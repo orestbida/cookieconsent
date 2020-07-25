@@ -10,6 +10,8 @@
 		
 		var _cookieconsent = {};
 		var _isAttachedToDom = false;
+		var _isHidden = true;
+		var _ccModalDom = null;
 		
 		/**
 		 * CookieConsent config settings
@@ -40,6 +42,8 @@
 				modal_edit_btn : "cc__modal__edit__btn"
 			}
 		};
+
+		//var _ccModalDom = (function(){ return document.getElementById(_config.cc_ids.modal_id)});
 
 
 		var _cc_languages = {
@@ -272,8 +276,9 @@
 			cc_btn_more.id = _config.cc_ids.modal_more_btn;
 			cc_btn_accept.setAttribute('type', 'button');
 			cc_btn_more.setAttribute('type', 'button');
-			_addClass(cc_modal, "cc__hidden");
 			_addClass(cc_btn_more, "cc__link");
+			cc_modal.style.display = "none";
+			//_addClass(cc_modal, "cc__hide");
 		
 			// insert cc_title into cc_modal
 			cc_modal.insertAdjacentElement('beforeend', cc_titolo);
@@ -318,15 +323,22 @@
 		 */
 		_cookieconsent.show = function(cc_delay){
 			if(_isAttachedToDom){
-				var delay = cc_delay || _config.cc_delay;
+				
+				_ccModalDom.style.display = "block";
+				
+				var delay = typeof cc_delay == "number" && cc_delay > 0 ? cc_delay : 0;
+
 				setTimeout(function() {
-					if(_hasClass(document.getElementById(_config.cc_ids.modal_id), "cc__hidden")){
-						_removeClass(document.getElementById(_config.cc_ids.modal_id), "cc__hidden");
+					if(_isHidden){
+						_addClass(_ccModalDom, "cc__anim");
+						_addClass(_ccModalDom, "cc__show");
 						_printVerbose("CookieConsent [ready_notice]: show_cookie_consent");
+						_isHidden = false;
 					}else{
 						_printVerbose("CookieConsent [ready_notice]: alredy_shown");
 					}
 				}, delay);
+				
 			}else{
 				_printVerbose("CookieConsent [cookie_notice]: cookie consent was not initialized!");
 			}
@@ -337,8 +349,12 @@
 		 */
 		_cookieconsent.hide = function(){
 			if(_isAttachedToDom){
-				if(!_hasClass(document.getElementById(_config.cc_ids.modal_id), "cc__hidden")){
-					_addClass(document.getElementById(_config.cc_ids.modal_id), "cc__hidden");
+				if(!_isHidden){
+					_removeClass(document.getElementById(_config.cc_ids.modal_id), "cc__show");
+					_isHidden = true;
+					_printVerbose("CookieConsent [cookie_notice]: hide_cookie_consent");
+				}else{
+					_printVerbose("CookieConsent [cookie_notice]: alredy_hidden");
 				}
 			}else{
 				_printVerbose("CookieConsent [cookie_notice]: nothing to hide!");
@@ -391,6 +407,7 @@
 					_setConfig(conf_params);
 					_loadCookieConsentCSS(_config.cc_theme_css);
 					_createCookieConsentHTML();
+					_ccModalDom = document.getElementById(_config.cc_ids.modal_id);
 					_setCookieConsentContent(_config.cc_current_lang);
 					_acceptCookieConsentListener();
 					if(_config.cc_autorun){

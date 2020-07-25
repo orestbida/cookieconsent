@@ -4,10 +4,52 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CookieConsent demo</title>
+    <style>
+        body{
+            font-family: Arial, Helvetica, sans-serif;
+            padding: 20px;
+        }
+		
+		.styled_btn{
+			padding: 13px 20px;
+            border: none;
+            color: #fff;
+			margin: 0;
+            margin-right: 10px;
+            background: rgb(37, 37, 37);
+            border-radius: 4px;
+            margin-bottom: 5px;
+            cursor: pointer;
+            outline: none;
+            transition: box-shadow .25s ease, background-color .25s ease;
+            box-shadow: 0 0 0 0 transparent;
+        }
+        
+        .styled_btn:hover{
+            box-shadow: 0 0 0 4px rgb(194, 194, 194);
+        }
+
+        h1, p{
+            margin: 0;
+            padding: 0;
+        }
+
+        h1{
+            margin-bottom: 10px;
+        }
+
+        p{
+            margin-bottom: 20px;
+        }
+    </style>
 </head>
 <body>
     <div id="app">
-        <h1>This is app</h1>
+        <h1>CookieConsent demo</h1>
+        <p>Simple, responsive and configurable cookie consent!</p>
+        <br>
+		<button class="styled_btn" type="button" onClick="showCookieConsent()">Show cookieConsent</button>
+		<button class="styled_btn" type="button" onClick="hideCookieConsent()">Hide cookieConsent</button>
     </div>
     <script src="../src/cookieconsent.js"></script>
     <script>
@@ -17,14 +59,23 @@
 		// Init cookieconsent with config object
 		CookieConsent.run({
                 "cc_autorun" : true, 							// run as soon as possible (without the need to manually call CookieConsent.show() )
-                "cc_delay" : 2500,								// specify initial delay after website has loaded
+                "cc_delay" : 1000,								// specify initial delay after website has loaded
                 "cc_website_name" : "Orest Bida",
                 "cc_website_url" : "orestbida.com",				
                 "cc_enable_verbose" : true,						// if enabled, prints all info/error msgs	
                 "cc_current_lang" : "en",	
                 "cc_auto_language" : false,						// if enabled, overrides cc_current_lang
                 "cc_theme_css" : "../src/cookieconsent.css"		// path to cookieconsent css
-		});
+        });
+        
+
+        function showCookieConsent(){
+            CookieConsent.show(0);                              // specify 0 as delay value
+        }
+
+        function hideCookieConsent(){
+            CookieConsent.hide();                               // hide cookie consent
+        }
 	</script>
 </body>
 </html>
