@@ -1,6 +1,6 @@
 /*!
- * CookieConsent.js v1.0
- * https://www.github.com/orestbida/cookie_consent
+ * CookieConsent v1.0
+ * https://www.github.com/orestbida/cookieconsent
  * Author Orest Bida
  * Released under the MIT License
  */
@@ -14,15 +14,14 @@
 		var _ccModalDom = null;
 		
 		/**
-		 * CookieConsent config settings
-		 * Here you can also add additional languages
+		 * Default cookieConsent config settings
 		 */
 		var _config = {
 			cc_container : "body",  					// supports only "body", and ids like "#example_id"
 			cc_current_lang : "en",         		
 			cc_default_lang : "en",						// default language (from those defined below)
 			cc_autorun: false, 							// run as soon as loaded
-			cc_delay: 0,								// milliseconds delay
+			cc_delay: 20,								// milliseconds delay
 			cc_website_name : null,		
 			cc_website_url: null,
 			cc_enable_verbose: true,					// if enabled, show on console all events/errors
@@ -31,7 +30,7 @@
 			cc_banner_type: "simple",
 			cc_policy_url: "",
 			privacy_policy_url: null,
-			cc_cookie_name: "cookie_consent",
+			cc_cookie_name: "cc_cookie",
 			cc_theme_css: "/public/assets/css/cookie_consent.css",
 			cc_ids : {
 				modal_id : "cc__modal",
@@ -43,9 +42,9 @@
 			}
 		};
 
-		//var _ccModalDom = (function(){ return document.getElementById(_config.cc_ids.modal_id)});
-
-
+		/**
+		 * Here you can also add additional languages
+		 */
 		var _cc_languages = {
 			"en" : {
 				dialog : {
@@ -66,7 +65,6 @@
 				}
 			}
 		};
-
 
 		/**
 		 * Update config settings (if user provided an config object)
@@ -149,6 +147,10 @@
 					elem.addEventListener(event, fn, false);
 				}
 			} else {
+				/**
+				 * For old browser, convert "click" and "focus" event to onclick
+				 * since the're not always supported
+				 */
 				if (event == "click" || event == "focus") {
 					event = "onclick";
 				}
@@ -203,13 +205,14 @@
 			return _config.cc_default_lang;
 		}
 
+		
 		/**
 		 * Helper function which prints info (console.log()) only if verbose mode is enabled
-		 * @param {string} print_msg 
+		 * @param {object} print_msg 
+		 * @param {object} optional_param 
 		 */
 		var _printVerbose = function(print_msg, optional_param){
-			optional_param = optional_param || "";
-			_config.cc_enable_verbose && console.log(print_msg, optional_param);
+			_config.cc_enable_verbose && console.log(print_msg, optional_param || "");
 		}
 
 		/**
@@ -259,6 +262,9 @@
 		*/
 		var _createCookieConsentHTML = function(){
 			
+			/**
+			 * Create all cc_modal elems
+			 */
 			var cc_modal = document.createElement("div");
 			var cc_titolo = document.createElement("h1");
 			var cc_text = document.createElement("p");
@@ -266,8 +272,9 @@
 			var cc_btn_accept = document.createElement("button");
 			var cc_btn_more = document.createElement("button");
 
-			//<a class="cc__link" href="'+_config.cc_policy_url+'">Learn more</a>
-
+			/**
+			 * Set for each of them, their default configured ids
+			 */
 			cc_modal.id = _config.cc_ids.modal_id;
 			cc_titolo.id = _config.cc_ids.modal_title;
 			cc_text.id = _config.cc_ids.modal_text;
@@ -277,9 +284,8 @@
 			cc_btn_accept.setAttribute('type', 'button');
 			cc_btn_more.setAttribute('type', 'button');
 			_addClass(cc_btn_more, "cc__link");
-			cc_modal.style.display = "none";
-			//_addClass(cc_modal, "cc__hide");
-		
+			cc_modal.style.visibility = "hidden";
+
 			// insert cc_title into cc_modal
 			cc_modal.insertAdjacentElement('beforeend', cc_titolo);
 		
@@ -292,29 +298,73 @@
 			
 			// insert btn_container into cc_modal
 			cc_modal.insertAdjacentElement('beforeend', cc_btn_container);
-		
-			// append inside specified cc_container
+			
+			
+			/**
+			 * Check if cc_container prop. is configured
+			 * If valid, check if it is and id or body
+			 */
 			if(_config.cc_container != undefined && _config.cc_container != null && typeof _config.cc_container == "string"){
 				if(_config.cc_container[0] != "#"){
-					document[_config.cc_container].appendChild(cc_modal)
+					document.body.appendChild(cc_modal)
 				}else{
+					/**
+					 * Remove '#' character from string
+					 * Append cc_modal object inside the specified dom element with id = _config.cc_container
+					 */
 					var id_without_hashtag = _config.cc_container.substr(1);
 					document.getElementById(id_without_hashtag).appendChild(cc_modal);
 				}
 			}
+			
 		}
 
 		/**
 		 * Load .css file for CookieConsent specified via the parameter
 		 * @param {string} css_file_path 
 		 */
-		var _loadCookieConsentCSS = function(css_file_path){
+		var _loadCookieConsentCSS = function(css_file_path, callback){
 			var link  = document.createElement('link');
 			link.rel  = 'stylesheet';
 			link.type = 'text/css';
+			try{
+				link.onload = callback();
+			}catch(ex){
+				link.onreadystatechange = callback();
+			}
+
 			link.href = css_file_path;
 			document.getElementsByTagName('head')[0].appendChild(link);
 			_printVerbose("CookieConsent [css_notice]: loading_css = '"+ css_file_path + "'");
+		}
+		
+		
+		/**
+		 * Check if cookieconsent is alredy attached to dom
+		 * If not, create one, configure it and attach it to body
+		 */
+		_cookieconsent.run = function(conf_params){
+			// 
+			if(!document.getElementById(_config.cc_ids.modal_id)){
+				var cc_cookie_value = _getCookie(_config.cc_cookie_name);
+				if(cc_cookie_value == undefined || cc_cookie_value == null || cc_cookie_value == ""){
+					_setConfig(conf_params);
+					_loadCookieConsentCSS(_config.cc_theme_css, function(){
+						_createCookieConsentHTML();
+						_ccModalDom = document.getElementById(_config.cc_ids.modal_id);
+						_setCookieConsentContent(_config.cc_current_lang);
+						_acceptCookieConsentListener();
+						if(_config.cc_autorun){
+							_cookieconsent.show(_config.cc_delay);
+						}
+					});
+					
+				}else{
+					_printVerbose("CookieConsent [NOTICE]: cookie consent alredy accepted!");
+				}
+			}else{
+				_printVerbose("CookieConsent [NOTICE]: cookie consent alredy attached to body!");
+			}
 		}
 
 		/**
@@ -323,11 +373,6 @@
 		 */
 		_cookieconsent.show = function(cc_delay){
 			if(_isAttachedToDom){
-				
-				_ccModalDom.style.display = "block";
-				
-				var delay = typeof cc_delay == "number" && cc_delay > 0 ? cc_delay : 0;
-
 				setTimeout(function() {
 					if(_isHidden){
 						_addClass(_ccModalDom, "cc__anim");
@@ -335,9 +380,9 @@
 						_printVerbose("CookieConsent [ready_notice]: show_cookie_consent");
 						_isHidden = false;
 					}else{
-						_printVerbose("CookieConsent [ready_notice]: alredy_shown");
+						_printVerbose("CookieConsent [cookie_notice]: alredy_shown");
 					}
-				}, delay);
+				}, typeof cc_delay == "number" && cc_delay > 15 ? cc_delay : 15);
 				
 			}else{
 				_printVerbose("CookieConsent [cookie_notice]: cookie consent was not initialized!");
@@ -369,7 +414,23 @@
 			}
 		}
 
-		
+		/**
+		 * TODO
+		 */
+		_cookieconsent.clearCookies = function(){
+			var cookie_val = _getCookie(_config.cc_cookie_name);
+			if(cookie_val != undefined && cookie_val != null && cookie_val != ""){
+				_eraseCookie(_config.cc_cookie_name);
+				_printVerbose("CookieConsent [cookie_notice]: cc_cookies erased!");
+			}else{
+				_printVerbose("CookieConsent [cookie_notice]: cc_cookies not found, nothing to erase!");
+			}
+		}
+
+		/**
+		 * Accept cookie consent listener
+		 * Create cookie with val. 'accepted' and then hide cookie-consent
+		 */
 		var _acceptCookieConsentListener = function(){
 			_addEvent(document.getElementById(_config.cc_ids.modal_accept_btn), "click", function(event){
 				_cookieconsent.hide();
@@ -379,6 +440,14 @@
 		}
 
 
+		/**
+		 * Set a cookie, specifying name, value and expiration time
+		 * @param {string} name 
+		 * @param {string} value 
+		 * @param {number} days 
+		 * @param {number} hours 
+		 * @param {number} minutes 
+		 */
 		var _setCookie = function(name, value, days, hours, minutes) {
 			var expires = "";
 		
@@ -387,39 +456,27 @@
 			expires = "; expires=" + date.toUTCString();
 		
 			document.cookie = name + "=" + (value || "") + expires + "; path=/";
-			document.cookie = "tagname = test;secure";
+			//document.cookie = "tagname = test;secure";
 		}
 
+		/**
+		 * Get cookie value by name
+		 * @param {string} a 
+		 */
 		var _getCookie = function(a) {
 			var b = document.cookie.match('(^|;)\\s*' + a + '\\s*=\\s*([^;]+)');
 			return b ? b.pop() : '';
 		}
 
 		/**
-		 * Check if cookieconsent is alredy attached to dom
-		 * If not, create one, configure it and attach it to body
+		 * Delete cookie by namn
+		 * @param {string} name 
 		 */
-		_cookieconsent.run = function(conf_params){
-			// 
-			if(!document.getElementById(_config.cc_ids.modal_id)){
-				var cc_cookie_value = _getCookie(_config.cc_cookie_name);
-				if(cc_cookie_value == undefined || cc_cookie_value == null || cc_cookie_value == ""){
-					_setConfig(conf_params);
-					_loadCookieConsentCSS(_config.cc_theme_css);
-					_createCookieConsentHTML();
-					_ccModalDom = document.getElementById(_config.cc_ids.modal_id);
-					_setCookieConsentContent(_config.cc_current_lang);
-					_acceptCookieConsentListener();
-					if(_config.cc_autorun){
-						_cookieconsent.show(_config.cc_delay);
-					}
-				}else{
-					_printVerbose("CookieConsent [NOTICE]: cookie consent alredy accepted!");
-				}
-			}else{
-				_printVerbose("CookieConsent [NOTICE]: cookie consent alredy attached to body!");
-			}
+		var _eraseCookie = function(name) {   
+			document.cookie = name +'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
 		}
+
+		
 
 		/**
 		 * Given a language, set the cookieconsent text content in the same language
@@ -438,7 +495,9 @@
 
 		return _cookieconsent;
 	};
-
+	/**
+	 * Make CookieConsent object accessible globally
+	 */
 	if(typeof(window.CookieConsent === 'undefined')){
 		window.CookieConsent = CookieConsent();
 	}

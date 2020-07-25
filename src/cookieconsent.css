@@ -22,7 +22,7 @@
 }
 
 #cc__modal.cc__anim{
-    display: block!important;
+    display: block;
     transition: transform .4s cubic-bezier(0.5,0,0,1.25), opacity .4s ease, visibility .4s ease;
     visibility: hidden;
     opacity: 0;
@@ -31,9 +31,8 @@
 
 #cc__modal.cc__anim.cc__show{
     opacity: 1;
-    visibility: visible;
+    visibility: visible!important;
     transform: scale(1);
-    display: block!important;
 }
 
 .ie #cc__modal{
