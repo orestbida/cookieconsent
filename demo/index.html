@@ -48,8 +48,10 @@
         <h1>CookieConsent demo</h1>
         <p>Simple, responsive and configurable cookie consent!</p>
         <br>
+        <button class="styled_btn" type="button" onClick="initCookieConsent()">Init CookieConsent</button>
 		<button class="styled_btn" type="button" onClick="showCookieConsent()">Show cookieConsent</button>
-		<button class="styled_btn" type="button" onClick="hideCookieConsent()">Hide cookieConsent</button>
+        <button class="styled_btn" type="button" onClick="hideCookieConsent()">Hide cookieConsent</button>
+        <button class="styled_btn" type="button" onClick="clearCCRelatedCookies()">Clear all cookies</button>
     </div>
     <script src="../src/cookieconsent.js"></script>
     <script>
@@ -57,17 +59,18 @@
 		// CookieConsent.run();
 		
 		// Init cookieconsent with config object
-		CookieConsent.run({
-                "cc_autorun" : true, 							// run as soon as possible (without the need to manually call CookieConsent.show() )
-                "cc_delay" : 1000,								// specify initial delay after website has loaded
+        function initCookieConsent(){
+            CookieConsent.run({
+                "cc_autorun" : true, 							// show as soon as possible (without the need to manually call CookieConsent.show() )
+                "cc_delay" : 0,								// specify initial delay after website has loaded
                 "cc_website_name" : "Orest Bida",
                 "cc_website_url" : "orestbida.com",				
                 "cc_enable_verbose" : true,						// if enabled, prints all info/error msgs	
                 "cc_current_lang" : "en",	
                 "cc_auto_language" : false,						// if enabled, overrides cc_current_lang
                 "cc_theme_css" : "../src/cookieconsent.css"		// path to cookieconsent css
-        });
-        
+            });
+        }
 
         function showCookieConsent(){
             CookieConsent.show(0);                              // specify 0 as delay value
@@ -76,6 +79,12 @@
         function hideCookieConsent(){
             CookieConsent.hide();                               // hide cookie consent
         }
+
+        function clearCCRelatedCookies(){
+            CookieConsent.clearCookies();                                  
+        }
+		
+		initCookieConsent();
 	</script>
 </body>
 </html>
