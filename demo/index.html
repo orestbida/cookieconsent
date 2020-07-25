@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CookieConsent demo</title>
+</head>
+<body>
+    <div id="app">
+        <h1>This is app</h1>
+    </div>
+    <script src="../src/cookieconsent.js"></script>
+    <script>
+		// Init cookieconsent with default settings
+		// CookieConsent.run();
+		
+		// Init cookieconsent with config object
+		CookieConsent.run({
+                "cc_autorun" : true, 							// run as soon as possible (without the need to manually call CookieConsent.show() )
+                "cc_delay" : 2500,								// specify initial delay after website has loaded
+                "cc_website_name" : "Orest Bida",
+                "cc_website_url" : "orestbida.com",				
+                "cc_enable_verbose" : true,						// if enabled, prints all info/error msgs	
+                "cc_current_lang" : "en",	
+                "cc_auto_language" : false,						// if enabled, overrides cc_current_lang
+                "cc_theme_css" : "../src/cookieconsent.css"		// path to cookieconsent css
+		});
+	</script>
+</body>
+</html>
