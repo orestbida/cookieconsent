@@ -18,27 +18,25 @@
 		 */
 		var _config = {
 			cc_container : "body",  					// supports only "body", and ids like "#example_id"
-			cc_current_lang : "en",         		
-			cc_default_lang : "en",						// default language (from those defined below)
+			cc_current_lang : "en",         			
+			cc_default_lang : "en",						// default language (from those in _cc_languages object)
 			cc_autorun: false, 							// run as soon as loaded
-			cc_delay: 20,								// milliseconds delay
+			cc_delay: 20,								// default milliseconds delay
 			cc_website_name : null,		
 			cc_website_url: null,
 			cc_enable_verbose: true,					// if enabled, show on console all events/errors
 			cc_auto_language: false,    				// if enabled, overrides default cc_current_lang
-			cc_cookie_expires : new Date((new Date).getTime() + 2592000),	// 30 days
+			cc_cookie_expires : 30,						// 30 days
 			cc_banner_type: "simple",
-			cc_policy_url: "",
-			privacy_policy_url: null,
 			cc_cookie_name: "cc_cookie",
-			cc_theme_css: "/public/assets/css/cookie_consent.css",
+			cc_theme_css: "/public/assets/css/cookieconsent.css",
 			cc_ids : {
-				modal_id : "cc__modal",
-				modal_title : "cc__modal__title",
-				modal_text : "cc__modal__text",
-				modal_accept_btn : "cc__modal__accept__btn",
-				modal_more_btn : "cc__modal__more__btn",
-				modal_edit_btn : "cc__modal__edit__btn"
+				modal_id : "cc__modal",							// do not change (or else modify also css)
+				modal_title : "cc__modal__title",				// do not change (or else modify also css)
+				modal_text : "cc__modal__text",					// do not change (or else modify also css)
+				modal_accept_btn : "cc__modal__accept__btn",	// do not change (or else modify also css)
+				modal_more_btn : "cc__modal__more__btn",		// do not change (or else modify also css)
+				modal_edit_btn : "cc__modal__edit__btn"			// do not change (or else modify also css)
 			}
 		};
 
@@ -108,7 +106,7 @@
 					}
 
 					if(_config.cc_auto_language){
-						_config.cc_current_lang = _config.cc_current_lang = _getValidatedLanguage(_getBrowserLang());
+						_config.cc_current_lang = _getValidatedLanguage(_getBrowserLang());
 					}else{
 						if(conf_params['cc_current_lang'] != undefined && conf_params['cc_current_lang'] != null ){
 							typeof conf_params['cc_current_lang'] == "string" ? _config.cc_current_lang = conf_params['cc_current_lang'] :  _printVerbose("CookieConsent [config_error]: 'cc_current_lang' value is not valid (string required)!");
@@ -138,14 +136,10 @@
 		 * @param {boolean} passive
 		 */
 		var _addEvent = function(elem, event, fn, passive) {
-			passive = passive || false;
+			var passive = passive || false;
 		
 			if (elem.addEventListener) {
-				if (passive) {
-					elem.addEventListener(event, fn, { capture: true, passive: true });
-				} else {
-					elem.addEventListener(event, fn, false);
-				}
+				passive ? elem.addEventListener(event, fn, { capture: true, passive: true }) : elem.addEventListener(event, fn, false);
 			} else {
 				/**
 				 * For old browser, convert "click" and "focus" event to onclick
@@ -173,10 +167,7 @@
 		 * @param {string} classname 
 		 */
 		var _hasClass = function(el, className) {
-			if (el.classList) {
-				return el.classList.contains(className);
-			}
-			return !!el.className.match(new RegExp('(\\s|^)' + className + '(\\s|$)'));
+			return el.classList ? el.classList.contains(className) : !!el.className.match(new RegExp('(\\s|^)' + className + '(\\s|$)'));
 		}
 		/**
 		 * Remove specified class from dom element
@@ -184,13 +175,7 @@
 		 * @param {string} classname 
 		 */
 		var _removeClass = function (el, className) {
-			if (el.classList) {
-				el.classList.remove(className)
-			}
-			else if (_hasClass(el, className)) {
-				var reg = new RegExp('(\\s|^)' + className + '(\\s|$)');
-				el.className = el.className.replace(reg, ' ');
-			}
+			el.classList ? el.classList.remove(className) : el.className = el.className.replace(new RegExp('(\\s|^)' + className + '(\\s|$)'), ' ');
 		}
 
 		/**
@@ -239,11 +224,7 @@
 		 */
 		var _getBrowserLang = function(){
 			var browser_lang = navigator.language || navigator.browserLanguage;
-
-			if(browser_lang.length > 2){
-				browser_lang = (browser_lang[0]+browser_lang[1]);
-			}
-			
+			browser_lang.length > 2 && (browser_lang = browser_lang[0]+browser_lang[1]);
 			_printVerbose("CookieConsent [browser_lang_notice]: detected_browser_lang = '"+ browser_lang + "'");
 			return browser_lang.toLowerCase()
 		}
@@ -316,7 +297,6 @@
 					document.getElementById(id_without_hashtag).appendChild(cc_modal);
 				}
 			}
-			
 		}
 
 		/**
@@ -382,7 +362,7 @@
 					}else{
 						_printVerbose("CookieConsent [cookie_notice]: alredy_shown");
 					}
-				}, typeof cc_delay == "number" && cc_delay > 15 ? cc_delay : 15);
+				}, typeof cc_delay == "number" && cc_delay > 20 ? cc_delay : 20);
 				
 			}else{
 				_printVerbose("CookieConsent [cookie_notice]: cookie consent was not initialized!");
@@ -403,14 +383,6 @@
 				}
 			}else{
 				_printVerbose("CookieConsent [cookie_notice]: nothing to hide!");
-			}
-		}
-
-		_cookieconsent.remove = function(){
-			if(_isAttachedToDom){
-				// ....
-			}else{
-				_printVerbose("CookieConsent [cookie_notice]: nothing to remove!");
 			}
 		}
 
@@ -435,7 +407,7 @@
 			_addEvent(document.getElementById(_config.cc_ids.modal_accept_btn), "click", function(event){
 				_cookieconsent.hide();
 				_printVerbose("CookieConsent [cookie_consent]: cookie_consent was accepted!");
-				_setCookie(_config.cc_cookie_name, "accepted", 30, 0, 0);
+				_setCookie(_config.cc_cookie_name, "accepted", _config.cc_cookie_expires, 0, 0);
 			});
 		}
 
@@ -456,7 +428,7 @@
 			expires = "; expires=" + date.toUTCString();
 		
 			document.cookie = name + "=" + (value || "") + expires + "; path=/";
-			//document.cookie = "tagname = test;secure";
+			document.cookie = "tagname = test;secure";
 		}
 
 		/**
@@ -464,8 +436,7 @@
 		 * @param {string} a 
 		 */
 		var _getCookie = function(a) {
-			var b = document.cookie.match('(^|;)\\s*' + a + '\\s*=\\s*([^;]+)');
-			return b ? b.pop() : '';
+			return (a = document.cookie.match("(^|;)\\s*" + a + "\\s*=\\s*([^;]+)")) ? a.pop() : ""
 		}
 
 		/**
@@ -476,14 +447,12 @@
 			document.cookie = name +'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
 		}
 
-		
-
 		/**
 		 * Given a language, set the cookieconsent text content in the same language
 		 * @param {string} selected_lang 
 		 */
 		var _setCookieConsentContent = function(selected_lang){
-			// check if selected language is defined in config file
+			// check if selected language is defined in config object
 			var lang = _getValidatedLanguage(selected_lang);
 			_printVerbose("CookieConsent [lang_notice]: current_lang = '"+ lang + "'");
 			_setText(_config.cc_ids.modal_title, _cc_languages[lang].dialog.cc_title);
