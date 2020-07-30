@@ -1,4 +1,4 @@
-# Cookie Consent
+# __Cookie Consent__
 Simple cross-browser cookie consent plugin written in plain javascript.
 
 ## Why though
@@ -65,3 +65,16 @@ CookieConsent.run({
 - __cc_theme_css__ : (string)
 	- *default* : null
 	- specify path to local cookieconsent.css file
+
+## TODO
+List of things to implement
+- Add the possibility of __"quickly" defining a new language__ without the necessity of directly editing source file
+- Make cookieconsent __GPDR compliant__:
+	- Implement "learn more" modal with a brief explanation about cookies
+	- Implement custom-cookie-table containing:
+		- column for cookie-name
+		- column for cookie-description
+		- column for cookie-expiration-date
+	- Implement the (eventual) possibility of opting-out of cookie-consent
+
+
