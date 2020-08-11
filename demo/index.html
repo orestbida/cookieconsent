@@ -48,43 +48,75 @@
         <h1>CookieConsent demo</h1>
         <p>Simple, responsive and configurable cookie consent!</p>
         <br>
-        <button class="styled_btn" type="button" onClick="initCookieConsent()">Init CookieConsent</button>
-		<button class="styled_btn" type="button" onClick="showCookieConsent()">Show cookieConsent</button>
-        <button class="styled_btn" type="button" onClick="hideCookieConsent()">Hide cookieConsent</button>
-        <button class="styled_btn" type="button" onClick="clearCCRelatedCookies()">Clear all cookies</button>
+        <button class="styled_btn" id="btn1" type="button">Init CookieConsent</button>
+		<button class="styled_btn" id="btn2" type="button">Show cookieConsent</button>
+        <button class="styled_btn" id="btn3" type="button">Hide cookieConsent</button>
+        <button class="styled_btn" id="btn4" type="button">Clear all cookies</button>
     </div>
-    <script src="../src/cookieconsent.js"></script>
+    <script src="../dist/cookieconsent.js"></script>
     <script>
-		// Init cookieconsent with default settings
-		// CookieConsent.run();
-		
-		// Init cookieconsent with config object
-        function initCookieConsent(){
-            CookieConsent.run({
-                "cc_autorun" : true, 							// show as soon as possible (without the need to manually call CookieConsent.show() )
-                "cc_delay" : 0,								// specify initial delay after website has loaded
-                "cc_website_name" : "Orest Bida",
-                "cc_website_url" : "orestbida.com",				
-                "cc_enable_verbose" : true,						// if enabled, prints all info/error msgs	
-                "cc_current_lang" : "en",	
-                "cc_auto_language" : false,						// if enabled, overrides cc_current_lang
-                "cc_theme_css" : "../src/cookieconsent.css"		// path to cookieconsent css
+        (function(){
+            // obtain plugin
+            var cc = initCookieConsent();
+
+            function autorun(){
+                cc.run({
+                    "cc_autorun" : true, 							// show as soon as possible (without the need to manually call CookieConsent.show() )
+                    "cc_delay" : 0,								// specify initial delay after website has loaded
+                    "cc_website_name" : "Orest Bida",
+                    "cc_website_url" : "orestbida.com",				
+                    "cc_enable_verbose" : true,						// if enabled, prints all info/error msgs	
+                    "cc_current_lang" : "en",	
+                    "cc_auto_language" : false,						// if enabled, overrides cc_current_lang
+                    "cc_theme_css" : "../src/cookieconsent.css"		// path to cookieconsent css
+                });
+            }
+
+            addEvent(document.getElementById("btn1"), "click", function(){
+                autorun();
             });
-        }
 
-        function showCookieConsent(){
-            CookieConsent.show(0);                              // specify 0 as delay value
-        }
+            addEvent(document.getElementById("btn2"), "click", function(){
+                cc.show(0);                              // specify 0 as delay value
+            });
 
-        function hideCookieConsent(){
-            CookieConsent.hide();                               // hide cookie consent
-        }
+            addEvent(document.getElementById("btn3"), "click", function(){
+                cc.hide();                               // hide cookie consent
+            });
 
-        function clearCCRelatedCookies(){
-            CookieConsent.clearCookies();                                  
-        }
-		
-		initCookieConsent();
+            addEvent(document.getElementById("btn4"), "click", function(){
+                cc.clearCookies();                        
+            });
+
+            autorun();
+
+            /**
+             * Add event listener to dom object (cross browser function)
+             * @param {Object} elem 
+             * @param {string} event //event type
+             * @param {Object } fn 
+             * @param {boolean} passive
+             */
+            function addEvent(elem, event, fn, passive) {
+                var passive = passive || false;
+
+                if (elem.addEventListener) {
+                    passive ? elem.addEventListener(event, fn, { capture: true, passive: true }) : elem.addEventListener(event, fn, false);
+                } else {
+                    /**
+                     * For old browser, convert "click" and "focus" event to onclick
+                     * since the're not always supported
+                     */
+                    if (event == "click" || event == "focus") {
+                        event = "onclick";
+                    }
+                    elem.attachEvent(event, fn);
+                }
+            }
+
+        })();
+            
+        
 	</script>
 </body>
 </html>
