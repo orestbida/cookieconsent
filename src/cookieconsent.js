@@ -12,6 +12,7 @@
 		var _isAttachedToDom = false;
 		var _isHidden = true;
 		var _ccModalDom = null;
+		var _ccPolicyDom = null;
 		
 		/**
 		 * Default cookieConsent config settings
@@ -31,12 +32,15 @@
 			cc_cookie_name: "cc_cookie",
 			cc_theme_css: "/public/assets/css/cookieconsent.css",
 			cc_ids : {
+				policy_container_id : "cc__policy__container",
+				main_container_id : "cc__modal__container",
 				modal_id : "cc__modal",							// do not change (or else modify also css)
 				modal_title : "cc__modal__title",				// do not change (or else modify also css)
 				modal_text : "cc__modal__text",					// do not change (or else modify also css)
 				modal_accept_btn : "cc__modal__accept__btn",	// do not change (or else modify also css)
 				modal_more_btn : "cc__modal__more__btn",		// do not change (or else modify also css)
-				modal_edit_btn : "cc__modal__edit__btn"			// do not change (or else modify also css)
+				modal_edit_btn : "cc__modal__edit__btn",			// do not change (or else modify also css)
+				policy_close_btn : "cc__plicy__close__btn"			// do not change (or else modify also css)
 			}
 		};
 
@@ -50,7 +54,7 @@
 					cc_more_text :  "Learn more", 
 					cc_accept_text : "I understand",
 					cc_edit_preferences_text :  "Change preferences",
-					cc_description :  'My website uses cookies necessary for its basic functioning. By continuing browsing, you consent to my use of cookies and other technologies.',
+					cc_description :  'My website uses essential cookies necessary for its functioning. By continuing browsing, you consent to my use of cookies and other technologies.',
 				}
 			},
 			"it" : {
@@ -73,58 +77,54 @@
 				if(conf_params != undefined && conf_params != null){
 
 					if(conf_params['cc_enable_verbose'] != undefined && conf_params['cc_enable_verbose'] != null){
-						typeof conf_params['cc_enable_verbose'] == "boolean" ? _config.cc_enable_verbose = conf_params['cc_enable_verbose'] : _printVerbose("CookieConsent [config_error]: 'cc_enable_verbose' value is not valid (boolean required)!");
+						typeof conf_params['cc_enable_verbose'] == "boolean" ? _config.cc_enable_verbose = conf_params['cc_enable_verbose'] : ""//_printVerbose("CookieConsent [config_error]: 'cc_enable_verbose' value is not valid (boolean required)!");
 					}
 	
-					_printVerbose("CookieConsent [config_notice]: recieved_config_settings ", conf_params);
-					_printVerbose("CookieConsent [config_notice]: Updating config settings!");
+					//_printVerbose("CookieConsent [config_notice]: recieved_config_settings ", conf_params);
+					//_printVerbose("CookieConsent [config_notice]: Updating config settings!");
 					
 					if(conf_params['cc_website_name'] != undefined && conf_params['cc_website_name'] != null ){
-						typeof conf_params['cc_website_name'] == "string" ? _config.cc_website_name = conf_params['cc_website_name'] : _printVerbose("CookieConsent [config_error]: 'cc_website_name' value is not valid (string required)!");
+						typeof conf_params['cc_website_name'] == "string" ? _config.cc_website_name = conf_params['cc_website_name'] : "" //_printVerbose("CookieConsent [config_error]: 'cc_website_name' value is not valid (string required)!");
 					}
 
 					if(conf_params['cc_auto_language'] != undefined && conf_params['cc_auto_language'] != null ){
-						typeof conf_params['cc_auto_language'] == "boolean" ? _config.cc_auto_language = conf_params['cc_auto_language'] : _printVerbose("CookieConsent [config_error]: 'cc_auto_language' value is not valid (boolean required)!");
+						typeof conf_params['cc_auto_language'] == "boolean" ? _config.cc_auto_language = conf_params['cc_auto_language'] : "" //_printVerbose("CookieConsent [config_error]: 'cc_auto_language' value is not valid (boolean required)!");
 					}
 	
 					if(conf_params['cc_theme_css'] != undefined && conf_params['cc_theme_css'] != null){
-						typeof conf_params['cc_theme_css'] == "string" ? _config.cc_theme_css = conf_params['cc_theme_css'] : _printVerbose("CookieConsent [config_error]: 'cc_theme_css' value is not valid (string required)!");
+						typeof conf_params['cc_theme_css'] == "string" ? _config.cc_theme_css = conf_params['cc_theme_css'] : "" //_printVerbose("CookieConsent [config_error]: 'cc_theme_css' value is not valid (string required)!");
 					}
 
 					if(conf_params['cc_delay'] != undefined && conf_params['cc_delay'] != null){
-						typeof conf_params['cc_delay'] == "number" &&  conf_params['cc_delay'] >=0 ? _config.cc_delay = conf_params['cc_delay'] : _printVerbose("CookieConsent [config_error]: 'cc_delay' value is not valid (number >=0 required)!");
+						typeof conf_params['cc_delay'] == "number" &&  conf_params['cc_delay'] >=0 ? _config.cc_delay = conf_params['cc_delay'] : "" //_printVerbose("CookieConsent [config_error]: 'cc_delay' value is not valid (number >=0 required)!");
 					}
 
 					if(conf_params['cc_autorun'] != undefined && conf_params['cc_autorun'] != null){
-						typeof conf_params['cc_autorun'] == "boolean" ? _config.cc_autorun = conf_params['cc_autorun'] : _printVerbose("CookieConsent [config_error]: 'cc_autorun' value is not valid (boolean required)!");
+						typeof conf_params['cc_autorun'] == "boolean" ? _config.cc_autorun = conf_params['cc_autorun'] : "" //_printVerbose("CookieConsent [config_error]: 'cc_autorun' value is not valid (boolean required)!");
 					}
 
 					if(conf_params['cc_website_url'] != undefined && conf_params['cc_website_url'] != null){
-						typeof conf_params['cc_website_url'] == "string" ? _config.cc_website_url = conf_params['cc_website_url'] : _printVerbose("CookieConsent [config_error]: 'cc_website_url' value is not valid (string required)!");
-					}else{
-						_config.cc_website_url = _getServerHostname();
+						typeof conf_params['cc_website_url'] == "string" ? _config.cc_website_url = conf_params['cc_website_url'] : "" //_printVerbose("CookieConsent [config_error]: 'cc_website_url' value is not valid (string required)!");
 					}
 
 					if(_config.cc_auto_language){
 						_config.cc_current_lang = _getValidatedLanguage(_getBrowserLang());
 					}else{
 						if(conf_params['cc_current_lang'] != undefined && conf_params['cc_current_lang'] != null ){
-							typeof conf_params['cc_current_lang'] == "string" ? _config.cc_current_lang = conf_params['cc_current_lang'] :  _printVerbose("CookieConsent [config_error]: 'cc_current_lang' value is not valid (string required)!");
+							typeof conf_params['cc_current_lang'] == "string" ? _config.cc_current_lang = conf_params['cc_current_lang'] :  "" //_printVerbose("CookieConsent [config_error]: 'cc_current_lang' value is not valid (string required)!");
 						}
 					}
 
 				}else{
 	
-					_printVerbose("CookieConsent [config_notice]: No initial config object found, using default values!");
+					//_printVerbose("CookieConsent [config_notice]: No initial config object found, using default values!");
 	
 					if(_config.cc_auto_language){
 						_config.cc_current_lang = _getValidatedLanguage(_getBrowserLang())
 					}
-	
-					_config.cc_website_url = _getServerHostname();
 				}
 			}catch(ex){
-				_printVerbose("CookieConsent [ERROR]: ", ex);
+				//_printVerbose("CookieConsent [ERROR]: ", ex);
 			}
 		}
 
@@ -169,6 +169,10 @@
 		var _hasClass = function(el, className) {
 			return el.classList ? el.classList.contains(className) : !!el.className.match(new RegExp('(\\s|^)' + className + '(\\s|$)'));
 		}
+
+		var _toggleClass = function(el, className) {
+			el.classList.toggle ? el.classList.toggle(className) : (!_hasClass(el ,className) ? _addClass(el ,className) : _removeClass(el, className));
+		}
 		/**
 		 * Remove specified class from dom element
 		 * @param {Object} elem 
@@ -186,7 +190,7 @@
 		 */
 		var _getValidatedLanguage = function(lang){
 			if(_cc_languages.hasOwnProperty(lang)) return lang;
-			_printVerbose("CookieConsent [lang_notice]: lang '"+lang+"' is not implemented, using default '"+_config.cc_default_lang+"' lang!");
+			//_printVerbose("CookieConsent [lang_notice]: lang '"+lang+"' is not implemented, using default '"+_config.cc_default_lang+"' lang!");
 			return _config.cc_default_lang;
 		}
 
@@ -225,17 +229,8 @@
 		var _getBrowserLang = function(){
 			var browser_lang = navigator.language || navigator.browserLanguage;
 			browser_lang.length > 2 && (browser_lang = browser_lang[0]+browser_lang[1]);
-			_printVerbose("CookieConsent [browser_lang_notice]: detected_browser_lang = '"+ browser_lang + "'");
+			//_printVerbose("CookieConsent [browser_lang_notice]: detected_browser_lang = '"+ browser_lang + "'");
 			return browser_lang.toLowerCase()
-		}
-			
-		/**
-		 * Get hostname/server of this script
-		 */
-		var _getServerHostname = function(){
-			var host = window.location.hostname;
-			_printVerbose("CookieConsent [hostname_notice]: detected_hostname = '"+ host+ "'");
-			return window.location.protocol+"//"+host
 		}
 
 		/**
@@ -246,6 +241,7 @@
 			/**
 			 * Create all cc_modal elems
 			 */
+			var cc_modal_container = document.createElement("div");
 			var cc_modal = document.createElement("div");
 			var cc_titolo = document.createElement("h1");
 			var cc_text = document.createElement("p");
@@ -256,6 +252,7 @@
 			/**
 			 * Set for each of them, their default configured ids
 			 */
+			cc_modal_container.id = _config.cc_ids.main_container_id;
 			cc_modal.id = _config.cc_ids.modal_id;
 			cc_titolo.id = _config.cc_ids.modal_title;
 			cc_text.id = _config.cc_ids.modal_text;
@@ -279,7 +276,8 @@
 			
 			// insert btn_container into cc_modal
 			cc_modal.insertAdjacentElement('beforeend', cc_btn_container);
-			
+
+			cc_modal_container.appendChild(cc_modal);
 			
 			/**
 			 * Check if cc_container prop. is configured
@@ -287,16 +285,75 @@
 			 */
 			if(_config.cc_container != undefined && _config.cc_container != null && typeof _config.cc_container == "string"){
 				if(_config.cc_container[0] != "#"){
-					document.body.appendChild(cc_modal)
+					document.body.appendChild(cc_modal_container)
 				}else{
 					/**
 					 * Remove '#' character from string
 					 * Append cc_modal object inside the specified dom element with id = _config.cc_container
 					 */
 					var id_without_hashtag = _config.cc_container.substr(1);
-					document.getElementById(id_without_hashtag).appendChild(cc_modal);
+					document.getElementById(id_without_hashtag).appendChild(cc_modal_container);
 				}
 			}
+
+			_ccModalDom = document.getElementById(_config.cc_ids.modal_id);
+
+			_createCookieConsentPolicyHTML();
+		}
+
+		var _createCookieConsentPolicyHTML = function(){
+
+
+			/**
+			 * Create all cc_modal elems
+			 */
+			var cc_policy_container = document.createElement("div");
+			var cc_v_align = document.createElement("div");
+			var cc_policy_underlay = document.createElement("div");
+			var cc_policy = document.createElement("div");
+			var cc_policy_title = document.createElement("h1");
+			var cc_policy_header = document.createElement("div");
+			var cc_policy_close_btn = document.createElement("button");
+			var cc_policy_text = document.createElement("p");
+			cc_policy_close_btn.setAttribute('type', 'button');
+			/**
+			 * Set for each of them, their default configured ids
+			 */
+			cc_policy_container.id = _config.cc_ids.policy_container_id;
+			cc_policy_underlay.id = "cc__policy__underlay";
+			cc_v_align.id = "cc__valign";
+			cc_policy.id = "cc__policy";
+			cc_policy_title.id = "cc__policy__title";
+			cc_policy_header.id = "cc__policy__header";
+			cc_policy_text.id = "cc__policy__text";
+			cc_policy_close_btn.id = _config.cc_ids.policy_close_btn;
+			var close_icon = 'x';
+			cc_policy_close_btn.innerHTML = close_icon;
+
+			cc_policy_title.innerText = "CookieConsent Policy";
+			cc_policy_text.innerText = "This is cookie consent policy content";
+			cc_policy_header.appendChild(cc_policy_title);
+			cc_policy_header.appendChild(cc_policy_close_btn);
+			cc_policy.appendChild(cc_policy_header);
+			cc_policy.appendChild(cc_policy_text);
+			cc_v_align.appendChild(cc_policy);
+			cc_policy_container.appendChild(cc_v_align);
+			cc_policy_container.appendChild(cc_policy_underlay);
+
+			_addEvent(document.getElementById(_config.cc_ids.modal_more_btn), 'click', function(){
+				_addClass(cc_policy_container, 'cc__show');
+			});
+
+			_addEvent(cc_policy_close_btn, 'click', function(){
+				_removeClass(cc_policy_container, 'cc__show');
+			});
+
+			cc_policy_container.style.visibility = "hidden";
+
+			// insert cc_title into cc_modal
+			document.getElementById(_config.cc_ids.main_container_id).appendChild(cc_policy_container);
+
+			_ccPolicyDom = cc_policy_container;
 		}
 
 		/**
@@ -307,15 +364,18 @@
 			var link  = document.createElement('link');
 			link.rel  = 'stylesheet';
 			link.type = 'text/css';
-			try{
+
+			if(link.onload){
 				link.onload = callback();
-			}catch(ex){
-				link.onreadystatechange = callback();
+				link.href = css_file_path;
+				document.getElementsByTagName('head')[0].appendChild(link);
+			}else{
+				link.href = css_file_path;
+				document.getElementsByTagName('head')[0].appendChild(link);
+				callback();
 			}
 
-			link.href = css_file_path;
-			document.getElementsByTagName('head')[0].appendChild(link);
-			_printVerbose("CookieConsent [css_notice]: loading_css = '"+ css_file_path + "'");
+			//_printVerbose("CookieConsent [css_notice]: loading_css = '"+ css_file_path + "'");
 		}
 		
 		
@@ -331,7 +391,6 @@
 					_setConfig(conf_params);
 					_loadCookieConsentCSS(_config.cc_theme_css, function(){
 						_createCookieConsentHTML();
-						_ccModalDom = document.getElementById(_config.cc_ids.modal_id);
 						_setCookieConsentContent(_config.cc_current_lang);
 						_acceptCookieConsentListener();
 						if(_config.cc_autorun){
@@ -340,10 +399,10 @@
 					});
 					
 				}else{
-					_printVerbose("CookieConsent [NOTICE]: cookie consent alredy accepted!");
+					//_printVerbose("CookieConsent [NOTICE]: cookie consent alredy accepted!");
 				}
 			}else{
-				_printVerbose("CookieConsent [NOTICE]: cookie consent alredy attached to body!");
+				//_printVerbose("CookieConsent [NOTICE]: cookie consent alredy attached to body!");
 			}
 		}
 
@@ -355,17 +414,24 @@
 			if(_isAttachedToDom){
 				setTimeout(function() {
 					if(_isHidden){
+						/**
+						 * Make these dom elems, animate-able
+						 */
 						_addClass(_ccModalDom, "cc__anim");
+						_addClass(_ccPolicyDom, "cc__anim");
+						/**
+						 * Show ccmodal
+						 */
 						_addClass(_ccModalDom, "cc__show");
-						_printVerbose("CookieConsent [ready_notice]: show_cookie_consent");
+						//_printVerbose("CookieConsent [ready_notice]: show_cookie_consent");
 						_isHidden = false;
 					}else{
-						_printVerbose("CookieConsent [cookie_notice]: alredy_shown");
+						//_printVerbose("CookieConsent [cookie_notice]: alredy_shown");
 					}
 				}, typeof cc_delay == "number" && cc_delay > 20 ? cc_delay : 20);
 				
 			}else{
-				_printVerbose("CookieConsent [cookie_notice]: cookie consent was not initialized!");
+				//_printVerbose("CookieConsent [cookie_notice]: cookie consent was not initialized!");
 			}
 		}
 
@@ -377,12 +443,12 @@
 				if(!_isHidden){
 					_removeClass(document.getElementById(_config.cc_ids.modal_id), "cc__show");
 					_isHidden = true;
-					_printVerbose("CookieConsent [cookie_notice]: hide_cookie_consent");
+					//_printVerbose("CookieConsent [cookie_notice]: hide_cookie_consent");
 				}else{
-					_printVerbose("CookieConsent [cookie_notice]: alredy_hidden");
+					//_printVerbose("CookieConsent [cookie_notice]: alredy_hidden");
 				}
 			}else{
-				_printVerbose("CookieConsent [cookie_notice]: nothing to hide!");
+				//_printVerbose("CookieConsent [cookie_notice]: nothing to hide!");
 			}
 		}
 
@@ -393,9 +459,9 @@
 			var cookie_val = _getCookie(_config.cc_cookie_name);
 			if(cookie_val != undefined && cookie_val != null && cookie_val != ""){
 				_eraseCookie(_config.cc_cookie_name);
-				_printVerbose("CookieConsent [cookie_notice]: cc_cookies erased!");
+				//_printVerbose("CookieConsent [cookie_notice]: cc_cookies erased!");
 			}else{
-				_printVerbose("CookieConsent [cookie_notice]: cc_cookies not found, nothing to erase!");
+				//_printVerbose("CookieConsent [cookie_notice]: cc_cookies not found, nothing to erase!");
 			}
 		}
 
@@ -406,11 +472,10 @@
 		var _acceptCookieConsentListener = function(){
 			_addEvent(document.getElementById(_config.cc_ids.modal_accept_btn), "click", function(event){
 				_cookieconsent.hide();
-				_printVerbose("CookieConsent [cookie_consent]: cookie_consent was accepted!");
+				//_printVerbose("CookieConsent [cookie_consent]: cookie_consent was accepted!");
 				_setCookie(_config.cc_cookie_name, "accepted", _config.cc_cookie_expires, 0, 0);
 			});
 		}
-
 
 		/**
 		 * Set a cookie, specifying name, value and expiration time
@@ -454,7 +519,7 @@
 		var _setCookieConsentContent = function(selected_lang){
 			// check if selected language is defined in config object
 			var lang = _getValidatedLanguage(selected_lang);
-			_printVerbose("CookieConsent [lang_notice]: current_lang = '"+ lang + "'");
+			//_printVerbose("CookieConsent [lang_notice]: current_lang = '"+ lang + "'");
 			_setText(_config.cc_ids.modal_title, _cc_languages[lang].dialog.cc_title);
 			_setHtml(_config.cc_ids.modal_text, _cc_languages[lang].dialog.cc_description);
 			_setText(_config.cc_ids.modal_accept_btn, _cc_languages[lang].dialog.cc_accept_text);
@@ -464,10 +529,25 @@
 
 		return _cookieconsent;
 	};
+
+
 	/**
 	 * Make CookieConsent object accessible globally
 	 */
-	if(typeof(window.CookieConsent === 'undefined')){
-		window.CookieConsent = CookieConsent();
+	if(typeof(window.initCookieConsent === 'undefined')){
+
+		var windowOnload = window.onload || function() {};
+		window.onload = function() { windowOnload(); };
+
+		window.initCookieConsent = function(){
+			var cc = CookieConsent();
+			try {
+				delete window.initCookieConsent; 
+			} 
+			catch(e) { 
+				window.initCookieConsent = undefined; 
+			}
+			return cc;
+		}
 	}
 })(window);
