@@ -90,6 +90,129 @@
     cursor: pointer;
 }
 
+/**
+CookieConsent policy
+**/
+#cc__policy__container{ /** have to add overflow hidden to body**/
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 101;
+    background: rgba(0, 0, 0 , 0.45);
+    display: table;
+    height: 100%;
+    width: 100%;
+    visibility: hidden;
+    opacity: 0;
+    transition: none; 
+	backdrop-filter: blur(2px);
+}
+
+#cc__policy__container.cc__anim{
+    transition: background-color 3s ease, visibility .3s ease, opacity .3s ease, backdrop-filter .3s ease;
+}
+
+#cc__policy__container.cc__anim.cc__show{
+    opacity: 1;
+    visibility: visible!important;
+}
+
+#cc__valign{
+    display: table-cell;
+    vertical-align: middle;
+    position: relative;
+    padding: 20px;
+}
+
+#cc__policy{
+    background: white;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 30px 30PX;
+    border-radius: 4px;
+    transform: scale(.95);
+    transition: transform .4s cubic-bezier(0.5,0,0,1.25), opacity .4s ease, visibility .4s ease;
+    visibility: hidden;
+    opacity: 0;
+    overflow-y: auto;
+}
+
+#cc__policy__header{
+    display: table;
+    width: 100%;
+}
+#cc__policy__title{
+    display: table-cell;
+    vertical-align: middle;
+}
+
+#cc__plicy__close__btn{
+    display: table-cell;
+    float: right;
+    padding: 0;
+    border: none;
+    background: #ffda30;
+    padding: 10px;
+    outline: none;
+    border-radius: 4px;
+    box-shadow: 0 0 0 0 transparent;
+    cursor: pointer;
+    transition: box-shadow .25s ease, background-color .25s ease;
+}
+
+#cc__plicy__close__btn:hover{
+    background: #dbbc2e;
+    box-shadow: 0 0 0 4px #ffefa6;
+}
+
+#cc__policy__text{
+    height: 500px;
+    overflow-y: auto;
+    margin-top: 20px;
+}
+
+.cc__anim.cc__show #cc__policy{
+    opacity: 1;
+    visibility: visible;
+    transform: scale(1);
+}
+
+
+/** funzia solo x chrome **/
+#cc__policy::-webkit-scrollbar{
+    height: 100%;
+    background-color: #ffffff;
+    border-radius: 0 4px 4px 0;
+}
+  
+#cc__policy::-webkit-scrollbar-thumb{
+    height: 6px;
+    border: 4px solid transparent;
+    background-clip: padding-box;
+    border-radius: 10px;
+    -webkit-border-radius: 10px;
+    background-color: #a0a4a8;
+    box-shadow: inset -1px -1px 0px rgba(0, 0, 0, 0.05), inset 1px 1px 0px rgba(0, 0, 0, 0.05);
+    -webkit-box-shadow: inset -1px -1px 0px rgba(0, 0, 0, 0.05), inset 1px 1px 0px rgba(0, 0, 0, 0.05);
+    -moz-border-radius: 10px;
+    -ms-border-radius: 10px;
+    -o-border-radius: 10px;
+}
+
+#cc__policy::-webkit-scrollbar-button {
+    width: 0;
+    height: 0;
+    display: none;
+}
+  
+#cc__policy::-webkit-scrollbar-corner {
+    background-color: transparent;
+}
+  
+/** end custom scrollbar **/
+
 @media screen and (max-width: 1050px){
     #cc__modal{
         width: 100%;
