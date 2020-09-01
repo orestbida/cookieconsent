@@ -22,11 +22,7 @@
 }
 
 #cc__modal.cc__anim{
-    display: block;
     transition: transform .4s cubic-bezier(0.5,0,0,1.25), opacity .4s ease, visibility .4s ease;
-    visibility: hidden;
-    opacity: 0;
-    transform: scale(.95);
 }
 
 #cc__modal.cc__anim.cc__show{
@@ -107,11 +103,11 @@ CookieConsent policy
     visibility: hidden;
     opacity: 0;
     transition: none; 
-	backdrop-filter: blur(2px);
+	/*backdrop-filter: blur(2px);*/
 }
 
 #cc__policy__container.cc__anim{
-    transition: background-color 3s ease, visibility .3s ease, opacity .3s ease, backdrop-filter .3s ease;
+    transition: background-color .3s ease, visibility .3s ease, opacity .3s ease, backdrop-filter .3s ease;
 }
 
 #cc__policy__container.cc__anim.cc__show{

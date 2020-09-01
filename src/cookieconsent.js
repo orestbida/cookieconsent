@@ -6,7 +6,7 @@
  */
 (function(window){
 	'use strict';
-	 var CookieConsent = function(){
+	var CookieConsent = function(){
 		
 		var _cookieconsent = {};
 		var _isAttachedToDom = false;
@@ -34,13 +34,17 @@
 			cc_ids : {
 				policy_container_id : "cc__policy__container",
 				main_container_id : "cc__modal__container",
-				modal_id : "cc__modal",							// do not change (or else modify also css)
-				modal_title : "cc__modal__title",				// do not change (or else modify also css)
-				modal_text : "cc__modal__text",					// do not change (or else modify also css)
-				modal_accept_btn : "cc__modal__accept__btn",	// do not change (or else modify also css)
-				modal_more_btn : "cc__modal__more__btn",		// do not change (or else modify also css)
+				modal_id : "cc__modal",								// do not change (or else modify also css)
+				modal_title : "cc__modal__title",					// do not change (or else modify also css)
+				modal_text : "cc__modal__text",						// do not change (or else modify also css)
+				modal_accept_btn : "cc__modal__accept__btn",		// do not change (or else modify also css)
+				modal_more_btn : "cc__modal__more__btn",			// do not change (or else modify also css)
 				modal_edit_btn : "cc__modal__edit__btn",			// do not change (or else modify also css)
 				policy_close_btn : "cc__plicy__close__btn"			// do not change (or else modify also css)
+			},
+			cc_policy_ids : {
+				title : 'cc__policy__title',
+				content : 'cc__policy__content'
 			}
 		};
 
@@ -64,6 +68,42 @@
 					cc_accept_text : "I understand",
 					cc_edit_preferences_text :  "Change preferences",
 					cc_description :  'My website uses cookies necessary for its basic functioning. By continuing browsing, you consent to my use of cookies and other technologies.',
+				}
+			}
+		};
+
+		var _cc_policy_content = {
+			langs : {
+				"en" : {
+					ccp_title : "Cookie Conswwent Policy",
+					ccp_blocks : [
+						{
+							title : "What are cookies",
+							description: 'Cookies are very small text files that are stored on your computer when you visit a website. I use cookies to assure the basic functionalities of the website and to enhance your online experience.'
+						},
+						{
+							title : "Strictly necessary cookies",
+							description: 'These cookies are essential for the proper functioning of my website. Without these cookies, the website would not work properly.',
+							switch : {
+								text : 'Always active',
+								enabled : true,
+								readonly: true
+							}
+						},
+						{
+							title : "Functionality cookies",
+							description: 'These cookies are used to provide you with a more personalized experience on my website and to remember choices you make when you browse the website. For example, whether or not you enabled dark-mode on this website.',
+							switch : {
+								text : 'Active',
+								enabled : true,
+								readonly: false
+							}
+						},
+						{
+							title : "More information",
+							description: 'For any queries in relation to my policy on cookies and your choices, please contact me.',
+						}
+					]
 				}
 			}
 		};
@@ -265,6 +305,7 @@
 			cc_modal.style.visibility = "hidden";
 
 			// insert cc_title into cc_modal
+			cc_modal.innerHTML = '<!--[if IE 8]>SAS<![endif]-->';
 			cc_modal.insertAdjacentElement('beforeend', cc_titolo);
 		
 			// insert cc_description into cc_modal
@@ -297,12 +338,9 @@
 			}
 
 			_ccModalDom = document.getElementById(_config.cc_ids.modal_id);
-
-			_createCookieConsentPolicyHTML();
 		}
 
 		var _createCookieConsentPolicyHTML = function(){
-
 
 			/**
 			 * Create all cc_modal elems
@@ -314,7 +352,7 @@
 			var cc_policy_title = document.createElement("h1");
 			var cc_policy_header = document.createElement("div");
 			var cc_policy_close_btn = document.createElement("button");
-			var cc_policy_text = document.createElement("p");
+			var cc_policy_content = document.createElement("div");
 			cc_policy_close_btn.setAttribute('type', 'button');
 			/**
 			 * Set for each of them, their default configured ids
@@ -323,19 +361,17 @@
 			cc_policy_underlay.id = "cc__policy__underlay";
 			cc_v_align.id = "cc__valign";
 			cc_policy.id = "cc__policy";
-			cc_policy_title.id = "cc__policy__title";
+			cc_policy_title.id = _config.cc_policy_ids.title;
 			cc_policy_header.id = "cc__policy__header";
-			cc_policy_text.id = "cc__policy__text";
+			cc_policy_content.id = _config.cc_policy_ids.content;
 			cc_policy_close_btn.id = _config.cc_ids.policy_close_btn;
 			var close_icon = 'x';
 			cc_policy_close_btn.innerHTML = close_icon;
 
-			cc_policy_title.innerText = "CookieConsent Policy";
-			cc_policy_text.innerText = "This is cookie consent policy content";
 			cc_policy_header.appendChild(cc_policy_title);
 			cc_policy_header.appendChild(cc_policy_close_btn);
 			cc_policy.appendChild(cc_policy_header);
-			cc_policy.appendChild(cc_policy_text);
+			cc_policy.appendChild(cc_policy_content);
 			cc_v_align.appendChild(cc_policy);
 			cc_policy_container.appendChild(cc_v_align);
 			cc_policy_container.appendChild(cc_policy_underlay);
@@ -356,6 +392,54 @@
 			_ccPolicyDom = cc_policy_container;
 		}
 
+		var _setCookieConsentPolicyContent = function(){
+
+			var all_blocks = _cc_policy_content.langs["en"].ccp_blocks;
+			_setText(_config.cc_policy_ids.title, _cc_policy_content.langs["en"].ccp_title);
+
+			var n_blocks = all_blocks.length;
+			var cc_content_dom = document.getElementById(_config.cc_policy_ids.content);
+
+			// Create cc policy content
+			for(var i=0; i<n_blocks; ++i){
+				
+				// Create title
+				var block_section = document.createElement('div');
+				var block_title = document.createElement('h2');
+				var block_desc = document.createElement('p');
+
+				_addClass(block_section, 'ccp_section');
+				_addClass(block_title, 'section_title');
+				_addClass(block_desc, 'section_desc');
+
+				// set value
+				block_title.innerText = all_blocks[i].title;
+				block_desc.innerText = all_blocks[i].description;
+
+				block_section.appendChild(block_title);
+				block_section.appendChild(block_desc);
+
+				// ... switch
+				if(typeof all_blocks[i].switch !== 'undefined'){
+					var block_switch = document.createElement('input');
+					block_switch.setAttribute('type', 'checkbox');
+					_addClass(block_switch, 'sc_toggle');
+					if(all_blocks[i].switch.enabled){
+						block_switch.checked = true;
+					}
+
+					if(all_blocks[i].switch.readonly){
+						block_switch.disabled = "disabled"
+					}
+					block_section.appendChild(block_switch);
+				}
+
+				// append to dom
+				cc_content_dom.appendChild(block_section);
+			}
+		}
+
+
 		/**
 		 * Load .css file for CookieConsent specified via the parameter
 		 * @param {string} css_file_path 
@@ -364,14 +448,12 @@
 			var link  = document.createElement('link');
 			link.rel  = 'stylesheet';
 			link.type = 'text/css';
+			link.href = css_file_path;
+			document.getElementsByTagName('head')[0].appendChild(link);
 
 			if(link.onload){
 				link.onload = callback();
-				link.href = css_file_path;
-				document.getElementsByTagName('head')[0].appendChild(link);
 			}else{
-				link.href = css_file_path;
-				document.getElementsByTagName('head')[0].appendChild(link);
 				callback();
 			}
 
@@ -392,6 +474,8 @@
 					_loadCookieConsentCSS(_config.cc_theme_css, function(){
 						_createCookieConsentHTML();
 						_setCookieConsentContent(_config.cc_current_lang);
+						_createCookieConsentPolicyHTML();
+						_setCookieConsentPolicyContent();
 						_acceptCookieConsentListener();
 						if(_config.cc_autorun){
 							_cookieconsent.show(_config.cc_delay);
@@ -419,10 +503,12 @@
 						 */
 						_addClass(_ccModalDom, "cc__anim");
 						_addClass(_ccPolicyDom, "cc__anim");
+						
 						/**
 						 * Show ccmodal
 						 */
 						_addClass(_ccModalDom, "cc__show");
+						
 						//_printVerbose("CookieConsent [ready_notice]: show_cookie_consent");
 						_isHidden = false;
 					}else{
@@ -543,8 +629,7 @@
 			var cc = CookieConsent();
 			try {
 				delete window.initCookieConsent; 
-			} 
-			catch(e) { 
+			}catch(e) { 
 				window.initCookieConsent = undefined; 
 			}
 			return cc;
