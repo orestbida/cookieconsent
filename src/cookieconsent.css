@@ -90,7 +90,7 @@
 CookieConsent policy
 **/
 #cc__policy__container{ /** have to add overflow hidden to body**/
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     right: 0;
