@@ -133,11 +133,28 @@ CookieConsent policy
     visibility: hidden;
     opacity: 0;
     overflow-y: auto;
+    height: 100%;
+    max-height: 600px;
+}
+
+#cc__policy__content{
+    overflow-y: auto;
+    margin: 30px;
+    position: absolute;
+    top: 60px;
+    bottom: 0;
+    padding: 0;
+    left: 0;
+    right: 0;
+    padding: 0 30px 30px 0;
 }
 
 #cc__policy__header{
     display: table;
-    width: 100%;
+    position: absolute;
+    left: 30px;
+    right: 30px;
+    top: 30px;
 }
 #cc__policy__title{
     display: table-cell;
@@ -177,13 +194,13 @@ CookieConsent policy
 
 
 /** funzia solo x chrome **/
-#cc__policy::-webkit-scrollbar{
+#cc__policy__content::-webkit-scrollbar{
     height: 100%;
     background-color: #ffffff;
     border-radius: 0 4px 4px 0;
 }
   
-#cc__policy::-webkit-scrollbar-thumb{
+#cc__policy__content::-webkit-scrollbar-thumb{
     height: 6px;
     border: 4px solid transparent;
     background-clip: padding-box;
@@ -197,13 +214,13 @@ CookieConsent policy
     -o-border-radius: 10px;
 }
 
-#cc__policy::-webkit-scrollbar-button {
+#cc__policy__content::-webkit-scrollbar-button {
     width: 0;
     height: 0;
     display: none;
 }
   
-#cc__policy::-webkit-scrollbar-corner {
+#cc__policy__content::-webkit-scrollbar-corner {
     background-color: transparent;
 }
   
