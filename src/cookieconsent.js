@@ -436,7 +436,6 @@
 			// Hide both cookie policy and cookie consent
 			_addEvent(cp_save_btn, 'click', function(){
 				_printVerbose('CookieConsent [cc_policy_notice]: saved_preferences!');
-				_saveCookiePreferences();
 				_hideCookieConsentPolicy();
 				_cookieconsent.hide();
 				_saveCookiePreferences();
