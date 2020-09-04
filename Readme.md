@@ -17,6 +17,10 @@ Main features
 	```javascript
 	<script src="<your_path>/cookieconsent.js"></script>
 	```
+- __Obtain Cookie-Consent plugin__ 
+	```javascript
+	const CookieConsent = initCookieConsent();
+	```
 - __Initialize cookieconsent__ (with default config. settings)
 	```javascript
 	CookieConsent.run(<config_object>);
@@ -36,8 +40,7 @@ Another way is to run the cookieconsent with an initial __config object__ like i
 CookieConsent.run({
 	"cc_autorun" : false, 						
 	"cc_delay" : 0,								
-	"cc_website_name" : "Orest Bida",
-	"cc_website_url" : "orestbida.com",				
+	"cc_policy_url" : null,				
 	"cc_enable_verbose" : true,					
 	"cc_current_lang" : "en",	
 	"cc_auto_language" : false,					
@@ -65,6 +68,9 @@ CookieConsent.run({
 - __cc_theme_css__ : (string)
 	- *default* : null
 	- specify path to local cookieconsent.css file
+- __cc_policy_url__ : (string)
+	- *default* : null
+	- specify path to your own cookieconsent policy page (eg. https://mydomain.com/cookiepolicy/)
 
 ## TODO
 List of things to implement
@@ -76,5 +82,3 @@ List of things to implement
 		- column for cookie-description
 		- column for cookie-expiration-date
 	- Implement the (eventual) possibility of opting-out of cookie-consent
-
-
