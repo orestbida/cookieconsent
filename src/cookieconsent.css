@@ -9,7 +9,7 @@
     z-index: 100;
     background: #fff;
     color: #000;
-    width: 420px;
+    width: 421px;
     bottom: 20px;
     right: 20px;
     box-shadow: 0 10px 30px #c4cbda;
@@ -20,6 +20,7 @@
     border-radius: 4px;
     transition: none;
     line-height: initial;
+    line-break: anywhere;
 }
 
 #cc__modal__container #cc__modal button,
@@ -178,10 +179,12 @@ CookieConsent policy
     vertical-align: middle;
 }
 
-#cc__modal__container #cc__plicy__close__btn{
+#cc__modal__container #cc__policy__close__btn{
     display: table-cell;
     float: right;
     padding: 0;
+    width: 36px;
+    height: 36px;
     border: none;
     background: #ffda30;
     padding: 10px;
@@ -192,7 +195,7 @@ CookieConsent policy
     transition: box-shadow .25s ease, background-color .25s ease;
 }
 
-#cc__modal__container #cc__plicy__close__btn:hover{
+#cc__modal__container #cc__policy__close__btn:hover{
     background: #dbbc2e;
     box-shadow: 0 0 0 4px #ffefa6;
 }
@@ -242,7 +245,7 @@ CookieConsent policy
   
 /** end custom scrollbar **/
 
-@media screen and (max-width: 1050px){
+@media screen and (max-width: 1000px){
     #cc__modal__container #cc__modal{
         width: 100%;
         margin: 0;
@@ -251,5 +254,25 @@ CookieConsent policy
         bottom: 0;
         border-radius: 0;
         display: block;
+    }
+}
+
+/* On screens that are 600px or less, set the background color to olive */
+@media screen and (max-width: 688px) {
+    #cc__modal__container #cc__valign {
+        padding: 0;
+    }
+
+    #cc__modal__container #cc__policy{
+        border-radius: 0;
+    }
+
+    #cc__modal__container #cc__policy__header{
+        left: 20px;
+        right: 20px;
+    }
+
+    #cc__modal__container #cc__policy__content{
+        margin: 20px;
     }
 }
