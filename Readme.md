@@ -2,7 +2,7 @@
 Simple cross-browser cookie consent plugin written in plain javascript.
 
 ## Why though
-I wanted a simple, lightweight but also "extensible" plugin, which could be placed in my own web server without the need of making additional external requests. The reason was to further optimize the loading speed of my website.
+I wanted a simple, `lightweight` but also `extensible` plugin, which could be placed in my own web server without the need of making additional external requests. The reason was to further optimize the loading speed of my website.
 
 Main features
 - __Cross-browser__ support (IE8+)
@@ -35,16 +35,46 @@ Main features
 	```
 
 ## Custom config. settings
-Another way is to run the cookieconsent with an initial __config object__ like in the example below.
+Another way is to run the cookieconsent with an initial __config object__ like in the example below. 
 ```javascript
 CookieConsent.run({
-	"cc_autorun" : false, 						
-	"cc_delay" : 0,								
-	"cc_policy_url" : null,				
-	"cc_enable_verbose" : true,					
-	"cc_current_lang" : "en",	
-	"cc_auto_language" : false,					
-	"cc_theme_css" : "<your_path>/cookieconsent.css"
+	cc_autorun : false, 						
+	cc_delay : 0,								
+	cc_policy_url : null,				
+	cc_enable_verbose : true,					
+	cc_current_lang : 'en',	
+	cc_auto_language : true,					
+	cc_theme_css : '<your_path>/cookieconsent.css',
+	cc_languages : [
+		{
+			lang : 'it',
+			modal : {
+				cc_title : "My cookie-modal title",
+				cc_description : "My cookie-modal description",
+				cc_more_text : "Learn more text",
+				cc_accept_text : "Accept cookie-modal text"
+			},
+			policy : {
+				cc_title : "My cookie-policy title",
+				ccp_save_text : "Save preferences text",
+				ccp_blocks : [
+					{
+						title : "Block1 title",
+						descritpion: "Block1 description"
+					},
+					{
+						title : "Block2 title",
+						description: "Block2 descritpion",
+						switch : {
+							value : 'block_2_cookies',
+							enabled : true,
+							readonly : false
+						}
+					}
+				]
+			}
+		}
+	]
 });
 ```
 
@@ -71,14 +101,39 @@ CookieConsent.run({
 - __cc_policy_url__ : (string)
 	- *default* : null
 	- specify path to your own cookieconsent policy page (eg. https://mydomain.com/cookiepolicy/)
+- __cc_languages__ : (string)
+	- *default* : [{<en_language_only>}]
+	- define (multiple) new languages or override default one (en)
+	- example usage:
+		```javascript
+			CookieConsent.run({
+				cc_languages : [
+					{
+						lang : "it"	//add italian
+						modal : {
+							cc_title : "<title ...>",
+							...
+						},
+						policy : {
+							...
+						}
+					}
+				]
+			});
+		```
 
 ## TODO
 List of things to implement
-- Add the possibility of __"quickly" defining a new language__ without the necessity of directly editing source file
-- Make cookieconsent __GPDR compliant__:
+- [ ] Add dark-mode 
+	- can be enabled based on a custom specific class set by user
+- [x] Make all `cookie-modal` content and `cookie-policy` __customizable__
+- [x] Add the possibility of quickly `defining a new language/override default one` 
+- [ ] Implement a dropdown select language menu when multiple languages are defined
+- [x] `Custom cookie-policy url` (useful for those who alredy have a cookie policy)
+- [ ] Make cookieconsent **`GPDR compliant`**:
 	- Implement "learn more" modal with a brief explanation about cookies
 	- Implement custom-cookie-table containing:
 		- column for cookie-name
 		- column for cookie-description
 		- column for cookie-expiration-date
-	- Implement the (eventual) possibility of opting-out of cookie-consent
+	- Implement the (eventual) `possibility of opting-out` of cookie-consent
