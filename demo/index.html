@@ -9,8 +9,23 @@
             font-family: Arial, Helvetica, sans-serif;
             padding: 20px;
         }
+
+        #app{
+            max-width: 800px;
+            margin: 0 auto;
+            color: #232323;
+        }
+
+        #app h1, #app p{
+            margin: 0;
+            padding: 0;
+        }
+
+        #app > p{
+            line-height: 1.4em;
+        }
 		
-		.styled_btn{
+		#app .styled_btn{
 			padding: 13px 20px;
             border: none;
             color: #fff;
@@ -23,97 +38,83 @@
             outline: none;
             transition: box-shadow .25s ease, background-color .25s ease;
             box-shadow: 0 0 0 0 transparent;
+            width: 180px;
+            text-align: center;
+        }
+
+        #app li{
+            margin-bottom: 5px;
         }
         
-        .styled_btn:hover{
+        #app .styled_btn:hover{
             box-shadow: 0 0 0 4px rgb(194, 194, 194);
         }
 
-        h1, p{
-            margin: 0;
-            padding: 0;
-        }
+       
 
-        h1{
-            margin-bottom: 10px;
-        }
-
-        p{
+        #app > h1{
             margin-bottom: 20px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid #dbdbdb;
+        }
+
+        #app > p{
+            margin-bottom: 20px;
+        }
+
+        #app .c_emf{
+            background: #e6ecef;
+            padding: 1px 4px;
+            margin: 0;
+            border-radius: 3px;
+        }
+
+        #app span.c_obj{
+            color: #e36209;
+        }
+
+        #app span.c_meth{
+            color: #005cc5;
+        }
+
+        #app p.c_ss{
+            font-size: 10pt;
+            line-break: anywhere;
+            display: inline-block;
+        }
+
+        #app span.c_fr{
+            color: #005cc5;
+        }
+
+        #app span.c_oc{
+            color: #22863a;
+        }
+
+        #app code{
+            background: #f6f8fa;
+            padding: 13px;
+            display: block;
+            border-radius: 5px;
+            margin-bottom: 10px;
         }
     </style>
 </head>
 <body>
     <div id="app">
         <h1>CookieConsent demo</h1>
-        <p>Simple, responsive and configurable cookie consent!</p>
+        <p class="c_underl">Simple, <span class="c_emf">lightweight</span>, responsive and <span class="c_emf">extensible</span> cookie consent! <a href="https://github.com/orestbida/cookieconsent">Github repo.</a></p>
+        <p>If your browser is set in italian language, then the cookie-consent will be loaded with the newly defined it-lang (see app.js), otherwise it will default to en-lang</p>
         <br>
-        <button class="styled_btn" id="btn1" type="button">Init CookieConsent</button>
-		<button class="styled_btn" id="btn2" type="button">Show cookieConsent</button>
-        <button class="styled_btn" id="btn3" type="button">Hide cookieConsent</button>
-        <button class="styled_btn" id="btn4" type="button">Clear all cookies</button>
+        <ul>
+            <li><button class="styled_btn" id="btn1" type="button">Init CookieConsent </button><p class="c_ss"><code><span class="c_obj">CookieConsent</span>.<span class="c_meth">run</span>({<span class="c_fr">&lt;</span><span class="c_oc">config_object</span><span class="c_fr">&gt;</span>});</code></p></li>
+            <li><button class="styled_btn" id="btn2" type="button">Show cookie modal</button><p class="c_ss"><code><span class="c_obj">CookieConsent</span>.<span class="c_meth">show</span>({<span class="c_fr">&lt;</span><span class="c_oc">optional_delay_value</span><span class="c_fr">&gt;</span>});</code></p></li>
+            <li><button class="styled_btn" id="btn5" type="button">Show cookie policy</button><p class="c_ss"><code><span class="c_obj">CookieConsent</span>.<span class="c_meth">show_policy</span>({<span class="c_fr">&lt;</span><span class="c_oc">optional_delay_value</span><span class="c_fr">&gt;</span>});</code></p></li>
+            <li><button class="styled_btn" id="btn3" type="button">Hide cookie modal</button><p class="c_ss"><code><span class="c_obj">CookieConsent</span>.<span class="c_meth">hide</span>({<span class="c_fr">&lt;</span><span class="c_oc">optional_delay_value</span><span class="c_fr">&gt;</span>});</code></p></li>
+            <li><button class="styled_btn" id="btn4" type="button">Clear all cookies</button><p class="c_ss"><code><span class="c_obj">CookieConsent</span>.<span class="c_meth">clearCookies</span>();</code></p></li>
+        </ul>
     </div>
     <script src="../src/cookieconsent.js"></script>
-    <script>
-
-        // obtain plugin object
-        var cc = initCookieConsent();
-
-        // init plugin
-        var autorun = function(){
-            cc.run({
-                "cc_autorun" : true, 							// show as soon as possible (without the need to manually call CookieConsent.show() )
-                "cc_delay" : 0,								    // specify initial delay after website has loaded		
-                "cc_enable_verbose" : true,						// if enabled, prints all info/error msgs	
-                "cc_current_lang" : "en",	
-                "cc_policy_url" : null,                         // specify your own dedicated cookie policy page url
-                "cc_auto_language" : true,						// if enabled, overrides cc_current_lang
-                "cc_theme_css" : "../src/cookieconsent.css"		// path to cookieconsent css
-            });
-        }
-
-        autorun();
-        
-        addEvent(document.getElementById("btn1"), "click", function(){
-            autorun();
-        });
-
-        addEvent(document.getElementById("btn2"), "click", function(){
-            cc.show(0);                              // specify 0 as delay value
-        });
-
-        addEvent(document.getElementById("btn3"), "click", function(){
-            cc.hide();                               // hide cookie consent
-        });
-
-        addEvent(document.getElementById("btn4"), "click", function(){
-            cc.clearCookies();                        
-        });
-
-        /**
-        * Add event listener to dom object (cross browser function)
-        * @param {Object} elem 
-        * @param {string} event //event type
-        * @param {Object } fn 
-        * @param {boolean} passive
-        */
-        function addEvent(elem, event, fn, passive) {
-            var passive = passive || false;
-
-            if (elem.addEventListener) {
-                passive ? elem.addEventListener(event, fn, { capture: true, passive: true }) : elem.addEventListener(event, fn, false);
-            } else {
-                /**
-                 * For old browser, convert "click" and "focus" event to onclick
-                 * since the're not always supported
-                 */
-                if (event == "click" || event == "focus") {
-                    event = "onclick";
-                }
-                elem.attachEvent(event, fn);
-            }
-        }
-
-    </script>
+    <script src="app.js"></script>
 </body>
 </html>
