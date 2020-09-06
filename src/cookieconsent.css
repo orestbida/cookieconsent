@@ -265,6 +265,7 @@ CookieConsent policy
 
     #cc__modal__container #cc__policy{
         border-radius: 0;
+		max-height: 100%;
     }
 
     #cc__modal__container #cc__policy__header{
