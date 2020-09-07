@@ -59,13 +59,13 @@ CookieConsent.run({
 				ccp_save_text : "Save preferences text",
 				ccp_blocks : [
 					{
-						title : "Block1 title",
-						descritpion: "Block1 description"
+						ccb_title : "Block1 title",
+						ccb_descritpion: "Block1 description"
 					},
 					{
-						title : "Block2 title",
-						description: "Block2 descritpion",
-						switch : {
+						ccb_title : "Block2 title",
+						ccb_description: "Block2 descritpion",
+						ccb_switch : {
 							value : 'block_2_cookies',
 							enabled : true,
 							readonly : false
