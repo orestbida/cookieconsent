@@ -1,8 +1,29 @@
+#cc__modal__container,
 #cc__modal__container #cc__modal{
     box-sizing: border-box;
     -webkit-box-sizing: border-box;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+}
+
+#cc__modal__container input, 
+#cc__modal__container p,
+#cc__modal__container h1,
+#cc__modal__container h2,
+#cc__modal__container h3,
+#cc__modal__container h4,
+#cc__modal__container div{
+    margin: 0;
+    padding: 0;
+}
+
+#cc__modal__container button{
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+#cc__modal__container #cc__modal{
     font-family: inherit;
     padding: 30px 40px;
     position: fixed;
@@ -64,7 +85,8 @@
     line-height: 22px;
 }
 
-#cc__modal__container #cc__modal #cc__modal__accept__btn{
+#cc__modal__container #cc__modal #cc__modal__accept__btn,
+#cc__modal__container #cc__policy__save__btn{
     border: none;
 	padding: 14px 30px 13px 30px;
     background: #ffda30;
@@ -79,15 +101,20 @@
     transition: none;
     font-weight: 600;
 }
-#cc__modal__container #cc__modal.cc__show #cc__modal__accept__btn{
+
+#cc__modal__container #cc__modal.cc__show #cc__modal__accept__btn,
+#cc__modal__container .cc__show #cc__policy__save__btn{
     transition: background-color .25s ease, color .25s ease, box-shadow .25s ease;
 }
-#cc__modal__container #cc__modal #cc__modal__accept__btn:hover{
+
+#cc__modal__container #cc__modal #cc__modal__accept__btn:hover,
+#cc__modal__container #cc__policy__save__btn:hover{
     background: #e7c52e;
     box-shadow: 0 0 0 4px #fff0ad;
 }
 
-#cc__modal__container #cc__modal #cc__modal__accept__btn:active{
+#cc__modal__container #cc__modal #cc__modal__accept__btn:active,
+#cc__modal__container #cc__policy__save__btn:active{
     background: #9e9e9e;
     box-shadow: 0 0 0 4px #dfdfdf;
 }
@@ -118,6 +145,25 @@ CookieConsent policy
     visibility: hidden;
     opacity: 0;
     transition: none; 
+}
+
+#cc__modal__container #cc__policy__content .ccp_section{
+    padding: 15px 0;
+    margin-bottom: 10px;
+}
+
+#cc__modal__container #cc__policy__container h2{
+    margin-bottom: 15px;
+}
+
+#cc__modal__container #cc__policy__container p{
+    margin-bottom: 10px;
+    font-size: 15px;
+    line-height: 1.3em;
+}
+
+#cc__modal__container #cc__policy__container input{
+    -webkit-appearance: auto;
 }
 
 #cc__modal__container #cc__policy__container.cc__blur{
@@ -164,19 +210,20 @@ CookieConsent policy
     padding: 0;
     left: 0;
     right: 0;
-    padding: 0 30px 30px 0;
+    padding: 0px 30px 30px 4px;
 }
 
 #cc__modal__container #cc__policy__header{
     display: table;
     position: absolute;
-    left: 30px;
+    left: 34px;
     right: 30px;
     top: 30px;
 }
 #cc__modal__container #cc__policy__title{
     display: table-cell;
     vertical-align: middle;
+    font-size: 1em;
 }
 
 #cc__modal__container #cc__policy__close__btn{
@@ -269,7 +316,7 @@ CookieConsent policy
     }
 
     #cc__modal__container #cc__policy__header{
-        left: 20px;
+        left: 24px;
         right: 20px;
     }
 
