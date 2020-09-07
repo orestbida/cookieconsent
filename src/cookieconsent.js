@@ -66,27 +66,27 @@
 					ccp_title : "Cookie Policy",
 					ccp_blocks : [
 						{
-							title : "What are cookies",
-							description: 'Cookies are very small text files that are stored on your computer when you visit a website. I use cookies to assure the basic functionalities of the website and to enhance your online experience.'
+							ccb_title : "What are cookies",
+							ccb_description: 'Cookies are very small text files that are stored on your computer when you visit a website. I use cookies to assure the basic functionalities of the website and to enhance your online experience.'
 						},{
-							title : "Strictly necessary cookies",
-							description: 'These cookies are essential for the proper functioning of my website. Without these cookies, the website would not work properly.',
-							switch : {
+							ccb_title : "Strictly necessary cookies",
+							ccb_description: 'These cookies are essential for the proper functioning of my website. Without these cookies, the website would not work properly.',
+							ccb_switch : {
 								value : 'necessary_cookies',
 								enabled : true,
 								readonly: true
 							}
 						},{
-							title : "Functionality cookies",
-							description: 'These cookies are used to provide you with a more personalized experience on my website and to remember choices you make when you browse the website. For example, whether or not you enabled dark-mode on this website.',
-							switch : {
+							ccb_title : "Functionality cookies",
+							ccb_description: 'These cookies are used to provide you with a more personalized experience on my website and to remember choices you make when you browse the website. For example, whether or not you enabled dark-mode on this website.',
+							ccb_switch : {
 								value : 'functionality_cookies',
 								enabled : true,
 								readonly: false
 							}
 						},{
-							title : "More information",
-							description: 'For any queries in relation to my policy on cookies and your choices, please contact me.',
+							ccb_title : "More information",
+							ccb_description: 'For any queries in relation to my policy on cookies and your choices, please contact me.',
 						}
 					],
 					ccp_save_text : "Save preferences"
@@ -143,6 +143,8 @@
 							 */
 							if(_cc_languages.hasOwnProperty(lang_index)){
 								
+								_printVerbose("CookieConsent [config_notice]: updating_existing_lang = '"+ lang_index +"'");
+
 								/**
 								 * Update cookie-consent modal content
 								 */
@@ -162,14 +164,43 @@
 								 */
 								if(typeof _config.cc_policy_url != "string"){
 									if(typeof lang_content['policy'] != "undefined"){
+
 										if(lang_content['policy'].hasOwnProperty('ccp_title'))
 											_cc_languages[lang_index].policy.ccp_title = lang_content['policy']['ccp_title'];
-	
-										if(lang_content['policy'].hasOwnProperty('ccp_blocks'))
-											_cc_languages[lang_index].policy.ccp_blocks = lang_content['policy']['ccp_blocks'];
-										
+		
 										if(lang_content['policy'].hasOwnProperty('ccp_save_text'))
 											_cc_languages[lang_index].policy.ccp_save_text = lang_content['policy']['ccp_save_text']
+										
+										if(lang_content['policy'].hasOwnProperty('ccp_blocks')){
+
+											/**
+											 * Delete current ccp_blocks content
+											 */
+											_cc_languages[lang_index].policy.ccp_blocks = [];
+
+											/**
+											 * Get all new blocks to add
+											 */
+											var all_blocks = lang_content['policy']['ccp_blocks'];
+								
+											for(var x=0; x<all_blocks.length; x++){
+												
+												var block_tmp = {};
+												
+												block_tmp.ccb_title = all_blocks[x]['ccb_title'];
+												block_tmp.ccb_description = all_blocks[x]['ccb_description'];
+
+												if(all_blocks[x].hasOwnProperty('ccb_switch')){
+													var ccb_switch = {};
+													ccb_switch.value = all_blocks[x]['ccb_switch']['value'];
+													ccb_switch.enabled = all_blocks[x]['ccb_switch']['enabled'];
+													ccb_switch.readonly = all_blocks[x]['ccb_switch']['readonly'];
+													block_tmp.ccb_switch = ccb_switch;
+												}
+
+												_cc_languages[lang_index].policy.ccp_blocks.push(block_tmp);
+											}
+										}	
 									}
 								}
 							}else{
@@ -178,9 +209,45 @@
 								 */
 								_printVerbose("CookieConsent [config_notice]: adding_new_lang = '"+ lang_index +"'");
 								_cc_languages[lang_index] = {};
-								_cc_languages[lang_index].modal = lang_content['modal'];
-								if(typeof _config.cc_policy_url != "string"){
-									typeof lang_content['policy'] != 'undefined' && !_isEmpty(lang_content['policy']) ? _cc_languages[lang_index].policy = lang_content['policy'] : _cc_languages[lang_index].policy = _cc_languages['en'].policy;
+								/**
+								 * Set modal content
+								 */
+								_cc_languages[lang_index].modal = {};
+								_cc_languages[lang_index].modal.cc_title = lang_content['modal']['cc_title'];
+								_cc_languages[lang_index].modal.cc_description = lang_content['modal']['cc_description'];
+								_cc_languages[lang_index].modal.cc_accept_text = lang_content['modal']['cc_accept_text'];
+								_cc_languages[lang_index].modal.cc_more_text = lang_content['modal']['cc_more_text'];
+
+								/**
+								 * Set policy content
+								 */
+
+								_cc_languages[lang_index].policy = {};
+								_cc_languages[lang_index].policy.ccp_blocks = [];
+								_cc_languages[lang_index].policy.ccp_title =  lang_content['policy']['ccp_title'];
+								_cc_languages[lang_index].policy.ccp_save_text =  lang_content['policy']['ccp_save_text'];
+								
+								/**
+								 * Set all blocks for policy
+								 */
+								var all_blocks = lang_content['policy']['ccp_blocks'];
+								
+								for(var j=0; j<all_blocks.length; j++){
+									
+									var block_tmp = {};
+									
+									block_tmp.ccb_title = all_blocks[j]['ccb_title'];
+									block_tmp.ccb_description = all_blocks[j]['ccb_description'];
+
+									if(all_blocks[j].hasOwnProperty('ccb_switch')){
+										var ccb_switch = {};
+										ccb_switch.value = all_blocks[j]['ccb_switch']['value'];
+										ccb_switch.enabled = all_blocks[j]['ccb_switch']['enabled'];
+										ccb_switch.readonly = all_blocks[j]['ccb_switch']['readonly'];
+										block_tmp.ccb_switch = ccb_switch;
+									}
+
+									_cc_languages[lang_index].policy.ccp_blocks.push(block_tmp);
 								}
 							}
 						}
@@ -202,7 +269,7 @@
 					}
 				}
 			}catch(ex){
-				_printVerbose("CookieConsent [ERROR]: ", ex);
+				_printVerbose("CookieConsent [ERROR] => ", ex, true);
 			}
 		}
 
@@ -277,8 +344,8 @@
 		 * @param {object} print_msg 
 		 * @param {object} optional_param 
 		 */
-		var _printVerbose = function(print_msg, optional_param){
-			_config.cc_enable_verbose && console.log(print_msg, optional_param || "");
+		var _printVerbose = function(print_msg, optional_param, error){
+			!error ? _config.cc_enable_verbose && console.log(print_msg, optional_param || "") : _config.cc_enable_verbose && console.error(print_msg, optional_param || "");
 		}
 
 		/**
@@ -478,25 +545,25 @@
 				_addClass(block_desc, 'section_desc');
 
 				// set title and description for each block
-				block_title.innerHTML = all_blocks[i].title;
-				block_desc.innerHTML = all_blocks[i].description;
+				block_title.innerHTML = all_blocks[i].ccb_title;
+				block_desc.innerHTML = all_blocks[i].ccb_description;
 
 				block_section.appendChild(block_title);
 				block_section.appendChild(block_desc);
 
 				// ... switch
-				if(typeof all_blocks[i].switch !== 'undefined'){
+				if(typeof all_blocks[i].ccb_switch !== 'undefined'){
 					var block_switch = document.createElement('input');
 					block_switch.setAttribute('type', 'checkbox');
-					block_switch.setAttribute('value', all_blocks[i].switch.value);
+					block_switch.setAttribute('value', all_blocks[i].ccb_switch.value);
 
 					_addClass(block_switch, 'sc_toggle');
 
-					if(all_blocks[i].switch.enabled){
+					if(all_blocks[i].ccb_switch.enabled){
 						block_switch.checked = true;
 					}
 
-					if(all_blocks[i].switch.readonly){
+					if(all_blocks[i].ccb_switch.readonly){
 						block_switch.disabled = "disabled"
 						block_switch.readOnly = true;
 					}
@@ -542,13 +609,13 @@
 				cc_cookie_level = '';
 				for(var i=0; i<accepted_cookies.length; i++){
 					if(accepted_cookies[i].checked){
-						cc_cookie_level+=accepted_cookies[i].value+";";
+						cc_cookie_level+=accepted_cookies[i].value+",";
 					}
 				}
 				cc_cookie_level = cc_cookie_level.slice(0, -1);
 			}
-			
-			_setCookie('cc_level', cc_cookie_level, 30);
+			_setCookie(_config.cc_cookie_name, "accepted", _config.cc_cookie_expires, 0, 0);
+			_setCookie('cc_level', cc_cookie_level, _config.cc_cookie_expires, 0, 0);
 		}
 
 		/**
@@ -717,7 +784,6 @@
 			_addEvent(document.getElementById(_config.cc_ids.modal_accept_btn), "click", function(event){
 				_cookieconsent.hide();
 				_printVerbose("CookieConsent [cookie_consent]: cookie_consent was accepted!");
-				_setCookie(_config.cc_cookie_name, "accepted", _config.cc_cookie_expires, 0, 0);
 				_saveCookiePreferences();
 			});
 		}
@@ -741,7 +807,7 @@
 			if(location.protocol == "https")
 				document.cookie = "tagname = test;secure";
 
-			_printVerbose("CookieConsent [cookie_consent]: cookie "+ name + "='" + value + "\" was set!\"");
+			_printVerbose("CookieConsent [cookie_consent]: cookie "+ name + "='" + value + "' was set!");
 		}
 
 		/**
