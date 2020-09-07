@@ -19,7 +19,7 @@
 			cc_theme_css : "../src/cookieconsent.css",		// path to cookieconsent css
 			cc_languages : [
 				{
-					lang : 'it',
+					lang : 'en',
 					modal : {
 						cc_title : "Noi usiamo i cookies",
 						cc_description : lorem_ipsum_short,
@@ -31,22 +31,22 @@
 						ccp_save_text : "Salva preference",
 						ccp_blocks : [
 							{
-								title : "Cookie essenziali",
-								description: lorem_ipsum + "<br><br>" + lorem_ipsum
+								ccb_title : "Cookie essenziali",
+								ccb_description: lorem_ipsum + "<br><br>" + lorem_ipsum
 							},
 							{
-								title : "Cookie di funzionalità",
-								description: lorem_ipsum,
-								switch : {
+								ccb_title : "Cookie di funzionalità",
+								ccb_description: lorem_ipsum,
+								ccb_switch : {
 									value : 'cc_funzionalita',
 									enabled : true,
 									readonly : true
 								}
 							},
 							{
-								title : "Cookie pubblicitari",
-								description: lorem_ipsum,
-								switch : {
+								ccb_title : "Cookie pubblicitari",
+								ccb_description: lorem_ipsum,
+								ccb_switch : {
 									value : 'cc_publicita',
 									enabled : false,
 									readonly : false

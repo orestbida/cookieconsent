@@ -5,15 +5,40 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CookieConsent demo</title>
     <style>
+
+        *, body, html{
+            box-sizing: border-box;
+        }
+
         body{
             font-family: Arial, Helvetica, sans-serif;
-            padding: 20px;
+            margin: 0;
+            padding: 0;
+        }
+
+        p{
+            margin: 0;
+            padding: 0;
         }
 
         #app{
             max-width: 800px;
             margin: 0 auto;
+            margin-top: 20px;
             color: #232323;
+            padding: 0 20px;
+        }
+
+        #app_banner{
+            background: #252525;
+            font-size: .9em;
+            color: white;
+        }
+
+        #app_banner > p {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 12px 20px;
         }
 
         #app h1, #app p{
@@ -49,8 +74,6 @@
         #app .styled_btn:hover{
             box-shadow: 0 0 0 4px rgb(194, 194, 194);
         }
-
-       
 
         #app > h1{
             margin-bottom: 20px;
@@ -101,20 +124,28 @@
     </style>
 </head>
 <body>
-    <div id="app">
-        <h1>CookieConsent demo</h1>
-        <p class="c_underl">Simple, <span class="c_emf">lightweight</span>, responsive and <span class="c_emf">extensible</span> cookie consent! <a href="https://github.com/orestbida/cookieconsent">Github repo.</a></p>
-        <p>If your browser is set in italian language, then the cookie-consent will be loaded with the newly defined it-lang (see app.js), otherwise it will default to en-lang</p>
-        <br>
-        <ul>
-            <li><button class="styled_btn" id="btn1" type="button">Init CookieConsent </button><p class="c_ss"><code><span class="c_obj">CookieConsent</span>.<span class="c_meth">run</span>({<span class="c_fr">&lt;</span><span class="c_oc">config_object</span><span class="c_fr">&gt;</span>});</code></p></li>
-            <li><button class="styled_btn" id="btn2" type="button">Show cookie modal</button><p class="c_ss"><code><span class="c_obj">CookieConsent</span>.<span class="c_meth">show</span>({<span class="c_fr">&lt;</span><span class="c_oc">optional_delay_value</span><span class="c_fr">&gt;</span>});</code></p></li>
-            <li><button class="styled_btn" id="btn5" type="button">Show cookie policy</button><p class="c_ss"><code><span class="c_obj">CookieConsent</span>.<span class="c_meth">show_policy</span>({<span class="c_fr">&lt;</span><span class="c_oc">optional_delay_value</span><span class="c_fr">&gt;</span>});</code></p></li>
-            <li><button class="styled_btn" id="btn3" type="button">Hide cookie modal</button><p class="c_ss"><code><span class="c_obj">CookieConsent</span>.<span class="c_meth">hide</span>({<span class="c_fr">&lt;</span><span class="c_oc">optional_delay_value</span><span class="c_fr">&gt;</span>});</code></p></li>
-            <li><button class="styled_btn" id="btn4" type="button">Clear all cookies</button><p class="c_ss"><code><span class="c_obj">CookieConsent</span>.<span class="c_meth">clearCookies</span>();</code></p></li>
-        </ul>
+    <div id="main_wrapper">
+        <div id="app_banner">
+            <p>Project under developement, features and aesthetics may change after new updates!</p>
+        </div>
+        <div id="app">
+            <h1>Cookie Consent demo</h1>
+            <p>Simple <span class="c_emf">cross-browser</span> cookie-consent plugin written in vanilla js.</p>
+            <p>If your browser is set in italian language, then the cookie-consent will be loaded with the newly defined it-lang (see <b><i>app.js</i></b> for the cookie-consent configuration), otherwise it will default to en-lang.</p>
+            <br>
+            <p>Go to <a href="https://github.com/orestbida/cookieconsent">github repo.</a></p>
+            <p class="c_emf" style="padding: 10px;"><i>Check <b>console window</b> for more details about api.</i></p>
+            <br>
+            <ul>
+                <li><button class="styled_btn" id="btn1" type="button">Init CookieConsent </button><p class="c_ss"><code><span class="c_obj">CookieConsent</span>.<span class="c_meth">run</span>({<span class="c_fr">&lt;</span><span class="c_oc">config_object</span><span class="c_fr">&gt;</span>});</code></p></li>
+                <li><button class="styled_btn" id="btn2" type="button">Show cookie modal</button><p class="c_ss"><code><span class="c_obj">CookieConsent</span>.<span class="c_meth">show</span>({<span class="c_fr">&lt;</span><span class="c_oc">optional_delay_value</span><span class="c_fr">&gt;</span>});</code></p></li>
+                <li><button class="styled_btn" id="btn5" type="button">Show cookie policy</button><p class="c_ss"><code><span class="c_obj">CookieConsent</span>.<span class="c_meth">show_policy</span>({<span class="c_fr">&lt;</span><span class="c_oc">optional_delay_value</span><span class="c_fr">&gt;</span>});</code></p></li>
+                <li><button class="styled_btn" id="btn3" type="button">Hide cookie modal</button><p class="c_ss"><code><span class="c_obj">CookieConsent</span>.<span class="c_meth">hide</span>({<span class="c_fr">&lt;</span><span class="c_oc">optional_delay_value</span><span class="c_fr">&gt;</span>});</code></p></li>
+                <li><button class="styled_btn" id="btn4" type="button">Clear all cookies</button><p class="c_ss"><code><span class="c_obj">CookieConsent</span>.<span class="c_meth">clearCookies</span>();</code></p></li>
+            </ul>
+        </div>
     </div>
-    <script src="../src/cookieconsent.js"></script>
+    <script src="../dist/cookieconsent.js"></script>
     <script src="app.js"></script>
 </body>
 </html>
