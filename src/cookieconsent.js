@@ -328,6 +328,20 @@
 		}
 
 		/**
+		 * Search for all occurrences in webpage and add an onClick listener : 
+		 * when clicked => open cookie policy
+		 */
+		var _addCookiePolicyButtonListener = function(){
+			var all_links = document.querySelectorAll('a[data-cc="cc_policy"], button[data-cc="cc_policy"]');
+			for(var x=0; x<all_links.length; x++){
+				_addEvent(all_links[x], 'click', function(event){
+					event.preventDefault ? event.preventDefault() : event.returnValue = false;
+					_cookieconsent.show_policy();
+				});
+			}
+		}
+
+		/**
 		 * Check if given lang index exists as a defined property inside _config object
 		 * If it exists -> desired language is implemented for cookieconsent
 		 * Otherwise switch back to default cc_current_lang
@@ -658,6 +672,7 @@
 						if (typeof _config.cc_policy_url != "string"){
 							_createCookieConsentPolicyHTML();
 							_setCookieConsentPolicyContent();
+							_addCookiePolicyButtonListener();
 						}
 
 						_acceptCookieConsentListener();
@@ -672,6 +687,7 @@
 						if (typeof _config.cc_policy_url != "string"){
 							_createCookieConsentPolicyHTML();
 							_setCookieConsentPolicyContent();
+							_addCookiePolicyButtonListener();
 						}
 					});
 					_printVerbose("CookieConsent [NOTICE]: cookie consent alredy accepted!");
