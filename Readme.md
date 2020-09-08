@@ -106,10 +106,14 @@ CookieConsent.run({
 	- define (multiple) new languages or override default one (en)
 	- example usage:
 		```javascript
+			/*
+			 * Defining new language example
+			 * the following props: lang, modal, policy are required
+		     */
 			CookieConsent.run({
 				cc_languages : [
 					{
-						lang : "it"	//add italian
+						lang : 'it',	//add italian
 						modal : {
 							cc_title : "<title ...>",
 							...
