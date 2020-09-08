@@ -77,6 +77,15 @@ CookieConsent.run({
 	]
 });
 ```
+## How to open cookie policy without manually calling api
+You need to create a button or link with the following custom attribute `data-cc="cc_policy"`
+```html
+<!-- button example-->
+<button type="button" data-cc="cc_policy">Open cookie-policy</button>
+
+<!-- link example-->
+<a href="javascript:void(0)" data-cc="cc_policy">Open cookie-policy</a>
+```
 
 ### Config. properties
 - __cc_autorun__ : (boolean)
