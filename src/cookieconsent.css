@@ -233,6 +233,7 @@ CookieConsent policy
     display: table-cell;
     float: right;
     margin-left: 0.625em;
+    margin-right: 0.2em;
     padding: 0;
     width: 2.5em;
     height: 2.5em;
@@ -326,7 +327,7 @@ CookieConsent policy
     height: 1em;
     width: 1em;
     background-color: #eee;
-    border-radius: 0.250em;
+    border-radius: 0.2em;
 }
 
 /* On mouse-over, add a grey background color */
@@ -359,12 +360,12 @@ CookieConsent policy
 
 /* Style the checkmark/indicator */
 #cc__modal__container .sc_container_checkbox .sc_checkmark:after {
-    left: 0.380em;
-    top: 0.15em;
+    left: 0.39em;
+    top: 0.18em;
     width: 0.17em;
     height: 0.450em;
     border: solid white;
-    border-width: 0 0.13em 0.13em 0;
+    border-width: 0 0.1em 0.1em 0;
     -webkit-transform: rotate(45deg);
     -ms-transform: rotate(45deg);
     transform: rotate(45deg);
@@ -391,7 +392,7 @@ CookieConsent policy
 
 /* Zebra striping */
 #cc__modal__container #cc__policy__content table tr:nth-of-type(odd) { 
-	background: #eee; 
+    background: #ececec;
 }
 
 #cc__modal__container #cc__policy__content table th { 
@@ -438,12 +439,9 @@ only screen and (max-width: 760px),
 		left: -9999px;
 	}
 	
-	#cc__modal__container #cc__policy__content table tr { border: 1px solid #ccc; }
-	
 	#cc__modal__container #cc__policy__content table td { 
 		/* Behave  like a "row" */
 		border: none;
-		border-bottom: 1px solid #eee; 
 		position: relative;
 		padding-left: 50%; 
 	}
