@@ -17,45 +17,6 @@
 			cc_policy_url : null,                           // specify your own dedicated cookie policy page url
 			cc_auto_language : true,						// if enabled, overrides cc_current_lang
 			cc_theme_css : "../src/cookieconsent.css",		// path to cookieconsent css
-			cc_languages : [
-				{
-					lang : 'en',
-					modal : {
-						cc_title : "Noi usiamo i cookies",
-						cc_description : lorem_ipsum_short,
-						cc_more_text : "Scopri di più",
-						cc_accept_text : "Ho capito"
-					},
-					policy : {
-						ccp_title : "La mia cookie-policy",
-						ccp_save_text : "Salva preference",
-						ccp_blocks : [
-							{
-								ccb_title : "Cookie essenziali",
-								ccb_description: lorem_ipsum + "<br><br>" + lorem_ipsum
-							},
-							{
-								ccb_title : "Cookie di funzionalità",
-								ccb_description: lorem_ipsum,
-								ccb_switch : {
-									value : 'cc_funzionalita',
-									enabled : true,
-									readonly : true
-								}
-							},
-							{
-								ccb_title : "Cookie pubblicitari",
-								ccb_description: lorem_ipsum,
-								ccb_switch : {
-									value : 'cc_publicita',
-									enabled : false,
-									readonly : false
-								}
-							}
-						]
-					}
-				}
-			]
 		});
 	}
 
