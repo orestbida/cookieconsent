@@ -67,10 +67,40 @@
 					ccp_blocks : [
 						{
 							ccb_title : "What are cookies",
-							ccb_description: 'Cookies are very small text files that are stored on your computer when you visit a website. I use cookies to assure the basic functionalities of the website and to enhance your online experience.'
+							ccb_description: 'Cookies are very small text files that are stored on your computer when you visit a website. I use cookies to assure the basic functionalities of the website and to enhance your online experience. I use many different types of cookies which you can check on the sections below.'
 						},{
 							ccb_title : "Strictly necessary cookies",
 							ccb_description: 'These cookies are essential for the proper functioning of my website. Without these cookies, the website would not work properly.',
+							ccb_cookies_table : [
+								{
+									ccb_cookie_name: '__Secure-PHPSESSID',
+									ccb_cookie_domain: 'orestbida.com',
+									ccb_cookie_expiration: 'When the browsing session ends',
+									ccb_cookie_description: 'Cookie that stores a random string which represents your current session id' ,
+									ccb_cookie_type: 'Session cookie'
+								},
+								{
+									ccb_cookie_name: '__cfduid',
+									ccb_cookie_domain: 'cloudflare.com',
+									ccb_cookie_expiration: 'When you leave the website',
+									ccb_cookie_description: 'Used to identify web traffic by cloudflare. This cookie does not store any personal information.',
+									ccb_cookie_type: 'Third-party cookie'
+								},
+								{
+									ccb_cookie_name: 'cc_cookie',
+									ccb_cookie_domain: 'orestbida.com',
+									ccb_cookie_expiration: 'After 3 months (Starting from the moment the cookie-consent was accepted)',
+									ccb_cookie_description: 'Used to know whether a visitor has accepted the cookie consent or not.',
+									ccb_cookie_type: 'Permanent cookie'
+								},
+								{
+									ccb_cookie_name: 'cc_level',
+									ccb_cookie_domain: 'orestbida.com',
+									ccb_cookie_expiration: 'After 3 months (Starting from the moment the cookie-consent was accepted)',
+									ccb_cookie_description: 'Used to know the accepted level of cookie consent (E.g.  essential cookie only, full cookie consent ...)',
+									ccb_cookie_type: 'Permanent cookie'
+								}
+							],
 							ccb_switch : {
 								value : 'necessary_cookies',
 								enabled : true,
@@ -83,7 +113,16 @@
 								value : 'functionality_cookies',
 								enabled : true,
 								readonly: false
-							}
+							},
+							ccb_cookies_table: [
+								{
+									ccb_cookie_name: 'darkmode',
+									ccb_cookie_domain: 'orestbida.com',
+									ccb_cookie_expiration: 'One week after the cookie has been created',
+									ccb_cookie_description: 'Used to remember visitor preferences. If darkmode was enabled, then the next time you visit the website, darkmode will be automatically turned on.' ,
+									ccb_cookie_type: 'Permanent cookie'
+								}
+							]
 						},{
 							ccb_title : "More information",
 							ccb_description: 'For any queries in relation to my policy on cookies and your choices, please contact me.',
@@ -190,6 +229,8 @@
 												block_tmp.ccb_title = all_blocks[x]['ccb_title'];
 												block_tmp.ccb_description = all_blocks[x]['ccb_description'];
 
+												// TO DO --> CCB_COOKIE_TABLE
+
 												if(all_blocks[x].hasOwnProperty('ccb_switch')){
 													var ccb_switch = {};
 													ccb_switch.value = all_blocks[x]['ccb_switch']['value'];
@@ -200,7 +241,7 @@
 
 												_cc_languages[lang_index].policy.ccp_blocks.push(block_tmp);
 											}
-										}	
+										}
 									}
 								}
 							}else{
@@ -221,7 +262,6 @@
 								/**
 								 * Set policy content
 								 */
-
 								_cc_languages[lang_index].policy = {};
 								_cc_languages[lang_index].policy.ccp_blocks = [];
 								_cc_languages[lang_index].policy.ccp_title =  lang_content['policy']['ccp_title'];
@@ -231,13 +271,15 @@
 								 * Set all blocks for policy
 								 */
 								var all_blocks = lang_content['policy']['ccp_blocks'];
-								
+
 								for(var j=0; j<all_blocks.length; j++){
 									
 									var block_tmp = {};
 									
 									block_tmp.ccb_title = all_blocks[j]['ccb_title'];
 									block_tmp.ccb_description = all_blocks[j]['ccb_description'];
+
+									// TO DO --> CCB_COOKIE_TABLE
 
 									if(all_blocks[j].hasOwnProperty('ccb_switch')){
 										var ccb_switch = {};
@@ -395,8 +437,9 @@
 			/**
 			 * Create general container
 			 */
-			var _cc_general_container = document.createElement("div");
-			_cc_general_container.id = _config.cc_ids.main_container_id;
+			var _cc_general_container = document.createElement('div');
+			_cc_general_container.setAttribute('cc_data', 'cc_cookie_main')
+			_cc_general_container.innerHTML = '<!--[if lte IE 9]><div id="'+_config.cc_ids.main_container_id+'" class="ie"></div><![endif]--><!--[if (gt IE 9)|!(IE)]><!--><div id="'+_config.cc_ids.main_container_id+'"></div><!--<![endif]-->'
 
 			/**
 			 * Check if cc_container prop. is configured
@@ -551,6 +594,7 @@
 				
 				// Create title
 				var block_section = document.createElement('div');
+				var block_title_container = document.createElement('div');
 				var block_title = document.createElement('h2');
 				var block_desc = document.createElement('p');
 
@@ -559,19 +603,24 @@
 				_addClass(block_desc, 'section_desc');
 
 				// set title and description for each block
-				block_title.innerHTML = all_blocks[i].ccb_title;
+				block_title.innerHTML =all_blocks[i].ccb_title;
 				block_desc.innerHTML = all_blocks[i].ccb_description;
 
-				block_section.appendChild(block_title);
-				block_section.appendChild(block_desc);
+				block_title_container.appendChild(block_title);
 
 				// ... switch
 				if(typeof all_blocks[i].ccb_switch !== 'undefined'){
+
+					var block_switch_label = document.createElement('label');
 					var block_switch = document.createElement('input');
+					var block_switch_span = document.createElement('span');
+
+					_addClass(block_switch_label, 'sc_container_checkbox');
+					_addClass(block_switch, 'sc_toggle');
+					_addClass(block_switch_span, 'sc_checkmark');
+					
 					block_switch.setAttribute('type', 'checkbox');
 					block_switch.setAttribute('value', all_blocks[i].ccb_switch.value);
-
-					_addClass(block_switch, 'sc_toggle');
 
 					if(all_blocks[i].ccb_switch.enabled){
 						block_switch.checked = true;
@@ -580,8 +629,81 @@
 					if(all_blocks[i].ccb_switch.readonly){
 						block_switch.disabled = "disabled"
 						block_switch.readOnly = true;
+						_addClass(block_switch_span, 'sc_readonly');
 					}
-					block_section.appendChild(block_switch);
+
+					block_switch_label.appendChild(block_switch);
+					block_switch_label.appendChild(block_switch_span);
+
+					block_title_container.appendChild(block_switch_label);
+				}
+
+				block_section.appendChild(block_title_container);
+				block_section.appendChild(block_desc);
+
+				// if cookie table found, generate table for this block
+				if(all_blocks[i].hasOwnProperty('ccb_cookies_table')){
+					
+					// generate cookie-table for this block
+					var block_table = document.createElement('table');
+
+					// create table header
+					var thead = document.createElement('thead');
+					var tr_tmp = document.createElement('tr');
+					var th1 = document.createElement('th');
+					var th2 = document.createElement('th');
+					var th3 = document.createElement('th');
+					var th4 = document.createElement('th');
+					var th5 = document.createElement('th');
+
+					th1.innerText = 'Name';
+					th2.innerText = 'Domain';
+					th3.innerText = 'Description';
+					th4.innerText = 'Expiration';
+					th5.innerText = 'Type';
+
+					tr_tmp.appendChild(th1);
+					tr_tmp.appendChild(th2);
+					tr_tmp.appendChild(th3);
+					tr_tmp.appendChild(th4);
+					tr_tmp.appendChild(th5);
+					thead.appendChild(tr_tmp);
+					block_table.appendChild(tr_tmp);
+
+					var tbody = document.createElement('tbody');
+
+					// create table content
+					for(var n=0; n<all_blocks[i].ccb_cookies_table.length; n++){
+						var tr = document.createElement('tr');
+						var td1 = document.createElement('td');
+						var td2 = document.createElement('td');
+						var td3 = document.createElement('td');
+						var td4 = document.createElement('td');
+						var td5 = document.createElement('td');
+
+						td1.innerText = all_blocks[i].ccb_cookies_table[n].ccb_cookie_name;
+						td2.innerText = all_blocks[i].ccb_cookies_table[n].ccb_cookie_domain;
+						td3.innerText = all_blocks[i].ccb_cookies_table[n].ccb_cookie_description;
+						td4.innerText = all_blocks[i].ccb_cookies_table[n].ccb_cookie_expiration;
+						td5.innerText = all_blocks[i].ccb_cookies_table[n].ccb_cookie_type;
+
+						td1.setAttribute('data-column', th1.innerText);
+						td2.setAttribute('data-column', th2.innerText);
+						td3.setAttribute('data-column', th3.innerText);
+						td4.setAttribute('data-column', th4.innerText);
+						td5.setAttribute('data-column', th5.innerText);
+
+						tr.appendChild(td1);
+						tr.appendChild(td2);
+						tr.appendChild(td3);
+						tr.appendChild(td4);
+						tr.appendChild(td5);
+						tbody.appendChild(tr);
+					}
+
+					block_table.appendChild(tbody);
+
+					block_section.appendChild(block_table);
 				}
 
 				// append block inside cc_policy dom
@@ -786,6 +908,7 @@
 			var cookie_val = _getCookie(_config.cc_cookie_name);
 			if(cookie_val != undefined && cookie_val != null && cookie_val != ""){
 				_eraseCookie(_config.cc_cookie_name);
+				_eraseCookie('_cc_level');
 				_printVerbose("CookieConsent [cookie_notice]: cc_cookies erased!");
 			}else{
 				_printVerbose("CookieConsent [cookie_notice]: cc_cookies not found, nothing to erase!");
