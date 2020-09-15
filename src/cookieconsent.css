@@ -25,20 +25,20 @@
 
 #cc__modal__container #cc__modal{
     font-family: inherit;
-    padding: 30px 40px;
+    padding: 1.875em 2.5em;
     position: fixed;
     z-index: 100;
     background: #fff;
     color: #000;
-    width: 421px;
-    bottom: 20px;
-    right: 20px;
-    box-shadow: 0 10px 30px #c4cbda;
-    box-shadow: 0 10px 30px rgba(57,62,72,.22);
+    width: 26.3125em;
+    bottom: 1.250em;
+    right: 1.250em;
+    box-shadow: 0 0.625em 1.875em #c4cbda;
+    box-shadow: 0 0.625em 1.875em rgba(57,62,72,.22);
     opacity: 0;
     visibility: hidden;
     transform: scale(.95);
-    border-radius: 4px;
+    border-radius: 0.250em;
     transition: none;
     line-height: initial;
     line-break: anywhere;
@@ -74,29 +74,29 @@
 
 #cc__modal__container #cc__modal__title{
     color: inherit;
-    margin: 0 0 16px 0;
+    margin: 0 0 0.6em 0;
     font-weight: 700;
 }
 
 #cc__modal__container #cc__modal__text{
-    margin-bottom: 26px;
-    font-size: 15px;
+    margin-bottom: 1.625em;
+    font-size: 0.938em;
     font-family: inherit;
-    line-height: 22px;
+    line-height: 1.45em;
 }
 
 #cc__modal__container #cc__modal #cc__modal__accept__btn,
 #cc__modal__container #cc__policy__save__btn{
     border: none;
-	padding: 14px 30px 13px 30px;
+    padding: 1.1em 2.3em;
     background: #ffda30;
     color: #000;
-    margin-bottom: 10px;
+    margin-bottom: 0.625em;
     display: inline-block;
     outline: 0;
     box-shadow: 0 0 0 0 transparent;
-    margin-right: 20px;
-    border-radius: 4px;
+    margin-right: 1.250em;
+    border-radius: 0.250em;
     cursor: pointer;
     transition: none;
     font-weight: 600;
@@ -110,13 +110,13 @@
 #cc__modal__container #cc__modal #cc__modal__accept__btn:hover,
 #cc__modal__container #cc__policy__save__btn:hover{
     background: #e7c52e;
-    box-shadow: 0 0 0 4px #fff0ad;
+    box-shadow: 0 0 0 0.250em #fff0ad;
 }
 
 #cc__modal__container #cc__modal #cc__modal__accept__btn:active,
 #cc__modal__container #cc__policy__save__btn:active{
     background: #9e9e9e;
-    box-shadow: 0 0 0 4px #dfdfdf;
+    box-shadow: 0 0 0 0.250em #dfdfdf;
 }
 
 #cc__modal__container #cc__modal .cc__link{
@@ -138,6 +138,7 @@ CookieConsent policy
     right: 0;
     bottom: 0;
     z-index: 101;
+    background: rgb(7, 7, 7);
     background: rgba(0, 0, 0 , 0.45);
     display: table;
     height: 100%;
@@ -148,26 +149,23 @@ CookieConsent policy
 }
 
 #cc__modal__container #cc__policy__content .ccp_section{
-    padding: 15px 0;
-    margin-bottom: 10px;
+    padding: 0.938em 0;
+    margin-bottom: 0.625em;
 }
 
 #cc__modal__container #cc__policy__container h2{
-    margin-bottom: 15px;
+    margin-bottom: 0.938em;
+    display: inline-block;
 }
 
 #cc__modal__container #cc__policy__container p{
-    margin-bottom: 10px;
-    font-size: 15px;
+    margin-bottom: 0.625em;
+    font-size: 0.938em;
     line-height: 1.3em;
 }
 
 #cc__modal__container #cc__policy__container input{
     -webkit-appearance: auto;
-}
-
-#cc__modal__container #cc__policy__container.cc__blur{
-    backdrop-filter: blur(2px);
 }
 
 #cc__modal__container #cc__policy__container.cc__anim{
@@ -183,42 +181,47 @@ CookieConsent policy
     display: table-cell;
     vertical-align: middle;
     position: relative;
-    padding: 20px;
+    padding: 1.250em;
 }
 
 #cc__modal__container #cc__policy{
     background: white;
-    max-width: 800px;
+    max-width: 50.000em;
     margin: 0 auto;
-    padding: 30px 30PX;
-    border-radius: 4px;
+    padding: 1.875em 1.875em;
+    border-radius: 0.250em;
     transform: scale(.95);
     transition: transform .4s cubic-bezier(0.5,0,0,1.25), opacity .4s ease, visibility .4s ease;
     visibility: hidden;
     opacity: 0;
     overflow-y: auto;
     height: 100%;
-    max-height: 600px;
+    max-height: 37.500em;
+    position: relative;
+}
+
+#cc__modal__container.ie #cc__policy{
+    min-height: 37.500em;
 }
 
 #cc__modal__container #cc__policy__content{
     overflow-y: auto;
-    margin: 30px;
+    margin: 1.875em;
     position: absolute;
-    top: 60px;
+    top: 3.750em;
     bottom: 0;
     padding: 0;
     left: 0;
     right: 0;
-    padding: 0px 30px 30px 4px;
+    padding: 0 1.875em 1.875em 0.250em;
 }
 
 #cc__modal__container #cc__policy__header{
     display: table;
     position: absolute;
-    left: 34px;
-    right: 30px;
-    top: 30px;
+    left: 2.125em;
+    right: 1.875em;
+    top: 1.875em;
 }
 #cc__modal__container #cc__policy__title{
     display: table-cell;
@@ -229,14 +232,16 @@ CookieConsent policy
 #cc__modal__container #cc__policy__close__btn{
     display: table-cell;
     float: right;
+    margin-left: 0.625em;
     padding: 0;
-    width: 36px;
-    height: 36px;
+    width: 2.5em;
+    height: 2.5em;
     border: none;
     background: #ffda30;
-    padding: 10px;
+    padding: 0.625em;
+    font-size: 1em;
     outline: none;
-    border-radius: 4px;
+    border-radius: 0.250em;
     box-shadow: 0 0 0 0 transparent;
     cursor: pointer;
     transition: box-shadow .25s ease, background-color .25s ease;
@@ -244,13 +249,13 @@ CookieConsent policy
 
 #cc__modal__container #cc__policy__close__btn:hover{
     background: #dbbc2e;
-    box-shadow: 0 0 0 4px #ffefa6;
+    box-shadow: 0 0 0 0.250em #ffefa6;
 }
 
 #cc__modal__container #cc__policy__text{
-    height: 500px;
+    height: 31.250em;
     overflow-y: auto;
-    margin-top: 20px;
+    margin-top: 1.250em;
 }
 
 #cc__modal__container .cc__anim.cc__show #cc__policy{
@@ -263,21 +268,21 @@ CookieConsent policy
 #cc__modal__container #cc__policy__content::-webkit-scrollbar{
     height: 100%;
     background-color: #ffffff;
-    border-radius: 0 4px 4px 0;
+    border-radius: 0 0.250em 0.250em 0;
 }
   
 #cc__modal__container #cc__policy__content::-webkit-scrollbar-thumb{
-    height: 6px;
-    border: 4px solid transparent;
+    height: 0.375em;
+    border: 0.250em solid transparent;
     background-clip: padding-box;
-    border-radius: 10px;
-    -webkit-border-radius: 10px;
+    border-radius: 0.625em;
+    -webkit-border-radius: 0.625em;
     background-color: #a0a4a8;
-    box-shadow: inset -1px -1px 0px rgba(0, 0, 0, 0.05), inset 1px 1px 0px rgba(0, 0, 0, 0.05);
-    -webkit-box-shadow: inset -1px -1px 0px rgba(0, 0, 0, 0.05), inset 1px 1px 0px rgba(0, 0, 0, 0.05);
-    -moz-border-radius: 10px;
-    -ms-border-radius: 10px;
-    -o-border-radius: 10px;
+    box-shadow: inset -1px -1px 0 rgba(0, 0, 0, 0.05), inset 1px 1px 0 rgba(0, 0, 0, 0.05);
+    -webkit-box-shadow: inset -1px -1px 0 rgba(0, 0, 0, 0.05), inset 1px 1px 0 rgba(0, 0, 0, 0.05);
+    -moz-border-radius: 0.625em;
+    -ms-border-radius: 0.625em;
+    -o-border-radius: 0.625em;
 }
 
 #cc__modal__container #cc__policy__content::-webkit-scrollbar-button {
@@ -289,14 +294,180 @@ CookieConsent policy
 #cc__modal__container #cc__policy__content::-webkit-scrollbar-corner {
     background-color: transparent;
 }
+
+/** custom checkbox **/
+/* The container */
+#cc__modal__container .sc_container_checkbox {
+    display: inline-block;
+    position: relative;
+    padding-left: 2.500em;
+    margin-bottom: 0.83em;
+    cursor: pointer;
+    font-size: 1.375em;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    margin-left: 0.625em;
+}
+
+/* Hide the browser's default checkbox */
+#cc__modal__container .sc_container_checkbox input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+}
+
+/* Create a custom checkbox */
+#cc__modal__container .sc_container_checkbox .sc_checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 1em;
+    width: 1em;
+    background-color: #eee;
+    border-radius: 0.250em;
+}
+
+/* On mouse-over, add a grey background color */
+#cc__modal__container  .sc_container_checkbox:hover input ~ .sc_checkmark {
+    background-color: #ccc;  
+}
+
+/* When the checkbox is checked, add a blue background */
+#cc__modal__container .sc_container_checkbox input:checked ~ .sc_checkmark {
+    background-color: #000000;
+}
+
+#cc__modal__container .sc_container_checkbox input:checked ~ .sc_checkmark.sc_readonly{
+    background-color: #ccc;
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+#cc__modal__container .sc_container_checkbox .sc_checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+
+
+/* Show the checkmark when checked */
+#cc__modal__container .sc_container_checkbox input:checked ~ .sc_checkmark:after {
+    display: block;
+}
+
+/* Style the checkmark/indicator */
+#cc__modal__container .sc_container_checkbox .sc_checkmark:after {
+    left: 0.380em;
+    top: 0.15em;
+    width: 0.17em;
+    height: 0.450em;
+    border: solid white;
+    border-width: 0 0.13em 0.13em 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+}
   
 /** end custom scrollbar **/
+
+#cc__modal__container #cc__policy__content table th,
+#cc__modal__container #cc__policy__content table td{
+    border: none;
+}
+
+#cc__modal__container #cc__policy__content table { 
+	width: 46.875em; 
+	border-collapse: collapse; 
+    margin: 1.250em auto;
+    text-align: left;
+    border-collapse: collapse;
+    width: 100%;
+    border-radius: 0.313em;
+    overflow: hidden;
+    box-shadow: 0 0 0 1px #e9e9e9;
+}
+
+/* Zebra striping */
+#cc__modal__container #cc__policy__content table tr:nth-of-type(odd) { 
+	background: #eee; 
+}
+
+#cc__modal__container #cc__policy__content table th { 
+    background: #000000;
+    color: white;
+    font-weight: bold;
+}
+
+#cc__modal__container #cc__policy__content table td, 
+#cc__modal__container #cc__policy__content table th { 
+    padding: 0.625em;
+    text-align: left;
+    vertical-align: top;
+    font-size: .9em;
+}
+
+/* 
+Max width before this PARTICULAR table gets nasty
+This query will take effect for any screen smaller than 760px
+and also iPads specifically.
+*/
+@media 
+only screen and (max-width: 760px),
+(min-device-width: 768px) and (max-device-width: 1024px)  {
+
+	#cc__modal__container #cc__policy__content table { 
+	  	width: 100%; 
+	}
+
+	/* Force table to not be like tables anymore */
+    #cc__modal__container #cc__policy__content table, 
+    #cc__modal__container #cc__policy__content table thead, 
+    #cc__modal__container #cc__policy__content table tbody, 
+    #cc__modal__container #cc__policy__content table th, 
+    #cc__modal__container #cc__policy__content table td, 
+    #cc__modal__container #cc__policy__content table tr { 
+		display: block; 
+	}
+	
+	/* Hide table headers (but not display: none;, for accessibility) */
+	#cc__modal__container #cc__policy__content table thead tr { 
+		position: absolute;
+		top: -9999px;
+		left: -9999px;
+	}
+	
+	#cc__modal__container #cc__policy__content table tr { border: 1px solid #ccc; }
+	
+	#cc__modal__container #cc__policy__content table td { 
+		/* Behave  like a "row" */
+		border: none;
+		border-bottom: 1px solid #eee; 
+		position: relative;
+		padding-left: 50%; 
+	}
+
+	#cc__modal__container #cc__policy__content table td:before { 
+		/* Now like a table header */
+		position: absolute;
+		/* Top/left values mimic padding */
+		left: 0.375em;
+		width: 45%; 
+		padding-right: 0.625em; 
+		white-space: nowrap;
+		/* Label the data */
+		content: attr(data-column);
+		color: #000;
+		font-weight: bold;
+	}
+}
 
 @media screen and (max-width: 1000px){
     #cc__modal__container #cc__modal{
         width: 100%;
         margin: 0;
-        padding: 30px 10%;
+        padding: 1.875em 10%;
         right: 0;
         bottom: 0;
         border-radius: 0;
@@ -304,7 +475,7 @@ CookieConsent policy
     }
 }
 
-/* On screens that are 600px or less, set the background color to olive */
+/* On screens that are 37.500em or less, set the background color to olive */
 @media screen and (max-width: 688px) {
     #cc__modal__container #cc__valign {
         padding: 0;
@@ -316,11 +487,11 @@ CookieConsent policy
     }
 
     #cc__modal__container #cc__policy__header{
-        left: 24px;
-        right: 20px;
+        left: 1.500em;
+        right: 1.250em;
     }
 
     #cc__modal__container #cc__policy__content{
-        margin: 20px;
+        margin: 1.250em;
     }
 }
