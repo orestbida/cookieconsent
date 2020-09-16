@@ -37,20 +37,6 @@
 								ccb_description: 'These cookies are essential for the proper functioning of my website. Without these cookies, the website would not work properly.',
 								ccb_cookies_table : [
 									{
-										ccb_cookie_name: '__Secure-PHPSESSID',
-										ccb_cookie_domain: 'orestbida.com',
-										ccb_cookie_expiration: 'When the browsing session ends',
-										ccb_cookie_description: 'Cookie that stores a random string which represents your current session id' ,
-										ccb_cookie_type: 'Session cookie'
-									},
-									{
-										ccb_cookie_name: '__cfduid',
-										ccb_cookie_domain: 'cloudflare.com',
-										ccb_cookie_expiration: 'When you leave the website',
-										ccb_cookie_description: 'Used to identify web traffic by cloudflare. This cookie does not store any personal information.',
-										ccb_cookie_type: 'Third-party cookie'
-									},
-									{
 										ccb_cookie_name: 'cc_cookie',
 										ccb_cookie_domain: 'orestbida.com',
 										ccb_cookie_expiration: 'After 3 months (Starting from the moment the cookie-consent was accepted)',
