@@ -4,9 +4,10 @@
     -webkit-box-sizing: border-box;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+	color: initial;
 }
 
-#cc__modal__container input, 
+#cc__modal__container input,
 #cc__modal__container p,
 #cc__modal__container h1,
 #cc__modal__container h2,
@@ -76,6 +77,7 @@
     color: inherit;
     margin: 0 0 0.6em 0;
     font-weight: 700;
+	font-family: "Circular", "Helvetica Neue", "Lucida Grande", Arial, Verdana, sans-serif;
 }
 
 #cc__modal__container #cc__modal__text{
@@ -88,7 +90,7 @@
 #cc__modal__container #cc__modal #cc__modal__accept__btn,
 #cc__modal__container #cc__policy__save__btn{
     border: none;
-    padding: 1.1em 2.3em;
+    padding: 1em 2em;
     background: #ffda30;
     color: #000;
     margin-bottom: 0.625em;
@@ -154,8 +156,10 @@ CookieConsent policy
 }
 
 #cc__modal__container #cc__policy__container h2{
-    margin-bottom: 0.938em;
+    margin-bottom: 0.7em;
     display: inline-block;
+	font-family: "Circular", "Helvetica Neue", "Lucida Grande", Arial, Verdana, sans-serif;
+	font-weight: bold;
 }
 
 #cc__modal__container #cc__policy__container p{
@@ -227,6 +231,7 @@ CookieConsent policy
     display: table-cell;
     vertical-align: middle;
     font-size: 1em;
+	font-family: "Circular", "Helvetica Neue", "Lucida Grande", Arial, Verdana, sans-serif;
 }
 
 #cc__modal__container #cc__policy__close__btn{
@@ -398,7 +403,8 @@ CookieConsent policy
 #cc__modal__container #cc__policy__content table th { 
     background: #000000;
     color: white;
-    font-weight: bold;
+    font-weight: initial;
+	font-family: "Circular", "Helvetica Neue", "Lucida Grande", Arial, Verdana, sans-serif;
 }
 
 #cc__modal__container #cc__policy__content table td, 
@@ -491,5 +497,6 @@ only screen and (max-width: 760px),
 
     #cc__modal__container #cc__policy__content{
         margin: 1.250em;
+		padding-right: 0;
     }
 }
