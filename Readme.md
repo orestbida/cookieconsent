@@ -7,7 +7,7 @@ I wanted a simple, `lightweight` but also `extensible` plugin, which could be pl
 Main features
 - __Cross-browser__ support (IE8+)
 - __Standalone__ (no external dependecies needed)
-- __Lightweight__ (~ 8kb for optimized/minified version)
+- __Lightweight__ (~ 10kb for optimized/minified version)
 - Can easily add __support__ for __additional languages__
 - Automatic browser language detection
 - No additional external http requests
@@ -200,7 +200,7 @@ List of things to implement
 	- can be enabled based on a custom specific class set by user
 - [x] Make all `cookie-modal` content and `cookie-policy` __customizable__
 - [x] Add the possibility of quickly `defining a new language/override default one` 
-- [ ]  ~~Implement a dropdown select language menu when multiple languages~~ are defined
+- [ ]  ~~Implement a dropdown select language menu when multiple languages are defined~~
 - [x] `Custom cookie-policy url` (useful for those who alredy have a cookie policy)
 - [x] Make cookieconsent **`GPDR compliant`** (up to user): 
 	- Implement "learn more" modal with a brief explanation about cookies (up to user)
