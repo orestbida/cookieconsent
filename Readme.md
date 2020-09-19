@@ -12,10 +12,23 @@ Main features
 - Automatic browser language detection
 - No additional external http requests
 
+## CDN
+```
+// dist version (no verbose mode)
+https://cdn.jsdelivr.net/gh/orestbida/cookieconsent/dist/cookieconsent.js
+
+// src version (with verbose mode)
+https://cdn.jsdelivr.net/gh/orestbida/cookieconsent/src/cookieconsent.js
+```
+
 ## How to run
 - __Include file__ (or load it dynamically)
 	```javascript
+	// either locally
 	<script src="<your_path>/cookieconsent.js"></script>
+
+	// or load it via cdn
+	<script src="https://cdn.jsdelivr.net/gh/orestbida/cookieconsent/dist/cookieconsent.js"></script>
 	```
 - __Obtain Cookie-Consent plugin__ 
 	```javascript
