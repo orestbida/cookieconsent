@@ -399,7 +399,7 @@
 			 */
 			var _cc_general_container = document.createElement('div');
 			_cc_general_container.setAttribute('cc_data', 'cc_cookie_main')
-			_cc_general_container.innerHTML = '<!--[if lte IE 9]><div id="'+_config.cc_ids.main_container_id+'" class="ie"></div><![endif]--><!--[if (gt IE 9)|!(IE)]><!--><div id="'+_config.cc_ids.main_container_id+'"></div><!--<![endif]-->'
+			_cc_general_container.innerHTML = '<!--[if lt IE 9 ]><div id="'+_config.cc_ids.main_container_id+'" class="ie"></div><![endif]--><!--[if (gt IE 8)|!(IE)]><!--><div id="'+_config.cc_ids.main_container_id+'"></div><!--<![endif]-->'
 
 			/**
 			 * Check if cc_container prop. is configured
