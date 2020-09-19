@@ -186,14 +186,14 @@ CookieConsent policy
 #cc__modal__container #cc__policy{
     margin: 0 auto;
     background: #fff;
-    border-radius: 3px;
-    width: 100%;
+    border-radius: 0.1875em;
     max-width: 50em;
+	width: 100%;
     position: fixed;
     left: 0;
     right: 0;
     height: 100%;
-    height: calc(100% - 40px);
+    height: calc(100% - 2.5em);
     overflow: hidden;
 	visibility: hidden;
 	opacity: 0;
@@ -201,22 +201,21 @@ CookieConsent policy
     top: 50%;
 	transform: translateY(-50%) scale(.95);
 	transition: transform .4s cubic-bezier(.5,0,0,1.25),opacity .4s ease,visibility .4s ease;
-    padding-top: 90px;
-	padding-bottom: 20px;
-	border-radius: .25em;
+    padding-top: 4.9375em;
+	padding-bottom: 1.25em;
+	border-radius: 0.25em;
 }
 
 #cc__modal__container.ie #cc__policy{
     position: relative;
 	top: 0;
-	padding-top: 90px;
-	margin-top: -90px;
+	margin-top: -5.625em;
 }
 
 
 #cc__modal__container.ie #cc__valign{
 	height: 100%;
-	padding-top: 90px;
+	padding-top: 4.9375em;
 }
 
 #cc__modal__container #cc__policy__content{
@@ -231,8 +230,11 @@ CookieConsent policy
     top: 0;
     width: 100%;
     display: table;
-    padding: 1.875em;
+    padding: 1.2em 1.875em;
     vertical-align: middle;
+    border-bottom: 1px solid #f0f0f0;
+    Z-INDEX: 1;
+    background: white;
 }
 #cc__modal__container #cc__policy__title{
 	display: table-cell;
@@ -491,6 +493,21 @@ only screen and (max-width: 760px),
     #cc__modal__container #cc__policy{
         border-radius: 0;
 		max-height: 100%;
+		height: 100%;
     }
+	
+	
+	
+	#cc__modal__container #cc__policy__content,
+	#cc__modal__container #cc__policy__header{
+		padding: 1.3em;
+	}
+	
+	#cc__modal__container .sc_container_checkbox{
+		display: block;
+		padding: 0;
+		margin: 0 0 2em 0; 
+	}
+	
 
 }
