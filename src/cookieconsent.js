@@ -902,10 +902,12 @@
 			var date = new Date();
 			date.setTime(date.getTime() + (1000 * (days * 24 * 60 * 60 + hours * 60 * 60 + minutes * 60)));
 			expires = "; expires=" + date.toUTCString();
-		
-			document.cookie = name + "=" + (value || "") + expires + "; path=/";
-			//if(location.protocol == "https")
-				//document.cookie = "tagname = test;secure";
+
+			if(location.protocol == "https:"){
+				document.cookie = name + "=" + (value || "") + expires + "; path=/; SameSite=Lax; Secure";
+			}else{
+				document.cookie = name + "=" + (value || "") + expires + "; path=/; SameSite=Lax";
+			}
 
 			_printVerbose("CookieConsent [cookie_consent]: cookie "+ name + "='" + value + "' was set!");
 		}
