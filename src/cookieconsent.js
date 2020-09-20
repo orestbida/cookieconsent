@@ -275,18 +275,6 @@
         }
 
         /**
-         * Returns true if object is empty
-         * @param {Object} obj
-         */
-        var _isEmpty = function(obj) {
-            for(var prop in obj) {
-                if(obj.hasOwnProperty(prop))
-                    return false;
-            }
-            return true;
-        }
-
-        /**
          * Add event listener to dom object (cross browser function)
          * @param {Object} elem 
          * @param {string} event //event type
