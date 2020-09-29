@@ -31,6 +31,7 @@
             cc_auto_language: false,    				// if enabled, overrides default cc_current_lang
             cc_cookie_expires : 30,						// 30 days
             cc_cookie_name: "cc_cookie",
+            cc_dark_mode_class : null,                  // default class for dark mode
             cc_theme_css: "cookieconsent.css",
             cc_ids : {
                 policy_container_id : "cc__policy__container",
@@ -75,6 +76,10 @@
                         _config.cc_auto_language = conf_params['cc_auto_language'];
                     }
     
+                    if(conf_params['cc_dark_mode_class'] != undefined && typeof conf_params['cc_dark_mode_class'] == "string"){
+                        _config.cc_dark_mode_class = conf_params['cc_dark_mode_class'];
+                    }
+
                     if(conf_params['cc_theme_css'] != undefined && typeof conf_params['cc_theme_css'] == "string"){
                         _config.cc_theme_css = conf_params['cc_theme_css'];
                     }
@@ -220,8 +225,6 @@
                                     block_tmp.ccb_title = all_blocks[j]['ccb_title'];
                                     block_tmp.ccb_description = all_blocks[j]['ccb_description'];
                                     
-
-                                    // TO DO --> CCB_COOKIE_TABLE
                                     if(all_blocks[j].hasOwnProperty('ccb_cookies_table')){
                                         block_tmp.ccb_cookies_table = [];
         
@@ -235,7 +238,6 @@
                                             ccb_cookie_tmp.ccb_cookie_description = all_cookies_table_tmp[t]['ccb_cookie_description'];
                                             ccb_cookie_tmp.ccb_cookie_type = all_cookies_table_tmp[t]['ccb_cookie_type'];
                                             block_tmp.ccb_cookies_table.push(ccb_cookie_tmp);
-
                                         }
                                     }
 
@@ -247,8 +249,7 @@
                                         block_tmp.ccb_switch = ccb_switch;
                                     }
 
-                                    _cc_languages[lang_index].policy.ccp_blocks.push(block_tmp);
-                                    
+                                    _cc_languages[lang_index].policy.ccp_blocks.push(block_tmp);  
                                 }
                             }
                         }
@@ -731,10 +732,20 @@
             if(!document.getElementById(_config.cc_ids.main_container_id)){
                 var cc_cookie_value = _getCookie(_config.cc_cookie_name);
                 if(cc_cookie_value == undefined || cc_cookie_value == null || cc_cookie_value == ""){
+                    
                     /**
                      * _setConfig with true param -> config all parameters
                      */
                     _setConfig(conf_params, true);
+                    
+                    /**
+                     * load dark-mode style if dark-mode class is specified
+                     */
+                    typeof _config.cc_dark_mode_class == 'string' && _loadStyle('');
+                    
+                    /**
+                     * Finally, load cookie-consent
+                     */
                     _loadCookieConsentCSS(_config.cc_theme_css, function(){
                         _createCookieConsentHTML();
                         _setCookieConsentContent(_config.cc_current_lang);
@@ -931,6 +942,110 @@
             _setText(_config.cc_ids.modal_accept_btn, _cc_languages[lang].modal.cc_accept_text);
             _setText(_config.cc_ids.modal_more_btn, _cc_languages[lang].modal.cc_more_text);
             _cc_modal_isAttached = true;
+        }
+
+        /**
+         * Append additional css inside head to enable dark-mode
+         */
+        var _loadStyle = function(){
+            var dark_mode = '.'+_config.cc_dark_mode_class+' ';
+
+            var css_string = 
+            dark_mode+'#cc__modal__container #cc__modal,'+
+            dark_mode+'#cc__modal__container .cc__anim.cc__show #cc__policy{'+
+                'color: #fff;}'+
+                
+            dark_mode+'#cc__modal__container #cc__policy__container p,'+
+            dark_mode+'#cc__modal__container #cc__policy__content table td{'+
+                'color: #c5cbd0;}'+
+
+            dark_mode+'#cc__modal__container #cc__policy__close__btn{'+
+                'color: #000;}'+
+            
+            dark_mode+'#cc__modal__container #cc__modal{'+
+                'background: #151619;'+
+                '-webkit-box-shadow: 0 0 1.875em rgba(57,62,72,.22);'+
+                'box-shadow: 0 0 1.875em rgba(0,0,0,.56);'+
+            '}'+
+
+            dark_mode+'#cc__modal #cc__modal__text{'+
+                'color: #d4d8d9;'+
+            '}'+
+
+            dark_mode+'#cc__modal__container #cc__policy,'+
+            dark_mode+'#cc__modal__container #cc__policy__header{'+
+                'background: #151619;'+
+            '}'+
+
+            dark_mode+'#cc__modal__container #cc__policy__header{'+
+                'border-bottom: 1px solid #1d2125;'+
+            '}'+
+
+            dark_mode+'#cc__modal__container .sc_container_checkbox input:checked ~ .sc_checkmark{'+
+                'background-color: #d1b42b;'+
+            '}'+
+
+            dark_mode+'#cc__modal__container .sc_container_checkbox .sc_checkmark:after{'+
+                'border: solid #000000;'+
+                'border-width: 0 0.1em 0.1em 0;'+
+            '}'+
+
+            dark_mode+'#cc__modal__container .sc_container_checkbox input:checked ~ .sc_checkmark.sc_readonly{'+
+                'background-color: #4b4e53;'+
+            '}'+
+
+            dark_mode+'#cc__modal__container .sc_container_checkbox input:checked ~ .sc_checkmark.sc_readonly:after{'+
+                'border: solid #26292b;'+
+                'border-width: 0 0.1em 0.1em 0;'+
+            '}'+
+
+            dark_mode+'#cc__modal__container #cc__modal #cc__modal__accept__btn:hover,'+
+            dark_mode+'#cc__modal__container #cc__policy__close__btn:hover,'+
+            dark_mode+'#cc__modal__container #cc__policy__save__btn:hover{'+
+                '-webkit-box-shadow: 0 0 0 0.25em #545141;'+
+                'box-shadow: 0 0 0 0.25em #545141;'+
+            '}'+
+
+            dark_mode+'#cc__modal__container #cc__modal #cc__modal__accept__btn:active,'+
+            dark_mode+'#cc__modal__container #cc__policy__save__btn:active{'+
+                'background: #2e3338;'+
+                '-webkit-box-shadow: 0 0 0 0.25em #1d2024;'+
+                'box-shadow: 0 0 0 0.25em #1d2024;'+
+            '}'+
+            
+            dark_mode+'#cc__modal__container #cc__policy__content::-webkit-scrollbar-thumb{'+
+                'border: 0.3em solid #151619;'+
+                'background-color: #3d4349;'+
+            '}'+
+
+            dark_mode+'#cc__modal__container #cc__policy__content::-webkit-scrollbar-thumb:hover{'+
+                'background-color: #535a5f;'+
+            '}'+
+
+            dark_mode+'#cc__modal__container #cc__policy__content table tr:nth-of-type(odd){'+
+                'background: #151619;'+
+            '}'+
+
+            dark_mode+'#cc__modal__container #cc__policy__content table td:before{'+
+                'color: #fff;'+
+            '}'+
+
+            dark_mode+'#cc__modal__container #cc__policy__content table{'+
+                'box-shadow: 0 0 0 1px #232529;'+
+            '}';
+
+            // get head
+            var head = document.head || document.getElementsByTagName('head')[0];
+            
+            // create style
+            var style = document.createElement('style');
+
+            // append style to head
+            head.appendChild(style);
+
+            // ie8 compatibilty
+            if (style.styleSheet && !style.sheet) style.styleSheet.cssText = css_string; // Support for IE
+            else style.appendChild(document.createTextNode(css_string)); // Support for the rest
         }
 
         return _cookieconsent;

@@ -127,7 +127,8 @@
     outline: none;
     padding: 0;
     cursor: pointer;
-	font-size: 0.9em;
+    font-size: 0.9em;
+    color: inherit;
 }
 
 /**
@@ -171,7 +172,7 @@ CookieConsent policy
 }
 
 #cc__modal__container #cc__policy__container.cc__anim{
-    transition: background-color .3s ease, visibility .3s ease, opacity .3s ease, backdrop-filter .3s ease;
+    transition: background-color .4s ease, visibility .4s ease, opacity .4s ease;
 }
 
 #cc__modal__container #cc__policy__container.cc__anim.cc__show{
@@ -263,6 +264,7 @@ CookieConsent policy
     box-shadow: 0 0 0 0 transparent;
     cursor: pointer;
     transition: box-shadow .25s ease, background-color .25s ease;
+    color: inherit;
 }
 
 #cc__modal__container #cc__policy__close__btn:hover{
@@ -302,7 +304,6 @@ CookieConsent policy
 
 #cc__modal__container #cc__policy__content::-webkit-scrollbar-thumb:hover{
 	background-color: #a2a3a4;
-	
 }
 
 #cc__modal__container #cc__policy__content::-webkit-scrollbar-button {
@@ -349,6 +350,11 @@ CookieConsent policy
     background-color: #eee;
     border-radius: 0.2em;
 }
+
+#cc__modal__container .sc_container_checkbox .sc_checkmark.sc_checkmark.sc_readonly{
+    cursor: default;
+}
+
 
 /* On mouse-over, add a grey background color */
 #cc__modal__container  .sc_container_checkbox:hover input ~ .sc_checkmark {
