@@ -169,6 +169,25 @@ You need to create a button or link with the following custom attribute `data-cc
 <a href="javascript:void(0)" data-cc="cc_policy">Open cookie-policy</a>
 ```
 
+## How to enable dark-mode
+You need to specify in the config object a value for the property `cc_dark_mode_class`
+```javascript
+// specify your custom class for dark-mode (useful especially when your whebsite alredy has one defined)
+var my_class = 'dark_mode';
+
+// init cookieconsent 
+CookieConsent.run({
+    ...
+    cc_dark_mode_class : my_class
+    ...
+});
+
+// you need to toggle the class on dom element which containes the cookie-consent
+// for example, body
+document.body.classList.toggle(my_class);
+
+```
+
 ### Config. properties
 - __cc_autorun__ : (boolean)
     - *default* : false
