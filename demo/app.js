@@ -6,10 +6,11 @@
 	// init plugin
 	var autorun = function(){
 		cc.run({
-			cc_autorun : true, 							// show as soon as possible (without the need to manually call CookieConsent.show() )
+			cc_autorun : true, 								// show as soon as possible (without the need to manually call CookieConsent.show() )
 			cc_delay : 0,								    // specify initial delay after website has loaded		
 			cc_enable_verbose : true,						// if enabled, prints all info/error msgs	
-			cc_current_lang : 'en',							
+			cc_current_lang : 'en',		
+			cc_dark_mode_class : 'dark_mode',				// class for dark-mode		
 			cc_policy_url : null,                           // specify your own dedicated cookie policy page url
 			cc_auto_language : true,						// if enabled, overrides cc_current_lang
 			cc_theme_css : "../src/cookieconsent.css",		// path to cookieconsent css
@@ -102,5 +103,9 @@
 
 	document.getElementById("btn5").addEventListener('click', function(){
 		cc.show_policy(0);  
+	});
+
+	document.getElementById("btn6").addEventListener('click', function(){
+		document.body.classList.toggle('dark_mode');
 	});
 })();
