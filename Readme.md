@@ -66,7 +66,10 @@ CookieConsent.run({
     cc_autorun : false, 						
     
     // shows cookie-consent modal after 0 milliseconds 
-    cc_delay : 0,		
+    cc_delay : 0,	
+    
+    // if specified, a dark mode will be enabled (toggle the class to see it)
+    cc_dark_mode_class : 'dark_mode',
 
     // if url is specified, the cookie-consent policy will not be generated
     // and the learn more button will instead be linked to the specified url
@@ -177,6 +180,9 @@ You need to create a button or link with the following custom attribute `data-cc
 - __cc_enable_verbose__ : (boolean) 
     - *default* : true
     - if set to true, all informational/error messages will show on console
+- __cc_dark_mode_class__ : (string) 
+    - *default* : null
+    - when specified, the style for the dark-mode will be generated and appended to head
 - __cc_current_lang__ : (string) __[REQUIRED]__
     - *default* : "en"
     - when specified, modal will be set to that language (if it is implemented)
@@ -217,7 +223,7 @@ You need to create a button or link with the following custom attribute `data-cc
 
 ## TODO
 List of things to implement
-- [ ] Add dark-mode 
+- [x] Add dark-mode 
     - can be enabled based on a custom specific class set by user
 - [x] Make all `cookie-modal` content and `cookie-policy` __customizable__
 - [x] Add the possibility of quickly `defining a new language/override default one` 
