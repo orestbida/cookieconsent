@@ -14,6 +14,9 @@
 			cc_policy_url : null,                           // specify your own dedicated cookie policy page url
 			cc_auto_language : true,						// if enabled, overrides cc_current_lang
 			cc_theme_css : "../src/cookieconsent.css",		// path to cookieconsent css
+			cc_accept_callback : function(){
+				console.log('The callback function was called!');
+			},
 			cc_languages : [
 				{
 					lang : 'en',

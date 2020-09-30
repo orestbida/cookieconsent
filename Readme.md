@@ -88,6 +88,11 @@ CookieConsent.run({
     // path to cookieconsent.css
     cc_theme_css : '<your_path>/cookieconsent.css',
     
+    // optional callback function to call when the visitor accepts the cookie consent
+    cc_accept_callback : function(){
+		console.log('The callback function was called!');
+	},
+    
     // define your own cookie-consent and cookie-policy
     // it's up to you to make it gdpr compliant
     cc_languages : [
@@ -214,6 +219,8 @@ document.body.classList.toggle(my_class);
 - __cc_policy_url__ : (string)
     - *default* : null
     - specify path to your own cookieconsent policy page (eg. https://mydomain.com/cookiepolicy/)
+- __cc_accept_callback__ : (function)
+    - a function to call when the visitor accepts the cookie consent
 - __cc_languages__ : (string) __[REQUIRED]__
     - *default* : [{<en_language_only>}]
     - define (multiple) new languages or override default one (en)
