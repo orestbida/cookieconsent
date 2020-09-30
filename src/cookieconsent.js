@@ -96,6 +96,10 @@
                         _config.cc_policy_url = conf_params['cc_policy_url'];
                     }
 
+                    if(conf_params['cc_accept_callback'] != undefined && typeof conf_params['cc_accept_callback'] == "function"){
+                        _config.cc_accept_callback = conf_params['cc_accept_callback'];
+                    }
+
                     if(conf_params['cc_languages'] != undefined && conf_params['cc_languages'] != null && conf_params['cc_languages'].length > 0){
                         /**
                          * Add each defined custom language
@@ -701,6 +705,10 @@
             }
             _setCookie(_config.cc_cookie_name, "accepted", _config.cc_cookie_expires, 0, 0);
             _setCookie('cc_level', cc_cookie_level, _config.cc_cookie_expires, 0, 0);
+
+            if(typeof _config.cc_accept_callback == "function"){
+                _config.cc_accept_callback();
+            }
         }
 
         /**
