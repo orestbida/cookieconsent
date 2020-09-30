@@ -67,9 +67,6 @@ CookieConsent.run({
     
     // shows cookie-consent modal after 0 milliseconds 
     cc_delay : 0,	
-    
-    // if specified, a dark mode will be enabled (toggle the class to see it)
-    cc_dark_mode_class : 'dark_mode',
 
     // if url is specified, the cookie-consent policy will not be generated
     // and the learn more button will instead be linked to the specified url
@@ -90,7 +87,7 @@ CookieConsent.run({
     
     // optional callback function to call when the visitor accepts the cookie consent
     cc_accept_callback : function(){
-		console.log('The callback function was called!');
+		console.log('cookie consent is accepted!');
 	},
     
     // define your own cookie-consent and cookie-policy
@@ -175,22 +172,9 @@ You need to create a button or link with the following custom attribute `data-cc
 ```
 
 ## How to enable dark-mode
-You need to specify in the config object a value for the property `cc_dark_mode_class`
+You can either specifiy the class `cc_darkmode` on a parent container (for example on body), or you can toggle it manually like in the following example
 ```javascript
-// specify your custom class for dark-mode (useful especially when your whebsite alredy has one defined)
-var my_class = 'dark_mode';
-
-// init cookieconsent 
-CookieConsent.run({
-    ...
-    cc_dark_mode_class : my_class
-    ...
-});
-
-// you need to toggle the class on dom element which containes the cookie-consent
-// for example, body
-document.body.classList.toggle(my_class);
-
+document.body.classList.toggle('cc_darkmode');
 ```
 
 ### Config. properties
@@ -204,9 +188,6 @@ document.body.classList.toggle(my_class);
 - __cc_enable_verbose__ : (boolean) 
     - *default* : true
     - if set to true, all informational/error messages will show on console
-- __cc_dark_mode_class__ : (string) 
-    - *default* : null
-    - when specified, the style for the dark-mode will be generated and appended to head
 - __cc_current_lang__ : (string) __[REQUIRED]__
     - *default* : "en"
     - when specified, modal will be set to that language (if it is implemented)
@@ -220,7 +201,8 @@ document.body.classList.toggle(my_class);
     - *default* : null
     - specify path to your own cookieconsent policy page (eg. https://mydomain.com/cookiepolicy/)
 - __cc_accept_callback__ : (function)
-    - a function to call when the visitor accepts the cookie consent
+	- *default* : undefined (not used)
+    - a function to call when the visitor accepts the cookie consent, or has alredy accepted it
 - __cc_languages__ : (string) __[REQUIRED]__
     - *default* : [{<en_language_only>}]
     - define (multiple) new languages or override default one (en)
@@ -250,7 +232,7 @@ document.body.classList.toggle(my_class);
 ## TODO
 List of things to implement
 - [x] Add dark-mode 
-    - can be enabled based on a custom specific class set by user
+    - can be enabled manually by toggling a specific class
 - [x] Make all `cookie-modal` content and `cookie-policy` __customizable__
 - [x] Add the possibility of quickly `defining a new language/override default one` 
 - [ ]  ~~Implement a dropdown select language menu when multiple languages are defined~~
