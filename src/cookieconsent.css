@@ -416,7 +416,7 @@ CookieConsent policy
     box-shadow: 0 0 0 1px #e9e9e9;
 }
 
-/* Zebra striping */
+/* Table Zebra striping */
 #cc__modal__container #cc__policy__content table tr:nth-of-type(odd) { 
     background: #ececec;
 }
@@ -434,6 +434,95 @@ CookieConsent policy
     text-align: left;
     vertical-align: top;
     font-size: .9em;
+}
+
+/**
+Dark-mode for cookie consent
+**/
+.cc_darkmode #cc__modal__container #cc__modal,
+.cc_darkmode #cc__modal__container .cc__anim.cc__show #cc__policy {
+	color: #fff;
+}
+
+.cc_darkmode #cc__modal__container #cc__policy__container p,
+.cc_darkmode #cc__modal__container #cc__policy__content table td {
+	color: #c5cbd0;
+}
+
+.cc_darkmode #cc__modal__container #cc__policy__close__btn {
+	color: #000;
+}
+
+.cc_darkmode #cc__modal__container #cc__modal {
+	background: #151619;
+	-webkit-box-shadow: 0 0 1.875em rgba(57, 62, 72, .22);
+	box-shadow: 0 0 1.875em rgba(0, 0, 0, .56);
+}
+
+.cc_darkmode #cc__modal #cc__modal__text {
+	color: #d4d8d9;
+}
+
+.cc_darkmode #cc__modal__container #cc__policy,
+.cc_darkmode #cc__modal__container #cc__policy__header {
+	background: #151619;
+}
+
+.cc_darkmode #cc__modal__container #cc__policy__header {
+	border-bottom: 1px solid #1d2125;
+}
+
+.cc_darkmode #cc__modal__container .sc_container_checkbox input:checked~.sc_checkmark {
+	background-color: #d1b42b;
+}
+
+.cc_darkmode #cc__modal__container .sc_container_checkbox .sc_checkmark:after {
+	border: solid #000000;
+	border-width: 0 0.1em 0.1em 0;
+}
+
+.cc_darkmode #cc__modal__container .sc_container_checkbox input:checked~.sc_checkmark.sc_readonly {
+	background-color: #4b4e53;
+}
+
+.cc_darkmode #cc__modal__container .sc_container_checkbox input:checked~.sc_checkmark.sc_readonly:after {
+	border: solid #26292b;
+	border-width: 0 0.1em 0.1em 0;
+}
+
+.cc_darkmode #cc__modal__container #cc__modal #cc__modal__accept__btn:hover,
+.cc_darkmode #cc__modal__container #cc__policy__close__btn:hover,
+.cc_darkmode #cc__modal__container #cc__policy__save__btn:hover {
+	-webkit-box-shadow: 0 0 0 0.25em #545141;
+	box-shadow: 0 0 0 0.25em #545141;
+}
+
+.cc_darkmode #cc__modal__container #cc__modal #cc__modal__accept__btn:active,
+.cc_darkmode #cc__modal__container #cc__policy__save__btn:active {
+	background: #2e3338;
+	-webkit-box-shadow: 0 0 0 0.25em #1d2024;
+	box-shadow: 0 0 0 0.25em #1d2024;
+}
+
+.cc_darkmode #cc__modal__container #cc__policy__content::-webkit-scrollbar-thumb {
+	border: 0.3em solid #151619;
+	background-color: #3d4349;
+}
+
+.cc_darkmode #cc__modal__container #cc__policy__content::-webkit-scrollbar-thumb:hover {
+	background-color: #535a5f;
+}
+
+.cc_darkmode #cc__modal__container #cc__policy__content table tr:nth-of-type(odd) {
+	background: #151619;
+}
+
+.cc_darkmode #cc__modal__container #cc__policy__content table td:before {
+	color: #fff;
+}
+
+.cc_darkmode #cc__modal__container #cc__policy__content table {
+	box-shadow: 0 0 0 1px #232529;
 }
 
 /* 
