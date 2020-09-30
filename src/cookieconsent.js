@@ -29,10 +29,10 @@
             cc_policy_url: null,
             cc_enable_verbose: true,					// if enabled, show on console all events/errors
             cc_auto_language: false,    				// if enabled, overrides default cc_current_lang
-            cc_cookie_expires : 30,						// 30 days
+            cc_cookie_expires : 182,					// 6 months (in day)
             cc_cookie_name: "cc_cookie",
-            cc_dark_mode_class : null,                  // default class for dark mode
-            cc_theme_css: "cookieconsent.css",
+            cc_dark_mode_class : 'cc_darkmode',         // default class for dark mode -> if you change this make sure to also update css file with your class
+            cc_theme_css: null,							
             cc_ids : {
                 policy_container_id : "cc__policy__container",
                 main_container_id : "cc__modal__container",
@@ -52,7 +52,7 @@
         };
 
         /**
-         * Here you can also add additional languages
+         * Here you can add additional languages
          */
         var _cc_languages = {
             // ... define a new langs
@@ -75,13 +75,9 @@
                     if(conf_params['cc_auto_language'] != undefined && typeof conf_params['cc_auto_language'] == "boolean"){
                         _config.cc_auto_language = conf_params['cc_auto_language'];
                     }
-    
-                    if(conf_params['cc_dark_mode_class'] != undefined && typeof conf_params['cc_dark_mode_class'] == "string"){
-                        _config.cc_dark_mode_class = conf_params['cc_dark_mode_class'];
-                    }
 
                     if(conf_params['cc_theme_css'] != undefined && typeof conf_params['cc_theme_css'] == "string"){
-                        _config.cc_theme_css = conf_params['cc_theme_css'];
+						_config.cc_theme_css = conf_params['cc_theme_css'];
                     }
 
                     if(conf_params['cc_delay'] != undefined && typeof conf_params['cc_delay'] == "number"){
@@ -703,8 +699,8 @@
                 }
                 cc_cookie_level = cc_cookie_level.slice(0, -1);
             }
-            _setCookie(_config.cc_cookie_name, "accepted", _config.cc_cookie_expires, 0, 0);
-            _setCookie('cc_level', cc_cookie_level, _config.cc_cookie_expires, 0, 0);
+            // save both status and 'acceptance' level
+            _setCookie(_config.cc_cookie_name, '{"status": "accepted", "level": "'+cc_cookie_level+'"}', _config.cc_cookie_expires, 0, 0);
 
             if(typeof _config.cc_accept_callback == "function"){
                 _config.cc_accept_callback();
@@ -749,7 +745,6 @@
                     /**
                      * load dark-mode style if dark-mode class is specified
                      */
-                    typeof _config.cc_dark_mode_class == 'string' && _loadStyle('');
                     
                     /**
                      * Finally, load cookie-consent
@@ -780,6 +775,10 @@
                         }
                     });
                     _printVerbose("CookieConsent [NOTICE]: cookie consent alredy accepted!");
+                    
+                    if(typeof _config.cc_accept_callback == "function"){
+                        _config.cc_accept_callback();
+                    }
                 }
             }else{
                 _printVerbose("CookieConsent [NOTICE]: cookie consent alredy attached to body!");
@@ -950,110 +949,6 @@
             _setText(_config.cc_ids.modal_accept_btn, _cc_languages[lang].modal.cc_accept_text);
             _setText(_config.cc_ids.modal_more_btn, _cc_languages[lang].modal.cc_more_text);
             _cc_modal_isAttached = true;
-        }
-
-        /**
-         * Append additional css inside head to enable dark-mode
-         */
-        var _loadStyle = function(){
-            var dark_mode = '.'+_config.cc_dark_mode_class+' ';
-
-            var css_string = 
-            dark_mode+'#cc__modal__container #cc__modal,'+
-            dark_mode+'#cc__modal__container .cc__anim.cc__show #cc__policy{'+
-                'color: #fff;}'+
-                
-            dark_mode+'#cc__modal__container #cc__policy__container p,'+
-            dark_mode+'#cc__modal__container #cc__policy__content table td{'+
-                'color: #c5cbd0;}'+
-
-            dark_mode+'#cc__modal__container #cc__policy__close__btn{'+
-                'color: #000;}'+
-            
-            dark_mode+'#cc__modal__container #cc__modal{'+
-                'background: #151619;'+
-                '-webkit-box-shadow: 0 0 1.875em rgba(57,62,72,.22);'+
-                'box-shadow: 0 0 1.875em rgba(0,0,0,.56);'+
-            '}'+
-
-            dark_mode+'#cc__modal #cc__modal__text{'+
-                'color: #d4d8d9;'+
-            '}'+
-
-            dark_mode+'#cc__modal__container #cc__policy,'+
-            dark_mode+'#cc__modal__container #cc__policy__header{'+
-                'background: #151619;'+
-            '}'+
-
-            dark_mode+'#cc__modal__container #cc__policy__header{'+
-                'border-bottom: 1px solid #1d2125;'+
-            '}'+
-
-            dark_mode+'#cc__modal__container .sc_container_checkbox input:checked ~ .sc_checkmark{'+
-                'background-color: #d1b42b;'+
-            '}'+
-
-            dark_mode+'#cc__modal__container .sc_container_checkbox .sc_checkmark:after{'+
-                'border: solid #000000;'+
-                'border-width: 0 0.1em 0.1em 0;'+
-            '}'+
-
-            dark_mode+'#cc__modal__container .sc_container_checkbox input:checked ~ .sc_checkmark.sc_readonly{'+
-                'background-color: #4b4e53;'+
-            '}'+
-
-            dark_mode+'#cc__modal__container .sc_container_checkbox input:checked ~ .sc_checkmark.sc_readonly:after{'+
-                'border: solid #26292b;'+
-                'border-width: 0 0.1em 0.1em 0;'+
-            '}'+
-
-            dark_mode+'#cc__modal__container #cc__modal #cc__modal__accept__btn:hover,'+
-            dark_mode+'#cc__modal__container #cc__policy__close__btn:hover,'+
-            dark_mode+'#cc__modal__container #cc__policy__save__btn:hover{'+
-                '-webkit-box-shadow: 0 0 0 0.25em #545141;'+
-                'box-shadow: 0 0 0 0.25em #545141;'+
-            '}'+
-
-            dark_mode+'#cc__modal__container #cc__modal #cc__modal__accept__btn:active,'+
-            dark_mode+'#cc__modal__container #cc__policy__save__btn:active{'+
-                'background: #2e3338;'+
-                '-webkit-box-shadow: 0 0 0 0.25em #1d2024;'+
-                'box-shadow: 0 0 0 0.25em #1d2024;'+
-            '}'+
-            
-            dark_mode+'#cc__modal__container #cc__policy__content::-webkit-scrollbar-thumb{'+
-                'border: 0.3em solid #151619;'+
-                'background-color: #3d4349;'+
-            '}'+
-
-            dark_mode+'#cc__modal__container #cc__policy__content::-webkit-scrollbar-thumb:hover{'+
-                'background-color: #535a5f;'+
-            '}'+
-
-            dark_mode+'#cc__modal__container #cc__policy__content table tr:nth-of-type(odd){'+
-                'background: #151619;'+
-            '}'+
-
-            dark_mode+'#cc__modal__container #cc__policy__content table td:before{'+
-                'color: #fff;'+
-            '}'+
-
-            dark_mode+'#cc__modal__container #cc__policy__content table{'+
-                'box-shadow: 0 0 0 1px #232529;'+
-            '}';
-
-            // get head
-            var head = document.head || document.getElementsByTagName('head')[0];
-            
-            // create style
-            var style = document.createElement('style');
-
-            // append style to head
-            head.appendChild(style);
-
-            // ie8 compatibilty
-            if (style.styleSheet && !style.sheet) style.styleSheet.cssText = css_string; // Support for IE
-            else style.appendChild(document.createTextNode(css_string)); // Support for the rest
         }
 
         return _cookieconsent;
