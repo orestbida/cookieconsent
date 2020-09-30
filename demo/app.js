@@ -10,12 +10,11 @@
 			cc_delay : 0,								    // specify initial delay after website has loaded		
 			cc_enable_verbose : true,						// if enabled, prints all info/error msgs	
 			cc_current_lang : 'en',		
-			cc_dark_mode_class : 'dark_mode',				// class for dark-mode		
 			cc_policy_url : null,                           // specify your own dedicated cookie policy page url
 			cc_auto_language : true,						// if enabled, overrides cc_current_lang
-			cc_theme_css : "../src/cookieconsent.css",		// path to cookieconsent css
+			cc_theme_css : "../dist/cookieconsent.css",		// path to cookieconsent css
 			cc_accept_callback : function(){
-				console.log('The callback function was called!');
+				console.log("cookie consent is accpeted!");
 			},
 			cc_languages : [
 				{
@@ -109,6 +108,6 @@
 	});
 
 	document.getElementById("btn6").addEventListener('click', function(){
-		document.body.classList.toggle('dark_mode');
+		document.body.classList.toggle('cc_darkmode');
 	});
 })();
