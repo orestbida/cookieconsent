@@ -12,9 +12,9 @@
 			cc_current_lang : 'en',		
 			cc_policy_url : null,                           // specify your own dedicated cookie policy page url
 			cc_auto_language : true,						// if enabled, overrides cc_current_lang
-			cc_theme_css : "../dist/cookieconsent.css",		// path to cookieconsent css
-			cc_accept_callback : function(){
-				console.log("cookie consent is accpeted!");
+			cc_theme_css : "../src/cookieconsent.css",		// path to cookieconsent css
+			cc_accept_callback : function(cookies){
+				console.log("cookie consent is accepted with the following cookie-values: ", cookies);
 			},
 			cc_languages : [
 				{
@@ -23,7 +23,7 @@
 						cc_title :  "I use cookies",
 						cc_more_text :  "Learn more", 
 						cc_accept_text : "I understand",
-						cc_description :  'My website uses essential cookies necessary for its functioning. By continuing browsing, you consent to my use of cookies and other technologies.',
+						cc_description :  "My website uses essential cookies necessary for its functioning. By continuing browsing, you consent to my use of cookies and other technologies."
 					},
 					policy : {
 						ccp_title : "Cookie Policy",
@@ -38,14 +38,14 @@
 									{
 										ccb_cookie_name: 'cc_cookie',
 										ccb_cookie_domain: 'orestbida.com',
-										ccb_cookie_expiration: 'After 3 months (Starting from the moment the cookie-consent was accepted)',
+										ccb_cookie_expiration: 'After 6 months (Starting from the moment the cookie-consent was accepted)',
 										ccb_cookie_description: 'Used to know whether a visitor has accepted the cookie consent or not.',
 										ccb_cookie_type: 'Permanent cookie'
 									},
 									{
 										ccb_cookie_name: 'cc_level',
 										ccb_cookie_domain: 'orestbida.com',
-										ccb_cookie_expiration: 'After 3 months (Starting from the moment the cookie-consent was accepted)',
+										ccb_cookie_expiration: 'After 6 months (Starting from the moment the cookie-consent was accepted)',
 										ccb_cookie_description: 'Used to know the accepted level of cookie consent (E.g.  essential cookie only, full cookie consent ...)',
 										ccb_cookie_type: 'Permanent cookie'
 									}
@@ -83,31 +83,57 @@
 			]
 		});
 	}
-
 	
 	autorun();
+	if(document.addEventListener){
+		document.getElementById("btn1").addEventListener('click', function(){
+			autorun();
+		});
 
-	document.getElementById("btn1").addEventListener('click', function(){
-		autorun();
-	});
+		document.getElementById("btn2").addEventListener('click', function(){
+			cc.show(0);
+		});
 
-	document.getElementById("btn2").addEventListener('click', function(){
-		cc.show(0);
-	});
+		document.getElementById("btn3").addEventListener('click', function(){
+			cc.hide();
+		});
 
-	document.getElementById("btn3").addEventListener('click', function(){
-		cc.hide();
-	});
+		document.getElementById("btn4").addEventListener('click', function(){
+			cc.clearCookies();
+		});
 
-	document.getElementById("btn4").addEventListener('click', function(){
-		cc.clearCookies();
-	});
+		document.getElementById("btn5").addEventListener('click', function(){
+			cc.show_policy(0);  
+		});
 
-	document.getElementById("btn5").addEventListener('click', function(){
-		cc.show_policy(0);  
-	});
+		document.getElementById("btn6").addEventListener('click', function(){
+			document.body.classList.toggle('cc_darkmode');
+		});
+	}else{
+		document.getElementById("btn1").attachEvent('onclick', function(){
+			autorun();
+		});
 
-	document.getElementById("btn6").addEventListener('click', function(){
-		document.body.classList.toggle('cc_darkmode');
-	});
+		document.getElementById("btn2").attachEvent('onclick', function(){
+			cc.show(0);
+		});
+
+		document.getElementById("btn3").attachEvent('onclick', function(){
+			cc.hide();
+		});
+
+		document.getElementById("btn4").attachEvent('onclick', function(){
+			cc.clearCookies();
+		});
+
+		document.getElementById("btn5").attachEvent('onclick', function(){
+			cc.show_policy(0);  
+		});
+
+		document.getElementById("btn6").attachEvent('onclick', function(){
+			console.log("clicked");
+			document.body.classList.toggle('cc_darkmode');
+		});
+	}
+	
 })();
