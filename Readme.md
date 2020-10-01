@@ -86,8 +86,9 @@ CookieConsent.run({
     cc_theme_css : '<your_path>/cookieconsent.css',
     
     // optional callback function to call when the visitor accepts the cookie consent
-    cc_accept_callback : function(){
-		console.log('cookie consent is accepted!');
+    cc_accept_callback : function(cookies){
+        // print accepted cookie settings
+		console.log('cookie consent is accepted!', cookies);
 	},
     
     // define your own cookie-consent and cookie-policy
@@ -177,6 +178,27 @@ You can either specifiy the class `cc_darkmode` on a parent container (for examp
 document.body.classList.toggle('cc_darkmode');
 ```
 
+## Do something on "accept cookie-consent" event
+You can find the user cookie settings via the `cc_accept_callback` callback function which is fired everytime a user accepts the cookie consent or if it is alredy accepted
+```javascript
+CookieConsent.run({
+    // ...
+    cc_accept_callback : function(cookies){
+        // print accepted cookie settings
+        console.log('cookie-consent accepted: ', cookies);
+        
+        /*
+         * example: do somethings if 'functionality_cookies' is accepted
+         */
+        if(cookies.level.includes('functionality_cookies')){
+            console.log("yoo")
+        }
+            
+    }
+    // ...
+});
+```
+
 ### Config. properties
 - __cc_autorun__ : (boolean)
     - *default* : false
@@ -219,20 +241,36 @@ document.body.classList.toggle('cc_darkmode');
                     lang : 'it',	//add italian
                     modal : {
                         cc_title : "<title ...>",
-                        ...
+                        // ...
                     },
                     policy : {
-                        ...
+                        // ...
                     }
                 }
             ]
         });
         ```
 
+## Reccomended way of loading the plugin
+1. preload `cookieconsent.css` inside `<head>`
+	```html
+	<link rel="preload" href="<your_path>/cookieconsent.css" as="style">
+	```
+2. append cookieconsent.js at the bottom, inside `body` tag
+    ```html
+	<script src="<your_path>/cookieconsent.js"></script>
+	```
+3. initialize plugin with a config. object like <a href="#full_example">full example</a>
+
+
+## Cookie-consent default expiration time
+The default expiration time for the cookie consent is `6 months`
+
 ## TODO
 List of things to implement
 - [x] Add dark-mode 
     - can be enabled manually by toggling a specific class
+- [ ] Add option to set custom cookie expiration date
 - [x] Make all `cookie-modal` content and `cookie-policy` __customizable__
 - [x] Add the possibility of quickly `defining a new language/override default one` 
 - [ ]  ~~Implement a dropdown select language menu when multiple languages are defined~~
