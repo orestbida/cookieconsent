@@ -3,6 +3,7 @@
     -webkit-box-sizing: border-box;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+
 }
 
 #cc__modal__container input,
@@ -22,6 +23,47 @@
     appearance: none;
 }
 
+#cc__modal__container .cc_button,
+#cc__modal__container #cc__modal .cc_button
+{
+    background: #ffda30;
+}
+
+.cc_darkmode #cc__modal__container .sc_container_checkbox input:checked~.sc_checkmark{
+    background-color: #ffda30;
+}
+
+#cc__modal__container #cc__modal .cc_button:hover,
+#cc__modal__container .cc_button:hover{
+    box-shadow: 0 0 0 0.250em #fff0ad;
+}
+
+#cc__modal__container #cc__modal .cc_button:active,
+#cc__modal__container .cc_button:active{
+    background: #e7c52e;
+    box-shadow: 0 0 0 0.250em #fff0ad;
+}
+
+.cc_darkmode #cc__modal__container #cc__modal .cc_button:hover,
+.cc_darkmode #cc__modal__container .cc_button:hover,
+.cc_darkmode #cc__modal__container #cc__policy__close__btn:hover{
+	-webkit-box-shadow: 0 0 0 0.25em #545141;
+	box-shadow: 0 0 0 0.25em #545141;
+}
+
+.cc_darkmode #cc__modal__container #cc__modal .cc_button:active,
+.cc_darkmode #cc__modal__container .cc_button:active,
+.cc_darkmode #cc__modal__container #cc__policy__close__btn:active {
+    background: #c7aa28;
+	-webkit-box-shadow: 0 0 0 0.25em #424033;
+	box-shadow: 0 0 0 0.25em #424033;
+}
+
+#cc__modal__container #cc__modal.cc__show .cc_button,
+#cc__modal__container .cc__show .cc_button{
+    transition: background-color .25s ease, color .25s ease, box-shadow .25s ease;
+}
+
 #cc__modal__container #cc__modal{
     font-family: inherit;
     padding: 1.875em 2.5em;
@@ -29,7 +71,7 @@
     z-index: 100;
     background: #fff;
     color: #000;
-    width: 26.3125em;
+    width: 27.125em;
     bottom: 1.250em;
     right: 1.250em;
     box-shadow: 0 0.625em 1.875em #c4cbda;
@@ -40,7 +82,6 @@
     border-radius: 0.250em;
     transition: none;
     line-height: initial;
-    line-break: anywhere;
 }
 
 #cc__modal__container #cc__modal button,
@@ -49,10 +90,8 @@
     height: auto;
     line-height: initial;
     text-decoration: initial;
-    background: none;
     border: initial;
     outline: none;
-    background-color: initial;
     color: initial;
     transition: none;
 }
@@ -85,12 +124,10 @@
     line-height: 1.45em;
 }
 
-#cc__modal__container #cc__modal #cc__modal__accept__btn,
-#cc__modal__container #cc__policy__save__btn{
+#cc__modal__container #cc__modal .cc_button,
+#cc__modal__container .cc_button{
     border: none;
     padding: 1em 2em;
-    background: #ffda30;
-    color: #000;
     margin-bottom: 0.625em;
     display: inline-block;
     outline: 0;
@@ -100,24 +137,12 @@
     cursor: pointer;
     transition: none;
     font-weight: 600;
-	font-size: 0.9em;
-}
-
-#cc__modal__container #cc__modal.cc__show #cc__modal__accept__btn,
-#cc__modal__container .cc__show #cc__policy__save__btn{
-    transition: background-color .25s ease, color .25s ease, box-shadow .25s ease;
-}
-
-#cc__modal__container #cc__modal #cc__modal__accept__btn:hover,
-#cc__modal__container #cc__policy__save__btn:hover{
-    background: #e7c52e;
-    box-shadow: 0 0 0 0.250em #fff0ad;
-}
-
-#cc__modal__container #cc__modal #cc__modal__accept__btn:active,
-#cc__modal__container #cc__policy__save__btn:active{
-    background: #9e9e9e;
-    box-shadow: 0 0 0 0.250em #dfdfdf;
+    font-size: 0.9em;
+    user-select: none;
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    -o-user-select: none;
 }
 
 #cc__modal__container #cc__modal .cc__link{
@@ -224,7 +249,8 @@ CookieConsent policy
 
 #cc__modal__container #cc__policy__content{
 	overflow-y: auto;
-	overflow-y: overlay;
+    overflow-y: overlay;
+    overflow-x: hidden;
     height: 100%;
     position: relative;
     padding: 1.875em;
@@ -256,20 +282,12 @@ CookieConsent policy
     width: 2.5em;
     height: 2.5em;
     border: none;
-    background: #ffda30;
     padding: 0.625em;
     font-size: 1em;
     outline: none;
     border-radius: 0.250em;
-    box-shadow: 0 0 0 0 transparent;
     cursor: pointer;
-    transition: box-shadow .25s ease, background-color .25s ease;
-    color: inherit;
-}
-
-#cc__modal__container #cc__policy__close__btn:hover{
-    background: #dbbc2e;
-    box-shadow: 0 0 0 0.250em #ffefa6;
+    margin: 0;
 }
 
 #cc__modal__container #cc__policy__text{
@@ -284,7 +302,7 @@ CookieConsent policy
     transform: scale(1) translateY(-50%);
 }
 
-/** funzia solo x chrome **/
+/** works only on webkit-based browsers **/
 #cc__modal__container #cc__policy__content::-webkit-scrollbar{
 	width: 1em;
     height: 100%;
@@ -333,12 +351,21 @@ CookieConsent policy
     margin-left: 0.625em;
 }
 
+#cc__modal__container.ie .sc_container_checkbox{
+	padding-left: 1em;
+	margin-bottom: 0.7em;
+}
+
 /* Hide the browser's default checkbox */
 #cc__modal__container .sc_container_checkbox input {
     position: absolute;
-    opacity: 0;
     cursor: pointer;
-	visibility: hidden;
+	display: none;
+}
+
+#cc__modal__container.ie .sc_container_checkbox input{
+	display: block;
+	opacity: 1;
 }
 
 /* Create a custom checkbox */
@@ -350,6 +377,10 @@ CookieConsent policy
     width: 1em;
     background-color: #eee;
     border-radius: 0.2em;
+}
+
+#cc__modal__container.ie .sc_container_checkbox .sc_checkmark{
+	display: none;
 }
 
 #cc__modal__container .sc_container_checkbox .sc_checkmark.sc_checkmark.sc_readonly{
@@ -415,6 +446,9 @@ CookieConsent policy
     overflow: hidden;
     box-shadow: 0 0 0 1px #e9e9e9;
 }
+#cc__modal__container.ie #cc__policy__content table{
+	overflow: auto;
+}
 
 /* Table Zebra striping */
 #cc__modal__container #cc__policy__content table tr:nth-of-type(odd) { 
@@ -449,10 +483,6 @@ Dark-mode for cookie consent
 	color: #c5cbd0;
 }
 
-.cc_darkmode #cc__modal__container #cc__policy__close__btn {
-	color: #000;
-}
-
 .cc_darkmode #cc__modal__container #cc__modal {
 	background: #151619;
 	-webkit-box-shadow: 0 0 1.875em rgba(57, 62, 72, .22);
@@ -472,10 +502,6 @@ Dark-mode for cookie consent
 	border-bottom: 1px solid #1d2125;
 }
 
-.cc_darkmode #cc__modal__container .sc_container_checkbox input:checked~.sc_checkmark {
-	background-color: #d1b42b;
-}
-
 .cc_darkmode #cc__modal__container .sc_container_checkbox .sc_checkmark:after {
 	border: solid #000000;
 	border-width: 0 0.1em 0.1em 0;
@@ -488,20 +514,6 @@ Dark-mode for cookie consent
 .cc_darkmode #cc__modal__container .sc_container_checkbox input:checked~.sc_checkmark.sc_readonly:after {
 	border: solid #26292b;
 	border-width: 0 0.1em 0.1em 0;
-}
-
-.cc_darkmode #cc__modal__container #cc__modal #cc__modal__accept__btn:hover,
-.cc_darkmode #cc__modal__container #cc__policy__close__btn:hover,
-.cc_darkmode #cc__modal__container #cc__policy__save__btn:hover {
-	-webkit-box-shadow: 0 0 0 0.25em #545141;
-	box-shadow: 0 0 0 0.25em #545141;
-}
-
-.cc_darkmode #cc__modal__container #cc__modal #cc__modal__accept__btn:active,
-.cc_darkmode #cc__modal__container #cc__policy__save__btn:active {
-	background: #2e3338;
-	-webkit-box-shadow: 0 0 0 0.25em #1d2024;
-	box-shadow: 0 0 0 0.25em #1d2024;
 }
 
 .cc_darkmode #cc__modal__container #cc__policy__content::-webkit-scrollbar-thumb {
@@ -525,59 +537,11 @@ Dark-mode for cookie consent
 	box-shadow: 0 0 0 1px #232529;
 }
 
-/* 
-Max width before this PARTICULAR table gets nasty
-This query will take effect for any screen smaller than 760px
-and also iPads specifically.
-*/
-@media 
-only screen and (max-width: 760px),
-(min-device-width: 768px) and (max-device-width: 1024px)  {
-
-	#cc__modal__container #cc__policy__content table { 
-	  	width: 100%; 
-	}
-
-	/* Force table to not be like tables anymore */
-    #cc__modal__container #cc__policy__content table, 
-    #cc__modal__container #cc__policy__content table thead, 
-    #cc__modal__container #cc__policy__content table tbody, 
-    #cc__modal__container #cc__policy__content table th, 
-    #cc__modal__container #cc__policy__content table td, 
-    #cc__modal__container #cc__policy__content table tr { 
-		display: block; 
-	}
-	
-	/* Hide table headers (but not display: none;, for accessibility) */
-	#cc__modal__container #cc__policy__content table thead tr { 
-		position: absolute;
-		top: -9999px;
-		left: -9999px;
-	}
-	
-	#cc__modal__container #cc__policy__content table td { 
-		/* Behave  like a "row" */
-		border: none;
-		position: relative;
-		padding-left: 50%; 
-	}
-
-	#cc__modal__container #cc__policy__content table td:before { 
-		/* Now like a table header */
-		position: absolute;
-		/* Top/left values mimic padding */
-		left: 0.375em;
-		width: 45%; 
-		padding-right: 0.625em; 
-		white-space: nowrap;
-		/* Label the data */
-		content: attr(data-column);
-		color: #000;
-		font-weight: bold;
-	}
+.cc_darkmode  #cc__modal__container.ie #cc__policy__content table{
+	border: 1px solid #232529;
 }
 
-@media screen and (max-width: 1000px){
+@media screen and (max-width: 900px){
     #cc__modal__container #cc__modal{
         width: 100%;
         margin: 0;
@@ -586,7 +550,7 @@ only screen and (max-width: 760px),
         bottom: 0;
         border-radius: 0;
         display: block;
-    }
+    } 
 }
 
 /* On screens that are 37.500em or less, set the background color to olive */
@@ -606,5 +570,48 @@ only screen and (max-width: 760px),
 		display: block;
 		padding: 0;
 		margin: 0 0 2em 0; 
-	}
+    }
+    
+    /** dynamic table layout **/
+    #cc__modal__container #cc__policy__content table { 
+        width: 100%; 
+    }
+
+    /* Force table to not be like tables anymore */
+    #cc__modal__container #cc__policy__content table, 
+    #cc__modal__container #cc__policy__content table thead, 
+    #cc__modal__container #cc__policy__content table tbody, 
+    #cc__modal__container #cc__policy__content table th, 
+    #cc__modal__container #cc__policy__content table td, 
+    #cc__modal__container #cc__policy__content table tr { 
+        display: block; 
+    }
+
+    /* Hide table headers (but not display: none;, for accessibility) */
+    #cc__modal__container #cc__policy__content table thead tr { 
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+    }
+
+    #cc__modal__container #cc__policy__content table td { 
+        /* Behave  like a "row" */
+        border: none;
+        position: relative;
+        padding-left: 50%; 
+    }
+
+    #cc__modal__container #cc__policy__content table td:before { 
+        /* Now like a table header */
+        position: absolute;
+        /* Top/left values mimic padding */
+        left: 0.375em;
+        width: 45%; 
+        padding-right: 0.625em; 
+        white-space: nowrap;
+        /* Label the data */
+        content: attr(data-column);
+        color: #000;
+        font-weight: bold;
+    }
 }
