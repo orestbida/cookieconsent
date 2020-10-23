@@ -33,14 +33,14 @@
             cc_cookie_name: "cc_cookie",
             cc_dark_mode_class : 'cc_darkmode',         // default class for dark mode -> if you change this make sure to also update css file with your class
             cc_theme_css: null,                         
-			cc_languages : []							// define new languages	
+			cc_languages : {}							
         };
 
         /**
          * Update config settings (if user provided an config object)
          * @param {Object} conf_params 
          */
-        var _setConfig = function(conf_params, op_mode){
+        var _setConfig = function(conf_params){
             try{
                 if(typeof conf_params !== 'undefined' && conf_params != null){
 
@@ -79,96 +79,13 @@
                          * Add each defined custom language
                          */
                         for(var i=0; i<conf_params['cc_languages'].length; i++){
-                            
                             var lang_index = conf_params['cc_languages'][i]['lang'];
                             var lang_content = conf_params['cc_languages'][i];
                             
                             /**
-                             * Check if index alredy exists
-                             * if it exists, override content with new values
+                             * Add language only if it doesn't exist
                              */
-                            if(_config.cc_languages.hasOwnProperty(lang_index)){
-                                
-                               _printVerbose("CookieConsent [config_notice]: updating_existing_lang = '"+ lang_index +"'");
-
-                                /**
-                                 * Update cookie-consent modal content
-                                 */
-                                if(op_mode && typeof lang_content['modal'] !== "undefined"){
-                                    if( typeof lang_content['modal']['cc_title'] === "string")
-                                        _config.cc_languages[lang_index].modal.cc_title = lang_content['modal']['cc_title'];
-                                    if( typeof lang_content['modal']['cc_more_text'] === "string")
-                                        _config.cc_languages[lang_index].modal.cc_more_text = lang_content['modal']['cc_more_text'];
-                                    if( typeof lang_content['modal']['cc_accept_text'] === "string")
-                                        _config.cc_languages[lang_index].modal.cc_accept_text = lang_content['modal']['cc_accept_text'];
-                                    if( typeof lang_content['modal']['cc_description'] === "string")
-                                        _config.cc_languages[lang_index].modal.cc_description = lang_content['modal']['cc_description'];
-                                }
-
-                                /**
-                                 * Update cookie-consent-policy
-                                 */
-                                if(typeof _config.cc_policy_url != "string"){
-                                    if(typeof lang_content['policy'] !== "undefined"){
-
-                                        if(lang_content['policy'].hasOwnProperty('ccp_title'))
-                                            _config.cc_languages[lang_index].policy.ccp_title = lang_content['policy']['ccp_title'];
-        
-                                        if(lang_content['policy'].hasOwnProperty('ccp_save_text'))
-                                            _config.cc_languages[lang_index].policy.ccp_save_text = lang_content['policy']['ccp_save_text']
-                                        
-                                        if(lang_content['policy'].hasOwnProperty('ccp_blocks')){
-
-                                            /**
-                                             * Delete current ccp_blocks content
-                                             */
-                                            _config.cc_languages[lang_index].policy.ccp_blocks = [];
-
-                                            /**
-                                             * Get all new blocks to add
-                                             */
-                                            var all_blocks = lang_content['policy']['ccp_blocks'];
-                                
-                                            for(var x=0; x<all_blocks.length; x++){
-                                                
-                                                var block_tmp = {};
-                                                
-                                                block_tmp.ccb_title = all_blocks[x]['ccb_title'];
-                                                block_tmp.ccb_description = all_blocks[x]['ccb_description'];
-
-                                                /**
-                                                 * Create cookies-table for this block
-                                                 */
-                                                if(all_blocks[x].hasOwnProperty('ccb_cookies_table')){
-                                                    block_tmp.ccb_cookies_table = [];
-                                
-                                                    var all_cookies_table_tmp = all_blocks[x]['ccb_cookies_table']
-
-                                                    for(var t=0; t<all_cookies_table_tmp.length; t++){
-                                                        var ccb_cookie_tmp = {};
-                                                        ccb_cookie_tmp.ccb_cookie_name = all_cookies_table_tmp[t]['ccb_cookie_name'];
-                                                        ccb_cookie_tmp.ccb_cookie_domain = all_cookies_table_tmp[t]['ccb_cookie_domain'];
-                                                        ccb_cookie_tmp.ccb_cookie_expiration = all_cookies_table_tmp[t]['ccb_cookie_expiration'];
-                                                        ccb_cookie_tmp.ccb_cookie_description = all_cookies_table_tmp[t]['ccb_cookie_description'];
-                                                        ccb_cookie_tmp.ccb_cookie_type = all_cookies_table_tmp[t]['ccb_cookie_type'];
-                                                        block_tmp.ccb_cookies_table.push(ccb_cookie_tmp);
-                                                    }
-                                                }
-
-                                                if(all_blocks[x].hasOwnProperty('ccb_switch')){
-                                                    var ccb_switch = {};
-                                                    ccb_switch.value = all_blocks[x]['ccb_switch']['value'];
-                                                    ccb_switch.enabled = all_blocks[x]['ccb_switch']['enabled'];
-                                                    ccb_switch.readonly = all_blocks[x]['ccb_switch']['readonly'];
-                                                    block_tmp.ccb_switch = ccb_switch;
-                                                }
-
-                                                _config.cc_languages[lang_index].policy.ccp_blocks.push(block_tmp);
-                                            }
-                                        }
-                                    }
-                                }
-                            }else{
+                            if(!_config.cc_languages.hasOwnProperty(lang_index)){
                                 /**
                                  * Add new language
                                  */
@@ -190,11 +107,32 @@
                                 _config.cc_languages[lang_index].policy.ccp_blocks = [];
                                 _config.cc_languages[lang_index].policy.ccp_title =  lang_content['policy']['ccp_title'];
                                 _config.cc_languages[lang_index].policy.ccp_save_text =  lang_content['policy']['ccp_save_text'];
-                                
+
                                 /**
                                  * Set all blocks for policy
                                  */
                                 var all_blocks = lang_content['policy']['ccp_blocks'];
+
+                                /**
+                                 * Use custom table headers 
+                                 */
+                                if(lang_content['policy'].hasOwnProperty('ccb_table_headers')){
+
+                                    _config.cc_languages[lang_index].policy.ccb_table_headers = [];
+
+                                    var all_table_headers = lang_content['policy']['ccb_table_headers'], tmp_headers = [];
+
+                                    for(var lk=0; lk<all_table_headers.length; ++lk){ 
+                                        var tmp_header = {}, new_keys;
+
+
+                                        new_keys = _getKeys(all_table_headers[lk]);
+                                        tmp_header[new_keys[0]] = all_table_headers[lk][new_keys[0]];
+                                        tmp_headers.push(tmp_header);
+                                    }
+
+                                    _config.cc_languages[lang_index].policy.ccb_table_headers = tmp_headers;
+                                }
 
                                 for(var j=0; j<all_blocks.length; j++){
                                     
@@ -205,16 +143,16 @@
                                     
                                     if(all_blocks[j].hasOwnProperty('ccb_cookies_table')){
                                         block_tmp.ccb_cookies_table = [];
-        
-                                        var all_cookies_table_tmp = all_blocks[j]['ccb_cookies_table']
+
+                                        var all_cookies_table_tmp = all_blocks[j]['ccb_cookies_table'];
+                                        var all_table_headers = _config.cc_languages[lang_index].policy.ccb_table_headers;
 
                                         for(var t=0; t<all_cookies_table_tmp.length; t++){
                                             var ccb_cookie_tmp = {};
-                                            ccb_cookie_tmp.ccb_cookie_name = all_cookies_table_tmp[t]['ccb_cookie_name'];
-                                            ccb_cookie_tmp.ccb_cookie_domain = all_cookies_table_tmp[t]['ccb_cookie_domain'];
-                                            ccb_cookie_tmp.ccb_cookie_expiration = all_cookies_table_tmp[t]['ccb_cookie_expiration'];
-                                            ccb_cookie_tmp.ccb_cookie_description = all_cookies_table_tmp[t]['ccb_cookie_description'];
-                                            ccb_cookie_tmp.ccb_cookie_type = all_cookies_table_tmp[t]['ccb_cookie_type'];
+                                            for(var y=0; y<all_table_headers.length; ++y){
+                                                new_keys = _getKeys(all_table_headers[y]);
+                                                ccb_cookie_tmp[new_keys[0]] = all_cookies_table_tmp[t][new_keys[0]];
+                                            }
                                             block_tmp.ccb_cookies_table.push(ccb_cookie_tmp);
                                         }
                                     }
@@ -277,6 +215,15 @@
             }
         }
 
+        var _getKeys = function(obj){
+            if(typeof obj === "object"){
+                var keys = [], i = 0;
+                for (keys[i++] in obj) {};
+                return keys;
+            }
+            throw new TypeError("Parameter is not an object!");
+        }
+
         /**
          * Append class to specified dom element
          * @param {Object} elem 
@@ -316,9 +263,17 @@
          * @param {string} lang 
          */
         var _getValidatedLanguage = function(lang){
-            if(_config.cc_languages.hasOwnProperty(lang)) return lang;
-           _printVerbose("CookieConsent [lang_notice]: lang '"+lang+"' is not implemented, using default '"+_config.cc_default_lang+"' lang!");
-            return _config.cc_default_lang;
+            
+            if(_config.cc_languages.hasOwnProperty(lang)){
+                return lang;
+            }else if(_getKeys(_config.cc_languages).length > 0){
+                if(_config.cc_languages.hasOwnProperty(_config.cc_current_lang)){
+                    return _config.cc_current_lang ;
+                }else{
+                    return _getKeys(_config.cc_languages)[0];
+                }
+            }
+            throw new Error("No language defined!")
         }
 
         /**
@@ -457,6 +412,7 @@
             var cc_policy_container = document.createElement("div");
             var cc_v_align = document.createElement("div");
             var cc_policy = document.createElement("div");
+            var cc_policy_inner = document.createElement("div");
             var cc_policy_title = document.createElement("h1");
             var cc_policy_header = document.createElement("div");
             var cc_policy_close_btn = document.createElement("button");
@@ -470,6 +426,7 @@
             cc_v_align.id = "cc__valign";
             cc_policy.id = "cc__policy";
             cc_policy_title.id = 'cc__policy__title';
+            cc_policy_inner.id = "cc__policy__inner";
             cc_policy_header.id = "cc__policy__header";
             cc_policy_content.id = 'cc__policy__content';
             cc_policy_close_btn.id = 'cc__policy__close__btn';
@@ -480,8 +437,9 @@
 
             cc_policy_header.appendChild(cc_policy_title);
             cc_policy_header.appendChild(cc_policy_close_btn);
-            cc_policy.appendChild(cc_policy_header);
-            cc_policy.appendChild(cc_policy_content);
+            cc_policy_inner.appendChild(cc_policy_header);
+            cc_policy_inner.appendChild(cc_policy_content);
+            cc_policy.appendChild(cc_policy_inner);
             cc_v_align.appendChild(cc_policy);
             cc_policy_container.appendChild(cc_v_align);
 
@@ -581,23 +539,26 @@
                     // create table header
                     var thead = document.createElement('thead');
                     var tr_tmp = document.createElement('tr');
-                    var th1 = document.createElement('th');
-                    var th2 = document.createElement('th');
-                    var th3 = document.createElement('th');
-                    var th4 = document.createElement('th');
-                    var th5 = document.createElement('th');
+               
+                    var all_table_headers = _config.cc_languages[_config.cc_current_lang].policy.ccb_table_headers;
+                    
+                    /**
+                     * Use custom table headers
+                     */
+                    for(var p=0; p<all_table_headers.length; ++p){ 
 
-                    th1.innerText = 'Name';
-                    th2.innerText = 'Domain';
-                    th3.innerText = 'Description';
-                    th4.innerText = 'Expiration';
-                    th5.innerText = 'Type';
+                        // create new header
+                        var th1 = document.createElement('th');
 
-                    tr_tmp.appendChild(th1);
-                    tr_tmp.appendChild(th2);
-                    tr_tmp.appendChild(th3);
-                    tr_tmp.appendChild(th4);
-                    tr_tmp.appendChild(th5);
+                        // get custom header content
+                        var new_column_key = _getKeys(all_table_headers[p])[0];
+                        var new_column_content = all_table_headers[p][new_column_key];
+                        
+                        th1.innerText = new_column_content;
+
+                        tr_tmp.appendChild(th1);
+                    }
+
                     thead.appendChild(tr_tmp);
                     block_table.appendChild(tr_tmp);
 
@@ -607,29 +568,21 @@
                     for(var n=0; n<all_blocks[i].ccb_cookies_table.length; n++){
 
                         var tr = document.createElement('tr');
-                        var td1 = document.createElement('td');
-                        var td2 = document.createElement('td');
-                        var td3 = document.createElement('td');
-                        var td4 = document.createElement('td');
-                        var td5 = document.createElement('td');
+ 
+                        for(var g=0; g<all_table_headers.length; ++g){ 
 
-                        td1.innerText = all_blocks[i].ccb_cookies_table[n].ccb_cookie_name;
-                        td2.innerText = all_blocks[i].ccb_cookies_table[n].ccb_cookie_domain;
-                        td3.innerText = all_blocks[i].ccb_cookies_table[n].ccb_cookie_description;
-                        td4.innerText = all_blocks[i].ccb_cookies_table[n].ccb_cookie_expiration;
-                        td5.innerText = all_blocks[i].ccb_cookies_table[n].ccb_cookie_type;
+                            var td_tmp = document.createElement('td');
+    
+                            // get custom header content
+                            var new_column_key = _getKeys(all_table_headers[g])[0];
+                            var new_column_content = all_blocks[i].ccb_cookies_table[n][new_column_key];
+            
+                            td_tmp.innerText = new_column_content;
+                            td_tmp.setAttribute('data-column', all_table_headers[g][new_column_key]);
 
-                        td1.setAttribute('data-column', th1.innerText);
-                        td2.setAttribute('data-column', th2.innerText);
-                        td3.setAttribute('data-column', th3.innerText);
-                        td4.setAttribute('data-column', th4.innerText);
-                        td5.setAttribute('data-column', th5.innerText);
+                            tr.appendChild(td_tmp);
+                        }
 
-                        tr.appendChild(td1);
-                        tr.appendChild(td2);
-                        tr.appendChild(td3);
-                        tr.appendChild(td4);
-                        tr.appendChild(td5);
                         tbody.appendChild(tr);
                     }
 
