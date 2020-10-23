@@ -1,12 +1,4 @@
-## Changelog compared to v1.0
- - add __custom table headers__ in cookie-policy modal ✨
- - tables inside cookie-policy can now have an arbitrary number of columns defined by user
- - refactor code / remove unused code 🔥
- - minor css updates
-
-<br>
-
-# Cookie Consent v1.1
+# Cookie Consent
 Simple cross-browser cookie consent plugin written in plain javascript.
 
 ## Why though
@@ -23,12 +15,10 @@ Main features
 ## CDN
 ```
 // dist version (no verbose mode)
-https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@1.1/dist/cookieconsent.js
-https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@1.1/dist/cookieconsent.css
+https://cdn.jsdelivr.net/gh/orestbida/cookieconsent/dist/cookieconsent.js
 
 // src version (with verbose mode)
-https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@1.1/src/cookieconsent.js
-https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@1.1/src/cookieconsent.css
+https://cdn.jsdelivr.net/gh/orestbida/cookieconsent/src/cookieconsent.js
 ```
 
 ## How to run
@@ -38,7 +28,7 @@ https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@1.1/src/cookieconsent.css
     <script src="<your_path>/cookieconsent.js"></script>
 
     // or load it via cdn
-    <script src="https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@1.1/dist/cookieconsent.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/orestbida/cookieconsent/dist/cookieconsent.js"></script>
 
     // dist version (no verbose mode)
 
@@ -304,3 +294,9 @@ List of things to implement
         - column for cookie-description
         - column for cookie-expiration-date
     - Implement the (eventual) `possibility of opting-out` of cookie-consent (up to user)
+
+## Changelog compared to v1.0
+ - add __custom table headers__ in cookie-policy modal ✨
+ - tables inside cookie-policy can now have an arbitrary number of columns defined by user
+ - refactor code / remove unused code 🔥
+ - minor css updates
