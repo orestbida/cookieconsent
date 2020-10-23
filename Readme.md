@@ -29,6 +29,10 @@ https://cdn.jsdelivr.net/gh/orestbida/cookieconsent/src/cookieconsent.js
 
     // or load it via cdn
     <script src="https://cdn.jsdelivr.net/gh/orestbida/cookieconsent/dist/cookieconsent.js"></script>
+
+    // dist version (no verbose mode)
+
+
     ```
 - __Obtain Cookie-Consent plugin__ 
     ```javascript
@@ -94,70 +98,78 @@ CookieConsent.run({
     // define your own cookie-consent and cookie-policy
     // it's up to you to make it gdpr compliant
     cc_languages : [
-                {
-                    lang : 'en',
-                    modal : {
-                        cc_title :  "I use cookies",
-                        cc_more_text :  "Learn more", 
-                        cc_accept_text : "I understand",
-                        cc_description :  'My website uses essential cookies necessary for its functioning. By continuing browsing, you consent to my use of cookies and other technologies.',
-                    },
-                    policy : {
-                        ccp_title : "Cookie Policy",
-                        ccp_blocks : [
+        {
+            lang : 'en',
+            modal : {
+                cc_title :  "I use cookies",
+                cc_more_text :  "Learn more", 
+                cc_accept_text : "I understand",
+                cc_description :  'My website uses essential cookies necessary for its functioning. By continuing browsing, you consent to my use of cookies and other technologies.',
+            },
+            policy : {
+                ccp_title : "Cookie Policy",
+                ccp_save_text : "Save preferences",
+                // ccb_table_headers is REQUIRED if any ccb_cookies_table is used
+                ccb_table_headers : [
+                    {col1: "Name" }, 
+                    {col2: "Domain" }, 
+                    {col3: "Expiration" }, 
+                    {col4: "Description" }, 
+                    {col5: "Type" }
+                ],
+                ccp_blocks : [
+                    {
+                        ccb_title : "What are cookies",
+                        ccb_description: 'Cookies are very small text files that are stored on your computer when you visit a website. I use cookies to assure the basic functionalities of the website and to enhance your online experience. I use many different types of cookies which you can check on the sections below.'
+                    },{
+                        ccb_title : "Strictly necessary cookies",
+                        ccb_description: 'These cookies are essential for the proper functioning of my website. Without these cookies, the website would not work properly.',
+                        ccb_cookies_table : [
                             {
-                                ccb_title : "What are cookies",
-                                ccb_description: 'Cookies are very small text files that are stored on your computer when you visit a website. I use cookies to assure the basic functionalities of the website and to enhance your online experience. I use many different types of cookies which you can check on the sections below.'
-                            },{
-                                ccb_title : "Strictly necessary cookies",
-                                ccb_description: 'These cookies are essential for the proper functioning of my website. Without these cookies, the website would not work properly.',
-                                ccb_cookies_table : [
-                                    {
-                                        ccb_cookie_name: 'cc_cookie',
-                                        ccb_cookie_domain: 'orestbida.com',
-                                        ccb_cookie_expiration: 'After 3 months (Starting from the moment the cookie-consent was accepted)',
-                                        ccb_cookie_description: 'Used to know whether a visitor has accepted the cookie consent or not.',
-                                        ccb_cookie_type: 'Permanent cookie'
-                                    },
-                                    {
-                                        ccb_cookie_name: 'cc_level',
-                                        ccb_cookie_domain: 'orestbida.com',
-                                        ccb_cookie_expiration: 'After 3 months (Starting from the moment the cookie-consent was accepted)',
-                                        ccb_cookie_description: 'Used to know the accepted level of cookie consent (E.g.  essential cookie only, full cookie consent ...)',
-                                        ccb_cookie_type: 'Permanent cookie'
-                                    }
-                                ],
-                                ccb_switch : {
-                                    value : 'necessary_cookies',
-                                    enabled : true,
-                                    readonly: true
-                                }
-                            },{
-                                ccb_title : "Functionality cookies",
-                                ccb_description: 'These cookies are used to provide you with a more personalized experience on my website and to remember choices you make when you browse the website. For example, whether or not you enabled dark-mode on this website.',
-                                ccb_switch : {
-                                    value : 'functionality_cookies',
-                                    enabled : true,
-                                    readonly: false
-                                },
-                                ccb_cookies_table: [
-                                    {
-                                        ccb_cookie_name: 'darkmode',
-                                        ccb_cookie_domain: 'orestbida.com',
-                                        ccb_cookie_expiration: 'One week after the cookie has been created',
-                                        ccb_cookie_description: 'Used to remember visitor preferences. If darkmode was enabled, then the next time you visit the website, darkmode will be automatically turned on.' ,
-                                        ccb_cookie_type: 'Permanent cookie'
-                                    }
-                                ]
-                            },{
-                                ccb_title : "More information",
-                                ccb_description: 'For any queries in relation to my policy on cookies and your choices, please contact me.',
+                                col1: 'cc_cookie',
+                                col2: 'orestbida.com',
+                                col3: 'After 3 months (Starting from the moment the cookie-consent was accepted)',
+                                col4: 'Used to know whether a visitor has accepted the cookie consent or not.',
+                                col5: 'Permanent cookie'
+                            },
+                            {
+                                col1: 'cc_level',
+                                col2: 'orestbida.com',
+                                col3: 'After 3 months (Starting from the moment the cookie-consent was accepted)',
+                                col4: 'Used to know the accepted level of cookie consent (E.g.  essential cookie only, full cookie consent ...)',
+                                col5: 'Permanent cookie'
                             }
                         ],
-                        ccp_save_text : "Save preferences"
+                        ccb_switch : {
+                            value : 'necessary_cookies',
+                            enabled : true,
+                            readonly: true
+                        }
+                    },{
+                        ccb_title : "Functionality cookies",
+                        ccb_description: 'These cookies are used to provide you with a more personalized experience on my website and to remember choices you make when you browse the website. For example, whether or not you enabled dark-mode on this website.',
+                        ccb_switch : {
+                            value : 'functionality_cookies',
+                            enabled : true,
+                            readonly: false
+                        },
+                        ccb_cookies_table: [
+                            {
+                                col1: 'darkmode',
+                                col2: 'orestbida.com',
+                                col3: 'One week after the cookie has been created',
+                                col4: 'Used to remember visitor preferences. If darkmode was enabled, then the next time you visit the website, darkmode will be automatically turned on.' ,
+                                col5: 'Permanent cookie'
+                            }
+                        ]
+                    },{
+                        ccb_title : "More information",
+                        ccb_description: 'For any queries in relation to my policy on cookies and your choices, please contact me.',
                     }
-                }
-            ]
+                ]
+            }
+        }
+    ]
 });
 ```
 </div>
@@ -282,3 +294,9 @@ List of things to implement
         - column for cookie-description
         - column for cookie-expiration-date
     - Implement the (eventual) `possibility of opting-out` of cookie-consent (up to user)
+
+## Changelog compared to v1.0
+ - add __custom table headers__ in cookie-policy modal ✨
+ - tables inside cookie-policy can now have an arbitrary number of columns defined by user
+ - refactor code / remove unused code 🔥
+ - minor css updates

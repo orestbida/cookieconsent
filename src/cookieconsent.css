@@ -162,13 +162,13 @@ CookieConsent policy
 #cc__modal__container #cc__policy__container{ /** have to add overflow hidden to body**/
     position: fixed;
     top: 0;
-	left: 0;
+    left: 0;
+    width: 100%;
     z-index: 101;
 	background: #070707;
     background: rgba(0, 0, 0 , 0.45);
     display: table;
     height: 100%;
-    width: 100%;
     visibility: hidden;
     opacity: 0;
     transition: none; 
@@ -214,10 +214,9 @@ CookieConsent policy
 
 #cc__modal__container #cc__policy{
     margin: 0 auto;
-    background: #fff;
     border-radius: 0.1875em;
-    max-width: 50em;
-	width: 100%;
+    max-width: 52.5em;
+    width: 100%;
     position: fixed;
     left: 0;
     right: 0;
@@ -230,9 +229,17 @@ CookieConsent policy
     top: 50%;
 	transform: translateY(-50%) scale(.95);
 	transition: transform .4s cubic-bezier(.5,0,0,1.25),opacity .4s ease,visibility .4s ease;
+}
+
+#cc__modal__container #cc__policy__inner{
+    background: #fff;
+    border-radius: 0.25em;
     padding-top: 4.9375em;
-	padding-bottom: 1.25em;
-	border-radius: 0.25em;
+    padding-bottom: 1.25em;
+    height: 100%;
+    position: relative;
+    margin: 0 1.250em;
+    overflow: hidden;
 }
 
 #cc__modal__container.ie #cc__policy{
@@ -263,9 +270,9 @@ CookieConsent policy
     display: table;
     padding: 1.2em 1.875em;
     vertical-align: middle;
-    border-bottom: 1px solid #f0f0f0;
-    Z-INDEX: 1;
+    z-index: 2;
     background: white;
+    border-bottom: 1px solid #f0f0f0;
 }
 #cc__modal__container #cc__policy__title{
 	display: table-cell;
@@ -493,13 +500,14 @@ Dark-mode for cookie consent
 	color: #d4d8d9;
 }
 
-.cc_darkmode #cc__modal__container #cc__policy,
+.cc_darkmode #cc__modal__container #cc__policy__inner,
 .cc_darkmode #cc__modal__container #cc__policy__header {
 	background: #151619;
 }
 
 .cc_darkmode #cc__modal__container #cc__policy__header {
-	border-bottom: 1px solid #1d2125;
+    border-bottom: none;
+    box-shadow: 0px 1px 3px #0b0b0c;
 }
 
 .cc_darkmode #cc__modal__container .sc_container_checkbox .sc_checkmark:after {
@@ -526,7 +534,15 @@ Dark-mode for cookie consent
 }
 
 .cc_darkmode #cc__modal__container #cc__policy__content table tr:nth-of-type(odd) {
-	background: #151619;
+    background: #000000;
+}
+
+.cc_darkmode #cc__modal__container #cc__policy__content table > tr:first-child{
+    border-bottom: 1px solid #0c0c0c;
+}
+
+.cc_darkmode #cc__modal__container #cc__policy__content table tr:nth-of-type(even) {
+
 }
 
 .cc_darkmode #cc__modal__container #cc__policy__content table td:before {
@@ -534,7 +550,8 @@ Dark-mode for cookie consent
 }
 
 .cc_darkmode #cc__modal__container #cc__policy__content table {
-	box-shadow: 0 0 0 1px #232529;
+    box-shadow: 0px 1px 2px #0f0f10;
+    background: #27282b;
 }
 
 .cc_darkmode  #cc__modal__container.ie #cc__policy__content table{
@@ -558,7 +575,14 @@ Dark-mode for cookie consent
     #cc__modal__container #cc__policy{
         border-radius: 0;
 		max-height: 100%;
-		height: 100%;
+        height: 100%;
+        left: 0;
+        right: 0;
+    }
+
+    #cc__modal__container #cc__policy__inner{
+        margin: 0;
+        border-radius: 0;
     }
 
 	#cc__modal__container #cc__policy__content,
@@ -587,6 +611,10 @@ Dark-mode for cookie consent
         display: block; 
     }
 
+    #cc__modal__container #cc__policy__content table th{
+        display: none;
+    }
+
     /* Hide table headers (but not display: none;, for accessibility) */
     #cc__modal__container #cc__policy__content table thead tr { 
         position: absolute;
@@ -602,16 +630,15 @@ Dark-mode for cookie consent
     }
 
     #cc__modal__container #cc__policy__content table td:before { 
-        /* Now like a table header */
         position: absolute;
-        /* Top/left values mimic padding */
-        left: 0.375em;
-        width: 45%; 
-        padding-right: 0.625em; 
+        left: 1em;
+        width: 43%;
+        padding-right: 0.625em;
         white-space: nowrap;
-        /* Label the data */
         content: attr(data-column);
         color: #000;
         font-weight: bold;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 }
