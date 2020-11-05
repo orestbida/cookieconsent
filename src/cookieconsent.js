@@ -1,5 +1,5 @@
 /*!
- * CookieConsent v1.0
+ * CookieConsent v1.2
  * https://www.github.com/orestbida/cookieconsent
  * Author Orest Bida
  * Released under the MIT License
@@ -29,11 +29,13 @@
             cc_policy_url: null,						// link to your own existing cookie-policy page	
             cc_enable_verbose: true,					// if enabled, show on console all events/errors
             cc_auto_language: false,    				// if enabled, overrides default cc_current_lang
-            cc_cookie_expires : 182,					// default: 6 months (in days)
+            cc_cookie_expiration : 182,					// default: 6 months (in days)
             cc_cookie_name: "cc_cookie",
-            cc_dark_mode_class : 'cc_darkmode',         // default class for dark mode -> if you change this make sure to also update css file with your class
-            cc_theme_css: null,                         
-			cc_languages : {}							
+            cc_autoclear_cookies: true,                 // [NEW from version 1.2] if enabled -> erase unused cookies based on deselected preferences
+            cc_autoload_css: true,                      // [NEW from version 1.2] if true -> autolad css
+            cc_cc_darkmode_class : 'cc_darkmode',         // default class for dark mode -> if you change this make sure to also update css file with your class
+            cc_theme_css: null,
+			cc_languages : {}
         };
 
         /**
@@ -48,7 +50,7 @@
                         _config.cc_enable_verbose = conf_params['cc_enable_verbose'];
                     }
     
-                   _printVerbose("CookieConsent [config_notice]: recieved_config_settings ", conf_params);
+                    _printVerbose("CookieConsent [config_notice]: recieved_config_settings ", conf_params);
             
                     if(typeof conf_params['cc_auto_language'] === "boolean"){
                         _config.cc_auto_language = conf_params['cc_auto_language'];
@@ -56,6 +58,16 @@
 
                     if(typeof conf_params['cc_theme_css'] === "string"){
 						_config.cc_theme_css = conf_params['cc_theme_css'];
+                    }
+
+                    if(typeof conf_params['cc_autoload_css'] === "boolean"){
+						_config.cc_autoload_css = conf_params['cc_autoload_css'];
+                    }
+
+                    if(typeof conf_params['cc_cookie_expiration'] === "number"){
+                        if(conf_params['cc_cookie_expiration'] > 0){
+                            _config.cc_cookie_expiration = conf_params['cc_cookie_expiration'];
+                        }
                     }
 
                     if(typeof conf_params['cc_delay'] === "number"){
@@ -74,6 +86,10 @@
                         _config.cc_accept_callback = conf_params['cc_accept_callback'];
                     }
 
+                    if(typeof conf_params['cc_autoclear_cookies'] === "boolean"){
+                        _config.cc_autoclear_cookies = conf_params['cc_autoclear_cookies'];
+                    }
+
                     if(typeof conf_params['cc_languages'] === "object" && conf_params['cc_languages'].length > 0){
                         /**
                          * Add each defined custom language
@@ -89,7 +105,7 @@
                                 /**
                                  * Add new language
                                  */
-                                _printVerbose("CookieConsent [config_notice]: adding_new_lang = '"+ lang_index +"'");
+                                 _printVerbose("CookieConsent [config_notice]: adding_new_lang = '"+ lang_index +"'");
                                 _config.cc_languages[lang_index] = {};
                                 /**
                                  * Set modal content
@@ -124,8 +140,6 @@
 
                                     for(var lk=0; lk<all_table_headers.length; ++lk){ 
                                         var tmp_header = {}, new_keys;
-
-
                                         new_keys = _getKeys(all_table_headers[lk]);
                                         tmp_header[new_keys[0]] = all_table_headers[lk][new_keys[0]];
                                         tmp_headers.push(tmp_header);
@@ -180,14 +194,14 @@
                     }
                 }else{
     
-                   _printVerbose("CookieConsent [config_notice]: No initial config object found, using default values!");
+                    _printVerbose("CookieConsent [config_notice]: No initial config object found, using default values!");
     
                     if(_config.cc_auto_language){
                         _config.cc_current_lang = _getValidatedLanguage(_getBrowserLang())
                     }
                 }
             }catch(ex){
-               _printVerbose("CookieConsent [ERROR] => ", ex, true);
+                _printVerbose("CookieConsent [ERROR] => ", ex, true);
             }
         }
 
@@ -215,6 +229,10 @@
             }
         }
 
+        /**
+         * Get all prop. keys defined inside object
+         * @param {Object} obj 
+         */
         var _getKeys = function(obj){
             if(typeof obj === "object"){
                 var keys = [], i = 0;
@@ -310,7 +328,7 @@
         var _getBrowserLang = function(){
             var browser_lang = navigator.language || navigator.browserLanguage;
             browser_lang.length > 2 && (browser_lang = browser_lang[0]+browser_lang[1]);
-           _printVerbose("CookieConsent [browser_lang_notice]: detected_browser_lang = '"+ browser_lang + "'");
+            _printVerbose("CookieConsent [browser_lang_notice]: detected_browser_lang = '"+ browser_lang + "'");
             return browser_lang.toLowerCase()
         }
 
@@ -319,7 +337,10 @@
              * Create general container
              */
             var _cc_general_container = document.createElement('div');
-            _cc_general_container.setAttribute('cc_data', 'cc_cookie_main')
+            _cc_general_container.setAttribute('cc_data', 'cc_cookie_main');
+            // Fix layout flash
+            _cc_general_container.style.position = "fixed";
+            _cc_general_container.style.zIndex = "1000";
             _cc_general_container.innerHTML = '<!--[if lt IE 9 ]><div id="'+'cc__modal__container'+'" class="ie"></div><![endif]--><!--[if (gt IE 8)|!(IE)]><!--><div id="'+'cc__modal__container'+'"></div><!--<![endif]-->'
 
             /**
@@ -465,7 +486,7 @@
             _cc_policy_isAttached = true;
         }
 
-        var _setCookieConsentPolicyContent = function(){
+        var _setCookieConsentPolicyContent = function(is_cookie_set){
             
             var all_blocks = _config.cc_languages[_config.cc_current_lang].policy.ccp_blocks;
 
@@ -511,7 +532,12 @@
                     block_switch.setAttribute('type', 'checkbox');
                     block_switch.setAttribute('value', all_blocks[i].ccb_switch.value);
 
-                    if(all_blocks[i].ccb_switch.enabled){
+                    // if cookie is set, get current saved preferences from cookie
+                    if(is_cookie_set){
+                        if(_cookieconsent.inArray(JSON.parse(_getCookie('cc_cookie')).level, all_blocks[i].ccb_switch.value)){ 
+                            block_switch.checked = true;
+                        }
+                    }else if(all_blocks[i].ccb_switch.enabled){
                         block_switch.checked = true;
                     }
 
@@ -605,7 +631,7 @@
             // Add save preferences button onClick event 
             // Hide both cookie policy and cookie consent
             _addEvent(cp_save_btn, 'click', function(){
-               _printVerbose('CookieConsent [cc_policy_notice]: saved_preferences!');
+                 _printVerbose('CookieConsent [cc_policy_notice]: saved_preferences!');
                 _cookieconsent.hide_policy();
                 _cookieconsent.hide();
                 _saveCookiePreferences();
@@ -623,7 +649,8 @@
             // Get all cookiepreferences values saved in cookieconsent policy
             var accepted_cookies = document.querySelectorAll('#cc__policy__content > .ccp_section input.sc_toggle');
             var cc_cookie_level = 'basic';
-            
+            var unselected_prefereneces = [];
+
             if(typeof accepted_cookies.length === "number"){
                 /**
                  * Reset cookie value
@@ -632,12 +659,68 @@
                 for(var i=0; i<accepted_cookies.length; i++){
                     if(accepted_cookies[i].checked){
                         cc_cookie_level+='"'+accepted_cookies[i].value+'",';
+                    }else{
+                        unselected_prefereneces.push(accepted_cookies[i].value);
                     }
                 }
+
                 cc_cookie_level = cc_cookie_level.slice(0, -1);
+                
+                /**
+                 * If cc_autoclear_cookies==true -> delete all cookies which are unused (based on selected preferences)
+                 */
+                if(_config.cc_autoclear_cookies){
+
+                    // Get array of all blocks defined inside the policy
+                    var all_blocks = _config.cc_languages[_config.cc_current_lang].policy.ccp_blocks;
+                    
+                    // Get number of blocks
+                    var len = all_blocks.length;
+
+                    // For each block
+                    for(var jk=0; jk<len; jk++){
+
+                        // Save current block (local scope & less accesses -> ~faster value retrieval)
+                        var curr_block = all_blocks[jk];
+                        
+                        // If current block has a cookie table and also a switch
+                        if(curr_block.hasOwnProperty('ccb_cookies_table') && curr_block.hasOwnProperty('ccb_switch')){
+                            
+                            // Check if switch is turned off (disabled)
+                            if(unselected_prefereneces.length > 0 && _cookieconsent.inArray(unselected_prefereneces, curr_block.ccb_switch.value)){
+                                curr_block.ccb_switch.enabled = false;
+                            }
+
+                            // If current block has switch disabled -> delete all cookies specified in it
+                            if(!curr_block.ccb_switch.enabled){
+                                
+                                // [IMPORTANT]: uses first parameter of each object (cookie), inside ccb_cookies_table array, assuming it stores the cookiename 
+                                // ISSUE? [TODO: ADD TO README]
+                                var ckey = _getKeys(_config.cc_languages[_config.cc_current_lang].policy.ccb_table_headers[0])[0];
+                                
+                                // Get number of cookies defined in ccb_cookies_table
+                                var clen = curr_block.ccb_cookies_table.length;
+                                
+                                // Delete each cookie defined in ccb_cookie_table of current block
+                                for(var hk=0; hk<clen; hk++){
+                                    // Get current row of table (corresponds to all cookie params)
+                                    var curr_row = curr_block.ccb_cookies_table[hk];
+                                    
+                                    // If cookie exists -> delete it
+                                    if(_getCookie(curr_row[ckey]) != ""){
+                                        _eraseCookie(curr_row[ckey]);
+                                    }
+                                }
+
+                                 _printVerbose('CookieConsent [erase_cookies]: deleted all cookies inside "'+curr_block.ccb_switch.value+'"', curr_block.ccb_cookies_table);
+                            }
+                        }
+                    }
+                }
             }
-            // save both status and 'acceptance' level
-            _setCookie(_config.cc_cookie_name, '{"status": "accepted", "level": ['+cc_cookie_level+']}', _config.cc_cookie_expires, 0, 0);
+
+            // save both status and 'preferences' level
+            _setCookie(_config.cc_cookie_name, '{"status": "accepted", "level": ['+cc_cookie_level+']}', _config.cc_cookie_expiration, 0, 0);
             
             if(typeof _config.cc_accept_callback === "function"){
                var cookie_val = _getCookie(_config.cc_cookie_name);
@@ -650,22 +733,39 @@
          * @param {string} css_file_path 
          */
         var _loadCookieConsentCSS = function(css_file_path, callback){
-            var link  = document.createElement('link');
-            link.rel  = 'stylesheet';
-            link.type = 'text/css';
-            link.href = css_file_path;
-            document.getElementsByTagName('head')[0].appendChild(link);
+            if(_config.cc_autoload_css){
+                var link  = document.createElement('link');
+                link.rel  = 'stylesheet';
+                link.type = 'text/css';
+                link.href = css_file_path;
+                document.getElementsByTagName('head')[0].appendChild(link);
 
-            if(link.onload){
-                link.onload = callback();
+                if(link.onload){
+                    link.onload = callback();
+                }else{
+                    callback();
+                }
+
+                 _printVerbose("CookieConsent [css_notice]: loading_css = '"+ css_file_path + "'");
             }else{
                 callback();
             }
-
-           _printVerbose("CookieConsent [css_notice]: loading_css = '"+ css_file_path + "'");
         }
-        
-        
+
+        /**
+         * Returns true if value is found inside array
+         * @param {Array} arr 
+         * @param {Object} value 
+         */
+        _cookieconsent.inArray = function(arr, value){
+            var len = arr.length;
+            for(var i=0; i<len; i++){
+                if(arr[i] == value)
+                    return true;
+            }
+            return false;
+        }
+
         /**
          * Check if cookieconsent is alredy attached to dom
          * If not, create one, configure it and attach it to body
@@ -704,18 +804,18 @@
                     _loadCookieConsentCSS(_config.cc_theme_css, function(){
                         if (typeof _config.cc_policy_url != "string"){
                             _createCookieConsentPolicyHTML();
-                            _setCookieConsentPolicyContent();
+                            _setCookieConsentPolicyContent(true);
                             _addCookiePolicyButtonListener();
                         }
                     });
-                   _printVerbose("CookieConsent [NOTICE]: cookie consent alredy accepted!");
+                    _printVerbose("CookieConsent [NOTICE]: cookie consent alredy accepted!");
                     
                     if(typeof _config.cc_accept_callback === "function"){
                         _config.cc_accept_callback(JSON.parse(_getCookie(_config.cc_cookie_name)));
                     }
                 }
             }else{
-               _printVerbose("CookieConsent [NOTICE]: cookie consent alredy attached to body!");
+                _printVerbose("CookieConsent [NOTICE]: cookie consent alredy attached to body!");
             }
         }
 
@@ -729,14 +829,14 @@
                         _addClass(_cc_policy_dom, "cc__anim");
                         _addClass(_cc_policy_dom, "cc__show");
                         
-                       _printVerbose("CookieConsent [cookie_policy]: show_cookie_policy");
+                        _printVerbose("CookieConsent [cookie_policy]: show_cookie_policy");
                         _cc_policy_isHidden = false;
                     }else{
-                       _printVerbose("CookieConsent [cookie_policy]: alredy_shown");
+                        _printVerbose("CookieConsent [cookie_policy]: alredy_shown");
                     }
                 }, typeof cc_delay === "number" && cc_delay > 20 ? cc_delay : 20);
             }else{
-               _printVerbose("CookieConsent [cookie_policy]: cookie policy was not initialized!");
+                _printVerbose("CookieConsent [cookie_policy]: cookie policy was not initialized!");
             }
         }
 
@@ -758,15 +858,15 @@
                          */
                         _addClass(_cc_modal_dom, "cc__show");
                         
-                       _printVerbose("CookieConsent [cookie_modal]: show_cookie_consent");
+                        _printVerbose("CookieConsent [cookie_modal]: show_cookie_consent");
                         _cc_modal_isHidden = false;
                     }else{
-                       _printVerbose("CookieConsent [cookie_modal]: alredy_shown");
+                        _printVerbose("CookieConsent [cookie_modal]: alredy_shown");
                     }
                 }, typeof cc_delay == "number" && cc_delay > 20 ? cc_delay : 20);
                 
             }else{
-               _printVerbose("CookieConsent [cookie_modal]: cookie modal was not initialized!");
+                _printVerbose("CookieConsent [cookie_modal]: cookie modal was not initialized!");
             }
         }
 
@@ -778,12 +878,12 @@
                 if(!_cc_modal_isHidden){
                     _removeClass(document.getElementById('cc__modal'), "cc__show");
                     _cc_modal_isHidden = true;
-                   _printVerbose("CookieConsent [cookie_modal]: hide_cookie_consent");
+                    _printVerbose("CookieConsent [cookie_modal]: hide_cookie_consent");
                 }else{
-                   _printVerbose("CookieConsent [cookie_modal]: alredy_hidden");
+                    _printVerbose("CookieConsent [cookie_modal]: alredy_hidden");
                 }
             }else{
-               _printVerbose("CookieConsent [cookie_modal]: nothing to hide!");
+                _printVerbose("CookieConsent [cookie_modal]: nothing to hide!");
             }
         }
 
@@ -792,12 +892,12 @@
                 if(!_cc_policy_isHidden){
                     _removeClass(_cc_policy_dom, "cc__show");
                     _cc_policy_isHidden = true;
-                   _printVerbose("CookieConsent [cookie_policy]: hide_cookie_policy");
+                    _printVerbose("CookieConsent [cookie_policy]: hide_cookie_policy");
                 }else{
-                   _printVerbose("CookieConsent [cookie_policy]: alredy_hidden");
+                    _printVerbose("CookieConsent [cookie_policy]: alredy_hidden");
                 }
             }else{
-               _printVerbose("CookieConsent [cookie_policy]: nothing to hide!");
+                _printVerbose("CookieConsent [cookie_policy]: nothing to hide!");
             }
         }
 
@@ -808,9 +908,9 @@
             var cookie_val = _getCookie(_config.cc_cookie_name);
             if(typeof cookie_val === "string" && cookie_val != ""){
                 _eraseCookie(_config.cc_cookie_name);
-               _printVerbose("CookieConsent [cookie_notice]: cc_cookies erased!");
+                _printVerbose("CookieConsent [cookie_notice]: cc_cookies erased!");
             }else{
-               _printVerbose("CookieConsent [cookie_notice]: cc_cookies not found, nothing to erase!");
+                _printVerbose("CookieConsent [cookie_notice]: cc_cookies not found, nothing to erase!");
             }
         }
 
@@ -821,7 +921,7 @@
         var _acceptCookieConsentListener = function(){
             _addEvent(document.getElementById('cc__modal__accept__btn'), "click", function(event){
                 _cookieconsent.hide();
-               _printVerbose("CookieConsent [cookie_consent]: cookie_consent was accepted!");
+                _printVerbose("CookieConsent [cookie_consent]: cookie_consent was accepted!");
                 _saveCookiePreferences();
             });
         }
@@ -850,7 +950,7 @@
                 document.cookie = name + "=" + (value || "") + expires + "; path=/; SameSite=Lax";
             }
 
-           _printVerbose("CookieConsent [cookie_consent]: cookie "+ name + "='" + value + "' was set!");
+            _printVerbose("CookieConsent [cookie_consent]: cookie "+ name + "='" + value + "' was set!");
         }
 
         /**
@@ -876,7 +976,7 @@
         var _setCookieConsentContent = function(selected_lang){
             // check if selected language is defined in config object
             var lang = _getValidatedLanguage(selected_lang);
-           _printVerbose("CookieConsent [cc_lang_notice]: setting cc_current_lang = '"+ lang + "'");
+            _printVerbose("CookieConsent [cc_lang_notice]: setting cc_current_lang = '"+ lang + "'");
             _setText('cc__modal__title', _config.cc_languages[lang].modal.cc_title);
             _setHtml('cc__modal__text', _config.cc_languages[lang].modal.cc_description);
             _setText('cc__modal__accept__btn', _config.cc_languages[lang].modal.cc_accept_text);
