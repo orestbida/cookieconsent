@@ -1,4 +1,7 @@
 # Cookie Consent
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
+![Size](https://img.shields.io/github/size/orestbida/cookieconsent/dist/cookieconsent.js)
+
 Simple cross-browser cookie consent plugin written in plain javascript.
 
 ## Why though
@@ -84,15 +87,28 @@ CookieConsent.run({
     
     // if set to true, sets cookie-consent language to that of the browser in use 
     // (if that language is defined in cc_languages)
-    cc_auto_language : true,					
+    cc_auto_language : true,	
+    
+    // if set to true, autoloads css based on cc_theme_css path [NEW IN VERSION 1.2]
+    cc_autoload_css : true,
     
     // path to cookieconsent.css
     cc_theme_css : '<your_path>/cookieconsent.css',
+
+    // number of DAYS before cc_cookie expires [NEW IN VERSION 1.2]
+    cc_cookie_expiration : 182,
+
+    // if true, erase unused cookies (based on selected preferences inside cookiepolicy modal) [NEW IN VERSION 1.2]
+    cc_autoclear_cookies: true,
     
     // optional callback function to call when the visitor accepts the cookie consent
     cc_accept_callback : function(cookies){
         // print accepted cookie settings
-		console.log('cookie consent is accepted!', cookies);
+        console.log('cookie consent is accepted!', cookies);
+        
+        if(cookies.level.contains('functionality_cookies')){
+            // js code here
+        }
 	},
     
     // define your own cookie-consent and cookie-policy
@@ -203,13 +219,13 @@ CookieConsent.run({
          * example: do somethings if 'functionality_cookies' is accepted
          */
         if(cookies.level.includes('functionality_cookies')){
-            console.log("yoo")
+            console.log("yoo");
         }
-            
     }
     // ...
 });
 ```
+
 
 ### Config. properties
 - __cc_autorun__ : (boolean)
@@ -225,9 +241,18 @@ CookieConsent.run({
 - __cc_current_lang__ : (string) __[REQUIRED]__
     - *default* : "en"
     - when specified, modal will be set to that language (if it is implemented)
+- __cc_cookie_expiration__ : (number) [**NEW FROM VERSION 1.2**]
+    - *default* : 182
+    - number of days before cc_cookie expires
+- __cc_autoclear_cookies__ : (boolean) [**NEW FROM VERSION 1.2**]
+    - *default* : true
+    - if set to true, erases all unused cookies specified inside ccb_cookies_table based the selected preferences inside cookiepolicy modal
 - __cc_auto_language__ : (boolean)
     - *default* : false
     - if set to true, cc_current_lang will be ignored, and the cookieconsent modal will set its language based on client browser language (if specific client browser language is not defined, a fallback_language="en" will be used instead)
+- __cc_autoload_css__ : (boolean) [**NEW FROM VERSION 1.2**]
+    - *default* : true
+    - if set to true, the plugin will automatically load the specified .css file based on cc_theme_css path
 - __cc_theme_css__ : (string) __[REQUIRED]__
     - *default* : null
     - specify path to local cookieconsent.css file
@@ -282,7 +307,7 @@ The default expiration time for the cookie consent is `6 months`
 List of things to implement
 - [x] Add dark-mode 
     - can be enabled manually by toggling a specific class
-- [ ] Add option to set custom cookie expiration date
+- [x] Add option to set custom cookie expiration date
 - [x] Make all `cookie-modal` content and `cookie-policy` __customizable__
 - [x] Add the possibility of quickly `defining a new language/override default one` 
 - [ ]  ~~Implement a dropdown select language menu when multiple languages are defined~~
@@ -295,8 +320,20 @@ List of things to implement
         - column for cookie-expiration-date
     - Implement the (eventual) `possibility of opting-out` of cookie-consent (up to user)
 
-## Changelog compared to v1.0
- - add __custom table headers__ in cookie-policy modal ✨
- - tables inside cookie-policy can now have an arbitrary number of columns defined by user
- - refactor code / remove unused code 🔥
- - minor css updates
+## Changelog 
+
+- version 1.2
+    ```
+    - ✨ add support for custom expiration date with cc_cookie_expiration 
+    - ✨ add support for auto-removal of unused cookies based on cookiepolicy preferences with cc_autoclear_cookies
+    - ✨ can now autolad css or not with cc_autoload_css 
+    - 🐛 fix minor (bug/incoherence): cookiepolicy did not remember/retrieve saved preferences and always displayed default values
+    ```
+- version 1.1
+    ```
+    - ✨ add __custom table headers__ in cookie-policy modal
+    - ✨ tables inside cookie-policy can now have an arbitrary number of columns defined by user
+    - 🔥 refactor code / remove unused code
+    - minor css updates
+    ```
+
