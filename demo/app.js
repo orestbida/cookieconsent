@@ -1,21 +1,36 @@
+/*
+ * CookieConsent v1.2
+ * https://www.github.com/orestbida/cookieconsent
+ * Author Orest Bida
+ * Released under the MIT License
+*/
 (function(){
 
-	// obtain plugin object
+	// obtain cookieconsent plugin
 	var cc = initCookieConsent();
 
-	// init plugin
+	// run plugin with config object
 	var autorun = function(){
 		cc.run({
 			cc_autorun : true, 								// show as soon as possible (without the need to manually call CookieConsent.show() )
 			cc_delay : 0,								    // specify initial delay after website has loaded		
-			cc_enable_verbose : true,						// if enabled, prints all info/error msgs	
+			cc_enable_verbose : true,						// if enabled, prints all info/error msgs (not available on dist version)
 			cc_current_lang : 'it',		
 			cc_policy_url : null,                           // specify your own dedicated cookie policy page url
 			cc_auto_language : true,						// if enabled, overrides cc_current_lang
-			cc_theme_css : "../src/cookieconsent.css",		// path to cookieconsent css
-			cc_accept_callback : function(cookies){
+			//cc_cookie_expiration : 	365,    			// [NEW FROM version 1.2]
+			//cc_autoclear_cookies : true,					// [NEW FROM version 1.2]
+			//cc_autoload_css : true, 						// [NEW FROM version 1.2]
+			cc_theme_css : "../dist/cookieconsent.css",	
+			cc_accept_callback : function(cookies){	
 				console.log("cookie consent is accepted with the following cookie-values: ", cookies);
+				
+				//Example: if functionality cookies are enabled do something ...
+				if(cookies!= null && cookies.level.contains('functionality_cookies')){
+					// js code here
+				}
 			},
+
 			cc_languages : [
 				{
 					lang : 'en',
@@ -100,6 +115,10 @@
 	}
 	
 	autorun();
+	
+	/*
+	 * The following lines of code are for demo purposes (show api functions)
+	 */ 
 	if(document.addEventListener){
 		document.getElementById("btn1").addEventListener('click', function(){
 			autorun();
@@ -150,5 +169,4 @@
 			document.body.classList.toggle('cc_darkmode');
 		});
 	}
-	
 })();
