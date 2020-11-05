@@ -33,9 +33,6 @@ https://cdn.jsdelivr.net/gh/orestbida/cookieconsent/src/cookieconsent.js
     // or load it via cdn
     <script src="https://cdn.jsdelivr.net/gh/orestbida/cookieconsent/dist/cookieconsent.js"></script>
 
-    // dist version (no verbose mode)
-
-
     ```
 - __Obtain Cookie-Consent plugin__ 
     ```javascript
@@ -105,12 +102,12 @@ CookieConsent.run({
     cc_accept_callback : function(cookies){
         // print accepted cookie settings
         console.log('cookie consent is accepted!', cookies);
-        
+
         if(cookies.level.contains('functionality_cookies')){
             // js code here
         }
-	},
-    
+    },
+
     // define your own cookie-consent and cookie-policy
     // it's up to you to make it gdpr compliant
     cc_languages : [
@@ -226,7 +223,6 @@ CookieConsent.run({
 });
 ```
 
-
 ### Config. properties
 - __cc_autorun__ : (boolean)
     - *default* : false
@@ -287,6 +283,14 @@ CookieConsent.run({
             ]
         });
         ```
+
+## Support for multi-language website
+If you have a `multi-language website` and you want to be able to `dynamically change language of the cookie consent` based on the page language (or other dynamic params), you can achieve that byassigning the value to `cc_current_lang`. In the example below the language is fetched from `lang="..."` attribute of html tag:
+```js
+cc_auto_language : false,
+// 'en' is used as fallback
+cc_current_lang : document.documentElement.getAttribute('lang') || 'en'
+```
 
 ## Reccomended way of loading the plugin
 1. preload `cookieconsent.css` inside `<head>`
