@@ -834,7 +834,7 @@
                     }else{
                         _printVerbose("CookieConsent [cookie_policy]: alredy_shown");
                     }
-                }, typeof cc_delay === "number" && cc_delay > 100 ? cc_delay : 100);
+                }, typeof cc_delay === "number" && cc_delay > 0 ? cc_delay : 0);
             }else{
                 _printVerbose("CookieConsent [cookie_policy]: cookie policy was not initialized!");
             }
@@ -863,7 +863,7 @@
                     }else{
                         _printVerbose("CookieConsent [cookie_modal]: alredy_shown");
                     }
-                }, typeof cc_delay == "number" && cc_delay > 20 ? cc_delay : 20);
+                }, typeof cc_delay == "number" && cc_delay > 100 ? cc_delay : 100);
                 
             }else{
                 _printVerbose("CookieConsent [cookie_modal]: cookie modal was not initialized!");
@@ -991,17 +991,8 @@
      * Make CookieConsent object accessible globally
      */
     if(typeof scope.initCookieConsent === 'undefined'){
-
         scope.initCookieConsent = function(){
-            var cc = CookieConsent();
-
-            try {
-                delete scope.initCookieConsent; 
-            }catch(e) { 
-                scope.initCookieConsent = undefined; 
-            }
-    
-            return cc;
+            return CookieConsent();
         };
     }
 })(window);
