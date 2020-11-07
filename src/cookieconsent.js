@@ -25,7 +25,7 @@
             cc_current_lang : "en",         			
             cc_default_lang : "en",						// default language (from those in _config.cc_languages object)
             cc_autorun: true, 							// run as soon as loaded
-            cc_delay: 20,								// default milliseconds delay	
+            cc_delay: 0,								// default milliseconds delay	
             cc_policy_url: null,						// link to your own existing cookie-policy page	
             cc_enable_verbose: true,					// if enabled, show on console all events/errors
             cc_auto_language: false,    				// if enabled, overrides default cc_current_lang
@@ -340,7 +340,7 @@
             _cc_general_container.setAttribute('cc_data', 'cc_cookie_main');
             // Fix layout flash
             _cc_general_container.style.position = "fixed";
-            _cc_general_container.style.zIndex = "1000";
+            _cc_general_container.style.zIndex = "1000000";
             _cc_general_container.innerHTML = '<!--[if lt IE 9 ]><div id="'+'cc__modal__container'+'" class="ie"></div><![endif]--><!--[if (gt IE 8)|!(IE)]><!--><div id="'+'cc__modal__container'+'"></div><!--<![endif]-->'
 
             /**
@@ -834,7 +834,7 @@
                     }else{
                         _printVerbose("CookieConsent [cookie_policy]: alredy_shown");
                     }
-                }, typeof cc_delay === "number" && cc_delay > 20 ? cc_delay : 20);
+                }, typeof cc_delay === "number" && cc_delay > 100 ? cc_delay : 100);
             }else{
                 _printVerbose("CookieConsent [cookie_policy]: cookie policy was not initialized!");
             }
