@@ -3,7 +3,6 @@
     -webkit-box-sizing: border-box;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-
 }
 
 #cc__modal__container input,
@@ -26,42 +25,44 @@
 #cc__modal__container .cc_button,
 #cc__modal__container #cc__modal .cc_button
 {
-    background: #ffda30;
+    background:#ffd87f;
 }
 
 .cc_darkmode #cc__modal__container .sc_container_checkbox input:checked~.sc_checkmark{
-    background-color: #ffda30;
+    background-color:#ffd87f;
 }
 
 #cc__modal__container #cc__modal .cc_button:hover,
 #cc__modal__container .cc_button:hover{
-    box-shadow: 0 0 0 0.250em #fff0ad;
+    box-shadow: 0 0 0 0.250em #fff1d2;
 }
+
+
 
 #cc__modal__container #cc__modal .cc_button:active,
 #cc__modal__container .cc_button:active{
-    background: #e7c52e;
-    box-shadow: 0 0 0 0.250em #fff0ad;
+    background: #eeca76;
+    box-shadow: 0 0 0 0.250em #fff1d2;
 }
 
 .cc_darkmode #cc__modal__container #cc__modal .cc_button:hover,
 .cc_darkmode #cc__modal__container .cc_button:hover,
 .cc_darkmode #cc__modal__container #cc__policy__close__btn:hover{
-	-webkit-box-shadow: 0 0 0 0.25em #545141;
-	box-shadow: 0 0 0 0.25em #545141;
+    -webkit-box-shadow: 0 0 0 0.25em #595242;
+    box-shadow: 0 0 0 0.25em #595242;
 }
 
 .cc_darkmode #cc__modal__container #cc__modal .cc_button:active,
 .cc_darkmode #cc__modal__container .cc_button:active,
 .cc_darkmode #cc__modal__container #cc__policy__close__btn:active {
-    background: #c7aa28;
-	-webkit-box-shadow: 0 0 0 0.25em #424033;
-	box-shadow: 0 0 0 0.25em #424033;
+    background: #c7a964;
+    -webkit-box-shadow: 0 0 0 0.25em #595242;
+    box-shadow: 0 0 0 0.25em #595242;
 }
 
 #cc__modal__container #cc__modal.cc__show .cc_button,
 #cc__modal__container .cc__show .cc_button{
-    transition: background-color .25s ease, color .25s ease, box-shadow .25s ease;
+    transition: background-color .25s ease, color .25s ease, box-shadow .25s ease!important;
 }
 
 #cc__modal__container #cc__modal{
@@ -80,7 +81,7 @@
     visibility: hidden;
     transform: scale(.95);
     border-radius: 0.250em;
-    transition: none;
+    transition: none!important;
     line-height: initial;
 }
 
@@ -93,11 +94,11 @@
     border: initial;
     outline: none;
     color: initial;
-    transition: none;
+    transition: none!important;
 }
 
 #cc__modal__container #cc__modal.cc__anim{
-    transition: transform .4s cubic-bezier(0.5,0,0,1.25), opacity .4s ease, visibility .4s ease;
+    transition: transform .4s cubic-bezier(0.5,0,0,1.25), opacity .4s ease, visibility .4s ease!important;
 }
 
 #cc__modal__container #cc__modal.cc__anim.cc__show{
@@ -113,8 +114,7 @@
 #cc__modal__container #cc__modal__title{
     color: inherit;
     margin: 0 0 0.6em 0;
-    font-weight: 700;
-	font-family: "Circular", "Helvetica Neue", "Lucida Grande", Arial, Verdana, sans-serif;
+	font-family: inherit;
 }
 
 #cc__modal__container #cc__modal__text{
@@ -125,7 +125,8 @@
 }
 
 #cc__modal__container #cc__modal .cc_button,
-#cc__modal__container .cc_button{
+#cc__modal__container .cc_button,
+#cc__modal__container #cc__modal .cc__link{
     border: none;
     padding: 1em 2em;
     margin-bottom: 0.625em;
@@ -135,8 +136,9 @@
     margin-right: 1.250em;
     border-radius: 0.250em;
     cursor: pointer;
-    transition: none;
-    font-weight: 600;
+    transition: none!important;
+    font-weight: bold;
+    font-family: inherit;
     font-size: 0.9em;
     user-select: none;
     -moz-user-select: none;
@@ -145,15 +147,18 @@
     -o-user-select: none;
 }
 
+.cc_darkmode #cc__modal__container #cc__modal .cc__link{
+    background: #222427;
+    color: #a2a2a2;
+}
+
 #cc__modal__container #cc__modal .cc__link{
-    text-decoration: underline;
-    background: none;
-    border: none;
-    outline: none;
-    padding: 0;
-    cursor: pointer;
-    font-size: 0.9em;
-    color: inherit;
+    background: #edf0f2;
+    transition: background-color .25s ease!important;
+}
+
+#cc__modal__container #cc__modal .cc__link:hover{
+    background: #e2e5e7;
 }
 
 /**
@@ -171,7 +176,7 @@ CookieConsent policy
     height: 100%;
     visibility: hidden;
     opacity: 0;
-    transition: none; 
+    transition: none!important; 
 }
 
 #cc__modal__container #cc__policy__content .ccp_section{
@@ -182,8 +187,7 @@ CookieConsent policy
 #cc__modal__container #cc__policy__container h2{
     margin-bottom: 0.7em;
     display: inline-block;
-	font-family: "Circular", "Helvetica Neue", "Lucida Grande", Arial, Verdana, sans-serif;
-	font-weight: bold;
+	font-family: inherit;
 }
 
 #cc__modal__container #cc__policy__container p{
@@ -197,7 +201,7 @@ CookieConsent policy
 }
 
 #cc__modal__container #cc__policy__container.cc__anim{
-    transition: background-color .4s ease, visibility .4s ease, opacity .4s ease;
+    transition: background-color .4s ease, visibility .4s ease, opacity .4s ease!important;
 }
 
 #cc__modal__container #cc__policy__container.cc__anim.cc__show{
@@ -228,7 +232,7 @@ CookieConsent policy
 	max-height: 37.5em;
     top: 50%;
 	transform: translateY(-50%) scale(.95);
-	transition: transform .4s cubic-bezier(.5,0,0,1.25),opacity .4s ease,visibility .4s ease;
+	transition: transform .4s cubic-bezier(.5,0,0,1.25),opacity .4s ease,visibility .4s ease!important;
 }
 
 #cc__modal__container #cc__policy__inner{
@@ -278,7 +282,7 @@ CookieConsent policy
 	display: table-cell;
     vertical-align: middle;
     font-size: 1em;
-	font-family: "Circular", "Helvetica Neue", "Lucida Grande", Arial, Verdana, sans-serif;
+    font-family: inherit;
 }
 
 #cc__modal__container #cc__policy__close__btn{
@@ -286,11 +290,11 @@ CookieConsent policy
     float: right;
     vertical-align: middle;
     padding: 0;
-    width: 2.5em;
-    height: 2.5em;
+    width: 2.7em;
+    height: 2.7em;
     border: none;
-    padding: 0.625em;
     font-size: 1em;
+    font-weight: bold;
     outline: none;
     border-radius: 0.250em;
     cursor: pointer;
@@ -332,7 +336,7 @@ CookieConsent policy
 }
 
 #cc__modal__container #cc__policy__content::-webkit-scrollbar-button {
-    width: 0;
+    width: 10;
     height: 5px;
     opacity: 0;
 	visibility: hidden;
@@ -348,7 +352,7 @@ CookieConsent policy
     display: inline-block;
     position: relative;
     padding-left: 2.500em;
-    margin-bottom: 0.93em;
+    margin-bottom: 0.95em;
     cursor: pointer;
     font-size: 1.375em;
     -webkit-user-select: none;
@@ -393,7 +397,6 @@ CookieConsent policy
 #cc__modal__container .sc_container_checkbox .sc_checkmark.sc_checkmark.sc_readonly{
     cursor: default;
 }
-
 
 /* On mouse-over, add a grey background color */
 #cc__modal__container  .sc_container_checkbox:hover input ~ .sc_checkmark {
@@ -459,14 +462,13 @@ CookieConsent policy
 
 /* Table Zebra striping */
 #cc__modal__container #cc__policy__content table tr:nth-of-type(odd) { 
-    background: #ececec;
+    background: #eff2f4;
 }
 
 #cc__modal__container #cc__policy__content table th { 
     background: #000000;
     color: white;
-    font-weight: initial;
-	font-family: "Circular", "Helvetica Neue", "Lucida Grande", Arial, Verdana, sans-serif;
+	font-family: inherit;
 }
 
 #cc__modal__container #cc__policy__content table td, 
@@ -541,10 +543,6 @@ Dark-mode for cookie consent
     border-bottom: 1px solid #0c0c0c;
 }
 
-.cc_darkmode #cc__modal__container #cc__policy__content table tr:nth-of-type(even) {
-
-}
-
 .cc_darkmode #cc__modal__container #cc__policy__content table td:before {
 	color: #fff;
 }
@@ -585,10 +583,13 @@ Dark-mode for cookie consent
         border-radius: 0;
     }
 
-	#cc__modal__container #cc__policy__content,
-	#cc__modal__container #cc__policy__header{
+	#cc__modal__container #cc__policy__content{
 		padding: 1.3em;
-	}
+    }
+    
+	#cc__modal__container #cc__policy__header{
+        padding: 1.2em 1.3em;
+    }
 	
 	#cc__modal__container .sc_container_checkbox{
 		display: block;
@@ -640,5 +641,26 @@ Dark-mode for cookie consent
         font-weight: bold;
         overflow: hidden;
         text-overflow: ellipsis;
+    }
+
+    #cc__modal__container .sc_container_checkbox .sc_checkmark {
+        height: 1.4em;
+        width: 1.4em;
+        border-radius: 0.3em;
+    }
+
+    #cc__modal__container .sc_container_checkbox .sc_checkmark::after{
+        left: 0.54em;
+        top: 0.2em;
+        width: 0.22em;
+        height: 0.70em;
+        border-width: 0 0.13em 0.13em 0;
+    }
+
+    #cc__modal__container #cc__modal.cc__show .cc_button,
+    #cc__modal__container .cc__show .cc_button,
+    #cc__modal__container #cc__modal .cc__link{
+        width: 100%;
+        margin-right: 0;
     }
 }
