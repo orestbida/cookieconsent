@@ -302,15 +302,6 @@
         var _printVerbose = function(print_msg, optional_param, error){
             !error ? _config.cc_enable_verbose && console.log(print_msg, optional_param || "") : _config.cc_enable_verbose && console.error(print_msg, optional_param || "");
         }
-
-        /**
-         * Given a description (text), set it as innerText inside dom element with given id
-         * @param {string} id id of dom element
-         * @param {string} cc_description innertext to set inside dom element
-         */
-        var _setText = function(id, cc_description){
-            document.getElementById(id).innerText = cc_description
-        };
         
         /**
          * Given a description (html), set it as innerHTML inside dom element with given id
@@ -497,7 +488,7 @@
             var cc_content_dom = document.getElementById('cc__policy__content');
 
             // Set cc policy title
-            _setText('cc__policy__title', _config.cc_languages[_config.cc_current_lang].policy.ccp_title);
+            _setHtml('cc__policy__title', _config.cc_languages[_config.cc_current_lang].policy.ccp_title);
 
             // Create cc policy content
             for(var i=0; i<n_blocks; ++i){
@@ -580,7 +571,7 @@
                         var new_column_key = _getKeys(all_table_headers[p])[0];
                         var new_column_content = all_table_headers[p][new_column_key];
                         
-                        th1.innerText = new_column_content;
+                        th1.innerHTML = new_column_content;
 
                         tr_tmp.appendChild(th1);
                     }
@@ -603,7 +594,7 @@
                             var new_column_key = _getKeys(all_table_headers[g])[0];
                             var new_column_content = all_blocks[i].ccb_cookies_table[n][new_column_key];
             
-                            td_tmp.innerText = new_column_content;
+                            td_tmp.innerHTML = new_column_content;
                             td_tmp.setAttribute('data-column', all_table_headers[g][new_column_key]);
 
                             tr.appendChild(td_tmp);
@@ -626,12 +617,12 @@
             cp_save_btn.setAttribute('type', 'button');
             cp_save_btn.id = 'cc__policy__save__btn';
             _addClass(cp_save_btn, 'cc_button');
-            cp_save_btn.innerText = _config.cc_languages[_config.cc_current_lang].policy.ccp_save_text;
+            cp_save_btn.innerHTML = _config.cc_languages[_config.cc_current_lang].policy.ccp_save_text;
 
             // Add save preferences button onClick event 
             // Hide both cookie policy and cookie consent
             _addEvent(cp_save_btn, 'click', function(){
-                 _printVerbose('CookieConsent [cc_policy_notice]: saved_preferences!');
+                _printVerbose('CookieConsent [cc_policy_notice]: saved_preferences!');
                 _cookieconsent.hide_policy();
                 _cookieconsent.hide();
                 _saveCookiePreferences();
@@ -712,7 +703,7 @@
                                     }
                                 }
 
-                                 _printVerbose('CookieConsent [erase_cookies]: deleted all cookies inside "'+curr_block.ccb_switch.value+'"', curr_block.ccb_cookies_table);
+                                _printVerbose('CookieConsent [erase_cookies]: deleted all cookies inside "'+curr_block.ccb_switch.value+'"', curr_block.ccb_cookies_table);
                             }
                         }
                     }
@@ -875,7 +866,7 @@
          */
         _cookieconsent.hide = function(){
             if(_cc_modal_isAttached){
-                if(!_cc_modal_isHidden){
+                if(!_cc_modal_isHidden){ 
                     _removeClass(document.getElementById('cc__modal'), "cc__show");
                     _cc_modal_isHidden = true;
                     _printVerbose("CookieConsent [cookie_modal]: hide_cookie_consent");
@@ -977,10 +968,10 @@
             // check if selected language is defined in config object
             var lang = _getValidatedLanguage(selected_lang);
             _printVerbose("CookieConsent [cc_lang_notice]: setting cc_current_lang = '"+ lang + "'");
-            _setText('cc__modal__title', _config.cc_languages[lang].modal.cc_title);
+            _setHtml('cc__modal__title', _config.cc_languages[lang].modal.cc_title);
             _setHtml('cc__modal__text', _config.cc_languages[lang].modal.cc_description);
-            _setText('cc__modal__accept__btn', _config.cc_languages[lang].modal.cc_accept_text);
-            _setText('cc__modal__more__btn', _config.cc_languages[lang].modal.cc_more_text);
+            _setHtml('cc__modal__accept__btn', _config.cc_languages[lang].modal.cc_accept_text);
+            _setHtml('cc__modal__more__btn', _config.cc_languages[lang].modal.cc_more_text);
             _cc_modal_isAttached = true;
         }
 
