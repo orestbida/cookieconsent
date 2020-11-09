@@ -20,7 +20,7 @@
 		cc_cookie_expiration : 	365,    				// [NEW FROM version 1.2]
 		cc_autoclear_cookies : true,					// [NEW FROM version 1.2]
 		cc_autoload_css : true, 						// [NEW FROM version 1.2]
-		cc_theme_css : "../src/cookieconsent.css",	
+		cc_theme_css : "https://raw.githubusercontent.com/orestbida/cookieconsent/master/src/cookieconsent.css",	
 		cc_accept_callback : function(cookies){
 			console.log("cookie consent is accepted with the following cookie-values: ", cookies);
 			
