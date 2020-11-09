@@ -11,22 +11,23 @@
 
 	// run plugin with config object
 	cc.run({
-		cc_autorun : true, 								// show as soon as possible (without the need to manually call CookieConsent.show() )
-		cc_delay : 0,								    // specify initial delay after website has loaded		
-		cc_enable_verbose : true,						// if enabled, prints all info/error msgs (not available on dist version)
+		cc_autorun : true, 							// show as soon as possible (without the need to manually call CookieConsent.show() )
+		cc_delay : 0,								// specify initial delay after website has loaded		
+		cc_enable_verbose : true,					// if enabled, prints all info/error msgs (not available on dist version)
 		cc_current_lang : 'it',		
-		cc_policy_url : null,                           // specify your own dedicated cookie policy page url
-		cc_auto_language : true,						// if enabled, overrides cc_current_lang
-		cc_cookie_expiration : 	365,    				// [NEW FROM version 1.2]
-		cc_autoclear_cookies : true,					// [NEW FROM version 1.2]
-		cc_autoload_css : true, 						// [NEW FROM version 1.2]
-		cc_theme_css : "https://raw.githubusercontent.com/orestbida/cookieconsent/master/src/cookieconsent.css",	
+		cc_policy_url : null,                        // specify your own dedicated cookie policy page url
+		cc_auto_language : true,					// if enabled, overrides cc_current_lang
+		cc_cookie_expiration : 	365,    			// [NEW FROM version 1.2]
+		cc_autoclear_cookies : true,				// [NEW FROM version 1.2]
+		cc_autoload_css : true, 					// [NEW FROM version 1.2]
+		cc_theme_css : "https://cdn.jsdelivr.net/gh/orestbida/cookieconsent/src/cookieconsent.css",	
 		cc_accept_callback : function(cookies){
-			console.log("cookie consent is accepted with the following cookie-values: ", cookies);
+			
+			console.log("cookieconsent accepted: ", cookies);
 			
 			//Example: if functionality cookies are enabled do something ...
 			if(cookies!= null && cookies.level.includes('functionality_cookies')){
-				// js code here
+				console.log("functionality cookies are accepted:", "do something!");
 			}
 		},
 
