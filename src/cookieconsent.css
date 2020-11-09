@@ -152,6 +152,10 @@
     color: #a2a2a2;
 }
 
+.cc_darkmode #cc__modal__container #cc__modal .cc__link:hover{
+	background: #313338;
+}
+
 #cc__modal__container #cc__modal .cc__link{
     background: #edf0f2;
     transition: background-color .25s ease!important;
@@ -465,11 +469,7 @@ CookieConsent policy
     background: #eff2f4;
 }
 
-#cc__modal__container #cc__policy__content table th { 
-    background: #000000;
-    color: white;
-	font-family: inherit;
-}
+
 
 #cc__modal__container #cc__policy__content table td, 
 #cc__modal__container #cc__policy__content table th { 
@@ -477,6 +477,13 @@ CookieConsent policy
     text-align: left;
     vertical-align: top;
     font-size: .9em;
+}
+
+#cc__modal__container #cc__policy__content table th { 
+    background: #000000;
+    color: white;
+	font-family: inherit;
+	padding: 1.2em 0.625em;
 }
 
 /**
@@ -508,8 +515,7 @@ Dark-mode for cookie consent
 }
 
 .cc_darkmode #cc__modal__container #cc__policy__header {
-    border-bottom: none;
-    box-shadow: 0px 1px 3px #0b0b0c;
+    border-color: #1e1f23;
 }
 
 .cc_darkmode #cc__modal__container .sc_container_checkbox .sc_checkmark:after {
@@ -548,8 +554,8 @@ Dark-mode for cookie consent
 }
 
 .cc_darkmode #cc__modal__container #cc__policy__content table {
-    box-shadow: 0px 1px 2px #0f0f10;
-    background: #27282b;
+    box-shadow: none;
+	background: #0e0f10;
 }
 
 .cc_darkmode  #cc__modal__container.ie #cc__policy__content table{
