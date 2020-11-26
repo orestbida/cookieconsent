@@ -25,7 +25,7 @@
 			console.log("cookie consent is accepted with the following cookie-values: ", cookies);
 			
 			//Example: if functionality cookies are enabled do something ...
-			if(cookies!= null && cookies.level.includes('functionality_cookies')){
+			if(cc.inArray(cookies.level, 'functionality_cookies')){
 				// js code here
 			}
 		},
