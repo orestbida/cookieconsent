@@ -203,6 +203,15 @@ You can either specifiy the class `cc_darkmode` on a parent container (for examp
 document.body.classList.toggle('cc_darkmode');
 ```
 
+## How can I link the cookieconsent to my own cookie policy?
+You need to specify the `cc_policy_url` property with your url, like this:
+```javascript
+cc_policy_url : 'https://yourdomain.com/<path>/cookiepolicy'
+```
+The second button will be linked to the specified url and you no longer need to set the `policy` property inside `cc_languages`.
+
+**Note**: by choosing this route, you will not benefit of the integrated "opt-in / opt-out" custom preferences for each defined cookie category
+
 ## Do something on "accept cookie-consent" event
 You can find the user cookie settings via the `cc_accept_callback` callback function which is fired everytime a user accepts the cookie consent or if it is alredy accepted
 ```javascript
@@ -302,10 +311,6 @@ cc_current_lang : document.documentElement.getAttribute('lang') || 'en'
 	<script src="<your_path>/cookieconsent.js"></script>
 	```
 3. initialize plugin with a config. object like <a href="#full_example">full example</a>
-
-
-## Cookie-consent default expiration time
-The default expiration time for the cookie consent is `6 months`
 
 ## TODO
 List of things to implement
