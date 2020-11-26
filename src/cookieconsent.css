@@ -78,9 +78,9 @@
 }
 
 
-#cc__modal__container #cc__modal.cc__show .cc_button,
-#cc__modal__container .cc__show .cc_button,
-#cc__modal__container #cc__modal.cc__show .cc__link{
+#cc__modal__container #cc__modal.cc__anim .cc_button,
+#cc__modal__container .cc__anim .cc_button,
+#cc__modal__container #cc__modal.cc__anim .cc__link{
     transition: background-color .25s ease, color .25s ease, box-shadow .25s ease!important;
 }
 
@@ -164,6 +164,7 @@
     -khtml-user-select: none;
     -webkit-user-select: none;
     -o-user-select: none;
+    text-align: center;
 }
 
 /**
@@ -176,7 +177,7 @@ CookieConsent policy
     width: 100%;
     z-index: 101;
 	background: #070707;
-    background: rgba(0, 0, 0 , 0.45);
+    background: rgba(0, 0, 0, 0.685);
     display: table;
     height: 100%;
     visibility: hidden;
@@ -218,7 +219,6 @@ CookieConsent policy
     display: table-cell;
     vertical-align: middle;
     position: relative;
-    /*padding: 1.250em;*/
 }
 
 #cc__modal__container #cc__policy{
@@ -470,8 +470,6 @@ CookieConsent policy
     background: #eff2f4;
 }
 
-
-
 #cc__modal__container #cc__policy__content table td, 
 #cc__modal__container #cc__policy__content table th { 
     padding: 0.625em;
@@ -491,7 +489,7 @@ CookieConsent policy
 Dark-mode for cookie consent
 **/
 .cc_darkmode #cc__modal__container #cc__modal,
-.cc_darkmode #cc__modal__container .cc__anim.cc__show #cc__policy {
+.cc_darkmode #cc__modal__container #cc__policy {
 	color: #fff;
 }
 
@@ -664,8 +662,8 @@ Dark-mode for cookie consent
         border-width: 0 0.13em 0.13em 0;
     }
 
-    #cc__modal__container #cc__modal.cc__show .cc_button,
-    #cc__modal__container .cc__show .cc_button,
+    #cc__modal__container #cc__modal .cc_button,
+    #cc__modal__container .cc_button,
     #cc__modal__container #cc__modal .cc__link{
         width: 100%;
         margin-right: 0;
