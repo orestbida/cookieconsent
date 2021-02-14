@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--
- * CookieConsent v1.2 demo
+ * CookieConsent v2.0 demo
  * https://www.github.com/orestbida/cookieconsent
  * Author Orest Bida
  * Released under the MIT License
@@ -44,8 +44,8 @@
                     <div id="_text">Github repo.</div>
                 </a>
                 <div id="_badges" class="_unselectable">
-                    <img alt="License" class="_badge _unselectable" src="https://img.shields.io/github/license/mashape/apistatus.svg">
-                    <img alt="GitHub file size in bytes" class="_badge _unselectable" src="https://img.shields.io/github/size/orestbida/cookieconsent/dist/cookieconsent.js">
+                    <img alt="License" class="_badge _unselectable" style="width: 78px; height: 20px;" src="https://img.shields.io/github/license/mashape/apistatus.svg">
+                    <img alt="GitHub file size in bytes" class="_badge _unselectable" style="width: 84px; height: 20px;" src="https://img.shields.io/github/size/orestbida/cookieconsent/dist/cookieconsent.js">
                 </div>
                 <h1 id="app_title">
                     <span id="_title_span">C<span id="_cookie_ic">🍪🍪</span>kie Consent<span id="_hover_line"></span></span> 
@@ -56,20 +56,20 @@
                     <ul>
                         <li><button class="styled_btn" id="btn1" type="button">Init CookieConsent</button></li>
                         <li><button class="styled_btn" id="btn2" type="button">Show cookie modal</button></li>
-                        <li><button class="styled_btn" id="btn5" type="button">Show cookie policy</button></li>
+                        <li><button class="styled_btn" id="btn5" type="button">Show cookie settings</button></li>
                         <li><button class="styled_btn" id="btn3" type="button">Hide cookie modal</button></li>
-                        <li><button class="styled_btn" id="btn4" type="button">Clear all cookies</button></li>
                         <li><button class="styled_btn" id="btn6" type="button">Toggle dark-mode</button></li>
                     </ul>
                 </div>
                 <div id="additional_section">
-                    <p>Open cookie policy without manually calling  api</p><br>
-                    <button type="button" class="styled_btn" data-cc="cc_policy">open cookie policy</button>
+                    <p>Open cookie settings without manually calling  api</p><br>
+                    <button type="button" class="styled_btn" data-cc="c-settings">open cookie settings</button>
                 </div>
             </div>
         </div>
     </div>
-    <script src="../dist/cookieconsent.js"></script>
-    <script defer src="app.js"></script>
+    <script src="../src/cookieconsent.js" defer></script>
+    <script src="app.js" defer></script>
+    <script src="assets/demo.js" defer></script>
 </body>
 </html>
