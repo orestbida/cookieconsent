@@ -8,8 +8,8 @@ A __lightweight__ & __gdpr compliant__ cookie consent plugin written in plain ja
 
 Table of contents
 - [Key features](#how-to-use)
-- [How to use](#get-started)
-- [Download](#download)
+- [How to use](#how-to-use)
+- [Download](#download--cdn)
 - [All available options](#options)
 - [Configuration examples](#examples)
 - [License](#license)
@@ -95,5 +95,21 @@ You can download the [latest version](https://github.com/orestbida/cookie-consen
 ...
 ```
 
+## All available options
+Below a table which sums up all of the available options.
+| Option              	| Type     	| Default 	| Description                                                                                                                      	|
+|---------------------	|----------	|---------	|----------------------------------------------------------------------------------------------------------------------------------	|
+| `autorun`           	| boolean  	| true    	| If enabled, show the cookie consent as soon as possible (otherwise you need to manually call the `.show()` method)               	|
+| `delay`             	| number   	| 0       	| Number of `milliseconds` before showing the consent-modal                                                                        	|
+| `cookie_expiration` 	| number   	| 182     	| Number of days before the cookie expires (182 days = 6 months)                                                                   	|
+| `autoload_css`      	| boolean  	| false   	| Enable if you want to let the plugin load the css (requires `theme_css` to be a valid path)                                      	|
+| `theme_css`         	| string   	| -       	| Specify path to the .css file (requires `autoload_css` to be `true` for it to work)                                              	|
+| `current_lang`      	| string   	| -       	| Specify one of the languages you have defined (can also be dynamic): `'en'`, `'de'` ...                                          	|
+| `auto_language`     	| boolean  	| false   	| Automatically grab the language based on the user's browser language, if language is not defined => use specified `current_lang` 	|
+| `autoclear_cookies` 	| boolean  	| false   	| Enable if you want to automatically delete cookies when user opts-out of a specific category inside cookie settings              	|
+| __`onAccept`__      	| function 	| -       	| Method run `once` when:  <br>  1. The cookie consent has been accepted <br> 2. After each page load (if alredy accepted)         	|
+| __`onUpdate`__      	| function 	| -       	| Method run after every event (except after page load)                                                                            	|
+
+
 ## License
-Distributed under the MIT License. See [LICENSE](#https://github.com/orestbida/cookieconsent/blob/master/LICENSE) for more information.
+Distributed under the MIT License. See [LICENSE](https://github.com/orestbida/cookieconsent/blob/master/LICENSE) for more information.
