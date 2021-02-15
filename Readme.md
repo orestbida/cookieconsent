@@ -1,10 +1,10 @@
-<h1 style="text-align: center;">Cookie Consent</h1>
-<div style="text-align: center;">
+<h1 align="center" style="text-align: center;">Cookie Consent</h1>
+<div align="center" style="text-align: center;">
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 ![Size](https://img.shields.io/github/size/orestbida/cookieconsent/dist/cookieconsent.js)
 </div>
-<div style="text-align: center; max-width: 770px; margin: 0 auto;">
+<div align="center" style="text-align: center; max-width: 770px; margin: 0 auto;">
 
 A __lightweight__ & __gdpr compliant__ cookie consent plugin written in plain javascript. An "all-in-one" solution which also allows you to write your cookie policy inside it without the need of having a dedicated page. 
 
