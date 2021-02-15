@@ -16,12 +16,19 @@ A __lightweight__ & __gdpr compliant__ cookie consent plugin written in plain ja
 
 
 ## Table of contents
-- [Key features](#how-to-use)
-- [How to use](#how-to-use)
-- [Download & CDN](#download--cdn) work-in-progress
-- [All available options](#all-available-options) work-in-progress
-- [Configuration examples](#examples) work-in-progress
-- [License](#license)
+1. [Key features](#key-features)
+2. [How to use](#how-to-use)
+3. [Download & CDN](#download--cdn) (work-in-progress)
+4. [All available options](#all-available-options) (work-in-progress)
+5. [Configuration examples](#examples) (work-in-progress)
+    - Configuration with Google analytics
+    - Configuration with explicit `accept all` and `accept necessary only` buttons
+    - Configuration with embedded full cookie-policy 
+6. [FAQ](#faq) (work-in-progress)
+    - How to enable darkmode
+    - How to integrate with my multi-language website
+    - How to add link/button to open cookie settings
+7. [License](#license)
 
 ## Key features
 - __Lightweight__ (~ 10kb for minified version)
