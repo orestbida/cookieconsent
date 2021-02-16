@@ -14,7 +14,7 @@ A __lightweight__ & __gdpr compliant__ cookie consent plugin written in plain ja
 ![Cookie Consent cover](demo/assets/cover.png)
 </div>
 
-## 🚧 Note: this v2 version is not NOT COMPATIBLE with previous versions
+### 🚧 Note: this v2 version is not NOT COMPATIBLE with previous versions
 Specifically the syntax has been completely changed (config. parameters have been renamed for the sake of simplicity/ease of use), some "useless" features have been removed, and some new ones have been added. Check [changelog](#changelog) for more.
 
 ## Table of contents
@@ -135,16 +135,32 @@ Below a table which sums up all of the available options.
 | __`onUpdate`__      	| function 	| -       	| Method run after every event (except after page load)                                                                            	|
 
 ## FAQ
-- <details><summary>How to enable dark-mode</summary>
-<p>
+-   <details><summary>How to enable dark-mode</summary>
+    <p>
 
-Either manually add the following class `c_darkmode` to the body/html tag, or toggle it via javascript:
-```javascript
-document.body.classList.toggle('c_darkmode');
-```
+    Either manually add the following class `c_darkmode` to the body/html tag, or toggle it via javascript:
+    ```javascript
+    document.body.classList.toggle('c_darkmode');
+    ```
 
-</p>
-</details>
+    </p>
+    </details>
+-   <details><summary>How to add link/button to open cookie settings</summary>
+    <p>
+
+    Create a link (or button) with `data-cc="c-settings"` attribute:
+    ```javascript
+    <a href="javascript:void(0);" aria-label="View cookie settings" data-cc="c-settings">Cookie Settings</a>
+    ```
+
+    </p>
+    </details>
+-   <details><summary>How to integrate with my multi-language website</summary>
+    <p>
+
+    // work in progress
+    </p>
+    </details>
 
 ## License
 Distributed under the MIT License. See [LICENSE](https://github.com/orestbida/cookieconsent/blob/master/LICENSE) for more information.
