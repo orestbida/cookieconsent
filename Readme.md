@@ -14,6 +14,8 @@ A __lightweight__ & __gdpr compliant__ cookie consent plugin written in plain ja
 ![Cookie Consent cover](demo/assets/cover.png)
 </div>
 
+## 🚧 Note: this v2 version is not NOT COMPATIBLE with previous versions
+Specifically the syntax has been completely changed (config. parameters have been renamed for the sake of simplicity/ease of use), some "useless" features have been removed, and some new ones have been added. Check [changelog](#changelog) for more.
 
 ## Table of contents
 1. [Key features](#key-features)
@@ -39,17 +41,23 @@ A __lightweight__ & __gdpr compliant__ cookie consent plugin written in plain ja
 - Allows you to __define different cookie categories with opt in/out toggle__
 
 ## How to use
-Include the script (either inside head or body)
-```html
-<script src="cookieconsent.js"></script>
-```
+1. Download and include the script (either inside head or body)
+    ```html
+    <script src="cookieconsent.js"></script>
+    ```
+    or load it via cdn:
+    ```html
+    <link href='cdn.jsdelivr.net' rel='preconnect' crossorigin>
+    <script src="https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@v2/dist/cookieconsent.js"></script>
+    ```
 
-load the css style
-```html
-<link rel="stylesheet" href="cookieconsent.css">
-```
+2. Load the css style:
+    ```html
+    <link rel="stylesheet" href="cookieconsent.css">
+    ```
+    or alternatively you can configure the plugin to automatically load the .css file.
 
-and then run the plugin with your configuration. A very basic example:
+3. Run the plugin with your configuration ([check out full examples](#examples)). A very basic example:
 ```javascript
 var cookieconsent = initCookieConsent();
 
@@ -107,8 +115,8 @@ cookieconsent.run({
 
 ## Download & CDN
 You can download the [latest version](https://github.com/orestbida/cookie-consent/releases/tag/v2.0) or use it via cdn:
-```
-...
+```html
+// work in progress
 ```
 
 ## All available options
@@ -126,6 +134,17 @@ Below a table which sums up all of the available options.
 | __`onAccept`__      	| function 	| -       	| Method run `once` when:  <br>  1. The cookie consent has been accepted <br> 2. After each page load (if alredy accepted)         	|
 | __`onUpdate`__      	| function 	| -       	| Method run after every event (except after page load)                                                                            	|
 
+## FAQ
+- <details><summary>How to enable dark-mode</summary>
+<p>
+
+Either manually add the following class `c_darkmode` to the body/html tag, or toggle it via javascript:
+```javascript
+document.body.classList.toggle('c_darkmode');
+```
+
+</p>
+</details>
 
 ## License
 Distributed under the MIT License. See [LICENSE](https://github.com/orestbida/cookieconsent/blob/master/LICENSE) for more information.
