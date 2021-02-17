@@ -12,6 +12,7 @@ A __lightweight__ & __gdpr compliant__ cookie consent plugin written in plain ja
 <div style="padding-top: .6em;">
 
 ![Cookie Consent cover](demo/assets/cover.png)
+![Cookie Consent cover](demo/assets/features.png)
 </div>
 
 ### 🚧 Note: this v2 version is not NOT COMPATIBLE with previous versions
@@ -372,7 +373,7 @@ cookieconsent.run({
                 // do something else
             }
         }
-    })
+    });
     ```
 
     </p>
