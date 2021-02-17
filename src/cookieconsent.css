@@ -1,296 +1,507 @@
-#cc__modal__container *{
-    box-sizing: border-box;
+#c_modal__container *{
     -webkit-box-sizing: border-box;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    box-sizing: border-box;
+    float: none;
+    font-style: inherit;
+    font-variant: normal;
+    font-weight: inherit;
+    height: auto;
+	line-height: 1.2;
 }
 
-#cc__modal__container input,
-#cc__modal__container p,
-#cc__modal__container h1,
-#cc__modal__container h2,
-#cc__modal__container h3,
-#cc__modal__container h4,
-#cc__modal__container div{
+#c_modal__container{
+    font-size: 16px;
+    font-weight: 400;
+    font-family: -apple-system,sans-serif;
+}
+
+#c_modal__container h1,
+#c_modal__container h2,
+#c_modal__container h3{
+    font-weight: bold;
+}
+
+#c_modal__container p,
+#c_modal__container span,
+#c_modal__container div,
+#c_modal__container h1,
+#c_modal__container h2,
+#c_modal__container h3,
+#c_modal__container button,
+#c_modal__container a,
+#c_modal__container label,
+#c_modal__container input{
+    transition: none;
+    animation: none;
     margin: 0;
     padding: 0;
+    text-transform: none;
+    letter-spacing: unset;
+    color: inherit;
 }
 
-#cc__modal__container button{
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-}
-
-#cc__modal__container .cc_button,
-#cc__modal__container #cc__modal .cc_button
-{
-    background:#ffd87f;
-}
-
-.cc_darkmode #cc__modal__container .sc_container_checkbox input:checked~.sc_checkmark{
-    background-color:#ffd87f;
-}
-
-#cc__modal__container #cc__modal .cc_button:hover,
-#cc__modal__container .cc_button:hover{
-    box-shadow: 0 0 0 0.250em #fff1d2;
-}
-
-
-
-#cc__modal__container #cc__modal .cc_button:active,
-#cc__modal__container .cc_button:active{
-    background: #eeca76;
-    box-shadow: 0 0 0 0.250em #fff1d2;
-}
-
-.cc_darkmode #cc__modal__container #cc__modal .cc_button:hover,
-.cc_darkmode #cc__modal__container .cc_button:hover,
-.cc_darkmode #cc__modal__container #cc__policy__close__btn:hover{
-    -webkit-box-shadow: 0 0 0 0.25em #595242;
-    box-shadow: 0 0 0 0.25em #595242;
-}
-
-.cc_darkmode #cc__modal__container #cc__modal .cc_button:active,
-.cc_darkmode #cc__modal__container .cc_button:active,
-.cc_darkmode #cc__modal__container #cc__policy__close__btn:active {
-    background: #c7a964;
-    -webkit-box-shadow: 0 0 0 0.25em #595242;
-    box-shadow: 0 0 0 0.25em #595242;
-}
-
-#cc__modal__container #cc__modal .cc__link{
-    background: #edf0f2;
-}
-
-#cc__modal__container #cc__modal .cc__link:hover{
-    background: #e2e5e7;
-}
-
-.cc_darkmode #cc__modal__container #cc__modal .cc__link:hover{
-	background: #313338;
-}
-
-.cc_darkmode #cc__modal__container #cc__modal .cc__link{
-    background: #222427;
-    color: #a2a2a2;
-}
-
-
-#cc__modal__container #cc__modal.cc__anim .cc_button,
-#cc__modal__container .cc__anim .cc_button,
-#cc__modal__container #cc__modal.cc__anim .cc__link{
-    transition: background-color .25s ease, color .25s ease, box-shadow .25s ease!important;
-}
-
-#cc__modal__container #cc__modal{
-    font-family: inherit;
-    padding: 1.875em 2.5em;
-    position: fixed;
-    z-index: 100;
-    background: #fff;
-    color: #000;
-    width: 27.125em;
-    bottom: 1.250em;
-    right: 1.250em;
-    box-shadow: 0 0.625em 1.875em #c4cbda;
-    box-shadow: 0 0.625em 1.875em rgba(57,62,72,.22);
-    opacity: 0;
-    visibility: hidden;
-    transform: scale(.95);
-    border-radius: 0.250em;
-    transition: none!important;
-    line-height: initial;
-}
-
-#cc__modal__container #cc__modal button,
-#cc__modal__container #cc__modal a{
+#c_modal__container #c_modal button,
+#c_modal__container #c_modal a{
     width: auto;
     height: auto;
     line-height: initial;
     text-decoration: initial;
     border: initial;
     outline: none;
-    color: initial;
-    transition: none!important;
+    transition: none;
 }
 
-#cc__modal__container #cc__modal.cc__anim{
-    transition: transform .4s cubic-bezier(0.5,0,0,1.25), opacity .4s ease, visibility .4s ease!important;
+#c_modal__container button{
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    color: inherit;
 }
 
-#cc__modal__container #cc__modal.cc__anim.cc__show{
+#c_modal__container #c_modal.c_anim .c_button,
+#c_modal__container .c_anim .c_button,
+#c_modal__container #c_modal.c_anim .c_link{
+    transition: background-color .25s ease, color .25s ease, box-shadow .25s ease!important;
+}
+
+#c_modal__container #c_modal{
+    font-family: inherit;
+    padding: 1.2em 2.2em;
+    position: fixed;
+    z-index: 100;
+    background: #fff;
+    color: #000;
+    max-width: 25em;
+    width: 100%;
+    bottom: 1.250em;
+    right: 1.250em;
+    box-shadow: 0 0.625em 1.875em #000000;
+    box-shadow: 0 0.625em 1.875em rgba(2, 2, 3, 0.28);
+    opacity: 0;
+    visibility: hidden;
+    transform: scale(.95);
+    border-radius: 0.250em;
+    line-height: initial;
+}
+
+#c_modal__container #c_modal.c_anim{
+    transition: transform .3s ease, opacity .3s ease, visibility .3s ease!important;
+}
+
+#c_modal__container #c_modal.c_anim.c_show{
     opacity: 1;
     visibility: visible!important;
     transform: scale(1);
 }
 
-.ie #cc__modal{
+.ie #c_modal{
     border: 1px solid #f1f2f6;
 }
 
-#cc__modal__container #cc__modal__title{
+#c_modal__container #c_modal__title{
     color: inherit;
     margin: 0 0 0.6em 0;
-	font-family: inherit;
+    font-family: inherit;
+    font-size: 1.5em;
 }
 
-#cc__modal__container #cc__modal__text{
+#c_modal__container #c_modal__text{
     margin-bottom: 1.625em;
-    font-size: 0.938em;
+    font-size: 0.9em;
     font-family: inherit;
     line-height: 1.45em;
 }
 
-#cc__modal__container #cc__modal .cc_button,
-#cc__modal__container .cc_button,
-#cc__modal__container #cc__modal .cc__link{
+#c_modal__container #c_modal .c_button,
+#c_modal__container .c_button,
+#c_modal__container #c_modal .c_link{
     border: none;
-    padding: 1em 2em;
+    padding: 1em 1.6em;
     margin-bottom: 0.625em;
     display: inline-block;
     outline: 0;
     box-shadow: 0 0 0 0 transparent;
-    margin-right: 1.250em;
     border-radius: 0.250em;
     cursor: pointer;
     transition: none!important;
     font-weight: bold;
     font-family: inherit;
-    font-size: 0.9em;
-    user-select: none;
+    font-size: 0.85em;
     -moz-user-select: none;
     -khtml-user-select: none;
     -webkit-user-select: none;
     -o-user-select: none;
+    user-select: none;
     text-align: center;
 }
 
+#c_modal__container #c_modal .c_button,
+#c_modal__container #c_modal .c_link{
+    width: 48.5%;
+}
+
+#c_modal__container #c_modal button+button{
+    float: right;
+}
+
+#c_modal__container .c_button,
+#c_modal__container #c_modal .c_button{
+    background: #e5ebef;
+    color: #40505a;
+}
+
+#c_modal__container #c_modal .c_link{
+    background: #eaeff2;
+}
+
+#c_modal__container #c_modal .c_link:hover,
+#c_modal__container #c_s_container button + button:hover,
+#c_modal__container #c_s_close__btn:hover{
+    background: #d8e0e6;
+}
+
+.c_darkmode #c_modal__container #c_modal .c_link{
+    background: #282b2e;
+    color: #cccccc;
+}
+
+.c_darkmode #c_modal__container #c_modal .c_link:hover,
+.c_darkmode #c_modal__container #c_s_container button + button:hover,
+.c_darkmode #c_modal__container #c_s_close__btn:hover{
+	background: #3e454a;
+}
+
 /**
-CookieConsent policy
+CookieConsent settings modal
 **/
-#cc__modal__container #cc__policy__container{ /** have to add overflow hidden to body**/
+#c_modal__container #c_s_container{ /** have to add overflow hidden to body**/
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     z-index: 101;
 	background: #070707;
-    background: rgba(0, 0, 0, 0.685);
+    background: rgba(11, 13, 14, 0.75);
     display: table;
     height: 100%;
     visibility: hidden;
     opacity: 0;
-    transition: none!important; 
+    transition: none!important;
 }
 
-#cc__modal__container #cc__policy__content .ccp_section{
-    padding: 0.938em 0;
-    margin-bottom: 0.625em;
+#c_modal__container #c_modal,
+#c_modal__container #c_s_container{
+    color: #2d4156;
 }
 
-#cc__modal__container #cc__policy__container h2{
-    margin-bottom: 0.7em;
-    display: inline-block;
-	font-family: inherit;
+#c_modal__container #c_s_container button + button {
+    float: right;
 }
 
-#cc__modal__container #cc__policy__container p{
-    margin-bottom: 0.625em;
-    font-size: 0.938em;
+#c_modal__container #c_s_blocks .title{
+    margin-top: 1.4em;
+}
+
+#c_modal__container #c_s_blocks .title:first-child{
+    margin-top: 0;
+}
+
+#c_modal__container #c_s_blocks .title h2{
+    font-size: 1.1em;
+}
+
+#c_modal__container #c_s_blocks .block_button{
+    margin-top: 0;
+    transition: background-color .3s ease;
+    cursor: pointer;
+}
+
+#c_modal__container #c_s_blocks .block_button:hover{
+    background-color: #e9eff4;
+}
+
+.c_darkmode #c_modal__container #c_s_blocks .block_button:hover{
+    background: #2b3035;
+}
+
+#c_modal__container #c_s_blocks .block__accordion{
+    margin-bottom: 0;
+}
+
+#c_modal__container #c_s_blocks .block__accordion > p{
+    margin-top: 0;
+    padding: 1em;
+}
+
+#c_modal__container #c_s_container .block_button h2{
+    display: table-cell;
+    font-family: inherit;
+    padding-right: 1em;
+    vertical-align: middle;
+}
+
+#c_modal__container #c_s_blocks .block_button{
+    display: table;
+    width: 100%;
+    padding: 1.2em 1em;
+}
+
+#c_modal__container #c_s_blocks .c_s_block{
+    padding: 1em;
+    margin-bottom: 1em;
+    border-radius: 5px;
+    border: 1px solid #f1f3f5;
+    transition: background-color .25s ease;
+}
+#c_modal__container #c_s_blocks .c_s_block:last-child{
+    margin-bottom: .5em;
+}
+
+.c_darkmode #c_modal__container #c_s_blocks .c_s_block{
+    border: 1px solid #373b40;
+}
+
+#c_modal__container #c_s_blocks .c_s_block:hover{
+    background-color: #f0f4f7;
+}
+
+.c_darkmode #c_modal__container #c_s_blocks .c_s_block:hover {
+    background: #23272a;
+}
+
+#c_modal__container #c_s_blocks .c_s_block:first-child{
+    transition: none;
+    padding: 0;
+    margin-top: 0;
+    border:none;
+    margin-bottom: 2em;
+}
+
+#c_modal__container #c_s_blocks .c_s_block:first-child:hover{
+    background-color: transparent;
+    background-color: unset;
+}
+
+#c_modal__container #c_s_blocks .c_s_block.block__expand{
+    margin-top: 0;
+    margin-bottom: 0;
+    padding: 0;
+    border-radius: 5px;
+    border: none;
+    margin-bottom: .5em;
+    background: #f0f4f7;
+    overflow: hidden;
+    transition: none;
+}
+
+#c_modal__container #c_s_blocks .c_s_block.block__expand+div:not(.c_s_block.block__expand){
+    margin-top: 2em;
+}
+
+.c_s_block.block__expand:first-child{
+    margin-bottom: 1em;
+}
+
+.c_darkmode #c_modal__container #c_s_blocks .c_s_block.block__expand{
+    background: #23272a;
+}
+
+#c_modal__container #c_s_blocks .c_s_block.block__expand:first-child{
+    margin-bottom: .5em;
+}
+
+#c_modal__container #c_s_blocks .c_s_block.block__expand:first-child:hover{
+    background: #f1f3f5;
+}
+
+#c_s_blocks div.block__expand:last-child{
+    margin-bottom: 1.5em;
+}
+
+#c_modal__container #c_s_blocks .block__accordion{
+    height: 0;
+    overflow: hidden;
+    padding-top: 0;
+}
+
+#c_modal__container #c_s_blocks ._active .block__accordion,
+#c_modal__container.ie #c_s_blocks .block__accordion{
+    height: 100%;
+}
+
+#c_modal__container #c_s_container p{
+    font-size: 0.9em;
     line-height: 1.3em;
+    margin-top: 1em;
 }
 
-#cc__modal__container #cc__policy__container input{
-    -webkit-appearance: auto;
+#c_modal__container #c_s_container input{
+    -webkit-appearance: none;
 }
 
-#cc__modal__container #cc__policy__container.cc__anim{
-    transition: background-color .4s ease, visibility .4s ease, opacity .4s ease!important;
+#c_modal__container #c_s_container.c_anim{
+    transition: background-color .3s ease, visibility .3s ease, opacity .3s ease!important;
 }
 
-#cc__modal__container #cc__policy__container.cc__anim.cc__show{
+#c_modal__container #c_s_container.c_anim.c_show{
     opacity: 1;
     visibility: visible!important;
 }
 
-#cc__modal__container #cc__valign{
+#c_modal__container #c_valign{
     display: table-cell;
     vertical-align: middle;
     position: relative;
 }
 
-#cc__modal__container #cc__policy{
+#c_modal__container #c_s{
     margin: 0 auto;
     border-radius: 0.1875em;
-    max-width: 52.5em;
+    max-width: 49em;
     width: 100%;
     position: fixed;
     left: 0;
     right: 0;
+    top: 0;
+    bottom: 0;
     height: 100%;
-    height: calc(100% - 2.5em);
     overflow: hidden;
-	visibility: hidden;
-	opacity: 0;
-	max-height: 37.5em;
-    top: 50%;
-	transform: translateY(-50%) scale(.95);
-	transition: transform .4s cubic-bezier(.5,0,0,1.25),opacity .4s ease,visibility .4s ease!important;
+    visibility: hidden;
+    opacity: 0;
+    transform: scale(.96);
+    transition: transform .3s ease, opacity .3s ease,visibility .3s ease!important;
 }
 
-#cc__modal__container #cc__policy__inner{
-    background: #fff;
+#c_modal__container.ie  #c_s{
+    max-height: 37.5em;
+}
+
+#c_modal__container.ie #c_s_ctl{
+    top: 0;
+}
+
+#c_modal__container #c_s_inner{
     border-radius: 0.25em;
     padding-top: 4.9375em;
-    padding-bottom: 1.25em;
+    padding-bottom: 4.9375em;
     height: 100%;
     position: relative;
     margin: 0 1.250em;
     overflow: hidden;
 }
 
-#cc__modal__container.ie #cc__policy{
+#c_modal__container.ie #c_s{
     position: relative;
 	top: 0;
 	margin-top: -5.625em;
 }
 
 
-#cc__modal__container.ie #cc__valign{
+#c_modal__container.ie #c_valign{
 	height: 100%;
 	padding-top: 4.9375em;
 }
 
-#cc__modal__container #cc__policy__content{
+#c_modal__container #c_s_blocks{
 	overflow-y: auto;
     overflow-y: overlay;
     overflow-x: hidden;
     height: 100%;
     position: relative;
-    padding: 1.875em;
+    padding: 1.5em 2.5em;
+    padding-bottom: .5em;
 }
 
-#cc__modal__container #cc__policy__header{
+#c_modal__container #c_s_buttons{
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    padding: 1em 2.5em;
+    border-top: 1px solid #f1f1f1;
+    height: 4.9375em;
+}
+
+#c_modal__container #c_modal .cc-link,
+#c_modal__container #c_s .cc-link{
+    color: #253b48;
+    border-bottom: 3px dotted #253b48;
+    display: inline;
+    padding-bottom: 0;
+    text-decoration: none;
+    font-weight: 700;
+}
+
+.c_darkmode #c_modal__container #c_modal .cc-link,
+.c_darkmode #c_modal__container #c_s .cc-link{
+    color: #b7cada;
+    border-color: #b7cada;
+}
+
+#c_modal__container #c_s_inner,
+#c_modal__container #c_s_header,
+#c_modal__container #c_s_buttons{
+    background-color: #fff;
+}
+
+.c_darkmode #c_modal__container .c_button, 
+.c_darkmode #c_modal__container #c_modal .c_button{
+    background: #33383c;
+    color: #ffffff;
+}
+
+#c_modal__container #c_modal button:first-child,
+#c_modal__container #c_s_buttons button:first-child,
+#c_modal__container .c_block_toggle input:checked ~ .sc_checkmark {
+    background: #253b48;
+    color: white;
+}
+
+#c_modal__container #c_modal button:first-child:hover,
+#c_modal__container #c_s_buttons button:first-child:hover{
+    background: #1d2e38;
+}
+
+.c_darkmode #c_modal__container #c_modal button:first-child,
+.c_darkmode #c_modal__container #c_s_buttons button:first-child,
+.c_darkmode #c_modal__container .c_block_toggle input:checked ~ .sc_checkmark{
+    background: #b7cada;
+    color: #000;
+}
+
+.c_darkmode #c_modal__container #c_modal button:first-child:hover,
+.c_darkmode #c_modal__container #c_s_buttons button:first-child:hover,
+.c_darkmode #c_modal__container .c_block_toggle input:checked:hover ~ .sc_checkmark{
+    background: #b7cada;
+    color: #000;
+}
+
+#c_modal__container #c_s_header{
     position: absolute;
     top: 0;
     width: 100%;
     display: table;
-    padding: 1.2em 1.875em;
+    padding: 1.2em 2.5em;
     vertical-align: middle;
     z-index: 2;
-    background: white;
-    border-bottom: 1px solid #f0f0f0;
+    border-bottom: 1px solid #f1f1f1;
 }
-#cc__modal__container #cc__policy__title{
+
+#c_modal__container #c_s_title{
 	display: table-cell;
     vertical-align: middle;
     font-size: 1em;
     font-family: inherit;
 }
 
-#cc__modal__container #cc__policy__close__btn{
+#c_modal__container #c_s_title h1{
+    font-size: 1em;
+}
+
+#c_modal__container #c_s_close__btn{
     display: table-cell;
     float: right;
     vertical-align: middle;
@@ -306,264 +517,260 @@ CookieConsent policy
     margin: 0;
 }
 
-#cc__modal__container #cc__policy__text{
+#c_modal__container #c_policy__text{
     height: 31.250em;
     overflow-y: auto;
     margin-top: 1.250em;
 }
 
-#cc__modal__container .cc__anim.cc__show #cc__policy{
+#c_modal__container .c_anim.c_show #c_s{
     opacity: 1;
     visibility: visible;
-    transform: scale(1) translateY(-50%);
+    transform: scale(1);
+}
+
+#c_modal__container #c_s_ctl{
+    height: 100%;
+    position: relative;
+    transform: translateY(-50%);
+    top: 50%;
+    height: calc(100% - 2.5em);
+    overflow: hidden;
+    max-height: 37.5em;
 }
 
 /** works only on webkit-based browsers **/
-#cc__modal__container #cc__policy__content::-webkit-scrollbar{
+#c_modal__container #c_s_blocks::-webkit-scrollbar{
 	width: 1em;
     height: 100%;
     background-color: transparent;
     border-radius: 0 0.250em 0.250em 0;
 }
   
-#cc__modal__container #cc__policy__content::-webkit-scrollbar-thumb{
+#c_modal__container #c_s_blocks::-webkit-scrollbar-thumb{
     border: 0.3em solid white;
-    background-color: #cecfd2;
-    border-radius: 100em;
+    background-color: #cfd5db;
     -webkit-border-radius: 100em;
 	-moz-border-radius: 100em;
     -ms-border-radius: 100em;
     -o-border-radius: 100em;
+    border-radius: 100em;
 }
 
-#cc__modal__container #cc__policy__content::-webkit-scrollbar-thumb:hover{
-	background-color: #a2a3a4;
+#c_modal__container #c_s_blocks::-webkit-scrollbar-thumb:hover{
+	background-color: #9199a0;
 }
 
-#cc__modal__container #cc__policy__content::-webkit-scrollbar-button {
-    width: 10;
+#c_modal__container #c_s_blocks::-webkit-scrollbar-button {
+    width: 10px;
     height: 5px;
     opacity: 0;
 	visibility: hidden;
 }
   
-#cc__modal__container #cc__policy__content::-webkit-scrollbar-corner {
+#c_modal__container #c_s_blocks::-webkit-scrollbar-corner {
     background-color: transparent;
 }
 
 /** custom checkbox **/
 /* The container */
-#cc__modal__container .sc_container_checkbox {
-    display: inline-block;
+#c_modal__container .c_block_toggle {
+    display: table-cell;
     position: relative;
-    padding-left: 2.500em;
-    margin-bottom: 0.95em;
     cursor: pointer;
-    font-size: 1.375em;
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
-    user-select: none;
-    margin-left: 0.625em;
+    user-select: none;  
+    vertical-align: middle;
 }
 
-#cc__modal__container.ie .sc_container_checkbox{
+#c_modal__container.ie .c_block_toggle{
 	padding-left: 1em;
 	margin-bottom: 0.7em;
 }
 
 /* Hide the browser's default checkbox */
-#cc__modal__container .sc_container_checkbox input {
+#c_modal__container .c_block_toggle input {
     position: absolute;
     cursor: pointer;
 	display: none;
 }
 
-#cc__modal__container.ie .sc_container_checkbox input{
+#c_modal__container.ie .c_block_toggle input{
 	display: block;
 	opacity: 1;
 }
 
 /* Create a custom checkbox */
-#cc__modal__container .sc_container_checkbox .sc_checkmark {
+#c_modal__container .c_block_toggle .sc_checkmark {
     position: absolute;
     top: 0;
-    left: 0;
-    height: 1em;
-    width: 1em;
-    background-color: #eee;
-    border-radius: 0.2em;
+    right: 0;
+    border-radius: 4em;
+    background-color: #919ea6;
+    transition: background-color .25s ease;
 }
 
-#cc__modal__container.ie .sc_container_checkbox .sc_checkmark{
+#c_modal__container .c_block_toggle,
+#c_modal__container .c_block_toggle .sc_checkmark{
+    width: 3.4em;
+    height: 1.6em;
+ }
+
+#c_modal__container.ie .c_block_toggle .sc_checkmark{
 	display: none;
 }
 
-#cc__modal__container .sc_container_checkbox .sc_checkmark.sc_checkmark.sc_readonly{
-    cursor: default;
+#c_modal__container .c_block_toggle .sc_checkmark.sc_readonly{
+    cursor: not-allowed;
 }
 
-/* On mouse-over, add a grey background color */
-#cc__modal__container  .sc_container_checkbox:hover input ~ .sc_checkmark {
-    background-color: #ccc;  
+#c_modal__container .c_block_toggle input ~ .sc_checkmark.sc_readonly{
+    background-color: #d5dee2;
 }
 
-/* When the checkbox is checked, add a blue background */
-#cc__modal__container .sc_container_checkbox input:checked ~ .sc_checkmark {
-    background-color: #000000;
-}
-
-#cc__modal__container .sc_container_checkbox input:checked ~ .sc_checkmark.sc_readonly{
-    background-color: #ccc;
-}
-
-/* Create the checkmark/indicator (hidden when not checked) */
-#cc__modal__container .sc_container_checkbox .sc_checkmark:after {
-    content: "";
-    position: absolute;
-    display: none;
-}
-
-/* Show the checkmark when checked */
-#cc__modal__container .sc_container_checkbox input:checked ~ .sc_checkmark:after {
-    display: block;
+#c_modal__container .c_block_toggle input ~ .sc_checkmark.sc_readonly:after{
+    box-shadow: none;
 }
 
 /* Style the checkmark/indicator */
-#cc__modal__container .sc_container_checkbox .sc_checkmark:after {
-    left: 0.39em;
-    top: 0.18em;
-    width: 0.17em;
-    height: 0.450em;
-    border: solid white;
-    border-width: 0 0.1em 0.1em 0;
-    -webkit-transform: rotate(45deg);
-    -ms-transform: rotate(45deg);
-    transform: rotate(45deg);
-	box-sizing: content-box;
+#c_modal__container .c_block_toggle .sc_checkmark:after {
+    content: "";
+    position: absolute;
+    left: 0.2em;
+    top: 0.2em;
+    width: 1.2em;
+    height: 1.2em;
+    border: none;
+    box-sizing: content-box;
+    background: #fff;
+    box-shadow: 0 1px 2px rgba(24, 32, 35, .36);
+    transition: transform .3s ease, background-color .3s ease;
+    border-radius: 100%;
 }
-  
+
+/* Show the checkmark when checked */
+#c_modal__container .c_block_toggle input:checked ~ .sc_checkmark:after {
+    transform: translateX(1.75em);
+}
+
 /** end custom scrollbar **/
 
-#cc__modal__container #cc__policy__content table th,
-#cc__modal__container #cc__policy__content table td{
+#c_modal__container #c_s_blocks table,
+#c_modal__container #c_s_blocks table th,
+#c_modal__container #c_s_blocks table td{
     border: none;
 }
 
-#cc__modal__container #cc__policy__content table { 
-	width: 46.875em; 
-	border-collapse: collapse; 
-    margin: 1.250em auto;
+#c_modal__container #c_s_blocks table tbody tr{
+    transition: background-color .3s ease;
+}
+
+#c_modal__container #c_s_blocks table tbody tr:hover{
+    background-color: #e9eff4;
+}
+
+.c_darkmode #c_modal__container #c_s_blocks table tbody tr:hover{
+    background-color: #2b3035
+}
+
+#c_modal__container #c_s_blocks table { 
     text-align: left;
     border-collapse: collapse;
     width: 100%;
-    border-radius: 0.313em;
+    padding: 0;
+    margin: 0;
     overflow: hidden;
-    box-shadow: 0 0 0 1px #e9e9e9;
 }
-#cc__modal__container.ie #cc__policy__content table{
+#c_modal__container.ie #c_s_blocks table{
 	overflow: auto;
 }
 
-/* Table Zebra striping */
-#cc__modal__container #cc__policy__content table tr:nth-of-type(odd) { 
-    background: #eff2f4;
-}
-
-#cc__modal__container #cc__policy__content table td, 
-#cc__modal__container #cc__policy__content table th { 
-    padding: 0.625em;
+#c_modal__container #c_s_blocks table td, 
+#c_modal__container #c_s_blocks table th { 
+    padding: 0.8em 0.625em;
     text-align: left;
     vertical-align: top;
-    font-size: .9em;
+    font-size: .8em;
+    padding-left: 1.2em;
 }
 
-#cc__modal__container #cc__policy__content table th { 
-    background: #000000;
-    color: white;
+#c_modal__container #c_s_blocks table th { 
 	font-family: inherit;
-	padding: 1.2em 0.625em;
+    padding: 1.2em 1.2em;
+}
+
+#c_modal__container #c_s_blocks thead tr:first-child{
+    border-bottom: 1px solid #e6e8ed;
+}
+.c_darkmode #c_modal__container #c_s_blocks thead tr:first-child{
+    border-color: #2b3035;
 }
 
 /**
 Dark-mode for cookie consent
 **/
-.cc_darkmode #cc__modal__container #cc__modal,
-.cc_darkmode #cc__modal__container #cc__policy {
+.c_darkmode #c_modal__container #c_modal,
+.c_darkmode #c_modal__container #c_s {
 	color: #fff;
 }
 
-.cc_darkmode #cc__modal__container #cc__policy__container p,
-.cc_darkmode #cc__modal__container #cc__policy__content table td {
+.c_darkmode #c_modal__container #c_s_container p,
+.c_darkmode #c_modal__container #c_s_blocks table td {
 	color: #c5cbd0;
 }
 
-.cc_darkmode #cc__modal__container #cc__modal {
+.c_darkmode #c_modal__container #c_modal {
 	background: #151619;
 	-webkit-box-shadow: 0 0 1.875em rgba(57, 62, 72, .22);
 	box-shadow: 0 0 1.875em rgba(0, 0, 0, .56);
 }
 
-.cc_darkmode #cc__modal #cc__modal__text {
+.c_darkmode #c_modal #c_modal__text {
 	color: #d4d8d9;
 }
 
-.cc_darkmode #cc__modal__container #cc__policy__inner,
-.cc_darkmode #cc__modal__container #cc__policy__header {
-	background: #151619;
+.c_darkmode #c_modal__container #c_s_inner,
+.c_darkmode #c_modal__container #c_s_header,
+.c_darkmode #c_modal__container #c_s_buttons {
+	background: #181b1d;
 }
 
-.cc_darkmode #cc__modal__container #cc__policy__header {
-    border-color: #1e1f23;
+.c_darkmode #c_modal__container #c_s_header,
+.c_darkmode #c_modal__container #c_s_buttons {
+    border-color: #292d31;
 }
 
-.cc_darkmode #cc__modal__container .sc_container_checkbox .sc_checkmark:after {
-	border: solid #000000;
-	border-width: 0 0.1em 0.1em 0;
+.c_darkmode #c_modal__container .c_block_toggle .sc_checkmark:after {
+	background: #23272a;
 }
 
-.cc_darkmode #cc__modal__container .sc_container_checkbox input:checked~.sc_checkmark.sc_readonly {
+.c_darkmode #c_modal__container .c_block_toggle input:checked~.sc_checkmark.sc_readonly {
 	background-color: #4b4e53;
 }
 
-.cc_darkmode #cc__modal__container .sc_container_checkbox input:checked~.sc_checkmark.sc_readonly:after {
-	border: solid #26292b;
-	border-width: 0 0.1em 0.1em 0;
-}
-
-.cc_darkmode #cc__modal__container #cc__policy__content::-webkit-scrollbar-thumb {
-	border: 0.3em solid #151619;
+.c_darkmode #c_modal__container #c_s_blocks::-webkit-scrollbar-thumb {
+	border: 0.3em solid #181b1d;
 	background-color: #3d4349;
 }
 
-.cc_darkmode #cc__modal__container #cc__policy__content::-webkit-scrollbar-thumb:hover {
+.c_darkmode #c_modal__container #c_s_blocks::-webkit-scrollbar-thumb:hover {
 	background-color: #535a5f;
 }
 
-.cc_darkmode #cc__modal__container #cc__policy__content table tr:nth-of-type(odd) {
-    background: #000000;
-}
-
-.cc_darkmode #cc__modal__container #cc__policy__content table > tr:first-child{
-    border-bottom: 1px solid #0c0c0c;
-}
-
-.cc_darkmode #cc__modal__container #cc__policy__content table td:before {
+.c_darkmode #c_modal__container #c_s_blocks table td:before {
 	color: #fff;
 }
 
-.cc_darkmode #cc__modal__container #cc__policy__content table {
-    box-shadow: none;
-	background: #0e0f10;
-}
-
-.cc_darkmode  #cc__modal__container.ie #cc__policy__content table{
+.c_darkmode  #c_modal__container.ie #c_s_blocks table{
 	border: 1px solid #232529;
 }
 
 @media screen and (max-width: 900px){
-    #cc__modal__container #cc__modal{
-        width: 100%;
+    #c_modal__container #c_modal{
+        width: auto;
+        max-width: 100%;
         margin: 0;
         padding: 1.875em 10%;
         right: 0;
@@ -575,67 +782,79 @@ Dark-mode for cookie consent
 
 /* On screens that are 37.500em or less, set the background color to olive */
 @media screen and (max-width: 688px) {
-    #cc__modal__container #cc__policy{
+    #c_modal__container #c_s{
         border-radius: 0;
-		max-height: 100%;
-        height: 100%;
-        left: 0;
-        right: 0;
     }
 
-    #cc__modal__container #cc__policy__inner{
+    #c_modal__container #c_s_ctl{
+        max-height: 100%;
+        height: 100%;
+        top: 0;
+        transform: none;
+    }
+
+    #c_modal__container .c_block_toggle{
+        font-size: 1.25em;
+    }
+
+    #c_modal__container #c_s_container button + button{
+        margin-bottom: 0;
+    }
+
+    #c_modal__container #c_s_inner{
         margin: 0;
         border-radius: 0;
+        padding-bottom: 7.8em;
     }
 
-	#cc__modal__container #cc__policy__content{
+    #c_modal__container #c_s_container .block_button h2{
+        font-size: 1em;
+    }
+
+	#c_modal__container #c_s_blocks{
 		padding: 1.3em;
     }
     
-	#cc__modal__container #cc__policy__header{
+	#c_modal__container #c_s_header{
         padding: 1.2em 1.3em;
     }
-	
-	#cc__modal__container .sc_container_checkbox{
-		display: block;
-		padding: 0;
-		margin: 0 0 2em 0; 
+
+    #c_modal__container #c_s_buttons{
+        height: 7.8em;
+        padding: 1em 1.3em;
     }
     
     /** dynamic table layout **/
-    #cc__modal__container #cc__policy__content table { 
+    #c_modal__container #c_s_blocks table { 
         width: 100%; 
     }
 
     /* Force table to not be like tables anymore */
-    #cc__modal__container #cc__policy__content table, 
-    #cc__modal__container #cc__policy__content table thead, 
-    #cc__modal__container #cc__policy__content table tbody, 
-    #cc__modal__container #cc__policy__content table th, 
-    #cc__modal__container #cc__policy__content table td, 
-    #cc__modal__container #cc__policy__content table tr { 
+    #c_modal__container #c_s_blocks table, 
+    #c_modal__container #c_s_blocks table thead, 
+    #c_modal__container #c_s_blocks table tbody, 
+    #c_modal__container #c_s_blocks table th, 
+    #c_modal__container #c_s_blocks table td, 
+    #c_modal__container #c_s_blocks table tr { 
         display: block; 
     }
 
-    #cc__modal__container #cc__policy__content table th{
-        display: none;
-    }
-
     /* Hide table headers (but not display: none;, for accessibility) */
-    #cc__modal__container #cc__policy__content table thead tr { 
+    #c_modal__container #c_s_blocks table thead tr { 
         position: absolute;
         top: -9999px;
         left: -9999px;
+        display: none;
     }
 
-    #cc__modal__container #cc__policy__content table td { 
+    #c_modal__container #c_s_blocks table td { 
         /* Behave  like a "row" */
         border: none;
         position: relative;
-        padding-left: 50%; 
+        padding-left: 40%; 
     }
 
-    #cc__modal__container #cc__policy__content table td:before { 
+    #c_modal__container #c_s_blocks table td:before { 
         position: absolute;
         left: 1em;
         width: 43%;
@@ -648,24 +867,14 @@ Dark-mode for cookie consent
         text-overflow: ellipsis;
     }
 
-    #cc__modal__container .sc_container_checkbox .sc_checkmark {
-        height: 1.4em;
-        width: 1.4em;
-        border-radius: 0.3em;
-    }
-
-    #cc__modal__container .sc_container_checkbox .sc_checkmark::after{
-        left: 0.54em;
-        top: 0.2em;
-        width: 0.22em;
-        height: 0.70em;
-        border-width: 0 0.13em 0.13em 0;
-    }
-
-    #cc__modal__container #cc__modal .cc_button,
-    #cc__modal__container .cc_button,
-    #cc__modal__container #cc__modal .cc__link{
+    #c_modal__container #c_modal .c_button,
+    #c_modal__container .c_button,
+    #c_modal__container #c_modal .c_link{
         width: 100%;
         margin-right: 0;
+    }
+
+    #c_modal__container #c_modal__btns button:last-child{
+        margin-bottom: 0;
     }
 }

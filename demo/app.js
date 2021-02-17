@@ -1,168 +1,119 @@
 /*
- * CookieConsent v1.2
- * https://www.github.com/orestbida/cookieconsent
- * Author Orest Bida
- * Released under the MIT License
+ * CookieConsent v2 DEMO config.
 */
-(function(){
 
-	// obtain cookieconsent plugin
-	var cc = initCookieConsent();
+// obtain cookieconsent plugin
+var cc = initCookieConsent();
 
-	// run plugin with config object
-	cc.run({
-		cc_autorun : true, 								// show as soon as possible (without the need to manually call CookieConsent.show() )
-		cc_delay : 0,								    // specify initial delay after website has loaded		
-		cc_enable_verbose : true,						// if enabled, prints all info/error msgs (not available on dist version)
-		cc_current_lang : 'it',		
-		cc_policy_url : null,                           // specify your own dedicated cookie policy page url
-		cc_auto_language : true,						// if enabled, overrides cc_current_lang
-		cc_cookie_expiration : 	365,    				// [NEW FROM version 1.2]
-		cc_autoclear_cookies : true,					// [NEW FROM version 1.2]
-		cc_autoload_css : true, 						// [NEW FROM version 1.2]
-		cc_theme_css : "../src/cookieconsent.css",	
-		cc_accept_callback : function(cookies){
-			console.log("cookie consent is accepted with the following cookie-values: ", cookies);
-			
-			//Example: if functionality cookies are enabled do something ...
-			if(cc.inArray(cookies.level, 'functionality_cookies')){
-				// js code here
-			}
-		},
-
-		cc_languages : [
-			{
-				lang : 'en',
-				modal : {
-					cc_title :  "I use cookies",
-					cc_more_text :  "Learn more", 
-					cc_accept_text : "I understand",
-					cc_description :  'My website uses essential cookies necessary for its functioning. By continuing browsing, you consent to my use of cookies and other technologies.',
-				},
-				policy : {
-					ccp_title : "Cookie Policy",
-					// ccb_table_headers is REQUIRED if any ccb_cookies_table is used
-					ccb_table_headers : [
-						{col1: "Name" }, 
-						{col2: "Domain" }, 
-						{col3: "Expiration" }, 
-						{col4: "Description" }, 
-						{col5: "Type" }
-					],
-					ccp_blocks : [
-						{
-							ccb_title : "What are cookies",
-							ccb_description: 'Cookies are very small text files that are stored on your computer when you visit a website. I use cookies to assure the basic functionalities of the website and to enhance your online experience. I use many different types of cookies which you can check on the sections below.'
-						},{
-							ccb_title : "Strictly necessary cookies",
-							ccb_description: 'These cookies are essential for the proper functioning of my website. Without these cookies, the website would not work properly.',
-							ccb_cookies_table : [
-								{
-									col1: 'cc_cookie',
-									col2: 'orestbida.com',
-									col3: 'After 3 months (Starting from the moment the cookie-consent was accepted)',
-									col4: 'Used to know whether a visitor has accepted the cookie consent or not.',
-									col5: 'Permanent cookie'
-								},
-								{
-									col1: 'cc_level',
-									col2: 'orestbida.com',
-									col3: 'After 3 months (Starting from the moment the cookie-consent was accepted)',
-									col4: 'Used to know the accepted level of cookie consent (E.g.  essential cookie only, full cookie consent ...)',
-									col5: 'Permanent cookie'
-								},
-								{
-									col1: 'cc_level2',
-									col2: 'orestbida.com',
-									col3: 'After 3 months (Starting from the moment the cookie-consent was accepted)',
-									col4: 'Used to know the accepted level of cookie consent (E.g.  essential cookie only, full cookie consent ...)',
-									col5: 'Permanent cookie'
-								}
-							],
-							ccb_switch : {
-								value : 'necessary_cookies',
-								enabled : true,
-								readonly: true
-							}
-						},{
-							ccb_title : "Functionality cookies",
-							ccb_description: 'These cookies are used to provide you with a more personalized experience on my website and to remember choices you make when you browse the website. For example, whether or not you enabled dark-mode on this website.',
-							ccb_switch : {
-								value : 'functionality_cookies',
-								enabled : true,
-								readonly: false
-							},
-							ccb_cookies_table: [
-								{
-									col1: 'cc_darkmode',
-									col2: 'orestbida.com',
-									col3: 'One week after the cookie has been created',
-									col4: 'Secure connections only, Content: <span style="word-break: break-word;">AHWqTUn0x1l8j_qWOD0zBGG646eTNjqLQxNQ-wywrCEsS33DLylxgvZ7I98N1Xz_</span>' ,
-									col5: 'Permanent cookie'
-								}
-							]
-						},{
-							ccb_title : "More information",
-							ccb_description: 'For any queries in relation to my policy on cookies and your choices, please contact me.',
-						}
-					],
-					ccp_save_text : "Save preferences"
-				}
-			}
-		]
-	});
+// run plugin with config object
+cc.run({
+	autorun : true, 							// [OPTIONAL] show consent modal as soon as possible
+	delay : 0,									// [OPTIONAL] specify initial delay after website has loaded		
+	current_lang : 'en',						// [REQUIRED] specify one of the languages defined inside languages below (NOTE: can be dynamic value)
+	autoload_css : true, 						// [OPTIONAL] if true, load css via js (NOTE: theme_css must have valid path)
+	theme_css : "../src/cookieconsent.css",		// [OPTIONAL*] (NOTE: autoload_css need too be set to true)
+	auto_language : false,						// [OPTIONAL] if true, grabs the language based on the client browser
+	autoclear_cookies : true,					// [OPTIONAL] if true, delete all cookies specified inside the cookie table, in a block after being deselected in the settings modal
+	cookie_expiration : 365,    				// [OPTIONAL] change default expiration number of days
 	
-	/*
-	 * The following lines of code are for demo purposes (show api functions)
-	 */ 
-	if(document.addEventListener){
-		document.getElementById("btn1").addEventListener('click', function(){
-			autorun();
-		});
+	onAccept: function(){						// [OPTIONAL]
+		console.log("onAccept fired ...");
+		if(cc.allowedCategory('analytics_cookies')){
+			cc.loadScript('https://www.google-analytics.com/analytics.js', function(){		
+				ga('create', 'UA-46747204-4', 'auto');
+				ga('send', 'pageview');
+				console.log("analytics.js loaded");
+			});
+		}
+	},
 
-		document.getElementById("btn2").addEventListener('click', function(){
-			cc.show(0);
-		});
+	onChange: function(){						// [OPTIONAL]
+		console.log("onChange fired ...");
+		// do something ...
+	},
 
-		document.getElementById("btn3").addEventListener('click', function(){
-			cc.hide();
-		});
-
-		document.getElementById("btn4").addEventListener('click', function(){
-			cc.clearCookies();
-		});
-
-		document.getElementById("btn5").addEventListener('click', function(){
-			cc.show_policy(0);  
-		});
-
-		document.getElementById("btn6").addEventListener('click', function(){
-			document.body.classList.toggle('cc_darkmode');
-		});
-	}else{
-		document.getElementById("btn1").attachEvent('onclick', function(){
-			autorun();
-		});
-
-		document.getElementById("btn2").attachEvent('onclick', function(){
-			cc.show(0);
-		});
-
-		document.getElementById("btn3").attachEvent('onclick', function(){
-			cc.hide();
-		});
-
-		document.getElementById("btn4").attachEvent('onclick', function(){
-			cc.clearCookies();
-		});
-
-		document.getElementById("btn5").attachEvent('onclick', function(){
-			cc.show_policy(0);  
-		});
-
-		document.getElementById("btn6").attachEvent('onclick', function(){
-			console.log("clicked");
-			document.body.classList.toggle('cc_darkmode');
-		});
+	languages : {
+		'en' : {	
+			consent_modal : {
+				title :  "I use cookies",
+				description :  'Hi, this website uses essential cookies to ensure its proper operation and tracking cookies to understand how you interact with it. The latter will be set only upon approval. <a aria-label="Cookie policy" class="cc-link" href="#">Read more</a>',
+				primary_btn: {
+					text: 'Accept',
+					role: 'accept_all'				//'accept_selected' or 'accept_all'
+				},
+				secondary_btn: {
+					text : 'Settings',
+					role : 'settings'				//'settings' or 'accept_necessary'
+				}
+			},
+			settings_modal : {
+				title : '<div>Cookie settings</div><div style="font-size: .8em; font-weight: 200; color: #859198; margin-top: 5px;">Powered by <a href="https://github.com/orestbida/cookieconsent/" aria-label="powered by cookie-consent" style="text-decoration: underline;">cookie-consent</a></div>',
+				save_settings_btn : "Save settings",
+				accept_all_btn : "Accept all",
+				cookie_table_headers : [
+					{col1: "Name" }, 
+					{col2: "Domain" }, 
+					{col3: "Expiration" }, 
+					{col4: "Description" }, 
+					{col5: "Type" }
+				],
+				blocks : [
+					{
+						title : "Cookie usage",
+						description: 'I use cookies to ensure the basic functionalities of the website and to enhance your online experience. You can choose for each category to opt-in/out whenever you want. For more details about cookies and how I use them, read the full <a href="#" class="cc-link">cookie policy</a>.'
+					},{
+						title : "Strictly necessary cookies",
+						description: 'These cookies are essential for the proper functioning of my website. Without these cookies, the website would not work properly.',
+						toggle : {
+							value : 'necessary_cookies',
+							enabled : true,
+							readonly: true							//cookie categories with readonly=true are all treated as "necessary cookies"
+						}
+					},{
+						title : "Preferences cookies",
+						description: 'These cookies allow the website to remember the choices you have made in the past.',
+						toggle : {
+							value : 'preferences_cookies_3rweds',	//there are no default categories => you specify them
+							enabled : true,
+							readonly: false
+						}
+					},{
+						title : "Analytics cookies",
+						description: 'These cookies cookies collect information about how you use the website, which pages you visited and which links you clicked on. All of the data is anonymized and cannot be used to identify you.',
+						toggle : {
+							value : 'analytics_cookies',
+							enabled : false,
+							readonly: false
+						},
+						cookie_table: [
+							{
+								col1: '_ga',
+								col2: 'google.com',
+								col3: '2 years',
+								col4: '<span><b>description</b> ...</span>' ,
+								col5: 'Permanent cookie'
+							},
+							{
+								col1: '_gat',
+								col2: 'google.com',
+								col3: '1 minute',
+								col4: '<b>description</b> ...' ,
+								col5: 'Permanent cookie'
+							},
+							{
+								col1: '_gid',
+								col2: 'google.com',
+								col3: '1 day',
+								col4: '<b>description</b> ...' ,
+								col5: 'Permanent cookie'
+							}
+						]
+					},{
+						title : "More information",
+						description: 'For any queries in relation to my policy on cookies and your choices, please <a class="cc-link" href="https://orestbida.com/contact">contact me</a>.',
+					}
+				]
+			}
+		}
 	}
-})();
+});
