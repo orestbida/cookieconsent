@@ -1,8 +1,8 @@
 #c_modal__container *{
-    box-sizing: border-box;
     -webkit-box-sizing: border-box;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    box-sizing: border-box;
     float: none;
     font-style: inherit;
     font-variant: normal;
@@ -156,17 +156,21 @@
     background: #eaeff2;
 }
 
-#c_modal__container #c_modal .c_link:hover{
-    background: #dfe6ec;
-}
-
-.c_darkmode #c_modal__container #c_modal .c_link:hover{
-	background: #313338;
+#c_modal__container #c_modal .c_link:hover,
+#c_modal__container #c_s_container button + button:hover,
+#c_modal__container #c_s_close__btn:hover{
+    background: #d8e0e6;
 }
 
 .c_darkmode #c_modal__container #c_modal .c_link{
     background: #282b2e;
     color: #cccccc;
+}
+
+.c_darkmode #c_modal__container #c_modal .c_link:hover,
+.c_darkmode #c_modal__container #c_s_container button + button:hover,
+.c_darkmode #c_modal__container #c_s_close__btn:hover{
+	background: #3e454a;
 }
 
 /**
@@ -334,7 +338,7 @@ CookieConsent settings modal
 }
 
 #c_modal__container #c_s_container input{
-    -webkit-appearance: auto;
+    -webkit-appearance: none;
 }
 
 #c_modal__container #c_s_container.c_anim{
@@ -445,7 +449,7 @@ CookieConsent settings modal
 
 .c_darkmode #c_modal__container .c_button, 
 .c_darkmode #c_modal__container #c_modal .c_button{
-    background: #383e42;
+    background: #33383c;
     color: #ffffff;
 }
 
@@ -458,12 +462,19 @@ CookieConsent settings modal
 
 #c_modal__container #c_modal button:first-child:hover,
 #c_modal__container #c_s_buttons button:first-child:hover{
-    background: #1f313b;
+    background: #1d2e38;
 }
 
 .c_darkmode #c_modal__container #c_modal button:first-child,
 .c_darkmode #c_modal__container #c_s_buttons button:first-child,
 .c_darkmode #c_modal__container .c_block_toggle input:checked ~ .sc_checkmark{
+    background: #b7cada;
+    color: #000;
+}
+
+.c_darkmode #c_modal__container #c_modal button:first-child:hover,
+.c_darkmode #c_modal__container #c_s_buttons button:first-child:hover,
+.c_darkmode #c_modal__container .c_block_toggle input:checked:hover ~ .sc_checkmark{
     background: #b7cada;
     color: #000;
 }
@@ -539,11 +550,11 @@ CookieConsent settings modal
 #c_modal__container #c_s_blocks::-webkit-scrollbar-thumb{
     border: 0.3em solid white;
     background-color: #cfd5db;
-    border-radius: 100em;
     -webkit-border-radius: 100em;
 	-moz-border-radius: 100em;
     -ms-border-radius: 100em;
     -o-border-radius: 100em;
+    border-radius: 100em;
 }
 
 #c_modal__container #c_s_blocks::-webkit-scrollbar-thumb:hover{
