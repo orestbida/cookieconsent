@@ -112,11 +112,11 @@ Addressed to those who alredy use this plugin: if you plan on using this version
     </details>
     <br>
 
-    For more details check out [full examples](#examples) and [how to configure languages & cookie settings](#how-to-configure-languages--cookie-settings) sections.
+    For more details check out [full examples](#full-example-configurations) and [how to configure languages & cookie settings](#how-to-configure-languages--cookie-settings) sections.
     
 
 ## Download & CDN
-You can download the [latest version](https://github.com/orestbida/cookie-consent/releases/tag/v2.0) or use it via cdn:
+You can download the [latest version](https://github.com/orestbida/cookieconsent/releases/tag/v2) or use it via cdn:
 ```html
 https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@v2/dist/cookieconsent.js
 ```
