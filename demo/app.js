@@ -1,8 +1,5 @@
 /*
- * CookieConsent v2
- * https://www.github.com/orestbida/cookieconsent
- * Author Orest Bida
- * Released under the MIT License
+ * CookieConsent v2 DEMO config.
 */
 
 // obtain cookieconsent plugin
@@ -13,28 +10,30 @@ cc.run({
 	autorun : true, 							// [OPTIONAL] show consent modal as soon as possible
 	delay : 0,									// [OPTIONAL] specify initial delay after website has loaded		
 	current_lang : 'en',						// [REQUIRED] specify one of the languages defined inside languages below (NOTE: can be dynamic value)
-	theme_css : "../src/cookieconsent.css",		// [REQUIRED] (NOTE: autoload_css need too be set to true)
-	auto_language : true,						// [OPTIONAL] if true, override current_lang and grabs the language based on the client browser
-	autoclear_cookies : true,					// [OPTIONAL] if true, delete all cookies specified inside the cookie table, in a block after being deselected in the settings modal
 	autoload_css : true, 						// [OPTIONAL] if true, load css via js (NOTE: theme_css must have valid path)
+	theme_css : "../src/cookieconsent.css",		// [OPTIONAL*] (NOTE: autoload_css need too be set to true)
+	auto_language : false,						// [OPTIONAL] if true, grabs the language based on the client browser
+	autoclear_cookies : true,					// [OPTIONAL] if true, delete all cookies specified inside the cookie table, in a block after being deselected in the settings modal
 	cookie_expiration : 365,    				// [OPTIONAL] change default expiration number of days
-	enable_verbose : true,						// [OPTIONAL] if true, print all info/error messages (not available on dist version)
 	
-	onAccept: function(cookies){				// [OPTIONAL]
-		if(cc.allowedCategory('marketing_analytics_cookies')){
+	onAccept: function(){						// [OPTIONAL]
+		console.log("onAccept fired ...");
+		if(cc.allowedCategory('analytics_cookies')){
 			cc.loadScript('https://www.google-analytics.com/analytics.js', function(){		
 				ga('create', 'UA-46747204-4', 'auto');
 				ga('send', 'pageview');
+				console.log("analytics.js loaded");
 			});
 		}
 	},
 
-	onUpdate : function(cookies){				// [OPTIONAL]
-		// do something if needed ...
+	onChange: function(){						// [OPTIONAL]
+		console.log("onChange fired ...");
+		// do something ...
 	},
 
 	languages : {
-		en : {	
+		'en' : {	
 			consent_modal : {
 				title :  "I use cookies",
 				description :  'Hi, this website uses essential cookies to ensure its proper operation and tracking cookies to understand how you interact with it. The latter will be set only upon approval. <a aria-label="Cookie policy" class="cc-link" href="#">Read more</a>',
@@ -68,21 +67,21 @@ cc.run({
 						toggle : {
 							value : 'necessary_cookies',
 							enabled : true,
-							readonly: true
+							readonly: true							//cookie categories with readonly=true are all treated as "necessary cookies"
 						}
 					},{
 						title : "Preferences cookies",
 						description: 'These cookies allow the website to remember the choices you have made in the past.',
 						toggle : {
-							value : 'preferences_cookies',
+							value : 'preferences_cookies_3rweds',	//there are no default categories => you specify them
 							enabled : true,
 							readonly: false
 						}
 					},{
-						title : "Statistics cookies",
+						title : "Analytics cookies",
 						description: 'These cookies cookies collect information about how you use the website, which pages you visited and which links you clicked on. All of the data is anonymized and cannot be used to identify you.',
 						toggle : {
-							value : 'statistics_cookies',
+							value : 'analytics_cookies',
 							enabled : false,
 							readonly: false
 						},
@@ -91,21 +90,21 @@ cc.run({
 								col1: '_ga',
 								col2: 'google.com',
 								col3: '2 years',
-								col4: 'Secure connections only, Content: <span style="word-break: break-word;">AHWqTUn0x1l8j_qWOD0zBGG646eTNjqLQxNQ-wywrCEsS33DLylxgvZ7I98N1Xz_</span>' ,
+								col4: '<span><b>description</b> ...</span>' ,
 								col5: 'Permanent cookie'
 							},
 							{
 								col1: '_gat',
 								col2: 'google.com',
 								col3: '1 minute',
-								col4: 'Secure connections only, Content: <span style="word-break: break-word;">AHWqTUn0x1l8j_qWOD0zBGG646eTNjqLQxNQ-wywrCEsS33DLylxgvZ7I98N1Xz_</span>' ,
+								col4: '<b>description</b> ...' ,
 								col5: 'Permanent cookie'
 							},
 							{
 								col1: '_gid',
 								col2: 'google.com',
 								col3: '1 day',
-								col4: 'Secure connections only, Content: <span style="word-break: break-word;">AHWqTUn0x1l8j_qWOD0zBGG646eTNjqLQxNQ-wywrCEsS33DLylxgvZ7I98N1Xz_</span>' ,
+								col4: '<b>description</b> ...' ,
 								col5: 'Permanent cookie'
 							}
 						]
