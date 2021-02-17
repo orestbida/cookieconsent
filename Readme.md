@@ -15,8 +15,8 @@ A __lightweight__ & __gdpr compliant__ cookie consent plugin written in plain ja
 ![Cookie Consent cover](demo/assets/features.png)
 </div>
 
-### 🚧 Note: this v2 version is not NOT COMPATIBLE with previous versions
-Specifically the syntax has been completely changed (config. parameters have been renamed for the sake of simplicity/ease of use), some "useless" features have been removed, and some new ones have been added. Check [changelog](#changelog) for more.
+### 🚨 Warning: this v2 version is not NOT COMPATIBLE with previous versions
+Addressed to those who alredy use this plugin: if you plan on using this version, please re-configure your parameters from scratch with the updated syntax.
 
 ## Table of contents
 1. [Key features](#key-features)
@@ -152,8 +152,8 @@ Below a table which sums up all of the available options (must be passed to the 
 | `current_lang`      	| string   	| -       	| Specify one of the languages you have defined (can also be dynamic): `'en'`, `'de'` ...                                          	|
 | `auto_language`     	| boolean  	| false   	| Automatically grab the language based on the user's browser language, if language is not defined => use specified `current_lang` 	|
 | `autoclear_cookies` 	| boolean  	| false   	| Enable if you want to automatically delete cookies when user opts-out of a specific category inside cookie settings              	|
-| __`onAccept`__      	| function 	| -       	| Method run `once` when:  <br>  1. The cookie consent has been accepted <br> 2. After each page load (if alredy accepted)         	|
-| __`onUpdate`__      	| function 	| -       	| Method run after every event (except after page load)                                                                            	|
+| __`onAccept`__      	| function 	| -       	| Method run `once` either when:  <br>  1. The moment the cookie consent is accepted <br> 2. After each page load (if cookie consent has alredy  been accepted)         	|
+| __`onChange`__      	| function 	| -       	| Method run `whenever preferences are modified` (and only if cookie consent has alredy been accepted)                                                                            	|
 | `languages`      	    | object 	| -       	| [Check below](#how-to-configure-languages--cookie-settings) for configuration
 
 ## Full example configurations
@@ -167,24 +167,22 @@ Below a table which sums up all of the available options (must be passed to the 
     // run plugin with config object
     cc.run({
         autorun : true, 							
-        delay : 0,								
-        current_lang : 'en',						
+        delay : 0,
+        current_lang : 'en',
         theme_css : "../src/cookieconsent.css",		
-        auto_language : true,						
-        autoclear_cookies : true,					
-        autoload_css : true, 						
-        cookie_expiration : 365,    				
-        enable_verbose : true,				
+        autoclear_cookies : true,	
+        autoload_css : true, 
+        cookie_expiration : 365,	
         
         onAccept: function(cookies){				
-            if(cc.allowedCategory('marketing_analytics_cookies')){
+            if(cc.allowedCategory('analytics_cookies')){
                 cc.loadScript('https://www.google-analytics.com/analytics.js', function(){		
                     ga('create', 'UA-XXXXXXXX-Y', 'auto');  //replace UA-XXXXXXXX-Y with your tracking code
                     ga('send', 'pageview');
                 });
             }
-        }
-
+        },
+        
         languages : {
             en : {	
                 consent_modal : {
