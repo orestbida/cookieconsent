@@ -23,7 +23,7 @@ Specifically the syntax has been completely changed (config. parameters have bee
 2. [How to use](#how-to-use)
 3. [Download & CDN](#download--cdn) (work-in-progress)
 4. [APIs & config. parameters](#apis--configuration-parameters) (work-in-progress)
-5. [Configuration examples](#examples) (work-in-progress)
+5. [Configuration examples](#full-example-configurations) (work-in-progress)
     - Configuration with Google analytics   
     - Configuration with [explicit `accept all` and `accept necessary only` buttons](#explicit-consent)
     - Configuration with embedded full cookie-policy 
@@ -50,61 +50,65 @@ Specifically the syntax has been completely changed (config. parameters have bee
     ```
     or alternatively you can configure the plugin to automatically load the .css file.
 
-3. run the plugin with your configuration ([check out full examples](#examples)). A very basic example:
-```javascript
-var cookieconsent = initCookieConsent();
+3. run the plugin with your configuration ([check out full examples](#examples) and [How to configure languages & cookie settings](#how-to-configure-languages--cookie-settings)).
+<br>
+**Note**: You must provide at least the following parameters: `current_lang` and `languages`
 
-cookieconsent.run({
-    current_lang : 'en',
-    onAccept : function(){
-        // do something ...
-    },
+    A very basic example:
+    ```javascript
+    var cookieconsent = initCookieConsent();
 
-    languages : {
-        en : {
-            consent_modal : {
-                title :  "I use cookies",
-                description :  'Your cookie consent message here',
-                primary_btn: {
-                    text: 'Accept',
-                    role: 'accept_all'
-                },
-                secondary_btn: {
-                    text : 'Settings',
-                    role : 'settings'
-                }
-            },
-            settings_modal : {
-                title : 'Cookie settings',
-                save_settings_btn : "Save settings",
-                accept_all_btn : "Accept all",
-                blocks : [
-                    {
-                        title : "Cookie usage",
-                        description: 'Your cookie usage disclaimer'
-                    },{
-                        title : "Strictly necessary cookies",
-                        description: 'Category description ... ',
-                        toggle : {
-                            value : 'necessary_cookies',
-                            enabled : true,
-                            readonly: true
-                        }
-                    },{
-                        title : "Statistics cookies",
-                        description: 'Category description ... ',
-                        toggle : {
-                            value : 'statistics_cookies',
-                            enabled : true,
-                            readonly: false
-                        }
+    cookieconsent.run({
+        current_lang : 'en',
+        onAccept : function(){
+            // do something ...
+        },
+
+        languages : {
+            en : {
+                consent_modal : {
+                    title :  "I use cookies",
+                    description :  'Your cookie consent message here',
+                    primary_btn: {
+                        text: 'Accept',
+                        role: 'accept_all'
                     },
-                ]
+                    secondary_btn: {
+                        text : 'Settings',
+                        role : 'settings'
+                    }
+                },
+                settings_modal : {
+                    title : 'Cookie settings',
+                    save_settings_btn : "Save settings",
+                    accept_all_btn : "Accept all",
+                    blocks : [
+                        {
+                            title : "Cookie usage",
+                            description: 'Your cookie usage disclaimer'
+                        },{
+                            title : "Strictly necessary cookies",
+                            description: 'Category description ... ',
+                            toggle : {
+                                value : 'necessary_cookies',
+                                enabled : true,
+                                readonly: true
+                            }
+                        },{
+                            title : "Statistics cookies",
+                            description: 'Category description ... ',
+                            toggle : {
+                                value : 'statistics_cookies',
+                                enabled : true,
+                                readonly: false
+                            }
+                        },
+                    ]
+                }
             }
         }
-    }
-});
-```
+    });
+    ```
 
 ## Download & CDN
 You can download the [latest version](https://github.com/orestbida/cookie-consent/releases/tag/v2.0) or use it via cdn:
@@ -131,7 +135,7 @@ For an easier management of your scripts and cookie settings:
 - cookieconsent`.validCookie(<cookiename>)`                 => returns true or false
 - cookieconsent`.loadScript(<src>, <callback>)`
 
-#### All available options
+### All available options
 Below a table which sums up all of the available options (must be passed to the .run() method).
 | Option              	| Type     	| Default 	| Description                                                                                                                      	|
 |---------------------	|----------	|---------	|----------------------------------------------------------------------------------------------------------------------------------	|
@@ -147,8 +151,120 @@ Below a table which sums up all of the available options (must be passed to the 
 | __`onUpdate`__      	| function 	| -       	| Method run after every event (except after page load)                                                                            	|
 | `languages`      	    | object 	| -       	| [Check below](#how-to-configure-languages--cookie-settings) for configuration
 
-#### How to configure languages & cookie settings
-Languages is an object which basically holds all of the text/html of your cookie modals in different languages. In here you can create `define cookie categories`, `cookie tables`, `opt-in/out toggle` for each category and more. For each language, a `consent_modal` object and a `settings_modal` must be configured.
+## Full example configurations
+-   <details><summary>Configuration with google analytics</summary>
+    <p>
+
+    ```javascript
+    // obtain cookieconsent plugin
+    var cc = initCookieConsent();
+
+    // run plugin with config object
+    cc.run({
+        autorun : true, 							
+        delay : 0,								
+        current_lang : 'en',						
+        theme_css : "../src/cookieconsent.css",		
+        auto_language : true,						
+        autoclear_cookies : true,					
+        autoload_css : true, 						
+        cookie_expiration : 365,    				
+        enable_verbose : true,				
+        
+        onAccept: function(cookies){				
+            if(cc.allowedCategory('marketing_analytics_cookies')){
+                cc.loadScript('https://www.google-analytics.com/analytics.js', function(){		
+                    ga('create', 'UA-XXXXXXXX-Y', 'auto');  //replace UA-XXXXXXXX-Y with your tracking code
+                    ga('send', 'pageview');
+                });
+            }
+        }
+
+        languages : {
+            en : {	
+                consent_modal : {
+                    title :  "I use cookies",
+                    description :  'Hi, this website uses essential cookies to ensure its proper operation and tracking cookies to understand how you interact with it. The latter will be set only upon approval. <a aria-label="Cookie policy" class="cc-link" href="#">Read more</a>',
+                    primary_btn: {
+                        text: 'Accept',
+                        role: 'accept_all'				//'accept_selected' or 'accept_all'
+                    },
+                    secondary_btn: {
+                        text : 'Settings',
+                        role : 'settings'				//'settings' or 'accept_necessary'
+                    }
+                },
+                settings_modal : {
+                    title : 'Cookie preferences',
+                    save_settings_btn : "Save settings",
+                    accept_all_btn : "Accept all",
+                    cookie_table_headers : [
+                        {col1: "Name" }, 
+                        {col2: "Domain" }, 
+                        {col3: "Expiration" }, 
+                        {col4: "Description" }, 
+                        {col5: "Type" }
+                    ],
+                    blocks : [
+                        {
+                            title : "Cookie usage",
+                            description: 'I use cookies to ensure the basic functionalities of the website and to enhance your online experience. You can choose for each category to opt-in/out whenever you want.'
+                        },{
+                            title : "Strictly necessary cookies",
+                            description: 'These cookies are essential for the proper functioning of my website. Without these cookies, the website would not work properly.',
+                            toggle : {
+                                value : 'necessary_cookies',
+                                enabled : true,
+                                readonly: true
+                            }
+                        },{
+                            title : "Analytics cookies",
+                            description: 'These cookies cookies collect information about how you use the website, which pages you visited and which links you clicked on. All of the data is anonymized and cannot be used to identify you.',
+                            toggle : {
+                                value : 'analytics_cookies',
+                                enabled : false,
+                                readonly: false
+                            },
+                            cookie_table: [
+                                {
+                                    col1: '_ga',
+                                    col2: 'google.com',
+                                    col3: '2 years',
+                                    col4: 'description ...' ,
+                                    col5: 'Permanent cookie'
+                                },
+                                {
+                                    col1: '_gat',
+                                    col2: 'google.com',
+                                    col3: '1 minute',
+                                    col4: 'description ...' ,
+                                    col5: 'Permanent cookie'
+                                },
+                                {
+                                    col1: '_gid',
+                                    col2: 'google.com',
+                                    col3: '1 day',
+                                    col4: 'description ...' ,
+                                    col5: 'Permanent cookie'
+                                }
+                            ]
+                        },{
+                            title : "More information",
+                            description: 'For any queries in relation to my policy on cookies and your choices, please <a class="cc-link" href="#yourwebsite">contact me</a>.',
+                        }
+                    ]
+                }
+            }
+        }
+    });
+    ```
+
+    </p>
+    </details>
+- More to be added ...
+
+### How to configure languages & cookie settings
+Languages is an object which basically holds all of the text/html of your cookie modals in different languages. In here you can define `cookie categories`, `cookie tables`, `opt-in/out toggle` for each category and more. For each language, a `consent_modal` object and a `settings_modal` object must be configured.
 
 <details><summary>Example with <b>multiple languages</b> ('en' and 'it')</summary>
 <p>
@@ -306,6 +422,7 @@ cookieconsent.run({
 ```
 </p>
 </details>
+
 
 
 ## FAQ
