@@ -23,8 +23,8 @@ Specifically the syntax has been completely changed (config. parameters have bee
 3. [Download & CDN](#download--cdn) (work-in-progress)
 4. [APIs & config. parameters](#apis--configuration-parameters) (work-in-progress)
 5. [Configuration examples](#examples) (work-in-progress)
-    - Configuration with Google analytics
-    - Configuration with explicit `accept all` and `accept necessary only` buttons
+    - Configuration with Google analytics   
+    - Configuration with [explicit `accept all` and `accept necessary only` buttons](#explicit-consent)
     - Configuration with embedded full cookie-policy 
 6. [FAQ](#faq) (work-in-progress)
 7. [License](#license)
@@ -34,8 +34,9 @@ Specifically the syntax has been completely changed (config. parameters have bee
 - __Cross-browser__ support (IE8+)
 - __Standalone__ (no external dependecies needed)
 - __GDPR compliant__
-- Can easily add __support__ for __additional languages__
+- __Support for multi language__
 - Allows you to __define different cookie categories with opt in/out toggle__
+- Allows you to __define custom cookie tables__ if you want to clarify the cookies you use
 
 ## How to use 
 1. download and include the script (or use via [cdn](#download--cdn))
@@ -125,7 +126,7 @@ the following methods are available:
 - cookieconsent`.hideSettings()`
 
 For an easier management of your scripts and cookie settings:
-- cookieconsent`.acceptedCategory(<your_cookie_category>)`  => returns true or false
+- cookieconsent`.allowedCategory(<your_cookie_category>)`  => returns true or false
 - cookieconsent`.validCookie(<cookiename>)`                 => returns true or false
 - cookieconsent`.loadScript(<src>, <callback>)`
 
@@ -144,8 +145,6 @@ Below a table which sums up all of the available options (must be passed to the 
 | __`onAccept`__      	| function 	| -       	| Method run `once` when:  <br>  1. The cookie consent has been accepted <br> 2. After each page load (if alredy accepted)         	|
 | __`onUpdate`__      	| function 	| -       	| Method run after every event (except after page load)                                                                            	|
 | `languages`      	    | object 	| -       	| [Check below](#how-to-configure-languages--cookie-settings) for configuration
-
-<br>
 
 #### How to configure languages & cookie settings
 Languages is an object which basically holds all of the text/html of your cookie modals in different languages. In here you can create `define cookie categories`, `cookie tables`, `opt-in/out toggle` for each category and more. For each language, a `consent_modal` object and a `settings_modal` must be configured.
@@ -253,7 +252,7 @@ cookieconsent.run({
 
 </p>
 </details>
-<details><summary>Example with explicit <b>accept all</b> and <b>accept necessary</b> buttons</summary>
+<details><summary id="explicit-consent">Example with explicit <b>accept all</b> and <b>accept necessary</b> buttons</summary>
 <p>
 
 ```javascript
@@ -355,21 +354,21 @@ cookieconsent.run({
 -   <details><summary>How to load scripts after a specific cookie category has been accepted</summary>
     <p>
 
-    You would do something like this:
+    <div id="#g-analytics-example">You would do something like this: </div>
 
     ```javascript
     cookieconsent.run({
         ...
         onAccept : function(){
             // if analytics category has been accepted
-            if(cookieconsent.acceptedCategory('analytics')){
+            if(cookieconsent.allowedCategory('analytics')){
                 cookieconsent.loadScript('https://www.google-analytics.com/analytics.js', function(){
                     ga('create', 'UA-XXXXXXXX-Y', 'auto');
                     ga('send', 'pageview');
                 });
             }
 
-            if(cookieconsent.acceptedCategory('marketing')){
+            if(cookieconsent.allowedCategory('marketing')){
                 // do something else
             }
         }
