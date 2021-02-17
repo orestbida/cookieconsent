@@ -50,11 +50,10 @@ Specifically the syntax has been completely changed (config. parameters have bee
     ```
     or alternatively you can configure the plugin to automatically load the .css file.
 
-3. run the plugin with your configuration ([check out full examples](#examples) and [How to configure languages & cookie settings](#how-to-configure-languages--cookie-settings)).
-<br>
-**Note**: You must provide at least the following parameters: `current_lang` and `languages`
+3. run the plugin with your configuration parameters. **IMPORTANT**: you must provide at least the following parameters: `current_lang` and `languages`.
+    <br>
+    <details><summary><b>Show basic example</b></summary>
 
-    A very basic example:
     ```javascript
     var cookieconsent = initCookieConsent();
 
@@ -109,6 +108,12 @@ Specifically the syntax has been completely changed (config. parameters have bee
         }
     });
     ```
+    </summary>
+    </details>
+    <br>
+
+    For more details check out [full examples](#examples) and [how to configure languages & cookie settings](#how-to-configure-languages--cookie-settings) sections.
+    
 
 ## Download & CDN
 You can download the [latest version](https://github.com/orestbida/cookie-consent/releases/tag/v2.0) or use it via cdn:
@@ -365,7 +370,11 @@ cookieconsent.run({
 <details><summary>Example with <b>custom cookie table</b></summary>
 <p>
 
-[Check demo app.js](../demo/app.js)
+You can create tables with a custom number of columns to explain what each cookie does.
+
+**NOTE**: If you want to also use `autoclear_cookie`, make sure the first column of the cookie table contains the name of the cookie.
+
+[Check demo app.js](../demo/app.js) which has a full example with cookie table.
 
 </p>
 </details>
