@@ -34,7 +34,7 @@
          * @param {Object} conf_params 
          */
         var _setConfig = function(conf_params){
-            //_log("CookieConsent [CONFIG]: recieved_config_settings ", conf_params);
+            _log("CookieConsent [CONFIG]: recieved_config_settings ", conf_params);
 
             if(typeof conf_params['cookie_expiration'] === "number"){
                 _config.cookie_expiration = conf_params['cookie_expiration'];
@@ -52,7 +52,7 @@
                 }
             }
 
-            //_log("CookieConsent [LANG]: setting current_lang = '"+ _config.current_lang + "'");
+            _log("CookieConsent [LANG]: setting current_lang = '"+ _config.current_lang + "'");
         }
 
         /**
@@ -136,13 +136,13 @@
                 if(conf_params.languages[lang]['consent_modal']['primary_btn']['role'] == 'accept_all'){
                     _addEvent(consent_primary_btn, "click", function(){ 
                         _cookieconsent.hide();
-                        //_log("CookieConsent [ACCEPT]: cookie_consent was accepted!");
+                        _log("CookieConsent [ACCEPT]: cookie_consent was accepted!");
                         _saveCookiePreferences(conf_params, 1);     // 1 => accept all
                     });
                 }else{
                     _addEvent(consent_primary_btn, "click", function(){
                         _cookieconsent.hide();
-                        //_log("CookieConsent [ACCEPT]: cookie_consent was accepted (necessary only)!");
+                        _log("CookieConsent [ACCEPT]: cookie_consent was accepted (necessary only)!");
                         _saveCookiePreferences(conf_params, -1);    // -1 => accept current selection
                     });
                 }
@@ -509,7 +509,7 @@
                                     // If cookie exists -> delete it
                                     if(_getCookie(curr_row[ckey]) != ""){
                                         _eraseCookie(curr_row[ckey]);
-                                        //_log('CookieConsent [AUTOCLEAR]: deleting cookie: \''+curr_row[ckey] +'\'');
+                                        _log('CookieConsent [AUTOCLEAR]: deleting cookie: \''+curr_row[ckey] +'\'');
                                     }
                                 }
                             }  
@@ -543,7 +543,7 @@
             preload.href = href;
             preload.setAttribute('as', as);
             document.getElementsByTagName('head')[0].appendChild(preload);
-            //_log('CookieConsent [PRELOAD]: preloaded '+as, href);
+            _log('CookieConsent [PRELOAD]: preloaded '+as, href);
         }
         
         /**
@@ -578,7 +578,7 @@
                         }
                     }catch(e){
                         clearInterval(interval_id);
-                        //_log("CookieConsent [WARNING]: css file might not load properly without a server!", "", true);
+                        _log("CookieConsent [WARNING]: css file might not load properly without a server!", "", true);
                         callback();
                     }
                 }, 100);
@@ -619,7 +619,7 @@
         var _getBrowserLang = function(){
             var browser_lang = navigator.language || navigator.browserLanguage;
             browser_lang.length > 2 && (browser_lang = browser_lang[0]+browser_lang[1]);
-            //_log("CookieConsent [LANG]: detected_browser_lang = '"+ browser_lang + "'");
+            _log("CookieConsent [LANG]: detected_browser_lang = '"+ browser_lang + "'");
             return browser_lang.toLowerCase()
         }
 
@@ -665,7 +665,7 @@
                     });
                 }else{
                     // Generate only settings modal
-                    //_log("CookieConsent [NOTICE]: cookie consent alredy acepted!");
+                    _log("CookieConsent [NOTICE]: cookie consent alredy acepted!");
 
                     _createCookieConsentHTML(true, conf_params);
                     _loadCookieConsentCSS(conf_params, function(){ 
@@ -681,14 +681,14 @@
                     });
                 }
             }else{
-                //_log("CookieConsent [NOTICE]: cookie consent alredy attached to body!");
+                _log("CookieConsent [NOTICE]: cookie consent alredy attached to body!");
             }
         }
 
         _cookieconsent.showSettings = function(delay){
             setTimeout(function() {
                 _addClass(settings_container, "cshow");
-                //_log("CookieConsent [SETTINGS]: showSettings_modal");
+                _log("CookieConsent [SETTINGS]: showSettings_modal");
             }, typeof delay === "number" && delay > 0 ? delay : 0);
         }
 
@@ -716,7 +716,7 @@
                 script.src = src;
                 document.getElementsByTagName('head')[0].appendChild(script);
             }else{
-                //_log("CookieConsent [LOAD_SCRIPT]: script '"+src+"' alredy loaded!");
+                _log("CookieConsent [LOAD_SCRIPT]: script '"+src+"' alredy loaded!");
                 callback();
             }
         }
@@ -729,7 +729,7 @@
             if(consent_modal_exists){
                 setTimeout(function() {
                     _addClass(consent_modal, "cshow");
-                    //_log("CookieConsent [MODAL]: show_consent_modal");
+                    _log("CookieConsent [MODAL]: show_consent_modal");
                 }, typeof delay === "number" && delay > 0 ? delay : 0);
             }
         }
@@ -774,7 +774,7 @@
                 document.cookie = name + "=" + (value || "") + expires + "; path=/; Domain=" + location.host+ "; SameSite=Lax;";
             }
 
-            //_log("CookieConsent [SET_COOKIE]: cookie "+ name + "='" + value + "' was set!");
+            _log("CookieConsent [SET_COOKIE]: cookie "+ name + "='" + value + "' was set!");
         }
 
         /**
