@@ -12,14 +12,13 @@
         var consent_modal_exists = false;
         var cookie_consent_acepted = false;
 
-        // variable to save main dom elements (to avoid using document.getElementById)
+        // variables to save main dom elements (to avoid retrieving them later using document.getElementById)
         var main_container = null;
         var consent_modal = null;
         var settings_container = null;
 
         // Array of booleans to keep track of enabled/disabled preferences
         var toggle_states = [];
-
      
         //default cookieConsent config settings (some are implicit, not shown here)
         var _config = {
@@ -523,12 +522,12 @@
 
             if(typeof conf_params['onAccept'] === "function" && !cookie_consent_acepted){
                 cookie_consent_acepted = true;
-                return conf_params['onAccept']();
+                return conf_params['onAccept'](JSON.parse(_getCookie('cc_cookie') || "{}"));
             }
 
             // fire onChange only if settings were changed
             if(typeof conf_params['onChange'] === "function" && changedSettings){
-                conf_params['onChange']();
+                conf_params['onChange'](JSON.parse(_getCookie('cc_cookie') || "{}"));
             }
         }
 
@@ -553,36 +552,20 @@
         function _loadCookieConsentCSS(conf_parms, callback) {
             if(conf_parms['autoload_css']){
 
-                // preload style
-                _preload(conf_parms['theme_css'], 'style');
-
                 // create link
-                var link = document.createElement('link'), sheet, cssRules;
+                var link = document.createElement('link');
                 link.href = conf_parms['theme_css']; 
                 link.rel  = 'stylesheet';
                 link.type = 'text/css';
-
-                // get the correct properties to check for depending on the browser
-                if ('sheet' in link ) {
-                    sheet = 'sheet'; cssRules = 'cssRules';
-                } else {
-                    sheet = 'styleSheet'; cssRules = 'rules';
-                }
-                
-                // Actively check if style is loaded ...
-                var interval_id = setInterval( function() { 
-                    try{
-                        if (link[sheet] && link[sheet][cssRules].length){
-                            clearInterval(interval_id);                     
-                            callback();
-                        }
-                    }catch(e){
-                        clearInterval(interval_id);
-                        _log("CookieConsent [WARNING]: css file might not load properly without a server!", "", true);
+                link.media = 'print';
+                link.onload = function(){
+                    this.onload=null; 
+                    this.media="all";
+                    _log("CookieConsent [CSS]: loaded css '"+ conf_parms['theme_css'] + "'");
+                    setTimeout(function(){
                         callback();
-                    }
-                }, 100);
-                
+                    }, 100);
+                }
                 document.getElementsByTagName('head')[0].appendChild(link);
             }else{
                 callback();
@@ -628,7 +611,7 @@
          * @param {String} cookie_name 
          */
         _cookieconsent.allowedCategory = function(cookie_name){
-            return this.inArray(JSON.parse(_getCookie('cc_cookie')).level || [], cookie_name);
+            return this.inArray(JSON.parse(_getCookie('cc_cookie') || '{}')['level'] || [], cookie_name);
         }
 
         /**
@@ -637,7 +620,6 @@
          */
         _cookieconsent.run = function(conf_params){
             if(!main_container){
-                
                 // config all parameters
                 _setConfig(conf_params);
 
@@ -676,7 +658,7 @@
                         // Fire once onAccept method (if defined)
                         if(typeof conf_params['onAccept'] === "function" && !cookie_consent_acepted){
                             cookie_consent_acepted = true;
-                            conf_params['onAccept'](JSON.parse(cookie_val != "" ? cookie_val : "null"));
+                            conf_params['onAccept'](JSON.parse(cookie_val || "{}"));
                         }
                     });
                 }
@@ -688,7 +670,7 @@
         _cookieconsent.showSettings = function(delay){
             setTimeout(function() {
                 _addClass(settings_container, "cshow");
-                _log("CookieConsent [SETTINGS]: showSettings_modal");
+                _log("CookieConsent [SETTINGS]: show settings_modal");
             }, typeof delay === "number" && delay > 0 ? delay : 0);
         }
 
@@ -729,25 +711,25 @@
             if(consent_modal_exists){
                 setTimeout(function() {
                     _addClass(consent_modal, "cshow");
-                    _log("CookieConsent [MODAL]: show_consent_modal");
+                    _log("CookieConsent [MODAL]: show consent_modal");
                 }, typeof delay === "number" && delay > 0 ? delay : 0);
             }
         }
 
-        /**
-         * Hide consent modal
-         */
+        // Hide consent modal
         _cookieconsent.hide = function(){
             if(consent_modal_exists){
                 _removeClass(consent_modal, "cshow");
+                _log("CookieConsent [MODAL]: hide");
             }
         }
 
         /**
          * Hide settings modal
          */
-        _cookieconsent.hideSettings = function(){ 
+        _cookieconsent.hideSettings = function(){
             _removeClass(settings_container, "cshow");
+            _log("CookieConsent [SETTINGS]: hide settings_modal");
         }
 
         /**
@@ -778,7 +760,7 @@
         }
 
         /**
-         * Get cookie value by name
+         * Get cookie value by name,
          * returns cookie value if found, otherwise empty string: ""
          * @param {string} a 
          */
@@ -800,8 +782,7 @@
          * @param {string} cookie_name 
          */
         _cookieconsent.validCookie = function(cookie_name){
-            var val = _getCookie(cookie_name);
-            return val != "";
+            return _getCookie(cookie_name) != "";
         }
 
         /**
@@ -823,7 +804,7 @@
                  */
                 if (event == "click" || event == "focus") {
                     event = "onclick";
-                }
+                } 
                 elem.attachEvent(event, _fn);
             }
         }
