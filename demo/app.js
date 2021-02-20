@@ -11,12 +11,13 @@ cc.run({
 	delay : 0,									// [OPTIONAL] specify initial delay after website has loaded		
 	current_lang : 'en',						// [REQUIRED] specify one of the languages defined inside languages below (NOTE: can be dynamic value)
 	autoload_css : true, 						// [OPTIONAL] if true, load css via js (NOTE: theme_css must have valid path)
-	theme_css : "../src/cookieconsent.css",		// [OPTIONAL*] (NOTE: autoload_css needs to be set to true)
+	theme_css : "../dist/cookieconsent.css",		// [OPTIONAL*] (NOTE: autoload_css needs to be set to true)
 	auto_language : true,						// [OPTIONAL] if true, grab the language based on the client browser
 	autoclear_cookies : true,					// [OPTIONAL] if true, delete all cookies specified inside the cookie table, in a block after being deselected in the settings modal
 	cookie_expiration : 365,    				// [OPTIONAL] change default expiration number of days
 	
-	onAccept: function(){						// [OPTIONAL]
+	onAccept: function(cookie){						// [OPTIONAL]
+		console.log(cookie);
 		console.log("onAccept fired ...");
 		if(cc.allowedCategory('analytics_cookies')){
 			cc.loadScript('https://www.google-analytics.com/analytics.js', function(){		
@@ -25,11 +26,15 @@ cc.run({
 				console.log("analytics.js loaded");
 			});
 		}
+		
+		document.getElementById('cookie').innerHTML = '<pre>'+JSON.stringify(cookie, null, 2)+'</pre>';
 	},
 
-	onChange: function(){						// [OPTIONAL]
+	onChange: function(cookie){						// [OPTIONAL]
 		console.log("onChange fired ...");
 		// do something ...
+		console.log(cookie);
+		document.getElementById('cookie').innerHTML = '<pre>'+JSON.stringify(cookie, null, 2)+'</pre>';
 	},
 
 	languages : {

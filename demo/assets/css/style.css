@@ -45,8 +45,13 @@ body, html{
     height: 100%;
 }
 
+header{
+    display: block;
+    position: relative;
+}
+
 ._max_width{
-    max-width: 900px;
+    max-width: 800px;
     margin: 0 auto;
     padding: 1.8em 1.4em;
 }
@@ -159,7 +164,7 @@ button:-moz-focusring,
 [type="button"]:-moz-focusring,
 [type="reset"]:-moz-focusring,
 [type="submit"]:-moz-focusring {
-    outline: 1px dotted ButtonText;
+    outline: 1px dotted;
 }
 
 fieldset {
@@ -275,9 +280,13 @@ ul, li, ol{
 #app_description{
     display: block;
     max-width: 500px;
-    margin-bottom: 150px;
+    margin-bottom: 80px;
     font-weight: initial;
-    padding: 0 10px;
+}
+
+#app_settings{
+    margin-bottom: 50px;
+    height: 300px;
 }
 
 .styled_btn{
@@ -295,6 +304,48 @@ ul, li, ol{
     transition: box-shadow .3s ease;
 }
 
+.d_mode .styled_btn.disabled{
+    background: #6d6141;
+    cursor: not-allowed;
+}
+
+.d_mode .styled_btn.disabled:focus{
+    background: #6d6141;
+    box-shadow: none;
+}
+
+#app_settings > h3{
+    margin-bottom: 14px;
+    color: #ffffff;
+    background: #2c2c2c;
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+
+._cookie_value{
+    margin-top: 5px;
+}
+
+#theme{
+    font-weight: bold;
+}
+
+#theme,
+#cookie{
+    background: #2c2c2c;
+    border-radius: 5px;
+    display: inline-block;
+    padding: 4px 10px;
+    color: #fee194;
+}
+
+#cookie{
+    margin-top: 5px;
+    width: 100%;
+    overflow: auto;
+    padding: 10px 20px;
+}
 
 .c_emf{
     font-weight: bold;
@@ -317,27 +368,8 @@ ul li{
     position: relative;
     display: inline-block;
     z-index: 1;
-    padding: 10px;
+    padding: 10px 0;
     border-radius: 10px;
-}
-
-#_hover_line{
-    width: 100%;
-    height: 98%;
-    display: block;
-    background: #ffeec0;
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    z-index: -1;
-    border-radius: 5px;
-    transition: transform .5s ease;
-    transform: scaleY(0);
-    transform-origin: bottom;
-}
-
-#_title_span:hover #_hover_line{
-    transform: scaleY(1);
 }
 
 #api_section h3,
@@ -347,23 +379,17 @@ ul li{
     background: #1e1c1b;
     color: #ffeec0;
     padding: 5px 10px;
-    margin-left: 10px;
+    margin-left: 0;
     border-radius: 5px;
     margin-bottom: 20px;
 }
 
 #api_section > ul{
     list-style-type: NONE;
-    padding: 0 10px;
 }
 
 #additional_section{
     margin-top: 50px;
-}
-
-
-#additional_section button{
-    margin-left: 10px;
 }
 
 #github_link{
@@ -374,8 +400,10 @@ ul li{
     color: #ffffff;
     text-decoration: none;
     box-shadow: 0px 0px 0px 4px #dad9d9;
-    margin-left: 10px;
     vertical-align: top;
+    position: absolute;
+    top: 24px;
+    right: 0;
 }
 #_icon,
 #_text{
@@ -442,22 +470,22 @@ body.d_mode{
     background: #fee194;
 }
 
-.d_mode #_hover_line{
-    background: #272623;
-}
-
 .d_mode #api_section h3, 
 .d_mode #additional_section > p{
     color: #ffffff;
     background: #2c2c2c;
 }
 
-.d_mode .styled_btn:hover{
+.d_mode .styled_btn:focus{
     box-shadow: 0 0 0 3px #4b4639;
 }
 
 @media screen and (max-width: 480px) {
     #app_description{
         margin-bottom: 80px;
+    }
+
+    #github_link{
+        position: relative;
     }
 }
