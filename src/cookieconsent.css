@@ -1,13 +1,5 @@
-#cc_div p,
-#cc_div span,
-#cc_div div,
-#cc_div h1,
-#cc_div h2,
-#cc_div h3,
-#cc_div button,
-#cc_div a,
-#cc_div label,
-#cc_div input{
+#cc_div *,
+#cc_div :after{
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
     float: none;
@@ -15,6 +7,7 @@
     font-variant: normal;
     font-weight: inherit;
 	line-height: 1.2;
+    font-size: 1em;
     transition: none;
     animation: none;
     margin: 0;
@@ -22,12 +15,14 @@
     text-transform: none;
     letter-spacing: unset;
     color: inherit;
+    background: none;
+    border: none;
 }
 
 #cc_div {
     font-size: 16px;
     font-weight: 400;
-    font-family: -apple-system,sans-serif;
+    font-family: -apple-system, sans-serif;
 }
 
 #cc_div h1,
@@ -98,14 +93,10 @@
     transition: transform .3s ease, opacity .3s ease, visibility .3s ease!important;
 }
 
-#cc_div #cm.c_anim.cshow{
+#cc_div #cm.c_anim.c_show{
     opacity: 1;
     visibility: visible!important;
     transform: scale(1);
-}
-
-.ie #cm{
-    border: 1px solid #f1f2f6;
 }
 
 #cc_div #cm_title{
@@ -161,14 +152,14 @@
 /**
 CookieConsent settings modal
 **/
-#cc_div #cs_cont{ /** have to add overflow hidden to body**/
+#cc_div #cs_cont{
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     z-index: 101;
 	background: #070707;
-    background: rgba(11, 13, 14, 0.75);
+    background: rgba(11, 13, 14, 0.8);
     display: table;
     height: 100%;
     visibility: hidden;
@@ -235,11 +226,11 @@ CookieConsent settings modal
 
 #cc_div #cs_blocks .cs_block{
     padding: 1em;
-    margin-bottom: 1em;
     border-radius: 5px;
     border: 1px solid #f1f3f5;
     transition: background-color .25s ease;
 }
+
 #cc_div #cs_blocks .cs_block:last-child{
     margin-bottom: .5em;
 }
@@ -270,22 +261,26 @@ CookieConsent settings modal
 }
 
 #cc_div #cs_blocks .cs_block.block__expand{
-    margin-top: 0;
-    margin-bottom: 0;
+    margin-top: 2em;
+    margin-bottom: .5em!Important;
     padding: 0;
     border-radius: 5px;
     border: none;
-    margin-bottom: .5em;
     background: #f0f4f7;
     overflow: hidden;
     transition: none;
 }
 
-#cc_div #cs_blocks .cs_block.block__expand+div:not(.cs_block.block__expand){
+#cc_div #cs_blocks .cs_block + .cs_block{
+    margin-bottom: .5em;
     margin-top: 2em;
 }
 
-.cs_block.block__expand:first-child{
+#cc_div #cs_blocks .cs_block.block__expand + .cs_block.block__expand{
+    margin-top: 0;
+}
+
+#cc_div #cs_blocks .cs_block.block__expand:first-child{
     margin-bottom: 1em;
 }
 
@@ -301,18 +296,13 @@ CookieConsent settings modal
     background: #f1f3f5;
 }
 
-#cs_blocks div.block__expand:last-child{
-    margin-bottom: 1.5em;
-}
-
 #cc_div #cs_blocks .accordion{
     max-height: 0;
     overflow: hidden;
     padding-top: 0;
 }
 
-#cc_div #cs_blocks ._active .accordion,
-#cc_div.ie #cs_blocks .accordion{
+#cc_div #cs_blocks ._active .accordion{
     max-height: 100%;
 }
 
@@ -330,7 +320,7 @@ CookieConsent settings modal
     transition: background-color .3s ease, visibility .3s ease, opacity .3s ease!important;
 }
 
-#cc_div #cs_cont.c_anim.cshow{
+#cc_div #cs_cont.c_anim.c_show{
     opacity: 1;
     visibility: visible!important;
 }
@@ -386,7 +376,7 @@ CookieConsent settings modal
 
 #cc_div.ie #cs_valign{
 	height: 100%;
-	padding-top: 4.9375em;
+	padding-top: 5.62em;
 }
 
 #cc_div #cs_blocks{
@@ -508,7 +498,7 @@ CookieConsent settings modal
     margin-top: 1.250em;
 }
 
-#cc_div .c_anim.cshow #cs{
+#cc_div .c_anim.c_show #cs{
     opacity: 1;
     visibility: visible;
     transform: scale(1);
@@ -747,6 +737,18 @@ Dark-mode for cookie consent
 	border: 1px solid #232529;
 }
 
+#cc_div.ie .c_b_toggle .sc_toggle{
+    display: none;
+}
+
+#cc_div.ie .c_b_toggle input{
+    position: relative;
+    display: inline-block;
+    vertical-align: middle;
+    margin-bottom: 0.2em
+}
+
+
 @media screen and (max-width: 900px){
     #cc_div #cm{
         width: auto;
@@ -784,7 +786,7 @@ Dark-mode for cookie consent
     #cc_div #cs_inner{
         margin: 0;
         border-radius: 0;
-        padding-bottom: 7.8em;
+        padding-bottom:8.1em;
     }
 
     #cc_div #cs_cont .block_button h2{
@@ -800,7 +802,7 @@ Dark-mode for cookie consent
     }
 
     #cc_div #cs_buttons{
-        height: 7.8em;
+        height:8.1em;
         padding: 1em 1.3em;
     }
     
