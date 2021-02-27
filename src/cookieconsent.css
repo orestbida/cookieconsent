@@ -226,6 +226,7 @@ CookieConsent settings modal
 
 #cc_div #cs_blocks .cs_block{
     padding: 1em;
+    margin-bottom: .5em;
     border-radius: 5px;
     border: 1px solid #f1f3f5;
     transition: background-color .25s ease;
@@ -271,8 +272,7 @@ CookieConsent settings modal
     transition: none;
 }
 
-#cc_div #cs_blocks .cs_block + .cs_block{
-    margin-bottom: .5em;
+#cc_div #cs_blocks .cs_block.block__expand + .cs_block{
     margin-top: 2em;
 }
 
