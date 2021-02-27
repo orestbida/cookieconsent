@@ -3,6 +3,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 ![Size](https://img.shields.io/github/size/orestbida/cookieconsent/dist/cookieconsent.js)
+[![Stable version](https://img.shields.io/github/v/release/orestbida/cookieconsent)](https://github.com/orestbida/cookieconsent/releases)
 </div>
 <div align="center" style="text-align: center; max-width: 770px; margin: 0 auto;">
 
@@ -47,6 +48,9 @@ Addressed to those who alredy use this plugin: if you plan on using this version
 2. load the css style:
     ```html
     <link rel="stylesheet" href="cookieconsent.css">
+
+    // or asynchronous loading (reccomended)
+    <link rel="stylesheet" href="cookieconsent.css" media="print" onload="this.media='all'; this.onload=null;">
     ```
     or alternatively you can configure the plugin to automatically load the .css file.
 
@@ -372,7 +376,7 @@ You can create tables with a custom number of columns to explain what each cooki
 
 **NOTE**: If you want to also use `autoclear_cookie`, make sure the first column of the cookie table contains the name of the cookie.
 
-[Check demo app.js](../demo/app.js) which has a full example with cookie table.
+[Check demo app.js](demo/app.js) which has a full example with cookie table.
 
 </p>
 </details>
