@@ -4,13 +4,13 @@
  * Author Orest Bida
  * Released under the MIT License
  */
-(function(scope){
+(function(){
     'use strict';
     var CookieConsent = function(){
         var _cookieconsent = {};
         
         var consent_modal_exists = false;
-        var cookie_consent_acepted = false;
+        var cookie_consent_accepted = false;
 
         // variables to save main dom elements (to avoid retrieving them later using document.getElementById)
         var main_container = null;
@@ -63,7 +63,7 @@
             for(var x=0; x<all_links.length; x++){
                 _addEvent(all_links[x], 'click', function(event){
                     event.preventDefault ? event.preventDefault() : event.returnValue = false;
-                    _cookieconsent.showSettings();
+                    _cookieconsent.showSettings(0);
                 });
             }
         }
@@ -474,7 +474,7 @@
                 /**
                  * If autoclear_cookies==true -> delete all cookies which are unused (based on selected preferences)
                  */
-                if(conf_params['autoclear_cookies'] && cookie_consent_acepted){
+                if(conf_params['autoclear_cookies'] && cookie_consent_accepted){
 
                     // Get array of all blocks defined inside settings
                     var all_blocks = conf_params.languages[_config.current_lang]['settings_modal']['blocks'];
@@ -517,11 +517,12 @@
                 }
             }
 
-            // save cookie with 'preferences' level
-            _setCookie('cc_cookie', '{"level": ['+c_cookie_level+']}', _config.cookie_expiration, 0, 0);
+            // save cookie with preferences 'level' (only if never accepted or settings were updated)
+            if(!cookie_consent_accepted || changedSettings)
+                _setCookie('cc_cookie', '{"level": ['+c_cookie_level+']}', _config.cookie_expiration, 0, 0);
 
-            if(typeof conf_params['onAccept'] === "function" && !cookie_consent_acepted){
-                cookie_consent_acepted = true;
+            if(typeof conf_params['onAccept'] === "function" && !cookie_consent_accepted){
+                cookie_consent_accepted = true;
                 return conf_params['onAccept'](JSON.parse(_getCookie('cc_cookie') || "{}"));
             }
 
@@ -531,42 +532,39 @@
             }
         }
 
-        /**
-         * Preload asset (css or javascript)
-         * @param {string} href 
-         * @param {string} as 
-         */
-        var _preload = function(href, as){
-            var preload = document.createElement('link');
-            preload.rel = 'preload';
-            preload.href = href;
-            preload.setAttribute('as', as);
-            document.getElementsByTagName('head')[0].appendChild(preload);
-            _log('CookieConsent [PRELOAD]: preloaded '+as, href);
-        }
-        
-        /**
-         * Load .css file for CookieConsent specified via the parameter
-         * @param {string} css_file_path 
-         */
-        function _loadCookieConsentCSS(conf_parms, callback) {
-            if(conf_parms['autoload_css']){
+        function _loadCookieConsentCSS(conf_params, callback){
+            if(conf_params['autoload_css'] && !document.getElementById('cc__style')){
 
-                // create link
-                var link = document.createElement('link');
-                link.href = conf_parms['theme_css']; 
-                link.rel  = 'stylesheet';
-                link.type = 'text/css';
-                link.media = 'print';
-                link.onload = function(){
-                    this.onload=null; 
-                    this.media="all";
-                    _log("CookieConsent [CSS]: loaded css '"+ conf_parms['theme_css'] + "'");
-                    setTimeout(function(){
+                // Create style tag
+                var style = document.createElement('style');
+                
+                // ad an id so that in SPA apps (react-like) the style doesn't get loaded multiple times when plugin is called
+                style.id = 'cc__style';
+                
+                var xhr = new XMLHttpRequest();
+                
+                xhr.onreadystatechange = function() {
+                    if(this.readyState == 4 && this.status == 200){
+
+                        // Necessary for <IE9
+                        style.setAttribute('type', 'text/css');
+                        
+                        if(style.styleSheet){ // if <IE9
+                            style.styleSheet.cssText = this.responseText;
+                        }else{ // all other browsers
+                            style.appendChild(document.createTextNode(this.responseText)); 
+                        }
+
+                        // Append css text content
+                        document.getElementsByTagName('head')[0].appendChild(style);
+                        _log("CookieConsent [AUTOLOAD_CSS]: loaded style = '"+ conf_params['theme_css'] + "'");
+
                         callback();
-                    }, 100);
-                }
-                document.getElementsByTagName('head')[0].appendChild(link);
+                    }
+                };
+                  
+                xhr.open("GET", conf_params['theme_css']);
+                xhr.send();
             }else{
                 callback();
             }
@@ -581,7 +579,7 @@
             var len = arr.length;
             for(var i=0; i<len; i++){
                 if(arr[i] == value)
-                    return true;
+                    return true;  
             }
             return false;
         }
@@ -592,7 +590,7 @@
          * @param {object} optional_param 
          */
         var _log = function(print_msg, optional_param, error){
-            !error ? console.log(print_msg, optional_param || "") : console.error(print_msg, optional_param || "");
+            !error ? console.log(print_msg, optional_param || ' ') : console.error(print_msg, optional_param || "");
         }
         
         /**
@@ -628,12 +626,10 @@
 
                 // If cookie doesn't exist => cookie-consent never acepted
                 if(!cookie_val){
-                    
-                    // Generate both cookie-consent & cookie-settings dom
-                    _createCookieConsentHTML(false, conf_params);
-
-                    // Load css (if enabled), and run callback function afterwards
                     _loadCookieConsentCSS(conf_params, function(){
+                        // Generate both cookie-consent & cookie-settings dom
+                        _createCookieConsentHTML(false, conf_params);
+                                                    
                         // Add listener to open settings via custom attribute buttons and links
                         _addCookieSettingsButtonListener();
 
@@ -642,22 +638,22 @@
                         _addClass(settings_container, "c_anim");
 
                         if(_config.autorun){
-                            _cookieconsent.show(conf_params['delay'] || 0);
+                            _cookieconsent.show(conf_params['delay'] > 30 ? conf_params['delay'] : 30);
                         }
                     });
                 }else{
-                    // Generate only settings modal
                     _log("CookieConsent [NOTICE]: cookie consent alredy acepted!");
 
-                    _createCookieConsentHTML(true, conf_params);
-                    _loadCookieConsentCSS(conf_params, function(){ 
+                    _loadCookieConsentCSS(conf_params, function(){
+                        // Generate only settings modal
+                        _createCookieConsentHTML(true, conf_params);
                         _addCookieSettingsButtonListener();
 
                         _addClass(settings_container, "c_anim");
                         
                         // Fire once onAccept method (if defined)
-                        if(typeof conf_params['onAccept'] === "function" && !cookie_consent_acepted){
-                            cookie_consent_acepted = true;
+                        if(typeof conf_params['onAccept'] === "function" && !cookie_consent_accepted){
+                            cookie_consent_accepted = true;
                             conf_params['onAccept'](JSON.parse(cookie_val || "{}"));
                         }
                     });
@@ -669,18 +665,14 @@
 
         _cookieconsent.showSettings = function(delay){
             setTimeout(function() {
-                _addClass(settings_container, "cshow");
+                _addClass(settings_container, "c_show");
                 _log("CookieConsent [SETTINGS]: show settings_modal");
-            }, typeof delay === "number" && delay > 0 ? delay : 0);
+            }, delay > 0 ? delay : 0);
         }
 
-        _cookieconsent.loadScript = function(src, callback, preload, attrs){
-
-            // Check if script is not alredy loaded
+        _cookieconsent.loadScript = function(src, callback, attrs){
+            // Load script only if not alredy loaded
             if(!document.querySelector('script[src="' + src + '"]')){
-                
-                // preload script
-                preload && _preload(src, 'script');
                 
                 var script = document.createElement('script');
 
@@ -691,14 +683,20 @@
                     }
                 }
 
-                script.onload = function () {
-                    callback();
-                };
+                if(script.readyState) {  // only required for IE <9
+                    script.onreadystatechange = function() {
+                        if ( script.readyState === "loaded" || script.readyState === "complete" ) {
+                            script.onreadystatechange = null;
+                            callback();
+                        }
+                    };
+                }else{  //Others
+                    script.onload = callback;
+                }
 
                 script.src = src;
                 document.getElementsByTagName('head')[0].appendChild(script);
             }else{
-                _log("CookieConsent [LOAD_SCRIPT]: script '"+src+"' alredy loaded!");
                 callback();
             }
         }
@@ -710,16 +708,16 @@
         _cookieconsent.show = function(delay){
             if(consent_modal_exists){
                 setTimeout(function() {
-                    _addClass(consent_modal, "cshow");
+                    _addClass(consent_modal, "c_show");
                     _log("CookieConsent [MODAL]: show consent_modal");
-                }, typeof delay === "number" && delay > 0 ? delay : 0);
+                }, delay > 0 ? delay : 0);
             }
         }
 
         // Hide consent modal
         _cookieconsent.hide = function(){
             if(consent_modal_exists){
-                _removeClass(consent_modal, "cshow");
+                _removeClass(consent_modal, "c_show");
                 _log("CookieConsent [MODAL]: hide");
             }
         }
@@ -728,7 +726,7 @@
          * Hide settings modal
          */
         _cookieconsent.hideSettings = function(){
-            _removeClass(settings_container, "cshow");
+            _removeClass(settings_container, "c_show");
             _log("CookieConsent [SETTINGS]: hide settings_modal");
         }
 
@@ -740,20 +738,20 @@
          * @param {number} hours 
          * @param {number} minutes 
          */
-        var _setCookie = function(name, value, days, hours, minutes) {
+        var _setCookie = function(name, value, days) {
             var expires = "";
         
             var date = new Date();
-            date.setTime(date.getTime() + (1000 * (days * 24 * 60 * 60 + hours * 60 * 60 + minutes * 60)));
+            date.setTime(date.getTime() + (1000 * (days * 24 * 60 * 60)));
             expires = "; expires=" + date.toUTCString();
 
             /**
              * Set secure cookie if https found
              */
             if(location.protocol === "https:"){
-                document.cookie = name + "=" + (value || "") + expires + "; path=/; Domain=" + location.host+ "; SameSite=Lax; Secure";
+                document.cookie = name + "=" + (value || "") + expires + "; path=/; Domain=" + window.location.host + "; SameSite=Lax; Secure";
             }else{
-                document.cookie = name + "=" + (value || "") + expires + "; path=/; Domain=" + location.host+ "; SameSite=Lax;";
+                document.cookie = name + "=" + (value || "") + expires + "; path=/; SameSite=Lax;";
             }
 
             _log("CookieConsent [SET_COOKIE]: cookie "+ name + "='" + value + "' was set!");
@@ -799,12 +797,12 @@
                 passive ? elem.addEventListener(event, _fn , { passive: true }) : elem.addEventListener(event, _fn, false);
             } else {
                 /**
-                 * For old browser, convert "click" and "focus" event to onclick
+                 * For old browser, convert "click" to onclick
                  * since they're not always supported
                  */
-                if (event == "click" || event == "focus") {
+                if (event == "click") {
                     event = "onclick";
-                } 
+                }
                 elem.attachEvent(event, _fn);
             }
         }
@@ -862,9 +860,7 @@
     /**
      * Make CookieConsent object accessible globally
      */
-    if(typeof scope.initCookieConsent === 'undefined'){
-        scope.initCookieConsent = function(){
-            return CookieConsent();
-        };
+    if(typeof window['initCookieConsent'] !== 'function'){
+        window['initCookieConsent'] = CookieConsent;
     }
-})(window);
+})();
