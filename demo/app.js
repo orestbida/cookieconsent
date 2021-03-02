@@ -8,7 +8,7 @@ var cc = initCookieConsent();
 // run plugin with config object
 cc.run({
 	autorun : true, 
-	delay : 1200,
+	delay : 0,
 	current_lang : 'en',
 	auto_language : true,
 	autoclear_cookies : true,
@@ -26,12 +26,15 @@ cc.run({
 			});
 		}
 		
+		// Delete line below
 		document.getElementById("cookie_val").innerHTML = JSON.stringify(cookie, null, 2);
 	},
 
 	onChange: function(cookie){	
 		console.log("onChange fired ...");
 		// do something ...
+
+		// Delete line below
 		document.getElementById("cookie_val").innerHTML = JSON.stringify(cookie, null, 2);
 	},
 
@@ -39,14 +42,14 @@ cc.run({
 		'en' : {	
 			consent_modal : {
 				title :  "I use cookies",
-				description :  'Hi, this website uses essential cookies to ensure its proper operation and tracking cookies to understand how you interact with it. The latter will be set only upon approval. <a aria-label="Cookie policy" class="cc-link" href="#">Read more</a>',
+				description :  'Hi, this website uses essential cookies to ensure its proper operation and tracking cookies to understand how you interact with it. The latter will be set only upon approval. <a aria-label="Cookie policy" data-cc="c-settings" class="cc-link" href="#">Change preferences</a>',
 				primary_btn: {
-					text: 'Accept',
-					role: 'accept_selected'				//'accept_selected' or 'accept_all'
+					text: 'Accept all',
+					role: 'accept_all'				//'accept_selected' or 'accept_all'
 				},
 				secondary_btn: {
-					text : 'Settings',
-					role : 'settings'				//'settings' or 'accept_necessary'
+					text : 'Deny all',
+					role : 'accept_necessary'				//'settings' or 'accept_necessary'
 				}
 			},
 			settings_modal : {
@@ -93,21 +96,21 @@ cc.run({
 								col1: '_ga',
 								col2: 'google.com',
 								col3: '2 years',
-								col4: '<span><b>description</b> ...</span>' ,
+								col4: 'description ...' ,
 								col5: 'Permanent cookie'
 							},
 							{
 								col1: '_gat',
 								col2: 'google.com',
 								col3: '1 minute',
-								col4: '<b>description</b> ...' ,
+								col4: 'description ...' ,
 								col5: 'Permanent cookie'
 							},
 							{
 								col1: '_gid',
 								col2: 'google.com',
 								col3: '1 day',
-								col4: '<b>description</b> ...' ,
+								col4: 'description ...' ,
 								col5: 'Permanent cookie'
 							}
 						]
@@ -120,7 +123,6 @@ cc.run({
 		}
 	}
 });
-
 
 // DELETE ALL CONTENT BELOW THIS COMMENT!!!
 if(cc.validCookie('cc_cookie')){
