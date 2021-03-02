@@ -1,0 +1,25 @@
+@font-face {  
+    font-family: 'BasierSquare';  
+    src: local('BasierSquare'),    
+    url('../fonts/basier-square-regular.woff2') format('woff2');
+    font-weight: 400;  
+    font-style: normal;  
+    font-display: swap; 
+    unicode-range: U+000-5FF;
+}
+
+@font-face {  
+    font-family: 'BasierSquare';  
+    src: local('BasierSquare'),       
+    url('../fonts/basier-square-semibold.woff2') format('woff2');
+    font-weight: bold;  
+    font-style: normal;  
+    unicode-range: U+000-5FF;
+    font-display: swap; 
+}
+
+
+body,
+body #cc_div{
+    font-family: 'BasierSquare', sans-serif!important;
+}

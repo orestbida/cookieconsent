@@ -3,6 +3,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 ![Size](https://img.shields.io/github/size/orestbida/cookieconsent/dist/cookieconsent.js)
+[![Stable version](https://img.shields.io/github/v/release/orestbida/cookieconsent)](https://github.com/orestbida/cookieconsent/releases)
 </div>
 <div align="center" style="text-align: center; max-width: 770px; margin: 0 auto;">
 
@@ -47,8 +48,11 @@ Addressed to those who alredy use this plugin: if you plan on using this version
 2. load the css style:
     ```html
     <link rel="stylesheet" href="cookieconsent.css">
+
+    // or asynchronous loading (recommended)
+    <link rel="stylesheet" href="cookieconsent.css" media="print" onload="this.media='all'; this.onload=null;">
     ```
-    or alternatively you can configure the plugin to automatically load the .css file.
+    or alternatively you can configure the plugin to <a href="#autoload-css">automatically load the .css file.</a>
 
 3. run the plugin with your configuration parameters. **IMPORTANT**: you must provide at least the following parameters: `current_lang` and `languages`.
     <br>
@@ -118,7 +122,7 @@ Addressed to those who alredy use this plugin: if you plan on using this version
 ## Download & CDN
 You can download the [latest version](https://github.com/orestbida/cookieconsent/releases/tag/v2.0) or use it via cdn:
 ```html
-https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@v2.0/dist/cookieconsent.js
+https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@v2.1/dist/cookieconsent.js
 ```
 ## APIs & configuration parameters
 After getting the plugin like so:
@@ -372,7 +376,7 @@ You can create tables with a custom number of columns to explain what each cooki
 
 **NOTE**: If you want to also use `autoclear_cookie`, make sure the first column of the cookie table contains the name of the cookie.
 
-[Check demo app.js](../demo/app.js) which has a full example with cookie table.
+[Check demo app.js](demo/app.js) which has a full example with cookie table.
 
 </p>
 </details>
@@ -503,7 +507,7 @@ cookieconsent.run({
     </p>
     </details>
 -   <details><summary>How to autoload the .css file</summary>
-    <p>
+    <p id="autoload-css">
 
     You need to enable `autoload_css` and set `theme_css` to a valid path.
 
@@ -515,6 +519,27 @@ cookieconsent.run({
     });
     ```
 
+    </p>
+    </details>
+-   <details><summary>Make consent required (block page navigation until action)</summary>
+    <p>
+    This is a css only solution:
+
+    1. add the following class `force--consent` to the html tag:
+        ```html
+        <html class="force--consent">
+        ```
+    2. add the following style **inside the head tag** of your page (important as it avoids reflow & weird jumps when scrollbar is hidden/shown) :
+        ```html
+        <style>
+            html.force--consent,
+            html.force--consent body{
+                height: auto!important;
+                width: 100vw!important;
+            }
+        </style>
+        ```
+    For a full example check the <a href="demo/index2.html">second demo</a>.
     </p>
     </details>
 

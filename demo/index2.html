@@ -5,7 +5,7 @@
  * Author Orest Bida
  * Released under the MIT License
  *-->
-<html lang="en">
+<html lang="en" class="force--consent">
 <head>
     <meta charset="UTF-8">
     <title>CookieConsent demo</title>
@@ -14,6 +14,13 @@
     <meta name="description" content="demo cookieconsent gdpr orest bida">
     <link rel="icon" type="image/png" href="https://orestbida.com/public/favicon.png">
     <link rel="apple-touch-icon" href="https://orestbida.com/public/favicon.png">
+    <style>
+        html.force--consent,
+        html.force--consent body{
+            height: auto!important;
+            width: 100vw!important;
+        }
+    </style>
     <style>
         *,:after,:before {
             -webkit-box-sizing: border-box;

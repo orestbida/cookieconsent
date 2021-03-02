@@ -1,39 +1,17 @@
-@font-face {  
-    font-family: 'BasierSquare';  
-    src: local('BasierSquare'),    
-    url('../fonts/basier-square-regular.woff2') format('woff2');
-    font-weight: 400;  
-    font-style: normal;  
-    font-display: swap; 
-    unicode-range: U+000-5FF;
-}
-
-@font-face {  
-    font-family: 'BasierSquare';  
-    src: local('BasierSquare'),       
-    url('../fonts/basier-square-semibold.woff2') format('woff2');
-    font-weight: bold;  
-    font-style: normal;  
-    unicode-range: U+000-5FF;
-    font-display: swap; 
-}
-
 *,:after,:before {
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
 }
 
 body {
-    -webkit-text-size-adjust: 100%;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
     line-height: 1.15;
-    font-family: 'BasierSquare', sans-serif;
+    font-family: sans-serif;
     margin: 0;
     overflow-x: hidden;
 }
 
-#cc_div{
+body.basier,
+body.basier #cc_div{
     font-family: 'BasierSquare', sans-serif!important;
 }
 
@@ -45,8 +23,7 @@ body, html{
     height: 100%;
 }
 
-header{
-    display: block;
+#header{
     position: relative;
 }
 

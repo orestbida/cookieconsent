@@ -7,17 +7,16 @@ var cc = initCookieConsent();
 
 // run plugin with config object
 cc.run({
-	autorun : true, 							// [OPTIONAL] show consent modal as soon as possible
-	delay : 0,									// [OPTIONAL] specify initial delay after website has loaded		
-	current_lang : 'en',						// [REQUIRED] specify one of the languages defined inside languages below (NOTE: can be dynamic value)
-	autoload_css : true, 						// [OPTIONAL] if true, load css via js (NOTE: theme_css must have valid path)
-	theme_css : "../dist/cookieconsent.css",		// [OPTIONAL*] (NOTE: autoload_css needs to be set to true)
-	auto_language : true,						// [OPTIONAL] if true, grab the language based on the client browser
-	autoclear_cookies : true,					// [OPTIONAL] if true, delete all cookies specified inside the cookie table, in a block after being deselected in the settings modal
-	cookie_expiration : 365,    				// [OPTIONAL] change default expiration number of days
+	autorun : true, 
+	delay : 0,
+	current_lang : 'en',
+	auto_language : true,
+	autoclear_cookies : true,
+	cookie_expiration : 365,
+	autoload_css: true,
+	theme_css: '../dist/cookieconsent.css',
 	
-	onAccept: function(cookie){						// [OPTIONAL]
-		console.log(cookie);
+	onAccept: function(cookie){	
 		console.log("onAccept fired ...");
 		if(cc.allowedCategory('analytics_cookies')){
 			cc.loadScript('https://www.google-analytics.com/analytics.js', function(){		
@@ -27,28 +26,30 @@ cc.run({
 			});
 		}
 		
-		document.getElementById('cookie').innerHTML = '<pre>'+JSON.stringify(cookie, null, 2)+'</pre>';
+		// Delete line below
+		document.getElementById("cookie_val").innerHTML = JSON.stringify(cookie, null, 2);
 	},
 
-	onChange: function(cookie){						// [OPTIONAL]
+	onChange: function(cookie){	
 		console.log("onChange fired ...");
 		// do something ...
-		console.log(cookie);
-		document.getElementById('cookie').innerHTML = '<pre>'+JSON.stringify(cookie, null, 2)+'</pre>';
+
+		// Delete line below
+		document.getElementById("cookie_val").innerHTML = JSON.stringify(cookie, null, 2);
 	},
 
 	languages : {
 		'en' : {	
 			consent_modal : {
 				title :  "I use cookies",
-				description :  'Hi, this website uses essential cookies to ensure its proper operation and tracking cookies to understand how you interact with it. The latter will be set only upon approval. <a aria-label="Cookie policy" class="cc-link" href="#">Read more</a>',
+				description :  'Hi, this website uses essential cookies to ensure its proper operation and tracking cookies to understand how you interact with it. The latter will be set only upon approval. <a aria-label="Cookie policy" data-cc="c-settings" class="cc-link" href="#">Change preferences</a>',
 				primary_btn: {
-					text: 'Accept',
+					text: 'Accept all',
 					role: 'accept_all'				//'accept_selected' or 'accept_all'
 				},
 				secondary_btn: {
-					text : 'Settings',
-					role : 'settings'				//'settings' or 'accept_necessary'
+					text : 'Deny all',
+					role : 'accept_necessary'				//'settings' or 'accept_necessary'
 				}
 			},
 			settings_modal : {
@@ -78,7 +79,7 @@ cc.run({
 						title : "Preferences cookies",
 						description: 'These cookies allow the website to remember the choices you have made in the past.',
 						toggle : {
-							value : 'preferences_cookies_3rweds',	//there are no default categories => you specify them
+							value : 'preferences_cookies',	//there are no default categories => you specify them
 							enabled : true,
 							readonly: false
 						}
@@ -95,21 +96,21 @@ cc.run({
 								col1: '_ga',
 								col2: 'google.com',
 								col3: '2 years',
-								col4: '<span><b>description</b> ...</span>' ,
+								col4: 'description ...' ,
 								col5: 'Permanent cookie'
 							},
 							{
 								col1: '_gat',
 								col2: 'google.com',
 								col3: '1 minute',
-								col4: '<b>description</b> ...' ,
+								col4: 'description ...' ,
 								col5: 'Permanent cookie'
 							},
 							{
 								col1: '_gid',
 								col2: 'google.com',
 								col3: '1 day',
-								col4: '<b>description</b> ...' ,
+								col4: 'description ...' ,
 								col5: 'Permanent cookie'
 							}
 						]
@@ -122,3 +123,67 @@ cc.run({
 		}
 	}
 });
+
+// DELETE ALL CONTENT BELOW THIS COMMENT!!!
+if(cc.validCookie('cc_cookie')){
+    //if cookie is set => disable buttons
+    disableBtn('btn2');
+    disableBtn('btn3');
+}
+
+function disableBtn(id){
+    document.getElementById(id).disabled = true;
+    document.getElementById(id).className = "styled_btn disabled";
+}
+
+var darkmode = false;
+
+function toggleDarkmode(){
+    if(!darkmode){
+        document.getElementById('theme').innerText = 'dark theme';
+		document.body.className='d_mode c_darkmode';
+        darkmode = true;
+    }else{
+        document.getElementById('theme').innerText = 'light theme';
+		document.body.className='d_mode';
+        darkmode = false;
+    }
+}
+
+/*
+* The following lines of code are for demo purposes (show api functions)
+*/ 
+if(document.addEventListener){
+
+    document.getElementById("btn2").addEventListener('click', function(){
+        cc.show(0);
+    });
+
+    document.getElementById("btn3").addEventListener('click', function(){
+        cc.hide();
+    });
+
+    document.getElementById("btn5").addEventListener('click', function(){
+        cc.showSettings(0);  
+    });
+
+    document.getElementById("btn6").addEventListener('click', function(){
+        toggleDarkmode();
+    });
+}else{
+    document.getElementById("btn2").attachEvent('onclick', function(){
+        cc.show(0);
+    });
+
+    document.getElementById("btn3").attachEvent('onclick', function(){
+        cc.hide();
+    });
+
+    document.getElementById("btn5").attachEvent('onclick', function(){
+        cc.showSettings(0);  
+    });
+
+    document.getElementById("btn6").attachEvent('onclick', function(){
+		toggleDarkmode();
+    });
+}
