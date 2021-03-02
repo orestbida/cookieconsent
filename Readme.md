@@ -49,10 +49,10 @@ Addressed to those who alredy use this plugin: if you plan on using this version
     ```html
     <link rel="stylesheet" href="cookieconsent.css">
 
-    // or asynchronous loading (reccomended)
+    // or asynchronous loading (recommended)
     <link rel="stylesheet" href="cookieconsent.css" media="print" onload="this.media='all'; this.onload=null;">
     ```
-    or alternatively you can configure the plugin to automatically load the .css file.
+    or alternatively you can configure the plugin to <a href="#autoload-css">automatically load the .css file.</a>
 
 3. run the plugin with your configuration parameters. **IMPORTANT**: you must provide at least the following parameters: `current_lang` and `languages`.
     <br>
@@ -122,7 +122,7 @@ Addressed to those who alredy use this plugin: if you plan on using this version
 ## Download & CDN
 You can download the [latest version](https://github.com/orestbida/cookieconsent/releases/tag/v2.0) or use it via cdn:
 ```html
-https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@v2.0/dist/cookieconsent.js
+https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@v2.1/dist/cookieconsent.js
 ```
 ## APIs & configuration parameters
 After getting the plugin like so:
@@ -507,7 +507,7 @@ cookieconsent.run({
     </p>
     </details>
 -   <details><summary>How to autoload the .css file</summary>
-    <p>
+    <p id="autoload-css">
 
     You need to enable `autoload_css` and set `theme_css` to a valid path.
 
@@ -519,6 +519,27 @@ cookieconsent.run({
     });
     ```
 
+    </p>
+    </details>
+-   <details><summary>Make consent required (block page navigation until action)</summary>
+    <p>
+    This is a css only solution:
+
+    1. add the following class `force--consent` to the html tag:
+        ```html
+        <html class="force--consent">
+        ```
+    2. add the following style **inside the head tag** of your page (important as it avoids reflow & weird jumps when scrollbar is hidden/shown) :
+        ```html
+        <style>
+            html.force--consent,
+            html.force--consent body{
+                height: auto!important;
+                width: 100vw!important;
+            }
+        </style>
+        ```
+    For a full example check the <a href="demo/index2.html">second demo</a>.
     </p>
     </details>
 
