@@ -227,14 +227,15 @@
                 var block_title_container = document.createElement('div');
                 var block_table_container = document.createElement('div');
                 var block_title = document.createElement('h2');
-                var block_desc = document.createElement('p');
+                var block_desc = document.createElement('div');
                 block_section.className = 'cs_block';
                 block_title.className = 'b_title';
                 block_title_container.className = 'title';
                 block_table_container.className = 'desc';
+                block_desc.className = 'p';
 
                 // set title and description for each block
-                block_title.innerHTML =all_blocks[i]['title'];
+                block_title.innerHTML = all_blocks[i]['title'];
                 block_desc.innerHTML = all_blocks[i]['description'];
 
                 block_title_container.appendChild(block_title);
@@ -751,7 +752,7 @@
             if(location.protocol === "https:"){
                 document.cookie = name + "=" + (value || "") + expires + "; path=/; Domain=" + window.location.hostname + "; SameSite=Lax; Secure";
             }else{
-                document.cookie = name + "=" + (value || "") + expires + "; path=/; Domain=" + window.location.hostname + "; SameSite=Lax;";
+                document.cookie = name + "=" + (value || "") + expires + "; path=/; SameSite=Lax;";
             }
 
             _log("CookieConsent [SET_COOKIE]: cookie "+ name + "='" + value + "' was set!");
