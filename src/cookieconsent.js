@@ -1,5 +1,5 @@
 /*!
- * CookieConsent v2.1
+ * CookieConsent v2.2
  * https://www.github.com/orestbida/cookieconsent
  * Author Orest Bida
  * Released under the MIT License
@@ -749,9 +749,9 @@
              * Set secure cookie if https found
              */
             if(location.protocol === "https:"){
-                document.cookie = name + "=" + (value || "") + expires + "; path=/; Domain=" + window.location.host + "; SameSite=Lax; Secure";
+                document.cookie = name + "=" + (value || "") + expires + "; path=/; Domain=" + window.location.hostname + "; SameSite=Lax; Secure";
             }else{
-                document.cookie = name + "=" + (value || "") + expires + "; path=/; SameSite=Lax;";
+                document.cookie = name + "=" + (value || "") + expires + "; path=/; Domain=" + window.location.hostname + "; SameSite=Lax;";
             }
 
             _log("CookieConsent [SET_COOKIE]: cookie "+ name + "='" + value + "' was set!");
@@ -771,8 +771,8 @@
          * @param {string} name 
          */
         var _eraseCookie = function(name) {   
-            document.cookie = name +'=; Path=/; Domain=' + location.host + '; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
-            document.cookie = name +'=; Path=/; Domain=.' + location.host + '; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+            document.cookie = name +'=; Path=/; Domain=' + window.location.hostname + '; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+            document.cookie = name +'=; Path=/; Domain=.' + window.location.hostname + '; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
         }
 
         /**
