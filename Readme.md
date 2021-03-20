@@ -22,13 +22,13 @@ Addressed to those who alredy use this plugin: if you plan on using this version
 ## Table of contents
 1. [Key features](#key-features)
 2. [How to use](#how-to-use)
-3. [Download & CDN](#download--cdn) (work-in-progress)
-4. [APIs & config. parameters](#apis--configuration-parameters) (work-in-progress)
+3. [Download & CDN](#download--cdn)
+4. [APIs & config. parameters](#apis--configuration-parameters)
 5. [Configuration examples](#full-example-configurations) (work-in-progress)
     - Configuration with Google analytics   
     - Configuration with [explicit `accept all` and `accept necessary only` buttons](#explicit-consent)
     - Configuration with embedded full cookie-policy 
-6. [FAQ](#faq) (work-in-progress)
+6. [FAQ](#faq)
 7. [License](#license)
 
 ## Key features
@@ -142,6 +142,7 @@ the following methods are available:
 Additional methods for an easier management of your scripts and cookie settings (expand them to see usage example):
 - <details><summary>cookieconsent<code>.allowedCategory(&lt;category_name&gt;)</code></summary>
     <p>
+
     <b>Note:</b> there are no default cookie categories, you create them!
 
 
@@ -156,6 +157,7 @@ Additional methods for an easier management of your scripts and cookie settings 
     }
     ...
     ```
+
     Example:
     ```javascript
     // Check if user accepts cookie consent with analytics category enabled
@@ -167,6 +169,7 @@ Additional methods for an easier management of your scripts and cookie settings 
     </details>
 - <details><summary>cookieconsent<code>.validCookie(&lt;cookie_name&gt;)</code></summary>
     <p>
+
     If cookie exists and has non empty (<code>''</code>) value => return <code>true</code>, otherwise <code>false</code>.
 
     ```javascript
@@ -179,6 +182,7 @@ Additional methods for an easier management of your scripts and cookie settings 
     </details>
 - <details><summary>cookieconsent<code>.loadScript(&lt;path&gt;, &lt;callback_function&gt;, &lt;optional_custom_attributes&gt;)</code></summary>
     <p>
+
     Basic example:
 
     ```javascript
@@ -578,6 +582,7 @@ cookieconsent.run({
     </details>
 -   <details><summary>Make consent required (block page navigation until action)</summary>
     <p>
+    
     This is a css only solution:
 
     1. add the following class `force--consent` to the html tag:
