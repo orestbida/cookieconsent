@@ -122,7 +122,7 @@ Addressed to those who alredy use this plugin: if you plan on using this version
 ## Download & CDN
 You can download the [latest version](https://github.com/orestbida/cookieconsent/releases) or use it via cdn:
 ```html
-https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@v2.1/dist/cookieconsent.js
+https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@v2.2/dist/cookieconsent.js
 ```
 ## APIs & configuration parameters
 After getting the plugin like so:
@@ -602,6 +602,48 @@ cookieconsent.run({
     For a full example check the <a href="demo/index2.html">second demo</a>.
     </p>
     </details>
+-   <details><summary>How to create custom cookie tables</summary>
+    <p>
 
+    - **Cookie tables are defined by you, that is you choose how many columns and what their naming will be**
+    - **Make sure that the first column of the table contains the name of the cookie for <code>autoclear_cookie</code> to work properly**
+    <br>
+    
+    1. Specify the table structure via the `cookie_table_headers` property inside `settings_modal` object:
+
+        Example with 3 columns:
+
+        ```javascript
+        ...
+        cookie_table_headers : [
+            {col1: "Name" }, 
+            {col2: "Source" }, 
+            {col3: "Description" }, 
+        ]
+        ...
+        ```
+
+    2. Now you can create a `cookie_table` array of objects:
+
+        ```javascript
+        ...
+        cookie_table: [
+            {
+                col1: '_ga',
+                col2: 'google.com',
+                col3: 'description ..',
+            },
+            {
+                col1: '_gid',
+                col2: 'google.com',
+                col3: 'description ..',
+            }
+        ]
+        ...
+        ```
+    
+    **Check the examples above for a valid implementation.**
+    </p>
+    </details>
 ## License
 Distributed under the MIT License. See [LICENSE](https://github.com/orestbida/cookieconsent/blob/master/LICENSE) for more information.
