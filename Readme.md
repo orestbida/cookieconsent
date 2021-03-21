@@ -22,13 +22,13 @@ Addressed to those who alredy use this plugin: if you plan on using this version
 ## Table of contents
 1. [Key features](#key-features)
 2. [How to use](#how-to-use)
-3. [Download & CDN](#download--cdn) (work-in-progress)
-4. [APIs & config. parameters](#apis--configuration-parameters) (work-in-progress)
+3. [Download & CDN](#download--cdn)
+4. [APIs & config. parameters](#apis--configuration-parameters)
 5. [Configuration examples](#full-example-configurations) (work-in-progress)
     - Configuration with Google analytics   
     - Configuration with [explicit `accept all` and `accept necessary only` buttons](#explicit-consent)
     - Configuration with embedded full cookie-policy 
-6. [FAQ](#faq) (work-in-progress)
+6. [FAQ](#faq)
 7. [License](#license)
 
 ## Key features
@@ -52,7 +52,7 @@ Addressed to those who alredy use this plugin: if you plan on using this version
     // or asynchronous loading (recommended)
     <link rel="stylesheet" href="cookieconsent.css" media="print" onload="this.media='all'; this.onload=null;">
     ```
-    or alternatively you can configure the plugin to <a href="#autoload-css">automatically load the .css file.</a>
+    or alternatively you can configure the plugin to <a href="#user-content-autoload-css">automatically load the .css file.</a>
 
 3. run the plugin with your configuration parameters. **IMPORTANT**: you must provide at least the following parameters: `current_lang` and `languages`.
     <br>
@@ -74,11 +74,11 @@ Addressed to those who alredy use this plugin: if you plan on using this version
                     description :  'Your cookie consent message here',
                     primary_btn: {
                         text: 'Accept',
-                        role: 'accept_all'
+                        role: 'accept_all'  //'accept_selected' or 'accept_all'
                     },
                     secondary_btn: {
                         text : 'Settings',
-                        role : 'settings'
+                        role : 'settings'   //'settings' or 'accept_necessary'
                     }
                 },
                 settings_modal : {
@@ -139,10 +139,69 @@ the following methods are available:
 - cookieconsent`.showSettings(<optional_delay>)`
 - cookieconsent`.hideSettings()`
 
-For an easier management of your scripts and cookie settings:
-- cookieconsent`.allowedCategory(<your_cookie_category>)`  => returns true or false
-- cookieconsent`.validCookie(<cookiename>)`                 => returns true or false
-- cookieconsent`.loadScript(<src>, <callback>)`
+Additional methods for an easier management of your scripts and cookie settings (expand them to see usage example):
+- <details><summary>cookieconsent<code>.allowedCategory(&lt;category_name&gt;)</code></summary>
+    <p>
+
+    <b>Note:</b> there are no default cookie categories, you create them!
+
+
+    A cookie category corresponds to the string of the <code>value</code> property inside the <code>toggle</code> object:
+
+    ```javascript
+    ...    
+    toggle : {
+        value: 'analytics',     // cookie category
+        enabled : false,        // default status
+        readonly: false         // allow to enable/disable
+    }
+    ...
+    ```
+
+    Example:
+    ```javascript
+    // Check if user accepts cookie consent with analytics category enabled
+    if(!cookieconsent.allowedCategory('analytics')){
+        // yoo, you might want to load analytics.js ...
+    };
+    ```
+    </p>
+    </details>
+- <details><summary>cookieconsent<code>.validCookie(&lt;cookie_name&gt;)</code></summary>
+    <p>
+
+    If cookie exists and has non empty (<code>''</code>) value => return <code>true</code>, otherwise <code>false</code>.
+
+    ```javascript
+    // Example: check if '_gid' cookie is set
+    if(!cookieconsent.validCookie('_gid')){
+        // yoo, _gid cookie is not set, do something ...
+    };
+    ```
+    </p>
+    </details>
+- <details><summary>cookieconsent<code>.loadScript(&lt;path&gt;, &lt;callback_function&gt;, &lt;optional_custom_attributes&gt;)</code></summary>
+    <p>
+
+    Basic example:
+
+    ```javascript
+    cookieconsent.loadScript('https://www.google-analytics.com/analytics.js', function(){
+        // Script loaded, do something
+    });
+    ```
+    How to load scripts with custom attributes:
+    ```javascript
+    cookieconsent.loadScript('https://www.google-analytics.com/analytics.js', function(){
+        // Script loaded, do something
+    }, [
+        {name: 'id', value: 'ga_id'},
+        {name: 'another-attribute', value: 'value'}
+    ]);
+    ```
+    </p>
+    </details>
+
 
 ### All available options
 Below a table which sums up all of the available options (must be passed to the .run() method).
@@ -523,6 +582,7 @@ cookieconsent.run({
     </details>
 -   <details><summary>Make consent required (block page navigation until action)</summary>
     <p>
+    
     This is a css only solution:
 
     1. add the following class `force--consent` to the html tag:

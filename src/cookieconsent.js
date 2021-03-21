@@ -1,5 +1,5 @@
 /*!
- * CookieConsent v2.1
+ * CookieConsent v2.2
  * https://www.github.com/orestbida/cookieconsent
  * Author Orest Bida
  * Released under the MIT License
@@ -227,14 +227,15 @@
                 var block_title_container = document.createElement('div');
                 var block_table_container = document.createElement('div');
                 var block_title = document.createElement('h2');
-                var block_desc = document.createElement('p');
+                var block_desc = document.createElement('div');
                 block_section.className = 'cs_block';
                 block_title.className = 'b_title';
                 block_title_container.className = 'title';
                 block_table_container.className = 'desc';
+                block_desc.className = 'p';
 
                 // set title and description for each block
-                block_title.innerHTML =all_blocks[i]['title'];
+                block_title.innerHTML = all_blocks[i]['title'];
                 block_desc.innerHTML = all_blocks[i]['description'];
 
                 block_title_container.appendChild(block_title);
@@ -749,7 +750,7 @@
              * Set secure cookie if https found
              */
             if(location.protocol === "https:"){
-                document.cookie = name + "=" + (value || "") + expires + "; path=/; Domain=" + window.location.host + "; SameSite=Lax; Secure";
+                document.cookie = name + "=" + (value || "") + expires + "; path=/; Domain=" + window.location.hostname + "; SameSite=Lax; Secure";
             }else{
                 document.cookie = name + "=" + (value || "") + expires + "; path=/; SameSite=Lax;";
             }
@@ -771,8 +772,8 @@
          * @param {string} name 
          */
         var _eraseCookie = function(name) {   
-            document.cookie = name +'=; Path=/; Domain=' + location.host + '; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
-            document.cookie = name +'=; Path=/; Domain=.' + location.host + '; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+            document.cookie = name +'=; Path=/; Domain=' + window.location.hostname + '; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+            document.cookie = name +'=; Path=/; Domain=.' + window.location.hostname + '; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
         }
 
         /**
