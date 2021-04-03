@@ -121,8 +121,15 @@ Addressed to those who alredy use this plugin: if you plan on using this version
 
 ## Download & CDN
 You can download the [latest version](https://github.com/orestbida/cookieconsent/releases) or use it via cdn:
+
+javascript :
 ```html
 https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@v2.2/dist/cookieconsent.js
+```
+
+stylesheet :
+```html
+https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@v2.2/dist/cookieconsent.css
 ```
 ## APIs & configuration parameters
 After getting the plugin like so:
