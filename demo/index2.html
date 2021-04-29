@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="force--consent">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>CookieConsent demo</title>
@@ -9,10 +9,11 @@
     <link rel="icon" type="image/png" href="https://orestbida.com/public/favicon.png">
     <link rel="apple-touch-icon" href="https://orestbida.com/public/favicon.png">
     <style>
-        html.force--consent,
-        html.force--consent body{
+        html,
+        body{
             height: auto!important;
             width: 100vw!important;
+            overflow-x: hidden!important;
         }
     </style>
     <style>
@@ -25,7 +26,6 @@
             line-height: 1.15;
             font-family: sans-serif;
             margin: 0;
-            overflow-x: hidden;
         }
         
         #_mainwrapper{
@@ -149,13 +149,7 @@
             border-style: none;
             padding: 0;
         }
-        
-        button:-moz-focusring,
-        [type="button"]:-moz-focusring,
-        [type="reset"]:-moz-focusring,
-        [type="submit"]:-moz-focusring {
-            outline: 1px dotted;
-        }
+    
         
         fieldset {
             padding: 0.35em 0.75em 0.625em;
@@ -188,12 +182,7 @@
         [type="number"]::-webkit-outer-spin-button {
             height: auto;
         }
-        
-        [type="search"] {
-            -webkit-appearance: textfield;
-            outline-offset: -2px;
-        }
-        
+   
         [type="search"]::-webkit-search-decoration {
             -webkit-appearance: none;
         }
@@ -223,10 +212,6 @@
         p, h1, h2, h3, h4, h5, h6, div, a{
             margin: 0;
             padding: 0;
-        }
-        
-        a, input, button{
-            outline: none;
         }
         
         ul, li, ol{
@@ -484,7 +469,7 @@
 </head>
 <body class="d_mode">
     <div id="_mainwrapper">
-        <div id="app_content">
+        <div id="app_content" role="main">
             <div class="_max_width">
                 <div id="header">
                     <a id="github_link" href="https://github.com/orestbida/cookieconsent/" aria-label="cookie consent">
@@ -546,6 +531,6 @@
         </div>
     </div>
     <script defer src="../dist/cookieconsent.js"></script>
-    <script defer src="app.js"></script>
+    <script defer src="app2.js"></script>
 </body>
 </html>
