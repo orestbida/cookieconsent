@@ -37,6 +37,7 @@ Addressed to those who alredy use this plugin: if you plan on using this version
 - __Standalone__ (no external dependecies needed)
 - __GDPR compliant__
 - __Support for multi language__
+- __[WAI-ARIA](https://developer.mozilla.org/en-US/docs/Learn/Accessibility/WAI-ARIA_basics) compliant__
 - Allows you to __define different cookie categories with opt in/out toggle__
 - Allows you to __define custom cookie tables__ if you want to clarify the cookies you use
 
@@ -85,6 +86,7 @@ Addressed to those who alredy use this plugin: if you plan on using this version
                     title : 'Cookie settings',
                     save_settings_btn : "Save settings",
                     accept_all_btn : "Accept all",
+                    close_btn_label: "Close",   
                     blocks : [
                         {
                             title : "Cookie usage",
@@ -124,12 +126,12 @@ You can download the [latest version](https://github.com/orestbida/cookieconsent
 
 javascript :
 ```html
-https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@v2.2/dist/cookieconsent.js
+https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@v2.3/dist/cookieconsent.js
 ```
 
 stylesheet :
 ```html
-https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@v2.2/dist/cookieconsent.css
+https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@v2.3/dist/cookieconsent.css
 ```
 ## APIs & configuration parameters
 After getting the plugin like so:
@@ -219,6 +221,7 @@ Below a table which sums up all of the available options (must be passed to the 
 | `cookie_expiration` 	| number   	| 182     	| Number of days before the cookie expires (182 days = 6 months)                                                                   	|
 | `autoload_css`      	| boolean  	| false   	| Enable if you want to let the plugin load the css (requires `theme_css` to be a valid path)                                      	|
 | `theme_css`         	| string   	| -       	| Specify path to the .css file (requires `autoload_css` to be `true` for it to work)                                              	|
+| `force_consent`       | boolean   | false     | Enable if you want to block page navigation until user action (check faq below for [proper implementation]()) |
 | `current_lang`      	| string   	| -       	| Specify one of the languages you have defined (can also be dynamic): `'en'`, `'de'` ...                                          	|
 | `auto_language`     	| boolean  	| false   	| Automatically grab the language based on the user's browser language, if language is not defined => use specified `current_lang` 	|
 | `autoclear_cookies` 	| boolean  	| false   	| Enable if you want to automatically delete cookies when user opts-out of a specific category inside cookie settings              	|
@@ -292,7 +295,7 @@ Below a table which sums up all of the available options (must be passed to the 
                             }
                         },{
                             title : "Analytics cookies",
-                            description: 'These cookies cookies collect information about how you use the website, which pages you visited and which links you clicked on. All of the data is anonymized and cannot be used to identify you.',
+                            description: 'These cookies ollect information about how you use the website, which pages you visited and which links you clicked on. All of the data is anonymized and cannot be used to identify you.',
                             toggle : {
                                 value : 'analytics_cookies',
                                 enabled : false,
@@ -592,17 +595,22 @@ cookieconsent.run({
     
     This is a css only solution:
 
-    1. add the following class `force--consent` to the html tag:
-        ```html
-        <html class="force--consent">
+    1. enable `force_consent` option:
+        ```javascript
+        cookieconsent.run({
+            ...
+            force_consent : true, 				
+            ...
+        });
         ```
-    2. add the following style **inside the head tag** of your page (important as it avoids reflow & weird jumps when scrollbar is hidden/shown) :
+    2. add the following style **inside the head tag** of your page (important as it avoids weird jumps when scrollbar is hidden/shown) :
         ```html
         <style>
-            html.force--consent,
-            html.force--consent body{
+            html,
+            body{
                 height: auto!important;
                 width: 100vw!important;
+                overflow-x: hidden!important;
             }
         </style>
         ```
