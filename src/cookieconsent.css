@@ -1,4 +1,63 @@
+/** Light color-scheme **/
+:root{
+    --cc-bg: #fff;
+    --cc-text: #2d4156;
+
+    --cc-btn-primary-bg: #2d4156;
+    --cc-btn-primary-text: var(--cc-bg);
+    --cc-btn-primary-hover-bg: #1d2e38;
+    --cc-btn-secondary-bg: #eaeff2;
+    --cc-btn-secondary-text: var(--cc-text);
+    --cc-btn-secondary-hover-bg: #d8e0e6;
+
+    --cc-toggle-bg-off: #919ea6;
+    --cc-toggle-bg-on: var(--cc-btn-primary-bg);
+    --cc-toggle-bg-readonly: #d5dee2;
+
+    --cc-toggle-knob-bg: #fff;
+    --cc-toggle-knob-icon-color: #cdd6dc;
+    
+    --cc-cookie-category-block-bg: #f0f4f7;
+    --cc-cookie-category-block-bg-hover: #e9eff4;
+
+    --cc-section-border: #f1f3f5;
+    --cc-cookie-table-border: #e9edf2;
+
+    --cc-overlay-bg: rgba(4, 6, 8, .85);
+    --cc-webkit-scrollbar-bg: #cfd5db;
+    --cc-webkit-scrollbar-bg-hover: #9199a0;
+}
+
+/** Dark color-scheme **/
+.c_darkmode{
+    --cc-bg: #181b1d;
+    --cc-text: #d8e5ea;
+
+    --cc-btn-primary-bg: #a6c4dd;
+    --cc-btn-primary-text: #000;
+    --cc-btn-primary-hover-bg: #c2dff7;
+    --cc-btn-secondary-bg: #33383c;
+    --cc-btn-secondary-text: var(--cc-text);
+    --cc-btn-secondary-hover-bg: #3e454a;
+
+    --cc-toggle-bg-off: #667481;
+    --cc-toggle-bg-on: var(--cc-btn-primary-bg);
+    --cc-toggle-bg-readonly: #454c54;
+    --cc-toggle-knob-bg: var(--cc-cookie-category-block-bg);
+    --cc-toggle-knob-icon-color: var(--cc-bg);
+
+    --cc-cookie-category-block-bg: #23272a;
+    --cc-cookie-category-block-bg-hover: #2b3035;
+
+    --cc-section-border: #292d31;
+    --cc-cookie-table-border: #2b3035;
+
+    --cc-webkit-scrollbar-bg: #667481;
+    --cc-webkit-scrollbar-bg-hover: #9199a0;
+}
+
 #cc_div *,
+#cc_div :before,
 #cc_div :after{
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
@@ -19,20 +78,31 @@
     background: none;
     border: none;
     box-shadow: none;
-    outline: none;
     text-decoration: none;
+    text-align: left;
 }
 
 #cc_div {
     font-size: 16px;
     font-weight: 400;
     font-family: -apple-system, sans-serif;
+    color: #2d4156;
+    color: var(--cc-text);
 }
 
-#cc_div h1,
-#cc_div h2,
-#cc_div h3{
+#cc_div .c_button,
+#cc_div .b_title,
+#cc_div #cs_title,
+#cc_div #cm_title,
+#cc_div #cs_blocks table td:before{
     font-weight: bold;
+}
+
+#cc_div #cm,
+#cc_div #cs_inner,
+#cc_div #cs_blocks .cs_block,
+#cc_div #cs_cont .block_button .b_title{
+    border-radius: .25em;
 }
 
 #cc_div input,
@@ -43,35 +113,32 @@
     appearance: none;
 }
 
-#cc_div .c_button,
-#cc_div .c_link{
-    padding: 1em 1.6em;
-    margin-bottom: 0.625em;
-    display: inline-block;
-    border-radius: 0.250em;
-    cursor: pointer;
-    font-size: 0.85em;
-    -moz-user-select: none;
-    -khtml-user-select: none;
-    -webkit-user-select: none;
-    -o-user-select: none;
-    user-select: none;
-    text-align: center;
-    font-weight: bold;
+/** Make elements "animatable" **/
+.c--anim #cc_div #cm,
+.c--anim #cc_div #cs,
+.c--anim #cc_div #cs_cont{
+    transition: visibility .25s ease, opacity .25s ease, transform .25s ease!important;
 }
 
-.c--anim #cc_div .c_button,
-.c--anim #cc_div .c_link{
-    transition: background-color .25s ease, color .25s ease, box-shadow .25s ease!important;
+.c--anim #cc_div .c_button{
+    transition: background-color .25s ease!important;
+}
+
+.show--consent .c--anim #cc_div #cm,
+.show--settings .c--anim #cc_div #cs,
+.show--settings .c--anim #cc_div #cs_cont{
+    opacity: 1;
+    visibility: visible!important;
+    transform: scale(1);
 }
 
 #cc_div #cm{
     font-family: inherit;
-    padding: 1.2em 2.2em;
+    padding: 1.2em 2.2em 1.825em 2.2em;
     position: fixed;
     z-index: 100;
     background: #fff;
-    color: #000;
+    background: var(--cc-bg);
     max-width: 25em;
     width: 100%;
     bottom: 1.250em;
@@ -81,68 +148,56 @@
     opacity: 0;
     visibility: hidden;
     transform: scale(.95);
-    border-radius: 0.250em;
     line-height: initial;
 }
 
-.c--anim #cc_div #cm{
-    transition: transform .3s ease, opacity .3s ease, visibility .3s ease!important;
-}
-
-.show--consent .c--anim #cc_div #cm{
-    opacity: 1;
-    visibility: visible!important;
-    transform: scale(1);
-}
-
 #cc_div #cm_title{
-    color: inherit;
     margin: 0 0 0.6em 0;
-    font-family: inherit;
-    font-size: 1.5em;
+    font-size: 1.4em;
 }
 
 #cc_div #cm_text{
     margin-bottom: 1.625em;
     font-size: 0.9em;
-    font-family: inherit;
     line-height: 1.45em;
 }
 
-#cc_div #cm .c_button,
-#cc_div #cm .c_link{
+#cc_div .c_button{
+    color: #40505a;
+    color: var(--cc-btn-secondary-text);
+    background: #e5ebef;
+    background: var(--cc-btn-secondary-bg);
+    padding: 1em 1.6em;
+    display: inline-block;
+    cursor: pointer;
+    font-size: 0.85em;
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+    text-align: center;
+    border-radius: 4px;
+}
+
+#cc_div #cm .c_button{
     width: 48.5%;
 }
 
-#cc_div #cm button+button{
+#cc_div #cm_btns button + button,
+#cc_div #cs_cont button + button,
+#cc_div #cs_close_btn{
     float: right;
 }
 
-#cc_div .c_button,
-#cc_div #cm .c_button{
-    background: #e5ebef;
-    color: #40505a;
-}
-
-#cc_div #cm .c_link{
-    background: #eaeff2;
-}
-
+#cc_div #cm .c_link:active,
 #cc_div #cm .c_link:hover,
+#cc_div #cs_cont button + button:active,
 #cc_div #cs_cont button + button:hover,
+#cc_div #cs_close_btn:active,
 #cc_div #cs_close_btn:hover{
     background: #d8e0e6;
-}
-
-.c_darkmode #cc_div #cm .c_link{
-    background: #282b2e;
-    color: #cccccc;
-}
-
-.c_darkmode #cc_div #cm .c_link:hover,
-.c_darkmode #cc_div #cs_cont button + button:hover,
-.c_darkmode #cc_div #cs_close_btn:hover{
-	background: #3e454a;
+    background: var(--cc-btn-secondary-hover-bg);
 }
 
 /**
@@ -155,7 +210,8 @@ CookieConsent settings modal
     width: 100%;
     z-index: 101;
 	background: #070707;
-    background: rgba(11, 13, 14, 0.8);
+    background: rgba(4, 6, 8, .85);
+    background: var(--cc-overlay-bg);
     display: table;
     height: 100%;
     visibility: hidden;
@@ -163,13 +219,8 @@ CookieConsent settings modal
     transition: none!important;
 }
 
-#cc_div #cm,
-#cc_div #cs_cont{
-    color: #2d4156;
-}
-
-#cc_div #cs_cont button + button {
-    float: right;
+#cc_div #cs_blocks{
+    outline: none;
 }
 
 #cc_div #cs_blocks .title{
@@ -180,22 +231,12 @@ CookieConsent settings modal
     margin-top: 0;
 }
 
-#cc_div #cs_blocks .title h2{
+#cc_div #cs_blocks .b_title{
     font-size: 1.1em;
 }
 
 #cc_div #cs_blocks .block_button{
     margin-top: 0;
-    transition: background-color .3s ease;
-    cursor: pointer;
-}
-
-#cc_div #cs_blocks .block_button:hover{
-    background-color: #e9eff4;
-}
-
-.c_darkmode #cc_div #cs_blocks .block_button:hover{
-    background: #2b3035;
 }
 
 #cc_div #cs_blocks .accordion{
@@ -207,41 +248,48 @@ CookieConsent settings modal
     padding: 1em;
 }
 
-#cc_div #cs_cont .block_button h2{
-    display: table-cell;
+#cc_div #cs_cont .block_button .b_title{
+    display: block;
     font-family: inherit;
-    padding-right: 1em;
-    vertical-align: middle;
+    font-size: 1em;
+    width: 100%;
+    cursor: pointer;
+    position: relative;
+    padding: 1.4em 6em 1.4em 2.7em;
+    background: none;
+    transition: background-color .25s ease;
+}
+
+#cc_div #cs_cont ._active .block_button .b_title{
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+#cc_div #cs_cont .block_button .b_title:active,
+#cc_div #cs_cont .block_button .b_title:hover{
+    background: #e9eff4;
+    background: var(--cc-cookie-category-block-bg-hover);
 }
 
 #cc_div #cs_blocks .block_button{
-    display: table;
-    width: 100%;
-    padding: 1.2em 1em;
+    position: relative;
 }
 
 #cc_div #cs_blocks .cs_block{
     padding: 1em;
     margin-bottom: .5em;
-    border-radius: 5px;
     border: 1px solid #f1f3f5;
+    border-color: var(--cc-section-border);
     transition: background-color .25s ease;
+}
+
+#cc_div #cs_blocks .cs_block:hover{
+    background: #f0f4f7;
+    background: var(--cc-cookie-category-block-bg);
 }
 
 #cc_div #cs_blocks .cs_block:last-child{
     margin-bottom: .5em;
-}
-
-.c_darkmode #cc_div #cs_blocks .cs_block{
-    border: 1px solid #373b40;
-}
-
-#cc_div #cs_blocks .cs_block:hover{
-    background-color: #f0f4f7;
-}
-
-.c_darkmode #cc_div #cs_blocks .cs_block:hover {
-    background: #23272a;
 }
 
 #cc_div #cs_blocks .cs_block:first-child{
@@ -253,18 +301,16 @@ CookieConsent settings modal
 }
 
 #cc_div #cs_blocks .cs_block:first-child:hover{
-    background-color: transparent;
-    background-color: unset;
+    background: transparent;
+    background: unset;
 }
 
 #cc_div #cs_blocks .cs_block.block__expand{
     margin-top: 2em;
-    margin-bottom: .5em!Important;
     padding: 0;
-    border-radius: 5px;
     border: none;
     background: #f0f4f7;
-    overflow: hidden;
+    background: var(--cc-cookie-category-block-bg);
     transition: none;
 }
 
@@ -280,16 +326,8 @@ CookieConsent settings modal
     margin-bottom: 1em;
 }
 
-.c_darkmode #cc_div #cs_blocks .cs_block.block__expand{
-    background: #23272a;
-}
-
 #cc_div #cs_blocks .cs_block.block__expand:first-child{
     margin-bottom: .5em;
-}
-
-#cc_div #cs_blocks .cs_block.block__expand:first-child:hover{
-    background: #f1f3f5;
 }
 
 #cc_div #cs_blocks .accordion{
@@ -312,13 +350,8 @@ CookieConsent settings modal
     -webkit-appearance: none;
 }
 
-.c--anim #cc_div #cs_cont{
-    transition: background-color .3s ease, visibility .3s ease, opacity .3s ease!important;
-}
-
-.show--settings .c--anim #cc_div #cs_cont{
-    opacity: 1;
-    visibility: visible!important;
+#cc_div .c_b_toggle input:disabled{
+    cursor: not-allowed;
 }
 
 #cc_div #cs_valign{
@@ -329,7 +362,6 @@ CookieConsent settings modal
 
 #cc_div #cs{
     padding: 0 1.7em;
-    border-radius: 0.1875em;
     width: 100%;
     position: fixed;
     left: 0;
@@ -344,39 +376,22 @@ CookieConsent settings modal
     transition: none;
 }
 
-.c--anim #cc_div #cs{ 
-    transition: transform .3s ease, opacity .3s ease,visibility .3s ease!important;
-}
-
-#cc_div.ie  #cs{
-    max-height: 37.5em;
-}
-
-#cc_div.ie #cs_cont_inner{
-    top: 0;
-}
-
 #cc_div #cs_inner{
-    border-radius: 0.25em;
     padding-top: 4.9375em;
     padding-bottom: 4.9375em;
     height: 100%;
     position: relative;
-    overflow: hidden;
     max-width: 49em;
     margin: 0 auto;
+    overflow: hidden;
+    box-shadow: rgba(3, 6, 9, .26) 0px 13px 27px -5px;
 }
 
-#cc_div.ie #cs{
-    position: relative;
-	top: 0;
-	margin-top: -5.625em;
-}
-
-
-#cc_div.ie #cs_valign{
-	height: 100%;
-	padding-top: 5.62em;
+#cc_div #cs_inner,
+#cc_div #cs_header,
+#cc_div #cs_buttons{
+    background: #fff;
+    background: var(--cc-bg);
 }
 
 #cc_div #cs_blocks{
@@ -384,9 +399,9 @@ CookieConsent settings modal
     overflow-y: overlay;
     overflow-x: hidden;
     height: 100%;
-    position: relative;
-    padding: 1.5em 2.5em;
-    padding-bottom: .5em;
+    padding: 1.5em 2.5em .5em 2.5em;
+    display: block;
+    width: 100%;
 }
 
 #cc_div #cs_buttons{
@@ -394,64 +409,43 @@ CookieConsent settings modal
     bottom: 0;
     left: 0;
     right: 0;
-    width: 100%;
     padding: 1em 2.5em;
-    border-top: 1px solid #f1f1f1;
+    border-top: 1px solid #f1f3f5;
+    border-color: var(--cc-section-border);
     height: 4.9375em;
 }
 
-#cc_div #cm .cc-link,
-#cc_div #cs .cc-link{
+#cc_div .cc-link{
     color: #253b48;
-    border-bottom: 3px dotted #253b48;
+    color: var(--cc-btn-primary-bg);
+    border-bottom: 1px solid #253b48;
+    border-color: var(--cc-btn-primary-bg);
     display: inline;
     padding-bottom: 0;
     text-decoration: none;
-    font-weight: 700;
+    cursor: pointer;
+    font-weight: bold;
 }
 
-.c_darkmode #cc_div #cm .cc-link,
-.c_darkmode #cc_div #cs .cc-link{
-    color: #b7cada;
-    border-color: #b7cada;
+#cc_div #cm_btns button:first-child,
+#cc_div #cs_buttons button:first-child{
+    color: #fff;
+    color: var(--cc-btn-primary-text);
+    background: #253b48;
+    background: var(--cc-btn-primary-bg);
 }
 
-#cc_div #cs_inner,
-#cc_div #cs_header,
-#cc_div #cs_buttons{
-    background-color: #fff;
-}
-
-.c_darkmode #cc_div .c_button, 
-.c_darkmode #cc_div #cm .c_button{
-    background: #33383c;
-    color: #ffffff;
-}
-
-#cc_div #cm button:first-child,
-#cc_div #cs_buttons button:first-child,
 #cc_div .c_b_toggle input:checked ~ .sc_toggle{
     background: #253b48;
-    color: white;
+    background: var(--cc-toggle-bg-on);
 }
 
-#cc_div #cm button:first-child:hover,
+#cc_div #cm_btns button:first-child:active,
+#cc_div #cm_btns button:first-child:hover,
+#cc_div #cs_buttons button:first-child:active,
 #cc_div #cs_buttons button:first-child:hover{
     background: #1d2e38;
-}
-
-.c_darkmode #cc_div #cm button:first-child,
-.c_darkmode #cc_div #cs_buttons button:first-child,
-.c_darkmode #cc_div .c_b_toggle input:checked ~ .sc_toggle{
-    background: #b7cada;
-    color: #000;
-}
-
-.c_darkmode #cc_div #cm button:first-child:hover,
-.c_darkmode #cc_div #cs_buttons button:first-child:hover,
-.c_darkmode #cc_div .c_b_toggle input:checked:hover ~ .sc_toggle{
-    background: #b7cada;
-    color: #000;
+    background: var(--cc-btn-primary-hover-bg);
 }
 
 #cc_div #cs_header{
@@ -462,34 +456,37 @@ CookieConsent settings modal
     padding: 1.2em 2.5em;
     vertical-align: middle;
     z-index: 2;
-    border-bottom: 1px solid #f1f1f1;
+    border-bottom: 1px solid #f1f3f5;
+    border-color: var(--cc-section-border);
 }
 
 #cc_div #cs_title{
 	display: table-cell;
     vertical-align: middle;
     font-size: 1em;
-    font-family: inherit;
-}
-
-#cc_div #cs_title h1{
-    font-size: 1em;
 }
 
 #cc_div #cs_close_btn{
-    display: table-cell;
-    float: right;
-    vertical-align: middle;
     padding: 0;
-    width: 2.7em;
-    height: 2.7em;
-    border: none;
-    font-size: 1em;
-    font-weight: bold;
-    outline: none;
-    border-radius: 0.250em;
-    cursor: pointer;
+    width: 1.7em;
+    height: 1.7em;
+    font-size: 1.6em;
     margin: 0;
+    font-weight: initial;
+    position: relative;
+}
+
+#cc_div #cs_close_btn_cont{
+    display: table-cell;
+    vertical-align: middle;
+}
+
+#cc_div span.toggle_label {
+    position: fixed;
+    opacity: 0;
+    width: 0;
+    height: 0;
+    pointer-events: none;
 }
 
 #cc_div #c_policy__text{
@@ -498,60 +495,50 @@ CookieConsent settings modal
     margin-top: 1.250em;
 }
 
-.show--settings .c--anim #cc_div #cs{
-    opacity: 1;
-    visibility: visible;
-    transform: scale(1);
-}
-
 #cc_div #cs_cont_inner{
-    height: 100%;
     position: relative;
     transform: translateY(-50%);
     top: 50%;
+    height: 100%;
     height: calc(100% - 2.5em);
-    overflow: hidden;
     max-height: 37.5em;
 }
 
 /** works only on webkit-based browsers **/
 #cc_div #cs_blocks::-webkit-scrollbar{
-	width: 1em;
+	width: .9em;
     height: 100%;
-    background-color: transparent;
+    background: transparent;
     border-radius: 0 0.250em 0.250em 0;
 }
   
 #cc_div #cs_blocks::-webkit-scrollbar-thumb{
-    border: 0.3em solid white;
-    background-color: #cfd5db;
-    -webkit-border-radius: 100em;
-	-moz-border-radius: 100em;
-    -ms-border-radius: 100em;
-    -o-border-radius: 100em;
+    border: 0.25em solid var(--cc-bg);
+    background: #cfd5db;
+    background: var(--cc-webkit-scrollbar-bg);
     border-radius: 100em;
 }
 
 #cc_div #cs_blocks::-webkit-scrollbar-thumb:hover{
-	background-color: #9199a0;
+	background: #9199a0;
+    background: var(--cc-webkit-scrollbar-bg-hover);
 }
 
 #cc_div #cs_blocks::-webkit-scrollbar-button {
     width: 10px;
     height: 5px;
-    opacity: 0;
-	visibility: hidden;
-}
-  
-#cc_div #cs_blocks::-webkit-scrollbar-corner {
-    background-color: transparent;
 }
 
 /** custom checkbox **/
 /* The container */
 #cc_div .c_b_toggle {
-    display: table-cell;
-    position: relative;
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    display: inline-block;
+    margin: auto;
+    right: 1.2em;
     cursor: pointer;
     -webkit-user-select: none;
     -moz-user-select: none;
@@ -560,32 +547,30 @@ CookieConsent settings modal
     vertical-align: middle;
 }
 
-#cc_div.ie .c_b_toggle{
-	padding-left: 1em;
-	margin-bottom: 0.7em;
-}
-
 /* Hide the browser's default checkbox */
 #cc_div .c_b_toggle input {
     position: absolute;
     cursor: pointer;
-	display: none;
+    display: block;
 }
 
 /* Create a custom checkbox */
 #cc_div .c_b_toggle .sc_toggle {
     position: absolute;
-    top: 0;
-    right: 0;
     border-radius: 4em;
-    background-color: #919ea6;
+    overflow: hidden;
+    background: #919ea6;
+    background: var(--cc-toggle-bg-off);
     transition: background-color .25s ease;
+    pointer-events: none;
 }
 
 #cc_div .c_b_toggle,
-#cc_div .c_b_toggle .sc_toggle{
-    width: 3.4em;
+#cc_div .c_b_toggle .sc_toggle,
+#cc_div .c_b_toggle input{
+    width: 3.6em;
     height: 1.6em;
+    border-radius: 4em;
 }
 
 #cc_div .c_b_toggle .sc_toggle.sc_readonly{
@@ -593,7 +578,8 @@ CookieConsent settings modal
 }
 
 #cc_div .c_b_toggle input ~ .sc_toggle.sc_readonly{
-    background-color: #d5dee2;
+    background: #d5dee2;
+    background: var(--cc-toggle-bg-readonly);
 }
 
 #cc_div .c_b_toggle input ~ .sc_toggle.sc_readonly:after{
@@ -604,28 +590,23 @@ CookieConsent settings modal
 #cc_div .c_b_toggle .sc_toggle:after {
     content: "";
     position: absolute;
-    left: 0.2em;
+    left: 0.22em;
     top: 0.2em;
     width: 1.2em;
     height: 1.2em;
     border: none;
     box-sizing: content-box;
     background: #fff;
-    box-shadow: 0 1px 2px rgba(24, 32, 35, .36);
-    transition: transform .3s ease, background-color .3s ease;
+    background: var(--cc-toggle-knob-bg);
+    box-shadow: 0 1px 2px rgb(24 32 35 / 36%);
+    transition: transform .3s ease;
     border-radius: 100%;
 }
 
 /* Show the checkmark when checked */
-#cc_div .c_b_toggle input:checked ~ .sc_toggle:after {
-    transform: translateX(1.75em);
+#cc_div .c_b_toggle input:checked ~ .sc_toggle:after{
+    transform: translateX(1.95em);
 }
-
-#cc_div.ie .c_b_toggle input:checked ~ .sc_toggle:after{
-    left: 1.95em;
-}
-
-/** end custom scrollbar **/
 
 #cc_div #cs_blocks table,
 #cc_div #cs_blocks table th,
@@ -634,15 +615,12 @@ CookieConsent settings modal
 }
 
 #cc_div #cs_blocks table tbody tr{
-    transition: background-color .3s ease;
+    transition: background-color .25s ease;
 }
 
 #cc_div #cs_blocks table tbody tr:hover{
-    background-color: #e9eff4;
-}
-
-.c_darkmode #cc_div #cs_blocks table tbody tr:hover{
-    background-color: #2b3035
+    background: #e9eff4;
+    background: var(--cc-cookie-category-block-bg-hover);
 }
 
 #cc_div #cs_blocks table { 
@@ -652,9 +630,6 @@ CookieConsent settings modal
     padding: 0;
     margin: 0;
     overflow: hidden;
-}
-#cc_div.ie #cs_blocks table{
-	overflow: auto;
 }
 
 #cc_div #cs_blocks table td, 
@@ -672,80 +647,8 @@ CookieConsent settings modal
 }
 
 #cc_div #cs_blocks thead tr:first-child{
-    border-bottom: 1px solid #e6e8ed;
-}
-.c_darkmode #cc_div #cs_blocks thead tr:first-child{
-    border-color: #2b3035;
-}
-
-/**
-Dark-mode for cookie consent
-**/
-.c_darkmode #cc_div #cm,
-.c_darkmode #cc_div #cs {
-	color: #fff;
-}
-
-.c_darkmode #cc_div #cs_cont p,
-.c_darkmode #cc_div #cs_blocks table td {
-	color: #c5cbd0;
-}
-
-.c_darkmode #cc_div #cm {
-	background: #151619;
-	-webkit-box-shadow: 0 0 1.875em rgba(57, 62, 72, .22);
-	box-shadow: 0 0 1.875em rgba(0, 0, 0, .56);
-}
-
-.c_darkmode #cm #cm_text {
-	color: #d4d8d9;
-}
-
-.c_darkmode #cc_div #cs_inner,
-.c_darkmode #cc_div #cs_header,
-.c_darkmode #cc_div #cs_buttons {
-	background: #181b1d;
-}
-
-.c_darkmode #cc_div #cs_header,
-.c_darkmode #cc_div #cs_buttons {
-    border-color: #292d31;
-}
-
-.c_darkmode #cc_div .c_b_toggle .sc_toggle:after {
-	background: #23272a;
-}
-
-.c_darkmode #cc_div .c_b_toggle input:checked~.sc_toggle.sc_readonly {
-	background-color: #4b4e53;
-}
-
-.c_darkmode #cc_div #cs_blocks::-webkit-scrollbar-thumb {
-	border: 0.3em solid #181b1d;
-	background-color: #3d4349;
-}
-
-.c_darkmode #cc_div #cs_blocks::-webkit-scrollbar-thumb:hover {
-	background-color: #535a5f;
-}
-
-.c_darkmode #cc_div #cs_blocks table td:before {
-	color: #fff;
-}
-
-.c_darkmode  #cc_div.ie #cs_blocks table{
-	border: 1px solid #232529;
-}
-
-#cc_div.ie .c_b_toggle .sc_toggle{
-    display: none;
-}
-
-#cc_div.ie .c_b_toggle input{
-    position: relative;
-    display: inline-block;
-    vertical-align: middle;
-    margin-bottom: 0.2em
+    border-bottom: 1px solid #e9edf2;
+    border-color: var(--cc-cookie-table-border);
 }
 
 /** BLOCK PAGE SCROLL **/
@@ -787,7 +690,7 @@ html.force--consent #cc_div{
 }
 
 html.force--consent .c--anim  #cc_div{
-    transition: opacity .3s ease, visibility .3s ease;
+    transition: opacity .25s ease, visibility .25s ease;
 }
 
 html.force--consent #cc_div #cm_inner{
@@ -805,6 +708,107 @@ html.force--consent.show--consent,
 html.force--consent.show--settings{
     overflow-y: hidden!important;
 }
+/** END BLOCK PAGE SCROLL */
+
+/** BEGIN ICONS **/
+#cc_div .block_button .b_title::before,
+#cc_div ._active .block_button .b_title::before{
+    border: solid #2d4156;
+    border-color: var(--cc-btn-secondary-text);
+    border-width: 0 2px 2px 0;
+    padding: .2em;
+    display: inline-block;
+    position: absolute;
+    content: '';
+    margin-right: 15px;
+    position: absolute;
+    transform: translateY(-.2em) rotate(45deg);
+    left: 1.2em;
+    top: 1.85em;
+}
+
+#cc_div ._active .block_button .b_title::before{
+    transform: translateY(.05em) rotate(225deg);
+}
+
+#cc_div .c_on_icon::before{
+    border: solid #ffffff;
+    border-color: var(--cc-toggle-knob-icon-color);
+    border-width: 0 2px 2px 0;
+    padding: .13em;
+    display: inline-block;
+    padding-bottom: .55em;
+    content: '';
+    margin: 0 auto;
+    transform: rotate(45deg);
+    margin-top: .31em;
+    margin-left: .1em;
+}
+
+#cc_div #cs_close_btn::before,
+#cc_div #cs_close_btn::after{
+    content: '';
+    position: absolute;
+    left: .83em;
+    top: .55em;
+    height: 17px;
+    width: 1.5px;
+    background: #444d53;
+    background: var(--cc-btn-secondary-text);
+    transform: rotate(45deg);
+    border-radius: 1em;
+    margin: 0 auto;
+}
+
+#cc_div #cs_close_btn::after{
+    transform: rotate(-45deg);
+}
+
+#cc_div .c_off_icon,
+#cc_div .c_on_icon{
+    height: 100%;
+    width: 50%;
+    position: absolute;
+    right: 0;
+    display: block;
+    text-align: center;
+    transition: opacity .25s ease;
+}
+
+#cc_div .c_on_icon{
+    left: 0;
+    opacity: 0;
+}
+
+#cc_div .c_off_icon::before,
+#cc_div .c_off_icon::after{
+    right: .84em;
+    top: .4em;
+    content: ' ';
+    height: .85em;
+    width: 0.09375em;
+    display: block;
+    background: #cdd6dc;
+    background: var(--cc-toggle-knob-icon-color);
+    margin: 0 auto;
+    position: absolute;
+    transform-origin: center;
+}
+
+#cc_div .c_off_icon::before {
+    transform: rotate(45deg);
+}
+#cc_div .c_off_icon::after {
+    transform: rotate(-45deg);
+}
+
+#cc_div .c_b_toggle input:checked ~ .sc_toggle .c_on_icon{
+    opacity: 1;
+}
+#cc_div .c_b_toggle input:checked ~ .sc_toggle .c_off_icon{
+    opacity: 0;
+}
+/** END ICONS **/
 
 @media screen and (max-width: 900px){
     #cc_div #cm{
@@ -819,7 +823,6 @@ html.force--consent.show--settings{
     } 
 }
 
-/* On screens that are 37.500em or less, set the background color to olive */
 @media screen and (max-width: 688px) {
     #cc_div #cs{
         border-radius: 0;
@@ -835,20 +838,13 @@ html.force--consent.show--settings{
 
     #cc_div .c_b_toggle{
         font-size: 1.25em;
-    }
-
-    #cc_div #cs_cont button + button{
-        margin-bottom: 0;
+        right: .9em;
     }
 
     #cc_div #cs_inner{
         margin: 0;
-        border-radius: 0;
-        padding-bottom:8.1em;
-    }
-
-    #cc_div #cs_cont .block_button h2{
-        font-size: 1em;
+        padding-bottom: 8.1em;
+        border-radius: unset;
     }
 
 	#cc_div #cs_blocks{
@@ -875,16 +871,21 @@ html.force--consent.show--settings{
     #cc_div #cs_blocks table tbody, 
     #cc_div #cs_blocks table th, 
     #cc_div #cs_blocks table td, 
-    #cc_div #cs_blocks table tr { 
+    #cc_div #cs_blocks table tr,
+    #cc_div #cs_cont{ 
         display: block; 
     }
 
     /* Hide table headers (but not display: none;, for accessibility) */
-    #cc_div #cs_blocks table thead tr { 
+    #cc_div #cs_blocks table thead tr{ 
         position: absolute;
         top: -9999px;
         left: -9999px;
-        display: none;
+    }
+
+    #cc_div #cs_blocks table tr{
+        border-top: 1px solid #e3e7ed;
+        border-color: var(--cc-cookie-table-border);
     }
 
     #cc_div #cs_blocks table td { 
@@ -902,19 +903,76 @@ html.force--consent.show--settings{
         white-space: nowrap;
         content: attr(data-column);
         color: #000;
-        font-weight: bold;
+        color: var(--cc-text);
         overflow: hidden;
         text-overflow: ellipsis;
     }
 
     #cc_div #cm .c_button,
-    #cc_div .c_button,
-    #cc_div #cm .c_link{
+    #cc_div .c_button{
         width: 100%;
         margin-right: 0;
     }
 
-    #cc_div #cm_btns button:last-child{
-        margin-bottom: 0;
+    #cc_div #cm_btns button + button,
+    #cc_div #cs_cont button + button{
+        margin-top: 0.625em;
+        float: unset;
     }
 }
+
+/* Begin IE fixes */
+#cc_div.ie #cs_valign{
+	height: 100%;
+	padding-top: 5.62em;
+}
+
+#cc_div.ie  #cs{
+    max-height: 37.5em;
+    position: relative;
+	top: 0;
+	margin-top: -5.625em;
+}
+
+#cc_div.ie #cm{
+    border: 1px solid #dee6e9;
+}
+
+#cc_div.ie #cs_cont_inner{
+    top: 0;
+}
+
+#cc_div.ie .c_b_toggle{
+	padding-left: 1em;
+	margin-bottom: 0.7em;
+}
+
+#cc_div.ie .c_b_toggle input:checked ~ .sc_toggle:after{
+    left: 1.95em;
+}
+
+#cc_div.ie #cs_blocks table{
+	overflow: auto;
+}
+
+#cc_div.ie .c_b_toggle .sc_toggle{
+    display: none;
+}
+
+#cc_div.ie .c_b_toggle input{
+    position: relative;
+    display: inline-block;
+    vertical-align: middle;
+    margin-bottom: 0.2em;
+    height: auto;
+}
+
+#cc_div.ie .c_b_toggle .toggle_label{
+    filter:alpha(opacity=0);
+}
+
+#cc_div.ie #cs_cont .block_button .b_title{
+    padding: 1.4em 6em 1.4em 1.4em
+}
+
+/** END IE FIXES **/
