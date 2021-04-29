@@ -25,7 +25,7 @@ Addressed to those who alredy use this plugin: if you plan on using this version
 3. [Download & CDN](#download--cdn)
 4. [APIs & config. parameters](#apis--configuration-parameters)
 5. [Configuration examples](#full-example-configurations) (work-in-progress)
-    - Configuration with Google analytics   
+    - Configuration with [Google analytics]((#full-example-configurations))
     - Configuration with [explicit `accept all` and `accept necessary only` buttons](#explicit-consent)
     - Configuration with embedded full cookie-policy 
 6. [FAQ](#faq)
