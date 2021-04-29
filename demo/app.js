@@ -15,8 +15,9 @@ cc.run({
 	cookie_expiration : 365,
 	autoload_css: true,
 	theme_css: '../dist/cookieconsent.css',
-	
-	onAccept: function(cookie){	
+	force_consent: false,
+
+	onAccept: function(cookie){
 		console.log("onAccept fired ...");
 		if(cc.allowedCategory('analytics_cookies')){
 			cc.loadScript('https://www.google-analytics.com/analytics.js', function(){		
@@ -30,7 +31,7 @@ cc.run({
 		document.getElementById("cookie_val").innerHTML = JSON.stringify(cookie, null, 2);
 	},
 
-	onChange: function(cookie){	
+	onChange: function(cookie){
 		console.log("onChange fired ...");
 		// do something ...
 
@@ -42,20 +43,21 @@ cc.run({
 		'en' : {	
 			consent_modal : {
 				title :  "I use cookies",
-				description :  'Hi, this website uses essential cookies to ensure its proper operation and tracking cookies to understand how you interact with it. The latter will be set only upon approval. <a aria-label="Cookie policy" data-cc="c-settings" class="cc-link" href="#">Change preferences</a>',
+				description :  'Hi, this website uses essential cookies to ensure its proper operation and tracking cookies to understand how you interact with it. The latter will be set only after consent. <button type="button" data-cc="c-settings" class="cc-link">Let me choose</button>',
 				primary_btn: {
-					text: 'Accept all',
+					text: 'Accept',
 					role: 'accept_all'				//'accept_selected' or 'accept_all'
 				},
 				secondary_btn: {
-					text : 'Deny all',
+					text : 'Reject',
 					role : 'accept_necessary'				//'settings' or 'accept_necessary'
 				}
 			},
 			settings_modal : {
-				title : '<div>Cookie settings</div><div style="font-size: .8em; font-weight: 200; color: #859198; margin-top: 5px;">Powered by <a href="https://github.com/orestbida/cookieconsent/" aria-label="powered by cookie-consent" style="text-decoration: underline;">cookie-consent</a></div>',
+				title : '<div>Cookie settings</div><div aria-hidden="true" style="font-size: .8em; font-weight: 200; color: #687278; margin-top: 5px;">Powered by <a tabindex="-1" aria-hidden="true" href="https://github.com/orestbida/cookieconsent/" style="text-decoration: underline;">cookie-consent</a></div>',
 				save_settings_btn : "Save settings",
 				accept_all_btn : "Accept all",
+				close_btn_label: "Close",
 				cookie_table_headers : [
 					{col1: "Name" }, 
 					{col2: "Domain" }, 
@@ -66,10 +68,10 @@ cc.run({
 				blocks : [
 					{
 						title : "Cookie usage",
-						description: 'I use cookies to ensure the basic functionalities of the website and to enhance your online experience. You can choose for each category to opt-in/out whenever you want. For more details about cookies and how I use them, read the full <a href="#" class="cc-link">cookie policy</a>.'
+						description: 'I use cookies to ensure the basic functionalities of the website and to enhance your online experience. You can choose for each category to opt-in/out whenever you want. For more details relative to cookies and other sensitive data, please read the full <a href="#" class="cc-link">privacy policy</a>.'
 					},{
 						title : "Strictly necessary cookies",
-						description: 'These cookies are essential for the proper functioning of my website. Without these cookies, the website would not work properly.',
+						description: 'These cookies are essential for the proper functioning of my website. Without these cookies, the website would not work properly',
 						toggle : {
 							value : 'necessary_cookies',
 							enabled : true,
@@ -77,7 +79,7 @@ cc.run({
 						}
 					},{
 						title : "Preferences cookies",
-						description: 'These cookies allow the website to remember the choices you have made in the past.',
+						description: 'These cookies allow the website to remember the choices you have made in the past',
 						toggle : {
 							value : 'preferences_cookies',	//there are no default categories => you specify them
 							enabled : true,
@@ -85,7 +87,7 @@ cc.run({
 						}
 					},{
 						title : "Analytics cookies",
-						description: 'These cookies cookies collect information about how you use the website, which pages you visited and which links you clicked on. All of the data is anonymized and cannot be used to identify you.',
+						description: 'These cookies collect information about how you use the website, which pages you visited and which links you clicked on. All of the data is anonymized and cannot be used to identify you',
 						toggle : {
 							value : 'analytics_cookies',
 							enabled : false,
@@ -152,7 +154,7 @@ function toggleDarkmode(){
 
 /*
 * The following lines of code are for demo purposes (show api functions)
-*/ 
+*/
 if(document.addEventListener){
 
     document.getElementById("btn2").addEventListener('click', function(){
