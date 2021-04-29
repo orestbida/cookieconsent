@@ -42,6 +42,7 @@
          * (used later on to restore focus when both modals are closed)
          */
         var last_elem_before_modal;
+        var last_consent_modal_btn_focus;
                              
         /**
          * Both of the array below have the same structure:
@@ -135,27 +136,57 @@
          */
         var _getModalFocusableData = function(){
             
-            var allowed_focusable_types = 'button, input, details, [tabindex="0"]';
+			/**
+			 * Note: any of the below focusable elements, which has the attribute tabindex="-1" AND is either
+			 * the first or last element of the modal, won't recieve focus during "open/close" modal
+			 */
+            var allowed_focusable_types = ['[href]', 'button', 'input', 'details', '[tabindex="0"]'];
+            var focus_later, focus_first;
 
             function _getAllFocusableElements(modal){
+
+                focus_later = focus_first = false;
+                
                 // ie might throw exception due to complex unsupported selector => a:not([tabindex="-1"])
                 try{  
-                    return modal.querySelectorAll(allowed_focusable_types + 'a:not([tabindex="-1"])');
+                    var elems = modal.querySelectorAll(allowed_focusable_types.join(':not([tabindex="-1"]), '));
+                    var attr, len=elems.length, i=0;
+                    
+                    while(i < len){
+                        
+                        attr = elems[i].getAttribute('data-focus');
+
+                        if(!focus_first && attr === "1"){
+                            focus_first = elems[i];
+                            
+                        }else if(attr === "0"){
+                            focus_later =  elems[i];
+                            if(!focus_first && elems[i+1].getAttribute('data-focus') !== "0"){
+                                focus_first = elems[i+1];
+                            }
+                        }
+
+                        i++;
+                    }
+                  
+                    return elems;
                 }catch(e){
-                    return modal.querySelectorAll(allowed_focusable_types);
+                    return modal.querySelectorAll(allowed_focusable_types.join(', '));
                 }
             }
 
             /**
              * Get settings modal'S all focusable elements
              */
-             var focusableContent = _getAllFocusableElements(settings_inner);
-
+            var focusableContent = _getAllFocusableElements(settings_inner);
+            
             /**
              * Save first and last elements (used to lock/trap focus inside modal)
              */
             settings_modal_focusable.push(focusableContent[0]);
             settings_modal_focusable.push(focusableContent[focusableContent.length - 1]);
+            settings_modal_focusable[2] = focus_later || false;
+            settings_modal_focusable[3] = focus_first || false;
 
             /**
              * If consent modal exists, do the same
@@ -164,9 +195,11 @@
                 focusableContent = _getAllFocusableElements(consent_modal);
                 consent_modal_focusable.push(focusableContent[0]);
                 consent_modal_focusable.push(focusableContent[focusableContent.length - 1]);
+                consent_modal_focusable[2] = focus_later || false;
+                consent_modal_focusable[3] = focus_first || false;
             }
 
-            focusableContent = null;
+            focus_later = focus_first = focusableContent = null;
         }
 
         /**
@@ -823,10 +856,27 @@
 
                     // If have not yet used tab (or shift+tab) and modal is open ...
                     // Focus the first focusable element
-                    if(!tabbedInsideModal){
+                    if(!tabbedInsideModal && !clicked_inside_modal){
                         tabbedInsideModal = true;
-                        !clicked_inside_modal && !tabbedOutsideDiv && e.preventDefault();
-                        !clicked_inside_modal && current_modal_focusable[0].focus();
+                        !tabbedOutsideDiv && e.preventDefault();
+
+                        if(e.shiftKey){
+                            if(current_modal_focusable[3]){
+                                if(!current_modal_focusable[2]){
+                                    current_modal_focusable[0].focus();
+                                }else{
+                                    current_modal_focusable[2].focus();
+                                }
+                            }else{
+                                current_modal_focusable[1].focus();
+                            }
+                        }else{
+                            if(current_modal_focusable[3]){
+                                current_modal_focusable[3].focus();
+                            }else{
+                                current_modal_focusable[0].focus();
+                            }
+                        }
                     }
                 }
 
@@ -834,17 +884,25 @@
             });
 
             if(document.contains){
-                _addEvent(settings_container, 'click', function(e){
-                    e = e || window.event;  
-  
+                _addEvent(main_container, 'click', function(e){
+                    e = e || window.event;
                     /**
                      * If click is on the foreground overlay (and not inside settings_modal),
                      * hide settings modal
                      * 
                      * Notice: click on div is not supported in IE
                      */
-                    if((settings_modal_visible && !settings_inner.contains(e.target))){
-                        _cookieconsent.hideSettings(0);
+                    if(settings_modal_visible){
+                        if(!settings_inner.contains(e.target)){
+                            _cookieconsent.hideSettings(0);
+                            clicked_inside_modal = false;
+                        }else{
+                            clicked_inside_modal = true;
+                        }
+                    }else if(consent_modal_visible){
+                        if(consent_modal.contains(e.target)){
+                            clicked_inside_modal = true;
+                        }
                     }
                     
                 }, true);
@@ -916,13 +974,19 @@
                 // If there is no consent-modal, keep track of last focused elem
                 if(!consent_modal_visible){
                     last_elem_before_modal = document.activeElement;
+                }else{
+                    last_consent_modal_btn_focus = document.activeElement;
                 }
 
                 /**
                  * Set focus to first focusable element inside settings modal
                  */
                 setTimeout(function(){
-                    settings_modal_focusable[0].focus();
+                    if(settings_modal_focusable[3]){
+                        settings_modal_focusable[3].focus();
+                    }else{
+                        settings_modal_focusable[0].focus();
+                    }
                     current_modal_focusable = settings_modal_focusable;
                 }, 100);
 
@@ -1022,7 +1086,7 @@
              * If consent modal is visible, focus him (instead of page document)
              */
             if(consent_modal_visible){
-                consent_modal_focusable[0].focus();
+                last_consent_modal_btn_focus.focus();
                 current_modal_focusable = consent_modal_focusable;
             }else{
                 /**
