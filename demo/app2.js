@@ -15,7 +15,7 @@ cc.run({
 	cookie_expiration : 365,
 	autoload_css: true,
 	theme_css: '../dist/cookieconsent.css',
-	force_consent: false,
+	force_consent: true,
 
 	onAccept: function(cookie){
 		console.log("onAccept fired ...");
@@ -43,19 +43,19 @@ cc.run({
 		'en' : {	
 			consent_modal : {
 				title :  "I use cookies",
-				description :  'Hi, this website uses essential cookies to ensure its proper operation and tracking cookies to understand how you interact with it. The latter will be set only after consent. <button type="button" data-cc="c-settings" class="cc-link">Let me choose</button>',
+				description :  'Hi, this website uses essential cookies to ensure its proper operation and tracking cookies to understand how you interact with it. The latter will be set only after consent. <a href="#privacy-policy" class="cc-link">Privacy policy</a>',
 				primary_btn: {
-					text: 'Accept',
+					text: 'Accept all',
 					role: 'accept_all'				//'accept_selected' or 'accept_all'
 				},
 				secondary_btn: {
-					text : 'Reject',
-					role : 'accept_necessary'				//'settings' or 'accept_necessary'
+					text : 'Manage preferences',
+					role : 'settings'				//'settings' or 'accept_necessary'
 				}
 			},
 			settings_modal : {
-				title : '<div>Cookie settings</div><div aria-hidden="true" style="font-size: .8em; font-weight: 200; color: #687278; margin-top: 5px;">Powered by <a tabindex="-1" aria-hidden="true" href="https://github.com/orestbida/cookieconsent/" style="text-decoration: underline;">cookie-consent</a></div>',
-				save_settings_btn : "Save settings",
+				title : '<div>Cookie preferences</div><div aria-hidden="true" style="font-size: .8em; font-weight: 200; color: #687278; margin-top: 5px;">Powered by <a tabindex="-1" aria-hidden="true" href="https://github.com/orestbida/cookieconsent/" style="text-decoration: underline;">cookie-consent</a></div>',
+				save_settings_btn : "Save current selection",
 				accept_all_btn : "Accept all",
 				close_btn_label: "Close",
 				cookie_table_headers : [
