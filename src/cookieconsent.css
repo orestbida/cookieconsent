@@ -482,7 +482,9 @@ CookieConsent settings modal
 }
 
 #cc_div span.toggle_label {
-    position: fixed;
+    position: absolute;
+    top: 0;
+    z-index: -1;
     opacity: 0;
     width: 0;
     height: 0;
