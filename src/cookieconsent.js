@@ -19,6 +19,7 @@
             current_lang : "en",         			    
             autorun: true, 							    // run as soon as loaded
             cookie_expiration : 182,					// default: 6 months (in days)
+            share_across_subdomains: false,
         };
 
         /**
@@ -78,6 +79,10 @@
 
             if(typeof conf_params['autorun'] === "boolean"){
                 _config.autorun = conf_params['autorun'];
+            }
+
+            if(typeof conf_params['share_across_subdomains'] === "boolean"){
+                _config.share_across_subdomains = conf_params['share_across_subdomains'];
             }
 
             if(conf_params['auto_language']){
@@ -722,7 +727,7 @@
 
             // save cookie with preferences 'level' (only if never accepted or settings were updated)
             if(!cookie_consent_accepted || changedSettings)
-                _setCookie('cc_cookie', _saved_cookie_content, _config.cookie_expiration, 0, 0);
+                _setCookie('cc_cookie', _saved_cookie_content, _config.cookie_expiration, _getDomain());
 
             if(typeof conf_params['onAccept'] === "function" && !cookie_consent_accepted){
                 cookie_consent_accepted = true;
@@ -1101,6 +1106,26 @@
         }
 
         /**
+        * Gets root domain of current location
+        * Won't work for top-level domains that contain a '.' such as co.uk, ...
+        * Ignore's IP addresses
+        * @returns {String}
+        */
+        var _getRootDomain = function(){
+            const r = /.*\.([^.]*[^0-9][^.]*\.[^.]*[^.0-9][^.]*$)/;
+            return window.location.hostname.replace(r, '$1');
+        }
+
+        /**
+        * Get domain for the cookie
+        * Returns .${root domain} of current location if 'share_across_subdomains' is true, else current window location
+        * @returns {String}
+        */
+        var _getDomain = function(){
+            return (_config.share_across_subdomains) ? `.${_getRootDomain()}` : window.location.hostname;
+        }
+
+        /**
          * Set cookie, specifying name, value and expiration time
          * @param {String} name 
          * @param {String} value 
@@ -1113,14 +1138,18 @@
             date.setTime(date.getTime() + (1000 * (days * 24 * 60 * 60)));
             expires = "; expires=" + date.toUTCString();
 
-            /**
-             * Set secure cookie if https found
-             */
-            if(location.protocol === "https:"){
-                document.cookie = name + "=" + (value || "") + expires + "; path=/; Domain=" + window.location.hostname + "; SameSite=Lax; Secure";
-            }else{
-                document.cookie = name + "=" + (value || "") + expires + "; path=/; SameSite=Lax;";
+            var cookieStr = name + "=" + (value || "") + expires + "; path=/;";
+
+            // assures cookie works with localhost
+            if(window.location.hostname.includes(".")){
+                cookieStr += " Domain=" + domain + ";";
             }
+            cookieStr += " SameSite=Lax;"
+            if(location.protocol === "https:") {
+                cookieStr += " Secure;";
+            }
+
+            document.cookie = cookieStr;
 
             _log("CookieConsent [SET_COOKIE]: cookie "+ name + "='" + value + "' was set!");
         }
@@ -1142,6 +1171,9 @@
         var _eraseCookie = function(name) {   
             document.cookie = name +'=; Path=/; Domain=' + window.location.hostname + '; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
             document.cookie = name +'=; Path=/; Domain=.' + window.location.hostname + '; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+            if(_config.share_across_subdomains){
+                document.cookie = name +'=; Path=/; Domain=.' + _getRootDomain() + '; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+            }
         }
 
         /**
