@@ -19,6 +19,7 @@
             current_lang : "en",         			    
             autorun: true, 							    // run as soon as loaded
             cookie_expiration : 182,					// default: 6 months (in days)
+            cookie_domain: window.location.hostname,    // default: current domain
         };
 
         /**
@@ -78,6 +79,10 @@
 
             if(typeof conf_params['autorun'] === "boolean"){
                 _config.autorun = conf_params['autorun'];
+            }
+
+            if(typeof conf_params['cookie_domain'] === "string"){
+                _config.cookie_domain = conf_params['cookie_domain'];
             }
 
             if(conf_params['auto_language']){
@@ -722,7 +727,7 @@
 
             // save cookie with preferences 'level' (only if never accepted or settings were updated)
             if(!cookie_consent_accepted || changedSettings)
-                _setCookie('cc_cookie', _saved_cookie_content, _config.cookie_expiration, 0, 0);
+                _setCookie('cc_cookie', _saved_cookie_content, _config.cookie_domain, _config.cookie_expiration);
 
             if(typeof conf_params['onAccept'] === "function" && !cookie_consent_accepted){
                 cookie_consent_accepted = true;
@@ -1104,23 +1109,28 @@
          * Set cookie, specifying name, value and expiration time
          * @param {String} name 
          * @param {String} value 
+         * @param {String} domain 
          * @param {Number} days 
          */
-        var _setCookie = function(name, value, days) {
+        var _setCookie = function(name, value, domain, days) {
             var expires = "";
         
             var date = new Date();
             date.setTime(date.getTime() + (1000 * (days * 24 * 60 * 60)));
             expires = "; expires=" + date.toUTCString();
 
-            /**
-             * Set secure cookie if https found
-             */
-            if(location.protocol === "https:"){
-                document.cookie = name + "=" + (value || "") + expires + "; path=/; Domain=" + window.location.hostname + "; SameSite=Lax; Secure";
-            }else{
-                document.cookie = name + "=" + (value || "") + expires + "; path=/; SameSite=Lax;";
+            var cookieStr = name + "=" + (value || "") + expires + "; path=/;";
+
+            // assures cookie works with localhost
+            if(window.location.hostname.includes(".")){
+                cookieStr += " Domain=" + domain + ";";
             }
+            cookieStr += " SameSite=Lax;"
+            if(location.protocol === "https:") {
+                cookieStr += " Secure;";
+            }
+
+            document.cookie = cookieStr;
 
             _log("CookieConsent [SET_COOKIE]: cookie "+ name + "='" + value + "' was set!");
         }
@@ -1140,7 +1150,7 @@
          * @param {String} name 
          */
         var _eraseCookie = function(name) {   
-            document.cookie = name +'=; Path=/; Domain=' + window.location.hostname + '; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+            document.cookie = name +'=; Path=/; Domain=' + _config.cookie_domain + '; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
             document.cookie = name +'=; Path=/; Domain=.' + window.location.hostname + '; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
         }
 
@@ -1231,3 +1241,4 @@
         window['initCookieConsent'] = CookieConsent;
     }
 })();
+
