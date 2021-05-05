@@ -1,5 +1,5 @@
 /*!
- * CookieConsent v2.3
+ * CookieConsent v2.3.1-b2
  * https://www.github.com/orestbida/cookieconsent
  * Author Orest Bida
  * Released under the MIT License
@@ -20,6 +20,8 @@
             autorun: true, 							    // run as soon as loaded
             cookie_expiration : 182,					// default: 6 months (in days)
             cookie_domain: window.location.hostname,    // default: current domain
+            cookie_path: "/",
+            cookie_same_site: "Lax"
         };
 
         /**
@@ -85,7 +87,18 @@
                 _config.cookie_domain = conf_params['cookie_domain'];
             }
 
-            if(conf_params['auto_language']){
+            if(typeof conf_params['cookie_same_site'] === "string"){
+                _config.cookie_same_site = conf_params['cookie_same_site'];
+            }
+
+            if(typeof conf_params['cookie_path'] === "string"){
+                _config.cookie_path = conf_params['cookie_path'];
+            }
+
+            _config.page_scripts = conf_params['page_scripts'] === true;
+            _config.page_scripts_loading = conf_params['page_scripts_loading'] === 'sequential';
+
+            if(conf_params['auto_language'] === true){
                 _config.current_lang = _getValidatedLanguage(_getBrowserLang(), conf_params.languages);
             }else{
                 if(typeof conf_params['current_lang'] === "string"){
@@ -498,10 +511,10 @@
                 block_table_container.appendChild(block_desc);
                 
                 // [NEW]
-                var hide_cookie_table = conf_params['hide_cookie_table'] || false;
+                var remove_cookie_tables = conf_params['remove_cookie_tables'] === true;
 
                 // if cookie table found, generate table for this block
-                if(!hide_cookie_table && typeof all_blocks[i]['cookie_table'] !== 'undefined'){
+                if(!remove_cookie_tables && typeof all_blocks[i]['cookie_table'] !== 'undefined'){
                     var tr_tmp_fragment = document.createDocumentFragment();
                     var all_table_headers = conf_params.languages[_config.current_lang]['settings_modal']['cookie_table_headers'];
                     
@@ -711,13 +724,17 @@
                                 
                                 // Delete each cookie defined in ccb_cookie_table of current block
                                 for(var hk=0; hk<clen; hk++){
+                                    
                                     // Get current row of table (corresponds to all cookie params)
                                     var curr_row = curr_block['cookie_table'][hk];
+                                    var is_regex = curr_row['is_regex'] || false;
+                                    var found_cookies = _getCookie(curr_row[ckey], is_regex, false);
+
+                                    _log("CookieConsent [AUTOCLEAR]: find cookie: '" + curr_row[ckey] + "' found:", found_cookies || false);
                                     
                                     // If cookie exists -> delete it
-                                    if(_getCookie(curr_row[ckey]) != ""){
-                                        _eraseCookie(curr_row[ckey]);
-                                        _log('CookieConsent [AUTOCLEAR]: deleting cookie: \''+curr_row[ckey] +'\'');
+                                    if(found_cookies){
+                                        _eraseCookie(found_cookies, is_regex);
                                     }
                                 }
                             }  
@@ -730,21 +747,17 @@
 
             // save cookie with preferences 'level' (only if never accepted or settings were updated)
             if(!cookie_consent_accepted || changedSettings)
-                _setCookie('cc_cookie', _saved_cookie_content, _config.cookie_domain, _config.cookie_expiration);
+                _setCookie('cc_cookie', _saved_cookie_content);
 
             if(typeof conf_params['onAccept'] === "function" && !cookie_consent_accepted){
                 cookie_consent_accepted = true;
-                if(conf_params['manage_existing_scripts'] === true){
-                    _manageExistingScripts();
-                }
+                _manageExistingScripts(conf_params['manage_existing_scripts'] || false);
                 return conf_params['onAccept'](JSON.parse(_saved_cookie_content));
             }
 
             // fire onChange only if settings were changed
             if(typeof conf_params['onChange'] === "function" && changedSettings){
-                if(conf_params['manage_existing_scripts'] === true){
-                    _manageExistingScripts();
-                }
+                _manageExistingScripts(conf_params['manage_existing_scripts'] || false);
                 conf_params['onChange'](JSON.parse(_saved_cookie_content));
             }
         }
@@ -816,7 +829,7 @@
          * @param {Object} optional_param 
          */
         var _log = function(print_msg, optional_param, error){
-            ENABLE_LOGS && (!error ? console.log(print_msg, optional_param || ' ') : console.error(print_msg, optional_param || ""));
+            ENABLE_LOGS && (!error ? console.log(print_msg, optional_param !== undefined ? optional_param : ' ') : console.error(print_msg, optional_param || ""));
         }
 
         /**
@@ -923,14 +936,13 @@
             } 
         }
         
-
         /**
          * Returns true cookie category is saved into cc_cookie
          * @param {String} cookie_name 
          * @returns {Boolean}
          */
         _cookieconsent.allowedCategory = function(cookie_name){
-            return _arrayContains(JSON.parse(_getCookie('cc_cookie') || '{}')['level'] || [], cookie_name);
+            return _arrayContains(JSON.parse(_getCookie('cc_cookie', false, true) || '{}')['level'] || [], cookie_name);
         }
 
         /**
@@ -943,7 +955,7 @@
                 _setConfig(conf_params);
 
                 // Retrieve cookie value (if set)
-                _saved_cookie_content = _getCookie('cc_cookie');
+                _saved_cookie_content = _getCookie('cc_cookie', false, true);
 
                 // If cookie is empty => create consent modal
                 consent_modal_exists = _saved_cookie_content == '';
@@ -965,14 +977,10 @@
                     setTimeout(function(){_handleFocusOutline();}, 100);
                 });
 
-                
-
                 // if cookie accepted => fire once onAccept method (if defined)
                 if(_saved_cookie_content && typeof conf_params['onAccept'] === "function" && !cookie_consent_accepted){
                     cookie_consent_accepted = true;
-                    if(conf_params['manage_existing_scripts'] === true){
-                        _manageExistingScripts();
-                    }
+                    _manageExistingScripts();
                     conf_params['onAccept'](JSON.parse(_saved_cookie_content || "{}"));
                 }
             }else{
@@ -1014,22 +1022,52 @@
         }
 
         var _manageExistingScripts = function(){
-            // get all the scripts in the current page which you want to manage (those with data-src attribute)
-            var scripts = document.querySelectorAll('script[data-src]');
 
-            // loop through each script
-            for(var i=0; i<scripts.length; i++){
-                // get current script's category
-                var script_category = scripts[i]['dataset']['category'];
-                var accepted_categories = JSON.parse(_saved_cookie_content).level || [];
-                
-                //if script's category is on the list of the cookieconsent's accepted categories => enable script
-                if(script_category && _arrayContains(accepted_categories, script_category)){
-                    scripts[i].src = scripts[i]['dataset']['src'];
-                    scripts[i].removeAttribute('data-src');
-                    _log("CookieConsent [SCRIPT_MANAGER]: loaded script :'"+scripts[i].src+"'");
+            if(!_config.page_scripts) return;
+
+            // get all the scripts in the current page which you want to manage (those with data-src attribute)
+            var scripts = document.querySelectorAll('script[cookie-category]');
+            var sequental = _config.page_scripts_loading === true;
+
+            _log("CookieConsent [SCRIPT_MANAGER]: sequential loading:", sequental);
+
+            /**
+             * Load scripts sequentally or not, using recursive function
+             * @param {Array} scripts scripts to load
+             * @param {Number} index current script to load
+             * @param {Number} length 
+             */
+            var _loadScripts = function(scripts, index){
+                if(index < scripts.length){
+                    var current = scripts[index];
+                    var script_category = current.getAttribute('cookie-category');
+                    var accepted_categories = JSON.parse(_saved_cookie_content).level || [];
+
+                    if(script_category && _arrayContains(accepted_categories, script_category)){
+                        var _fresh = current.cloneNode(true);
+                        _fresh.removeAttribute('type');
+                        _fresh.removeAttribute('cookie-category');
+
+                        if(_fresh.getAttribute('data-src')){
+                            _fresh.setAttribute('src', _fresh.getAttribute('data-src'));
+                            _fresh.removeAttribute('data-src');
+                        }
+
+                        sequental && (_fresh.onload = _fresh.onreadystatechange = function(){
+                            this.onload = this.onreadystatechange = null;
+                            _loadScripts(scripts, ++index);
+                        });
+                        
+                        current.parentNode.replaceChild(_fresh, current);
+                        !sequental && _loadScripts(scripts, ++index);
+                        
+                    }else{
+                        _loadScripts(scripts, ++index);
+                    }
                 }
             }
+
+            _loadScripts(scripts, 0);
         }
 
         /**
@@ -1142,23 +1180,23 @@
          * Set cookie, specifying name, value and expiration time
          * @param {String} name 
          * @param {String} value 
-         * @param {String} domain 
-         * @param {Number} days 
          */
-        var _setCookie = function(name, value, domain, days) {
+        var _setCookie = function(name, value) {
             var expires = "";
         
             var date = new Date();
-            date.setTime(date.getTime() + (1000 * (days * 24 * 60 * 60)));
+            date.setTime(date.getTime() + (1000 * ( _config.cookie_expiration * 24 * 60 * 60)));
             expires = "; expires=" + date.toUTCString();
 
-            var cookieStr = name + "=" + (value || "") + expires + "; path=/;";
+            var cookieStr = name + "=" + (value || "") + expires + "; Path=" + _config.cookie_path + ";";
 
             // assures cookie works with localhost
-            if(window.location.hostname.includes(".")){
-                cookieStr += " Domain=" + domain + ";";
+            if(location.hostname.indexOf(".") > -1){
+                cookieStr += " Domain=" + _config.cookie_domain + ";";
             }
-            cookieStr += " SameSite=Lax;"
+          
+            cookieStr += " SameSite=" + _config.cookie_same_site + ";";
+
             if(location.protocol === "https:") {
                 cookieStr += " Secure;";
             }
@@ -1174,17 +1212,36 @@
          * @param {String} name 
          * @returns {String}
          */
-        var _getCookie = function(name) {
-            return (name = document.cookie.match("(^|;)\\s*" + name + "\\s*=\\s*([^;]+)")) ? name.pop() : ""
+        var _getCookie = function(name, is_regex, get_value) {
+            var found;
+            /**
+             * Allows to find multiple cookies by custom regex expression
+             */
+            if(is_regex){
+                var cookies = document.cookie.split(/;\s*/); found= [];
+                for(var i=0; i<cookies.length; i++){
+                    if (cookies[i].match(name)) {
+                        found.push(cookies[i].split("=")[0]);
+                    }
+                }
+                return found;
+            }else{
+                return (found = document.cookie.match("(^|;)\\s*" + name + "\\s*=\\s*([^;]+)")) ? (get_value ? found.pop() : name) : ""
+            }
         }
 
         /**
          * Delete cookie by name
          * @param {String} name 
+         * @param {Boolean} isArray
          */
-        var _eraseCookie = function(name) {   
-            document.cookie = name +'=; Path=/; Domain=' + _config.cookie_domain + '; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
-            document.cookie = name +'=; Path=/; Domain=.' + window.location.hostname + '; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+        var _eraseCookie = function(name, isArray) {
+            var cookies = isArray ? name : [name], expires = 'Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+            for(var i=0; i<cookies.length; i++){
+                document.cookie = cookies[i] +'=; Path=' +_config.cookie_path + '; Domain=' + _config.cookie_domain + '; ' + expires;
+                document.cookie = cookies[i] +'=; Path=' +_config.cookie_path + '; Domain=.' + _config.cookie_domain + '; ' + expires;
+                _log("CookieConsent [AUTOCLEAR]: deleting cookie: '" + cookies[i] + "'");
+            }
         }
 
         /**
@@ -1193,7 +1250,7 @@
          * @returns {Boolean}
          */
         _cookieconsent.validCookie = function(cookie_name){
-            return _getCookie(cookie_name) != "";
+            return _getCookie(cookie_name, false, true) != "";
         }
 
         /**
@@ -1263,15 +1320,16 @@
             }
             return !!el.className.match(new RegExp('(\\s|^)' + className + '(\\s|$)'));
         }
-
-        return _cookieconsent;
+        
+        return (CookieConsent = window[init] = undefined), _cookieconsent;
     };
 
+
+    var init = 'initCookieConsent';
     /**
      * Make CookieConsent object accessible globally
      */
-    if(typeof window['initCookieConsent'] !== 'function'){
-        window['initCookieConsent'] = CookieConsent;
+    if(typeof window[init] !== 'function'){
+        window[init] = CookieConsent
     }
 })();
-
