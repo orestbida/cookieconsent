@@ -239,9 +239,6 @@ CookieConsent settings modal
     margin-top: 0;
 }
 
-#cc_div #cs_blocks .accordion{
-    margin-bottom: 0;
-}
 
 #cc_div #cs_blocks .accordion .p{
     margin-top: 0;
@@ -334,10 +331,13 @@ CookieConsent settings modal
     max-height: 0;
     overflow: hidden;
     padding-top: 0;
+    margin-bottom: 0;
+    display: none;
 }
 
 #cc_div #cs_blocks ._active .accordion{
     max-height: 100%;
+    display: block;
 }
 
 #cc_div #cs_cont .p{
@@ -486,9 +486,8 @@ CookieConsent settings modal
     top: 0;
     z-index: -1;
     opacity: 0;
-    width: 0;
-    height: 0;
     pointer-events: none;
+    overflow: hidden;
 }
 
 #cc_div #c_policy__text{
@@ -559,7 +558,6 @@ CookieConsent settings modal
 /* Create a custom checkbox */
 #cc_div .c_b_toggle .sc_toggle {
     position: absolute;
-    border-radius: 4em;
     overflow: hidden;
     background: #919ea6;
     background: var(--cc-toggle-bg-off);
@@ -567,6 +565,7 @@ CookieConsent settings modal
     pointer-events: none;
 }
 
+#cc_div span.toggle_label,
 #cc_div .c_b_toggle,
 #cc_div .c_b_toggle .sc_toggle,
 #cc_div .c_b_toggle input{
