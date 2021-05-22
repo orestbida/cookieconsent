@@ -23,7 +23,7 @@
             cookie_domain: location.hostname,       // default: current domain
             cookie_path: "/",
             cookie_same_site: "Lax",
-            script_selector: "cookie-category"
+            script_selector: "data-cookiecategory"
         };
 
         /**
@@ -75,7 +75,7 @@
          * @param {Object} conf_params 
          */
         var _setConfig = function(conf_params){
-            //_log("CookieConsent [CONFIG]: recieved_config_settings ", conf_params);
+            _log("CookieConsent [CONFIG]: recieved_config_settings ", conf_params);
 
             if(typeof conf_params['cookie_expiration'] === "number"){
                 _config.cookie_expiration = conf_params['cookie_expiration'];
@@ -112,7 +112,7 @@
                 _addClass(html_dom, 'force--consent');
             }
 
-            //_log("CookieConsent [LANG]: setting current_lang = '"+ _config.current_lang + "'");
+            _log("CookieConsent [LANG]: setting current_lang = '"+ _config.current_lang + "'");
         }
 
         /**
@@ -242,6 +242,7 @@
                 
                 consent_modal = _createNode('div');
                 var consent_modal_inner = _createNode('div');
+                var consent_modal_inner_inner = _createNode('div');
                 var consent_title = _createNode('div');
                 var consent_text = _createNode('div');
                 var consent_buttons = _createNode('div');
@@ -250,6 +251,7 @@
   
                 consent_modal.id = 'cm'; 
                 consent_modal_inner.id = 'c-inr';
+                consent_modal_inner_inner.id = 'c-inr-i';
                 consent_title.id = 'c-ttl';
                 consent_text.id = 'c-txt';
                 consent_buttons.id = "c-bns";
@@ -284,13 +286,13 @@
                 if(conf_params.languages[lang]['consent_modal']['primary_btn']['role'] == 'accept_all'){
                     _addEvent(consent_primary_btn, "click", function(){ 
                         _cookieconsent.hide();
-                        //_log("CookieConsent [ACCEPT]: cookie_consent was accepted!");
+                        _log("CookieConsent [ACCEPT]: cookie_consent was accepted!");
                         _saveCookiePreferences(conf_params, 1);     // 1 => accept all
                     });
                 }else{
                     _addEvent(consent_primary_btn, "click", function(){
                         _cookieconsent.hide();
-                        //_log("CookieConsent [ACCEPT]: cookie_consent was accepted (necessary only)!");
+                        _log("CookieConsent [ACCEPT]: cookie_consent was accepted (necessary only)!");
                         _saveCookiePreferences(conf_params, -1);    // -1 => accept current selection
                     });
                 }
@@ -306,10 +308,11 @@
                     });
                 }
 
-                consent_modal_inner.appendChild(consent_title);
-                consent_modal_inner.appendChild(consent_text);
+                consent_modal_inner_inner.appendChild(consent_title);
+                consent_modal_inner_inner.appendChild(consent_text);
                 consent_buttons.appendChild(consent_primary_btn);
                 consent_buttons.appendChild(consent_secondary_btn);
+                consent_modal_inner.appendChild(consent_modal_inner_inner);
                 consent_modal_inner.appendChild(consent_buttons); 
                 consent_modal.appendChild(consent_modal_inner);
 
@@ -548,7 +551,7 @@
                             var obj = all_table_headers[g];
                             if(obj){
                                 var new_column_key = _getKeys(obj)[0];
-                            
+                                
                                 var td_tmp = _createNode('td');
                                 td_tmp[innerText] = all_blocks[i]['cookie_table'][n][new_column_key];
                                 td_tmp.setAttribute('data-column', obj[new_column_key]);
@@ -744,7 +747,7 @@
                                         if(found_index > -1) found_cookies.push(all_cookies_array[found_index]);
                                     }
 
-                                    //_log("CookieConsent [AUTOCLEAR]: find cookie: '" + curr_cookie_name + "' found:", found_cookies);
+                                    _log("CookieConsent [AUTOCLEAR]: find cookie: '" + curr_cookie_name + "' found:", found_cookies);
                                     
                                     // If cookie exists -> delete it
                                     if(found_cookies.length > 0){
@@ -818,7 +821,7 @@
 
                         // Append css text content
                         document.getElementsByTagName('head')[0].appendChild(style);
-                        //_log("CookieConsent [AUTOLOAD_CSS]: loaded style = '"+ css_path + "'");
+                        _log("CookieConsent [AUTOLOAD_CSS]: loaded style = '"+ css_path + "'");
                         
                         // Call function with minimal delay (to make sure that initial fade-zoom-in animations dont get skipped)
                         setTimeout(function(){
@@ -879,7 +882,7 @@
         var _getBrowserLang = function(){
             var browser_lang = navigator.language || navigator.browserLanguage;
             browser_lang.length > 2 && (browser_lang = browser_lang[0]+browser_lang[1]);
-            //_log("CookieConsent [LANG]: detected_browser_lang = '"+ browser_lang + "'");
+            _log("CookieConsent [LANG]: detected_browser_lang = '"+ browser_lang + "'");
             return browser_lang.toLowerCase()
         }
 
@@ -966,6 +969,73 @@
                 }, true);
             } 
         }
+
+        /**
+         * Manage each modal's layout
+         * @param {Object} gui_options 
+         */
+        var _guiManager = function(gui_options){
+
+            // If gui_options is not obje => exit
+            if(typeof gui_options !== 'object') return;
+
+            var consent_modal_options = gui_options['consent_modal'];
+            var settings_modal_options = gui_options['settings_modal'];
+
+            /**
+             * Helper function which adds layout and 
+             * position classes to given modal
+             * 
+             * @param {HTMLElement} modal 
+             * @param {Array} allowed_layouts 
+             * @param {Array} allowed_positions 
+             * @param {String} layout 
+             * @param {Array} position
+             */
+            function _setLayout(modal, allowed_layouts, allowed_positions, layout, position){
+                // Check if specified layout is valid
+                if(_arrayContains(allowed_layouts, layout)){
+
+                    // Add layout class
+                    _addClass(modal, layout);
+
+                    // Add position class (if specified)
+                    if(_arrayContains(allowed_positions, position[0])){
+                        for(var i=0; i<position.length; i++){
+                            _addClass(modal, position[i]);
+                        }
+                    }
+                }
+            }
+            
+            if(consent_modal_exists && consent_modal_options){
+                var layout = consent_modal_options['layout'];
+                var position = consent_modal_options['position'];
+                position = position && position.split(" ") || [];
+
+                _setLayout(
+                    consent_modal,
+                    ['box', 'bar', 'cloud'],
+                    ['top', 'bottom'],
+                    layout,
+                    position
+                );
+            }
+
+            if(settings_modal_options){
+                var layout = settings_modal_options['layout'];
+                var position = settings_modal_options['position'];
+                position = position && position.split(" ") || [];
+
+                _setLayout(
+                    settings_container,
+                    ['bar'],
+                    ['left', 'right'],
+                    layout,
+                    position
+                );
+            }
+        }
         
         /**
          * Returns true if cookie category is accepted by the user
@@ -997,6 +1067,7 @@
                 _loadCSS(conf_params['theme_css'], function(){
                     // Generate cookie-settings dom (& consent modal)
                     _createCookieConsentHTML(!consent_modal_exists, conf_params);
+                    _guiManager(conf_params['gui_options']);
                     _addCookieSettingsButtonListener();
                     _getModalFocusableData();
 
@@ -1018,7 +1089,7 @@
                     conf_params['onAccept'](JSON.parse(_saved_cookie_content || "{}"));
                 }
             }else{
-                //_log("CookieConsent [NOTICE]: cookie consent alredy attached to body!");
+                _log("CookieConsent [NOTICE]: cookie consent alredy attached to body!");
             }
         }
 
@@ -1051,7 +1122,7 @@
                     current_modal_focusable = settings_modal_focusable;
                 }, 100);
 
-                //_log("CookieConsent [SETTINGS]: show settings_modal");
+                _log("CookieConsent [SETTINGS]: show settings_modal");
             }, delay > 0 ? delay : 0);
         }
 
@@ -1068,7 +1139,7 @@
             var sequental = _config.page_scripts_order;
             var accepted_categories = JSON.parse(_saved_cookie_content).level || [];
 
-            //_log("CookieConsent [SCRIPT_MANAGER]: sequential loading:", sequental);
+            _log("CookieConsent [SCRIPT_MANAGER]: sequential loading:", sequental);
 
             /**
              * Load scripts sequentally or not, using a recursive function
@@ -1190,7 +1261,7 @@
                     last_elem_before_modal = document.activeElement;
                     current_modal_focusable = consent_modal_focusable;
                     
-                    //_log("CookieConsent [MODAL]: show consent_modal");
+                    _log("CookieConsent [MODAL]: show consent_modal");
                 }, delay > 0 ? delay : 0);
             }
         }
@@ -1207,7 +1278,7 @@
                 //restore focus to last page element which had focus before modal opening
                 last_elem_before_modal.focus();
                 current_modal_focusable = null;
-                //_log("CookieConsent [MODAL]: hide");
+                _log("CookieConsent [MODAL]: hide");
             }
         }
 
@@ -1234,7 +1305,7 @@
             }
 
             clicked_inside_modal = false;
-            //_log("CookieConsent [SETTINGS]: hide settings_modal");
+            _log("CookieConsent [SETTINGS]: hide settings_modal");
         }
 
         /**
@@ -1262,7 +1333,7 @@
 
             document.cookie = cookieStr;
 
-            //_log("CookieConsent [SET_COOKIE]: cookie "+ name + "='" + value + "' was set!");
+            _log("CookieConsent [SET_COOKIE]: cookie "+ name + "='" + value + "' was set!");
         }
 
         /**
@@ -1298,7 +1369,7 @@
             for(var i=0; i<cookies.length; i++){
                 document.cookie = cookies[i] +'=; Path='+ path +'; Domain=' + _config.cookie_domain + '; ' + expires;
                 document.cookie = cookies[i] +'=; Path='+ path +'; Domain=.' + _config.cookie_domain + '; ' + expires;
-                //_log("CookieConsent [AUTOCLEAR]: deleting cookie: '" + cookies[i] + "' path: '" + path + "'");
+                _log("CookieConsent [AUTOCLEAR]: deleting cookie: '" + cookies[i] + "' path: '" + path + "'");
             }
         }
 
