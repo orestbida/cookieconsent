@@ -1150,8 +1150,7 @@
             var scripts = document.querySelectorAll('script[' + _config.script_selector + ']');
             var sequental_enabled = _config.page_scripts_order;
             var accepted_categories = JSON.parse(_saved_cookie_content).level || [];
-
-            _log("CookieConsent [SCRIPT_MANAGER]: sequential loading:", sequental);
+            _log("CookieConsent [SCRIPT_MANAGER]: sequential loading:", sequental_enabled);
 
             /**
              * Load scripts (sequentally), using a recursive function
@@ -1172,7 +1171,10 @@
                     if(_inArray(accepted_categories, curr_script_category) > -1){
                         
                         var fresh_script = curr_script.cloneNode(true);
-                        var src = curr_script.getAttribute('data-src') || curr_script.getAttribute('src');
+                        var src = fresh_script.getAttribute('data-src') || fresh_script.src;
+                        
+                        // set src (if src found)
+                        src && (fresh_script.src = src);
 
                         fresh_script.type = 'text/javascript';
                         fresh_script.removeAttribute(_config.script_selector);
