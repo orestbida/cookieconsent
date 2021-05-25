@@ -784,15 +784,15 @@
             if(!cookie_consent_accepted || changedSettings.length > 0)
                 _setCookie(_config.cookie_name, _saved_cookie_content);
 
+            _manageExistingScripts();
+
             if(typeof conf_params['onAccept'] === "function" && !cookie_consent_accepted){
-                cookie_consent_accepted = true;
-                _manageExistingScripts();
+                cookie_consent_accepted = true; 
                 return conf_params['onAccept'](JSON.parse(_saved_cookie_content));
             }
 
             // fire onChange only if settings were changed
             if(typeof conf_params['onChange'] === "function" && changedSettings.length > 0){
-                _manageExistingScripts();
                 conf_params['onChange'](JSON.parse(_saved_cookie_content));
             }
         }
@@ -1100,9 +1100,10 @@
                     cookie_consent_accepted && 
                     typeof conf_params['onAccept'] === "function"
                 ){
-                    _manageExistingScripts();
                     conf_params['onAccept'](JSON.parse(_saved_cookie_content || "{}"));
                 }
+
+                _manageExistingScripts();
             }else{
                 _log("CookieConsent [NOTICE]: cookie consent alredy attached to body!");
             }
