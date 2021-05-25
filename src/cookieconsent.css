@@ -759,6 +759,12 @@ html.force--consent.show--consent,
 html.force--consent.show--settings{
     overflow-y: hidden!important;
 }
+
+html.force--consent,
+html.force--consent body{
+    height: auto!important;
+    overflow-x: hidden!important;
+}
 /** END BLOCK PAGE SCROLL */
 
 /** BEGIN ICONS **/
