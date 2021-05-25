@@ -23,13 +23,15 @@ Addressed to those who alredy use this plugin: if you plan on using this version
 1. [Key features](#key-features)
 2. [How to use](#how-to-use)
 3. [Download & CDN](#download--cdn)
-4. [APIs & config. parameters](#apis--configuration-parameters)
-5. [Configuration examples](#full-example-configurations) (work-in-progress)
+4. [Layout options & customization](#layout-options--customization)
+5. [APIs & config. parameters](#apis--configuration-parameters)
+6. [Manage third party scripts](#manage-third-party-scripts)
+7. [Configuration examples](#full-example-configurations) (work-in-progress)
     - Configuration with [Google analytics](#full-example-configurations)
     - Configuration with [explicit `accept all` and `accept necessary only` buttons](#explicit-consent)
     - Configuration with embedded full cookie-policy 
-6. [FAQ](#faq)
-7. [License](#license)
+8. [FAQ](#faq)
+9. [License](#license)
 
 ## Key features
 - __Lightweight__ (~ 10kb for minified version)
@@ -95,16 +97,17 @@ Addressed to those who alredy use this plugin: if you plan on using this version
                             title : "Strictly necessary cookies",
                             description: 'Category description ... ',
                             toggle : {
-                                value : 'necessary_cookies',
-                                enabled : true,
+                                value : 'necessary',
+                                enabled : false,
                                 readonly: true
                             }
                         },{
                             title : "Statistics cookies",
                             description: 'Category description ... ',
                             toggle : {
-                                value : 'statistics_cookies',
+                                value : 'statistics',
                                 enabled : true,
+                                // reload : 'on_disable',
                                 readonly: false
                             }
                         },
@@ -126,13 +129,61 @@ You can download the [latest version](https://github.com/orestbida/cookieconsent
 
 javascript :
 ```html
-https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@v2.3/dist/cookieconsent.js
+https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@v2.4/dist/cookieconsent.js
 ```
 
 stylesheet :
 ```html
-https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@v2.3/dist/cookieconsent.css
+https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@v2.4/dist/cookieconsent.css
 ```
+
+## Layout options & customization
+You can change the color scheme with css variables inside cookieconsent.css. You can also change some basic layout options via the `gui_options` inside the config. object; example:
+
+```javascript
+cookieconsent.run({
+    ...
+    gui_options: {
+        consent_modal : {
+            layout : 'cloud',               // box/cloud/bar
+            position : 'bottom center',     // bottom/top + left/right/center
+            transition: 'slide'             // zoom/slide
+        },
+        settings_modal : {
+            layout : 'box',                 // box/bar
+            // position : 'left',           // left/right
+            transition: 'slide'             // zoom/slide
+        }
+    }
+    ...
+});
+```
+<i>Default layout is `box` and default transition is `slide`.</i>
+
+## Manage third party scripts
+If you have `<script>` tags which you want to manage through the cookieconsent (enable based on a specific cookie category) you can do this by either moving the javascript code inside the onAccept/onChange methods and using the provided APIs below, or via `page_scripts` option:
+
+1. Enable page scripts management:
+
+    ```javascript
+    cookieconsent.run({
+        ...
+        page_scripts: true
+        ...
+    });
+    ```
+2. Disable the script tag by setting `type="text/plain"` and change src to `data-src`:
+
+    ```html
+    <script type="text/plain" data-src="<path>/analytics.js" defer>
+    ```
+3. Add `data-cookiecategory` attribute:
+
+    ```html
+    <script type="text/plain" data-src="<path>/analytics.js" data-cookiecategory="analytics" defer>
+    ```
+    <i>Note: data-cookiecategory must also be defined inside the config. object</i>
+
 ## APIs & configuration parameters
 After getting the plugin like so:
 
@@ -163,6 +214,7 @@ Additional methods for an easier management of your scripts and cookie settings 
         value: 'analytics',     // cookie category
         enabled : false,        // default status
         readonly: false         // allow to enable/disable
+        // reload : 'on_disable',   // allows to reload page when the current cookie category is deselected
     }
     ...
     ```
@@ -219,12 +271,17 @@ Below a table which sums up all of the available options (must be passed to the 
 | `autorun`           	| boolean  	| true    	| If enabled, show the cookie consent as soon as possible (otherwise you need to manually call the `.show()` method)               	|
 | `delay`             	| number   	| 0       	| Number of `milliseconds` before showing the consent-modal                                                                        	|
 | `cookie_expiration` 	| number   	| 182     	| Number of days before the cookie expires (182 days = 6 months)                                                                   	|
-| `autoload_css`      	| boolean  	| false   	| Enable if you want to let the plugin load the css (requires `theme_css` to be a valid path)                                      	|
-| `theme_css`         	| string   	| -       	| Specify path to the .css file (requires `autoload_css` to be `true` for it to work)                                              	|
-| `force_consent`       | boolean   | false     | Enable if you want to block page navigation until user action (check faq below for [proper implementation]()) |
+| `cookie_path` 	    | string   	| "/"     	| Path where the cookie will be set                                                                                                 |
+| `cookie_domain` 	    | string   	| location.hostname | Specify your domain (will be grabbed by default) or a subdomain                                                           |
+| `cookie_same_site` 	| string   	| "Lax"     | SameSite attribute                                                           |
+| `theme_css`         	| string   	| -       	| Specify path to the .css file                                          	|
+| `force_consent`       | boolean   | false     | Enable if you want to block page navigation until user action (check [faq](#faq) for a proper implementation) |
 | `current_lang`      	| string   	| -       	| Specify one of the languages you have defined (can also be dynamic): `'en'`, `'de'` ...                                          	|
 | `auto_language`     	| boolean  	| false   	| Automatically grab the language based on the user's browser language, if language is not defined => use specified `current_lang` 	|
 | `autoclear_cookies` 	| boolean  	| false   	| Enable if you want to automatically delete cookies when user opts-out of a specific category inside cookie settings              	|
+| `page_scripts` 	    | boolean  	| false   	| Enable if you want to easily `manage existing <script>` tags. Check [manage third party scripts](#manage-third-party-scripts)     	|
+| `remove_cookie_tables`| boolean  	| false   	| Enable if you want remove the html cookie tables (and still want to make use of `autoclear_cookies`)     	|
+| `gui_options`         | object  	| -   	    | Customization option which allows to choose layout, position	and transition. Check [layout options & customization](#layout-options--customization) |
 | __`onAccept`__      	| function 	| -       	| Method run `once` either when:  <br>  1. The moment the cookie consent is accepted <br> 2. After each page load (if cookie consent has alredy  been accepted)         	|
 | __`onChange`__      	| function 	| -       	| Method run `whenever preferences are modified` (and only if cookie consent has alredy been accepted)                                                                            	|
 | `languages`      	    | object 	| -       	| [Check below](#how-to-configure-languages--cookie-settings) for configuration
@@ -244,8 +301,19 @@ Below a table which sums up all of the available options (must be passed to the 
         current_lang : 'en',
         theme_css : "../src/cookieconsent.css",		
         autoclear_cookies : true,	
-        autoload_css : true, 
-        cookie_expiration : 365,	
+        cookie_expiration : 365,
+        
+        gui_options : {
+            consent_modal : {
+                layout : 'cloud',
+                position : 'bottom',
+                transition : 'slide'
+            },
+            settings_modal : {
+                layout : 'box',
+                transition : 'slide'
+            }
+        },
         
         onAccept: function(cookies){				
             if(cc.allowedCategory('analytics_cookies')){
@@ -383,7 +451,7 @@ cookieconsent.run({
                         description: 'Third block description ...',
                         toggle : {
                             value : 'my_category2',
-                            enabled : true,
+                            enabled : false,
                             readonly: false
                         }
                     }
@@ -424,7 +492,7 @@ cookieconsent.run({
                         description: 'Third block description in italian...',
                         toggle : {
                             value : 'my_category2',
-                            enabled : true,
+                            enabled : false,
                             readonly: false
                         }
                     }
@@ -539,6 +607,7 @@ cookieconsent.run({
 
     ```javascript
     cookieconsent.run({
+        ...
         current_lang : document.documentElement.getAttribute('lang'),
         ...
     });
@@ -578,11 +647,11 @@ cookieconsent.run({
 -   <details><summary>How to autoload the .css file</summary>
     <p id="autoload-css">
 
-    You need to enable `autoload_css` and set `theme_css` to a valid path.
+    You need to set `theme_css` to a valid path.
 
     ```javascript
     cookieconsent.run({
-        autoload_css : true, 	
+        ...
         theme_css : "../src/cookieconsent.css",					
         ...
     });
@@ -603,7 +672,7 @@ cookieconsent.run({
             ...
         });
         ```
-    2. add the following style **inside the head tag** of your page (important as it avoids weird jumps when scrollbar is hidden/shown) :
+    2. That should do it. If you want to remove the weird horizontal jump (due to the scrollbar disappearing) you can add the following style **inside the head tag** of your page:
         ```html
         <style>
             html,

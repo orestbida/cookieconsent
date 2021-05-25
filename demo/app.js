@@ -13,7 +13,6 @@ cc.run({
 	auto_language : false,
 	autoclear_cookies : true,
 	cookie_expiration : 365,
-	autoload_css: true,
 	theme_css: '../dist/cookieconsent.css',
 	force_consent: false,
 

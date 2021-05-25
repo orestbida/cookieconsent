@@ -13,19 +13,39 @@ cc.run({
 	auto_language : false,
 	autoclear_cookies : true,
 	cookie_expiration : 365,
-	autoload_css: true,
 	theme_css: '../dist/cookieconsent.css',
 	force_consent: true,
 
+	/* New options from v2.4 (everything is optional) */
+	// remove_cookie_tables: false				// default: false (if set to true, cookie table's html will not be generated)
+
+	// cookie_domain: location.hostname,       	// default: current domain
+	// cookie_path: "/",						// default: root
+	// cookie_same_site: "Lax",
+	
+	/* Manage existing <scripts> tags (check readme.md) */
+	page_scripts: true,							// default: false (by default don't manage existing script tags)
+
+	/* Basic gui options */
+	gui_options : {
+		consent_modal : {
+			layout : 'cloud',				// box(default),cloud,bar
+			position : 'bottom center',		// bottom(default),top + left,right,center:=> examples: 'bottom' or 'top right'
+			transition : 'slide'			// zoom(default),slide
+		},
+		settings_modal : {
+			layout : 'box',						// box(default),bar
+			// position: 'left',				// right(default),left (available only if bar layout selected)
+			transition : 'slide'				// zoom(default),slide
+		}
+	},
+
+	/* End new options added in v2.4 */
+
 	onAccept: function(cookie){
 		console.log("onAccept fired ...");
-		if(cc.allowedCategory('analytics_cookies')){
-			cc.loadScript('https://www.google-analytics.com/analytics.js', function(){		
-				ga('create', 'UA-46747204-4', 'auto');
-				ga('send', 'pageview');
-				console.log("analytics.js loaded");
-			});
-		}
+		disableBtn('btn2');
+    	disableBtn('btn3');
 		
 		// Delete line below
 		document.getElementById("cookie_val").innerHTML = JSON.stringify(cookie, null, 2);
@@ -42,7 +62,7 @@ cc.run({
 	languages : {
 		'en' : {	
 			consent_modal : {
-				title :  "I use cookies",
+				title :  "👋 It's time for some nice cookies",
 				description :  'Hi, this website uses essential cookies to ensure its proper operation and tracking cookies to understand how you interact with it. The latter will be set only after consent. <a href="#privacy-policy" class="cc-link">Privacy policy</a>',
 				primary_btn: {
 					text: 'Accept all',
@@ -61,70 +81,87 @@ cc.run({
 				cookie_table_headers : [
 					{col1: "Name" }, 
 					{col2: "Domain" }, 
-					{col3: "Expiration" }, 
-					{col4: "Description" }, 
-					{col5: "Type" }
+					{col3: "Expiration" }
 				],
 				blocks : [
 					{
 						title : "Cookie usage",
-						description: 'I use cookies to ensure the basic functionalities of the website and to enhance your online experience. You can choose for each category to opt-in/out whenever you want. For more details relative to cookies and other sensitive data, please read the full <a href="#" class="cc-link">privacy policy</a>.'
+						description: getLoremIpsum()+' <a href="#" class="cc-link">Privacy Policy</a>.'
 					},{
 						title : "Strictly necessary cookies",
-						description: 'These cookies are essential for the proper functioning of my website. Without these cookies, the website would not work properly',
+						description: getLoremIpsum()+getLoremIpsum()+"<br><br>"+getLoremIpsum()+getLoremIpsum(),
 						toggle : {
-							value : 'necessary_cookies',
+							value : 'necessary',
 							enabled : true,
 							readonly: true							//cookie categories with readonly=true are all treated as "necessary cookies"
 						}
 					},{
-						title : "Preferences cookies",
-						description: 'These cookies allow the website to remember the choices you have made in the past',
+						title : "Analytics & Performance cookies",
+						description: getLoremIpsum()+getLoremIpsum(),
 						toggle : {
-							value : 'preferences_cookies',	//there are no default categories => you specify them
-							enabled : true,
-							readonly: false
-						}
-					},{
-						title : "Analytics cookies",
-						description: 'These cookies collect information about how you use the website, which pages you visited and which links you clicked on. All of the data is anonymized and cannot be used to identify you',
-						toggle : {
-							value : 'analytics_cookies',
+							value : 'analytics',
 							enabled : false,
-							readonly: false
+							readonly: false	
 						},
 						cookie_table: [
 							{
 								col1: '_ga',
-								col2: 'google.com',
-								col3: '2 years',
-								col4: 'description ...' ,
-								col5: 'Permanent cookie'
+								col2: 'yourdomain.com',
+								col3: getLoremIpsum(),
 							},
 							{
 								col1: '_gat',
-								col2: 'google.com',
-								col3: '1 minute',
-								col4: 'description ...' ,
-								col5: 'Permanent cookie'
+								col2: 'yourdomain.com',
+								col3: getLoremIpsum(),
+							},
+							{
+								col1: '_gat_UA-46747204-9',
+								col2: 'yourdomain.com',
+								col3: getLoremIpsum(),
 							},
 							{
 								col1: '_gid',
-								col2: 'google.com',
-								col3: '1 day',
-								col4: 'description ...' ,
-								col5: 'Permanent cookie'
+								col2: 'yourdomain.com',
+								col3: 'description ...',
+							},
+							{
+								col1: '_my_cookie',
+								col2: 'yourdomain.com',
+								col3: 'test cookie with custom path ...',
+								path: '/demo'		// needed for autoclear cookies 
+							}
+						]
+					},{
+						title : "Targeting & Advertising cookies",
+						description: 'If this category is deselected, <b>the page will reload when preferences are saved</b>... <br><br>(demo example with reload option enabled, for scripts like microsoft clarity which will re-set cookies and send beacons even after the cookies have been cleared by the cookieconsent\'s autoclear function)',
+						toggle : {
+							value : 'targeting',
+							enabled : false,
+							readonly: false,
+							reload: 'on_disable'			// New option in v2.4, check readme.md
+						},
+						cookie_table : [
+							{
+								col1: '^_cl',				// New option in v2.4: regex (microsoft clarity cookies)
+								col2: 'yourdomain.com',
+								col3: 'These cookies are set by microsoft clarity',
+								// path: '/',				// New option in v2.4
+								is_regex: true				// New option in v2.4
 							}
 						]
 					},{
 						title : "More information",
-						description: 'For any queries in relation to my policy on cookies and your choices, please <a class="cc-link" href="https://orestbida.com/contact">contact me</a>.',
+						description: getLoremIpsum() + ' <a class="cc-link" href="https://orestbida.com/contact/">Contact me</a>.',
 					}
 				]
 			}
 		}
 	}
 });
+
+function getLoremIpsum(){
+	return 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.';
+}
 
 // DELETE ALL CONTENT BELOW THIS COMMENT!!!
 if(cc.validCookie('cc_cookie')){
