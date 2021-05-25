@@ -718,8 +718,13 @@
                         // If current block has a toggle for opt in/out
                         if(curr_block.hasOwnProperty('toggle')){
                             
-                            // if current block has a cookie table with toggle off => delete cookies
-                            if(!toggle_states[++count] && curr_block.hasOwnProperty('cookie_table')){
+                            // if current block has a cookie table with toggle off, a cookie_table 
+                            // and the it's preferences were just changed => delete cookies
+                            if(
+                                !toggle_states[++count] && 
+                                curr_block.hasOwnProperty('cookie_table') && 
+                                _inArray(changedSettings, curr_block['toggle']['value']) > -1
+                            ){
                                 var curr_cookie_table = curr_block['cookie_table'];
 
                                 // Get first property name
