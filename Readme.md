@@ -129,12 +129,12 @@ You can download the [latest version](https://github.com/orestbida/cookieconsent
 
 javascript :
 ```html
-https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@v2.4/dist/cookieconsent.js
+https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@v2.4.2/dist/cookieconsent.js
 ```
 
 stylesheet :
 ```html
-https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@v2.4/dist/cookieconsent.css
+https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@v2.4.2/dist/cookieconsent.css
 ```
 
 ## Layout options & customization
