@@ -23,13 +23,15 @@ Addressed to those who alredy use this plugin: if you plan on using this version
 1. [Key features](#key-features)
 2. [How to use](#how-to-use)
 3. [Download & CDN](#download--cdn)
-4. [APIs & config. parameters](#apis--configuration-parameters)
-5. [Configuration examples](#full-example-configurations) (work-in-progress)
+4. [Layout options & customization](#layout-options--customization)
+5. [APIs & config. parameters](#apis--configuration-parameters)
+6. [Manage third party scripts]()
+7. [Configuration examples](#full-example-configurations) (work-in-progress)
     - Configuration with [Google analytics](#full-example-configurations)
     - Configuration with [explicit `accept all` and `accept necessary only` buttons](#explicit-consent)
     - Configuration with embedded full cookie-policy 
-6. [FAQ](#faq)
-7. [License](#license)
+8. [FAQ](#faq)
+9. [License](#license)
 
 ## Key features
 - __Lightweight__ (~ 10kb for minified version)
@@ -133,6 +135,51 @@ stylesheet :
 ```html
 https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@v2.3/dist/cookieconsent.css
 ```
+
+## Layout options & customization
+You can change the color scheme with css variables inside cookieconsent.css. You can also change some basic layout options via the `gui_options` inside the config. object; example:
+
+```javascript
+cookieconsent.run({
+    ...
+    gui_options: {
+        consent_modal : {
+            layout : 'cloud',               // box/cloud/bar
+            position : 'bottom center',     // bottom/top + left/right/center
+            transition: 'slide'             // zoom/slide
+        },
+        settings_modal : {
+            layout : 'box',                 // box/bar
+            // position : 'left',           // left/right
+            transition: 'slide'             // zoom/slide
+        }
+    }
+    ...
+});
+```
+<i>Default layout is `box` and default transition is `slide`.</i>
+
+## Manage third party scripts
+If you have `<script>` tags which you want to manage through the cookieconsent (enable based on a specific cookie category) you can do this by either moving the javascript code inside the onAccept/onChange and using the provided APIs below, or via `page_scripts` option.
+
+1. Enable page scripts management:
+    ```javascript
+    cookieconsent.run({
+        ...
+        page_scripts: true
+        ...
+    });
+    ```
+2. Disable the script tag by setting `type="text/plain"` and change src to `data-src`:
+    ```html
+    <script type="text/plain" data-src="<path>/analytics.js" defer>
+    ```
+3. Add `data-cookiecategory` attribute:
+    ```html
+    <script type="text/plain" data-src="<path>/analytics.js" data-cookiecategory="analytics" defer>
+    ```
+    <i>Note: data-cookiecategory must also be defined inside the config. object</i>
+
 ## APIs & configuration parameters
 After getting the plugin like so:
 
