@@ -1082,6 +1082,10 @@
                     _addCookieSettingsButtonListener();
                     _getModalFocusableData();
 
+                    if(!_saved_cookie_content && _config.autorun){
+                        _cookieconsent.show(conf_params['delay'] || 0);
+                    }
+
                     // Add class to enable animations/transitions
                     setTimeout(function(){_addClass(main_container, 'c--anim');}, 15);
 
@@ -1089,12 +1093,8 @@
                     setTimeout(function(){_handleFocusTrap();}, 100);
                 });
 
-                if(!_saved_cookie_content && _config.autorun){
-                    _cookieconsent.show(conf_params['delay'] || 0);
-                }else{
-                    cookie_consent_accepted = true;
-                }
-
+                _saved_cookie_content && (cookie_consent_accepted = true)
+  
                 // if cookie accepted => fire once the "onAccept" method (if defined)
                 if(
                     cookie_consent_accepted && 
