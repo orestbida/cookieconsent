@@ -34,7 +34,7 @@ Addressed to those who alredy use this plugin: if you plan on using this version
 9. [License](#license)
 
 ## Key features
-- __Lightweight__ (~ 10kb for minified version)
+- __Lightweight__
 - __Cross-browser__ support (IE8+)
 - __Standalone__ (no external dependecies needed)
 - __GDPR compliant__
@@ -158,7 +158,7 @@ cookieconsent.run({
     ...
 });
 ```
-<i>Default layout is `box` and default transition is `slide`.</i>
+<i>Default layout is `box` and default transition is `zoom`.</i>
 
 ## Manage third party scripts
 If you have `<script>` tags which you want to manage through the cookieconsent (enable based on a specific cookie category) you can do this by either moving the javascript code inside the onAccept/onChange methods and using the provided APIs below, or via `page_scripts` option:
