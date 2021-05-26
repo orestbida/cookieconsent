@@ -91,7 +91,8 @@
 #cm,
 #s-inr,
 .cc_div .c-bl,
-.cc_div .b-tl{
+.cc_div .b-tl,
+#s-bl .act .b-acc{
     border-radius: .25em;
 }
 
@@ -101,6 +102,14 @@
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
+}
+
+.cc_div a{
+    text-decoration: underline;
+}
+
+.cc_div a:hover{
+    text-decoration: none;
 }
 
 /* Make elements "animatable" */
@@ -117,6 +126,27 @@
 }
 
 /* start transitions */
+.c--anim #cm.bar.slide,
+.c--anim .bar.slide #s-inr{
+    transition: visibility .4s ease, opacity .4s ease, transform .4s ease!important;
+}
+
+.c--anim #cm.bar.slide + #cm-ov,
+.c--anim .bar.slide + #cs-ov{
+    transition: visibility .4s ease, opacity .4s ease, transform .4s ease!important;
+}
+
+#cm.bar.slide,
+.cc_div .bar.slide #s-inr{
+    transform: translateX(100%);
+    opacity: 1;
+}
+
+#cm.bar.top.slide,
+.cc_div .bar.left.slide #s-inr{
+    transform: translateX(-100%);
+    opacity: 1;
+}
 
 #cm.slide,
 .cc_div .slide #s-inr{
@@ -125,24 +155,6 @@
 
 #cm.top.slide{
     transform: translateY(-1.6em);
-}
-
-#cm.bar.slide,
-.cc_div .bar.slide #s-inr{
-    transition: visibility .35s ease, opacity .35s ease, transform .35s ease!important;
-    transform: translateX(100%);
-    opacity: 1;
-}
-
-#cm.bar.slide + #cm-ov,
-.cc_div .bar.slide + #cs-ov{
-    transition: visibility .35s ease, opacity .35s ease, transform .35s ease!important;
-}
-
-#cm.bar.top.slide,
-.cc_div .bar.left.slide #s-inr{
-    transform: translateX(-100%);
-    opacity: 1;
 }
 
 #cm.bar.slide{
@@ -157,31 +169,23 @@
 /* Show modals */
 
 .show--consent .c--anim #cm,
-.show--consent .c--anim #cm.bar{
+.show--consent .c--anim #cm.bar,
+.show--settings .c--anim #s-inr,
+.show--settings .c--anim .bar.slide #s-inr{
     opacity: 1;
-    visibility: visible!important;
     transform: scale(1);
+    visibility: visible!important;
 }
 
 .show--settings .c--anim #s-cnt{
     visibility: visible!important;
 }
 
-.show--settings .c--anim #s-inr,
-.show--settings .c--anim .bar.slide #s-inr{
-    transform: scale(1);
-    opacity: 1;
-}
-
 /* Show overlays */
-.force--consent.show--consent .c--anim #cm-ov{
-    opacity: 1;
-    visibility: visible;
-}
-
+.force--consent.show--consent .c--anim #cm-ov,
 .show--settings .c--anim #cs-ov{
-    opacity: 1;
-    visibility: visible;
+    visibility: visible!important;
+    opacity: 1!important;
 }
 
 #cm{
@@ -264,7 +268,6 @@ CookieConsent settings modal
     display: table;
     height: 100%;
     visibility: hidden;
-    transition: none!important;
 }
 
 #s-bl{
@@ -299,7 +302,7 @@ CookieConsent settings modal
     width: 100%;
     cursor: pointer;
     position: relative;
-    padding: 1.4em 6em 1.4em 2.7em;
+    padding: 1.4em 6.4em 1.4em 2.7em;
     background: none;
     transition: background-color .25s ease;
 }
@@ -385,6 +388,7 @@ CookieConsent settings modal
 #s-bl .act .b-acc{
     max-height: 100%;
     display: block;
+    overflow: hidden;
 }
 
 #s-cnt .p{
@@ -426,6 +430,7 @@ CookieConsent settings modal
     position: relative;
     height: 100%;
     overflow: hidden;
+    visibility: hidden;
     box-shadow: rgba(3, 6, 9, .26) 0px 13px 27px -5px;
 }
 
@@ -716,13 +721,14 @@ CookieConsent settings modal
     background: #070707;
     background: rgba(4, 6, 8, .85);
     background: var(--cc-overlay-bg);
-}
-
-#cm-ov{
     display: none;
+    transition: none;
 }
 
-.force--consent #cm-ov{
+.show--settings #cs-ov,
+.c--anim #cs-ov,
+.force--consent .c--anim #cm-ov,
+.force--consent.show--consent #cm-ov{
     display: block;
 }
 
@@ -883,7 +889,6 @@ html.force--consent body{
 .cc_div .cloud #c-inr{
     display: table;
     width: 100%;
-    overflow: hidden;
 }
 
 .cc_div .cloud #c-inr-i{
@@ -970,8 +975,6 @@ html.force--consent body{
     padding: 0;
 }
 
-
-
 /* align bar to right by default */
 .cc_div .bar #s-inr{
     margin: 0;
@@ -1013,7 +1016,7 @@ html.force--consent body{
     /* Behave  like a "row" */
     border: none;
     position: relative;
-    padding-left: 40%; 
+    padding-left: 35%; 
 }
 
 .cc_div .bar #s-bl td:before { 
@@ -1184,7 +1187,7 @@ html.force--consent body{
         /* Behave  like a "row" */
         border: none;
         position: relative;
-        padding-left: 40%; 
+        padding-left: 35%; 
     }
 
     #s-bl td:before { 
@@ -1294,7 +1297,19 @@ html.force--consent body{
 }
 
 .cc_div.ie #s-cnt .b-bn .b-tl{
-    padding: 1.4em 6em 1.4em 1.4em
+    padding: 1.4em 6.4em 1.4em 1.4em
+}
+
+.cc_div.ie  .bar #s-bl td:before{
+    display: none;
+}
+
+.cc_div.ie .bar #s-bl td{
+    padding: 0.8em 0.625em 0.8em 1.2em;
+}
+
+.cc_div.ie .bar #s-bl thead tr{
+    position: relative;
 }
 
 .cc_div.ie .b-tg .t-lb{

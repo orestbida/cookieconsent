@@ -272,7 +272,8 @@
                 /**
                  * Make modal by default hidden to prevent weird page jumps/flashes (shown only once css is loaded)
                  */
-                consent_modal.style.visibility = "hidden";
+                consent_modal.style.visibility = overlay.style.visibility = "hidden";
+                overlay.style.opacity = 0;
 
                 // Use insertAdjacentHTML instead of innerHTML
                 consent_title.insertAdjacentHTML('beforeend', conf_params.languages[lang]['consent_modal']['title']);
@@ -281,22 +282,17 @@
                 consent_primary_btn[innerText] = conf_params.languages[lang]['consent_modal']['primary_btn']['text'];
                 consent_secondary_btn[innerText] = conf_params.languages[lang]['consent_modal']['secondary_btn']['text'];
 
-                /**
-                 * Add click event listeners
-                 */
+                var accept_type = -1;   // accept current selection
+
                 if(conf_params.languages[lang]['consent_modal']['primary_btn']['role'] == 'accept_all'){
-                    _addEvent(consent_primary_btn, "click", function(){ 
-                        _cookieconsent.hide();
-                        _log("CookieConsent [ACCEPT]: cookie_consent was accepted!");
-                        _saveCookiePreferences(conf_params, 1);     // 1 => accept all
-                    });
-                }else{
-                    _addEvent(consent_primary_btn, "click", function(){
-                        _cookieconsent.hide();
-                        _log("CookieConsent [ACCEPT]: cookie_consent was accepted (necessary only)!");
-                        _saveCookiePreferences(conf_params, -1);    // -1 => accept current selection
-                    });
+                    accept_type = 1;    // accept all
                 }
+
+                _addEvent(consent_primary_btn, "click", function(){
+                    _cookieconsent.hide();
+                    _log("CookieConsent [ACCEPT]: cookie_consent was accepted!");
+                    _saveCookiePreferences(conf_params, accept_type);
+                });
 
                 if(conf_params.languages[lang]['consent_modal']['secondary_btn']['role'] == 'accept_necessary'){
                     _addEvent(consent_secondary_btn, 'click', function(){
@@ -359,7 +355,8 @@
             settings_container.setAttribute('aria-hidden', 'true');
             settings_container.setAttribute('aria-labelledby', 's-ttl');
             settings_title.setAttribute('role', 'heading');
-            settings_container.style.visibility = "hidden";
+            settings_container.style.visibility = overlay.style.visibility = "hidden";
+            overlay.style.opacity = 0;
 
             settings_close_btn_container.appendChild(settings_close_btn);
             
@@ -464,7 +461,8 @@
 
                     _addClass(block_table_container, 'b-acc');
                     _addClass(block_title_container, 'b-bn');
-                   
+                    _addClass(block_section, 'b-ex');
+
                     block_table_container.id = accordion_id;
                     block_table_container.setAttribute('aria-hidden', 'true');
 
@@ -473,8 +471,6 @@
                     block_switch_label.appendChild(label_text_span);
                     block_title_container.appendChild(block_switch_label);
 
-                    _addClass(block_section, 'b-ex');
-                    
                     /**
                      * On button click handle the following :=> aria-expanded, aria-hidden and act class for current block
                      */
@@ -639,11 +635,11 @@
         var _saveCookiePreferences = function(conf_params, accept_type){
             
             // Get all cookiepreferences values saved in cookieconsent settings modal
-            var category_toggles = document.querySelectorAll('.c-tgl');
-            var c_cookie_level = '', changedSettings = [];
+            var category_toggles = document.querySelectorAll('.c-tgl') || [];
+            var c_cookie_level = '', changedSettings = [], must_reload = false;
 
             // If there are opt in/out toggles ...
-            if(typeof category_toggles.length === "number"){
+            if(category_toggles.length > 0){
                 switch(accept_type){
                     case -1: 
                         //accept current selection
@@ -704,7 +700,7 @@
                     
                     // Get number of blocks
                     var len = all_blocks.length;
-                    var count = -1, must_reload = false;
+                    var count = -1;
 
                     // Retrieve all cookies
                     var all_cookies_array = _getCookie('', 'all');
@@ -718,8 +714,8 @@
                         // If current block has a toggle for opt in/out
                         if(curr_block.hasOwnProperty('toggle')){
                             
-                            // if current block has a cookie table with toggle off, a cookie_table 
-                            // and the it's preferences were just changed => delete cookies
+                            // if current block has a cookie table, an off toggle, 
+                            // and its preferences were just changed => delete cookies
                             if(
                                 !toggle_states[++count] && 
                                 curr_block.hasOwnProperty('cookie_table') && 
@@ -768,13 +764,6 @@
                             }  
                         }
                     }
-
-                    /**
-                     * reload page if needed
-                     */
-                    if(must_reload){
-                        window.location.reload();
-                    }
                 }
             }
 
@@ -794,6 +783,13 @@
             // fire onChange only if settings were changed
             if(typeof conf_params['onChange'] === "function" && changedSettings.length > 0){
                 conf_params['onChange'](JSON.parse(_saved_cookie_content));
+            }
+
+            /**
+             * reload page if needed
+             */
+            if(must_reload){
+                window.location.reload();
             }
         }
 
@@ -832,11 +828,8 @@
                         // Append css text content
                         document.getElementsByTagName('head')[0].appendChild(style);
                         _log("CookieConsent [AUTOLOAD_CSS]: loaded style = '"+ css_path + "'");
-                        
-                        // Call function with minimal delay (to make sure that initial fade-zoom-in animations dont get skipped)
-                        setTimeout(function(){
-                            callback();
-                        }, 10);
+
+                        callback(); 
                     }
                 };
                   
@@ -1071,23 +1064,24 @@
 
                 // Retrieve cookie value (if set)
                 _saved_cookie_content = _getCookie(_config.cookie_name, 'one', true);
-
+                
                 // If cookie is empty => create consent modal
                 consent_modal_exists = _saved_cookie_content == '';
-  
+
+                // Generate cookie-settings dom (& consent modal)
+                _createCookieConsentHTML(!consent_modal_exists, conf_params);
+
                 _loadCSS(conf_params['theme_css'], function(){
-                    // Generate cookie-settings dom (& consent modal)
-                    _createCookieConsentHTML(!consent_modal_exists, conf_params);
+                    _getModalFocusableData();
                     _guiManager(conf_params['gui_options']);
                     _addCookieSettingsButtonListener();
-                    _getModalFocusableData();
 
                     if(!_saved_cookie_content && _config.autorun){
                         _cookieconsent.show(conf_params['delay'] || 0);
                     }
 
                     // Add class to enable animations/transitions
-                    setTimeout(function(){_addClass(main_container, 'c--anim');}, 15);
+                    setTimeout(function(){_addClass(main_container, 'c--anim');}, 30);
 
                     // Accessibility :=> if tab pressed => trap focus inside modal
                     setTimeout(function(){_handleFocusTrap();}, 100);
@@ -1096,14 +1090,12 @@
                 _saved_cookie_content && (cookie_consent_accepted = true)
   
                 // if cookie accepted => fire once the "onAccept" method (if defined)
-                if(
-                    cookie_consent_accepted && 
-                    typeof conf_params['onAccept'] === "function"
-                ){
-                    conf_params['onAccept'](JSON.parse(_saved_cookie_content || "{}"));
+                if(cookie_consent_accepted){
+                    _manageExistingScripts();
+                    if(typeof conf_params['onAccept'] === "function"){
+                        conf_params['onAccept'](JSON.parse(_saved_cookie_content || "{}"));
+                    }
                 }
-
-                _manageExistingScripts();
             }else{
                 _log("CookieConsent [NOTICE]: cookie consent alredy attached to body!");
             }
@@ -1317,7 +1309,7 @@
              * If consent modal is visible, focus him (instead of page document)
              */
             if(consent_modal_visible){
-                last_consent_modal_btn_focus.focus();
+                last_consent_modal_btn_focus && last_consent_modal_btn_focus.focus();
                 current_modal_focusable = consent_modal_focusable;
             }else{
                 /**
