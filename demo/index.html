@@ -6,8 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="keywords" content="cookieconsent, orestbida, github,cookie consent gdpr, vanillajs">
     <meta name="description" content="demo cookieconsent gdpr orest bida">
-    <link rel="icon" type="image/png" href="https://orestbida.com/public/favicon.png">
-    <link rel="apple-touch-icon" href="https://orestbida.com/public/favicon.png">
+    <link rel="icon" type="image/png" href="https://orestbida.com/favicon.png">
+    <link rel="apple-touch-icon" href="https://orestbida.com/favicon.png">
     <style>
         *,:after,:before {
             -webkit-box-sizing: border-box;
@@ -436,6 +436,82 @@
         }
     </style>
     <link rel="stylesheet" media="print" href="assets/css/fonts.css" onload="this.media='all';">
+    <script>
+        function doDemoThings(cookie){
+            if(cc.validCookie('cc_cookie')){
+                //if cookie is set => disable buttons
+                disableBtn('btn2');
+                disableBtn('btn3');
+            }
+
+            // Delete line below
+		    cookie && (document.getElementById("cookie_val").innerHTML = JSON.stringify(cookie, null, 2));
+        }
+
+        function disableBtn(id){
+            document.getElementById(id).disabled = true;
+            document.getElementById(id).className = "styled_btn disabled";
+        }
+
+        window.addEventListener && window.addEventListener('load', function(){
+
+            doDemoThings();
+
+            var darkmode = false;
+
+            function toggleDarkmode(){
+                if(!darkmode){
+                    document.getElementById('theme').innerText = 'dark theme';
+                    document.body.className='d_mode c_darkmode';
+                    darkmode = true;
+                }else{
+                    document.getElementById('theme').innerText = 'light theme';
+                    document.body.className='d_mode';
+                    darkmode = false;
+                }
+            }
+
+            /*
+            * The following lines of code are for demo purposes (show api functions)
+            */
+            if(document.addEventListener){
+
+                document.getElementById("btn2").addEventListener('click', function(){
+                    cc.show(0);
+                });
+
+                document.getElementById("btn3").addEventListener('click', function(){
+                    cc.hide();
+                });
+
+                document.getElementById("btn5").addEventListener('click', function(){
+                    cc.showSettings(0);  
+                });
+
+                document.getElementById("btn6").addEventListener('click', function(){
+                    toggleDarkmode();
+                });
+            }else{
+                document.getElementById("btn2").attachEvent('onclick', function(){
+                    cc.show(0);
+                });
+
+                document.getElementById("btn3").attachEvent('onclick', function(){
+                    cc.hide();
+                });
+
+                document.getElementById("btn5").attachEvent('onclick', function(){
+                    cc.showSettings(0);  
+                });
+
+                document.getElementById("btn6").attachEvent('onclick', function(){
+                    toggleDarkmode();
+                });
+            }
+        });
+
+        
+    </script>
 </head>
 <body class="d_mode">
     <div id="_mainwrapper">
@@ -500,7 +576,7 @@
             </div>
         </div>
     </div>
-    <script defer src="../dist/cookieconsent.js"></script>
+    <script defer src="../src/cookieconsent.js"></script>
     <script defer src="app.js"></script>
 </body>
 </html>
