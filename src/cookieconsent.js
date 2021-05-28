@@ -1,5 +1,5 @@
 /*!
- * CookieConsent v2.4
+ * CookieConsent v2.4.5
  * https://www.github.com/orestbida/cookieconsent
  * Author Orest Bida
  * Released under the MIT License
@@ -95,6 +95,10 @@
 
             if(typeof conf_params['cookie_path'] === "string"){
                 _config.cookie_path = conf_params['cookie_path'];
+            }
+
+            if(typeof conf_params['cookie_name'] === "string"){
+                _config.cookie_name = conf_params['cookie_name'];
             }
 
             _config.page_scripts = conf_params['page_scripts'] === true;
@@ -553,7 +557,9 @@
                                 var new_column_key = _getKeys(obj)[0];
                                 
                                 var td_tmp = _createNode('td');
-                                td_tmp[innerText] = all_blocks[i]['cookie_table'][n][new_column_key];
+                                
+                                // Allow html inside table cells
+                                td_tmp.insertAdjacentHTML('beforeend', all_blocks[i]['cookie_table'][n][new_column_key]);
                                 td_tmp.setAttribute('data-column', obj[new_column_key]);
     
                                 tr.appendChild(td_tmp);
@@ -1088,7 +1094,7 @@
                 });
 
                 _saved_cookie_content && (cookie_consent_accepted = true)
-  
+
                 // if cookie accepted => fire once the "onAccept" method (if defined)
                 if(cookie_consent_accepted){
                     _manageExistingScripts();
@@ -1168,24 +1174,47 @@
                      */
                     if(_inArray(accepted_categories, curr_script_category) > -1){
                         
-                        var fresh_script = curr_script.cloneNode(true);
-                        var src = fresh_script.getAttribute('data-src') || fresh_script.src;
+                        curr_script.type = 'text/javascript';
+                        curr_script.removeAttribute(_config.script_selector);
                         
-                        // set src (if src found)
-                        src && (fresh_script.src = src);
+                        // get current script data-src
+                        var src = curr_script.getAttribute('data-src');
+                        
+                        // create fresh script (with the same code)
+                        var fresh_script = _createNode('script');
+                        fresh_script.textContent = curr_script.innerHTML;
 
-                        fresh_script.type = 'text/javascript';
-                        fresh_script.removeAttribute(_config.script_selector);
+                        // Copy attributes over to the new "revived" script
+                        (function(destination, source){
+                            var attr, attributes = source.attributes;
+                            var len = attributes.length;
+                            for(var i=0; i<len; i++){
+                                attr = attributes[i];
+                                destination.setAttribute(attr.nodeName, attr.nodeValue);
+                            }
+                        })(fresh_script, curr_script);
                         
+                        // set src (if data-src found)
+                        src ? (fresh_script.src = src) : (src = curr_script.src);
+
                         // if script has "src" attribute
                         // try loading it sequentially
                         if(src){
                             if(sequental_enabled){
                                 // load script sequentially => the next script will not be loaded 
                                 // until the current's script onload event triggers
-                                fresh_script.onload = fresh_script.onreadystatechange = function(){
-                                    this.onload = this.onreadystatechange = null;
-                                    _loadScripts(scripts, ++index);
+                                if(fresh_script.readyState) {  // only required for IE <9
+                                    fresh_script.onreadystatechange = function() {
+                                        if (fresh_script.readyState === "loaded" || fresh_script.readyState === "complete" ) {
+                                            fresh_script.onreadystatechange = null;
+                                            _loadScripts(scripts, ++index);
+                                        }
+                                    };
+                                }else{  // others
+                                    fresh_script.onload = function(){
+                                        fresh_script.onload = null;
+                                        _loadScripts(scripts, ++index);
+                                    };
                                 }
                             }else{
                                 // if sequential option is disabled
@@ -1196,7 +1225,7 @@
 
                         // Replace current "sleeping" script with the new "revived" one
                         curr_script.parentNode.replaceChild(fresh_script, curr_script);
-                        
+
                         /**
                          * If we managed to get here and scr is still set, it means that
                          * the script is loading/loaded sequentially so don't go any further
