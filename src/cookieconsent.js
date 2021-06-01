@@ -1,5 +1,5 @@
 /*!
- * CookieConsent v2.4.5
+ * CookieConsent v2.4.6
  * https://www.github.com/orestbida/cookieconsent
  * Author Orest Bida
  * Released under the MIT License
@@ -711,6 +711,16 @@
                     // Retrieve all cookies
                     var all_cookies_array = _getCookie('', 'all');
 
+                    // delete cookies on 'www.domain.com' and '.www.domain.com' (can also be without www)
+                    var domains = [_config.cookie_domain, '.'+_config.cookie_domain];
+
+                    // if domain has www, delete cookies also for 'domain.com' and '.domain.com'
+                    if(_config.cookie_domain.slice(0, 4) === 'www.'){
+                        var non_www_domain = _config.cookie_domain.substr(4);  // remove first 4 chars (www.)
+                        domains.push(non_www_domain);
+                        domains.push('.' + non_www_domain);
+                    }
+
                     // For each block
                     for(var jk=0; jk<len; jk++){
 
@@ -763,7 +773,7 @@
                                     
                                     // If cookie exists -> delete it
                                     if(found_cookies.length > 0){
-                                        _eraseCookies(found_cookies, curr_cookie_path);
+                                        _eraseCookies(found_cookies, curr_cookie_path, domains);
                                         curr_block['toggle']['reload'] === 'on_clear' && (must_reload = true);
                                     }
                                 }
@@ -1407,14 +1417,16 @@
          * Delete cookie by name & path
          * @param {Array} cookies 
          * @param {String} custom_path
+         * @param {Array} domains ['www.domain.com', '.www.domain.com', 'domain.com', '.domain.com']
          */
-        var _eraseCookies = function(cookies, custom_path) {
+        var _eraseCookies = function(cookies, custom_path, domains) {
             var path = custom_path ? custom_path : '/';
             var expires = 'Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
-            
+
             for(var i=0; i<cookies.length; i++){
-                document.cookie = cookies[i] +'=; Path='+ path +'; Domain=' + _config.cookie_domain + '; ' + expires;
-                document.cookie = cookies[i] +'=; Path='+ path +'; Domain=.' + _config.cookie_domain + '; ' + expires;
+                for(var j=0; j<domains.length; j++){
+                    document.cookie = cookies[i] +'=; Path='+ path +'; Domain=' + domains[j] + '; ' + expires;
+                }
                 _log("CookieConsent [AUTOCLEAR]: deleting cookie: '" + cookies[i] + "' path: '" + path + "'");
             }
         }
