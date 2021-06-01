@@ -1022,7 +1022,6 @@ html.force--consent body{
 .cc_div .bar #s-bl td:before { 
     position: absolute;
     left: 1em;
-    width: 43%;
     padding-right: 0.625em;
     white-space: nowrap;
     content: attr(data-column);

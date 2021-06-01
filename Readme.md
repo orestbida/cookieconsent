@@ -16,9 +16,6 @@ A __lightweight__ & __gdpr compliant__ cookie consent plugin written in plain ja
 ![Cookie Consent cover](demo/assets/features.png)
 </div>
 
-### 🚨 Warning: this v2 version is not NOT COMPATIBLE with previous versions
-Addressed to those who alredy use this plugin: if you plan on using this version, please re-configure your parameters from scratch with the updated syntax.
-
 ## Table of contents
 1. [Key features](#key-features)
 2. [How to use](#how-to-use)
@@ -44,78 +41,73 @@ Addressed to those who alredy use this plugin: if you plan on using this version
 - Allows you to __define custom cookie tables__ if you want to clarify the cookies you use
 
 ## How to use 
-1. download and include the script (or use via [cdn](#download--cdn))
+1. Download (or use via [cdn](#download--cdn)) and include the script at the bottom of `body` tag.
     ```html
-    <script src="cookieconsent.js"></script>
+    <script src="<path-to-cookieconsent.js>"></script>
     ```
-2. load the css style:
-    ```html
-    <link rel="stylesheet" href="cookieconsent.css">
-
-    // or asynchronous loading (recommended)
-    <link rel="stylesheet" href="cookieconsent.css" media="print" onload="this.media='all'; this.onload=null;">
-    ```
-    or alternatively you can configure the plugin to <a href="#user-content-autoload-css">automatically load the .css file.</a>
-
-3. run the plugin with your configuration parameters. **IMPORTANT**: you must provide at least the following parameters: `current_lang` and `languages`.
+2. Run the plugin with your configuration parameters. **IMPORTANT**: you must provide at least the following parameters: `current_lang` and `languages`
     <br>
     <details><summary><b>Show basic example</b></summary>
 
-    ```javascript
-    var cookieconsent = initCookieConsent();
+    ```html
+    <script src="<path-to-cookieconsent.js>"></script>
+    <script>
+        var cookieconsent = initCookieConsent();
 
-    cookieconsent.run({
-        current_lang : 'en',
-        onAccept : function(){
-            // do something ...
-        },
+        cookieconsent.run({
+            current_lang : 'en',
+            theme_css : '<path-to-cookieconsent.css>',
 
-        languages : {
-            en : {
-                consent_modal : {
-                    title :  "I use cookies",
-                    description :  'Your cookie consent message here',
-                    primary_btn: {
-                        text: 'Accept',
-                        role: 'accept_all'  //'accept_selected' or 'accept_all'
-                    },
-                    secondary_btn: {
-                        text : 'Settings',
-                        role : 'settings'   //'settings' or 'accept_necessary'
-                    }
-                },
-                settings_modal : {
-                    title : 'Cookie settings',
-                    save_settings_btn : "Save settings",
-                    accept_all_btn : "Accept all",
-                    close_btn_label: "Close",   
-                    blocks : [
-                        {
-                            title : "Cookie usage",
-                            description: 'Your cookie usage disclaimer'
-                        },{
-                            title : "Strictly necessary cookies",
-                            description: 'Category description ... ',
-                            toggle : {
-                                value : 'necessary',
-                                enabled : false,
-                                readonly: true
-                            }
-                        },{
-                            title : "Statistics cookies",
-                            description: 'Category description ... ',
-                            toggle : {
-                                value : 'statistics',
-                                enabled : true,
-                                // reload : 'on_disable',
-                                readonly: false
-                            }
+            onAccept : function(){
+                // do something ...
+            },
+
+            languages : {
+                en : {
+                    consent_modal : {
+                        title :  "I use cookies",
+                        description :  'Your cookie consent message here',
+                        primary_btn: {
+                            text: 'Accept',
+                            role: 'accept_all'  //'accept_selected' or 'accept_all'
                         },
-                    ]
+                        secondary_btn: {
+                            text : 'Reject',
+                            role : 'accept_necessary'   //'settings' or 'accept_necessary'
+                        }
+                    },
+                    settings_modal : {
+                        title : 'Cookie settings',
+                        save_settings_btn : "Save settings",
+                        accept_all_btn : "Accept all",
+                        close_btn_label: "Close",   
+                        blocks : [
+                            {
+                                title : "Cookie usage",
+                                description: 'Your cookie usage disclaimer'
+                            },{
+                                title : "Strictly necessary cookies",
+                                description: 'Category description ... ',
+                                toggle : {
+                                    value : 'necessary',
+                                    enabled : false,
+                                    readonly: true
+                                }
+                            },{
+                                title : "Analytics cookies",
+                                description: 'Category description ... ',
+                                toggle : {
+                                    value : 'analytics',
+                                    enabled : false,
+                                    readonly: false
+                                }
+                            },
+                        ]
+                    }
                 }
             }
-        }
-    });
+        });
+    </script>
     ```
     </summary>
     </details>
@@ -129,12 +121,12 @@ You can download the [latest version](https://github.com/orestbida/cookieconsent
 
 javascript :
 ```html
-https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@v2.4.5/dist/cookieconsent.js
+https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@v2.4.6/dist/cookieconsent.js
 ```
 
 stylesheet :
 ```html
-https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@v2.4.5/dist/cookieconsent.css
+https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@v2.4.6/dist/cookieconsent.css
 ```
 
 ## Layout options & customization
