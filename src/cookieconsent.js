@@ -1,5 +1,5 @@
 /*!
- * CookieConsent v2.4.6
+ * CookieConsent v2.4.7
  * https://www.github.com/orestbida/cookieconsent
  * Author Orest Bida
  * Released under the MIT License
@@ -755,7 +755,11 @@
                                     var curr_row = curr_cookie_table[hk], found_cookies = [];
                                     var curr_cookie_name = curr_row[ckey];
                                     var is_regex = curr_row['is_regex'] || false;
+                                    var curr_cookie_domain = curr_row['domain'] || null;
                                     var curr_cookie_path = curr_row['path'] || false;
+
+                                    // set domain to the specified domain
+                                    curr_cookie_domain && ( domains = [curr_cookie_domain, '.'+curr_cookie_domain]);
 
                                     // If regex provided => filter cookie array
                                     if(is_regex){
@@ -1427,7 +1431,7 @@
                 for(var j=0; j<domains.length; j++){
                     document.cookie = cookies[i] +'=; Path='+ path +'; Domain=' + domains[j] + '; ' + expires;
                 }
-                _log("CookieConsent [AUTOCLEAR]: deleting cookie: '" + cookies[i] + "' path: '" + path + "'");
+                _log("CookieConsent [AUTOCLEAR]: deleting cookie: '" + cookies[i] + "' path: '" + path + "' domain:", domains);
             }
         }
 
