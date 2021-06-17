@@ -1,5 +1,5 @@
 /*
- CookieConsent v2.4.6
+ CookieConsent v2.4.7
  https://www.github.com/orestbida/cookieconsent
  Author Orest Bida
  Released under the MIT License
