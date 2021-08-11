@@ -2,7 +2,7 @@ name: CI
 
 on:
   release:
-    types: [published]
+    types: [released]
 
 jobs:
   push-to-npm-registry:
