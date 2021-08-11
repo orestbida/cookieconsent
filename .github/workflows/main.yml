@@ -1,0 +1,16 @@
+name: CI
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  push-to-npm-registry:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - uses: JS-DevTools/npm-publish@v1
+      with:
+        token: ${{ secrets.NPM_TOKEN }}
+        access: public
