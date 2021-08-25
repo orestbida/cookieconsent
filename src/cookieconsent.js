@@ -1,5 +1,5 @@
 /*!
- * CookieConsent v2.4.7
+ * CookieConsent v2.5.0
  * https://www.github.com/orestbida/cookieconsent
  * Author Orest Bida
  * Released under the MIT License
@@ -59,6 +59,7 @@
 
         /**
          * Array of booleans used to keep track of enabled/disabled preferences
+         * @type {boolean[]}
          */
         var toggle_states = [];
         
@@ -75,7 +76,7 @@
          * @param {Object} conf_params 
          */
         var _setConfig = function(conf_params){
-            _log("CookieConsent [CONFIG]: recieved_config_settings ", conf_params);
+            _log("CookieConsent [CONFIG]: received_config_settings ", conf_params);
 
             if(typeof conf_params['cookie_expiration'] === "number"){
                 _config.cookie_expiration = conf_params['cookie_expiration'];
@@ -135,11 +136,10 @@
         }
 
         /**
-         * Check if given lang. index exists as a property.
-         * If it exists -> desired language is implemented,
-         * otherwise fall back to the default current_lang
-         * @param {String} lang
-         * @param {Object} all_languages
+         * Get a valid language (at least 1 must be defined)
+         * @param {string} lang - desired language
+         * @param {Object} all_languages - all defined languages
+         * @returns {string} validated language
          */
         var _getValidatedLanguage = function(lang, all_languages){
             if(all_languages.hasOwnProperty(lang)){
@@ -156,17 +156,15 @@
         /**
          * Save reference to first and last focusable elements inside each modal
          * to prevent losing focus while navigating with TAB
-         * @param {HTMLElement} modal_dom 
          */
         var _getModalFocusableData = function(){
             
             /**
              * Note: any of the below focusable elements, which has the attribute tabindex="-1" AND is either
-             * the first or last element of the modal, won't recieve focus during "open/close" modal
+             * the first or last element of the modal, won't receive focus during "open/close" modal
              */
             var allowed_focusable_types = ['[href]', 'button', 'input', 'details', '[tabindex="0"]'];
             
-
             function _getAllFocusableElements(modal, _array){
                 var focus_later=false, focus_first=false;
                 
@@ -396,7 +394,7 @@
                 block_desc.className = 'p';
                 block_title_container.className = 'title';
 
-                // Sset title and description for each block
+                // Set title and description for each block
                 block_desc.insertAdjacentHTML('beforeend', all_blocks[i]['description']);
 
                 // Create toggle if specified (opt in/out)
@@ -640,7 +638,7 @@
          */
         var _saveCookiePreferences = function(conf_params, accept_type){
             
-            // Get all cookiepreferences values saved in cookieconsent settings modal
+            // Retrieve all toggle/checkbox values
             var category_toggles = document.querySelectorAll('.c-tgl') || [];
             var c_cookie_level = '', changedSettings = [], must_reload = false;
 
@@ -814,9 +812,14 @@
         }
 
         /**
+         * Function to run after css load
+         * @callback cssLoaded
+         */
+
+        /**
          * Load style via ajax in background (and then show modal)
-         * @param {String} css_path 
-         * @param {Function} callback
+         * @param {string} css_path 
+         * @param {cssLoaded} callback
          */
         var _loadCSS = function(css_path, callback){
 
@@ -861,10 +864,10 @@
         }
 
         /**
-         * Returns index of found elemet inside array, otherwise -1
+         * Returns index of found element inside array, otherwise -1
          * @param {Array} arr 
          * @param {Object} value
-         * @returns {Number}
+         * @returns {number}
          */
         var _inArray = function(arr, value){
             var len = arr.length;
@@ -886,7 +889,7 @@
 
         /**
          * Helper function which creates an HTMLElement object based on 'type' and returns it.
-         * @param {String} type 
+         * @param {string} type 
          * @returns {HTMLElement}
          */
         var _createNode = function(type){
@@ -899,8 +902,7 @@
         
         /**
          * Get current client's browser language
-         * Used when 'auto_language' config property is set to 'true' (boolean)
-         * @returns {String}
+         * @returns {string}
          */
         var _getBrowserLang = function(){
             var browser_lang = navigator.language || navigator.browserLanguage;
@@ -910,7 +912,7 @@
         }
 
         /**
-         * Trap focus inside modal and focuse the first 
+         * Trap focus inside modal and focus the first 
          * focusable element of current active modal
          */
         var _handleFocusTrap = function(){
@@ -999,7 +1001,7 @@
          */
         var _guiManager = function(gui_options){
 
-            // If gui_options is not obje => exit
+            // If gui_options is not object => exit
             if(typeof gui_options !== 'object') return;
 
             var consent_modal_options = gui_options['consent_modal'];
@@ -1010,10 +1012,10 @@
              * position classes to given modal
              * 
              * @param {HTMLElement} modal 
-             * @param {Array} allowed_layouts 
-             * @param {Array} allowed_positions 
-             * @param {String} layout 
-             * @param {Array} position
+             * @param {string[]} allowed_layouts 
+             * @param {string[]} allowed_positions 
+             * @param {string} layout 
+             * @param {string[]} position
              */
             function _setLayout(modal, allowed_layouts, allowed_positions, allowed_transitions, layout, position, transition){
                 position = position && position.split(" ") || []; 
@@ -1021,7 +1023,7 @@
                 // Check if specified layout is valid
                 if(_inArray(allowed_layouts, layout) > -1){
 
-                    // Add layout classe
+                    // Add layout classes
                     _addClass(modal, layout);
                     
                     // Add position class (if specified)
@@ -1063,8 +1065,8 @@
         
         /**
          * Returns true if cookie category is accepted by the user
-         * @param {String} cookie_category 
-         * @returns {Boolean}
+         * @param {string} cookie_category 
+         * @returns {boolean}
          */
         _cookieconsent.allowedCategory = function(cookie_category){
             return _inArray(
@@ -1074,7 +1076,7 @@
         }
 
         /**
-         * Check if cookieconsent is alredy attached to dom
+         * Check if cookieconsent is already attached to dom
          * If not, create one, configure it and attach it to the body
          */
         _cookieconsent.run = function(conf_params){
@@ -1117,13 +1119,13 @@
                     }
                 }
             }else{
-                _log("CookieConsent [NOTICE]: cookie consent alredy attached to body!");
+                _log("CookieConsent [NOTICE]: cookie consent already attached to body!");
             }
         }
 
         /**
          * Show settings modal (with optional delay)
-         * @param {Number} delay 
+         * @param {number} delay 
          */
         _cookieconsent.showSettings = function(delay){
             setTimeout(function() {
@@ -1157,7 +1159,7 @@
         }
 
         /**
-         * This function handles the loading/activation logic of the alredy 
+         * This function handles the loading/activation logic of the already 
          * existing scripts based on the current accepted cookie categories
          */
         var _manageExistingScripts = function(){
@@ -1166,15 +1168,15 @@
 
             // get all the scripts with "cookie-category" attribute
             var scripts = document.querySelectorAll('script[' + _config.script_selector + ']');
-            var sequental_enabled = _config.page_scripts_order;
+            var sequential_enabled = _config.page_scripts_order;
             var accepted_categories = JSON.parse(_saved_cookie_content).level || [];
-            _log("CookieConsent [SCRIPT_MANAGER]: sequential loading:", sequental_enabled);
+            _log("CookieConsent [SCRIPT_MANAGER]: sequential loading:", sequential_enabled);
 
             /**
-             * Load scripts (sequentally), using a recursive function
+             * Load scripts (sequentially), using a recursive function
              * which loops through the scripts array
-             * @param {Array} scripts scripts to load
-             * @param {Number} index current script to load
+             * @param {Element[]} scripts scripts to load
+             * @param {number} index current script to load
              */
             var _loadScripts = function(scripts, index){
                 if(index < scripts.length){
@@ -1214,7 +1216,7 @@
                         // if script has "src" attribute
                         // try loading it sequentially
                         if(src){
-                            if(sequental_enabled){
+                            if(sequential_enabled){
                                 // load script sequentially => the next script will not be loaded 
                                 // until the current's script onload event triggers
                                 if(fresh_script.readyState) {  // only required for IE <9
@@ -1256,16 +1258,21 @@
         }
 
         /**
+         * Function which will run after script load
+         * @callback scriptLoaded
+        */
+
+        /**
          * Dynamically load script (append to head)
-         * @param {String} src 
-         * @param {Function} callback
-         * @param {Array} attrs
+         * @param {string} src
+         * @param {scriptLoaded} callback
+         * @param {string[]} attrs
          */
         _cookieconsent.loadScript = function(src, callback, attrs){
 
             var function_defined = typeof callback === 'function';
 
-            // Load script only if not alredy loaded
+            // Load script only if not already loaded
             if(!document.querySelector('script[src="' + src + '"]')){
                 
                 var script = _createNode('script');
@@ -1304,7 +1311,7 @@
 
         /**
          * Show cookie consent modal (with delay parameter)
-         * @param {Number} delay 
+         * @param {number} delay 
          */
         _cookieconsent.show = function(delay){
             if(consent_modal_exists){
@@ -1393,8 +1400,8 @@
 
         /**
          * Set cookie, by specifying name and value
-         * @param {String} name 
-         * @param {String} value 
+         * @param {string} name 
+         * @param {string} value 
          */
         var _setCookie = function(name, value) {
 
@@ -1423,8 +1430,10 @@
          * Get cookie value by name,
          * returns the cookie value if found (or an array
          * of cookies if filter provided), otherwise empty string: ""
-         * @param {String} name 
-         * @returns {String}
+         * @param {string} name 
+         * @param {string} filter ('one' or 'aLL')
+         * @param {boolean} get_value
+         * @returns {string|string[]}
          */
         var _getCookie = function(name, filter, get_value) {
             var found;
@@ -1444,9 +1453,9 @@
 
         /**
          * Delete cookie by name & path
-         * @param {Array} cookies 
-         * @param {String} custom_path
-         * @param {Array} domains ['www.domain.com', '.www.domain.com', 'domain.com', '.domain.com']
+         * @param {string[]} cookies 
+         * @param {string} custom_path
+         * @param {string[]} domains ['www.domain.com', '.www.domain.com', 'domain.com', '.domain.com']
          */
         var _eraseCookies = function(cookies, custom_path, domains) {
             var path = custom_path ? custom_path : '/';
@@ -1461,20 +1470,25 @@
         }
 
         /**
-         * Return true if cookie was found and has valid value (not empty string)
-         * @param {String} cookie_name
-         * @returns {Boolean}
+         * Returns true if cookie was found and has valid value (not empty string)
+         * @param {string} cookie_name
+         * @returns {boolean} 
          */
         _cookieconsent.validCookie = function(cookie_name){
             return _getCookie(cookie_name, 'one', true) != "";
         }
 
         /**
+         * Function to run when event is fired
+         * @callback eventFired
+         */
+
+        /**
          * Add event listener to dom object (cross browser function)
-         * @param {Object} elem 
-         * @param {String} event //event type
-         * @param {Object } fn 
-         * @param {Boolean} passive
+         * @param {Element} elem 
+         * @param {string} event //event type
+         * @param {eventFired} fn 
+         * @param {boolean} passive
          */
         var _addEvent = function(elem, event, fn, passive) {
             var passive = passive || false;
@@ -1505,7 +1519,7 @@
         /**
          * Append class to the specified dom element
          * @param {HTMLElement} elem 
-         * @param {String} classname 
+         * @param {string} classname 
          */
         var _addClass = function (elem, classname){
             if(elem.classList)
@@ -1519,7 +1533,7 @@
         /**
          * Remove specified class from dom element
          * @param {HTMLElement} elem 
-         * @param {String} classname 
+         * @param {string} classname 
          */
         var _removeClass = function (el, className) {
             el.classList ? el.classList.remove(className) : el.className = el.className.replace(new RegExp('(\\s|^)' + className + '(\\s|$)'), ' ');
@@ -1528,7 +1542,7 @@
         /**
          * Check if html element has classname
          * @param {HTMLElement} el 
-         * @param {String} className 
+         * @param {string} className 
          */
         var _hasClass = function(el, className) {
             if (el.classList) {
