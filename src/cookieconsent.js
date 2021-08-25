@@ -1367,6 +1367,31 @@
         }
 
         /**
+         * API function to easily erase cookies
+         * @param {(string|string[])} _cookies 
+         * @param {string} _path 
+         * @param {string} _domain
+         */
+        _cookieconsent.eraseCookies = function(_cookies, _path, _domain){
+            var cookies = [];
+            var domains = _domain ? 
+                [_domain, "."+_domain] : 
+                [_config.cookie_domain, "."+_config.cookie_domain];
+
+            if(_cookies && _cookies.length > 0){
+                for(var i=0; i<_cookies.length; i++){
+                    if(this.validCookie(_cookies[i])){
+                        cookies.push(_cookies[i]);
+                    }
+                }
+            }else{
+                cookies = [_cookies];
+            }
+            
+            _eraseCookies(cookies, _path, domains);
+        }
+
+        /**
          * Set cookie, by specifying name and value
          * @param {String} name 
          * @param {String} value 
@@ -1518,7 +1543,9 @@
          * to prevent users from directly manipulating the 
          * cookieconsent options from browser console (or at least make it harder)
          */
-        return (CookieConsent = window[init] = undefined), _cookieconsent;
+        CookieConsent = window[init] = undefined;
+
+        return _cookieconsent;
     };
 
     var init = 'initCookieConsent';
