@@ -25,8 +25,8 @@
             cookie_domain: location.hostname,       // default: current domain
             cookie_path: "/",
             cookie_same_site: "Lax",
-            consent_revision: 1,
             autoclear_cookies: true,
+            revision: 0,
             script_selector: "data-cookiecategory"
         };
 
@@ -46,6 +46,7 @@
         var clicked_inside_modal = false;
         var current_modal_focusable;
         var all_table_headers, all_blocks, onAccept, onChange;
+        var valid_revision, revision_enabled;
         
         /**
          * Save reference to the last focused element on the page
@@ -127,8 +128,9 @@
                 onChange = conf_params['onChange'];
             }
 
-            if(typeof conf_params['consent_revision'] === "number"){
-                _config.consent_revision = conf_params['consent_revision'];
+            if(typeof conf_params['revision'] === "number"){
+                _config.revision = conf_params['revision'];
+                revision_enabled = true;
             }
 
             if(conf_params['autoclear_cookies'] === true){
@@ -315,7 +317,18 @@
 
                 // Use insertAdjacentHTML instead of innerHTML
                 consent_title.insertAdjacentHTML('beforeend', conf_params.languages[lang]['consent_modal']['title']);
-                consent_text.insertAdjacentHTML('beforeend', conf_params.languages[lang]['consent_modal']['description']);
+                
+                var description = conf_params.languages[lang]['consent_modal']['description'];
+
+                if(revision_enabled){
+                    if(!valid_revision){
+                        description = description.replace("{{revision_message}}", conf_params.languages[lang]['consent_modal']['revision_message'] || "");
+                    }else{
+                        description = description.replace("{{revision_message}}", "");
+                    }
+                }
+
+                consent_text.insertAdjacentHTML('beforeend', description);
                 
                 consent_primary_btn[innerText] = conf_params.languages[lang]['consent_modal']['primary_btn']['text'];
                 consent_secondary_btn[innerText] = conf_params.languages[lang]['consent_modal']['secondary_btn']['text'];
@@ -550,7 +563,6 @@
                 block_section.appendChild(block_title_container);
                 block_table_container.appendChild(block_desc);
                 
-                // [NEW]
                 var remove_cookie_tables = conf_params['remove_cookie_tables'] === true;
 
                 // if cookie table found, generate table for this block
@@ -687,19 +699,14 @@
             // If there are opt in/out toggles ...
             if(category_toggles.length > 0){
                 for(var i=0; i<category_toggles.length; i++){
-
                     if(_inArray(accepted_categories, category_toggles[i].value) !== -1){
                         category_toggles[i].checked = true;
-       
                         if(!toggle_states[i]){
                             changedSettings.push(category_toggles[i].value);
                             toggle_states[i] = true;
                         }
-
                     }else{
-                        
                         category_toggles[i].checked = false;
-        
                         if(toggle_states[i]){
                             changedSettings.push(category_toggles[i].value);
                             toggle_states[i] = false;
@@ -797,7 +804,7 @@
 
             _saved_cookie_content = JSON.stringify({
                 "level" : accepted_categories,
-                "revision": _config.consent_revision
+                "revision": _config.revision
             });
 
             // save cookie with preferences 'level' (only if never accepted or settings were updated)
@@ -1101,7 +1108,11 @@
                 _saved_cookie_content = _getCookie(_config.cookie_name, 'one', true);
 
                 // Compare current revision with the one retrieved from cookie
-                var valid_revision = (_saved_cookie_content && JSON.parse(_saved_cookie_content || "{}")['revision'] === _config.consent_revision) === true;
+                valid_revision = typeof conf_params['revision'] === "number" ? 
+                    _saved_cookie_content ? 
+                        (JSON.parse(_saved_cookie_content || "{}")['revision'] === _config.revision) 
+                        : true
+                    : true;
                 
                 // If invalid revision or cookie is empty => create consent modal
                 consent_modal_exists = (!valid_revision || _saved_cookie_content === '');
@@ -1518,7 +1529,7 @@
          * returns the cookie value if found (or an array
          * of cookies if filter provided), otherwise empty string: ""
          * @param {string} name 
-         * @param {string} filter - ('one' or 'aLL')
+         * @param {string} filter - 'one' or 'all'
          * @param {boolean} get_value - set to true to obtain its value
          * @returns {string|string[]}
          */
