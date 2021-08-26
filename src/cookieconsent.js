@@ -642,7 +642,7 @@
             var settings_buttons = _createNode('div');
             var settings_save_btn = _createNode('button');
             var settings_accept_all_btn = _createNode('button');
-
+            
             settings_buttons.id = 's-bns';
             settings_save_btn.id = 's-sv-bn';
             settings_accept_all_btn.id = 's-all-bn';
@@ -650,7 +650,29 @@
             settings_accept_all_btn.className ='c-bn';
             settings_save_btn.insertAdjacentHTML('beforeend', conf_params.languages[_config.current_lang]['settings_modal']['save_settings_btn']);
             settings_accept_all_btn.insertAdjacentHTML('beforeend', conf_params.languages[_config.current_lang]['settings_modal']['accept_all_btn']);
+            
             settings_buttons.appendChild(settings_accept_all_btn);
+
+            var reject_all_btn_text = conf_params.languages[_config.current_lang]['settings_modal']['reject_all_btn'];
+
+            // Add third [optional] reject all button if provided
+            if(reject_all_btn_text){
+
+                var reject_all_btn = _createNode('button');
+                reject_all_btn.id = 's-rall-bn';
+                reject_all_btn.className = 'c-bn';
+                reject_all_btn.insertAdjacentHTML('beforeend', reject_all_btn_text);
+                
+                _addEvent(reject_all_btn, 'click', function(){
+                    _cookieconsent.hideSettings();
+                    _cookieconsent.hide();
+                    _cookieconsent.accept([]);
+                });
+
+                settings_inner.className = "bns-t";
+                settings_buttons.appendChild(reject_all_btn);
+            }
+
             settings_buttons.appendChild(settings_save_btn);
             
             // Add save preferences button onClick event 
@@ -1405,7 +1427,7 @@
          * @param {string[]|string} _categories - Categories to accept
          * @param {string[]} [_exclusions] - Excluded categories [optional]
          */
-         _cookieconsent.accept = function(_categories, _exclusions){
+        _cookieconsent.accept = function(_categories, _exclusions){
             var categories = _categories || undefined;
             var exclusions = _exclusions || [];
             var to_accept = [];
