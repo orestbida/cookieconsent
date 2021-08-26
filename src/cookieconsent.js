@@ -7,12 +7,14 @@
 (function(){
     'use strict';
     /**
-     * @param {HTMLElement} root element where the cookieconsent will be appended (default :=> document.body)
-     * @returns {Object}
+     * @param {HTMLElement} [root] - [optional] element where the cookieconsent will be appended
+     * @returns {Object} cookieconsent object with API
      */
     var CookieConsent = function(root){
         
-        // CHANGE THIS FLAG FALSE TO DISABLE console.log()
+        /**
+         * CHANGE THIS FLAG FALSE TO DISABLE console.log()
+         */
         var ENABLE_LOGS = true;
 
         var _config = {
@@ -23,11 +25,13 @@
             cookie_domain: location.hostname,       // default: current domain
             cookie_path: "/",
             cookie_same_site: "Lax",
+            consent_revision: 1,
+            autoclear_cookies: true,
             script_selector: "data-cookiecategory"
         };
 
         /**
-         * Object which holds the main methods (.show, .run, ...)
+         * Object which holds the main methods/API (.show, .run, ...)
          */
         var _cookieconsent = {};
 
@@ -41,6 +45,7 @@
         var settings_modal_visible = false;
         var clicked_inside_modal = false;
         var current_modal_focusable;
+        var all_table_headers, all_blocks, onAccept, onChange;
         
         /**
          * Save reference to the last focused element on the page
@@ -58,10 +63,22 @@
         var settings_modal_focusable = [];
 
         /**
-         * Array of booleans used to keep track of enabled/disabled preferences
+         * Keep track of enabled/disabled categories
          * @type {boolean[]}
          */
         var toggle_states = [];
+
+        /**
+         * Stores all available categories
+         * @type {string[]}
+         */
+        var toggle_categories = [];
+
+        /**
+         * Keep track of readonly toggles
+         * @type {boolean[]}
+         */
+        var toggle_readonly = [];
         
         /**
          * Pointers to main dom elements (to avoid retrieving them later using document.getElementById)
@@ -100,6 +117,22 @@
 
             if(typeof conf_params['cookie_name'] === "string"){
                 _config.cookie_name = conf_params['cookie_name'];
+            }
+
+            if(typeof conf_params['onAccept'] === "function"){
+                onAccept = conf_params['onAccept'];
+            }
+
+            if(typeof conf_params['onChange'] === "function"){
+                onChange = conf_params['onChange'];
+            }
+
+            if(typeof conf_params['consent_revision'] === "number"){
+                _config.consent_revision = conf_params['consent_revision'];
+            }
+
+            if(conf_params['autoclear_cookies'] === true){
+                _config.autoclear_cookies = true;
             }
 
             _config.page_scripts = conf_params['page_scripts'] === true;
@@ -217,9 +250,12 @@
             }
         }
 
+
         /**
          * Generate cookie consent html based on config settings
-        */
+         * @param {boolean} never_accepted - used to know whether to create both modals or not
+         * @param {Object} conf_params - user configuration parameters
+         */
         var _createCookieConsentHTML = function(never_accepted, conf_params){
             
             // Create main container which holds both consent modal & settings modal
@@ -284,22 +320,22 @@
                 consent_primary_btn[innerText] = conf_params.languages[lang]['consent_modal']['primary_btn']['text'];
                 consent_secondary_btn[innerText] = conf_params.languages[lang]['consent_modal']['secondary_btn']['text'];
 
-                var accept_type = -1;   // accept current selection
+                var accept_type;   // accept current selection
 
                 if(conf_params.languages[lang]['consent_modal']['primary_btn']['role'] == 'accept_all'){
-                    accept_type = 1;    // accept all
+                    accept_type = 'all';    // accept all
                 }
 
                 _addEvent(consent_primary_btn, "click", function(){
                     _cookieconsent.hide();
                     _log("CookieConsent [ACCEPT]: cookie_consent was accepted!");
-                    _saveCookiePreferences(conf_params, accept_type);
+                    _cookieconsent.accept(accept_type);
                 });
 
                 if(conf_params.languages[lang]['consent_modal']['secondary_btn']['role'] == 'accept_necessary'){
                     _addEvent(consent_secondary_btn, 'click', function(){
                         _cookieconsent.hide();
-                        _saveCookiePreferences(conf_params, 0); // 0 => accept necessary only
+                        _cookieconsent.accept([]); // accept necessary only
                     });
                 }else{
                     _addEvent(consent_secondary_btn, 'click', function(){
@@ -374,7 +410,7 @@
                 _cookieconsent.hideSettings(0);
             });
 
-            var all_blocks = conf_params.languages[_config.current_lang]['settings_modal']['blocks'];
+            all_blocks = conf_params.languages[_config.current_lang]['settings_modal']['blocks'];
             var n_blocks = all_blocks.length;
 
             // Set settings modal title
@@ -450,7 +486,12 @@
                         }
                     }else if(all_blocks[i]['toggle']['enabled']){
                         block_switch.checked = true;
+                        toggle_states.push(true);
+                    }else{
+                        toggle_states.push(false);
                     }
+
+                    toggle_categories.push(cookie_category);
 
                     /**
                      * Set toggle as readonly if true (disable checkbox)
@@ -459,6 +500,9 @@
                         block_switch.disabled = true;
                         block_switch.setAttribute('aria-readonly', 'true');
                         _addClass(block_switch_span, 'c-ro');
+                        toggle_readonly.push(true);
+                    }else{
+                        toggle_readonly.push(false);
                     }
 
                     _addClass(block_table_container, 'b-acc');
@@ -512,7 +556,7 @@
                 // if cookie table found, generate table for this block
                 if(!remove_cookie_tables && typeof all_blocks[i]['cookie_table'] !== 'undefined'){
                     var tr_tmp_fragment = document.createDocumentFragment();
-                    var all_table_headers = conf_params.languages[_config.current_lang]['settings_modal']['cookie_table_headers'];
+                    all_table_headers = conf_params.languages[_config.current_lang]['settings_modal']['cookie_table_headers'];
                     
                     /**
                      * Use custom table headers
@@ -602,13 +646,13 @@
             _addEvent(settings_save_btn, 'click', function(){
                 _cookieconsent.hideSettings();
                 _cookieconsent.hide();
-                _saveCookiePreferences(conf_params, -1);
+                _cookieconsent.accept();
             });
 
             _addEvent(settings_accept_all_btn, 'click', function(){
                 _cookieconsent.hideSettings();
                 _cookieconsent.hide();
-                _saveCookiePreferences(conf_params, 1);
+                _cookieconsent.accept('all');
             });
 
             settings_header.appendChild(settings_title);
@@ -631,76 +675,42 @@
         }
 
         /**
-         * Save cookie preferences
-         * accept_type = 0: accept necessary only
-         * accept_type = 1: accept all
-         * accept_type = -1: accept selection
+         * Set toggles/checkboxes based on accepted categories and save cookie
+         * @param {string[]} accepted_categories - Array of categories to accept
          */
-        var _saveCookiePreferences = function(conf_params, accept_type){
+        var _saveCookiePreferences = function(accepted_categories){
             
             // Retrieve all toggle/checkbox values
             var category_toggles = document.querySelectorAll('.c-tgl') || [];
-            var c_cookie_level = '', changedSettings = [], must_reload = false;
-
+            var changedSettings = [], must_reload = false;
+            
             // If there are opt in/out toggles ...
             if(category_toggles.length > 0){
-                switch(accept_type){
-                    case -1: 
-                        //accept current selection
-                        for(var i=0; i<category_toggles.length; i++){
-                            if(category_toggles[i].checked){
-                                c_cookie_level+='"'+category_toggles[i].value+'",';
-                                if(!toggle_states[i]){
-                                    changedSettings.push(category_toggles[i].value);
-                                    toggle_states[i] = true;
-                                }
-                            }else{
-                                if(toggle_states[i]){
-                                    changedSettings.push(category_toggles[i].value);
-                                    toggle_states[i] = false;
-                                }
-                            }
-                        }
-                        break;
-                    case 0: 
-                        // disable all except necessary
-                        for(var i=0; i<category_toggles.length; i++){
-                            if(category_toggles[i].disabled){
-                                c_cookie_level += '"' + category_toggles[i].value + '",';
-                                toggle_states[i] = true;
-                            }else{
-                                category_toggles[i].checked = false;
-                                if(toggle_states[i]){
-                                    changedSettings.push(category_toggles[i].value);
-                                    toggle_states[i] = false;
-                                }
-                            }
-                        }
-                        break;
-                    case 1: 
-                        // enable all
-                        for(var i=0; i<category_toggles.length; i++){
-                            category_toggles[i].checked = true;
-                            c_cookie_level += '"' + category_toggles[i].value +'",';
-                            if(!toggle_states[i]){
-                                changedSettings.push(category_toggles[i].value);
-                            }
+                for(var i=0; i<category_toggles.length; i++){
 
+                    if(_inArray(accepted_categories, category_toggles[i].value) !== -1){
+                        category_toggles[i].checked = true;
+       
+                        if(!toggle_states[i]){
+                            changedSettings.push(category_toggles[i].value);
                             toggle_states[i] = true;
                         }
-                        break;
+
+                    }else{
+                        
+                        category_toggles[i].checked = false;
+        
+                        if(toggle_states[i]){
+                            changedSettings.push(category_toggles[i].value);
+                            toggle_states[i] = false;
+                        }
+                    }
                 }
 
-                // remove last ',' character
-                c_cookie_level = c_cookie_level.slice(0, -1);
-                
                 /**
                  * If autoclear_cookies==true -> delete all cookies which are unused (based on selected preferences)
                  */
-                if(conf_params['autoclear_cookies'] && cookie_consent_accepted && changedSettings.length > 0){
-
-                    // Get array of all blocks defined inside settings
-                    var all_blocks = conf_params.languages[_config.current_lang]['settings_modal']['blocks'];
+                if(_config.autoclear_cookies && cookie_consent_accepted && changedSettings.length > 0){
                     
                     // Get number of blocks
                     var len = all_blocks.length;
@@ -738,7 +748,7 @@
                                 var curr_cookie_table = curr_block['cookie_table'];
 
                                 // Get first property name
-                                var ckey = _getKeys(conf_params.languages[_config.current_lang]['settings_modal']['cookie_table_headers'][0])[0];
+                                var ckey = _getKeys(all_table_headers[0])[0];
                                 
                                 // Get number of cookies defined in cookie_table
                                 var clen = curr_cookie_table.length;
@@ -785,7 +795,10 @@
                 }
             }
 
-            _saved_cookie_content = '{"level": ['+c_cookie_level+']}';
+            _saved_cookie_content = JSON.stringify({
+                "level" : accepted_categories,
+                "revision": _config.consent_revision
+            });
 
             // save cookie with preferences 'level' (only if never accepted or settings were updated)
             if(!cookie_consent_accepted || changedSettings.length > 0)
@@ -793,14 +806,14 @@
 
             _manageExistingScripts();
 
-            if(typeof conf_params['onAccept'] === "function" && !cookie_consent_accepted){
+            if(typeof onAccept === "function" && !cookie_consent_accepted){
                 cookie_consent_accepted = true; 
-                return conf_params['onAccept'](JSON.parse(_saved_cookie_content));
+                return onAccept(JSON.parse(_saved_cookie_content));
             }
 
             // fire onChange only if settings were changed
-            if(typeof conf_params['onChange'] === "function" && changedSettings.length > 0){
-                conf_params['onChange'](JSON.parse(_saved_cookie_content));
+            if(typeof onChange === "function" && changedSettings.length > 0){
+                onChange(JSON.parse(_saved_cookie_content));
             }
 
             /**
@@ -1086,9 +1099,12 @@
 
                 // Retrieve cookie value (if set)
                 _saved_cookie_content = _getCookie(_config.cookie_name, 'one', true);
+
+                // Compare current revision with the one retrieved from cookie
+                var valid_revision = (_saved_cookie_content && JSON.parse(_saved_cookie_content || "{}")['revision'] === _config.consent_revision) === true;
                 
-                // If cookie is empty => create consent modal
-                consent_modal_exists = _saved_cookie_content == '';
+                // If invalid revision or cookie is empty => create consent modal
+                consent_modal_exists = (!valid_revision || _saved_cookie_content === '');
 
                 // Generate cookie-settings dom (& consent modal)
                 _createCookieConsentHTML(!consent_modal_exists, conf_params);
@@ -1098,7 +1114,7 @@
                     _guiManager(conf_params['gui_options']);
                     _addCookieSettingsButtonListener();
 
-                    if(!_saved_cookie_content && _config.autorun){
+                    if(_config.autorun && (!_saved_cookie_content || !valid_revision)){
                         _cookieconsent.show(conf_params['delay'] || 0);
                     }
 
@@ -1374,10 +1390,81 @@
         }
 
         /**
+         * Accept cookieconsent function API
+         * @param {string[]|string} _categories - Categories to accept
+         * @param {string[]} [_exclusions] - Excluded categories [optional]
+         */
+         _cookieconsent.accept = function(_categories, _exclusions){
+            var categories = _categories || undefined;
+            var exclusions = _exclusions || [];
+            var to_accept = [];
+
+            /**
+             * Get all accepted categories
+             * @returns {string[]}
+             */
+            var _getCurrentPreferences = function(){
+                var toggles = document.querySelectorAll('.c-tgl') || [];
+                var states = [];
+
+                for(var i=0; i<toggles.length; i++){
+                    if(toggles[i].checked){
+                        states.push(toggles[i].value);
+                    }
+                }
+                return states;
+            }
+
+            if(!categories){
+                to_accept = _getCurrentPreferences();
+            }else{
+                if(
+                    typeof categories === "object" && 
+                    typeof categories.length === "number"
+                ){
+                    for(var i=0; i<categories.length; i++){
+                        if(_inArray(toggle_categories, categories[i]) !== -1)
+                            to_accept.push(categories[i]);
+                    }
+                }else if(typeof categories === "string"){
+                    if(categories === 'all')
+                        to_accept = toggle_categories.slice();
+                    else{
+                        if(_inArray(toggle_categories, categories) !== -1)
+                            to_accept.push(categories);
+                    }
+                }
+            }
+
+            // Remove excluded categories
+            if(exclusions.length >= 1){
+                for(var i=0; i<exclusions.length; i++){
+                    to_accept = to_accept.filter(function(item) {
+                        return item !== exclusions[i]
+                    })
+                }
+            }
+
+            // Add back all the categories set as "readonly/required"
+            for(var i=0;i<toggle_categories.length; i++){
+                if(
+                    toggle_readonly[i] === true && 
+                    _inArray(to_accept, toggle_categories[i]) === -1
+                ){
+                    to_accept.push(toggle_categories[i]);
+                }
+            }
+            
+            _saveCookiePreferences(to_accept);
+
+            this.hide();
+        }
+
+        /**
          * API function to easily erase cookies
          * @param {(string|string[])} _cookies 
-         * @param {string} _path 
-         * @param {string} _domain
+         * @param {string} [_path] - optional 
+         * @param {string} [_domain] - optional
          */
         _cookieconsent.eraseCookies = function(_cookies, _path, _domain){
             var cookies = [];
@@ -1431,8 +1518,8 @@
          * returns the cookie value if found (or an array
          * of cookies if filter provided), otherwise empty string: ""
          * @param {string} name 
-         * @param {string} filter ('one' or 'aLL')
-         * @param {boolean} get_value
+         * @param {string} filter - ('one' or 'aLL')
+         * @param {boolean} get_value - set to true to obtain its value
          * @returns {string|string[]}
          */
         var _getCookie = function(name, filter, get_value) {
@@ -1454,8 +1541,8 @@
         /**
          * Delete cookie by name & path
          * @param {string[]} cookies 
-         * @param {string} custom_path
-         * @param {string[]} domains ['www.domain.com', '.www.domain.com', 'domain.com', '.domain.com']
+         * @param {string} [custom_path] - optional
+         * @param {string[]} domains - example: ['domain.com', '.domain.com']
          */
         var _eraseCookies = function(cookies, custom_path, domains) {
             var path = custom_path ? custom_path : '/';
@@ -1486,8 +1573,8 @@
         /**
          * Add event listener to dom object (cross browser function)
          * @param {Element} elem 
-         * @param {string} event //event type
-         * @param {eventFired} fn 
+         * @param {string} event
+         * @param {eventFired} fn
          * @param {boolean} passive
          */
         var _addEvent = function(elem, event, fn, passive) {
@@ -1540,7 +1627,7 @@
         }
 
         /**
-         * Check if html element has classname
+         * Check if html element has class
          * @param {HTMLElement} el 
          * @param {string} className 
          */
