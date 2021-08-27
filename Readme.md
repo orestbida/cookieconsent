@@ -26,7 +26,8 @@ A __lightweight__ & __gdpr compliant__ cookie consent plugin written in plain ja
 7. [Configuration examples](#full-example-configurations) (work-in-progress)
     - Configuration with [Google analytics](#full-example-configurations)
     - Configuration with [explicit `accept all` and `accept necessary only` buttons](#explicit-consent)
-    - Configuration with embedded full cookie-policy 
+    - Configuration with embedded full cookie-policy
+8. [How to enable/manage revisions](#how-to-enablemanage-revisions)
 8. [FAQ](#faq)
 9. [License](#license)
 
@@ -80,6 +81,7 @@ A __lightweight__ & __gdpr compliant__ cookie consent plugin written in plain ja
                         title : 'Cookie settings',
                         save_settings_btn : "Save settings",
                         accept_all_btn : "Accept all",
+                        reject_all_btn : "Reject all", // optional, [v.2.5.0 +]
                         close_btn_label: "Close",   
                         blocks : [
                             {
@@ -121,12 +123,12 @@ You can download the [latest version](https://github.com/orestbida/cookieconsent
 
 javascript :
 ```html
-https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@v2.4.7/dist/cookieconsent.js
+https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@v2.5.0/dist/cookieconsent.js
 ```
 
 stylesheet :
 ```html
-https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@v2.4.7/dist/cookieconsent.css
+https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@v2.5.0/dist/cookieconsent.css
 ```
 
 ## Layout options & customization
@@ -318,6 +320,7 @@ Below a table which sums up all of the available options (must be passed to the 
 | `cookie_same_site` 	| string   	| "Lax"     | SameSite attribute                                                           |
 | `theme_css`         	| string   	| -       	| Specify path to the .css file                                          	|
 | `force_consent`       | boolean   | false     | Enable if you want to block page navigation until user action (check [faq](#faq) for a proper implementation) |
+| `revision`            | number  	| 0   	    | Specify this option to enable revisions. [Check below](#how-to-enablemanage-revisions) for a proper usage |
 | `current_lang`      	| string   	| -       	| Specify one of the languages you have defined (can also be dynamic): `'en'`, `'de'` ...                                          	|
 | `auto_language`     	| boolean  	| false   	| Automatically grab the language based on the user's browser language, if language is not defined => use specified `current_lang` 	|
 | `autoclear_cookies` 	| boolean  	| false   	| Enable if you want to automatically delete cookies when user opts-out of a specific category inside cookie settings              	|
@@ -384,6 +387,7 @@ Below a table which sums up all of the available options (must be passed to the 
                     title : 'Cookie preferences',
                     save_settings_btn : "Save settings",
                     accept_all_btn : "Accept all",
+                    reject_all_btn : "Reject all",      // optional, [v.2.5.0 +]
                     cookie_table_headers : [
                         {col1: "Name" }, 
                         {col2: "Domain" }, 
@@ -583,6 +587,7 @@ cookieconsent.run({
                 title : 'Cookie preferences ...',
                 save_settings_btn : "Save settings",
                 accept_all_btn : "Accept all",
+                reject_all_btn: "Reject all",   // optional, [v.2.5.0 +]
                 blocks : [
                     {
                         title : "First block title ...",
@@ -612,6 +617,43 @@ cookieconsent.run({
 ```
 </p>
 </details>
+
+## How to enable/manage revisions
+
+- default revision number is 0
+- if saved revision number inside the existing cookie is different from the one you just specified => consent modal will be shown.
+
+1. Enable revisions by specifying a valid `revision` parameter:
+
+    ```javascript
+    cookieconsent.run({
+        ...
+        revision: 1,
+        ...
+    })
+    ```
+
+2. Set a valid `revision_message` parameter (optional) inside `consent_modal`, and put the following `{{revision_message}}` placeholder somewhere inside `description`:
+
+    ```javascript
+    cookieconsent.run({
+        ...
+        revision: 1,
+        ...
+        languages : {
+            en : {
+                consent_modal : {
+                    ...
+                    description: "Usual description ... {{revision_message}}"
+                    revision_message: "<br> Dude, my terms have changed. Sorry for bothering you again!",
+                    ...
+                },
+                ...
+            }
+        }
+        ...
+    })
+    ```
 
 
 
@@ -697,6 +739,29 @@ cookieconsent.run({
         theme_css : "../src/cookieconsent.css",					
         ...
     });
+    ```
+
+    </p>
+    </details>
+-   <details><summary>How to add a "reject all" button inside settings modal</summary>
+    <p id="add-reject-all-btn">
+
+    You need to specify `reject_all_btn` inside `settings_modal`:
+
+    ```javascript
+    cookieconsent.run({
+        ...
+        languages : {
+            en : {
+                ...
+                settings_modal : {
+                    ...
+                    reject_all_btn : "Reject all",
+                    ...
+                }
+            }
+        } 
+    })       
     ```
 
     </p>
