@@ -13,6 +13,7 @@
     --cc-toggle-bg-readonly: #d5dee2;
     --cc-toggle-knob-bg: #fff;
     --cc-toggle-knob-icon-color: #ecf2fa;
+    --cc-block-text: var(--cc-text);
     --cc-cookie-category-block-bg: #f0f4f7;
     --cc-cookie-category-block-bg-hover: #e9eff4;
     --cc-section-border: #f1f3f5;
@@ -37,6 +38,7 @@
     --cc-toggle-bg-readonly: #454c54;
     --cc-toggle-knob-bg: var(--cc-cookie-category-block-bg);
     --cc-toggle-knob-icon-color: var(--cc-bg);
+    --cc-block-text: #b3bfc5;
     --cc-cookie-category-block-bg: #23272a;
     --cc-cookie-category-block-bg-hover: #2b3035;
     --cc-section-border: #292d31;
@@ -96,7 +98,7 @@
 .cc_div .c-bl,
 .cc_div .b-tl,
 #s-bl .act .b-acc{
-    border-radius: .25em;
+    border-radius: .35em;
 }
 
 .cc_div input,
@@ -122,7 +124,7 @@
 .c--anim #s-inr,
 #cs-ov,
 #cm-ov{
-    transition: visibility .25s ease, opacity .25s ease, transform .25s ease!important;
+    transition: visibility .25s linear, opacity .25s ease, transform .25s ease!important;
 }
 
 .c--anim .c-bn{
@@ -194,7 +196,7 @@
 
 #cm{
     font-family: inherit;
-    padding: 1.2em 2.2em 1.825em 2.2em;
+    padding: 1.05em 2.1em 1.5em 2.1em;
     position: fixed;
     z-index: 1;
     background: #fff;
@@ -212,12 +214,12 @@
 }
 
 #c-ttl{
-    margin: 0 0 0.6em 0;
-    font-size: 1.1em;
+    margin: 0 0 0.7em 0;
+    font-size: 1.05em;
 }
 
 #c-txt{
-    margin-bottom: 1.625em;
+    margin-bottom: 1.4em;
     font-size: 0.9em;
     line-height: 1.5em;
 }
@@ -400,6 +402,8 @@ CookieConsent settings modal
     font-size: 0.9em;
     line-height: 1.5em;
     margin-top: 1em;
+    color: #2d4156;
+    color: var(--cc-block-text);
 }
 
 .cc_div .c-tgl:disabled{
@@ -528,7 +532,7 @@ CookieConsent settings modal
     padding: 0;
     width: 1.7em;
     height: 1.7em;
-    font-size: 1.55em;
+    font-size: 1.515em;
     margin: 0;
     font-weight: initial;
     position: relative;
@@ -651,23 +655,22 @@ CookieConsent settings modal
 .cc_div .b-tg .c-tg:after {
     content: "";
     position: absolute;
-    left: 0.22em;
-    top: 50%;
-    width: 1.2em;
-    height: 1.2em;
+    left: 0.24em;
+    top: 0.25em;
+    width: 1.1em;
+    height: 1.1em;
     border: none;
     box-sizing: content-box;
     background: #fff;
     background: var(--cc-toggle-knob-bg);
     box-shadow: 0 1px 2px rgba(24, 32, 35, .36);
     transition: transform .25s ease;
-    transform: translateY(-50%);
     border-radius: 100%;
 }
 
 /* Show the checkmark when checked */
 .cc_div .c-tgl:checked ~ .c-tg:after{
-    transform: translateY(-50%) translateX(1.95em);
+    transform: translateX(1.95em);
 }
 
 #s-bl table,
@@ -753,7 +756,7 @@ CookieConsent settings modal
     width: 100%;
     width: 100vw;
     visibility: hidden;
-    transition: visibility .25s ease;
+    transition: visibility .25s linear;
 }
 
 .force--consent.show--consent .c--anim .cc_div,
@@ -971,8 +974,8 @@ html.force--consent body{
 .cc_div .bar #s-hdr,
 .cc_div .bar #s-bl,
 .cc_div .bar #s-bns {
-    padding-left: 2em;
-    padding-right: 2em;
+    padding-left: 1.8em;
+    padding-right: 1.8em;
 }
 
 .cc_div .bar #cs{
@@ -1063,8 +1066,6 @@ html.force--consent body{
 }
 /* end positions */
 
-
-
 @media screen and (max-width: 688px) {
 
     #cm,
@@ -1106,6 +1107,11 @@ html.force--consent body{
         font-size: .85em;
     }
 
+    #s-bns,
+    .cc_div .bar #s-bns{
+        padding: 1em 1.3em;
+    }
+
     .cc_div .bar #s-inr{
         max-width: 100%;
         width: 100%;
@@ -1134,8 +1140,12 @@ html.force--consent body{
 
     #s-inr{
         margin: 0;
-        padding-bottom: 8.1em;
+        padding-bottom: 7.9em;
         border-radius: unset;
+    }
+
+    #s-bns{
+        height: 7.9em;
     }
 
 	#s-bl,
@@ -1148,12 +1158,6 @@ html.force--consent body{
         padding: 0 1.3em;
     }
 
-    #s-bns,
-    .cc_div .bar #s-bns{
-        height: 8.1em;
-        padding: 1em 1.3em;
-    }
-    
     /** dynamic table layout **/
     #s-bl table { 
         width: 100%; 
