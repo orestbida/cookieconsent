@@ -28,13 +28,13 @@ A __lightweight__ & __gdpr compliant__ cookie consent plugin written in plain ja
     - Configuration with [explicit `accept all` and `accept necessary only` buttons](#explicit-consent)
     - Configuration with embedded full cookie-policy
 8. [How to enable/manage revisions](#how-to-enablemanage-revisions)
-8. [FAQ](#faq)
-9. [License](#license)
+9. [FAQ](#faq)
+10. [License](#license)
 
 ## Key features
 - __Lightweight__
 - __Cross-browser__ support (IE8+)
-- __Standalone__ (no external dependecies needed)
+- __Standalone__ (no external dependencies needed)
 - __GDPR compliant__
 - __Support for multi language__
 - __[WAI-ARIA](https://developer.mozilla.org/en-US/docs/Learn/Accessibility/WAI-ARIA_basics) compliant__
@@ -217,7 +217,7 @@ Additional methods for an easier management of your scripts and cookie settings 
     cookieconsent.accept('all', ['cat_1', 'cat_2']); // accept all except these 2 categories
     ```
 
-    How to later reject a specific category (cookieconsent alredy accepted)? Same as above:
+    How to later reject a specific category (cookieconsent already accepted)? Same as above:
 
     ```javascript
     cookieconsent.accept('all', ['targeting']);     // opt out of targeting category
@@ -327,8 +327,8 @@ Below a table which sums up all of the available options (must be passed to the 
 | `page_scripts` 	    | boolean  	| false   	| Enable if you want to easily `manage existing <script>` tags. Check [manage third party scripts](#manage-third-party-scripts)     	|
 | `remove_cookie_tables`| boolean  	| false   	| Enable if you want remove the html cookie tables (and still want to make use of `autoclear_cookies`)     	|
 | `gui_options`         | object  	| -   	    | Customization option which allows to choose layout, position	and transition. Check [layout options & customization](#layout-options--customization) |
-| __`onAccept`__      	| function 	| -       	| Method run `once` either when:  <br>  1. The moment the cookie consent is accepted <br> 2. After each page load (if cookie consent has alredy  been accepted)         	|
-| __`onChange`__      	| function 	| -       	| Method run `whenever preferences are modified` (and only if cookie consent has alredy been accepted)                                                                            	|
+| __`onAccept`__      	| function 	| -       	| Method run `once` either when:  <br>  1. The moment the cookie consent is accepted <br> 2. After each page load (if cookie consent has already  been accepted)         	|
+| __`onChange`__      	| function 	| -       	| Method run `whenever preferences are modified` (and only if cookie consent has already been accepted)                                                                            	|
 | `languages`      	    | object 	| -       	| [Check below](#how-to-configure-languages--cookie-settings) for configuration
 
 ## Full example configurations
@@ -409,7 +409,7 @@ Below a table which sums up all of the available options (must be passed to the 
                             }
                         },{
                             title : "Analytics cookies",
-                            description: 'These cookies ollect information about how you use the website, which pages you visited and which links you clicked on. All of the data is anonymized and cannot be used to identify you.',
+                            description: 'These cookies collect information about how you use the website, which pages you visited and which links you clicked on. All of the data is anonymized and cannot be used to identify you.',
                             toggle : {
                                 value : 'analytics_cookies',
                                 enabled : false,
