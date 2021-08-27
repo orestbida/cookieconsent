@@ -633,7 +633,7 @@ cookieconsent.run({
     })
     ```
 
-2. Set a valid `revision_message` parameter (optional) inside `consent_modal`, and put the following `{{revision_message}}` placeholder somewhere inside `description`:
+2. Set a valid `revision_message` parameter (optional) inside `consent_modal`, and put the following placeholder `{{revision_message}}` somewhere inside `description`:
 
     ```javascript
     cookieconsent.run({
@@ -644,7 +644,7 @@ cookieconsent.run({
             en : {
                 consent_modal : {
                     ...
-                    description: "Usual description ... {{revision_message}}"
+                    description: "Usual description ... {{revision_message}}",
                     revision_message: "<br> Dude, my terms have changed. Sorry for bothering you again!",
                     ...
                 },
