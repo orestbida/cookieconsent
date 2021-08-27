@@ -13,6 +13,7 @@
     --cc-toggle-bg-readonly: #d5dee2;
     --cc-toggle-knob-bg: #fff;
     --cc-toggle-knob-icon-color: #ecf2fa;
+    --cc-block-text: var(--cc-text);
     --cc-cookie-category-block-bg: #f0f4f7;
     --cc-cookie-category-block-bg-hover: #e9eff4;
     --cc-section-border: #f1f3f5;
@@ -37,6 +38,7 @@
     --cc-toggle-bg-readonly: #454c54;
     --cc-toggle-knob-bg: var(--cc-cookie-category-block-bg);
     --cc-toggle-knob-icon-color: var(--cc-bg);
+    --cc-block-text: #b3bfc5;
     --cc-cookie-category-block-bg: #23272a;
     --cc-cookie-category-block-bg-hover: #2b3035;
     --cc-section-border: #292d31;
@@ -75,7 +77,10 @@
 .cc_div {
     font-size: 16px;
     font-weight: 400;
-    font-family: -apple-system, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
     color: #2d4156;
     color: var(--cc-text);
 }
@@ -85,7 +90,7 @@
 #s-ttl,
 #c-ttl,
 #s-bl td:before{
-    font-weight: bold;
+    font-weight: 600;
 }
 
 #cm,
@@ -93,7 +98,7 @@
 .cc_div .c-bl,
 .cc_div .b-tl,
 #s-bl .act .b-acc{
-    border-radius: .25em;
+    border-radius: .35em;
 }
 
 .cc_div input,
@@ -105,11 +110,12 @@
 }
 
 .cc_div a{
-    text-decoration: underline;
+    border-bottom: 1px solid;
 }
 
 .cc_div a:hover{
     text-decoration: none;
+    border-color: transparent;
 }
 
 /* Make elements "animatable" */
@@ -118,7 +124,7 @@
 .c--anim #s-inr,
 #cs-ov,
 #cm-ov{
-    transition: visibility .25s ease, opacity .25s ease, transform .25s ease!important;
+    transition: visibility .25s linear, opacity .25s ease, transform .25s ease!important;
 }
 
 .c--anim .c-bn{
@@ -190,7 +196,7 @@
 
 #cm{
     font-family: inherit;
-    padding: 1.2em 2.2em 1.825em 2.2em;
+    padding: 1.05em 2.1em 1.5em 2.1em;
     position: fixed;
     z-index: 1;
     background: #fff;
@@ -208,14 +214,14 @@
 }
 
 #c-ttl{
-    margin: 0 0 0.6em 0;
-    font-size: 1.3em;
+    margin: 0 0 0.7em 0;
+    font-size: 1.05em;
 }
 
 #c-txt{
-    margin-bottom: 1.625em;
+    margin-bottom: 1.4em;
     font-size: 0.9em;
-    line-height: 1.45em;
+    line-height: 1.5em;
 }
 
 .cc_div .c-bn{
@@ -223,10 +229,10 @@
     color: var(--cc-btn-secondary-text);
     background: #e5ebef;
     background: var(--cc-btn-secondary-bg);
-    padding: 1em 1.6em;
+    padding: 1em 1.7em;
     display: inline-block;
     cursor: pointer;
-    font-size: 0.85em;
+    font-size: 0.82em;
     -moz-user-select: none;
     -khtml-user-select: none;
     -webkit-user-select: none;
@@ -244,6 +250,11 @@
 #s-cnt button + button,
 #s-c-bn{
     float: right;
+}
+
+#s-cnt #s-rall-bn{
+    float: none;
+    margin-left: 1em;
 }
 
 #cm .c_link:hover,
@@ -282,10 +293,6 @@ CookieConsent settings modal
     margin-top: 0;
 }
 
-#s-bl .b-tl{
-    font-size: 1.1em;
-}
-
 #s-bl .b-bn{
     margin-top: 0;
 }
@@ -298,11 +305,11 @@ CookieConsent settings modal
 #s-cnt .b-bn .b-tl{
     display: block;
     font-family: inherit;
-    font-size: 1em;
+    font-size: .95em;
     width: 100%;
     cursor: pointer;
     position: relative;
-    padding: 1.4em 6.4em 1.4em 2.7em;
+    padding: 1.3em 6.4em 1.3em 2.7em;
     background: none;
     transition: background-color .25s ease;
 }
@@ -393,8 +400,10 @@ CookieConsent settings modal
 
 #s-cnt .p{
     font-size: 0.9em;
-    line-height: 1.3em;
+    line-height: 1.5em;
     margin-top: 1em;
+    color: #2d4156;
+    color: var(--cc-block-text);
 }
 
 .cc_div .c-tgl:disabled{
@@ -421,12 +430,12 @@ CookieConsent settings modal
 #s-inr{
     height: 100%;
     position: relative;
-    max-width: 47em;
+    max-width: 45em;
     margin: 0 auto;
     transform: scale(.96);
     opacity: 0;
     padding-top: 5.125em;
-    padding-bottom: 4.9375em;
+    padding-bottom: 4.75em;
     position: relative;
     height: 100%;
     overflow: hidden;
@@ -459,7 +468,7 @@ CookieConsent settings modal
     padding: 1em 2.5em;
     border-top: 1px solid #f1f3f5;
     border-color: var(--cc-section-border);
-    height: 4.9375em;
+    height: 4.75em;
 }
 
 .cc_div .cc-link{
@@ -471,7 +480,7 @@ CookieConsent settings modal
     padding-bottom: 0;
     text-decoration: none;
     cursor: pointer;
-    font-weight: bold;
+    font-weight: 600;
 }
 
 .cc_div .cc-link:hover,
@@ -505,7 +514,8 @@ CookieConsent settings modal
     top: 0;
     width: 100%;
     display: table;
-    padding: 1.2em 2.5em;
+    padding: 0 2.5em;
+    height: 5.125em;
     vertical-align: middle;
     z-index: 2;
     border-bottom: 1px solid #f1f3f5;
@@ -522,7 +532,7 @@ CookieConsent settings modal
     padding: 0;
     width: 1.7em;
     height: 1.7em;
-    font-size: 1.6em;
+    font-size: 1.515em;
     margin: 0;
     font-weight: initial;
     position: relative;
@@ -605,6 +615,8 @@ CookieConsent settings modal
     position: absolute;
     cursor: pointer;
     display: block;
+    top: 0;
+    left: 0;
 }
 
 /* Create a custom checkbox */
@@ -643,10 +655,10 @@ CookieConsent settings modal
 .cc_div .b-tg .c-tg:after {
     content: "";
     position: absolute;
-    left: 0.22em;
-    top: 0.2em;
-    width: 1.2em;
-    height: 1.2em;
+    left: 0.24em;
+    top: 0.25em;
+    width: 1.1em;
+    height: 1.1em;
     border: none;
     box-sizing: content-box;
     background: #fff;
@@ -744,7 +756,7 @@ CookieConsent settings modal
     width: 100%;
     width: 100vw;
     visibility: hidden;
-    transition: visibility .25s ease;
+    transition: visibility .25s linear;
 }
 
 .force--consent.show--consent .c--anim .cc_div,
@@ -785,13 +797,13 @@ html.force--consent body{
     content: '';
     margin-right: 15px;
     position: absolute;
-    transform: translateY(-.2em) rotate(45deg);
+    transform: translateY(-50%) rotate(45deg);
     left: 1.2em;
-    top: 1.85em;
+    top: 50%;
 }
 
 .cc_div .act .b-bn .b-tl::before{
-    transform: translateY(.05em) rotate(225deg);
+    transform: translateY(-20%) rotate(225deg);
 }
 
 .cc_div .on-i::before{
@@ -813,8 +825,8 @@ html.force--consent body{
     content: '';
     position: absolute;
     left: .82em;
-    top: .55em;
-    height: 17px;
+    top: .58em;
+    height: .6em;
     width: 1.5px;
     background: #444d53;
     background: var(--cc-btn-secondary-text);
@@ -898,10 +910,6 @@ html.force--consent body{
     padding-right: 2.4em;
 }
 
-.cc_div .cloud #c-ttl{
-    font-size: 1.1em;
-}
-
 .cc_div .cloud #c-txt{
     margin-bottom: 0;
     font-size: 0.85em;
@@ -916,7 +924,6 @@ html.force--consent body{
 #cm.cloud .c-bn{
     margin: .625em 0 0 0;
     width: 100%;
-    font-size: .8em;
 }
 
 #cm.cloud .c-bn:first-child{
@@ -967,8 +974,8 @@ html.force--consent body{
 .cc_div .bar #s-hdr,
 .cc_div .bar #s-bl,
 .cc_div .bar #s-bns {
-    padding-left: 2em;
-    padding-right: 2em;
+    padding-left: 1.8em;
+    padding-right: 1.8em;
 }
 
 .cc_div .bar #cs{
@@ -1059,8 +1066,6 @@ html.force--consent body{
 }
 /* end positions */
 
-
-
 @media screen and (max-width: 688px) {
 
     #cm,
@@ -1070,7 +1075,7 @@ html.force--consent body{
         width: 100%;
         max-width: 100%;
         margin: 0;
-        padding: 1.875em;
+        padding: 1.6em!important;
         right: 0;
         left: 0;
         bottom: 0;
@@ -1093,10 +1098,6 @@ html.force--consent body{
         bottom: 0;
         top: unset;
     }
-
-    .cc_div .cloud #c-ttl{
-        font-size: 1.3em;
-    }
     
     .cc_div .cloud #c-txt{
         font-size: .9em;
@@ -1104,6 +1105,11 @@ html.force--consent body{
 
     #cm.cloud .c-bn{
         font-size: .85em;
+    }
+
+    #s-bns,
+    .cc_div .bar #s-bns{
+        padding: 1em 1.3em;
     }
 
     .cc_div .bar #s-inr{
@@ -1128,14 +1134,18 @@ html.force--consent body{
     }
 
     .cc_div .b-tg{
-        font-size: 1.25em;
+        font-size: 1.1em;
         right: .9em;
     }
 
     #s-inr{
         margin: 0;
-        padding-bottom: 8.1em;
+        padding-bottom: 7.9em;
         border-radius: unset;
+    }
+
+    #s-bns{
+        height: 7.9em;
     }
 
 	#s-bl,
@@ -1145,18 +1155,30 @@ html.force--consent body{
     
 	#s-hdr,
     .cc_div .bar #s-hdr{
-        padding: 1.2em 1.3em;
+        padding: 0 1.3em;
     }
 
-    #s-bns,
-    .cc_div .bar #s-bns{
-        height: 8.1em;
-        padding: 1em 1.3em;
-    }
-    
     /** dynamic table layout **/
     #s-bl table { 
         width: 100%; 
+    }
+
+    #s-inr.bns-t{
+        padding-bottom: 10.5em;
+    }
+
+    .bns-t #s-bns{
+        height: 10.5em;
+    }
+
+    .cc_div .bns-t .c-bn{
+        font-size: 0.83em;
+        padding: .9em 1.6em;
+    }
+
+    #s-cnt .b-bn .b-tl{
+        padding-top: 1.2em;
+        padding-bottom: 1.2em;
     }
 
     /* Force table to not be like tables anymore */
@@ -1207,6 +1229,10 @@ html.force--consent body{
         margin-right: 0;
     }
 
+    #s-cnt #s-rall-bn{
+        margin-left: 0;
+    }
+
     #c-bns button + button,
     #s-cnt button + button{
         margin-top: 0.625em;
@@ -1231,7 +1257,7 @@ html.force--consent body{
     .cc_div .cloud #c-inr-i{
         display: block;
         width: auto;
-        min-width: auto;
+        min-width: unset;
     }
 
     .cc_div .cloud #c-txt{
@@ -1295,7 +1321,7 @@ html.force--consent body{
 }
 
 .cc_div.ie #s-cnt .b-bn .b-tl{
-    padding: 1.4em 6.4em 1.4em 1.4em
+    padding: 1.3em 6.4em 1.3em 1.4em
 }
 
 .cc_div.ie  .bar #s-bl td:before{

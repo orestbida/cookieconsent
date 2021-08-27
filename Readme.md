@@ -26,14 +26,15 @@ A __lightweight__ & __gdpr compliant__ cookie consent plugin written in plain ja
 7. [Configuration examples](#full-example-configurations) (work-in-progress)
     - Configuration with [Google analytics](#full-example-configurations)
     - Configuration with [explicit `accept all` and `accept necessary only` buttons](#explicit-consent)
-    - Configuration with embedded full cookie-policy 
-8. [FAQ](#faq)
-9. [License](#license)
+    - Configuration with embedded full cookie-policy
+8. [How to enable/manage revisions](#how-to-enablemanage-revisions)
+9. [FAQ](#faq)
+10. [License](#license)
 
 ## Key features
 - __Lightweight__
 - __Cross-browser__ support (IE8+)
-- __Standalone__ (no external dependecies needed)
+- __Standalone__ (no external dependencies needed)
 - __GDPR compliant__
 - __Support for multi language__
 - __[WAI-ARIA](https://developer.mozilla.org/en-US/docs/Learn/Accessibility/WAI-ARIA_basics) compliant__
@@ -80,6 +81,7 @@ A __lightweight__ & __gdpr compliant__ cookie consent plugin written in plain ja
                         title : 'Cookie settings',
                         save_settings_btn : "Save settings",
                         accept_all_btn : "Accept all",
+                        reject_all_btn : "Reject all", // optional, [v.2.5.0 +]
                         close_btn_label: "Close",   
                         blocks : [
                             {
@@ -121,12 +123,12 @@ You can download the [latest version](https://github.com/orestbida/cookieconsent
 
 javascript :
 ```html
-https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@v2.4.7/dist/cookieconsent.js
+https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@v2.5.0/dist/cookieconsent.js
 ```
 
 stylesheet :
 ```html
-https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@v2.4.7/dist/cookieconsent.css
+https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@v2.5.0/dist/cookieconsent.css
 ```
 
 ## Layout options & customization
@@ -192,6 +194,36 @@ the following methods are available:
 - cookieconsent`.hideSettings()`
 
 Additional methods for an easier management of your scripts and cookie settings (expand them to see usage example):
+- <details><summary>cookieconsent<code>.accept(&lt;accepted_categories&gt;, &lt;optional_rejected_categories&gt;)</code> [v2.5.0+]</summary>
+    <p>
+
+    - accepted_categories: `string` or `string[]`
+    - rejected_categories: `string[]` - optional
+
+    <br>
+
+    Note: **all categories marked as `readonly` will ALWAYS be enabled/accepted regardless of the categories provided inside the `.accept()` API call.**
+
+    Examples:
+
+    ```javascript
+    cookieconsent.accept('all');                // accept all categories
+    cookieconsent.accept([]);                   // accept none (reject all)
+    cookieconsent.accept('analytics');          // accept only analytics category
+    cookieconsent.accept(['cat_1', 'cat_2']);   // accept only these 2 categories   
+    cookieconsent.accept();                     // accept all currently selected categories inside modal
+
+    cookieconsent.accept('all', ['analytics']); // accept all except "analytics" category
+    cookieconsent.accept('all', ['cat_1', 'cat_2']); // accept all except these 2 categories
+    ```
+
+    How to later reject a specific category (cookieconsent already accepted)? Same as above:
+
+    ```javascript
+    cookieconsent.accept('all', ['targeting']);     // opt out of targeting category
+    ```
+    </p>
+    </details>
 - <details><summary>cookieconsent<code>.allowedCategory(&lt;category_name&gt;)</code></summary>
     <p>
 
@@ -233,6 +265,26 @@ Additional methods for an easier management of your scripts and cookie settings 
     ```
     </p>
     </details>
+- <details><summary>cookieconsent<code>.eraseCookies(&lt;cookie_names&gt;, &lt;optional_path&gt;, &lt;optional_domains&gt;)</code> [v2.5.0+]</summary>
+    <p>
+
+    - cookie_names: `string[]`
+    - path: `string` - optional
+    - domains: `string[]` - optional
+
+    <br>
+
+    Examples:
+
+    ```javascript
+    cookieconsent.eraseCookies(['cc_cookies']);             // erase "cc_cookie" if it exists
+    cookieconsent.eraseCookies(['cookie1', 'cookie2']);     // erase these 2 cookies
+
+    cookieconsent.eraseCookies(['cc_cookie'], "/demo");
+    cookieconsent.eraseCookies(['cc_cookie'], "/demo", [location.hostname]);
+    ```
+    </p>
+    </details>
 - <details><summary>cookieconsent<code>.loadScript(&lt;path&gt;, &lt;callback_function&gt;, &lt;optional_custom_attributes&gt;)</code></summary>
     <p>
 
@@ -268,14 +320,15 @@ Below a table which sums up all of the available options (must be passed to the 
 | `cookie_same_site` 	| string   	| "Lax"     | SameSite attribute                                                           |
 | `theme_css`         	| string   	| -       	| Specify path to the .css file                                          	|
 | `force_consent`       | boolean   | false     | Enable if you want to block page navigation until user action (check [faq](#faq) for a proper implementation) |
+| `revision`            | number  	| 0   	    | Specify this option to enable revisions. [Check below](#how-to-enablemanage-revisions) for a proper usage |
 | `current_lang`      	| string   	| -       	| Specify one of the languages you have defined (can also be dynamic): `'en'`, `'de'` ...                                          	|
 | `auto_language`     	| boolean  	| false   	| Automatically grab the language based on the user's browser language, if language is not defined => use specified `current_lang` 	|
 | `autoclear_cookies` 	| boolean  	| false   	| Enable if you want to automatically delete cookies when user opts-out of a specific category inside cookie settings              	|
 | `page_scripts` 	    | boolean  	| false   	| Enable if you want to easily `manage existing <script>` tags. Check [manage third party scripts](#manage-third-party-scripts)     	|
 | `remove_cookie_tables`| boolean  	| false   	| Enable if you want remove the html cookie tables (and still want to make use of `autoclear_cookies`)     	|
 | `gui_options`         | object  	| -   	    | Customization option which allows to choose layout, position	and transition. Check [layout options & customization](#layout-options--customization) |
-| __`onAccept`__      	| function 	| -       	| Method run `once` either when:  <br>  1. The moment the cookie consent is accepted <br> 2. After each page load (if cookie consent has alredy  been accepted)         	|
-| __`onChange`__      	| function 	| -       	| Method run `whenever preferences are modified` (and only if cookie consent has alredy been accepted)                                                                            	|
+| __`onAccept`__      	| function 	| -       	| Method run `once` either when:  <br>  1. The moment the cookie consent is accepted <br> 2. After each page load (if cookie consent has already  been accepted)         	|
+| __`onChange`__      	| function 	| -       	| Method run `whenever preferences are modified` (and only if cookie consent has already been accepted)                                                                            	|
 | `languages`      	    | object 	| -       	| [Check below](#how-to-configure-languages--cookie-settings) for configuration
 
 ## Full example configurations
@@ -334,6 +387,7 @@ Below a table which sums up all of the available options (must be passed to the 
                     title : 'Cookie preferences',
                     save_settings_btn : "Save settings",
                     accept_all_btn : "Accept all",
+                    reject_all_btn : "Reject all",      // optional, [v.2.5.0 +]
                     cookie_table_headers : [
                         {col1: "Name" }, 
                         {col2: "Domain" }, 
@@ -355,7 +409,7 @@ Below a table which sums up all of the available options (must be passed to the 
                             }
                         },{
                             title : "Analytics cookies",
-                            description: 'These cookies ollect information about how you use the website, which pages you visited and which links you clicked on. All of the data is anonymized and cannot be used to identify you.',
+                            description: 'These cookies collect information about how you use the website, which pages you visited and which links you clicked on. All of the data is anonymized and cannot be used to identify you.',
                             toggle : {
                                 value : 'analytics_cookies',
                                 enabled : false,
@@ -533,6 +587,7 @@ cookieconsent.run({
                 title : 'Cookie preferences ...',
                 save_settings_btn : "Save settings",
                 accept_all_btn : "Accept all",
+                reject_all_btn: "Reject all",   // optional, [v.2.5.0 +]
                 blocks : [
                     {
                         title : "First block title ...",
@@ -562,6 +617,43 @@ cookieconsent.run({
 ```
 </p>
 </details>
+
+## How to enable/manage revisions
+
+- default revision number is 0
+- if saved revision number inside the existing cookie is different from the one you just specified => consent modal will be shown.
+
+1. Enable revisions by specifying a valid `revision` parameter:
+
+    ```javascript
+    cookieconsent.run({
+        ...
+        revision: 1,
+        ...
+    })
+    ```
+
+2. Set a valid `revision_message` parameter (optional) inside `consent_modal`, and put the following placeholder `{{revision_message}}` somewhere inside `description`:
+
+    ```javascript
+    cookieconsent.run({
+        ...
+        revision: 1,
+        ...
+        languages : {
+            en : {
+                consent_modal : {
+                    ...
+                    description: "Usual description ... {{revision_message}}",
+                    revision_message: "<br> Dude, my terms have changed. Sorry for bothering you again!",
+                    ...
+                },
+                ...
+            }
+        }
+        ...
+    })
+    ```
 
 
 
@@ -647,6 +739,29 @@ cookieconsent.run({
         theme_css : "../src/cookieconsent.css",					
         ...
     });
+    ```
+
+    </p>
+    </details>
+-   <details><summary>How to add a "reject all" button inside settings modal</summary>
+    <p id="add-reject-all-btn">
+
+    You need to specify `reject_all_btn` inside `settings_modal`:
+
+    ```javascript
+    cookieconsent.run({
+        ...
+        languages : {
+            en : {
+                ...
+                settings_modal : {
+                    ...
+                    reject_all_btn : "Reject all",
+                    ...
+                }
+            }
+        } 
+    })       
     ```
 
     </p>
