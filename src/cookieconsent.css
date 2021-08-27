@@ -75,7 +75,10 @@
 .cc_div {
     font-size: 16px;
     font-weight: 400;
-    font-family: -apple-system, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
     color: #2d4156;
     color: var(--cc-text);
 }
@@ -85,7 +88,7 @@
 #s-ttl,
 #c-ttl,
 #s-bl td:before{
-    font-weight: bold;
+    font-weight: 600;
 }
 
 #cm,
@@ -105,11 +108,12 @@
 }
 
 .cc_div a{
-    text-decoration: underline;
+    border-bottom: 1px solid;
 }
 
 .cc_div a:hover{
     text-decoration: none;
+    border-color: transparent;
 }
 
 /* Make elements "animatable" */
@@ -472,7 +476,7 @@ CookieConsent settings modal
     padding-bottom: 0;
     text-decoration: none;
     cursor: pointer;
-    font-weight: bold;
+    font-weight: 600;
 }
 
 .cc_div .cc-link:hover,
@@ -607,6 +611,8 @@ CookieConsent settings modal
     position: absolute;
     cursor: pointer;
     display: block;
+    top: 0;
+    left: 0;
 }
 
 /* Create a custom checkbox */
@@ -1247,7 +1253,7 @@ html.force--consent body{
     .cc_div .cloud #c-inr-i{
         display: block;
         width: auto;
-        min-width: auto;
+        min-width: unset;
     }
 
     .cc_div .cloud #c-txt{
