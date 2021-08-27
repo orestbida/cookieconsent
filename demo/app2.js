@@ -29,13 +29,13 @@ cc.run({
     /* Basic gui options */
     gui_options : {
         consent_modal : {
-            layout : 'cloud',               // box(default),cloud,bar
-            position : 'bottom center',     // bottom(default),top + left,right,center:=> examples: 'bottom' or 'top right'
-            transition : 'slide'            // zoom(default),slide
+            layout : 'box',                     // box(default),cloud,bar
+            position : 'bottom right',          // bottom(default),top + left,right,center:=> examples: 'bottom' or 'top right'
+            transition : 'slide'                // zoom(default),slide
         },
         settings_modal : {
             layout : 'box',                 // box(default),bar
-            // position: 'left',            // right(default),left (available only if bar layout selected)
+            //position: 'left',               // right(default),left (available only if bar layout selected)
             transition : 'slide'            // zoom(default),slide
         }
     },
@@ -51,10 +51,26 @@ cc.run({
         document.getElementById("cookie_val").innerHTML = JSON.stringify(cookie, null, 2);
     },
 
-    onChange: function(cookie){
+    onChange: function(cookie, changed_preferences){
         console.log("onChange fired ...");
-        // do something ...
         
+        // If analytics category's status was changed ...
+        if(changed_preferences.indexOf('analytics') > -1){
+
+            // If analytics category is disabled ...
+            if(!cc.allowedCategory('analytics')){
+
+                // Disable gtag ...
+                console.log("disabling gtag")
+                window.dataLayer = window.dataLayer || [];
+                function gtag() { dataLayer.push(arguments); }
+                gtag('consent', 'default', {
+                    'ad_storage': 'denied',
+                    'analytics_storage': 'denied'
+                });
+            }
+        }
+
         // Delete line below
         document.getElementById("cookie_val").innerHTML = JSON.stringify(cookie, null, 2);
     },
@@ -62,21 +78,23 @@ cc.run({
     languages : {
         'en' : {	
             consent_modal : {
-                title :  "👋 It's time for some nice cookies",
+                title :  "Hello traveler, it's time for some nice cookies",
                 description :  'Hi, this website uses essential cookies to ensure its proper operation and tracking cookies to understand how you interact with it. The latter will be set only after consent. <a href="#privacy-policy" class="cc-link">Privacy policy</a>',
                 primary_btn: {
                     text: 'Accept all',
                     role: 'accept_all'      //'accept_selected' or 'accept_all'
                 },
                 secondary_btn: {
-                    text : 'Manage preferences',
+                    text : 'Preferences',
                     role : 'settings'       //'settings' or 'accept_necessary'
-                }
+                },
+                revision_message: "<br><br> Dear user, terms and conditions have changed since the last time you visisted!"
             },
             settings_modal : {
-                title : '<div>Cookie preferences</div><div aria-hidden="true" style="font-size: .8em; font-weight: 200; color: #687278; margin-top: 5px;">Powered by <a tabindex="-1" aria-hidden="true" href="https://github.com/orestbida/cookieconsent/" style="text-decoration: underline;">cookie-consent</a></div>',
+                title : '<div>Cookie preferences</div><div aria-hidden="true" style="font-size: .8em; font-weight: 400; color: #687278; margin-top: 3px;">Powered by <a tabindex="-1" aria-hidden="true" href="https://github.com/orestbida/cookieconsent/">cookie-consent</a></div>',
                 save_settings_btn : "Save current selection",
                 accept_all_btn : "Accept all",
+                reject_all_btn: "Reject all",
                 close_btn_label: "Close",
                 cookie_table_headers : [
                     {col1: "Name" }, 
@@ -97,7 +115,7 @@ cc.run({
                         }
                     },{
                         title : "Analytics & Performance cookies",
-                        description: getLoremIpsum()+getLoremIpsum(),
+                        description: getLoremIpsum(),
                         toggle : {
                             value : 'analytics',
                             enabled : false,
@@ -105,19 +123,10 @@ cc.run({
                         },
                         cookie_table: [
                             {
-                                col1: '_ga',
+                                col1: '^_ga',
                                 col2: 'yourdomain.com',
-                                col3: getLoremIpsum(),
-                            },
-                            {
-                                col1: '_gat',
-                                col2: 'yourdomain.com',
-                                col3: getLoremIpsum(),
-                            },
-                            {
-                                col1: '_gat_UA-46747204-9',
-                                col2: 'yourdomain.com',
-                                col3: getLoremIpsum(),
+                                col3: "description ...",
+                                is_regex: true
                             },
                             {
                                 col1: '_gid',
@@ -158,6 +167,7 @@ cc.run({
         }
     }
 });
+
 
 function getLoremIpsum(){
     return 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.';
