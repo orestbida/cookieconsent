@@ -842,7 +842,7 @@
 
             // fire onChange only if settings were changed
             if(typeof onChange === "function" && changedSettings.length > 0){
-                onChange(JSON.parse(_saved_cookie_content));
+                onChange(JSON.parse(_saved_cookie_content), changedSettings);
             }
 
             /**
