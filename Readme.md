@@ -192,6 +192,36 @@ the following methods are available:
 - cookieconsent`.hideSettings()`
 
 Additional methods for an easier management of your scripts and cookie settings (expand them to see usage example):
+- <details><summary>cookieconsent<code>.accept(&lt;accepted_categories&gt;, &lt;optional_rejected_categories&gt;)</code> [v2.5.0+]</summary>
+    <p>
+
+    - accepted_categories: `string` or `string[]`
+    - rejected_categories: `string[]` - optional
+
+    <br>
+
+    Note: **all categories marked as `readonly` will ALWAYS be enabled/accepted regardless of the categories provided inside the `.accept()` API call.**
+
+    Examples:
+
+    ```javascript
+    cookieconsent.accept('all');                // accept all categories
+    cookieconsent.accept([]);                   // accept none (reject all)
+    cookieconsent.accept('analytics');          // accept only analytics category
+    cookieconsent.accept(['cat_1', 'cat_2']);   // accept only these 2 categories   
+    cookieconsent.accept();                     // accept all currently selected categories inside modal
+
+    cookieconsent.accept('all', ['analytics']); // accept all except "analytics" category
+    cookieconsent.accept('all', ['cat_1', 'cat_2']); // accept all except these 2 categories
+    ```
+
+    How to later reject a specific category (cookieconsent alredy accepted)? Same as above:
+
+    ```javascript
+    cookieconsent.accept('all', ['targeting']);     // opt out of targeting category
+    ```
+    </p>
+    </details>
 - <details><summary>cookieconsent<code>.allowedCategory(&lt;category_name&gt;)</code></summary>
     <p>
 
@@ -230,6 +260,26 @@ Additional methods for an easier management of your scripts and cookie settings 
     if(!cookieconsent.validCookie('_gid')){
         // yoo, _gid cookie is not set, do something ...
     };
+    ```
+    </p>
+    </details>
+- <details><summary>cookieconsent<code>.eraseCookies(&lt;cookie_names&gt;, &lt;optional_path&gt;, &lt;optional_domains&gt;)</code> [v2.5.0+]</summary>
+    <p>
+
+    - cookie_names: `string[]`
+    - path: `string` - optional
+    - domains: `string[]` - optional
+
+    <br>
+
+    Examples:
+
+    ```javascript
+    cookieconsent.eraseCookies(['cc_cookies']);             // erase "cc_cookie" if it exists
+    cookieconsent.eraseCookies(['cookie1', 'cookie2']);     // erase these 2 cookies
+
+    cookieconsent.eraseCookies(['cc_cookie'], "/demo");
+    cookieconsent.eraseCookies(['cc_cookie'], "/demo", [location.hostname]);
     ```
     </p>
     </details>
