@@ -511,7 +511,6 @@
                      */
                     if(all_blocks[i]['toggle']['readonly']){
                         block_switch.disabled = true;
-                        block_switch.setAttribute('aria-readonly', 'true');
                         _addClass(block_switch_span, 'c-ro');
                         toggle_readonly.push(true);
                     }else{
@@ -720,17 +719,18 @@
             
             // If there are opt in/out toggles ...
             if(category_toggles.length > 0){
+
                 for(var i=0; i<category_toggles.length; i++){
-                    if(_inArray(accepted_categories, category_toggles[i].value) !== -1){
+                    if(_inArray(accepted_categories, toggle_categories[i]) !== -1){
                         category_toggles[i].checked = true;
                         if(!toggle_states[i]){
-                            changedSettings.push(category_toggles[i].value);
+                            changedSettings.push(toggle_categories[i]);
                             toggle_states[i] = true;
                         }
                     }else{
                         category_toggles[i].checked = false;
                         if(toggle_states[i]){
-                            changedSettings.push(category_toggles[i].value);
+                            changedSettings.push(toggle_categories[i]);
                             toggle_states[i] = false;
                         }
                     }
@@ -1181,18 +1181,18 @@
                 _addClass(html_dom, "show--settings");
                 settings_container.setAttribute('aria-hidden', 'false');
                 settings_modal_visible = true;
-                
-                // If there is no consent-modal, keep track of the last focused elem.
-                if(!consent_modal_visible){
-                    last_elem_before_modal = document.activeElement;
-                }else{
-                    last_consent_modal_btn_focus = document.activeElement;
-                }
 
                 /**
                  * Set focus to the first focusable element inside settings modal
                  */
                 setTimeout(function(){
+                    // If there is no consent-modal, keep track of the last focused elem.
+                    if(!consent_modal_visible){
+                        last_elem_before_modal = document.activeElement;
+                    }else{
+                        last_consent_modal_btn_focus = document.activeElement;
+                    }
+
                     if (settings_modal_focusable.length === 0) return;
 
                     if(settings_modal_focusable[3]){
@@ -1201,7 +1201,7 @@
                         settings_modal_focusable[0].focus();
                     }
                     current_modal_focusable = settings_modal_focusable;
-                }, 100);
+                }, 200);
 
                 _log("CookieConsent [SETTINGS]: show settings_modal");
             }, delay > 0 ? delay : 0);
@@ -1372,8 +1372,12 @@
                      */
                     consent_modal.setAttribute('aria-hidden', 'false');
                     consent_modal_visible = true;
-                    last_elem_before_modal = document.activeElement;
-                    current_modal_focusable = consent_modal_focusable;
+
+
+                    setTimeout(function(){
+                        last_elem_before_modal = document.activeElement;
+                        current_modal_focusable = consent_modal_focusable;
+                    }, 200);
                     
                     _log("CookieConsent [MODAL]: show consent_modal");
                 }, delay > 0 ? delay : 0);
@@ -1389,9 +1393,12 @@
                 consent_modal.setAttribute('aria-hidden', 'true');
                 consent_modal_visible = false;
 
-                //restore focus to the last page element which had focus before modal opening
-                last_elem_before_modal.focus();
-                current_modal_focusable = null;
+                setTimeout(function(){
+                    //restore focus to the last page element which had focus before modal opening
+                    last_elem_before_modal.focus();
+                    current_modal_focusable = null;
+                }, 200);
+
                 _log("CookieConsent [MODAL]: hide");
             }
         }
@@ -1404,21 +1411,25 @@
             settings_modal_visible = false;
             settings_container.setAttribute('aria-hidden', 'true');
             
-            /**
-             * If consent modal is visible, focus him (instead of page document)
-             */
-            if(consent_modal_visible){
-                last_consent_modal_btn_focus && last_consent_modal_btn_focus.focus();
-                current_modal_focusable = consent_modal_focusable;
-            }else{
-                /**
-                 * Restore focus to last page element which had focus before modal opening
-                 */
-                last_elem_before_modal.focus();
-                current_modal_focusable = null;
-            }
 
-            clicked_inside_modal = false;
+            setTimeout(function(){
+                /**
+                 * If consent modal is visible, focus him (instead of page document)
+                 */
+                if(consent_modal_visible){
+                    last_consent_modal_btn_focus && last_consent_modal_btn_focus.focus();
+                    current_modal_focusable = consent_modal_focusable;
+                }else{
+                    /**
+                     * Restore focus to last page element which had focus before modal opening
+                     */
+                    last_elem_before_modal.focus();
+                    current_modal_focusable = null;
+                }
+
+                clicked_inside_modal = false;
+            }, 200);
+            
             _log("CookieConsent [SETTINGS]: hide settings_modal");
         }
 
@@ -1489,8 +1500,6 @@
             }
             
             _saveCookiePreferences(to_accept);
-
-            this.hide();
         }
 
         /**
