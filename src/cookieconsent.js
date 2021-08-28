@@ -15,10 +15,10 @@
         /**
          * CHANGE THIS FLAG FALSE TO DISABLE console.log()
          */
-        var ENABLE_LOGS = true;
+        var ENABLE_LOGS = false;
 
         var _config = {
-            current_lang : "en",         			    
+            current_lang : "de",
             autorun: true,                          // run as soon as loaded
             cookie_name: 'cc_cookie',
             cookie_expiration : 182,                // default: 6 months (in days)
