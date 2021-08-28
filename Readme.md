@@ -9,97 +9,128 @@ __Lightweight__ & __gdpr compliant__ cookie consent plugin written in plain java
 <div style="padding-top: .6em;">
 </div>
 
-## Table of contents
-1. [Key features](#key-features)
-2. [How to use](#how-to-use)
-3. [Download & CDN](#download--cdn)
-4. [Layout options & customization](#layout-options--customization)
-5. [APIs & config. parameters](#apis--configuration-parameters)
-6. [Manage third party scripts](#manage-third-party-scripts)
-7. [Configuration examples](#full-example-configurations) (work-in-progress)
-    - Configuration with [Google analytics](#full-example-configurations)
-    - Configuration with [explicit `accept all` and `accept necessary only` buttons](#explicit-consent)
-    - Configuration with embedded full cookie-policy
-8. [How to enable/manage revisions](#how-to-enablemanage-revisions)
-9. [FAQ](#faq)
-10. [License](#license)
+## Table of contents.
+1. [Quickstart](#quickstart)
+1. [Installation](#how-to-use)
+2. [Layout options & customization](#layout-options--customization)
+3. [APIs & config. parameters](#apis--configuration-parameters)
+4. [Manage third party scripts](#manage-third-party-scripts)
+5. Configuration with [Google analytics](#full-example-configurations)
 
-## How to use 
-1. Download (or use via [cdn](#download--cdn)) and include the script at the bottom of `body` tag.
-    ```html
-    <script src="<path-to-cookieconsent.js>"></script>
-    ```
-2. Run the plugin with your configuration parameters. **IMPORTANT**: you must provide at least the following parameters: `current_lang` and `languages`
-    <br>
-    <details><summary><b>Show basic example</b></summary>
+## Quickstart
+```
+<!-- Cookie Consent -->
+<script src="https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@v2.5.0/dist/cookieconsent.js"></script>
+<script>
+    var cc = initCookieConsent();
 
-    ```html
-    <script src="<path-to-cookieconsent.js>"></script>
-    <script>
-        var cookieconsent = initCookieConsent();
-
-        cookieconsent.run({
-            current_lang : 'en',
-            theme_css : '<path-to-cookieconsent.css>',
-
-            onAccept : function(){
-                // do something ...
+    cc.run({
+        current_lang: 'de',
+        theme_css: 'https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@v2.5.0/sdist/cookieconsent.css',
+        gui_options : {
+            consent_modal : {
+                layout : 'box',
+                position : 'bottom left',
+                transition : 'slide'
             },
+            settings_modal : {
+                layout : 'box',
+                position: 'left',
+                transition : 'slide'
+            }
+        },
+        onAccept: function(cookies){				
+            if(cc.allowedCategory('analytics_cookies')){
+                cc.loadScript('https://www.googletagmanager.com/gtag/js?id=UA-139955768-1', function(){		
+                    window.dataLayer = window.dataLayer || [];
+                    function gtag(){dataLayer.push(arguments);}
+                    gtag('js', new Date());
 
-            languages : {
-                en : {
-                    consent_modal : {
-                        title :  "I use cookies",
-                        description :  'Your cookie consent message here',
-                        primary_btn: {
-                            text: 'Accept',
-                            role: 'accept_all'  //'accept_selected' or 'accept_all'
-                        },
-                        secondary_btn: {
-                            text : 'Reject',
-                            role : 'accept_necessary'   //'settings' or 'accept_necessary'
-                        }
+                    gtag('config', 'UA-139955768-1');
+                });
+            }
+        },
+        languages : {
+            de : {	
+                consent_modal : {
+                    title :  "This website uses cookies",
+                    description :  'Hi, this website uses essential cookies to ensure its proper operation and tracking cookies to understand how you interact with it. <a aria-label="Cookie policy" class="cc-link" href="/impressum.php">Read more</a>',
+                    primary_btn: {
+                        text: 'Accept',
+                        role: 'accept_all'				//'accept_selected' or 'accept_all'
                     },
-                    settings_modal : {
-                        title : 'Cookie settings',
-                        save_settings_btn : "Save settings",
-                        accept_all_btn : "Accept all",
-                        reject_all_btn : "Reject all", // optional, [v.2.5.0 +]
-                        close_btn_label: "Close",   
-                        blocks : [
-                            {
-                                title : "Cookie usage",
-                                description: 'Your cookie usage disclaimer'
-                            },{
-                                title : "Strictly necessary cookies",
-                                description: 'Category description ... ',
-                                toggle : {
-                                    value : 'necessary',
-                                    enabled : false,
-                                    readonly: true
-                                }
-                            },{
-                                title : "Analytics cookies",
-                                description: 'Category description ... ',
-                                toggle : {
-                                    value : 'analytics',
-                                    enabled : false,
-                                    readonly: false
-                                }
-                            },
-                        ]
+                    secondary_btn: {
+                        text : 'Settings',
+                        role : 'settings'				//'settings' or 'accept_necessary'
                     }
+                },
+                settings_modal : {
+                    title : 'Cookie preferences',
+                    save_settings_btn : "Save settings",
+                    accept_all_btn : "Accept all",
+                    reject_all_btn : "Reject all",      // optional, [v.2.5.0 +]
+                    cookie_table_headers : [
+                        {col1: "Name" }, 
+                        {col2: "Domain" }, 
+                        {col3: "Expiration" }, 
+                        {col4: "Description" }, 
+                        {col5: "Type" }
+                    ],
+                    blocks : [
+                        {
+                            title : "Cookie usage",
+                            description: 'This website uses cookies to ensure the basic functionalities of the website and to enhance your online experience. You can choose for each category to opt-in/out whenever you want.'
+                        },{
+                            title : "Strictly necessary cookies",
+                            description: 'These cookies are essential for the proper functioning of my website. Without these cookies, the website would not work properly.',
+                            toggle : {
+                                value : 'necessary_cookies',
+                                enabled : true,
+                                readonly: true
+                            }
+                        },{
+                            title : "Analytics cookies",
+                            description: 'These cookies collect information about how you use the website, which pages you visited and which links you clicked on. All of the data is anonymized and cannot be used to identify you.',
+                            toggle : {
+                                value : 'analytics_cookies',
+                                enabled : false,
+                                readonly: false
+                            },
+                            cookie_table: [
+                                {
+                                    col1: '_ga',
+                                    col2: 'google.com',
+                                    col3: '2 years',
+                                    col4: 'This cookie is used to distinguish users. <a href="https://developers.google.com/analytics/devguides/collection/analyticsjs/cookie-usage?hl=de#gajs_-_cookie_usage">More Information</a>' ,
+                                    col5: 'Permanent cookie'
+                                },
+                                {
+                                    col1: '_gat',
+                                    col2: 'google.com',
+                                    col3: '1 minute',
+                                    col4: 'Used to throttle request rate.' ,
+                                    col5: 'Permanent cookie'
+                                },
+                                {
+                                    col1: '_gid',
+                                    col2: 'google.com',
+                                    col3: '1 day',
+                                    col4: 'This cookie is used to distinguish users. <a href="https://developers.google.com/analytics/devguides/collection/analyticsjs/cookie-usage?hl=de">More Information</a>' ,
+                                    col5: 'Permanent cookie'
+                                }
+                            ]
+                        },{
+                            title : "More information",
+                            description: 'For any queries in relation to the-campers.at policy on cookies and your choices, please <a class="cc-link" href="/contact">contact us</a>.',
+                        }
+                    ]
                 }
             }
-        });
-    </script>
-    ```
-    </summary>
-    </details>
-    <br>
-
-    For more details check out [full examples](#full-example-configurations) and [how to configure languages & cookie settings](#how-to-configure-languages--cookie-settings) sections.
-    
+        }
+    })
+</script>
+<!-- Cookie Consent -->
+```
 
 ## Download & CDN
 You can download the [latest version](https://github.com/orestbida/cookieconsent/releases) or use it via cdn:
