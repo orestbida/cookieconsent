@@ -1,19 +1,12 @@
-<h1 align="center" style="text-align: center;">Cookie Consent</h1>
-<div align="center" style="text-align: center;">
-
-[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
-![Size](https://img.shields.io/github/size/orestbida/cookieconsent/dist/cookieconsent.js)
-[![Stable version](https://img.shields.io/github/v/release/orestbida/cookieconsent)](https://github.com/orestbida/cookieconsent/releases)
-</div>
+<h1 align="center" style="text-align: center;">Cookie Consent | Raphael Bernhart</h1>
 <div align="center" style="text-align: center; max-width: 770px; margin: 0 auto;">
 
-A __lightweight__ & __gdpr compliant__ cookie consent plugin written in plain javascript. An "all-in-one" solution which also allows you to write your cookie policy inside it without the need of having a dedicated page. 
+A fork of [orestbida / cookieconsent](https://github.com/orestbida/cookieconsent).
+
+__Lightweight__ & __gdpr compliant__ cookie consent plugin written in plain javascript. An "all-in-one" solution which also allows you to write your cookie policy inside it without the need of having a dedicated page. 
 
 </div>
 <div style="padding-top: .6em;">
-
-![Cookie Consent cover](demo/assets/cover.png)
-![Cookie Consent cover](demo/assets/features.png)
 </div>
 
 ## Table of contents
@@ -30,16 +23,6 @@ A __lightweight__ & __gdpr compliant__ cookie consent plugin written in plain ja
 8. [How to enable/manage revisions](#how-to-enablemanage-revisions)
 9. [FAQ](#faq)
 10. [License](#license)
-
-## Key features
-- __Lightweight__
-- __Cross-browser__ support (IE8+)
-- __Standalone__ (no external dependencies needed)
-- __GDPR compliant__
-- __Support for multi language__
-- __[WAI-ARIA](https://developer.mozilla.org/en-US/docs/Learn/Accessibility/WAI-ARIA_basics) compliant__
-- Allows you to __define different cookie categories with opt in/out toggle__
-- Allows you to __define custom cookie tables__ if you want to clarify the cookies you use
 
 ## How to use 
 1. Download (or use via [cdn](#download--cdn)) and include the script at the bottom of `body` tag.
