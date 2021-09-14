@@ -19,7 +19,7 @@ A __lightweight__ & __gdpr compliant__ cookie consent plugin written in plain ja
 ## Table of contents
 1. [Key features](#key-features)
 2. [How to use](#how-to-use)
-3. [Download & CDN](#download--cdn)
+3. [Download & CDN/NPM](#download--cdn)
 4. [Layout options & customization](#layout-options--customization)
 5. [APIs & config. parameters](#apis--configuration-parameters)
 6. [Manage third party scripts](#manage-third-party-scripts)
@@ -129,6 +129,13 @@ https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@v2.5.0/dist/cookieconsent.js
 stylesheet :
 ```html
 https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@v2.5.0/dist/cookieconsent.css
+```
+
+## NPM
+Thanks to [Till Sanders](https://github.com/tillsanders) for bringing the plugin on [npm](https://www.npmjs.com/package/vanilla-cookieconsent).
+
+```
+npm i vanilla-cookieconsent
 ```
 
 ## Layout options & customization
