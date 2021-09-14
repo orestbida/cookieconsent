@@ -123,12 +123,12 @@ You can download the [latest version](https://github.com/orestbida/cookieconsent
 
 javascript :
 ```html
-https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@v2.5.0/dist/cookieconsent.js
+https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@v2.5.1/dist/cookieconsent.js
 ```
 
 stylesheet :
 ```html
-https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@v2.5.0/dist/cookieconsent.css
+https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@v2.5.1/dist/cookieconsent.css
 ```
 
 ## NPM
