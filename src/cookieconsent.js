@@ -1,5 +1,5 @@
 /*!
- * CookieConsent v2.5.0
+ * CookieConsent v2.5.1
  * https://www.github.com/orestbida/cookieconsent
  * Author Orest Bida
  * Released under the MIT License
@@ -46,7 +46,7 @@
         var clicked_inside_modal = false;
         var current_modal_focusable;
         var all_table_headers, all_blocks, onAccept, onChange;
-        var valid_revision, revision_enabled;
+        var valid_revision=true, revision_enabled=false;
         
         /**
          * Save reference to the last focused element on the page
@@ -830,7 +830,7 @@
             });
 
             // save cookie with preferences 'level' (only if never accepted or settings were updated)
-            if(!cookie_consent_accepted || changedSettings.length > 0)
+            if(!cookie_consent_accepted || changedSettings.length > 0 || !valid_revision)
                 _setCookie(_config.cookie_name, _saved_cookie_content);
 
             _manageExistingScripts();
@@ -1122,7 +1122,7 @@
          * If not, create one, configure it and attach it to the body
          */
         _cookieconsent.run = function(conf_params){
-            if(!main_container){
+            if(!document.getElementById('cc_div')){
                 // configure all parameters
                 _setConfig(conf_params);
 
@@ -1130,9 +1130,9 @@
                 _saved_cookie_content = _getCookie(_config.cookie_name, 'one', true);
 
                 // Compare current revision with the one retrieved from cookie
-                valid_revision = typeof conf_params['revision'] === "number" ? 
-                    _saved_cookie_content ? 
-                        (JSON.parse(_saved_cookie_content || "{}")['revision'] === _config.revision) 
+                valid_revision = typeof conf_params['revision'] === "number" 
+                    ? _saved_cookie_content 
+                        ? (JSON.parse(_saved_cookie_content || "{}")['revision'] === _config.revision) 
                         : true
                     : true;
                 
@@ -1510,18 +1510,16 @@
          */
         _cookieconsent.eraseCookies = function(_cookies, _path, _domain){
             var cookies = [];
-            var domains = _domain ? 
-                [_domain, "."+_domain] : 
-                [_config.cookie_domain, "."+_config.cookie_domain];
+            var domains = _domain
+                ? [_domain, "."+_domain]
+                : [_config.cookie_domain, "."+_config.cookie_domain];
 
-            if(_cookies && _cookies.length > 0){
+            if(typeof _cookies === "object" && _cookies.length > 0){
                 for(var i=0; i<_cookies.length; i++){
-                    if(this.validCookie(_cookies[i])){
-                        cookies.push(_cookies[i]);
-                    }
+                    this.validCookie(_cookies[i]) && cookies.push(_cookies[i]);
                 }
             }else{
-                cookies = [_cookies];
+                this.validCookie(_cookies) && cookies.push(_cookies);
             }
             
             _eraseCookies(cookies, _path, domains);
@@ -1592,7 +1590,8 @@
 
             for(var i=0; i<cookies.length; i++){
                 for(var j=0; j<domains.length; j++){
-                    document.cookie = cookies[i] +'=; Path='+ path +'; Domain=' + domains[j] + '; ' + expires;
+                    document.cookie = cookies[i] + '=; path=' + path + 
+                    (domains[j].indexOf('.') > -1 ? '; domain=' + domains[j] : "") + '; ' + expires;
                 }
                 _log("CookieConsent [AUTOCLEAR]: deleting cookie: '" + cookies[i] + "' path: '" + path + "' domain:", domains);
             }
