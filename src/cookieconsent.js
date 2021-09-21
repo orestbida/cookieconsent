@@ -424,6 +424,8 @@
             });
 
             all_blocks = conf_params.languages[_config.current_lang]['settings_modal']['blocks'];
+            all_table_headers = conf_params.languages[_config.current_lang]['settings_modal']['cookie_table_headers'];
+
             var n_blocks = all_blocks.length;
 
             // Set settings modal title
@@ -567,7 +569,6 @@
                 // if cookie table found, generate table for this block
                 if(!remove_cookie_tables && typeof all_blocks[i]['cookie_table'] !== 'undefined'){
                     var tr_tmp_fragment = document.createDocumentFragment();
-                    all_table_headers = conf_params.languages[_config.current_lang]['settings_modal']['cookie_table_headers'];
                     
                     /**
                      * Use custom table headers
@@ -1373,7 +1374,7 @@
                     consent_modal.setAttribute('aria-hidden', 'false');
                     consent_modal_visible = true;
 
-
+                    
                     setTimeout(function(){
                         last_elem_before_modal = document.activeElement;
                         current_modal_focusable = consent_modal_focusable;
