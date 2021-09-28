@@ -47,7 +47,9 @@
         var current_modal_focusable;
         var all_table_headers, all_blocks, onAccept, onChange;
         var valid_revision=true, revision_enabled=false, data=null;
-        var is_bot = navigator ? /bot|crawler|spider|crawling/i.test(navigator.userAgent) : false;
+
+        // Don't run plugin (to avoid indexing its text content) if bot detected 
+        var is_bot = navigator ? /bot|crawl|spider|slurp|teoma/i.test(navigator.userAgent) : false;
         
         /**
          * Save reference to the last focused element on the page
