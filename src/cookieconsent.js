@@ -49,7 +49,7 @@
         var valid_revision=true, revision_enabled=false, data=null;
 
         // Don't run plugin (to avoid indexing its text content) if bot detected 
-        var is_bot = navigator ? /bot|crawl|spider|slurp|teoma/i.test(navigator.userAgent) : false;
+        var is_bot = false;
         
         /**
          * Save reference to the last focused element on the page
@@ -138,6 +138,10 @@
 
             if(conf_params['autoclear_cookies'] === true){
                 _config.autoclear_cookies = true;
+            }
+
+            if(conf_params['hide_from_bots'] === true){
+                is_bot = navigator && navigator.userAgent && /bot|crawl|spider|slurp|teoma/i.test(navigator.userAgent);
             }
 
             _config.page_scripts = conf_params['page_scripts'] === true;
