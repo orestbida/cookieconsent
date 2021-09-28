@@ -839,10 +839,11 @@
             }
 
             // save cookie with preferences 'level' (only if never accepted or settings were updated)
-            if(!cookie_consent_accepted || changedSettings.length > 0 || !valid_revision)
+            if(!cookie_consent_accepted || changedSettings.length > 0 || !valid_revision){
+                valid_revision = true;
                 _setCookie(_config.cookie_name, JSON.stringify(saved_cookie_content));
-
-            _manageExistingScripts();
+                _manageExistingScripts();
+            }
 
             if(typeof onAccept === "function" && !cookie_consent_accepted){
                 cookie_consent_accepted = true;
@@ -1131,9 +1132,12 @@
          * If not, create one, configure it and attach it to the body
          */
         _cookieconsent.run = function(conf_params){
-            if(!document.getElementById('cc_div') && !is_bot){
+            if(!document.getElementById('cc_div')){
                 // configure all parameters
                 _setConfig(conf_params);
+
+                // if is bot, don't run plugin
+                if(is_bot) return;
 
                 // Retrieve cookie value (if set)
                 saved_cookie_content = JSON.parse(_getCookie(_config.cookie_name, 'one', true) || "{}");
@@ -1170,7 +1174,7 @@
                 });
 
                 // if cookie accepted => fire once the "onAccept" method (if defined)
-                if(cookie_consent_accepted){
+                if(valid_revision){
                     _manageExistingScripts();
                     if(typeof conf_params['onAccept'] === "function"){
                         conf_params['onAccept'](saved_cookie_content);
