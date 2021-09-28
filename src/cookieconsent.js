@@ -47,6 +47,7 @@
         var current_modal_focusable;
         var all_table_headers, all_blocks, onAccept, onChange;
         var valid_revision=true, revision_enabled=false, data=null;
+        var is_bot = navigator ? /bot|crawler|spider|crawling/i.test(navigator.userAgent) : false;
         
         /**
          * Save reference to the last focused element on the page
@@ -1124,7 +1125,7 @@
          * If not, create one, configure it and attach it to the body
          */
         _cookieconsent.run = function(conf_params){
-            if(!document.getElementById('cc_div')){
+            if(!document.getElementById('cc_div') && !is_bot){
                 // configure all parameters
                 _setConfig(conf_params);
 
@@ -1723,14 +1724,6 @@
             }
             return !!el.className.match(new RegExp('(\\s|^)' + className + '(\\s|$)'));
         }
-        
-        /**
-         * Before returning the cookieconsent object,
-         * remove the initCookieConsent function from global scope
-         * to prevent users from directly manipulating the 
-         * cookieconsent options from browser console (or at least make it harder)
-         */
-        CookieConsent = window[init] = undefined;
 
         return _cookieconsent;
     };
