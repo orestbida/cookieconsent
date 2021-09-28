@@ -38,7 +38,7 @@
         /**
          * Internal state variables
          */
-        var _saved_cookie_content;
+        var saved_cookie_content = {};
         var consent_modal_exists = false;
         var cookie_consent_accepted = false;
         var consent_modal_visible = false;
@@ -46,7 +46,7 @@
         var clicked_inside_modal = false;
         var current_modal_focusable;
         var all_table_headers, all_blocks, onAccept, onChange;
-        var valid_revision=true, revision_enabled=false;
+        var valid_revision=true, revision_enabled=false, data=null;
         
         /**
          * Save reference to the last focused element on the page
@@ -493,7 +493,7 @@
                      * Otherwise, retrieve values from saved cookie
                      */
                     if(never_accepted){
-                        if(_inArray(JSON.parse(_saved_cookie_content).level, cookie_category) > -1){ 
+                        if(_inArray(saved_cookie_content['level'], cookie_category) > -1){ 
                             block_switch.checked = true;
                             toggle_states.push(true);
                         }else{
@@ -825,25 +825,26 @@
                 }
             }
 
-            _saved_cookie_content = JSON.stringify({
+            saved_cookie_content = {
                 "level" : accepted_categories,
-                "revision": _config.revision
-            });
+                "revision": _config.revision,
+                "data": data
+            }
 
             // save cookie with preferences 'level' (only if never accepted or settings were updated)
             if(!cookie_consent_accepted || changedSettings.length > 0 || !valid_revision)
-                _setCookie(_config.cookie_name, _saved_cookie_content);
+                _setCookie(_config.cookie_name, JSON.stringify(saved_cookie_content));
 
             _manageExistingScripts();
 
             if(typeof onAccept === "function" && !cookie_consent_accepted){
-                cookie_consent_accepted = true; 
-                return onAccept(JSON.parse(_saved_cookie_content));
+                cookie_consent_accepted = true;
+                return onAccept(saved_cookie_content);
             }
 
             // fire onChange only if settings were changed
             if(typeof onChange === "function" && changedSettings.length > 0){
-                onChange(JSON.parse(_saved_cookie_content), changedSettings);
+                onChange(saved_cookie_content, changedSettings);
             }
 
             /**
@@ -1128,17 +1129,19 @@
                 _setConfig(conf_params);
 
                 // Retrieve cookie value (if set)
-                _saved_cookie_content = _getCookie(_config.cookie_name, 'one', true);
+                saved_cookie_content = JSON.parse(_getCookie(_config.cookie_name, 'one', true) || "{}");
+                cookie_consent_accepted = saved_cookie_content['level'] !== undefined;
+                data = saved_cookie_content['data'] !== undefined ? saved_cookie_content['data'] : null;
 
                 // Compare current revision with the one retrieved from cookie
                 valid_revision = typeof conf_params['revision'] === "number" 
-                    ? _saved_cookie_content 
-                        ? (JSON.parse(_saved_cookie_content || "{}")['revision'] === _config.revision) 
+                    ? cookie_consent_accepted 
+                        ? saved_cookie_content['revision'] === _config.revision
                         : true
                     : true;
                 
                 // If invalid revision or cookie is empty => create consent modal
-                consent_modal_exists = (!valid_revision || _saved_cookie_content === '');
+                consent_modal_exists = (!cookie_consent_accepted || !valid_revision);
 
                 // Generate cookie-settings dom (& consent modal)
                 _createCookieConsentHTML(!consent_modal_exists, conf_params);
@@ -1148,7 +1151,7 @@
                     _guiManager(conf_params['gui_options']);
                     _addCookieSettingsButtonListener();
 
-                    if(_config.autorun && (!_saved_cookie_content || !valid_revision)){
+                    if(_config.autorun && consent_modal_exists){
                         _cookieconsent.show(conf_params['delay'] || 0);
                     }
 
@@ -1159,13 +1162,11 @@
                     setTimeout(function(){_handleFocusTrap();}, 100);
                 });
 
-                _saved_cookie_content && (cookie_consent_accepted = true)
-
                 // if cookie accepted => fire once the "onAccept" method (if defined)
                 if(cookie_consent_accepted){
                     _manageExistingScripts();
                     if(typeof conf_params['onAccept'] === "function"){
-                        conf_params['onAccept'](JSON.parse(_saved_cookie_content || "{}"));
+                        conf_params['onAccept'](saved_cookie_content);
                     }
                 }
             }else{
@@ -1219,7 +1220,7 @@
             // get all the scripts with "cookie-category" attribute
             var scripts = document.querySelectorAll('script[' + _config.script_selector + ']');
             var sequential_enabled = _config.page_scripts_order;
-            var accepted_categories = JSON.parse(_saved_cookie_content).level || [];
+            var accepted_categories = saved_cookie_content['level'] || [];
             _log("CookieConsent [SCRIPT_MANAGER]: sequential loading:", sequential_enabled);
 
             /**
@@ -1308,6 +1309,50 @@
         }
 
         /**
+         * Save custom data inside cookie
+         * @param {object|string} new_data 
+         * @param {string} [mode]
+         * @returns {boolean}
+         */
+        _cookieconsent.setCookieData = function(new_data, mode){
+
+            /**
+             * If mode is 'update':
+             * add/update only the specified props.
+             */
+            if(mode === 'update'){
+                data = this.getCookieData();
+                var same_type = typeof data === typeof new_data;
+
+                if(same_type && typeof data === "object"){
+                    !data && (data = {});
+
+                    for(var prop in new_data)
+                        data[prop] = new_data[prop];
+                }else{
+                    if(same_type || !data)
+                        data = new_data;
+                    else
+                        return false;
+                }
+            }else
+                data = new_data;
+            
+            saved_cookie_content['data'] = data;
+            _setCookie(_config.cookie_name, JSON.stringify(saved_cookie_content));
+
+            return true;
+        }
+
+        /**
+         * Retrieve data from existing cookie
+         * @returns {object|string}
+         */
+        _cookieconsent.getCookieData = function(){
+            return JSON.parse(_getCookie(_config.cookie_name, 'one', true) || "{}")['data'] || data;
+        }
+
+        /**
          * Function which will run after script load
          * @callback scriptLoaded
         */
@@ -1374,7 +1419,6 @@
                     consent_modal.setAttribute('aria-hidden', 'false');
                     consent_modal_visible = true;
 
-                    
                     setTimeout(function(){
                         last_elem_before_modal = document.activeElement;
                         current_modal_focusable = consent_modal_focusable;
