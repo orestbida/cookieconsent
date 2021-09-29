@@ -1325,42 +1325,62 @@
          * @param {string} [mode]
          * @returns {boolean}
          */
-        _cookieconsent.setCookieData = function(new_data, mode){
+        var setCookieData = function(new_data, mode){
 
+            var set = false;
             /**
              * If mode is 'update':
              * add/update only the specified props.
              */
             if(mode === 'update'){
-                data = this.getCookieData();
+                data = _cookieconsent.get('data');
                 var same_type = typeof data === typeof new_data;
 
                 if(same_type && typeof data === "object"){
                     !data && (data = {});
 
-                    for(var prop in new_data)
-                        data[prop] = new_data[prop];
-                }else{
-                    if(same_type || !data)
-                        data = new_data;
-                    else
-                        return false;
+                    for(var prop in new_data){
+                        if(data[prop] !== new_data[prop]){
+                            data[prop] = new_data[prop]
+                            set = true;
+                        }
+                    }     
+                }else if((same_type || !data) && data !== new_data){
+                    data = new_data;
+                    set = true;
                 }
-            }else
+            }else{
                 data = new_data;
-            
-            saved_cookie_content['data'] = data;
-            _setCookie(_config.cookie_name, JSON.stringify(saved_cookie_content));
+                set = true;
+            }
+                
+            set && (
+                saved_cookie_content['data'] = data,
+                _setCookie(_config.cookie_name, JSON.stringify(saved_cookie_content))
+            )
 
-            return true;
+            return set;
+        }
+
+        _cookieconsent.set = function(field, data){
+            switch(field){
+                case 'data': return setCookieData(data['value'], data['mode']);
+            }
         }
 
         /**
          * Retrieve data from existing cookie
-         * @returns {object|string}
+         * @returns {any}
          */
-        _cookieconsent.getCookieData = function(){
-            return JSON.parse(_getCookie(_config.cookie_name, 'one', true) || "{}")['data'] || data;
+        _cookieconsent.get = function(field){
+            var cookie = JSON.parse(_getCookie(_config.cookie_name, 'one', true) || "{}");
+
+            switch(field){
+                case 'data': return cookie['data'] || data;
+                case 'level': return cookie['level'] || [];
+                case 'revision': return cookie['revision'] || _config.revision;
+                default: return false;
+            }
         }
 
         /**
