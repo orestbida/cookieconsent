@@ -214,7 +214,7 @@
 }
 
 #c-ttl{
-    margin: 0 0 0.7em 0;
+    margin: -.2em 0 0.7em 0;
     font-size: 1.05em;
 }
 
@@ -354,13 +354,12 @@ CookieConsent settings modal
     margin-bottom: 2em;
 }
 
-#s-bl .c-bl:first-child:hover{
+#s-bl .c-bl:not(.b-ex):first-child:hover{
     background: transparent;
     background: unset;
 }
 
 #s-bl .c-bl.b-ex{
-    margin-top: 2em;
     padding: 0;
     border: none;
     background: #f0f4f7;
@@ -434,7 +433,7 @@ CookieConsent settings modal
     margin: 0 auto;
     transform: scale(.96);
     opacity: 0;
-    padding-top: 5.125em;
+    padding-top: 4.75em;
     padding-bottom: 4.75em;
     position: relative;
     height: 100%;
@@ -455,7 +454,7 @@ CookieConsent settings modal
     overflow-y: overlay;
     overflow-x: hidden;
     height: 100%;
-    padding: 1.5em 2.5em;
+    padding: 1.5em 2.3em;
     display: block;
     width: 100%;
 }
@@ -465,7 +464,7 @@ CookieConsent settings modal
     bottom: 0;
     left: 0;
     right: 0;
-    padding: 1em 2.5em;
+    padding: 1em 2.3em;
     border-top: 1px solid #f1f3f5;
     border-color: var(--cc-section-border);
     height: 4.75em;
@@ -514,8 +513,8 @@ CookieConsent settings modal
     top: 0;
     width: 100%;
     display: table;
-    padding: 0 2.5em;
-    height: 5.125em;
+    padding: 0 2.3em;
+    height: 4.75em;
     vertical-align: middle;
     z-index: 2;
     border-bottom: 1px solid #f1f3f5;
@@ -567,29 +566,31 @@ CookieConsent settings modal
     max-height: 37.5em;
 }
 
-/** works only on webkit-based browsers **/
-#s-bl::-webkit-scrollbar{
-	width: .9em;
-    height: 100%;
-    background: transparent;
-    border-radius: 0 0.250em 0.250em 0;
-}
-  
-#s-bl::-webkit-scrollbar-thumb{
-    border: 0.25em solid var(--cc-bg);
-    background: #cfd5db;
-    background: var(--cc-webkit-scrollbar-bg);
-    border-radius: 100em;
-}
+@media screen and (min-width: 688px) {
+    /** works only on webkit-based browsers **/
+    #s-bl::-webkit-scrollbar{
+        width: .9em;
+        height: 100%;
+        background: transparent;
+        border-radius: 0 0.250em 0.250em 0;
+    }
+    
+    #s-bl::-webkit-scrollbar-thumb{
+        border: 0.25em solid var(--cc-bg);
+        background: #cfd5db;
+        background: var(--cc-webkit-scrollbar-bg);
+        border-radius: 100em;
+    }
 
-#s-bl::-webkit-scrollbar-thumb:hover{
-	background: #9199a0;
-    background: var(--cc-webkit-scrollbar-bg-hover);
-}
+    #s-bl::-webkit-scrollbar-thumb:hover{
+        background: #9199a0;
+        background: var(--cc-webkit-scrollbar-bg-hover);
+    }
 
-#s-bl::-webkit-scrollbar-button {
-    width: 10px;
-    height: 5px;
+    #s-bl::-webkit-scrollbar-button {
+        width: 10px;
+        height: 5px;
+    }
 }
 
 /** custom checkbox **/
@@ -655,22 +656,22 @@ CookieConsent settings modal
 .cc_div .b-tg .c-tg:after {
     content: "";
     position: absolute;
-    left: 0.24em;
-    top: 0.25em;
-    width: 1.1em;
-    height: 1.1em;
+    left: .125em;
+    top: .125em;
+    width: 1.35em;
+    height: 1.35em;
     border: none;
     box-sizing: content-box;
     background: #fff;
     background: var(--cc-toggle-knob-bg);
-    box-shadow: 0 1px 2px rgba(24, 32, 35, .36);
+    box-shadow: 0 1px 2px rgb(24 32 35 / 36%);
     transition: transform .25s ease;
     border-radius: 100%;
 }
 
 /* Show the checkmark when checked */
 .cc_div .c-tgl:checked ~ .c-tg:after{
-    transform: translateX(1.95em);
+    transform: translateX(1.975em);
 }
 
 #s-bl table,
@@ -957,7 +958,7 @@ html.force--consent body{
 }
 
 #cm.bar #c-bns{
-    max-width: 540px;
+    max-width: 33.75em;
 }
 
 #cm.bar #cs{
@@ -974,8 +975,8 @@ html.force--consent body{
 .cc_div .bar #s-hdr,
 .cc_div .bar #s-bl,
 .cc_div .bar #s-bns {
-    padding-left: 1.8em;
-    padding-right: 1.8em;
+    padding-left: 1.6em;
+    padding-right: 1.6em;
 }
 
 .cc_div .bar #cs{
@@ -1075,28 +1076,31 @@ html.force--consent body{
         width: 100%;
         max-width: 100%;
         margin: 0;
-        padding: 1.6em!important;
+        padding: 1.4em!important;
         right: 0;
         left: 0;
         bottom: 0;
-        border-radius: 0;
         display: block;
     }
 
     .force--consent #cm,
     .force--consent #cm.cloud{
-        width: 100vw;
+        width: auto;
         max-width: 100vw;
     }
 
     #cm.top{
-        top: 0;
+        top: 1em;
         bottom: unset;
     }
 
     #cm.bottom{
-        bottom: 0;
+        bottom: 1em;
         top: unset;
+    }
+
+    #cm.bar.bottom{
+        bottom: 0;
     }
     
     .cc_div .cloud #c-txt{
@@ -1141,7 +1145,7 @@ html.force--consent body{
     #s-inr{
         margin: 0;
         padding-bottom: 7.9em;
-        border-radius: unset;
+        border-radius: 0;
     }
 
     #s-bns{
@@ -1239,12 +1243,11 @@ html.force--consent body{
         float: unset;
     }
 
-    #cm.cloud{
-        left: 0;
-        right: 0;
-        max-width: 100%;
-        width: 100%;
-        
+    #cm.cloud,
+    #cm.box{
+        left: 1em;
+        right: 1em;
+        width: auto;
     }
 
     #cm.cloud.right,
