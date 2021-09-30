@@ -70,7 +70,7 @@ A __lightweight__ & __gdpr compliant__ cookie consent plugin written in plain ja
                         description :  'Your cookie consent message here',
                         primary_btn: {
                             text: 'Accept',
-                            role: 'accept_all'  //'accept_selected' or 'accept_all'
+                            role: 'accept_all'  //'accept_necessary' or 'accept_all'
                         },
                         secondary_btn: {
                             text : 'Reject',
