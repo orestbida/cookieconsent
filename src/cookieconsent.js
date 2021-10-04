@@ -1083,7 +1083,7 @@
                     _addClass(modal, layout);
                     
                     // Add position class (if specified)
-                    if(_inArray(allowed_positions, position[0]) > -1){
+                    if(!(layout === 'bar' && position[0] === 'middle') && _inArray(allowed_positions, position[0]) > -1){
                         for(var i=0; i<position.length; i++){
                             _addClass(modal, position[i]);
                         }
@@ -1098,7 +1098,7 @@
                 _setLayout(
                     consent_modal,
                     ['box', 'bar', 'cloud'],
-                    ['top', 'bottom'],
+                    ['top', 'middle', 'bottom'],
                     ['zoom', 'slide'],
                     consent_modal_options['layout'],
                     consent_modal_options['position'],

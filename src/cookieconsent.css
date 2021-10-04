@@ -183,6 +183,11 @@
     visibility: visible!important;
 }
 
+.force--consent.show--consent .c--anim #cm.box.middle,
+.force--consent.show--consent .c--anim #cm.cloud.middle{
+    transform: scale(1) translateY(-50%);
+}
+
 .show--settings .c--anim #s-cnt{
     visibility: visible!important;
 }
@@ -885,14 +890,32 @@ html.force--consent.show--consent body{
 }
 /** END ICONS **/
 
+.force--consent #cm.box.middle,
+.force--consent #cm.cloud.middle{
+    top: 50%;
+    transform: translateY(-37%);
+    bottom: auto;
+}
+
+.force--consent #cm.box.middle.zoom,
+.force--consent #cm.cloud.middle.zoom{
+    transform: scale(.95) translateY(-50%);
+ 
+}
+
+#cm.box.center{
+    left: 1em;
+    right: 1em;
+    margin: 0 auto;
+}
 
 /* Start cloud layout */
 #cm.cloud {
     max-width: 50em;
     margin: 0 auto;
     text-align: center;
-    left: 1.25em;
-    right: 1.25em;
+    left: 1em;
+    right: 1em;
     overflow: hidden;
     padding: 1.3em 2.4em;
     width: unset;
@@ -1076,9 +1099,9 @@ html.force--consent.show--consent body{
         max-width: 100%;
         margin: 0;
         padding: 1.4em!important;
-        right: 0;
-        left: 0;
-        bottom: 0;
+        right: 1em;
+        left: 1em;
+        bottom: 1em;
         display: block;
     }
 
@@ -1090,12 +1113,12 @@ html.force--consent.show--consent body{
 
     #cm.top{
         top: 1em;
-        bottom: unset;
+        bottom: auto;
     }
 
     #cm.bottom{
         bottom: 1em;
-        top: unset;
+        top: auto;
     }
 
     #cm.bar.bottom{
