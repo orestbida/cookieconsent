@@ -774,13 +774,12 @@ CookieConsent settings modal
     max-width: 100vw;
 }
 
-html.force--consent.show--consent,
-html.force--consent.show--settings{
+html.force--consent.show--consent{
     overflow-y: hidden!important;
 }
 
-html.force--consent,
-html.force--consent body{
+html.force--consent.show--consent,
+html.force--consent.show--consent body{
     height: auto!important;
     overflow-x: hidden!important;
 }
