@@ -25,6 +25,7 @@
             cookie_domain: location.hostname,       // default: current domain
             cookie_path: "/",
             cookie_same_site: "Lax",
+            use_rfc_cookie: false,
             autoclear_cookies: true,
             revision: 0,
             script_selector: "data-cookiecategory"
@@ -138,6 +139,10 @@
 
             if(conf_params['autoclear_cookies'] === true){
                 _config.autoclear_cookies = true;
+            }
+
+            if(conf_params['use_rfc_cookie'] === true){
+                _config.use_rfc_cookie = true;
             }
 
             if(conf_params['hide_from_bots'] === true){
@@ -839,7 +844,8 @@
             saved_cookie_content = {
                 "level" : accepted_categories,
                 "revision": _config.revision,
-                "data": data
+                "data": data,
+                "rfc_cookie": _config.use_rfc_cookie
             }
 
             // save cookie with preferences 'level' (only if never accepted or settings were updated)
@@ -1154,7 +1160,7 @@
                         ? saved_cookie_content['revision'] === _config.revision
                         : true
                     : true;
-                
+
                 // If invalid revision or cookie is empty => create consent modal
                 consent_modal_exists = (!cookie_consent_accepted || !valid_revision);
 
@@ -1178,7 +1184,19 @@
                 });
 
                 // if cookie accepted => fire once the "onAccept" method (if defined)
-                if(valid_revision){
+                if(cookie_consent_accepted && valid_revision){
+
+                    var rfc_prop_exists = typeof saved_cookie_content['rfc_cookie'] === "boolean";
+                    
+                    /*
+                     * If cookie consent is already accepted and revision is valid,
+                     * convert cookie to rfc format (if `use_rfc_cookie` is enabled)
+                     */
+                    if(!rfc_prop_exists || (rfc_prop_exists && saved_cookie_content['rfc_cookie'] !== _config.use_rfc_cookie)){
+                        saved_cookie_content['rfc_cookie'] = _config.use_rfc_cookie;
+                        _setCookie(_config.cookie_name, JSON.stringify(saved_cookie_content));
+                    }
+
                     _manageExistingScripts();
                     if(typeof conf_params['onAccept'] === "function"){
                         conf_params['onAccept'](saved_cookie_content);
@@ -1421,12 +1439,7 @@
         _cookieconsent.get = function(field){
             var cookie = JSON.parse(_getCookie(_config.cookie_name, 'one', true) || "{}");
 
-            switch(field){
-                case 'data': return cookie['data'] || data;
-                case 'level': return cookie['level'] || [];
-                case 'revision': return cookie['revision'] || _config.revision;
-                default: return false;
-            }
+            return cookie[field];
         }
 
         /**
@@ -1654,6 +1667,8 @@
          */
         var _setCookie = function(name, value) {
 
+            var value = _config.use_rfc_cookie ? b64EncodeUnicode(value) : value;
+
             var date = new Date();
             date.setTime(date.getTime() + (1000 * ( _config.cookie_expiration * 24 * 60 * 60)));
             var expires = "; expires=" + date.toUTCString();
@@ -1688,7 +1703,16 @@
             var found;
 
             if(filter === 'one'){
-                found = (found = document.cookie.match("(^|;)\\s*" + name + "\\s*=\\s*([^;]+)")) ? (get_value ? found.pop() : name) : ""
+                found = (found = document.cookie.match("(^|;)\\s*" + name + "\\s*=\\s*([^;]+)")) ? (get_value ? found.pop() : name) : "";
+
+                if(found && name === _config.cookie_name){
+                    try{ 
+                        found = JSON.parse(found)
+                    }catch(e){ 
+                        found = JSON.parse(b64DecodeUnicode(found))
+                    }
+                    found = JSON.stringify(found);
+                }
             }else if(filter === 'all'){
                 // array of names of all existing cookies
                 var cookies = document.cookie.split(/;\s*/); found = [];
@@ -1764,6 +1788,30 @@
                 for (keys[i++] in obj) {};
                 return keys;
             }
+        }
+
+        /**
+         * Encoding UTF8 -> base64
+         * https://stackoverflow.com/questions/30106476/using-javascripts-atob-to-decode-base64-doesnt-properly-decode-utf-8-strings
+         * @param {string} str 
+         * @returns {string}
+         */
+        function b64EncodeUnicode(str) {
+            return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function(match, p1) {
+                return String.fromCharCode(parseInt(p1, 16))
+            }))
+        }
+
+        /**
+         * Decoding base64 -> UTF8
+         * https://stackoverflow.com/questions/30106476/using-javascripts-atob-to-decode-base64-doesnt-properly-decode-utf-8-strings
+         * @param {string} str 
+         * @returns {string}
+         */
+        function b64DecodeUnicode(str) {
+            return decodeURIComponent(Array.prototype.map.call(atob(str), function(c) {
+                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)
+            }).join(''))
         }
 
         /**
