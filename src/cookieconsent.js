@@ -259,6 +259,7 @@
             }
         }
 
+        var _conf_params, _createConsentModal;
 
         /**
          * Generate cookie consent html based on config settings
@@ -283,8 +284,8 @@
             // Feature detection :=> avoid IE exception since .textContent is not always supported
             var innerText = (typeof html_dom.textContent === 'string' ? 'textContent' : 'innerText');
             
-            // If never_accepted => create consent-modal
-            if(!never_accepted){
+            _conf_params = conf_params;
+            _createConsentModal = function(conf_params){
                 
                 consent_modal = _createNode('div');
                 var consent_modal_inner = _createNode('div');
@@ -295,7 +296,7 @@
                 var consent_primary_btn = _createNode('button');
                 var consent_secondary_btn = _createNode('button');
                 var overlay = _createNode('div');
-  
+
                 consent_modal.id = 'cm'; 
                 consent_modal_inner.id = 'c-inr';
                 consent_modal_inner_inner.id = 'c-inr-i';
@@ -375,6 +376,9 @@
                 all_modals_container.appendChild(consent_modal);
                 all_modals_container.appendChild(overlay);
             }
+
+            // Create consent modal
+            if(!never_accepted) _createConsentModal(conf_params);
 
             /**
              * Create all consent_modal elements
@@ -1325,7 +1329,7 @@
          * @param {string} [mode]
          * @returns {boolean}
          */
-        var setCookieData = function(new_data, mode){
+        var _setCookieData = function(new_data, mode){
 
             var set = false;
             /**
@@ -1362,9 +1366,51 @@
             return set;
         }
 
+        /**
+         * Forcefully set a specific revision and show consent modal
+         * @param {number} new_revision
+         * @param {boolean} [prompt_consent]
+         * @returns {boolean}
+         */
+        var _setRevision = function(new_revision, prompt_consent){
+
+            // If plugin has been initialized and new revision is valid
+            if(
+                main_container
+                && typeof new_revision === "number" 
+                && _config.revision !== new_revision
+            ){
+
+                _config.revision = new_revision;
+                valid_revision = false;
+
+                // Show consent modal ?
+                if(prompt_consent === true){
+                    if(!consent_modal_exists)
+                        _createConsentModal(_conf_params);
+                    
+                    _cookieconsent.show();
+                }else {
+                    // If revision was modified, save cookie with the new revision
+                    _cookieconsent.accept();
+                }
+
+                return true;
+            }
+            
+            return false;
+        }
+
+        /**
+         * Helper method to set a variety of fields
+         * @param {string} field 
+         * @param {object} data 
+         * @returns {boolean}
+         */
         _cookieconsent.set = function(field, data){
             switch(field){
-                case 'data': return setCookieData(data['value'], data['mode']);
+                case 'data': return _setCookieData(data['value'], data['mode']);
+                case 'revision': return _setRevision(data['value'], data['prompt_consent']);
             }
         }
 
@@ -1440,7 +1486,7 @@
          * @param {number} delay 
          */
         _cookieconsent.show = function(delay){
-            if(consent_modal_exists){
+            if(consent_modal){
                 setTimeout(function() {
                     _addClass(html_dom, "show--consent");
 
