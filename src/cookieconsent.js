@@ -133,7 +133,7 @@
             }
 
             if(typeof conf_params['revision'] === "number"){
-                _config.revision = conf_params['revision'];
+                conf_params['revision'] > -1 && (_config.revision = conf_params['revision']);
                 revision_enabled = true;
             }
 
@@ -264,7 +264,7 @@
             }
         }
 
-        var _conf_params, _createConsentModal;
+        var _conf_params, _createConsentModal, revision_message="";
 
         /**
          * Generate cookie consent html based on config settings
@@ -335,7 +335,7 @@
 
                 if(revision_enabled){
                     if(!valid_revision){
-                        description = description.replace("{{revision_message}}", conf_params.languages[lang]['consent_modal']['revision_message'] || "");
+                        description = description.replace("{{revision_message}}", revision_message || conf_params.languages[lang]['consent_modal']['revision_message'] || "");
                     }else{
                         description = description.replace("{{revision_message}}", "");
                     }
@@ -380,6 +380,8 @@
                 // Append consent modal to main container
                 all_modals_container.appendChild(consent_modal);
                 all_modals_container.appendChild(overlay);
+
+                consent_modal_exists = true;
             }
 
             // Create consent modal
@@ -1061,7 +1063,7 @@
          * Manage each modal's layout
          * @param {Object} gui_options 
          */
-        var _guiManager = function(gui_options){
+        var _guiManager = function(gui_options, only_consent_modal){
 
             // If gui_options is not object => exit
             if(typeof gui_options !== 'object') return;
@@ -1112,7 +1114,7 @@
                 );
             }
 
-            if(settings_modal_options){
+            if(!only_consent_modal && settings_modal_options){
                 _setLayout(
                     settings_container,
                     ['bar'],
@@ -1157,7 +1159,9 @@
                 // Compare current revision with the one retrieved from cookie
                 valid_revision = typeof conf_params['revision'] === "number" 
                     ? cookie_consent_accepted 
-                        ? saved_cookie_content['revision'] === _config.revision
+                        ? conf_params['revision'] > -1
+                            ? saved_cookie_content['revision'] === _config.revision
+                            : true
                         : true
                     : true;
 
@@ -1183,14 +1187,11 @@
                     setTimeout(function(){_handleFocusTrap();}, 100);
                 });
 
-                // if cookie accepted => fire once the "onAccept" method (if defined)
                 if(cookie_consent_accepted && valid_revision){
-
                     var rfc_prop_exists = typeof saved_cookie_content['rfc_cookie'] === "boolean";
                     
                     /*
-                     * If cookie consent is already accepted and revision is valid,
-                     * convert cookie to rfc format (if `use_rfc_cookie` is enabled)
+                     * Convert cookie to rfc format (if `use_rfc_cookie` is enabled)
                      */
                     if(!rfc_prop_exists || (rfc_prop_exists && saved_cookie_content['rfc_cookie'] !== _config.use_rfc_cookie)){
                         saved_cookie_content['rfc_cookie'] = _config.use_rfc_cookie;
@@ -1390,23 +1391,28 @@
          * @param {boolean} [prompt_consent]
          * @returns {boolean}
          */
-        var _setRevision = function(new_revision, prompt_consent){
+        var _setRevision = function(new_revision, prompt_consent, message){
 
             // If plugin has been initialized and new revision is valid
             if(
                 main_container
+                && cookie_consent_accepted
                 && typeof new_revision === "number" 
-                && _config.revision !== new_revision
+                && saved_cookie_content['revision'] !== new_revision
             ){
 
-                _config.revision = new_revision;
+                revision_enabled = true;
+                revision_message = message;
                 valid_revision = false;
+                _config.revision = new_revision;
 
                 // Show consent modal ?
                 if(prompt_consent === true){
-                    if(!consent_modal_exists)
+                    if(!consent_modal_exists){
                         _createConsentModal(_conf_params);
-                    
+                        _guiManager(_conf_params['gui_options'], true);
+                    }
+                        
                     _cookieconsent.show();
                 }else {
                     // If revision was modified, save cookie with the new revision
@@ -1428,7 +1434,7 @@
         _cookieconsent.set = function(field, data){
             switch(field){
                 case 'data': return _setCookieData(data['value'], data['mode']);
-                case 'revision': return _setRevision(data['value'], data['prompt_consent']);
+                case 'revision': return _setRevision(data['value'], data['prompt_consent'], data['message']);
             }
         }
 
@@ -1499,7 +1505,7 @@
          * @param {number} delay 
          */
         _cookieconsent.show = function(delay){
-            if(consent_modal){
+            if(consent_modal_exists){
                 setTimeout(function() {
                     _addClass(html_dom, "show--consent");
 
