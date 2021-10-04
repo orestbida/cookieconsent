@@ -503,6 +503,8 @@ CookieConsent settings modal
 .cc_div .c-tgl:checked ~ .c-tg{
     background: #253b48;
     background: var(--cc-toggle-bg-on);
+    box-shadow: 0 0 0 2px #253b48;
+    box-shadow: 0 0 0 2px var(--cc-toggle-bg-on);
 }
 
 #c-bns button:first-child:active,
@@ -628,19 +630,20 @@ CookieConsent settings modal
 /* Create a custom checkbox */
 .cc_div .b-tg .c-tg {
     position: absolute;
-    overflow: hidden;
     background: #919ea6;
     background: var(--cc-toggle-bg-off);
-    transition: background-color .25s ease;
+    transition: background-color .25s ease, box-shadow .25s ease;
     pointer-events: none;
+    box-shadow: 0 0 0 2px #919ea6;
+    box-shadow: 0 0 0 2px var(--cc-toggle-bg-off);
 }
 
 .cc_div span.t-lb,
 .cc_div .b-tg,
 .cc_div .b-tg .c-tg,
 .cc_div .c-tgl{
-    width: 3.6em;
-    height: 1.6em;
+    width: 3.3em;
+    height: 1.35em;
     border-radius: 4em;
 }
 
@@ -651,6 +654,8 @@ CookieConsent settings modal
 .cc_div .c-tgl ~ .c-tg.c-ro{
     background: #d5dee2;
     background: var(--cc-toggle-bg-readonly);
+    box-shadow: 0 0 0 2px #d5dee2;
+    box-shadow: 0 0 0 2px var(--cc-toggle-bg-readonly);
 }
 
 .cc_div .c-tgl ~ .c-tg.c-ro:after{
@@ -660,9 +665,10 @@ CookieConsent settings modal
 /* Style the checkmark/indicator */
 .cc_div .b-tg .c-tg:after {
     content: "";
-    position: absolute;
-    left: .125em;
-    top: .125em;
+    position: relative;
+    display: block;
+    left: 0;
+    top: 0;
     width: 1.35em;
     height: 1.35em;
     border: none;
@@ -676,7 +682,7 @@ CookieConsent settings modal
 
 /* Show the checkmark when checked */
 .cc_div .c-tgl:checked ~ .c-tg:after{
-    transform: translateX(1.975em);
+    transform: translateX(1.95em);
 }
 
 #s-bl table,
@@ -815,14 +821,15 @@ html.force--consent.show--consent body{
     border: solid #ffffff;
     border-color: var(--cc-toggle-knob-icon-color);
     border-width: 0 2px 2px 0;
-    padding: .13em;
+    padding: .1em;
     display: inline-block;
-    padding-bottom: .55em;
+    padding-bottom: .45em;
     content: '';
     margin: 0 auto;
     transform: rotate(45deg);
-    margin-top: .31em;
-    margin-left: .1em;
+    top: .28em;
+    left: .6em;
+    position: absolute;
 }
 
 #s-c-bn::before,
@@ -852,7 +859,7 @@ html.force--consent.show--consent body{
     right: 0;
     display: block;
     text-align: center;
-    transition: opacity .25s ease;
+    transition: opacity .15s ease;
 }
 
 .cc_div .on-i{
@@ -862,10 +869,10 @@ html.force--consent.show--consent body{
 
 .cc_div .off-i::before,
 .cc_div .off-i::after{
-    right: .84em;
-    top: .4em;
+    right: .7em;
+    top: .35em;
     content: ' ';
-    height: .85em;
+    height: .7em;
     width: 0.09375em;
     display: block;
     background: #cdd6dc;
