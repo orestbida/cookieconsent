@@ -159,10 +159,6 @@
                     _config.current_lang = _getValidatedLanguage(conf_params['current_lang'], conf_params.languages);;
                 }
             }
-            
-            if(conf_params['force_consent'] === true){
-                _addClass(html_dom, 'force--consent');
-            }
 
             _log("CookieConsent [LANG]: setting current_lang = '"+ _config.current_lang + "'");
         }
@@ -291,6 +287,10 @@
             
             _conf_params = conf_params;
             _createConsentModal = function(conf_params){
+
+                if(conf_params['force_consent'] === true){
+                    _addClass(html_dom, 'force--consent');
+                }
                 
                 consent_modal = _createNode('div');
                 var consent_modal_inner = _createNode('div');
