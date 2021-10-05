@@ -201,12 +201,12 @@
 
 #cm{
     font-family: inherit;
-    padding: 1.05em 2.1em 1.5em 2.1em;
+    padding: 1.1em 1.8em 1.4em 1.8em;
     position: fixed;
     z-index: 1;
     background: #fff;
     background: var(--cc-bg);
-    max-width: 25em;
+    max-width: 24.2em;
     width: 100%;
     bottom: 1.250em;
     right: 1.250em;
@@ -221,6 +221,10 @@
 #c-ttl{
     margin-bottom: .7em;
     font-size: 1.05em;
+}
+
+.cloud #c-ttl{
+    margin-top: -.15em;
 }
 
 #c-txt{
@@ -405,7 +409,7 @@ CookieConsent settings modal
 #s-cnt .p{
     font-size: 0.9em;
     line-height: 1.5em;
-    margin-top: 1em;
+    margin-top: .85em;
     color: #2d4156;
     color: var(--cc-block-text);
 }
@@ -459,7 +463,7 @@ CookieConsent settings modal
     overflow-y: overlay;
     overflow-x: hidden;
     height: 100%;
-    padding: 1.5em 2.3em;
+    padding: 1.3em 2.1em;
     display: block;
     width: 100%;
 }
@@ -469,7 +473,7 @@ CookieConsent settings modal
     bottom: 0;
     left: 0;
     right: 0;
-    padding: 1em 2.3em;
+    padding: 1em 2.1em;
     border-top: 1px solid #f1f3f5;
     border-color: var(--cc-section-border);
     height: 4.75em;
@@ -503,8 +507,6 @@ CookieConsent settings modal
 .cc_div .b-tg .c-tgl:checked ~ .c-tg{
     background: #253b48;
     background: var(--cc-toggle-bg-on);
-    box-shadow: 0 0 0 .125em #253b48;
-    box-shadow: 0 0 0 .125em var(--cc-toggle-bg-on);
 }
 
 #c-bns button:first-child:active,
@@ -520,7 +522,7 @@ CookieConsent settings modal
     top: 0;
     width: 100%;
     display: table;
-    padding: 0 2.3em;
+    padding: 0 2.1em;
     height: 4.75em;
     vertical-align: middle;
     z-index: 2;
@@ -538,7 +540,7 @@ CookieConsent settings modal
     padding: 0;
     width: 1.7em;
     height: 1.7em;
-    font-size: 1.515em;
+    font-size: 1.45em;
     margin: 0;
     font-weight: initial;
     position: relative;
@@ -636,16 +638,14 @@ CookieConsent settings modal
     background: var(--cc-toggle-bg-off);
     transition: background-color .25s ease, box-shadow .25s ease;
     pointer-events: none;
-    box-shadow: 0 0 0 .125em #919ea6;
-    box-shadow: 0 0 0 .125em var(--cc-toggle-bg-off);
 }
 
 .cc_div span.t-lb,
 .cc_div .b-tg,
 .cc_div .b-tg .c-tg,
 .cc_div .b-tg .c-tgl{
-    width: 3.3em;
-    height: 1.35em;
+    width: 3.4em;
+    height: 1.5em;
     border-radius: 4em;
 }
 
@@ -656,8 +656,6 @@ CookieConsent settings modal
 .cc_div .b-tg .c-tgl ~ .c-tg.c-ro{
     background: #d5dee2;
     background: var(--cc-toggle-bg-readonly);
-    box-shadow: 0 0 0 .125em #d5dee2;
-    box-shadow: 0 0 0 .125em var(--cc-toggle-bg-readonly);
 }
 
 .cc_div .b-tg .c-tgl ~ .c-tg.c-ro:after{
@@ -669,10 +667,10 @@ CookieConsent settings modal
     content: "";
     position: relative;
     display: block;
-    left: 0;
-    top: 0;
-    width: 1.35em;
-    height: 1.35em;
+    left: 0.125em;
+    top: 0.125em;
+    width: 1.25em;
+    height: 1.25em;
     border: none;
     box-sizing: content-box;
     background: #fff;
@@ -684,7 +682,7 @@ CookieConsent settings modal
 
 /* Show the checkmark when checked */
 .cc_div .b-tg .c-tgl:checked ~ .c-tg:after{
-    transform: translateX(1.95em);
+    transform: translateX(1.9em);
 }
 
 #s-bl table,
@@ -820,7 +818,7 @@ html.force--consent.show--consent body{
 }
 
 .cc_div .on-i::before{
-    border: solid #ffffff;
+    border: solid #fff;
     border-color: var(--cc-toggle-knob-icon-color);
     border-width: 0 2px 2px 0;
     padding: .1em;
@@ -829,8 +827,8 @@ html.force--consent.show--consent body{
     content: '';
     margin: 0 auto;
     transform: rotate(45deg);
-    top: .28em;
-    left: .6em;
+    top: .35em;
+    left: .65em;
     position: absolute;
 }
 
@@ -871,11 +869,11 @@ html.force--consent.show--consent body{
 
 .cc_div .off-i::before,
 .cc_div .off-i::after{
-    right: .7em;
-    top: .35em;
+    right: .75em;
+    top: .42em;
     content: ' ';
     height: .7em;
-    width: 0.09375em;
+    width: .09375em;
     display: block;
     background: #cdd6dc;
     background: var(--cc-toggle-knob-icon-color);
@@ -926,7 +924,7 @@ html.force--consent.show--consent body{
     left: 1em;
     right: 1em;
     overflow: hidden;
-    padding: 1.3em 2.4em;
+    padding: 1.3em 2em;
     width: unset;
 }
 
