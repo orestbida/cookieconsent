@@ -28,8 +28,8 @@ cc.run({
 
     gui_options : {
         consent_modal : {
-            layout : 'box',                 // box,cloud,bar
-            position : 'bottom right',      // bottom,middle,top + left,right,center
+            layout : 'cloud',                 // box,cloud,bar
+            position : 'bottom center',      // bottom,middle,top + left,right,center
             transition : 'slide'            // zoom,slide
         },
         settings_modal : {
@@ -88,6 +88,7 @@ cc.run({
                 title : logo,
                 save_settings_btn : "Save settings",
                 accept_all_btn : "Accept all",
+                reject_all_btn: "Reject all",
                 close_btn_label: "Close",
                 cookie_table_headers : [
                     {col1: "Name" }, 
@@ -108,34 +109,28 @@ cc.run({
                             readonly: true							//cookie categories with readonly=true are all treated as "necessary cookies"
                         }
                     },{
-                        title : "Preferences cookies",
+                        title : "Performance and Analytics",
                         description: 'These cookies allow the website to remember the choices you have made in the past',
                         toggle : {
-                            value : 'preferences',	//there are no default categories => you specify them
+                            value : 'analytics',	//there are no default categories => you specify them
                             enabled : false,
                             readonly: false
                         }
                     },{
-                        title : "Analytics cookies",
+                        title : "Advertisement and Targeting cookies",
                         description: 'These cookies collect information about how you use the website, which pages you visited and which links you clicked on. All of the data is anonymized and cannot be used to identify you',
                         toggle : {
-                            value : 'analytics',
+                            value : 'targeting',
                             enabled : false,
                             readonly: false
                         },
                         cookie_table: [
                             {
-                                col1: '_ga',
+                                col1: '^_ga',
                                 col2: 'google.com',
                                 col3: '2 years',
                                 col4: 'description ...' ,
                                 is_regex: true
-                            },
-                            {
-                                col1: '_gat',
-                                col2: 'google.com',
-                                col3: '1 minute',
-                                col4: 'description ...' ,
                             },
                             {
                                 col1: '_gid',
