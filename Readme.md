@@ -23,7 +23,7 @@ A __lightweight__ & __gdpr compliant__ cookie consent plugin written in plain ja
 4. [Layout options & customization](#layout-options--customization)
 5. [APIs & config. parameters](#apis--configuration-parameters)
 6. [Manage third party scripts](#manage-third-party-scripts)
-7. [Configuration examples](#full-example-configurations) (work-in-progress)
+7. [Configuration examples](#full-example-configurations)
 8. [How to enable/manage revisions](#how-to-enablemanage-revisions)
 9. [FAQ](#faq)
 10. [License](#license)
@@ -322,7 +322,7 @@ Additional methods for an easier management of your scripts and cookie settings 
 
     <br>
 
-    How to set save custom `data`:
+    How to save custom `data`:
     ```javascript
     // Set cookie's "data" field to whatever the value of the `value` prop. is
     cookieconsent.set('data', {value: {id: 21, country: "italy"}});
@@ -383,6 +383,12 @@ Below a table which sums up all of the available options (must be passed to the 
 -   <details><summary>Configuration with gtag.js - Google Analytics</summary>
     <p>
 
+    How to:
+    1. enable `page_scripts`
+    2. set `type="text/plain"`and `data-cookiecategory="<your-category>"` to each script:
+
+    <br>
+
     ```html
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script type="text/plain" data-cookiecategory="analytics" async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
@@ -394,7 +400,7 @@ Below a table which sums up all of the available options (must be passed to the 
         gtag('config', 'GA_MEASUREMENT_ID');
     </script>
     
-    <script defer src="<path-to-cookieconsent.js>">
+    <script defer src="<path-to-cookieconsent.js>"></script>
     <script>
         window.addEventListener('load', function(){
             // obtain cookieconsent plugin
@@ -413,8 +419,8 @@ Below a table which sums up all of the available options (must be passed to the 
                 },
 
                 onChange: function(cookie, changed_preferences){
-
-                }
+                    // ... cookieconsent preferences were changed
+                },
                 
                 languages : {
                     en : {	
@@ -612,65 +618,11 @@ You can create tables with a custom number of columns to explain what each cooki
 
 </p>
 </details>
-<details><summary id="explicit-consent">Example with explicit <b>accept all</b> and <b>accept necessary</b> buttons</summary>
-<p>
-
-```javascript
-cookieconsent.run({
-    ...
-    languages : {
-        'en' : {
-            consent_modal : {
-                title :  "Title here ...",
-                description :  'Description here ...',
-                primary_btn: {
-                    text: 'Accept all',
-                    role: 'accept_all'          //'accept_selected' or 'accept_all'
-                },
-                secondary_btn: {
-                    text : 'Accept necessary',
-                    role : 'accept_necessary'   //'settings' or 'accept_necessary'
-                }
-            },
-            settings_modal : {
-                title : 'Cookie preferences ...',
-                save_settings_btn : "Save settings",
-                accept_all_btn : "Accept all",
-                reject_all_btn: "Reject all",   // optional, [v.2.5.0 +]
-                blocks : [
-                    {
-                        title : "First block title ...",
-                        description: 'First block description ...'
-                    },{
-                        title : "Second block title ...",
-                        description: 'Second block description ...',
-                        toggle : {
-                            value : 'my_category1',
-                            enabled : true,
-                            readonly: true
-                        }
-                    },{
-                        title : "Third block title ...",
-                        description: 'Third block description ...',
-                        toggle : {
-                            value : 'my_category2',
-                            enabled : true,
-                            readonly: false
-                        }
-                    }
-                ]
-            }
-        }
-    }
-});
-```
-</p>
-</details>
 
 ## How to enable/manage revisions
-
+Note:
 - default revision number is 0
-- if saved revision number inside the existing cookie is different from the one you just specified => consent modal will be shown.
+- if existing revision number is different from the one you just specified => show consent modal
 
 1. Enable revisions by specifying a valid `revision` parameter:
 
