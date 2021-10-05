@@ -136,6 +136,7 @@ Thanks to [Till Sanders](https://github.com/tillsanders) for bringing the plugin
 
 ```
 npm i vanilla-cookieconsent
+yarn add vanilla-cookieconsent
 ```
 
 ## Layout options & customization
