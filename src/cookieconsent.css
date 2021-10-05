@@ -503,8 +503,8 @@ CookieConsent settings modal
 .cc_div .b-tg .c-tgl:checked ~ .c-tg{
     background: #253b48;
     background: var(--cc-toggle-bg-on);
-    box-shadow: 0 0 0 2px #253b48;
-    box-shadow: 0 0 0 2px var(--cc-toggle-bg-on);
+    box-shadow: 0 0 0 .125em #253b48;
+    box-shadow: 0 0 0 .125em var(--cc-toggle-bg-on);
 }
 
 #c-bns button:first-child:active,
@@ -636,8 +636,8 @@ CookieConsent settings modal
     background: var(--cc-toggle-bg-off);
     transition: background-color .25s ease, box-shadow .25s ease;
     pointer-events: none;
-    box-shadow: 0 0 0 2px #919ea6;
-    box-shadow: 0 0 0 2px var(--cc-toggle-bg-off);
+    box-shadow: 0 0 0 .125em #919ea6;
+    box-shadow: 0 0 0 .125em var(--cc-toggle-bg-off);
 }
 
 .cc_div span.t-lb,
@@ -656,8 +656,8 @@ CookieConsent settings modal
 .cc_div .b-tg .c-tgl ~ .c-tg.c-ro{
     background: #d5dee2;
     background: var(--cc-toggle-bg-readonly);
-    box-shadow: 0 0 0 2px #d5dee2;
-    box-shadow: 0 0 0 2px var(--cc-toggle-bg-readonly);
+    box-shadow: 0 0 0 .125em #d5dee2;
+    box-shadow: 0 0 0 .125em var(--cc-toggle-bg-readonly);
 }
 
 .cc_div .b-tg .c-tgl ~ .c-tg.c-ro:after{
