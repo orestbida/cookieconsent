@@ -219,7 +219,7 @@
 }
 
 #c-ttl{
-    margin: -.2em 0 0.7em 0;
+    margin-bottom: .7em;
     font-size: 1.05em;
 }
 
@@ -410,7 +410,7 @@ CookieConsent settings modal
     color: var(--cc-block-text);
 }
 
-.cc_div .c-tgl:disabled{
+.cc_div .b-tg .c-tgl:disabled{
     cursor: not-allowed;
 }
 
@@ -500,7 +500,7 @@ CookieConsent settings modal
     background: var(--cc-btn-primary-bg);
 }
 
-.cc_div .c-tgl:checked ~ .c-tg{
+.cc_div .b-tg .c-tgl:checked ~ .c-tg{
     background: #253b48;
     background: var(--cc-toggle-bg-on);
     box-shadow: 0 0 0 2px #253b48;
@@ -619,12 +619,14 @@ CookieConsent settings modal
 }
 
 /* Hide the browser's default checkbox */
-.cc_div .c-tgl {
+.cc_div .b-tg .c-tgl {
     position: absolute;
     cursor: pointer;
     display: block;
     top: 0;
     left: 0;
+    margin: 0;
+    border: 0;
 }
 
 /* Create a custom checkbox */
@@ -641,7 +643,7 @@ CookieConsent settings modal
 .cc_div span.t-lb,
 .cc_div .b-tg,
 .cc_div .b-tg .c-tg,
-.cc_div .c-tgl{
+.cc_div .b-tg .c-tgl{
     width: 3.3em;
     height: 1.35em;
     border-radius: 4em;
@@ -651,14 +653,14 @@ CookieConsent settings modal
     cursor: not-allowed;
 }
 
-.cc_div .c-tgl ~ .c-tg.c-ro{
+.cc_div .b-tg .c-tgl ~ .c-tg.c-ro{
     background: #d5dee2;
     background: var(--cc-toggle-bg-readonly);
     box-shadow: 0 0 0 2px #d5dee2;
     box-shadow: 0 0 0 2px var(--cc-toggle-bg-readonly);
 }
 
-.cc_div .c-tgl ~ .c-tg.c-ro:after{
+.cc_div .b-tg .c-tgl ~ .c-tg.c-ro:after{
     box-shadow: none;
 }
 
@@ -681,7 +683,7 @@ CookieConsent settings modal
 }
 
 /* Show the checkmark when checked */
-.cc_div .c-tgl:checked ~ .c-tg:after{
+.cc_div .b-tg .c-tgl:checked ~ .c-tg:after{
     transform: translateX(1.95em);
 }
 
@@ -889,10 +891,10 @@ html.force--consent.show--consent body{
     transform: rotate(-45deg);
 }
 
-.cc_div .c-tgl:checked ~ .c-tg .on-i{
+.cc_div .b-tg .c-tgl:checked ~ .c-tg .on-i{
     opacity: 1;
 }
-.cc_div .c-tgl:checked ~ .c-tg .off-i{
+.cc_div .b-tg .c-tgl:checked ~ .c-tg .off-i{
     opacity: 0;
 }
 /** END ICONS **/
@@ -1332,7 +1334,7 @@ html.force--consent.show--consent body{
 	margin-bottom: 0.7em;
 }
 
-.cc_div.ie .c-tgl:checked ~ .c-tg:after{
+.cc_div.ie .b-tg .c-tgl:checked ~ .c-tg:after{
     left: 1.95em;
 }
 
@@ -1344,7 +1346,7 @@ html.force--consent.show--consent body{
     display: none;
 }
 
-.cc_div.ie .c-tgl{
+.cc_div.ie .b-tg .c-tgl{
     position: relative;
     display: inline-block;
     vertical-align: middle;
