@@ -827,8 +827,8 @@ html.force--consent.show--consent body{
     content: '';
     margin: 0 auto;
     transform: rotate(45deg);
-    top: .35em;
-    left: .65em;
+    top: .37em;
+    left: .75em;
     position: absolute;
 }
 
@@ -869,7 +869,7 @@ html.force--consent.show--consent body{
 
 .cc_div .off-i::before,
 .cc_div .off-i::after{
-    right: .75em;
+    right: .8em;
     top: .42em;
     content: ' ';
     height: .7em;
@@ -1167,8 +1167,8 @@ html.force--consent.show--consent body{
     }
 
     .cc_div .b-tg{
-        font-size: 1.1em;
-        right: .9em;
+        transform: scale(1.1);
+        right: 1.1em;
     }
 
     #s-inr{
