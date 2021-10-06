@@ -471,18 +471,12 @@ Below a table which sums up all of the available options (must be passed to the 
                                     },
                                     cookie_table: [
                                         {
-                                            col1: '_ga',
+                                            col1: '^_ga',
                                             col2: 'google.com',
                                             col3: '2 years',
                                             col4: 'description ...' ,
-                                            col5: 'Permanent cookie'
-                                        },
-                                        {
-                                            col1: '_gat',
-                                            col2: 'google.com',
-                                            col3: '1 minute',
-                                            col4: 'description ...' ,
-                                            col5: 'Permanent cookie'
+                                            col5: 'Permanent cookie',
+                                            is_regex: true
                                         },
                                         {
                                             col1: '_gid',
@@ -629,7 +623,7 @@ Note:
 
     ```javascript
     cookieconsent.run({
-        ...
+        ...,
         revision: 1,
         ...
     })
@@ -639,13 +633,13 @@ Note:
 
     ```javascript
     cookieconsent.run({
-        ...
+        ...,
         revision: 1,
-        ...
+        ...,
         languages : {
             en : {
                 consent_modal : {
-                    ...
+                    ...,
                     description: "Usual description ... {{revision_message}}",
                     revision_message: "<br> Dude, my terms have changed. Sorry for bothering you again!",
                     ...
@@ -707,26 +701,46 @@ Note:
 -   <details><summary>How to load scripts after a specific cookie category has been accepted</summary>
     <p>
 
-    <div id="#g-analytics-example">You would do something like this: </div>
+    Suppose you have a `analytics.js` file you want to load after the `analytics` category has been accepted:
+    - <details><summary>Method 1 (recommended)</summary>
+        <p>
 
-    ```javascript
-    cookieconsent.run({
-        ...
-        onAccept : function(){
-            // if analytics category has been accepted
-            if(cookieconsent.allowedCategory('analytics')){
-                cookieconsent.loadScript('https://www.google-analytics.com/analytics.js', function(){
-                    ga('create', 'UA-XXXXXXXX-Y', 'auto');
-                    ga('send', 'pageview');
-                });
-            }
+        1. enable `page_scripts`:
 
-            if(cookieconsent.allowedCategory('marketing')){
-                // do something else
+            ```javascript
+            cookieconsent.run({
+                ..,
+                page_scripts: true,
+                ...
+            });
+            ```
+        2. add a `<script>` tag with the following attributes: `type="text/plain"` and `data-cookiecategory="<category>"`
+
+            ```html
+            <script type="text/plain" data-cookiecategory="analytics" src="<path-to-analytics.js"></script>
+            ```
+
+        </p>
+        </details>
+    - <details><summary>Method 2</summary>
+        <p>
+
+        Load script using the `.loadScript()` method inside the `onAccept` method:
+        
+        ```javascript
+        cookieconsent.run({
+            ..,
+            onAccept: function(){
+                if(cookieconsent.allowedCategory('analytics')){
+                    cookieconsent.loadScript('<path-to-analytics.js', function(){
+                        // script loaded ...
+                    });
+                }
             }
-        }
-    });
-    ```
+        })
+        ```
+        </p>
+        </details>
 
     </p>
     </details>
@@ -741,29 +755,6 @@ Note:
         theme_css : "../src/cookieconsent.css",					
         ...
     });
-    ```
-
-    </p>
-    </details>
--   <details><summary>How to add a "reject all" button inside settings modal</summary>
-    <p id="add-reject-all-btn">
-
-    You need to specify `reject_all_btn` inside `settings_modal`:
-
-    ```javascript
-    cookieconsent.run({
-        ...
-        languages : {
-            en : {
-                ...
-                settings_modal : {
-                    ...
-                    reject_all_btn : "Reject all",
-                    ...
-                }
-            }
-        } 
-    })       
     ```
 
     </p>
