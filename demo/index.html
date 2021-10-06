@@ -11,11 +11,8 @@
     <link rel="stylesheet" type="text/css" href="assets/css/style.css">
     <script>
         function doDemoThings(cookie){
-            if(cc.validCookie('cc_cookie')){
-                //if cookie is set => disable buttons
-                disableBtn('btn2');
-                disableBtn('btn3');
-            }
+            disableBtn('btn2');
+            disableBtn('btn3');
 
             // Delete line below
 		    cookie && (document.getElementById("cookie_val").innerHTML = JSON.stringify(cookie, null, 2));

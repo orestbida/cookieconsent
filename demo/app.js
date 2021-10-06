@@ -28,9 +28,9 @@ cc.run({
 
     gui_options : {
         consent_modal : {
-            layout : 'cloud',                 // box,cloud,bar
-            position : 'bottom center',      // bottom,middle,top + left,right,center
-            transition : 'slide'            // zoom,slide
+            layout : 'box',                     // box,cloud,bar
+            position : 'bottom right',         // bottom,middle,top + left,right,center
+            transition : 'slide'                // zoom,slide
         },
         settings_modal : {
             layout : 'box',                 // box,bar
@@ -109,18 +109,10 @@ cc.run({
                             readonly: true							//cookie categories with readonly=true are all treated as "necessary cookies"
                         }
                     },{
-                        title : "Performance and Analytics",
+                        title : "Performance and Analytics cookies",
                         description: 'These cookies allow the website to remember the choices you have made in the past',
                         toggle : {
                             value : 'analytics',	//there are no default categories => you specify them
-                            enabled : false,
-                            readonly: false
-                        }
-                    },{
-                        title : "Advertisement and Targeting cookies",
-                        description: 'These cookies collect information about how you use the website, which pages you visited and which links you clicked on. All of the data is anonymized and cannot be used to identify you',
-                        toggle : {
-                            value : 'targeting',
                             enabled : false,
                             readonly: false
                         },
@@ -139,6 +131,14 @@ cc.run({
                                 col4: 'description ...' ,
                             }
                         ]
+                    },{
+                        title : "Advertisement and Targeting cookies",
+                        description: 'These cookies collect information about how you use the website, which pages you visited and which links you clicked on. All of the data is anonymized and cannot be used to identify you',
+                        toggle : {
+                            value : 'targeting',
+                            enabled : false,
+                            readonly: false
+                        }
                     },{
                         title : "More information",
                         description: 'For any queries in relation to my policy on cookies and your choices, please <a class="cc-link" href="https://orestbida.com/contact">contact me</a>.',

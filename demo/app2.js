@@ -67,7 +67,7 @@ cc.run({
         }
 
         // Delete line below
-        document.getElementById("cookie_val").innerHTML = JSON.stringify(cookie, null, 2);
+        document.getElementById("cookie_val") && (document.getElementById("cookie_val").innerHTML = JSON.stringify(cookie, null, 2));
     },
 
     languages : {
