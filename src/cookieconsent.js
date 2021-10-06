@@ -1,5 +1,5 @@
 /*!
- * CookieConsent v2.5.1
+ * CookieConsent v2.6.0
  * https://www.github.com/orestbida/cookieconsent
  * Author Orest Bida
  * Released under the MIT License
@@ -25,6 +25,7 @@
             cookie_domain: location.hostname,       // default: current domain
             cookie_path: "/",
             cookie_same_site: "Lax",
+            use_rfc_cookie: false,
             autoclear_cookies: true,
             revision: 0,
             script_selector: "data-cookiecategory"
@@ -38,7 +39,7 @@
         /**
          * Internal state variables
          */
-        var _saved_cookie_content;
+        var saved_cookie_content = {};
         var consent_modal_exists = false;
         var cookie_consent_accepted = false;
         var consent_modal_visible = false;
@@ -46,7 +47,10 @@
         var clicked_inside_modal = false;
         var current_modal_focusable;
         var all_table_headers, all_blocks, onAccept, onChange;
-        var valid_revision=true, revision_enabled=false;
+        var valid_revision=true, revision_enabled=false, data=null;
+
+        // Don't run plugin (to avoid indexing its text content) if bot detected 
+        var is_bot = false;
         
         /**
          * Save reference to the last focused element on the page
@@ -129,12 +133,20 @@
             }
 
             if(typeof conf_params['revision'] === "number"){
-                _config.revision = conf_params['revision'];
+                conf_params['revision'] > -1 && (_config.revision = conf_params['revision']);
                 revision_enabled = true;
             }
 
             if(conf_params['autoclear_cookies'] === true){
                 _config.autoclear_cookies = true;
+            }
+
+            if(conf_params['use_rfc_cookie'] === true){
+                _config.use_rfc_cookie = true;
+            }
+
+            if(conf_params['hide_from_bots'] === true){
+                is_bot = navigator && navigator.userAgent && /bot|crawl|spider|slurp|teoma/i.test(navigator.userAgent);
             }
 
             _config.page_scripts = conf_params['page_scripts'] === true;
@@ -146,10 +158,6 @@
                 if(typeof conf_params['current_lang'] === "string"){
                     _config.current_lang = _getValidatedLanguage(conf_params['current_lang'], conf_params.languages);;
                 }
-            }
-            
-            if(conf_params['force_consent'] === true){
-                _addClass(html_dom, 'force--consent');
             }
 
             _log("CookieConsent [LANG]: setting current_lang = '"+ _config.current_lang + "'");
@@ -252,6 +260,7 @@
             }
         }
 
+        var _conf_params, _createConsentModal, revision_message="";
 
         /**
          * Generate cookie consent html based on config settings
@@ -276,8 +285,12 @@
             // Feature detection :=> avoid IE exception since .textContent is not always supported
             var innerText = (typeof html_dom.textContent === 'string' ? 'textContent' : 'innerText');
             
-            // If never_accepted => create consent-modal
-            if(!never_accepted){
+            _conf_params = conf_params;
+            _createConsentModal = function(conf_params){
+
+                if(conf_params['force_consent'] === true){
+                    _addClass(html_dom, 'force--consent');
+                }
                 
                 consent_modal = _createNode('div');
                 var consent_modal_inner = _createNode('div');
@@ -288,7 +301,7 @@
                 var consent_primary_btn = _createNode('button');
                 var consent_secondary_btn = _createNode('button');
                 var overlay = _createNode('div');
-  
+
                 consent_modal.id = 'cm'; 
                 consent_modal_inner.id = 'c-inr';
                 consent_modal_inner_inner.id = 'c-inr-i';
@@ -322,7 +335,7 @@
 
                 if(revision_enabled){
                     if(!valid_revision){
-                        description = description.replace("{{revision_message}}", conf_params.languages[lang]['consent_modal']['revision_message'] || "");
+                        description = description.replace("{{revision_message}}", revision_message || conf_params.languages[lang]['consent_modal']['revision_message'] || "");
                     }else{
                         description = description.replace("{{revision_message}}", "");
                     }
@@ -367,7 +380,12 @@
                 // Append consent modal to main container
                 all_modals_container.appendChild(consent_modal);
                 all_modals_container.appendChild(overlay);
+
+                consent_modal_exists = true;
             }
+
+            // Create consent modal
+            if(!never_accepted) _createConsentModal(conf_params);
 
             /**
              * Create all consent_modal elements
@@ -424,6 +442,8 @@
             });
 
             all_blocks = conf_params.languages[_config.current_lang]['settings_modal']['blocks'];
+            all_table_headers = conf_params.languages[_config.current_lang]['settings_modal']['cookie_table_headers'];
+
             var n_blocks = all_blocks.length;
 
             // Set settings modal title
@@ -491,7 +511,7 @@
                      * Otherwise, retrieve values from saved cookie
                      */
                     if(never_accepted){
-                        if(_inArray(JSON.parse(_saved_cookie_content).level, cookie_category) > -1){ 
+                        if(_inArray(saved_cookie_content['level'], cookie_category) > -1){ 
                             block_switch.checked = true;
                             toggle_states.push(true);
                         }else{
@@ -567,7 +587,6 @@
                 // if cookie table found, generate table for this block
                 if(!remove_cookie_tables && typeof all_blocks[i]['cookie_table'] !== 'undefined'){
                     var tr_tmp_fragment = document.createDocumentFragment();
-                    all_table_headers = conf_params.languages[_config.current_lang]['settings_modal']['cookie_table_headers'];
                     
                     /**
                      * Use custom table headers
@@ -824,25 +843,28 @@
                 }
             }
 
-            _saved_cookie_content = JSON.stringify({
+            saved_cookie_content = {
                 "level" : accepted_categories,
-                "revision": _config.revision
-            });
+                "revision": _config.revision,
+                "data": data,
+                "rfc_cookie": _config.use_rfc_cookie
+            }
 
             // save cookie with preferences 'level' (only if never accepted or settings were updated)
-            if(!cookie_consent_accepted || changedSettings.length > 0 || !valid_revision)
-                _setCookie(_config.cookie_name, _saved_cookie_content);
-
-            _manageExistingScripts();
+            if(!cookie_consent_accepted || changedSettings.length > 0 || !valid_revision){
+                valid_revision = true;
+                _setCookie(_config.cookie_name, JSON.stringify(saved_cookie_content));
+                _manageExistingScripts();
+            }
 
             if(typeof onAccept === "function" && !cookie_consent_accepted){
-                cookie_consent_accepted = true; 
-                return onAccept(JSON.parse(_saved_cookie_content));
+                cookie_consent_accepted = true;
+                return onAccept(saved_cookie_content);
             }
 
             // fire onChange only if settings were changed
             if(typeof onChange === "function" && changedSettings.length > 0){
-                onChange(JSON.parse(_saved_cookie_content), changedSettings);
+                onChange(saved_cookie_content, changedSettings);
             }
 
             /**
@@ -1041,7 +1063,7 @@
          * Manage each modal's layout
          * @param {Object} gui_options 
          */
-        var _guiManager = function(gui_options){
+        var _guiManager = function(gui_options, only_consent_modal){
 
             // If gui_options is not object => exit
             if(typeof gui_options !== 'object') return;
@@ -1069,7 +1091,7 @@
                     _addClass(modal, layout);
                     
                     // Add position class (if specified)
-                    if(_inArray(allowed_positions, position[0]) > -1){
+                    if(!(layout === 'bar' && position[0] === 'middle') && _inArray(allowed_positions, position[0]) > -1){
                         for(var i=0; i<position.length; i++){
                             _addClass(modal, position[i]);
                         }
@@ -1084,7 +1106,7 @@
                 _setLayout(
                     consent_modal,
                     ['box', 'bar', 'cloud'],
-                    ['top', 'bottom'],
+                    ['top', 'middle', 'bottom'],
                     ['zoom', 'slide'],
                     consent_modal_options['layout'],
                     consent_modal_options['position'],
@@ -1092,7 +1114,7 @@
                 );
             }
 
-            if(settings_modal_options){
+            if(!only_consent_modal && settings_modal_options){
                 _setLayout(
                     settings_container,
                     ['bar'],
@@ -1126,18 +1148,25 @@
                 // configure all parameters
                 _setConfig(conf_params);
 
+                // if is bot, don't run plugin
+                if(is_bot) return;
+
                 // Retrieve cookie value (if set)
-                _saved_cookie_content = _getCookie(_config.cookie_name, 'one', true);
+                saved_cookie_content = JSON.parse(_getCookie(_config.cookie_name, 'one', true) || "{}");
+                cookie_consent_accepted = saved_cookie_content['level'] !== undefined;
+                data = saved_cookie_content['data'] !== undefined ? saved_cookie_content['data'] : null;
 
                 // Compare current revision with the one retrieved from cookie
                 valid_revision = typeof conf_params['revision'] === "number" 
-                    ? _saved_cookie_content 
-                        ? (JSON.parse(_saved_cookie_content || "{}")['revision'] === _config.revision) 
+                    ? cookie_consent_accepted 
+                        ? conf_params['revision'] > -1
+                            ? saved_cookie_content['revision'] === _config.revision
+                            : true
                         : true
                     : true;
-                
+
                 // If invalid revision or cookie is empty => create consent modal
-                consent_modal_exists = (!valid_revision || _saved_cookie_content === '');
+                consent_modal_exists = (!cookie_consent_accepted || !valid_revision);
 
                 // Generate cookie-settings dom (& consent modal)
                 _createCookieConsentHTML(!consent_modal_exists, conf_params);
@@ -1147,7 +1176,7 @@
                     _guiManager(conf_params['gui_options']);
                     _addCookieSettingsButtonListener();
 
-                    if(_config.autorun && (!_saved_cookie_content || !valid_revision)){
+                    if(_config.autorun && consent_modal_exists){
                         _cookieconsent.show(conf_params['delay'] || 0);
                     }
 
@@ -1158,13 +1187,20 @@
                     setTimeout(function(){_handleFocusTrap();}, 100);
                 });
 
-                _saved_cookie_content && (cookie_consent_accepted = true)
+                if(cookie_consent_accepted && valid_revision){
+                    var rfc_prop_exists = typeof saved_cookie_content['rfc_cookie'] === "boolean";
+                    
+                    /*
+                     * Convert cookie to rfc format (if `use_rfc_cookie` is enabled)
+                     */
+                    if(!rfc_prop_exists || (rfc_prop_exists && saved_cookie_content['rfc_cookie'] !== _config.use_rfc_cookie)){
+                        saved_cookie_content['rfc_cookie'] = _config.use_rfc_cookie;
+                        _setCookie(_config.cookie_name, JSON.stringify(saved_cookie_content));
+                    }
 
-                // if cookie accepted => fire once the "onAccept" method (if defined)
-                if(cookie_consent_accepted){
                     _manageExistingScripts();
                     if(typeof conf_params['onAccept'] === "function"){
-                        conf_params['onAccept'](JSON.parse(_saved_cookie_content || "{}"));
+                        conf_params['onAccept'](saved_cookie_content);
                     }
                 }
             }else{
@@ -1218,7 +1254,7 @@
             // get all the scripts with "cookie-category" attribute
             var scripts = document.querySelectorAll('script[' + _config.script_selector + ']');
             var sequential_enabled = _config.page_scripts_order;
-            var accepted_categories = JSON.parse(_saved_cookie_content).level || [];
+            var accepted_categories = saved_cookie_content['level'] || [];
             _log("CookieConsent [SCRIPT_MANAGER]: sequential loading:", sequential_enabled);
 
             /**
@@ -1307,6 +1343,112 @@
         }
 
         /**
+         * Save custom data inside cookie
+         * @param {object|string} new_data 
+         * @param {string} [mode]
+         * @returns {boolean}
+         */
+        var _setCookieData = function(new_data, mode){
+
+            var set = false;
+            /**
+             * If mode is 'update':
+             * add/update only the specified props.
+             */
+            if(mode === 'update'){
+                data = _cookieconsent.get('data');
+                var same_type = typeof data === typeof new_data;
+
+                if(same_type && typeof data === "object"){
+                    !data && (data = {});
+
+                    for(var prop in new_data){
+                        if(data[prop] !== new_data[prop]){
+                            data[prop] = new_data[prop]
+                            set = true;
+                        }
+                    }     
+                }else if((same_type || !data) && data !== new_data){
+                    data = new_data;
+                    set = true;
+                }
+            }else{
+                data = new_data;
+                set = true;
+            }
+                
+            set && (
+                saved_cookie_content['data'] = data,
+                _setCookie(_config.cookie_name, JSON.stringify(saved_cookie_content))
+            )
+
+            return set;
+        }
+
+        /**
+         * Forcefully set a specific revision and show consent modal
+         * @param {number} new_revision
+         * @param {boolean} [prompt_consent]
+         * @returns {boolean}
+         */
+        var _setRevision = function(new_revision, prompt_consent, message){
+
+            // If plugin has been initialized and new revision is valid
+            if(
+                main_container
+                && cookie_consent_accepted
+                && typeof new_revision === "number" 
+                && saved_cookie_content['revision'] !== new_revision
+            ){
+
+                revision_enabled = true;
+                revision_message = message;
+                valid_revision = false;
+                _config.revision = new_revision;
+
+                // Show consent modal ?
+                if(prompt_consent === true){
+                    if(!consent_modal_exists){
+                        _createConsentModal(_conf_params);
+                        _guiManager(_conf_params['gui_options'], true);
+                    }
+                        
+                    _cookieconsent.show();
+                }else {
+                    // If revision was modified, save cookie with the new revision
+                    _cookieconsent.accept();
+                }
+
+                return true;
+            }
+            
+            return false;
+        }
+
+        /**
+         * Helper method to set a variety of fields
+         * @param {string} field 
+         * @param {object} data 
+         * @returns {boolean}
+         */
+        _cookieconsent.set = function(field, data){
+            switch(field){
+                case 'data': return _setCookieData(data['value'], data['mode']);
+                case 'revision': return _setRevision(data['value'], data['prompt_consent'], data['message']);
+            }
+        }
+
+        /**
+         * Retrieve data from existing cookie
+         * @returns {any}
+         */
+        _cookieconsent.get = function(field){
+            var cookie = JSON.parse(_getCookie(_config.cookie_name, 'one', true) || "{}");
+
+            return cookie[field];
+        }
+
+        /**
          * Function which will run after script load
          * @callback scriptLoaded
         */
@@ -1372,7 +1514,6 @@
                      */
                     consent_modal.setAttribute('aria-hidden', 'false');
                     consent_modal_visible = true;
-
 
                     setTimeout(function(){
                         last_elem_before_modal = document.activeElement;
@@ -1532,6 +1673,8 @@
          */
         var _setCookie = function(name, value) {
 
+            var value = _config.use_rfc_cookie ? b64EncodeUnicode(value) : value;
+
             var date = new Date();
             date.setTime(date.getTime() + (1000 * ( _config.cookie_expiration * 24 * 60 * 60)));
             var expires = "; expires=" + date.toUTCString();
@@ -1566,7 +1709,16 @@
             var found;
 
             if(filter === 'one'){
-                found = (found = document.cookie.match("(^|;)\\s*" + name + "\\s*=\\s*([^;]+)")) ? (get_value ? found.pop() : name) : ""
+                found = (found = document.cookie.match("(^|;)\\s*" + name + "\\s*=\\s*([^;]+)")) ? (get_value ? found.pop() : name) : "";
+
+                if(found && name === _config.cookie_name){
+                    try{ 
+                        found = JSON.parse(found)
+                    }catch(e){ 
+                        found = JSON.parse(b64DecodeUnicode(found))
+                    }
+                    found = JSON.stringify(found);
+                }
             }else if(filter === 'all'){
                 // array of names of all existing cookies
                 var cookies = document.cookie.split(/;\s*/); found = [];
@@ -1645,6 +1797,30 @@
         }
 
         /**
+         * Encoding UTF8 -> base64
+         * https://stackoverflow.com/questions/30106476/using-javascripts-atob-to-decode-base64-doesnt-properly-decode-utf-8-strings
+         * @param {string} str 
+         * @returns {string}
+         */
+        function b64EncodeUnicode(str) {
+            return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function(match, p1) {
+                return String.fromCharCode(parseInt(p1, 16))
+            }))
+        }
+
+        /**
+         * Decoding base64 -> UTF8
+         * https://stackoverflow.com/questions/30106476/using-javascripts-atob-to-decode-base64-doesnt-properly-decode-utf-8-strings
+         * @param {string} str 
+         * @returns {string}
+         */
+        function b64DecodeUnicode(str) {
+            return decodeURIComponent(Array.prototype.map.call(atob(str), function(c) {
+                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)
+            }).join(''))
+        }
+
+        /**
          * Append class to the specified dom element
          * @param {HTMLElement} elem 
          * @param {string} classname 
@@ -1678,14 +1854,6 @@
             }
             return !!el.className.match(new RegExp('(\\s|^)' + className + '(\\s|$)'));
         }
-        
-        /**
-         * Before returning the cookieconsent object,
-         * remove the initCookieConsent function from global scope
-         * to prevent users from directly manipulating the 
-         * cookieconsent options from browser console (or at least make it harder)
-         */
-        CookieConsent = window[init] = undefined;
 
         return _cookieconsent;
     };

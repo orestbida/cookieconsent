@@ -183,6 +183,11 @@
     visibility: visible!important;
 }
 
+.force--consent.show--consent .c--anim #cm.box.middle,
+.force--consent.show--consent .c--anim #cm.cloud.middle{
+    transform: scale(1) translateY(-50%);
+}
+
 .show--settings .c--anim #s-cnt{
     visibility: visible!important;
 }
@@ -196,12 +201,12 @@
 
 #cm{
     font-family: inherit;
-    padding: 1.05em 2.1em 1.5em 2.1em;
+    padding: 1.1em 1.8em 1.4em 1.8em;
     position: fixed;
     z-index: 1;
     background: #fff;
     background: var(--cc-bg);
-    max-width: 25em;
+    max-width: 24.2em;
     width: 100%;
     bottom: 1.250em;
     right: 1.250em;
@@ -214,8 +219,12 @@
 }
 
 #c-ttl{
-    margin: 0 0 0.7em 0;
+    margin-bottom: .7em;
     font-size: 1.05em;
+}
+
+.cloud #c-ttl{
+    margin-top: -.15em;
 }
 
 #c-txt{
@@ -354,13 +363,12 @@ CookieConsent settings modal
     margin-bottom: 2em;
 }
 
-#s-bl .c-bl:first-child:hover{
+#s-bl .c-bl:not(.b-ex):first-child:hover{
     background: transparent;
     background: unset;
 }
 
 #s-bl .c-bl.b-ex{
-    margin-top: 2em;
     padding: 0;
     border: none;
     background: #f0f4f7;
@@ -401,12 +409,12 @@ CookieConsent settings modal
 #s-cnt .p{
     font-size: 0.9em;
     line-height: 1.5em;
-    margin-top: 1em;
+    margin-top: .85em;
     color: #2d4156;
     color: var(--cc-block-text);
 }
 
-.cc_div .c-tgl:disabled{
+.cc_div .b-tg .c-tgl:disabled{
     cursor: not-allowed;
 }
 
@@ -434,7 +442,7 @@ CookieConsent settings modal
     margin: 0 auto;
     transform: scale(.96);
     opacity: 0;
-    padding-top: 5.125em;
+    padding-top: 4.75em;
     padding-bottom: 4.75em;
     position: relative;
     height: 100%;
@@ -455,7 +463,7 @@ CookieConsent settings modal
     overflow-y: overlay;
     overflow-x: hidden;
     height: 100%;
-    padding: 1.5em 2.5em;
+    padding: 1.3em 2.1em;
     display: block;
     width: 100%;
 }
@@ -465,7 +473,7 @@ CookieConsent settings modal
     bottom: 0;
     left: 0;
     right: 0;
-    padding: 1em 2.5em;
+    padding: 1em 2.1em;
     border-top: 1px solid #f1f3f5;
     border-color: var(--cc-section-border);
     height: 4.75em;
@@ -496,7 +504,7 @@ CookieConsent settings modal
     background: var(--cc-btn-primary-bg);
 }
 
-.cc_div .c-tgl:checked ~ .c-tg{
+.cc_div .b-tg .c-tgl:checked ~ .c-tg{
     background: #253b48;
     background: var(--cc-toggle-bg-on);
 }
@@ -514,8 +522,8 @@ CookieConsent settings modal
     top: 0;
     width: 100%;
     display: table;
-    padding: 0 2.5em;
-    height: 5.125em;
+    padding: 0 2.1em;
+    height: 4.75em;
     vertical-align: middle;
     z-index: 2;
     border-bottom: 1px solid #f1f3f5;
@@ -532,7 +540,7 @@ CookieConsent settings modal
     padding: 0;
     width: 1.7em;
     height: 1.7em;
-    font-size: 1.515em;
+    font-size: 1.45em;
     margin: 0;
     font-weight: initial;
     position: relative;
@@ -567,29 +575,31 @@ CookieConsent settings modal
     max-height: 37.5em;
 }
 
-/** works only on webkit-based browsers **/
-#s-bl::-webkit-scrollbar{
-	width: .9em;
-    height: 100%;
-    background: transparent;
-    border-radius: 0 0.250em 0.250em 0;
-}
-  
-#s-bl::-webkit-scrollbar-thumb{
-    border: 0.25em solid var(--cc-bg);
-    background: #cfd5db;
-    background: var(--cc-webkit-scrollbar-bg);
-    border-radius: 100em;
-}
+@media screen and (min-width: 688px) {
+    /** works only on webkit-based browsers **/
+    #s-bl::-webkit-scrollbar{
+        width: .9em;
+        height: 100%;
+        background: transparent;
+        border-radius: 0 0.250em 0.250em 0;
+    }
+    
+    #s-bl::-webkit-scrollbar-thumb{
+        border: 0.25em solid var(--cc-bg);
+        background: #cfd5db;
+        background: var(--cc-webkit-scrollbar-bg);
+        border-radius: 100em;
+    }
 
-#s-bl::-webkit-scrollbar-thumb:hover{
-	background: #9199a0;
-    background: var(--cc-webkit-scrollbar-bg-hover);
-}
+    #s-bl::-webkit-scrollbar-thumb:hover{
+        background: #9199a0;
+        background: var(--cc-webkit-scrollbar-bg-hover);
+    }
 
-#s-bl::-webkit-scrollbar-button {
-    width: 10px;
-    height: 5px;
+    #s-bl::-webkit-scrollbar-button {
+        width: 10px;
+        height: 5px;
+    }
 }
 
 /** custom checkbox **/
@@ -611,30 +621,31 @@ CookieConsent settings modal
 }
 
 /* Hide the browser's default checkbox */
-.cc_div .c-tgl {
+.cc_div .b-tg .c-tgl {
     position: absolute;
     cursor: pointer;
     display: block;
     top: 0;
     left: 0;
+    margin: 0;
+    border: 0;
 }
 
 /* Create a custom checkbox */
 .cc_div .b-tg .c-tg {
     position: absolute;
-    overflow: hidden;
     background: #919ea6;
     background: var(--cc-toggle-bg-off);
-    transition: background-color .25s ease;
+    transition: background-color .25s ease, box-shadow .25s ease;
     pointer-events: none;
 }
 
 .cc_div span.t-lb,
 .cc_div .b-tg,
 .cc_div .b-tg .c-tg,
-.cc_div .c-tgl{
-    width: 3.6em;
-    height: 1.6em;
+.cc_div .b-tg .c-tgl{
+    width: 3.4em;
+    height: 1.5em;
     border-radius: 4em;
 }
 
@@ -642,35 +653,36 @@ CookieConsent settings modal
     cursor: not-allowed;
 }
 
-.cc_div .c-tgl ~ .c-tg.c-ro{
+.cc_div .b-tg .c-tgl ~ .c-tg.c-ro{
     background: #d5dee2;
     background: var(--cc-toggle-bg-readonly);
 }
 
-.cc_div .c-tgl ~ .c-tg.c-ro:after{
+.cc_div .b-tg .c-tgl ~ .c-tg.c-ro:after{
     box-shadow: none;
 }
 
 /* Style the checkmark/indicator */
 .cc_div .b-tg .c-tg:after {
     content: "";
-    position: absolute;
-    left: 0.24em;
-    top: 0.25em;
-    width: 1.1em;
-    height: 1.1em;
+    position: relative;
+    display: block;
+    left: 0.125em;
+    top: 0.125em;
+    width: 1.25em;
+    height: 1.25em;
     border: none;
     box-sizing: content-box;
     background: #fff;
     background: var(--cc-toggle-knob-bg);
-    box-shadow: 0 1px 2px rgba(24, 32, 35, .36);
+    box-shadow: 0 1px 2px rgb(24 32 35 / 36%);
     transition: transform .25s ease;
     border-radius: 100%;
 }
 
 /* Show the checkmark when checked */
-.cc_div .c-tgl:checked ~ .c-tg:after{
-    transform: translateX(1.95em);
+.cc_div .b-tg .c-tgl:checked ~ .c-tg:after{
+    transform: translateX(1.9em);
 }
 
 #s-bl table,
@@ -773,13 +785,12 @@ CookieConsent settings modal
     max-width: 100vw;
 }
 
-html.force--consent.show--consent,
-html.force--consent.show--settings{
+html.force--consent.show--consent{
     overflow-y: hidden!important;
 }
 
-html.force--consent,
-html.force--consent body{
+html.force--consent.show--consent,
+html.force--consent.show--consent body{
     height: auto!important;
     overflow-x: hidden!important;
 }
@@ -807,17 +818,18 @@ html.force--consent body{
 }
 
 .cc_div .on-i::before{
-    border: solid #ffffff;
+    border: solid #fff;
     border-color: var(--cc-toggle-knob-icon-color);
     border-width: 0 2px 2px 0;
-    padding: .13em;
+    padding: .1em;
     display: inline-block;
-    padding-bottom: .55em;
+    padding-bottom: .45em;
     content: '';
     margin: 0 auto;
     transform: rotate(45deg);
-    margin-top: .31em;
-    margin-left: .1em;
+    top: .37em;
+    left: .75em;
+    position: absolute;
 }
 
 #s-c-bn::before,
@@ -847,7 +859,7 @@ html.force--consent body{
     right: 0;
     display: block;
     text-align: center;
-    transition: opacity .25s ease;
+    transition: opacity .15s ease;
 }
 
 .cc_div .on-i{
@@ -857,11 +869,11 @@ html.force--consent body{
 
 .cc_div .off-i::before,
 .cc_div .off-i::after{
-    right: .84em;
-    top: .4em;
+    right: .8em;
+    top: .42em;
     content: ' ';
-    height: .85em;
-    width: 0.09375em;
+    height: .7em;
+    width: .09375em;
     display: block;
     background: #cdd6dc;
     background: var(--cc-toggle-knob-icon-color);
@@ -877,24 +889,42 @@ html.force--consent body{
     transform: rotate(-45deg);
 }
 
-.cc_div .c-tgl:checked ~ .c-tg .on-i{
+.cc_div .b-tg .c-tgl:checked ~ .c-tg .on-i{
     opacity: 1;
 }
-.cc_div .c-tgl:checked ~ .c-tg .off-i{
+.cc_div .b-tg .c-tgl:checked ~ .c-tg .off-i{
     opacity: 0;
 }
 /** END ICONS **/
 
+.force--consent #cm.box.middle,
+.force--consent #cm.cloud.middle{
+    top: 50%;
+    transform: translateY(-37%);
+    bottom: auto;
+}
+
+.force--consent #cm.box.middle.zoom,
+.force--consent #cm.cloud.middle.zoom{
+    transform: scale(.95) translateY(-50%);
+ 
+}
+
+#cm.box.center{
+    left: 1em;
+    right: 1em;
+    margin: 0 auto;
+}
 
 /* Start cloud layout */
 #cm.cloud {
     max-width: 50em;
     margin: 0 auto;
     text-align: center;
-    left: 1.25em;
-    right: 1.25em;
+    left: 1em;
+    right: 1em;
     overflow: hidden;
-    padding: 1.3em 2.4em;
+    padding: 1.3em 2em;
     width: unset;
 }
 
@@ -957,7 +987,7 @@ html.force--consent body{
 }
 
 #cm.bar #c-bns{
-    max-width: 540px;
+    max-width: 33.75em;
 }
 
 #cm.bar #cs{
@@ -974,8 +1004,8 @@ html.force--consent body{
 .cc_div .bar #s-hdr,
 .cc_div .bar #s-bl,
 .cc_div .bar #s-bns {
-    padding-left: 1.8em;
-    padding-right: 1.8em;
+    padding-left: 1.6em;
+    padding-right: 1.6em;
 }
 
 .cc_div .bar #cs{
@@ -1075,28 +1105,31 @@ html.force--consent body{
         width: 100%;
         max-width: 100%;
         margin: 0;
-        padding: 1.6em!important;
-        right: 0;
-        left: 0;
-        bottom: 0;
-        border-radius: 0;
+        padding: 1.4em!important;
+        right: 1em;
+        left: 1em;
+        bottom: 1em;
         display: block;
     }
 
     .force--consent #cm,
     .force--consent #cm.cloud{
-        width: 100vw;
+        width: auto;
         max-width: 100vw;
     }
 
     #cm.top{
-        top: 0;
-        bottom: unset;
+        top: 1em;
+        bottom: auto;
     }
 
     #cm.bottom{
+        bottom: 1em;
+        top: auto;
+    }
+
+    #cm.bar.bottom{
         bottom: 0;
-        top: unset;
     }
     
     .cc_div .cloud #c-txt{
@@ -1134,14 +1167,14 @@ html.force--consent body{
     }
 
     .cc_div .b-tg{
-        font-size: 1.1em;
-        right: .9em;
+        transform: scale(1.1);
+        right: 1.1em;
     }
 
     #s-inr{
         margin: 0;
         padding-bottom: 7.9em;
-        border-radius: unset;
+        border-radius: 0;
     }
 
     #s-bns{
@@ -1239,12 +1272,11 @@ html.force--consent body{
         float: unset;
     }
 
-    #cm.cloud{
-        left: 0;
-        right: 0;
-        max-width: 100%;
-        width: 100%;
-        
+    #cm.cloud,
+    #cm.box{
+        left: 1em;
+        right: 1em;
+        width: auto;
     }
 
     #cm.cloud.right,
@@ -1300,7 +1332,7 @@ html.force--consent body{
 	margin-bottom: 0.7em;
 }
 
-.cc_div.ie .c-tgl:checked ~ .c-tg:after{
+.cc_div.ie .b-tg .c-tgl:checked ~ .c-tg:after{
     left: 1.95em;
 }
 
@@ -1312,7 +1344,7 @@ html.force--consent body{
     display: none;
 }
 
-.cc_div.ie .c-tgl{
+.cc_div.ie .b-tg .c-tgl{
     position: relative;
     display: inline-block;
     vertical-align: middle;
