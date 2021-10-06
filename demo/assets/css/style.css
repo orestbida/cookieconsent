@@ -3,16 +3,18 @@
     box-sizing: border-box;
 }
 
-body {
-    line-height: 1.15;
-    font-family: sans-serif;
-    margin: 0;
-    overflow-x: hidden;
+html,
+body{
+    height: auto!important;
+    width: 100vw!important;
+    overflow-x: hidden!important;
 }
 
-body.basier,
-body.basier #cc_div{
-    font-family: 'BasierSquare', sans-serif!important;
+body {
+    line-height: 1.15;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    font-weight: 400;
+    margin: 0;
 }
 
 #_mainwrapper{
@@ -65,7 +67,7 @@ abbr[title] {
 
 b,
 strong {
-    font-weight: bolder;
+    font-weight: 600;
 }
 
 code,
@@ -116,6 +118,10 @@ input {
     overflow: visible;
 }
 
+.cc_div b{
+    font-weight: 600;
+    font-style: italic;
+}
 
 button,
 select {
@@ -136,6 +142,7 @@ button::-moz-focus-inner,
     border-style: none;
     padding: 0;
 }
+
 
 fieldset {
     padding: 0.35em 0.75em 0.625em;
@@ -168,7 +175,6 @@ textarea {
 [type="number"]::-webkit-outer-spin-button {
     height: auto;
 }
-
 
 [type="search"]::-webkit-search-decoration {
     -webkit-appearance: none;
@@ -209,7 +215,7 @@ ul, li, ol{
     vertical-align: middle;
     display: table-cell;
 }
-  
+
 ._unselectable {
     -webkit-touch-callout: none;
     -webkit-user-select: none;
@@ -232,7 +238,7 @@ ul, li, ol{
 
 #app_title{
     margin-bottom: 10px;
-    font-size: 4em;
+    font-size: 3em;
     padding-bottom: 0;
     color: #1e1c1b;
     margin-top: 40px;
@@ -243,16 +249,16 @@ ul, li, ol{
     display: block;
     max-width: 500px;
     margin-bottom: 80px;
-    font-weight: initial;
+    font-weight: 600;
 }
 
 #app_settings{
     margin-bottom: 50px;
-    height: 300px;
+    min-height: 300px;
 }
 
 .styled_btn{
-    font-weight: bold;
+    font-weight: 600;
     text-transform: none;
     background: #161515;
     background: #ffeec0;
@@ -283,6 +289,7 @@ ul, li, ol{
     display: inline-block;
     padding: 5px 10px;
     border-radius: 5px;
+    font-weight: 600;
 }
 
 ._cookie_value{
@@ -290,7 +297,7 @@ ul, li, ol{
 }
 
 #theme{
-    font-weight: bold;
+    font-weight: 600;
 }
 
 #theme,
@@ -310,7 +317,7 @@ ul, li, ol{
 }
 
 .c_emf{
-    font-weight: bold;
+    font-weight: 600;
 }
 
 ul{
@@ -344,6 +351,7 @@ ul li{
     margin-left: 0;
     border-radius: 5px;
     margin-bottom: 20px;
+    font-weight: 600;
 }
 
 #api_section > ul{
@@ -380,7 +388,7 @@ ul li{
 }
 
 #_text{
-    font-weight: bold;
+    font-weight: 600;
     margin-left: 5px;
     DISPLAY: inline-block;
     vertical-align: middle;
@@ -442,7 +450,7 @@ body.d_mode{
     box-shadow: 0 0 0 3px #4b4639;
 }
 
-@media screen and (max-width: 480px) {
+@media screen and (max-width: 780px) {
     #app_description{
         margin-bottom: 80px;
     }

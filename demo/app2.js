@@ -1,42 +1,37 @@
-/*
- * CookieConsent v2 DEMO config.
-*/
-
 // obtain cookieconsent plugin
 var cc = initCookieConsent();
 
 // run plugin with config object
 cc.run({
-    autorun : true, 
-    delay : 0,
     current_lang : 'en',
-    auto_language : false,
-    autoclear_cookies : true,
-    cookie_expiration : 365,
-    theme_css: '../dist/cookieconsent.css',
-    force_consent: true,
+    autoclear_cookies : true,                   // default: false
+    theme_css: '../src/cookieconsent.css',
+    cookie_name: 'cc_cookie_demo2',             // default: 'cc_cookie'
+    cookie_expiration : 365,                    // default: 182
+    page_scripts: true,                         // default: false 
+    force_consent: true,                        // default: false
 
-    /* New options from v2.4 (everything is optional) */
-    // remove_cookie_tables: false              // default: false (if set to true, cookie table's html will not be generated)
-
-    // cookie_domain: location.hostname,       	// default: current domain
+    // auto_language : false,                   // default: false
+    // autorun : true,                          // default: true
+    // delay : 0,                               // default: 0
+    // hide_from_bots: false,                   // default: false
+    // remove_cookie_tables: false              // default: false
+    // cookie_domain: location.hostname,        // default: current domain
     // cookie_path: "/",                        // default: root
     // cookie_same_site: "Lax",
-    
-    /* Manage existing <scripts> tags (check readme.md) */
-    page_scripts: true,                         // default: false (by default don't manage existing script tags)
+    // use_rfc_cookie: false,                   // default: false
+    // revision: 0,                             // default: 0
 
-    /* Basic gui options */
     gui_options : {
         consent_modal : {
-            layout : 'cloud',                       // box(default),cloud,bar
-            position : 'bottom center',             // bottom(default),top + left,right,center:=> examples: 'bottom' or 'top right'
-            transition : 'slide'                    // zoom(default),slide
+            layout : 'cloud',                   // box,cloud,bar
+            position : 'bottom center',         // bottom,middle,top + left,right,center
+            transition : 'slide'                // zoom,slide
         },
         settings_modal : {
-            layout : 'bar',                 // box(default),bar
-            position: 'left',               // right(default),left (available only if bar layout selected)
-            transition : 'slide'            // zoom(default),slide
+            layout : 'bar',                 // box,bar
+            position: 'left',               // right,left (available only if bar layout selected)
+            transition : 'slide'            // zoom,slide
         }
     },
 
@@ -48,7 +43,7 @@ cc.run({
         disableBtn('btn3');
         
         // Delete line below
-        document.getElementById("cookie_val").innerHTML = JSON.stringify(cookie, null, 2);
+        document.getElementById("cookie_val") && (document.getElementById("cookie_val").innerHTML = JSON.stringify(cookie, null, 2));
     },
 
     onChange: function(cookie, changed_preferences){
@@ -72,14 +67,14 @@ cc.run({
         }
 
         // Delete line below
-        document.getElementById("cookie_val").innerHTML = JSON.stringify(cookie, null, 2);
+        document.getElementById("cookie_val") && (document.getElementById("cookie_val").innerHTML = JSON.stringify(cookie, null, 2));
     },
 
     languages : {
-        'en' : {	
+        'en' : {
             consent_modal : {
-                title :  "Hello traveler, it's cookie time!",
-                description :  'Hi, this website uses essential cookies to ensure its proper operation and tracking cookies to understand how you interact with it. The latter will be set only after consent. <a href="#privacy-policy" class="cc-link">Privacy policy</a>',
+                title :  "Hello traveller, it's cookie time!",
+                description :  'Our website uses essential cookies to ensure its proper operation and tracking cookies to understand how you interact with it. The latter will be set only after consent. <a href="#privacy-policy" class="cc-link">Privacy policy</a>',
                 primary_btn: {
                     text: 'Accept all',
                     role: 'accept_all'      //'accept_selected' or 'accept_all'
@@ -91,7 +86,7 @@ cc.run({
                 revision_message: "<br><br> Dear user, terms and conditions have changed since the last time you visisted!"
             },
             settings_modal : {
-                title : '<div>Cookie preferences</div><div aria-hidden="true" style="font-size: .8em; font-weight: 400; color: #687278; margin-top: 3px;">Powered by <a tabindex="-1" aria-hidden="true" href="https://github.com/orestbida/cookieconsent/">cookie-consent</a></div>',
+                title : 'Cookie settings',
                 save_settings_btn : "Save current selection",
                 accept_all_btn : "Accept all",
                 reject_all_btn: "Reject all",
