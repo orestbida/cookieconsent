@@ -1,4 +1,5 @@
-Forked to publish in the NPM registry. No further changes. Thanks and credits to [Orest Bida](https://github.com/orestbida/cookieconsent).
+[Forked](https://github.com/orestbida/cookieconsent) to publish in the NPM registry. No further
+changes. Thanks and credits to [Orest Bida](https://github.com/orestbida/cookieconsent).
 
 ---
 
@@ -11,7 +12,7 @@ Forked to publish in the NPM registry. No further changes. Thanks and credits to
 </div>
 <div align="center" style="text-align: center; max-width: 770px; margin: 0 auto;">
 
-A __lightweight__ & __gdpr compliant__ cookie consent plugin written in plain javascript. An "all-in-one" solution which also allows you to write your cookie policy inside it without the need of having a dedicated page. 
+A __lightweight__ & __gdpr compliant__ cookie consent plugin written in plain javascript. An "all-in-one" solution which also allows you to write your cookie policy inside it without the need of having a dedicated page.
 
 </div>
 <div style="padding-top: .6em;">
@@ -21,16 +22,20 @@ A __lightweight__ & __gdpr compliant__ cookie consent plugin written in plain ja
 </div>
 
 ## Table of contents
-1. [Key features](#key-features)
-2. [How to use](#how-to-use)
-3. [Download & CDN/NPM](#download--cdn)
-4. [Layout options & customization](#layout-options--customization)
-5. [APIs & config. parameters](#apis--configuration-parameters)
-6. [Manage third party scripts](#manage-third-party-scripts)
-7. [Configuration examples](#full-example-configurations)
-8. [How to enable/manage revisions](#how-to-enablemanage-revisions)
-9. [FAQ](#faq)
-10. [License](#license)
+- [Table of contents](#table-of-contents)
+- [Key features](#key-features)
+- [How to use](#how-to-use)
+- [Download & CDN](#download--cdn)
+- [NPM](#npm)
+- [Layout options & customization](#layout-options--customization)
+- [Manage third party scripts](#manage-third-party-scripts)
+- [APIs & configuration parameters](#apis--configuration-parameters)
+  - [All available options](#all-available-options)
+- [Full example configurations](#full-example-configurations)
+  - [How to configure languages & cookie settings](#how-to-configure-languages--cookie-settings)
+- [How to enable/manage revisions](#how-to-enablemanage-revisions)
+- [FAQ](#faq)
+- [License](#license)
 
 ## Key features
 - __Lightweight__
@@ -42,7 +47,7 @@ A __lightweight__ & __gdpr compliant__ cookie consent plugin written in plain ja
 - Allows you to __define different cookie categories with opt in/out toggle__
 - Allows you to __define custom cookie tables__ to specify the cookies you use
 
-## How to use 
+## How to use
 1. Download (or use via [cdn](#download--cdn)) and include the script at the bottom of `body` tag.
     ```html
     <script src="<path-to-cookieconsent.js>"></script>
@@ -85,7 +90,7 @@ A __lightweight__ & __gdpr compliant__ cookie consent plugin written in plain ja
                             save_settings_btn : "Save settings",
                             accept_all_btn : "Accept all",
                             reject_all_btn : "Reject all", // optional, [v.2.5.0 +]
-                            close_btn_label: "Close",   
+                            close_btn_label: "Close",
                             blocks : [
                                 {
                                     title : "Cookie usage",
@@ -120,7 +125,7 @@ A __lightweight__ & __gdpr compliant__ cookie consent plugin written in plain ja
     <br>
 
     For more details check out [full examples](#full-example-configurations) and [how to configure languages & cookie settings](#how-to-configure-languages--cookie-settings) sections.
-    
+
 
 ## Download & CDN
 You can download the [latest version](https://github.com/orestbida/cookieconsent/releases) or use it via cdn:
@@ -222,7 +227,7 @@ Additional methods for an easier management of your scripts and cookie settings 
     cookieconsent.accept('all');                // accept all categories
     cookieconsent.accept([]);                   // accept none (reject all)
     cookieconsent.accept('analytics');          // accept only analytics category
-    cookieconsent.accept(['cat_1', 'cat_2']);   // accept only these 2 categories   
+    cookieconsent.accept(['cat_1', 'cat_2']);   // accept only these 2 categories
     cookieconsent.accept();                     // accept all currently selected categories inside modal
 
     cookieconsent.accept('all', ['analytics']); // accept all except "analytics" category
@@ -245,7 +250,7 @@ Additional methods for an easier management of your scripts and cookie settings 
     A cookie category corresponds to the string of the <code>value</code> property inside the <code>toggle</code> object:
 
     ```javascript
-    ...    
+    ...
     toggle : {
         value: 'analytics',     // cookie category
         enabled : false,        // default status
@@ -404,7 +409,7 @@ Below a table which sums up all of the available options (must be passed to the 
 
         gtag('config', 'GA_MEASUREMENT_ID');
     </script>
-    
+
     <script defer src="<path-to-cookieconsent.js>"></script>
     <script>
         window.addEventListener('load', function(){
@@ -413,22 +418,22 @@ Below a table which sums up all of the available options (must be passed to the 
 
             // run plugin with config object
             cookieconsent.run({
-                autorun : true, 							
+                autorun : true,
                 current_lang : 'en',
-                theme_css : "<path-to-cookieconsent.css>",		
-                autoclear_cookies : true,	
+                theme_css : "<path-to-cookieconsent.css>",
+                autoclear_cookies : true,
                 page_scripts: true,
-                
-                onAccept: function(cookie){				
+
+                onAccept: function(cookie){
                     // ... cookieconsent accepted
                 },
 
                 onChange: function(cookie, changed_preferences){
                     // ... cookieconsent preferences were changed
                 },
-                
+
                 languages : {
-                    en : {	
+                    en : {
                         consent_modal : {
                             title :  "I use cookies",
                             description :  'Hi, this website uses essential cookies to ensure its proper operation and tracking cookies to understand how you interact with it. The latter will be set only upon approval. <a aria-label="Cookie policy" class="cc-link" href="#">Read more</a>',
@@ -447,10 +452,10 @@ Below a table which sums up all of the available options (must be passed to the 
                             accept_all_btn : "Accept all",
                             reject_all_btn : "Reject all",      // optional, [v.2.5.0 +]
                             cookie_table_headers : [
-                                {col1: "Name" }, 
-                                {col2: "Domain" }, 
-                                {col3: "Expiration" }, 
-                                {col4: "Description" }, 
+                                {col1: "Name" },
+                                {col2: "Domain" },
+                                {col3: "Expiration" },
+                                {col4: "Description" },
                                 {col5: "Type" }
                             ],
                             blocks : [
@@ -730,7 +735,7 @@ Note:
         <p>
 
         Load script using the `.loadScript()` method inside the `onAccept` method:
-        
+
         ```javascript
         cookieconsent.run({
             ..,
@@ -756,7 +761,7 @@ Note:
     ```javascript
     cookieconsent.run({
         ...
-        theme_css : "../src/cookieconsent.css",					
+        theme_css : "../src/cookieconsent.css",
         ...
     });
     ```
@@ -765,14 +770,14 @@ Note:
     </details>
 -   <details><summary>Make consent required (block page navigation until action)</summary>
     <p>
-    
+
     This is a css only solution:
 
     1. enable `force_consent` option:
         ```javascript
         cookieconsent.run({
             ...
-            force_consent : true, 				
+            force_consent : true,
             ...
         });
         ```
@@ -796,7 +801,7 @@ Note:
     - **Cookie tables are defined by you, that is you choose how many columns and what their naming will be**
     - **Make sure that the first column of the table contains the name of the cookie for <code>autoclear_cookie</code> to work properly**
     <br>
-    
+
     1. Specify the table structure via the `cookie_table_headers` property inside `settings_modal` object:
 
         Example with 3 columns:
@@ -804,9 +809,9 @@ Note:
         ```javascript
         ...
         cookie_table_headers : [
-            {col1: "Name" }, 
-            {col2: "Source" }, 
-            {col3: "Description" }, 
+            {col1: "Name" },
+            {col2: "Source" },
+            {col3: "Description" },
         ]
         ...
         ```
@@ -829,7 +834,7 @@ Note:
         ]
         ...
         ```
-    
+
     **Check the examples above for a valid implementation.**
     </p>
     </details>
