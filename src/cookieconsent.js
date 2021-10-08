@@ -260,7 +260,7 @@
             }
         }
 
-        var _conf_params, _createConsentModal, revision_message="";
+        var _conf_params, _createConsentModal, revision_message="", consent_text;
 
         /**
          * Generate cookie consent html based on config settings
@@ -291,12 +291,27 @@
                 if(conf_params['force_consent'] === true){
                     _addClass(html_dom, 'force--consent');
                 }
+
+                var description = conf_params.languages[lang]['consent_modal']['description'];
+
+                if(revision_enabled){
+                    if(!valid_revision){
+                        description = description.replace("{{revision_message}}", revision_message || conf_params.languages[lang]['consent_modal']['revision_message'] || "");
+                    }else{
+                        description = description.replace("{{revision_message}}", "");
+                    }
+                }
+
+                if(consent_modal){
+                    consent_text.innerHTML = description;
+                    return;
+                }
                 
                 consent_modal = _createNode('div');
                 var consent_modal_inner = _createNode('div');
                 var consent_modal_inner_inner = _createNode('div');
                 var consent_title = _createNode('div');
-                var consent_text = _createNode('div');
+                consent_text = _createNode('div');
                 var consent_buttons = _createNode('div');
                 var consent_primary_btn = _createNode('button');
                 var consent_secondary_btn = _createNode('button');
@@ -331,16 +346,6 @@
                 // Use insertAdjacentHTML instead of innerHTML
                 consent_title.insertAdjacentHTML('beforeend', conf_params.languages[lang]['consent_modal']['title']);
                 
-                var description = conf_params.languages[lang]['consent_modal']['description'];
-
-                if(revision_enabled){
-                    if(!valid_revision){
-                        description = description.replace("{{revision_message}}", revision_message || conf_params.languages[lang]['consent_modal']['revision_message'] || "");
-                    }else{
-                        description = description.replace("{{revision_message}}", "");
-                    }
-                }
-
                 consent_text.insertAdjacentHTML('beforeend', description);
                 
                 consent_primary_btn[innerText] = conf_params.languages[lang]['consent_modal']['primary_btn']['text'];
@@ -1396,7 +1401,6 @@
             // If plugin has been initialized and new revision is valid
             if(
                 main_container
-                && cookie_consent_accepted
                 && typeof new_revision === "number" 
                 && saved_cookie_content['revision'] !== new_revision
             ){
@@ -1408,11 +1412,9 @@
 
                 // Show consent modal ?
                 if(prompt_consent === true){
-                    if(!consent_modal_exists){
-                        _createConsentModal(_conf_params);
-                        _guiManager(_conf_params['gui_options'], true);
-                    }
-                        
+                    _createConsentModal(_conf_params);
+                    _guiManager(_conf_params['gui_options'], true);
+                    _getModalFocusableData();
                     _cookieconsent.show();
                 }else {
                     // If revision was modified, save cookie with the new revision
