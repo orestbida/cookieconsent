@@ -1673,7 +1673,7 @@
          */
         var _setCookie = function(name, value) {
 
-            var value = _config.use_rfc_cookie ? b64EncodeUnicode(value) : value;
+            var value = _config.use_rfc_cookie ? encodeURIComponent(value) : value;
 
             var date = new Date();
             date.setTime(date.getTime() + (1000 * ( _config.cookie_expiration * 24 * 60 * 60)));
@@ -1715,7 +1715,7 @@
                     try{ 
                         found = JSON.parse(found)
                     }catch(e){ 
-                        found = JSON.parse(b64DecodeUnicode(found))
+                        found = JSON.parse(decodeURIComponent(found))
                     }
                     found = JSON.stringify(found);
                 }
@@ -1794,30 +1794,6 @@
                 for (keys[i++] in obj) {};
                 return keys;
             }
-        }
-
-        /**
-         * Encoding UTF8 -> base64
-         * https://stackoverflow.com/questions/30106476/using-javascripts-atob-to-decode-base64-doesnt-properly-decode-utf-8-strings
-         * @param {string} str 
-         * @returns {string}
-         */
-        function b64EncodeUnicode(str) {
-            return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function(match, p1) {
-                return String.fromCharCode(parseInt(p1, 16))
-            }))
-        }
-
-        /**
-         * Decoding base64 -> UTF8
-         * https://stackoverflow.com/questions/30106476/using-javascripts-atob-to-decode-base64-doesnt-properly-decode-utf-8-strings
-         * @param {string} str 
-         * @returns {string}
-         */
-        function b64DecodeUnicode(str) {
-            return decodeURIComponent(Array.prototype.map.call(atob(str), function(c) {
-                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)
-            }).join(''))
         }
 
         /**
