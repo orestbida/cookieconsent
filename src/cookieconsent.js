@@ -146,7 +146,8 @@
             }
 
             if(conf_params['hide_from_bots'] === true){
-                is_bot = navigator && navigator.userAgent && /bot|crawl|spider|slurp|teoma/i.test(navigator.userAgent);
+                is_bot = navigator &&
+                    ((navigator.userAgent && /bot|crawl|spider|slurp|teoma/i.test(navigator.userAgent)) || navigator.webdriver);
             }
 
             _config.page_scripts = conf_params['page_scripts'] === true;
