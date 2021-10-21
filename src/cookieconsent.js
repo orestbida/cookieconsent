@@ -11,24 +11,24 @@
      * @returns {Object} cookieconsent object with API
      */
     var CookieConsent = function(root){
-        
+
         /**
          * CHANGE THIS FLAG FALSE TO DISABLE console.log()
          */
         var ENABLE_LOGS = true;
 
         var _config = {
-            current_lang : "en",         			    
+            current_lang: 'en',
             autorun: true,                          // run as soon as loaded
             cookie_name: 'cc_cookie',
-            cookie_expiration : 182,                // default: 6 months (in days)
+            cookie_expiration: 182,                 // default: 6 months (in days)
             cookie_domain: location.hostname,       // default: current domain
-            cookie_path: "/",
-            cookie_same_site: "Lax",
+            cookie_path: '/',
+            cookie_same_site: 'Lax',
             use_rfc_cookie: false,
             autoclear_cookies: true,
             revision: 0,
-            script_selector: "data-cookiecategory"
+            script_selector: 'data-cookiecategory'
         };
 
         /**
@@ -49,16 +49,16 @@
         var all_table_headers, all_blocks, onAccept, onChange;
         var valid_revision=true, revision_enabled=false, data=null;
 
-        // Don't run plugin (to avoid indexing its text content) if bot detected 
+        // Don't run plugin (to avoid indexing its text content) if bot detected
         var is_bot = false;
-        
+
         /**
          * Save reference to the last focused element on the page
          * (used later to restore focus when both modals are closed)
          */
         var last_elem_before_modal;
         var last_consent_modal_btn_focus;
-                             
+
         /**
          * Both of the arrays below have the same structure:
          * [0] => holds reference to the FIRST focusable element inside modal
@@ -84,7 +84,7 @@
          * @type {boolean[]}
          */
         var toggle_readonly = [];
-        
+
         /**
          * Pointers to main dom elements (to avoid retrieving them later using document.getElementById)
          */
@@ -95,7 +95,7 @@
 
         /**
          * Update config settings
-         * @param {Object} conf_params 
+         * @param {Object} conf_params
          */
         var _setConfig = function(conf_params){
             _log("CookieConsent [CONFIG]: received_config_settings ", conf_params);
@@ -157,15 +157,15 @@
                 _config.current_lang = _getValidatedLanguage(_getBrowserLang(), conf_params.languages);
             }else{
                 if(typeof conf_params['current_lang'] === "string"){
-                    _config.current_lang = _getValidatedLanguage(conf_params['current_lang'], conf_params.languages);;
+                    _config.current_lang = _getValidatedLanguage(conf_params['current_lang'], conf_params.languages);
                 }
             }
 
-            _log("CookieConsent [LANG]: setting current_lang = '"+ _config.current_lang + "'");
+            _log("CookieConsent [LANG]: setting current_lang = '" + _config.current_lang + "'");
         }
 
         /**
-         * Search for all occurrences in the current page and add an onClick listener : 
+         * Search for all occurrences in the current page and add an onClick listener :
          * when clicked => open settings modal
          */
         var _addCookieSettingsButtonListener = function(){
@@ -202,28 +202,28 @@
          * to prevent losing focus while navigating with TAB
          */
         var _getModalFocusableData = function(){
-            
+
             /**
              * Note: any of the below focusable elements, which has the attribute tabindex="-1" AND is either
              * the first or last element of the modal, won't receive focus during "open/close" modal
              */
             var allowed_focusable_types = ['[href]', 'button', 'input', 'details', '[tabindex="0"]'];
-            
+
             function _getAllFocusableElements(modal, _array){
                 var focus_later=false, focus_first=false;
-                
+
                 // ie might throw exception due to complex unsupported selector => a:not([tabindex="-1"])
-                try{  
+                try{
                     var focusable_elems = modal.querySelectorAll(allowed_focusable_types.join(':not([tabindex="-1"]), '));
                     var attr, len=focusable_elems.length, i=0;
-                    
+
                     while(i < len){
-                        
+
                         attr = focusable_elems[i].getAttribute('data-focus');
 
                         if(!focus_first && attr === "1"){
                             focus_first = focusable_elems[i];
-                            
+
                         }else if(attr === "0"){
                             focus_later = focusable_elems[i];
                             if(!focus_first && focusable_elems[i+1].getAttribute('data-focus') !== "0"){
@@ -269,7 +269,7 @@
          * @param {Object} conf_params - user configuration parameters
          */
         var _createCookieConsentHTML = function(never_accepted, conf_params){
-            
+
             // Create main container which holds both consent modal & settings modal
             main_container = _createNode('div');
             main_container.id = 'cc--main';
@@ -279,13 +279,13 @@
             main_container.style.zIndex = "1000000";
             main_container.innerHTML = '<!--[if lt IE 9 ]><div id="cc_div" class="cc_div ie"></div><![endif]--><!--[if (gt IE 8)|!(IE)]><!--><div id="cc_div" class="cc_div"></div><!--<![endif]-->'
             var all_modals_container = main_container.children[0];
-            
+
             // Get current language
             var lang = _config.current_lang;
 
             // Feature detection :=> avoid IE exception since .textContent is not always supported
             var innerText = (typeof html_dom.textContent === 'string' ? 'textContent' : 'innerText');
-            
+
             _conf_params = conf_params;
             _createConsentModal = function(conf_params){
 
@@ -307,7 +307,7 @@
                     consent_text.innerHTML = description;
                     return;
                 }
-                
+
                 consent_modal = _createNode('div');
                 var consent_modal_inner = _createNode('div');
                 var consent_modal_inner_inner = _createNode('div');
@@ -318,7 +318,7 @@
                 var consent_secondary_btn = _createNode('button');
                 var overlay = _createNode('div');
 
-                consent_modal.id = 'cm'; 
+                consent_modal.id = 'cm';
                 consent_modal_inner.id = 'c-inr';
                 consent_modal_inner_inner.id = 'c-inr-i';
                 consent_title.id = 'c-ttl';
@@ -346,9 +346,9 @@
 
                 // Use insertAdjacentHTML instead of innerHTML
                 consent_title.insertAdjacentHTML('beforeend', conf_params.languages[lang]['consent_modal']['title']);
-                
+
                 consent_text.insertAdjacentHTML('beforeend', description);
-                
+
                 consent_primary_btn[innerText] = conf_params.languages[lang]['consent_modal']['primary_btn']['text'];
                 consent_secondary_btn[innerText] = conf_params.languages[lang]['consent_modal']['secondary_btn']['text'];
 
@@ -380,7 +380,7 @@
                 consent_buttons.appendChild(consent_primary_btn);
                 consent_buttons.appendChild(consent_secondary_btn);
                 consent_modal_inner.appendChild(consent_modal_inner_inner);
-                consent_modal_inner.appendChild(consent_buttons); 
+                consent_modal_inner.appendChild(consent_buttons);
                 consent_modal.appendChild(consent_modal_inner);
 
                 // Append consent modal to main container
@@ -407,7 +407,7 @@
             var settings_close_btn_container = _createNode('div');
             var settings_blocks = _createNode('div');
             var overlay = _createNode('div');
-            
+
             /**
              * Set ids
              */
@@ -434,7 +434,7 @@
             overlay.style.opacity = 0;
 
             settings_close_btn_container.appendChild(settings_close_btn);
-            
+
             // If 'esc' key is pressed inside settings_container div => hide settings
             _addEvent(settings_container_valign, 'keydown', function(evt){
                 evt = evt || window.event;
@@ -457,7 +457,7 @@
 
             // Create settings modal content (blocks)
             for(var i=0; i<n_blocks; ++i){
-                
+
                 // Create title
                 var block_section = _createNode('div');
                 var block_table_container = _createNode('div');
@@ -474,7 +474,7 @@
 
                 // Create toggle if specified (opt in/out)
                 if(typeof all_blocks[i]['toggle'] !== 'undefined'){
-                    
+
                     var accordion_id = "c-ac-"+i;
 
                     // Create button (to collapse/expand block description)
@@ -495,7 +495,7 @@
                     block_switch_span_off_icon.className = 'off-i';
                     block_switch_span.className = 'c-tg';
                     label_text_span.className = "t-lb";
-         
+
                     block_title_btn.setAttribute('aria-expanded', 'false');
                     block_title_btn.setAttribute('aria-controls', accordion_id);
 
@@ -504,8 +504,8 @@
 
                     var cookie_category = all_blocks[i]['toggle'].value;
                     block_switch.value = cookie_category;
-  
-                    label_text_span[innerText] = all_blocks[i]['title']; 
+
+                    label_text_span[innerText] = all_blocks[i]['title'];
                     block_title_btn.insertAdjacentHTML('beforeend', all_blocks[i]['title']);
 
                     block_title_container.appendChild(block_title_btn);
@@ -517,7 +517,7 @@
                      * Otherwise, retrieve values from saved cookie
                      */
                     if(never_accepted){
-                        if(_inArray(saved_cookie_content['level'], cookie_category) > -1){ 
+                        if(_inArray(saved_cookie_content['level'], cookie_category) > -1){
                             block_switch.checked = true;
                             toggle_states.push(true);
                         }else{
@@ -574,8 +574,8 @@
 
                 }else{
                     /**
-                     * If block is not a button (no toggle defined), 
-                     * create a simple div instead 
+                     * If block is not a button (no toggle defined),
+                     * create a simple div instead
                      */
                     var block_title = _createNode('div');
                     block_title.className = 'b-tl';
@@ -587,17 +587,17 @@
 
                 block_section.appendChild(block_title_container);
                 block_table_container.appendChild(block_desc);
-                
+
                 var remove_cookie_tables = conf_params['remove_cookie_tables'] === true;
 
                 // if cookie table found, generate table for this block
                 if(!remove_cookie_tables && typeof all_blocks[i]['cookie_table'] !== 'undefined'){
                     var tr_tmp_fragment = document.createDocumentFragment();
-                    
+
                     /**
                      * Use custom table headers
                      */
-                    for(var p=0; p<all_table_headers.length; ++p){ 
+                    for(var p=0; p<all_table_headers.length; ++p){
                         // create new header
                         var th1 = _createNode('th');
                         var obj = all_table_headers[p];
@@ -617,47 +617,47 @@
                     // create table header & append fragment
                     var thead = _createNode('thead');
                     thead.appendChild(tr_tmp);
-                    
+
                     // append header to table
                     var block_table = _createNode('table');
                     block_table.appendChild(thead);
 
                     var tbody_fragment = document.createDocumentFragment();
-                    
+
                     // create table content
                     for(var n=0; n<all_blocks[i]['cookie_table'].length; n++){
                         var tr = _createNode('tr');
 
-                        for(var g=0; g<all_table_headers.length; ++g){ 
+                        for(var g=0; g<all_table_headers.length; ++g){
                             // get custom header content
                             var obj = all_table_headers[g];
                             if(obj){
                                 var new_column_key = _getKeys(obj)[0];
-                                
+
                                 var td_tmp = _createNode('td');
-                                
+
                                 // Allow html inside table cells
                                 td_tmp.insertAdjacentHTML('beforeend', all_blocks[i]['cookie_table'][n][new_column_key]);
                                 td_tmp.setAttribute('data-column', obj[new_column_key]);
-    
+
                                 tr.appendChild(td_tmp);
                             }
                         }
 
                         tbody_fragment.appendChild(tr);
                     }
-                    
+
                     // append tbody_fragment to tbody & append the latter into the table
-                    var tbody = _createNode('tbody'); 
+                    var tbody = _createNode('tbody');
                     tbody.appendChild(tbody_fragment);
                     block_table.appendChild(tbody);
 
                     //block_section.appendChild(block_table);
-                    block_table_container.appendChild(block_table); 
+                    block_table_container.appendChild(block_table);
                 }
 
                 block_section.appendChild(block_table_container);
-    
+
                 // append block inside settings dom
                 settings_blocks.appendChild(block_section);
             }
@@ -666,7 +666,7 @@
             var settings_buttons = _createNode('div');
             var settings_save_btn = _createNode('button');
             var settings_accept_all_btn = _createNode('button');
-            
+
             settings_buttons.id = 's-bns';
             settings_save_btn.id = 's-sv-bn';
             settings_accept_all_btn.id = 's-all-bn';
@@ -674,7 +674,7 @@
             settings_accept_all_btn.className ='c-bn';
             settings_save_btn.insertAdjacentHTML('beforeend', conf_params.languages[_config.current_lang]['settings_modal']['save_settings_btn']);
             settings_accept_all_btn.insertAdjacentHTML('beforeend', conf_params.languages[_config.current_lang]['settings_modal']['accept_all_btn']);
-            
+
             settings_buttons.appendChild(settings_accept_all_btn);
 
             var reject_all_btn_text = conf_params.languages[_config.current_lang]['settings_modal']['reject_all_btn'];
@@ -686,7 +686,7 @@
                 reject_all_btn.id = 's-rall-bn';
                 reject_all_btn.className = 'c-bn';
                 reject_all_btn.insertAdjacentHTML('beforeend', reject_all_btn_text);
-                
+
                 _addEvent(reject_all_btn, 'click', function(){
                     _cookieconsent.hideSettings();
                     _cookieconsent.hide();
@@ -698,8 +698,8 @@
             }
 
             settings_buttons.appendChild(settings_save_btn);
-            
-            // Add save preferences button onClick event 
+
+            // Add save preferences button onClick event
             // Hide both settings modal and consent modal
             _addEvent(settings_save_btn, 'click', function(){
                 _cookieconsent.hideSettings();
@@ -715,12 +715,12 @@
 
             settings_header.appendChild(settings_title);
             settings_header.appendChild(settings_close_btn_container);
-  
+
             settings_inner.appendChild(settings_header);
             settings_inner.appendChild(settings_blocks);
             settings_inner.appendChild(settings_buttons);
             settings_container_inner.appendChild(settings_inner);
-        
+
             settings.appendChild(settings_container_inner);
             settings_container_valign.appendChild(settings);
             settings_container.appendChild(settings_container_valign);
@@ -737,11 +737,11 @@
          * @param {string[]} accepted_categories - Array of categories to accept
          */
         var _saveCookiePreferences = function(accepted_categories){
-            
+
             // Retrieve all toggle/checkbox values
             var category_toggles = document.querySelectorAll('.c-tgl') || [];
             var changedSettings = [], must_reload = false;
-            
+
             // If there are opt in/out toggles ...
             if(category_toggles.length > 0){
 
@@ -765,7 +765,7 @@
                  * If autoclear_cookies==true -> delete all cookies which are unused (based on selected preferences)
                  */
                 if(_config.autoclear_cookies && cookie_consent_accepted && changedSettings.length > 0){
-                    
+
                     // Get number of blocks
                     var len = all_blocks.length;
                     var count = -1;
@@ -791,19 +791,19 @@
 
                         // If current block has a toggle for opt in/out
                         if(curr_block.hasOwnProperty('toggle')){
-                            
-                            // if current block has a cookie table, an off toggle, 
+
+                            // if current block has a cookie table, an off toggle,
                             // and its preferences were just changed => delete cookies
                             if(
-                                !toggle_states[++count] && 
-                                curr_block.hasOwnProperty('cookie_table') && 
+                                !toggle_states[++count] &&
+                                curr_block.hasOwnProperty('cookie_table') &&
                                 _inArray(changedSettings, curr_block['toggle']['value']) > -1
                             ){
                                 var curr_cookie_table = curr_block['cookie_table'];
 
                                 // Get first property name
                                 var ckey = _getKeys(all_table_headers[0])[0];
-                                
+
                                 // Get number of cookies defined in cookie_table
                                 var clen = curr_cookie_table.length;
 
@@ -812,7 +812,7 @@
 
                                 // for each row defined in the cookie table
                                 for(var hk=0; hk<clen; hk++){
-                                    
+
                                     // Get current row of table (corresponds to all cookie params)
                                     var curr_row = curr_cookie_table[hk], found_cookies = [];
                                     var curr_cookie_name = curr_row[ckey];
@@ -836,21 +836,21 @@
                                     }
 
                                     _log("CookieConsent [AUTOCLEAR]: search cookie: '" + curr_cookie_name + "', found:", found_cookies);
-                                    
+
                                     // If cookie exists -> delete it
                                     if(found_cookies.length > 0){
                                         _eraseCookies(found_cookies, curr_cookie_path, domains);
                                         curr_block['toggle']['reload'] === 'on_clear' && (must_reload = true);
                                     }
                                 }
-                            }  
+                            }
                         }
                     }
                 }
             }
 
             saved_cookie_content = {
-                "level" : accepted_categories,
+                "level": accepted_categories,
                 "revision": _config.revision,
                 "data": data,
                 "rfc_cookie": _config.use_rfc_cookie
@@ -888,44 +888,44 @@
 
         /**
          * Load style via ajax in background (and then show modal)
-         * @param {string} css_path 
+         * @param {string} css_path
          * @param {cssLoaded} callback
          */
         var _loadCSS = function(css_path, callback){
 
             // Enable if given path is string and non empty
             var enable = typeof css_path === 'string' && css_path != "";
-            
+
             if(enable && !document.getElementById('cc--style')){
 
                 // Create style tag
                 var style = _createNode('style');
-                
+
                 // ad an id so that in SPA apps (react-like) the style doesn't get loaded multiple times when plugin is called
                 style.id = 'cc--style';
-                
+
                 var xhr = new XMLHttpRequest();
-                
+
                 xhr.onreadystatechange = function() {
                     if(this.readyState == 4 && this.status == 200){
 
                         // Necessary for <IE9
                         style.setAttribute('type', 'text/css');
-                        
+
                         if(style.styleSheet){ // if <IE9
                             style.styleSheet.cssText = this.responseText;
                         }else{ // all other browsers
-                            style.appendChild(document.createTextNode(this.responseText)); 
+                            style.appendChild(document.createTextNode(this.responseText));
                         }
 
                         // Append css text content
                         document.getElementsByTagName('head')[0].appendChild(style);
                         _log("CookieConsent [AUTOLOAD_CSS]: loaded style = '"+ css_path + "'");
 
-                        callback(); 
+                        callback();
                     }
                 };
-                  
+
                 xhr.open("GET", css_path);
                 xhr.send();
             }else{
@@ -935,7 +935,7 @@
 
         /**
          * Returns index of found element inside array, otherwise -1
-         * @param {Array} arr 
+         * @param {Array} arr
          * @param {Object} value
          * @returns {number}
          */
@@ -943,15 +943,15 @@
             var len = arr.length;
             for(var i=0; i<len; i++){
                 if(arr[i] == value)
-                    return i;  
+                    return i;
             }
             return -1;
         }
 
         /**
          * Helper function which prints info (console.log())
-         * @param {Object} print_msg 
-         * @param {Object} optional_param 
+         * @param {Object} print_msg
+         * @param {Object} optional_param
          */
         var _log = function(print_msg, optional_param, error){
             ENABLE_LOGS && (!error ? console.log(print_msg, optional_param !== undefined ? optional_param : ' ') : console.error(print_msg, optional_param || ""));
@@ -959,7 +959,7 @@
 
         /**
          * Helper function which creates an HTMLElement object based on 'type' and returns it.
-         * @param {string} type 
+         * @param {string} type
          * @returns {HTMLElement}
          */
         var _createNode = function(type){
@@ -969,7 +969,7 @@
             }
             return el;
         }
-        
+
         /**
          * Get current client's browser language
          * @returns {string}
@@ -982,16 +982,16 @@
         }
 
         /**
-         * Trap focus inside modal and focus the first 
+         * Trap focus inside modal and focus the first
          * focusable element of current active modal
          */
         var _handleFocusTrap = function(){
             var tabbedOutsideDiv = false;
             var tabbedInsideModal = false;
-            
+
             _addEvent(document, 'keydown', function(e){
                 e = e || window.event;
-                
+
                 // If is tab key => ok
                 if(e.key !== 'Tab') return;
 
@@ -1001,7 +1001,7 @@
                     if(e.shiftKey){
                         if (document.activeElement === current_modal_focusable[0]) {
                             current_modal_focusable[1].focus();
-                            e.preventDefault();         
+                            e.preventDefault();
                         }
                     }else{
                         if (document.activeElement === current_modal_focusable[1]) {
@@ -1045,7 +1045,7 @@
                     /**
                      * If click is on the foreground overlay (and not inside settings_modal),
                      * hide settings modal
-                     * 
+                     *
                      * Notice: click on div is not supported in IE
                      */
                     if(settings_modal_visible){
@@ -1060,14 +1060,14 @@
                             clicked_inside_modal = true;
                         }
                     }
-                    
+
                 }, true);
-            } 
+            }
         }
 
         /**
          * Manage each modal's layout
-         * @param {Object} gui_options 
+         * @param {Object} gui_options
          */
         var _guiManager = function(gui_options, only_consent_modal){
 
@@ -1078,24 +1078,24 @@
             var settings_modal_options = gui_options['settings_modal'];
 
             /**
-             * Helper function which adds layout and 
+             * Helper function which adds layout and
              * position classes to given modal
-             * 
-             * @param {HTMLElement} modal 
-             * @param {string[]} allowed_layouts 
-             * @param {string[]} allowed_positions 
-             * @param {string} layout 
+             *
+             * @param {HTMLElement} modal
+             * @param {string[]} allowed_layouts
+             * @param {string[]} allowed_positions
+             * @param {string} layout
              * @param {string[]} position
              */
             function _setLayout(modal, allowed_layouts, allowed_positions, allowed_transitions, layout, position, transition){
-                position = position && position.split(" ") || []; 
+                position = position && position.split(" ") || [];
 
                 // Check if specified layout is valid
                 if(_inArray(allowed_layouts, layout) > -1){
 
                     // Add layout classes
                     _addClass(modal, layout);
-                    
+
                     // Add position class (if specified)
                     if(!(layout === 'bar' && position[0] === 'middle') && _inArray(allowed_positions, position[0]) > -1){
                         for(var i=0; i<position.length; i++){
@@ -1103,11 +1103,11 @@
                         }
                     }
                 }
-                
+
                 // Add transition class
                 (_inArray(allowed_transitions, transition) > -1) && _addClass(modal, transition);
             }
-            
+
             if(consent_modal_exists && consent_modal_options){
                 _setLayout(
                     consent_modal,
@@ -1132,15 +1132,15 @@
                 );
             }
         }
-        
+
         /**
          * Returns true if cookie category is accepted by the user
-         * @param {string} cookie_category 
+         * @param {string} cookie_category
          * @returns {boolean}
          */
         _cookieconsent.allowedCategory = function(cookie_category){
             return _inArray(
-                JSON.parse(_getCookie(_config.cookie_name, 'one', true) || '{}')['level'] || [] , 
+                JSON.parse(_getCookie(_config.cookie_name, 'one', true) || '{}')['level'] || [] ,
                 cookie_category
             ) > -1;
         }
@@ -1163,8 +1163,8 @@
                 data = saved_cookie_content['data'] !== undefined ? saved_cookie_content['data'] : null;
 
                 // Compare current revision with the one retrieved from cookie
-                valid_revision = typeof conf_params['revision'] === "number" 
-                    ? cookie_consent_accepted 
+                valid_revision = typeof conf_params['revision'] === "number"
+                    ? cookie_consent_accepted
                         ? conf_params['revision'] > -1
                             ? saved_cookie_content['revision'] === _config.revision
                             : true
@@ -1195,7 +1195,7 @@
 
                 if(cookie_consent_accepted && valid_revision){
                     var rfc_prop_exists = typeof saved_cookie_content['rfc_cookie'] === "boolean";
-                    
+
                     /*
                      * Convert cookie to rfc format (if `use_rfc_cookie` is enabled)
                      */
@@ -1216,7 +1216,7 @@
 
         /**
          * Show settings modal (with optional delay)
-         * @param {number} delay 
+         * @param {number} delay
          */
         _cookieconsent.showSettings = function(delay){
             setTimeout(function() {
@@ -1250,7 +1250,7 @@
         }
 
         /**
-         * This function handles the loading/activation logic of the already 
+         * This function handles the loading/activation logic of the already
          * existing scripts based on the current accepted cookie categories
          */
         var _manageExistingScripts = function(){
@@ -1274,19 +1274,19 @@
 
                     var curr_script = scripts[index];
                     var curr_script_category = curr_script.getAttribute(_config.script_selector);
-                    
+
                     /**
                      * If current script's category is on the array of categories
                      * accepted by the user => load script
                      */
                     if(_inArray(accepted_categories, curr_script_category) > -1){
-                        
+
                         curr_script.type = 'text/javascript';
                         curr_script.removeAttribute(_config.script_selector);
-                        
+
                         // get current script data-src
                         var src = curr_script.getAttribute('data-src');
-                        
+
                         // create fresh script (with the same code)
                         var fresh_script = _createNode('script');
                         fresh_script.textContent = curr_script.innerHTML;
@@ -1300,7 +1300,7 @@
                                 destination.setAttribute(attr.nodeName, attr.nodeValue);
                             }
                         })(fresh_script, curr_script);
-                        
+
                         // set src (if data-src found)
                         src ? (fresh_script.src = src) : (src = curr_script.src);
 
@@ -1308,7 +1308,7 @@
                         // try loading it sequentially
                         if(src){
                             if(sequential_enabled){
-                                // load script sequentially => the next script will not be loaded 
+                                // load script sequentially => the next script will not be loaded
                                 // until the current's script onload event triggers
                                 if(fresh_script.readyState) {  // only required for IE <9
                                     fresh_script.onreadystatechange = function() {
@@ -1350,7 +1350,7 @@
 
         /**
          * Save custom data inside cookie
-         * @param {object|string} new_data 
+         * @param {object|string} new_data
          * @param {string} [mode]
          * @returns {boolean}
          */
@@ -1373,7 +1373,7 @@
                             data[prop] = new_data[prop]
                             set = true;
                         }
-                    }     
+                    }
                 }else if((same_type || !data) && data !== new_data){
                     data = new_data;
                     set = true;
@@ -1382,7 +1382,7 @@
                 data = new_data;
                 set = true;
             }
-                
+
             set && (
                 saved_cookie_content['data'] = data,
                 _setCookie(_config.cookie_name, JSON.stringify(saved_cookie_content))
@@ -1402,7 +1402,7 @@
             // If plugin has been initialized and new revision is valid
             if(
                 main_container
-                && typeof new_revision === "number" 
+                && typeof new_revision === "number"
                 && saved_cookie_content['revision'] !== new_revision
             ){
 
@@ -1424,14 +1424,14 @@
 
                 return true;
             }
-            
+
             return false;
         }
 
         /**
          * Helper method to set a variety of fields
-         * @param {string} field 
-         * @param {object} data 
+         * @param {string} field
+         * @param {object} data
          * @returns {boolean}
          */
         _cookieconsent.set = function(field, data){
@@ -1468,16 +1468,16 @@
 
             // Load script only if not already loaded
             if(!document.querySelector('script[src="' + src + '"]')){
-                
+
                 var script = _createNode('script');
-                
+
                 // if an array is provided => add custom attributes
                 if(attrs && attrs.length > 0){
                     for(var i=0; i<attrs.length; ++i){
                         attrs[i] && script.setAttribute(attrs[i]['name'], attrs[i]['value']);
                     }
                 }
-                
+
                 // if callback function defined => run callback onload
                 if(function_defined){
                     if(script.readyState) {  // only required for IE <9
@@ -1493,7 +1493,7 @@
                 }
 
                 script.src = src;
-                
+
                 /**
                  * Append script to head
                  */
@@ -1505,7 +1505,7 @@
 
         /**
          * Show cookie consent modal (with delay parameter)
-         * @param {number} delay 
+         * @param {number} delay
          */
         _cookieconsent.show = function(delay){
             if(consent_modal_exists){
@@ -1522,7 +1522,7 @@
                         last_elem_before_modal = document.activeElement;
                         current_modal_focusable = consent_modal_focusable;
                     }, 200);
-                    
+
                     _log("CookieConsent [MODAL]: show consent_modal");
                 }, delay > 0 ? delay : 0);
             }
@@ -1531,7 +1531,7 @@
         /**
          * Hide consent modal
          */
-        _cookieconsent.hide = function(){ 
+        _cookieconsent.hide = function(){
             if(consent_modal_exists){
                 _removeClass(html_dom, "show--consent");
                 consent_modal.setAttribute('aria-hidden', 'true');
@@ -1554,7 +1554,7 @@
             _removeClass(html_dom, "show--settings");
             settings_modal_visible = false;
             settings_container.setAttribute('aria-hidden', 'true');
-            
+
 
             setTimeout(function(){
                 /**
@@ -1573,7 +1573,7 @@
 
                 clicked_inside_modal = false;
             }, 200);
-            
+
             _log("CookieConsent [SETTINGS]: hide settings_modal");
         }
 
@@ -1607,7 +1607,7 @@
                 to_accept = _getCurrentPreferences();
             }else{
                 if(
-                    typeof categories === "object" && 
+                    typeof categories === "object" &&
                     typeof categories.length === "number"
                 ){
                     for(var i=0; i<categories.length; i++){
@@ -1636,20 +1636,20 @@
             // Add back all the categories set as "readonly/required"
             for(var i=0;i<toggle_categories.length; i++){
                 if(
-                    toggle_readonly[i] === true && 
+                    toggle_readonly[i] === true &&
                     _inArray(to_accept, toggle_categories[i]) === -1
                 ){
                     to_accept.push(toggle_categories[i]);
                 }
             }
-            
+
             _saveCookiePreferences(to_accept);
         }
 
         /**
          * API function to easily erase cookies
-         * @param {(string|string[])} _cookies 
-         * @param {string} [_path] - optional 
+         * @param {(string|string[])} _cookies
+         * @param {string} [_path] - optional
          * @param {string} [_domain] - optional
          */
         _cookieconsent.eraseCookies = function(_cookies, _path, _domain){
@@ -1665,14 +1665,14 @@
             }else{
                 this.validCookie(_cookies) && cookies.push(_cookies);
             }
-            
+
             _eraseCookies(cookies, _path, domains);
         }
 
         /**
          * Set cookie, by specifying name and value
-         * @param {string} name 
-         * @param {string} value 
+         * @param {string} name
+         * @param {string} value
          */
         var _setCookie = function(name, value) {
 
@@ -1703,7 +1703,7 @@
          * Get cookie value by name,
          * returns the cookie value if found (or an array
          * of cookies if filter provided), otherwise empty string: ""
-         * @param {string} name 
+         * @param {string} name
          * @param {string} filter - 'one' or 'all'
          * @param {boolean} get_value - set to true to obtain its value
          * @returns {string|string[]}
@@ -1715,9 +1715,9 @@
                 found = (found = document.cookie.match("(^|;)\\s*" + name + "\\s*=\\s*([^;]+)")) ? (get_value ? found.pop() : name) : "";
 
                 if(found && name === _config.cookie_name){
-                    try{ 
+                    try{
                         found = JSON.parse(found)
-                    }catch(e){ 
+                    }catch(e){
                         found = JSON.parse(decodeURIComponent(found))
                     }
                     found = JSON.stringify(found);
@@ -1735,7 +1735,7 @@
 
         /**
          * Delete cookie by name & path
-         * @param {string[]} cookies 
+         * @param {string[]} cookies
          * @param {string} [custom_path] - optional
          * @param {string[]} domains - example: ['domain.com', '.domain.com']
          */
@@ -1745,7 +1745,7 @@
 
             for(var i=0; i<cookies.length; i++){
                 for(var j=0; j<domains.length; j++){
-                    document.cookie = cookies[i] + '=; path=' + path + 
+                    document.cookie = cookies[i] + '=; path=' + path +
                     (domains[j].indexOf('.') > -1 ? '; domain=' + domains[j] : "") + '; ' + expires;
                 }
                 _log("CookieConsent [AUTOCLEAR]: deleting cookie: '" + cookies[i] + "' path: '" + path + "' domain:", domains);
@@ -1755,7 +1755,7 @@
         /**
          * Returns true if cookie was found and has valid value (not empty string)
          * @param {string} cookie_name
-         * @returns {boolean} 
+         * @returns {boolean}
          */
         _cookieconsent.validCookie = function(cookie_name){
             return _getCookie(cookie_name, 'one', true) != "";
@@ -1768,14 +1768,14 @@
 
         /**
          * Add event listener to dom object (cross browser function)
-         * @param {Element} elem 
+         * @param {Element} elem
          * @param {string} event
          * @param {eventFired} fn
          * @param {boolean} passive
          */
         var _addEvent = function(elem, event, fn, passive) {
             var passive = passive || false;
-            
+
             if (elem.addEventListener) {
                 passive ? elem.addEventListener(event, fn , { passive: true }) : elem.addEventListener(event, fn, false);
             } else {
@@ -1789,7 +1789,7 @@
 
         /**
          * Get all prop. keys defined inside object
-         * @param {Object} obj 
+         * @param {Object} obj
          */
         var _getKeys = function(obj){
             if(typeof obj === "object"){
@@ -1801,8 +1801,8 @@
 
         /**
          * Append class to the specified dom element
-         * @param {HTMLElement} elem 
-         * @param {string} classname 
+         * @param {HTMLElement} elem
+         * @param {string} classname
          */
         var _addClass = function (elem, classname){
             if(elem.classList)
@@ -1815,8 +1815,8 @@
 
         /**
          * Remove specified class from dom element
-         * @param {HTMLElement} elem 
-         * @param {string} classname 
+         * @param {HTMLElement} elem
+         * @param {string} classname
          */
         var _removeClass = function (el, className) {
             el.classList ? el.classList.remove(className) : el.className = el.className.replace(new RegExp('(\\s|^)' + className + '(\\s|$)'), ' ');
@@ -1824,8 +1824,8 @@
 
         /**
          * Check if html element has class
-         * @param {HTMLElement} el 
-         * @param {string} className 
+         * @param {HTMLElement} el
+         * @param {string} className
          */
         var _hasClass = function(el, className) {
             if (el.classList) {
