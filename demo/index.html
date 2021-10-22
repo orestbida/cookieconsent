@@ -10,33 +10,33 @@
     <link rel="apple-touch-icon" href="https://orestbida.com/favicon.png">
     <link rel="stylesheet" type="text/css" href="assets/css/style.css">
     <script>
-        function doDemoThings(cookie){
+        function doDemoThings(cookie) {
             disableBtn('btn2');
             disableBtn('btn3');
 
             // Delete line below
-		    cookie && (document.getElementById("cookie_val").innerHTML = JSON.stringify(cookie, null, 2));
+            cookie && (document.getElementById('cookie_val').innerHTML = JSON.stringify(cookie, null, 2));
         }
 
-        function disableBtn(id){
+        function disableBtn(id) {
             document.getElementById(id).disabled = true;
-            document.getElementById(id).className = "styled_btn disabled";
+            document.getElementById(id).className = 'styled_btn disabled';
         }
 
-        window.addEventListener && window.addEventListener('load', function(){
+        window.addEventListener && window.addEventListener('load', function () {
 
             doDemoThings();
 
             var darkmode = false;
 
-            function toggleDarkmode(){
-                if(!darkmode){
+            function toggleDarkmode() {
+                if (!darkmode) {
                     document.getElementById('theme').innerText = 'dark theme';
-                    document.body.className='d_mode c_darkmode';
+                    document.body.className = 'd_mode c_darkmode';
                     darkmode = true;
-                }else{
+                } else {
                     document.getElementById('theme').innerText = 'light theme';
-                    document.body.className='d_mode';
+                    document.body.className = 'd_mode';
                     darkmode = false;
                 }
             }
@@ -44,37 +44,37 @@
             /*
             * The following lines of code are for demo purposes (show api functions)
             */
-            if(document.addEventListener){
+            if (document.addEventListener) {
 
-                document.getElementById("btn2").addEventListener('click', function(){
+                document.getElementById('btn2').addEventListener('click', function () {
                     cc.show(0);
                 });
 
-                document.getElementById("btn3").addEventListener('click', function(){
+                document.getElementById('btn3').addEventListener('click', function () {
                     cc.hide();
                 });
 
-                document.getElementById("btn5").addEventListener('click', function(){
-                    cc.showSettings(0);  
+                document.getElementById('btn5').addEventListener('click', function () {
+                    cc.showSettings(0);
                 });
 
-                document.getElementById("btn6").addEventListener('click', function(){
+                document.getElementById('btn6').addEventListener('click', function () {
                     toggleDarkmode();
                 });
-            }else{
-                document.getElementById("btn2").attachEvent('onclick', function(){
+            } else {
+                document.getElementById('btn2').attachEvent('onclick', function () {
                     cc.show(0);
                 });
 
-                document.getElementById("btn3").attachEvent('onclick', function(){
+                document.getElementById('btn3').attachEvent('onclick', function () {
                     cc.hide();
                 });
 
-                document.getElementById("btn5").attachEvent('onclick', function(){
-                    cc.showSettings(0);  
+                document.getElementById('btn5').attachEvent('onclick', function () {
+                    cc.showSettings(0);
                 });
 
-                document.getElementById("btn6").attachEvent('onclick', function(){
+                document.getElementById('btn6').attachEvent('onclick', function () {
                     toggleDarkmode();
                 });
             }
@@ -102,7 +102,7 @@
                 <div id="app_settings">
                     <h3>Current settings</h3>
                     <p class="_theme">Current theme: <span id="theme">light theme</span></p>
-                    <p class="_cookie_value">Current cookie_value: </p>   
+                    <p class="_cookie_value">Current cookie_value: </p>
                     <code id="cookie">
                         <pre id="cookie_val"></pre>
                     </code>
