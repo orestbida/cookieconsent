@@ -1,5 +1,5 @@
 /*!
- * CookieConsent v2.6.1
+ * CookieConsent v2.6.2
  * https://www.github.com/orestbida/cookieconsent
  * Author Orest Bida
  * Released under the MIT License
@@ -22,7 +22,7 @@
             autorun: true,                          // run as soon as loaded
             cookie_name: 'cc_cookie',
             cookie_expiration: 182,                 // default: 6 months (in days)
-            cookie_domain: location.hostname,       // default: current domain
+            cookie_domain: window.location.hostname,       // default: current domain
             cookie_path: '/',
             cookie_same_site: 'Lax',
             use_rfc_cookie: false,
@@ -100,50 +100,40 @@
         var _setConfig = function(conf_params){
             _log("CookieConsent [CONFIG]: received_config_settings ", conf_params);
 
-            if(typeof conf_params['cookie_expiration'] === "number"){
+            if(typeof conf_params['cookie_expiration'] === "number")
                 _config.cookie_expiration = conf_params['cookie_expiration'];
-            }
 
-            if(typeof conf_params['autorun'] === "boolean"){
+            if(typeof conf_params['autorun'] === "boolean")
                 _config.autorun = conf_params['autorun'];
-            }
 
-            if(typeof conf_params['cookie_domain'] === "string"){
+            if(typeof conf_params['cookie_domain'] === "string")
                 _config.cookie_domain = conf_params['cookie_domain'];
-            }
 
-            if(typeof conf_params['cookie_same_site'] === "string"){
+            if(typeof conf_params['cookie_same_site'] === "string")
                 _config.cookie_same_site = conf_params['cookie_same_site'];
-            }
 
-            if(typeof conf_params['cookie_path'] === "string"){
+            if(typeof conf_params['cookie_path'] === "string")
                 _config.cookie_path = conf_params['cookie_path'];
-            }
 
-            if(typeof conf_params['cookie_name'] === "string"){
+            if(typeof conf_params['cookie_name'] === "string")
                 _config.cookie_name = conf_params['cookie_name'];
-            }
 
-            if(typeof conf_params['onAccept'] === "function"){
+            if(typeof conf_params['onAccept'] === "function")
                 onAccept = conf_params['onAccept'];
-            }
 
-            if(typeof conf_params['onChange'] === "function"){
+            if(typeof conf_params['onChange'] === "function")
                 onChange = conf_params['onChange'];
-            }
 
             if(typeof conf_params['revision'] === "number"){
                 conf_params['revision'] > -1 && (_config.revision = conf_params['revision']);
                 revision_enabled = true;
             }
 
-            if(conf_params['autoclear_cookies'] === true){
+            if(conf_params['autoclear_cookies'] === true)
                 _config.autoclear_cookies = true;
-            }
 
-            if(conf_params['use_rfc_cookie'] === true){
+            if(conf_params['use_rfc_cookie'] === true)
                 _config.use_rfc_cookie = true;
-            }
 
             if(conf_params['hide_from_bots'] === true){
                 is_bot = navigator &&
@@ -156,9 +146,8 @@
             if(conf_params['auto_language'] === true){
                 _config.current_lang = _getValidatedLanguage(_getBrowserLang(), conf_params.languages);
             }else{
-                if(typeof conf_params['current_lang'] === "string"){
+                if(typeof conf_params['current_lang'] === "string")
                     _config.current_lang = _getValidatedLanguage(conf_params['current_lang'], conf_params.languages);
-                }
             }
 
             _log("CookieConsent [LANG]: setting current_lang = '" + _config.current_lang + "'");
@@ -186,10 +175,10 @@
          * @returns {string} validated language
          */
         var _getValidatedLanguage = function(lang, all_languages){
-            if(all_languages.hasOwnProperty(lang)){
+            if(Object.prototype.hasOwnProperty.call(all_languages, lang)){
                 return lang;
             }else if(_getKeys(all_languages).length > 0){
-                if(all_languages.hasOwnProperty(_config.current_lang)){
+                if(Object.prototype.hasOwnProperty.call(all_languages, _config.current_lang)){
                     return _config.current_lang ;
                 }else{
                     return _getKeys(all_languages)[0];
@@ -354,7 +343,7 @@
 
                 var accept_type;   // accept current selection
 
-                if(conf_params.languages[lang]['consent_modal']['primary_btn']['role'] == 'accept_all'){
+                if(conf_params.languages[lang]['consent_modal']['primary_btn']['role'] === 'accept_all'){
                     accept_type = 'all';    // accept all
                 }
 
@@ -364,7 +353,7 @@
                     _cookieconsent.accept(accept_type);
                 });
 
-                if(conf_params.languages[lang]['consent_modal']['secondary_btn']['role'] == 'accept_necessary'){
+                if(conf_params.languages[lang]['consent_modal']['secondary_btn']['role'] === 'accept_necessary'){
                     _addEvent(consent_secondary_btn, 'click', function(){
                         _cookieconsent.hide();
                         _cookieconsent.accept([]); // accept necessary only
@@ -438,7 +427,7 @@
             // If 'esc' key is pressed inside settings_container div => hide settings
             _addEvent(settings_container_valign, 'keydown', function(evt){
                 evt = evt || window.event;
-                if (evt.keyCode == 27) {
+                if (evt.keyCode === 27) {
                     _cookieconsent.hideSettings(0);
                 }
             }, true);
@@ -630,9 +619,9 @@
 
                         for(var g=0; g<all_table_headers.length; ++g){
                             // get custom header content
-                            var obj = all_table_headers[g];
+                            obj = all_table_headers[g];
                             if(obj){
-                                var new_column_key = _getKeys(obj)[0];
+                                new_column_key = _getKeys(obj)[0];
 
                                 var td_tmp = _createNode('td');
 
@@ -790,13 +779,13 @@
                         var curr_block = all_blocks[jk];
 
                         // If current block has a toggle for opt in/out
-                        if(curr_block.hasOwnProperty('toggle')){
+                        if(Object.prototype.hasOwnProperty.call(curr_block, "toggle")){
 
                             // if current block has a cookie table, an off toggle,
                             // and its preferences were just changed => delete cookies
                             if(
                                 !toggle_states[++count] &&
-                                curr_block.hasOwnProperty('cookie_table') &&
+                                Object.prototype.hasOwnProperty.call(curr_block, "cookie_table") &&
                                 _inArray(changedSettings, curr_block['toggle']['value']) > -1
                             ){
                                 var curr_cookie_table = curr_block['cookie_table'];
@@ -894,7 +883,7 @@
         var _loadCSS = function(css_path, callback){
 
             // Enable if given path is string and non empty
-            var enable = typeof css_path === 'string' && css_path != "";
+            var enable = typeof css_path === 'string' && css_path !== "";
 
             if(enable && !document.getElementById('cc--style')){
 
@@ -907,7 +896,7 @@
                 var xhr = new XMLHttpRequest();
 
                 xhr.onreadystatechange = function() {
-                    if(this.readyState == 4 && this.status == 200){
+                    if(this.readyState === 4 && this.status === 200){
 
                         // Necessary for <IE9
                         style.setAttribute('type', 'text/css');
@@ -942,7 +931,7 @@
         var _inArray = function(arr, value){
             var len = arr.length;
             for(var i=0; i<len; i++){
-                if(arr[i] == value)
+                if(arr[i] === value)
                     return i;
             }
             return -1;
@@ -1088,7 +1077,7 @@
              * @param {string[]} position
              */
             function _setLayout(modal, allowed_layouts, allowed_positions, allowed_transitions, layout, position, transition){
-                position = position && position.split(" ") || [];
+                position = (position && position.split(" ")) || [];
 
                 // Check if specified layout is valid
                 if(_inArray(allowed_layouts, layout) > -1){
@@ -1383,10 +1372,10 @@
                 set = true;
             }
 
-            set && (
-                saved_cookie_content['data'] = data,
-                _setCookie(_config.cookie_name, JSON.stringify(saved_cookie_content))
-            )
+            if(set){
+                saved_cookie_content['data'] = data;
+                _setCookie(_config.cookie_name, JSON.stringify(saved_cookie_content));
+            }   
 
             return set;
         }
@@ -1438,6 +1427,7 @@
             switch(field){
                 case 'data': return _setCookieData(data['value'], data['mode']);
                 case 'revision': return _setRevision(data['value'], data['prompt_consent'], data['message']);
+                default: return false;
             }
         }
 
@@ -1626,7 +1616,7 @@
 
             // Remove excluded categories
             if(exclusions.length >= 1){
-                for(var i=0; i<exclusions.length; i++){
+                for(i=0; i<exclusions.length; i++){
                     to_accept = to_accept.filter(function(item) {
                         return item !== exclusions[i]
                     })
@@ -1634,7 +1624,7 @@
             }
 
             // Add back all the categories set as "readonly/required"
-            for(var i=0;i<toggle_categories.length; i++){
+            for(i=0; i<toggle_categories.length; i++){
                 if(
                     toggle_readonly[i] === true &&
                     _inArray(to_accept, toggle_categories[i]) === -1
@@ -1676,7 +1666,7 @@
          */
         var _setCookie = function(name, value) {
 
-            var value = _config.use_rfc_cookie ? encodeURIComponent(value) : value;
+            value = _config.use_rfc_cookie ? encodeURIComponent(value) : value;
 
             var date = new Date();
             date.setTime(date.getTime() + (1000 * ( _config.cookie_expiration * 24 * 60 * 60)));
@@ -1686,11 +1676,11 @@
             cookieStr += " SameSite=" + _config.cookie_same_site + ";";
 
             // assures cookie works with localhost (=> don't specify domain if on localhost)
-            if(location.hostname.indexOf(".") > -1){
+            if(window.location.hostname.indexOf(".") > -1){
                 cookieStr += " Domain=" + _config.cookie_domain + ";";
             }
 
-            if(location.protocol === "https:") {
+            if(window.location.protocol === "https:") {
                 cookieStr += " Secure;";
             }
 
@@ -1712,7 +1702,8 @@
             var found;
 
             if(filter === 'one'){
-                found = (found = document.cookie.match("(^|;)\\s*" + name + "\\s*=\\s*([^;]+)")) ? (get_value ? found.pop() : name) : "";
+                found = document.cookie.match("(^|;)\\s*" + name + "\\s*=\\s*([^;]+)");
+                found = found ? (get_value ? found.pop() : name) : "";
 
                 if(found && name === _config.cookie_name){
                     try{
@@ -1758,7 +1749,7 @@
          * @returns {boolean}
          */
         _cookieconsent.validCookie = function(cookie_name){
-            return _getCookie(cookie_name, 'one', true) != "";
+            return _getCookie(cookie_name, 'one', true) !== "";
         }
 
         /**
@@ -1773,8 +1764,8 @@
          * @param {eventFired} fn
          * @param {boolean} passive
          */
-        var _addEvent = function(elem, event, fn, passive) {
-            var passive = passive || false;
+        var _addEvent = function(elem, event, fn, _passive) {
+            var passive = _passive === true;
 
             if (elem.addEventListener) {
                 passive ? elem.addEventListener(event, fn , { passive: true }) : elem.addEventListener(event, fn, false);
@@ -1794,7 +1785,7 @@
         var _getKeys = function(obj){
             if(typeof obj === "object"){
                 var keys = [], i = 0;
-                for (keys[i++] in obj) {};
+                for (keys[i++] in obj);
                 return keys;
             }
         }
