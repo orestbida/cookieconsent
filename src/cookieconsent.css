@@ -1102,7 +1102,7 @@ html.force--consent.show--consent body{
     #cm.cloud,
     #cm.left,
     #cm.right{
-        width: 100%;
+        width: auto;
         max-width: 100%;
         margin: 0;
         padding: 1.4em!important;
