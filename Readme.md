@@ -1009,6 +1009,48 @@ Note:
     **Check the examples above for a valid implementation.**
     </p>
     </details>
+-   <details><summary>How to use in React</summary>
+    <p>
+
+    1. Create a new component: `CookieConsent.js` 
+
+        ```javascript
+        import { useEffect } from "react";
+
+        import "./<path-to-cookieconsent.css>";
+        import "./<path-to-cookieconsent.js>";
+
+        export default function CookieConsent() {
+            useEffect(() => {
+                const cc = window.initCookieConsent();
+
+                cc.run({
+                    // your config
+                });
+
+            }, []);
+
+            return null;
+        }
+        ```
+
+    2. Import the component only once (generally in your main/root component like `App.js` or `index.js`)
+
+        ```javascript
+        import CookieConsent from "./<path-to-CookieConsent.js-component>";
+
+        export default function App() {
+            return (
+                <div className="App">
+                    <h1>Hello World</h1>
+                    
+                    <CookieConsent/>
+                </div>
+            );
+        }
+        ```
+    </p>
+    </details>
 
 ## License
 Distributed under the MIT License. See [LICENSE](https://github.com/orestbida/cookieconsent/blob/master/LICENSE) for more information.
