@@ -1718,7 +1718,12 @@
                     try{
                         found = JSON.parse(found)
                     }catch(e){
-                        found = JSON.parse(decodeURIComponent(found))
+                        try {
+                            found = JSON.parse(decodeURIComponent(found))
+                        } catch (e) {
+                            // if I got here => cookie value is not a valid json string
+                            found = {};
+                        }
                     }
                     found = JSON.stringify(found);
                 }
