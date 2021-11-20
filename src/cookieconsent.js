@@ -1,5 +1,5 @@
 /*!
- * CookieConsent v2.6.2
+ * CookieConsent v2.7.0-b1
  * https://www.github.com/orestbida/cookieconsent
  * Author Orest Bida
  * Released under the MIT License
@@ -1491,6 +1491,15 @@
             }else{
                 function_defined && callback();
             }
+        }
+
+        /**
+         * Manage dynamically loaded scripts: https://github.com/orestbida/cookieconsent/issues/101
+         * If plugin has already run, call this method to enable 
+         * the newly added scripts based on currently selected preferences 
+         */
+        _cookieconsent.updateScripts = function(){
+            _manageExistingScripts();
         }
 
         /**
