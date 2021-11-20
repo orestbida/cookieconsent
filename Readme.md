@@ -20,7 +20,7 @@ A __lightweight__ & __gdpr compliant__ cookie consent plugin written in plain ja
 1. [Key features](#key-features)
 2. [Installation & Usage](#installation--usage)
 4. [Layout options & customization](#layout-options--customization)
-5. [APIs & config. parameters](#apis--configuration-parameters)
+5. [APIs & config. parameters](#api--configuration-parameters)
 6. [Manage third party scripts](#manage-third-party-scripts)
 7. [Configuration examples](#full-example-configurations)
 8. [How to enable/manage revisions](#how-to-enablemanage-revisions)
