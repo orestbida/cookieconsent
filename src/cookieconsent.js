@@ -1375,7 +1375,7 @@
             if(set){
                 saved_cookie_content['data'] = data;
                 _setCookie(_config.cookie_name, JSON.stringify(saved_cookie_content));
-            }   
+            }
 
             return set;
         }
@@ -1442,6 +1442,14 @@
         }
 
         /**
+         * Read current configuration value
+         * @returns {any}
+         */
+        _cookieconsent.getConfig = function(field){
+            return _config[field];
+        }
+
+        /**
          * Function which will run after script load
          * @callback scriptLoaded
         */
@@ -1495,8 +1503,8 @@
 
         /**
          * Manage dynamically loaded scripts: https://github.com/orestbida/cookieconsent/issues/101
-         * If plugin has already run, call this method to enable 
-         * the newly added scripts based on currently selected preferences 
+         * If plugin has already run, call this method to enable
+         * the newly added scripts based on currently selected preferences
          */
         _cookieconsent.updateScripts = function(){
             _manageExistingScripts();
