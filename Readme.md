@@ -536,6 +536,17 @@ Additional methods for an easier management of your scripts and cookie settings 
     ```
     </p>
     </details>
+- <details><summary>cookieconsent<code>.getConfig(&lt;field&gt;)</code> [v2.7.0+]</summary>
+    <p>
+
+  The `.getConfig()` method allows you to read configuration options from the current instance:
+    ```javascript
+    cookieconsent.getConfig('current_lang');        // get currently used language
+    cookieconsent.getConfig('cookie_expiration');   // get configured cookie expiration
+    // ...
+    ```
+    </p>
+    </details>
 
 
 ### All available options
