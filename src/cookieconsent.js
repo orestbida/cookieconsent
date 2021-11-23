@@ -1,5 +1,5 @@
 /*!
- * CookieConsent v2.7.0-b1
+ * CookieConsent v2.7.0-rc1
  * https://www.github.com/orestbida/cookieconsent
  * Author Orest Bida
  * Released under the MIT License
@@ -1457,10 +1457,12 @@
 
         /**
          * Retrieve data from existing cookie
+         * @param {string} field
+         * @param {string} [cookie_name]
          * @returns {any}
          */
-        _cookieconsent.get = function(field){
-            var cookie = JSON.parse(_getCookie(_config.cookie_name, 'one', true) || "{}");
+        _cookieconsent.get = function(field, cookie_name){
+            var cookie = JSON.parse(_getCookie(cookie_name || _config.cookie_name, 'one', true) || "{}");
 
             return cookie[field];
         }
