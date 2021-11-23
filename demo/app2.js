@@ -11,9 +11,9 @@ cc.run({
     page_scripts: true,                         // default: false
     force_consent: true,                        // default: false
 
-    // auto_language : false,                   // default: false
-    // autorun : true,                          // default: true
-    // delay : 0,                               // default: 0
+    // auto_language: null,                     // default: null; could also be 'browser' or 'document'
+    // autorun: true,                           // default: true
+    // delay: 0,                                // default: 0
     // hide_from_bots: false,                   // default: false
     // remove_cookie_tables: false              // default: false
     // cookie_domain: location.hostname,        // default: current domain

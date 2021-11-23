@@ -218,6 +218,11 @@
     line-height: initial;
 }
 
+/** fix https://github.com/orestbida/cookieconsent/issues/94 **/
+#cc_div #cm {
+    display: block!important;
+}
+
 #c-ttl{
     margin-bottom: .7em;
     font-size: 1.05em;

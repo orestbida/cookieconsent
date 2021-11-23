@@ -1,5 +1,5 @@
 /*!
- * CookieConsent v2.6.2
+ * CookieConsent v2.7.0-rc1
  * https://www.github.com/orestbida/cookieconsent
  * Author Orest Bida
  * Released under the MIT License
@@ -19,6 +19,7 @@
 
         var _config = {
             current_lang: 'en',
+            auto_language: null,
             autorun: true,                          // run as soon as loaded
             cookie_name: 'cc_cookie',
             cookie_expiration: 182,                 // default: 6 months (in days)
@@ -143,14 +144,13 @@
             _config.page_scripts = conf_params['page_scripts'] === true;
             _config.page_scripts_order = conf_params['page_scripts_order'] !== false;
 
-            if(conf_params['auto_language'] === true){
-                _config.current_lang = _getValidatedLanguage(_getBrowserLang(), conf_params.languages);
-            }else{
-                if(typeof conf_params['current_lang'] === "string")
-                    _config.current_lang = _getValidatedLanguage(conf_params['current_lang'], conf_params.languages);
+            if (conf_params['auto_language'] === 'browser' || conf_params['auto_language'] === true) {
+                _config.auto_language = 'browser';
+            } else if (conf_params['auto_language'] === 'document') {
+                _config.auto_language = 'document';
             }
 
-            _log("CookieConsent [LANG]: setting current_lang = '" + _config.current_lang + "'");
+            _config.current_lang = _resolveCurrentLang(conf_params.languages, conf_params['current_lang']);
         }
 
         /**
@@ -940,7 +940,7 @@
         /**
          * Helper function which prints info (console.log())
          * @param {Object} print_msg
-         * @param {Object} optional_param
+         * @param {Object} [optional_param]
          */
         var _log = function(print_msg, optional_param, error){
             ENABLE_LOGS && (!error ? console.log(print_msg, optional_param !== undefined ? optional_param : ' ') : console.error(print_msg, optional_param || ""));
@@ -957,6 +957,30 @@
                 el.setAttribute('type', type);
             }
             return el;
+        }
+
+        /**
+         * Resolve which language should be used.
+         *
+         * @param {Object} languages Object with language translations
+         * @param {string} [requested_language] Language specified by given configuration parameters
+         * @returns {string}
+         */
+        var _resolveCurrentLang = function (languages, requested_language) {
+            _log("CookieConsent [LANG]: auto_language strategy is '" + _config.auto_language + "'");
+
+            if (_config.auto_language === 'browser') {
+                return _getValidatedLanguage(_getBrowserLang(), languages);
+            } else if (_config.auto_language === 'document') {
+                return _getValidatedLanguage(document.documentElement.lang, languages);
+            } else {
+                if (typeof requested_language === 'string') {
+                    return _config.current_lang = _getValidatedLanguage(requested_language, languages);
+                }
+            }
+
+            _log("CookieConsent [LANG]: setting current_lang = '" + _config.current_lang + "'");
+            return _config.current_lang; // otherwise return default
         }
 
         /**
@@ -1375,7 +1399,7 @@
             if(set){
                 saved_cookie_content['data'] = data;
                 _setCookie(_config.cookie_name, JSON.stringify(saved_cookie_content));
-            }   
+            }
 
             return set;
         }
@@ -1433,18 +1457,28 @@
 
         /**
          * Retrieve data from existing cookie
+         * @param {string} field
+         * @param {string} [cookie_name]
          * @returns {any}
          */
-        _cookieconsent.get = function(field){
-            var cookie = JSON.parse(_getCookie(_config.cookie_name, 'one', true) || "{}");
+        _cookieconsent.get = function(field, cookie_name){
+            var cookie = JSON.parse(_getCookie(cookie_name || _config.cookie_name, 'one', true) || "{}");
 
             return cookie[field];
         }
 
         /**
+         * Read current configuration value
+         * @returns {any}
+         */
+        _cookieconsent.getConfig = function(field){
+            return _config[field];
+        }
+
+        /**
          * Function which will run after script load
          * @callback scriptLoaded
-        */
+         */
 
         /**
          * Dynamically load script (append to head)
@@ -1491,6 +1525,15 @@
             }else{
                 function_defined && callback();
             }
+        }
+
+        /**
+         * Manage dynamically loaded scripts: https://github.com/orestbida/cookieconsent/issues/101
+         * If plugin has already run, call this method to enable
+         * the newly added scripts based on currently selected preferences
+         */
+        _cookieconsent.updateScripts = function(){
+            _manageExistingScripts();
         }
 
         /**
@@ -1709,7 +1752,12 @@
                     try{
                         found = JSON.parse(found)
                     }catch(e){
-                        found = JSON.parse(decodeURIComponent(found))
+                        try {
+                            found = JSON.parse(decodeURIComponent(found))
+                        } catch (e) {
+                            // if I got here => cookie value is not a valid json string
+                            found = {};
+                        }
                     }
                     found = JSON.stringify(found);
                 }

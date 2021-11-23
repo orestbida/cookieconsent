@@ -25,7 +25,7 @@ A __lightweight__ & __gdpr compliant__ cookie consent plugin written in plain ja
 1. [Key features](#key-features)
 2. [Installation & Usage](#installation--usage)
 4. [Layout options & customization](#layout-options--customization)
-5. [APIs & config. parameters](#apis--configuration-parameters)
+5. [API & config. parameters](#api--configuration-parameters)
 6. [Manage third party scripts](#manage-third-party-scripts)
 7. [Configuration examples](#full-example-configurations)
 8. [How to enable/manage revisions](#how-to-enablemanage-revisions)
@@ -99,7 +99,7 @@ A __lightweight__ & __gdpr compliant__ cookie consent plugin written in plain ja
                 page_scripts: true,                        // default: false
 
                 // delay: 0,                               // default: 0
-                // auto_language: false,                   // default: false
+                // auto_language: null                     // default: null; could also be 'browser' or 'document'
                 // autorun: true,                          // default: true
                 // force_consent: false,                   // default: false
                 // hide_from_bots: false,                  // default: false
@@ -224,7 +224,7 @@ A __lightweight__ & __gdpr compliant__ cookie consent plugin written in plain ja
                         page_scripts: true,                        // default: false
 
                         // delay: 0,                               // default: 0
-                        // auto_language: false,                   // default: false
+                        // auto_language: '',                      // default: null; could also be 'browser' or 'document'
                         // autorun: true,                          // default: true
                         // force_consent: false,                   // default: false
                         // hide_from_bots: false,                  // default: false
@@ -341,7 +341,7 @@ cookieconsent.run({
         consent_modal: {
             layout: 'cloud',               // box/cloud/bar
             position: 'bottom center',     // bottom/middle/top + left/right/center
-            transition: 'slide'             // zoom/slide
+            transition: 'slide'            // zoom/slide
         },
         settings_modal: {
             layout: 'box',                 // box/bar
@@ -353,6 +353,10 @@ cookieconsent.run({
 });
 ```
 <i>Default layout is `box` and default transition is `zoom`.</i>
+
+#### Note: if `force_consent` option is not enabled, the `middle` position will be ignored
+
+<br>
 
 ## Manage third party scripts
 You can easily manage third party scripts (enable/disable based on user's preferences) via the `page_scripts` option:
@@ -432,7 +436,7 @@ Additional methods for an easier management of your scripts and cookie settings 
     // ...
     toggle: {
         value: 'analytics',     // cookie category
-        enabled : false,        // default status
+        enabled: false,         // default status
         readonly: false         // allow to enable/disable
         // reload: 'on_disable',   // allows to reload page when the current cookie category is deselected
     }
@@ -541,6 +545,17 @@ Additional methods for an easier management of your scripts and cookie settings 
     ```
     </p>
     </details>
+- <details><summary>cookieconsent<code>.getConfig(&lt;field&gt;)</code> [v2.7.0+]</summary>
+    <p>
+
+  The `.getConfig()` method allows you to read configuration options from the current instance:
+    ```javascript
+    cookieconsent.getConfig('current_lang');        // get currently used language
+    cookieconsent.getConfig('cookie_expiration');   // get configured cookie expiration
+    // ...
+    ```
+    </p>
+    </details>
 
 
 ### All available options
@@ -558,7 +573,7 @@ Below a table which sums up all of the available options (must be passed to the 
 | `force_consent`       | boolean   | false     | Enable if you want to block page navigation until user action (check [faq](#faq) for a proper implementation) |
 | `revision`            | number  	| 0   	    | Specify this option to enable revisions. [Check below](#how-to-enablemanage-revisions) for a proper usage |
 | `current_lang`      	| string   	| -       	| Specify one of the languages you have defined (can also be dynamic): `'en'`, `'de'` ...                                           |
-| `auto_language`     	| boolean  	| false   	| Automatically detect language based on the user's browser language, if language is not defined => use specified `current_lang`    |
+| `auto_language`     	| string  	| null  	| Language auto-detection strategy. Null to disable (default), `"browser"` to get user's browser language or `"document"` to read value from `<html lang="...">` of current page. If language is not defined => use specified `current_lang` |
 | `autoclear_cookies` 	| boolean  	| false   	| Enable if you want to automatically delete cookies when user opts-out of a specific category inside cookie settings               |
 | `page_scripts` 	    | boolean  	| false   	| Enable if you want to easily `manage existing <script>` tags. Check [manage third party scripts](#manage-third-party-scripts)     |
 | `remove_cookie_tables`| boolean  	| false   	| Enable if you want to remove the html cookie tables (but still want to make use of `autoclear_cookies`)                           |
