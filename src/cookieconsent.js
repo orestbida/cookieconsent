@@ -18,18 +18,18 @@
         var ENABLE_LOGS = true;
 
         var _config = {
-            current_lang: 'en',
-            auto_language: null,
-            autorun: true,                          // run as soon as loaded
-            cookie_name: 'cc_cookie',
-            cookie_expiration: 182,                 // default: 6 months (in days)
-            cookie_domain: window.location.hostname,       // default: current domain
-            cookie_path: '/',
-            cookie_same_site: 'Lax',
-            use_rfc_cookie: false,
-            autoclear_cookies: true,
-            revision: 0,
-            script_selector: 'data-cookiecategory'
+            'current_lang': 'en',
+            'auto_language': null,
+            'autorun': true,                          // run as soon as loaded
+            'cookie_name': 'cc_cookie',
+            'cookie_expiration': 182,                 // default: 6 months (in days)
+            'cookie_domain': window.location.hostname,       // default: current domain
+            'cookie_path': '/',
+            'cookie_same_site': 'Lax',
+            'use_rfc_cookie': false,
+            'autoclear_cookies': true,
+            'revision': 0,
+            'script_selector': 'data-cookiecategory'
         };
 
         /**
