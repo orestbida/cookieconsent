@@ -101,6 +101,11 @@
     border-radius: .35em;
 }
 
+#s-bl .act .b-acc{
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}
+
 .cc_div input,
 .cc_div button,
 .cc_div a{
@@ -233,9 +238,14 @@
 }
 
 #c-txt{
-    margin-bottom: 1.4em;
     font-size: 0.9em;
     line-height: 1.5em;
+}
+
+.cc_div #c-bns{
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1.4em;
 }
 
 .cc_div .c-bn{
@@ -254,21 +264,18 @@
     user-select: none;
     text-align: center;
     border-radius: 4px;
-}
-
-#cm .c-bn{
-    width: 48.5%;
+    flex: 1;
 }
 
 #c-bns button + button,
 #s-cnt button + button,
 #s-c-bn{
     float: right;
+    margin-left: 1em;
 }
 
 #s-cnt #s-rall-bn{
     float: none;
-    margin-left: 1em;
 }
 
 #cm .c_link:hover,
@@ -321,11 +328,14 @@ CookieConsent settings modal
     font-family: inherit;
     font-size: .95em;
     width: 100%;
-    cursor: pointer;
     position: relative;
     padding: 1.3em 6.4em 1.3em 2.7em;
     background: none;
     transition: background-color .25s ease;
+}
+
+#s-cnt .b-bn .b-tl.exp{
+    cursor: pointer;
 }
 
 #s-cnt .act .b-bn .b-tl{
@@ -802,8 +812,8 @@ html.force--consent.show--consent body{
 /** END BLOCK PAGE SCROLL */
 
 /** BEGIN ICONS **/
-.cc_div .b-bn .b-tl::before,
-.cc_div .act .b-bn .b-tl::before{
+.cc_div .b-bn .b-tl.exp::before,
+.cc_div .act .b-bn .b-tl.exp::before{
     border: solid #2d4156;
     border-color: var(--cc-btn-secondary-text);
     border-width: 0 2px 2px 0;
@@ -946,7 +956,6 @@ html.force--consent.show--consent body{
 }
 
 .cc_div .cloud #c-txt{
-    margin-bottom: 0;
     font-size: 0.85em;
 }
 
@@ -1136,10 +1145,6 @@ html.force--consent.show--consent body{
     #cm.bar.bottom{
         bottom: 0;
     }
-    
-    .cc_div .cloud #c-txt{
-        font-size: .9em;
-    }
 
     #cm.cloud .c-bn{
         font-size: .85em;
@@ -1271,9 +1276,14 @@ html.force--consent.show--consent body{
         margin-left: 0;
     }
 
+    .cc_div #c-bns{
+        flex-direction: column;
+    }
+
     #c-bns button + button,
     #s-cnt button + button{
         margin-top: 0.625em;
+        margin-left: 0;
         float: unset;
     }
 
@@ -1298,7 +1308,11 @@ html.force--consent.show--consent body{
     }
 
     .cc_div .cloud #c-txt{
-        margin-bottom: 1.625em
+        font-size: .9em;
+    }
+
+    .cc_div .cloud #c-bns{
+        margin-top: 1.625em;
     }
 }
 
