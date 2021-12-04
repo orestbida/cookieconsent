@@ -188,8 +188,8 @@
     visibility: visible!important;
 }
 
-.force--consent.show--consent .c--anim #cm.box.middle,
-.force--consent.show--consent .c--anim #cm.cloud.middle{
+.show--consent .c--anim #cm.box.middle,
+.show--consent .c--anim #cm.cloud.middle{
     transform: scale(1) translateY(-50%);
 }
 
@@ -912,17 +912,16 @@ html.force--consent.show--consent body{
 }
 /** END ICONS **/
 
-.force--consent #cm.box.middle,
-.force--consent #cm.cloud.middle{
+#cm.box.middle,
+#cm.cloud.middle{
     top: 50%;
     transform: translateY(-37%);
     bottom: auto;
 }
 
-.force--consent #cm.box.middle.zoom,
-.force--consent #cm.cloud.middle.zoom{
+#cm.box.middle.zoom,
+#cm.cloud.middle.zoom{
     transform: scale(.95) translateY(-50%);
- 
 }
 
 #cm.box.center{
