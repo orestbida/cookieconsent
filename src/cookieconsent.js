@@ -363,8 +363,6 @@
                         _log("CookieConsent [ACCEPT]: cookie_consent was accepted!");
                         _cookieconsent.accept(accept_type);
                     });
-    
-                    consent_buttons.appendChild(consent_primary_btn);
                 }
 
                 // Add secondary button if not falsy
@@ -385,8 +383,17 @@
                             _cookieconsent.showSettings(0);
                         });
                     }
+                }
 
-                    consent_buttons.appendChild(consent_secondary_btn);
+                // Swap buttons
+                var gui_options_data = conf_params['gui_options'];
+                if(gui_options_data && gui_options_data['consent_modal'] && gui_options_data['consent_modal']['swap_buttons'] === true){
+                    secondary_btn_data && consent_buttons.appendChild(consent_secondary_btn);
+                    primary_btn_data && consent_buttons.appendChild(consent_primary_btn);
+                    consent_buttons.className = 'swap';
+                }else{
+                    primary_btn_data && consent_buttons.appendChild(consent_primary_btn);
+                    secondary_btn_data && consent_buttons.appendChild(consent_secondary_btn);
                 }
 
                 consent_modal_inner.appendChild(consent_modal_inner_inner);

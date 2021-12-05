@@ -519,6 +519,20 @@ CookieConsent settings modal
     background: var(--cc-btn-primary-bg);
 }
 
+#c-bns.swap button:first-child{
+    color: #40505a;
+    color: var(--cc-btn-secondary-text);
+    background: #e5ebef;
+    background: var(--cc-btn-secondary-bg);
+}
+
+#c-bns.swap button:last-child{
+    color: #fff;
+    color: var(--cc-btn-primary-text);
+    background: #253b48;
+    background: var(--cc-btn-primary-bg);
+}
+
 .cc_div .b-tg .c-tgl:checked ~ .c-tg{
     background: #253b48;
     background: var(--cc-toggle-bg-on);
@@ -527,9 +541,17 @@ CookieConsent settings modal
 #c-bns button:first-child:active,
 #c-bns button:first-child:hover,
 #s-bns button:first-child:active,
-#s-bns button:first-child:hover{
+#s-bns button:first-child:hover,
+#c-bns.swap button:last-child:active,
+#c-bns.swap button:last-child:hover{
     background: #1d2e38;
     background: var(--cc-btn-primary-hover-bg);
+}
+
+#c-bns.swap button:first-child:active,
+#c-bns.swap button:first-child:hover{
+    background: #3e454a;
+    background: var(--cc-btn-secondary-hover-bg);
 }
 
 #s-hdr{
