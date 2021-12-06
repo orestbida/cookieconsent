@@ -543,11 +543,24 @@ Additional methods for an easier management of your scripts and cookie settings 
 - <details><summary>cookieconsent<code>.getConfig(&lt;field&gt;)</code> [v2.7.0+]</summary>
     <p>
 
-  The `.getConfig()` method allows you to read configuration options from the current instance:
+    The `.getConfig()` method allows you to read configuration options from the current instance:
     ```javascript
     cookieconsent.getConfig('current_lang');        // get currently used language
     cookieconsent.getConfig('cookie_expiration');   // get configured cookie expiration
     // ...
+    ```
+    </p>
+    </details>
+- <details><summary>cookieconsent<code>.getUserPreferences()</code> [v2.7.0+]</summary>
+    <p>
+
+    The `.getUserPreferences()` returns the following object (for analytics/logging purposes):
+    ```javascript
+    {
+        accept_type: string,            // 'all', 'necessary', 'custom'
+        accepted_categories: string[],  // e.g. ['necessary', 'analytics']
+        rejected_categories: string[]   // e.g. ['ads']
+    }
     ```
     </p>
     </details>
@@ -574,8 +587,9 @@ Below a table which sums up all of the available options (must be passed to the 
 | `remove_cookie_tables`| boolean  	| false   	| Enable if you want to remove the html cookie tables (but still want to make use of `autoclear_cookies`)                           |
 | `hide_from_bots`      | boolean  	| false   	| Enable if you don't want the plugin to run when a bot/crawler/webdriver is detected       |
 | `gui_options`         | object  	| -   	    | Customization option which allows to choose layout, position	and transition. Check [layout options & customization](#layout-options--customization) |
-| __`onAccept`__      	| function 	| -       	| Method run `once` either when:  <br>  1. The moment the cookie consent is accepted <br> 2. After each page load (if cookie consent has already  been accepted) |
+| __`onAccept`__      	| function 	| -       	| Method run on: <br>  1. the moment the cookie consent is accepted <br> 2. after each page load (if cookie consent has already been accepted) |
 | __`onChange`__      	| function 	| -       	| Method run `whenever preferences are modified` (and only if cookie consent has already been accepted)                             |
+| __`onFirstAction`__   | function 	| -       	| Method run only `once` when the user makes the initial choice (accept/reject)                                                     |
 | `languages`      	    | object 	| -       	| [Check below](#how-to-configure-languages--cookie-settings) for configuration
 
 ## Full example configurations

@@ -47,8 +47,29 @@
         var settings_modal_visible = false;
         var clicked_inside_modal = false;
         var current_modal_focusable;
-        var all_table_headers, all_blocks, onAccept, onChange;
+        var all_table_headers, all_blocks, onAccept, onChange, onFirstAction;
         var valid_revision=true, revision_enabled=false, data=null;
+
+        /**
+         * Accept type:
+         *  - "all"
+         *  - "necessary"
+         *  - "custom"
+         * @type {string}
+         */
+        var accept_type;
+
+        /**
+         * Contains all accepted categories
+         * @type {string[]}
+         */
+        var accepted_categories=[];
+        
+        /**
+         * Contains all non-accepted (rejected) categories
+         * @type {string[]}
+         */
+        var rejected_categories=[];
 
         // Don't run plugin (to avoid indexing its text content) if bot detected
         var is_bot = false;
@@ -121,6 +142,9 @@
 
             if(typeof conf_params['onAccept'] === "function")
                 onAccept = conf_params['onAccept'];
+            
+            if(typeof conf_params['onFirstAction'] === "function")
+                onFirstAction = conf_params['onFirstAction'];
 
             if(typeof conf_params['onChange'] === "function")
                 onChange = conf_params['onChange'];
@@ -353,15 +377,15 @@
                     consent_primary_btn.className =  "c-bn";
                     consent_primary_btn[innerText] = conf_params.languages[lang]['consent_modal']['primary_btn']['text'];
                     
-                    var accept_type;
+                    var _accept_type;
 
                     if(primary_btn_data['role'] === 'accept_all')
-                        accept_type = 'all';
+                        _accept_type = 'all'
 
                     _addEvent(consent_primary_btn, "click", function(){
                         _cookieconsent.hide();
                         _log("CookieConsent [ACCEPT]: cookie_consent was accepted!");
-                        _cookieconsent.accept(accept_type);
+                        _cookieconsent.accept(_accept_type);
                     });
                 }
 
@@ -896,9 +920,17 @@
                 _manageExistingScripts();
             }
 
-            if(typeof onAccept === "function" && !cookie_consent_accepted){
+            if(!cookie_consent_accepted){
+
+                if(typeof onFirstAction === 'function')
+                    onFirstAction(_cookieconsent.getUserPreferences());
+
+                if(typeof onAccept === 'function')
+                    onAccept(saved_cookie_content);
+                
                 cookie_consent_accepted = true;
-                return onAccept(saved_cookie_content);
+
+                return;
             }
 
             // fire onChange only if settings were changed
@@ -1520,6 +1552,25 @@
         }
 
         /**
+         * @typedef {object} userPreferences
+         * @property {string} accept_type
+         * @property {string[]} accepted_categories
+         * @property {string[]} rejected_categories
+         */
+
+        /**
+         * Retrieve current user preferences (summary)
+         * @returns {userPreferences}
+         */
+        _cookieconsent.getUserPreferences = function(){
+            return {
+                'accept_type': accept_type,
+                'accepted_categories': accepted_categories,
+                'rejected_categories': rejected_categories
+            }
+        }
+
+        /**
          * Function which will run after script load
          * @callback scriptLoaded
          */
@@ -1719,6 +1770,27 @@
                     to_accept.push(toggle_categories[i]);
                 }
             }
+
+            // save accepted categories
+            accepted_categories = to_accept;
+
+            // number of categories marked as necessary/readonly
+            var necessary_categories_count = toggle_readonly.filter(function(readonly){
+                return readonly === true;
+            }).length;
+
+            // save rejected categories
+            rejected_categories = toggle_categories.filter(function(category){
+                return (_inArray(accepted_categories, category) === -1);
+            });
+
+            // set accept type based on accepted/rejected categories
+            if(accepted_categories.length === toggle_categories.length)
+                accept_type = 'all';
+            else if(rejected_categories.length >= 0 && accepted_categories.length === necessary_categories_count)
+                accept_type = 'necessary'
+            else
+                accept_type = 'custom'
 
             _saveCookiePreferences(to_accept);
         }
