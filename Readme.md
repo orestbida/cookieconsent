@@ -349,8 +349,7 @@ cookieconsent.run({
 ```
 <i>Default layout is `box` and default transition is `zoom`.</i>
 
-#### Note: if `force_consent` option is not enabled, the `middle` position will be ignored
-
+#### ~~Note: if `force_consent` option is not enabled, the `middle` position will be ignored~~. As of v2.7.0 the `middle` position is allowed regardless of `force_consent`.
 <br>
 
 ## Manage third party scripts
