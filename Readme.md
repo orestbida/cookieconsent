@@ -573,6 +573,7 @@ Below a table which sums up all of the available options (must be passed to the 
 | `autorun`           	| boolean  	| true    	| If enabled, show the cookie consent as soon as possible (otherwise you need to manually call the `.show()` method)                |
 | `delay`             	| number   	| 0       	| Number of `milliseconds` before showing the consent-modal                                                                         |
 | `cookie_expiration` 	| number   	| 182     	| Number of days before the cookie expires (182 days = 6 months)                                                                    |
+| `cookie_necessary_only_expiration` 	| number   	| -     	| Specify if you want to set a different number of days - before the cookie expires - when the user accepts only the necessary categories                                                |
 | `cookie_path` 	    | string   	| "/"     	| Path where the cookie will be set                                                                                                 |
 | `cookie_domain` 	    | string   	| location.hostname | Specify your domain (will be grabbed by default) or a subdomain                                                           |
 | `cookie_same_site` 	| string   	| "Lax"     | SameSite attribute                                                           |

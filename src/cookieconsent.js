@@ -125,6 +125,9 @@
             if(typeof conf_params['cookie_expiration'] === "number")
                 _config.cookie_expiration = conf_params['cookie_expiration'];
 
+            if(typeof conf_params['cookie_necessary_only_expiration'] === "number")
+                _config.cookie_necessary_only_expiration  = conf_params['cookie_necessary_only_expiration'];
+
             if(typeof conf_params['autorun'] === "boolean")
                 _config.autorun = conf_params['autorun'];
 
@@ -1825,10 +1828,15 @@
          */
         var _setCookie = function(name, value) {
 
+            var cookie_expiration = _config.cookie_expiration;
+
+            if(typeof _config.cookie_necessary_only_expiration === 'number' && accept_type === 'necessary')
+                cookie_expiration = _config.cookie_necessary_only_expiration;
+
             value = _config.use_rfc_cookie ? encodeURIComponent(value) : value;
 
             var date = new Date();
-            date.setTime(date.getTime() + (1000 * ( _config.cookie_expiration * 24 * 60 * 60)));
+            date.setTime(date.getTime() + (1000 * (cookie_expiration * 24 * 60 * 60)));
             var expires = "; expires=" + date.toUTCString();
 
             var cookieStr = name + "=" + (value || "") + expires + "; Path=" + _config.cookie_path + ";";
@@ -1845,7 +1853,7 @@
 
             document.cookie = cookieStr;
 
-            _log("CookieConsent [SET_COOKIE]: cookie "+ name + "='" + value + "' was set!");
+            _log("CookieConsent [SET_COOKIE]: cookie "+ name + "='" + value + "' was set! Expires after " + cookie_expiration + " days");
         }
 
         /**
