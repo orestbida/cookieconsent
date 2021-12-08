@@ -101,6 +101,11 @@
     border-radius: .35em;
 }
 
+#s-bl .act .b-acc{
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}
+
 .cc_div input,
 .cc_div button,
 .cc_div a{
@@ -183,8 +188,8 @@
     visibility: visible!important;
 }
 
-.force--consent.show--consent .c--anim #cm.box.middle,
-.force--consent.show--consent .c--anim #cm.cloud.middle{
+.show--consent .c--anim #cm.box.middle,
+.show--consent .c--anim #cm.cloud.middle{
     transform: scale(1) translateY(-50%);
 }
 
@@ -233,9 +238,14 @@
 }
 
 #c-txt{
-    margin-bottom: 1.4em;
     font-size: 0.9em;
     line-height: 1.5em;
+}
+
+.cc_div #c-bns{
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1.4em;
 }
 
 .cc_div .c-bn{
@@ -254,21 +264,18 @@
     user-select: none;
     text-align: center;
     border-radius: 4px;
-}
-
-#cm .c-bn{
-    width: 48.5%;
+    flex: 1;
 }
 
 #c-bns button + button,
 #s-cnt button + button,
 #s-c-bn{
     float: right;
+    margin-left: 1em;
 }
 
 #s-cnt #s-rall-bn{
     float: none;
-    margin-left: 1em;
 }
 
 #cm .c_link:hover,
@@ -321,11 +328,14 @@ CookieConsent settings modal
     font-family: inherit;
     font-size: .95em;
     width: 100%;
-    cursor: pointer;
     position: relative;
     padding: 1.3em 6.4em 1.3em 2.7em;
     background: none;
     transition: background-color .25s ease;
+}
+
+#s-cnt .b-bn .b-tl.exp{
+    cursor: pointer;
 }
 
 #s-cnt .act .b-bn .b-tl{
@@ -509,6 +519,20 @@ CookieConsent settings modal
     background: var(--cc-btn-primary-bg);
 }
 
+#c-bns.swap button:first-child{
+    color: #40505a;
+    color: var(--cc-btn-secondary-text);
+    background: #e5ebef;
+    background: var(--cc-btn-secondary-bg);
+}
+
+#c-bns.swap button:last-child{
+    color: #fff;
+    color: var(--cc-btn-primary-text);
+    background: #253b48;
+    background: var(--cc-btn-primary-bg);
+}
+
 .cc_div .b-tg .c-tgl:checked ~ .c-tg{
     background: #253b48;
     background: var(--cc-toggle-bg-on);
@@ -517,9 +541,17 @@ CookieConsent settings modal
 #c-bns button:first-child:active,
 #c-bns button:first-child:hover,
 #s-bns button:first-child:active,
-#s-bns button:first-child:hover{
+#s-bns button:first-child:hover,
+#c-bns.swap button:last-child:active,
+#c-bns.swap button:last-child:hover{
     background: #1d2e38;
     background: var(--cc-btn-primary-hover-bg);
+}
+
+#c-bns.swap button:first-child:active,
+#c-bns.swap button:first-child:hover{
+    background: #3e454a;
+    background: var(--cc-btn-secondary-hover-bg);
 }
 
 #s-hdr{
@@ -802,8 +834,8 @@ html.force--consent.show--consent body{
 /** END BLOCK PAGE SCROLL */
 
 /** BEGIN ICONS **/
-.cc_div .b-bn .b-tl::before,
-.cc_div .act .b-bn .b-tl::before{
+.cc_div .b-bn .b-tl.exp::before,
+.cc_div .act .b-bn .b-tl.exp::before{
     border: solid #2d4156;
     border-color: var(--cc-btn-secondary-text);
     border-width: 0 2px 2px 0;
@@ -902,17 +934,16 @@ html.force--consent.show--consent body{
 }
 /** END ICONS **/
 
-.force--consent #cm.box.middle,
-.force--consent #cm.cloud.middle{
+#cm.box.middle,
+#cm.cloud.middle{
     top: 50%;
     transform: translateY(-37%);
     bottom: auto;
 }
 
-.force--consent #cm.box.middle.zoom,
-.force--consent #cm.cloud.middle.zoom{
+#cm.box.middle.zoom,
+#cm.cloud.middle.zoom{
     transform: scale(.95) translateY(-50%);
- 
 }
 
 #cm.box.center{
@@ -946,7 +977,6 @@ html.force--consent.show--consent body{
 }
 
 .cc_div .cloud #c-txt{
-    margin-bottom: 0;
     font-size: 0.85em;
 }
 
@@ -1136,10 +1166,6 @@ html.force--consent.show--consent body{
     #cm.bar.bottom{
         bottom: 0;
     }
-    
-    .cc_div .cloud #c-txt{
-        font-size: .9em;
-    }
 
     #cm.cloud .c-bn{
         font-size: .85em;
@@ -1271,9 +1297,14 @@ html.force--consent.show--consent body{
         margin-left: 0;
     }
 
+    .cc_div #c-bns{
+        flex-direction: column;
+    }
+
     #c-bns button + button,
     #s-cnt button + button{
         margin-top: 0.625em;
+        margin-left: 0;
         float: unset;
     }
 
@@ -1298,7 +1329,11 @@ html.force--consent.show--consent body{
     }
 
     .cc_div .cloud #c-txt{
-        margin-bottom: 1.625em
+        font-size: .9em;
+    }
+
+    .cc_div .cloud #c-bns{
+        margin-top: 1.625em;
     }
 }
 

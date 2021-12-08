@@ -1,5 +1,5 @@
 /*!
- * CookieConsent v2.7.0-rc3
+ * CookieConsent v2.7.0
  * https://www.github.com/orestbida/cookieconsent
  * Author Orest Bida
  * Released under the MIT License
@@ -47,8 +47,29 @@
         var settings_modal_visible = false;
         var clicked_inside_modal = false;
         var current_modal_focusable;
-        var all_table_headers, all_blocks, onAccept, onChange;
+        var all_table_headers, all_blocks, onAccept, onChange, onFirstAction;
         var valid_revision=true, revision_enabled=false, data=null;
+
+        /**
+         * Accept type:
+         *  - "all"
+         *  - "necessary"
+         *  - "custom"
+         * @type {string}
+         */
+        var accept_type;
+
+        /**
+         * Contains all accepted categories
+         * @type {string[]}
+         */
+        var accepted_categories=[];
+        
+        /**
+         * Contains all non-accepted (rejected) categories
+         * @type {string[]}
+         */
+        var rejected_categories=[];
 
         // Don't run plugin (to avoid indexing its text content) if bot detected
         var is_bot = false;
@@ -104,6 +125,9 @@
             if(typeof conf_params['cookie_expiration'] === "number")
                 _config.cookie_expiration = conf_params['cookie_expiration'];
 
+            if(typeof conf_params['cookie_necessary_only_expiration'] === "number")
+                _config.cookie_necessary_only_expiration  = conf_params['cookie_necessary_only_expiration'];
+
             if(typeof conf_params['autorun'] === "boolean")
                 _config.autorun = conf_params['autorun'];
 
@@ -121,6 +145,9 @@
 
             if(typeof conf_params['onAccept'] === "function")
                 onAccept = conf_params['onAccept'];
+            
+            if(typeof conf_params['onFirstAction'] === "function")
+                onFirstAction = conf_params['onFirstAction'];
 
             if(typeof conf_params['onChange'] === "function")
                 onChange = conf_params['onChange'];
@@ -300,27 +327,20 @@
                 consent_modal = _createNode('div');
                 var consent_modal_inner = _createNode('div');
                 var consent_modal_inner_inner = _createNode('div');
-                var consent_title = _createNode('div');
+                
                 consent_text = _createNode('div');
                 var consent_buttons = _createNode('div');
-                var consent_primary_btn = _createNode('button');
-                var consent_secondary_btn = _createNode('button');
                 var overlay = _createNode('div');
 
                 consent_modal.id = 'cm';
                 consent_modal_inner.id = 'c-inr';
                 consent_modal_inner_inner.id = 'c-inr-i';
-                consent_title.id = 'c-ttl';
+               
                 consent_text.id = 'c-txt';
                 consent_buttons.id = "c-bns";
-                consent_primary_btn.id = 'c-p-bn';
-                consent_secondary_btn.id = 'c-s-bn';
                 overlay.id = 'cm-ov';
-                consent_primary_btn.className =  "c-bn";
-                consent_secondary_btn.className = "c-bn c_link";
-
-                consent_title.setAttribute('role', 'heading');
-                consent_title.setAttribute('aria-level', '2');
+       
+                
                 consent_modal.setAttribute('role', 'dialog');
                 consent_modal.setAttribute('aria-modal', 'true');
                 consent_modal.setAttribute('aria-hidden', 'false');
@@ -334,42 +354,77 @@
                 overlay.style.opacity = 0;
 
                 // Use insertAdjacentHTML instead of innerHTML
-                consent_title.insertAdjacentHTML('beforeend', conf_params.languages[lang]['consent_modal']['title']);
+                var consent_modal_title_value = conf_params.languages[lang]['consent_modal']['title'];
+                
+                // Add title (if valid)
+                if(consent_modal_title_value){
+                    var consent_title = _createNode('div');
+                    consent_title.id = 'c-ttl';
+                    consent_title.setAttribute('role', 'heading');
+                    consent_title.setAttribute('aria-level', '2');
+                    consent_title.insertAdjacentHTML('beforeend', consent_modal_title_value);
+                    consent_modal_inner_inner.appendChild(consent_title);
+                }
 
                 consent_text.insertAdjacentHTML('beforeend', description);
-
-                consent_primary_btn[innerText] = conf_params.languages[lang]['consent_modal']['primary_btn']['text'];
-                consent_secondary_btn[innerText] = conf_params.languages[lang]['consent_modal']['secondary_btn']['text'];
-
-                var accept_type;   // accept current selection
-
-                if(conf_params.languages[lang]['consent_modal']['primary_btn']['role'] === 'accept_all'){
-                    accept_type = 'all';    // accept all
-                }
-
-                _addEvent(consent_primary_btn, "click", function(){
-                    _cookieconsent.hide();
-                    _log("CookieConsent [ACCEPT]: cookie_consent was accepted!");
-                    _cookieconsent.accept(accept_type);
-                });
-
-                if(conf_params.languages[lang]['consent_modal']['secondary_btn']['role'] === 'accept_necessary'){
-                    _addEvent(consent_secondary_btn, 'click', function(){
-                        _cookieconsent.hide();
-                        _cookieconsent.accept([]); // accept necessary only
-                    });
-                }else{
-                    _addEvent(consent_secondary_btn, 'click', function(){
-                        _cookieconsent.showSettings(0);
-                    });
-                }
-
-                consent_modal_inner_inner.appendChild(consent_title);
                 consent_modal_inner_inner.appendChild(consent_text);
-                consent_buttons.appendChild(consent_primary_btn);
-                consent_buttons.appendChild(consent_secondary_btn);
+
+                var primary_btn_data = conf_params.languages[lang]['consent_modal']['primary_btn'],   // accept current selection
+                    secondary_btn_data = conf_params.languages[lang]['consent_modal']['secondary_btn'];
+
+                // Add primary button if not falsy
+                if(primary_btn_data){
+                    
+                    var consent_primary_btn = _createNode('button');
+                    consent_primary_btn.id = 'c-p-bn';
+                    consent_primary_btn.className =  "c-bn";
+                    consent_primary_btn[innerText] = conf_params.languages[lang]['consent_modal']['primary_btn']['text'];
+                    
+                    var _accept_type;
+
+                    if(primary_btn_data['role'] === 'accept_all')
+                        _accept_type = 'all'
+
+                    _addEvent(consent_primary_btn, "click", function(){
+                        _cookieconsent.hide();
+                        _log("CookieConsent [ACCEPT]: cookie_consent was accepted!");
+                        _cookieconsent.accept(_accept_type);
+                    });
+                }
+
+                // Add secondary button if not falsy
+                if(secondary_btn_data){
+
+                    var consent_secondary_btn = _createNode('button');
+                    consent_secondary_btn.id = 'c-s-bn';
+                    consent_secondary_btn.className = "c-bn c_link";
+                    consent_secondary_btn[innerText] = conf_params.languages[lang]['consent_modal']['secondary_btn']['text'];
+
+                    if(secondary_btn_data['role'] === 'accept_necessary'){
+                        _addEvent(consent_secondary_btn, 'click', function(){
+                            _cookieconsent.hide();
+                            _cookieconsent.accept([]); // accept necessary only
+                        });
+                    }else{
+                        _addEvent(consent_secondary_btn, 'click', function(){
+                            _cookieconsent.showSettings(0);
+                        });
+                    }
+                }
+
+                // Swap buttons
+                var gui_options_data = conf_params['gui_options'];
+                if(gui_options_data && gui_options_data['consent_modal'] && gui_options_data['consent_modal']['swap_buttons'] === true){
+                    secondary_btn_data && consent_buttons.appendChild(consent_secondary_btn);
+                    primary_btn_data && consent_buttons.appendChild(consent_primary_btn);
+                    consent_buttons.className = 'swap';
+                }else{
+                    primary_btn_data && consent_buttons.appendChild(consent_primary_btn);
+                    secondary_btn_data && consent_buttons.appendChild(consent_secondary_btn);
+                }
+
                 consent_modal_inner.appendChild(consent_modal_inner_inner);
-                consent_modal_inner.appendChild(consent_buttons);
+                (primary_btn_data || secondary_btn_data ) && consent_modal_inner.appendChild(consent_buttons);
                 consent_modal.appendChild(consent_modal_inner);
 
                 // Append consent modal to main container
@@ -447,27 +502,37 @@
             // Create settings modal content (blocks)
             for(var i=0; i<n_blocks; ++i){
 
+                var title_data = all_blocks[i]['title'],
+                    description_data = all_blocks[i]['description'],
+                    toggle_data = all_blocks[i]['toggle'],
+                    cookie_table_data = all_blocks[i]['cookie_table'],
+                    remove_cookie_tables = conf_params['remove_cookie_tables'] === true,
+                    isExpandable = (description_data && 'truthy') || (!remove_cookie_tables && (cookie_table_data && 'truthy'));
+                
                 // Create title
                 var block_section = _createNode('div');
                 var block_table_container = _createNode('div');
-                var block_desc = _createNode('div');
+
+                // Create description
+                if(description_data){
+                    var block_desc = _createNode('div');
+                    block_desc.className = 'p';
+                    block_desc.insertAdjacentHTML('beforeend', description_data);
+                }
+
                 var block_title_container = _createNode('div');
+                block_title_container.className = 'title';
 
                 block_section.className = 'c-bl';
                 block_table_container.className = 'desc';
-                block_desc.className = 'p';
-                block_title_container.className = 'title';
-
-                // Set title and description for each block
-                block_desc.insertAdjacentHTML('beforeend', all_blocks[i]['description']);
-
+ 
                 // Create toggle if specified (opt in/out)
-                if(typeof all_blocks[i]['toggle'] !== 'undefined'){
+                if(title_data && typeof toggle_data !== 'undefined'){
 
                     var accordion_id = "c-ac-"+i;
 
                     // Create button (to collapse/expand block description)
-                    var block_title_btn = _createNode('button');
+                    var block_title_btn = isExpandable ? _createNode('button') : _createNode('div');
                     var block_switch_label = _createNode('label');
                     var block_switch = _createNode('input');
                     var block_switch_span = _createNode('span');
@@ -477,7 +542,7 @@
                     var block_switch_span_on_icon = _createNode('span');
                     var block_switch_span_off_icon = _createNode('span');
 
-                    block_title_btn.className = 'b-tl';
+                    block_title_btn.className = isExpandable ? 'b-tl exp' : 'b-tl';
                     block_switch_label.className = 'b-tg';
                     block_switch.className = 'c-tgl';
                     block_switch_span_on_icon.className = 'on-i';
@@ -485,17 +550,19 @@
                     block_switch_span.className = 'c-tg';
                     label_text_span.className = "t-lb";
 
-                    block_title_btn.setAttribute('aria-expanded', 'false');
-                    block_title_btn.setAttribute('aria-controls', accordion_id);
+                    if(isExpandable){
+                        block_title_btn.setAttribute('aria-expanded', 'false');
+                        block_title_btn.setAttribute('aria-controls', accordion_id);
+                    }
 
                     block_switch.type = 'checkbox';
                     block_switch_span.setAttribute('aria-hidden', 'true');
 
-                    var cookie_category = all_blocks[i]['toggle'].value;
+                    var cookie_category = toggle_data.value;
                     block_switch.value = cookie_category;
 
-                    label_text_span[innerText] = all_blocks[i]['title'];
-                    block_title_btn.insertAdjacentHTML('beforeend', all_blocks[i]['title']);
+                    label_text_span[innerText] = title_data;
+                    block_title_btn.insertAdjacentHTML('beforeend', title_data);
 
                     block_title_container.appendChild(block_title_btn);
                     block_switch_span.appendChild(block_switch_span_on_icon);
@@ -512,7 +579,7 @@
                         }else{
                             toggle_states.push(false);
                         }
-                    }else if(all_blocks[i]['toggle']['enabled']){
+                    }else if(toggle_data['enabled']){
                         block_switch.checked = true;
                         toggle_states.push(true);
                     }else{
@@ -524,7 +591,7 @@
                     /**
                      * Set toggle as readonly if true (disable checkbox)
                      */
-                    if(all_blocks[i]['toggle']['readonly']){
+                    if(toggle_data['readonly']){
                         block_switch.disabled = true;
                         _addClass(block_switch_span, 'c-ro');
                         toggle_readonly.push(true);
@@ -547,7 +614,7 @@
                     /**
                      * On button click handle the following :=> aria-expanded, aria-hidden and act class for current block
                      */
-                    (function(accordion, block_section, btn){
+                    isExpandable && (function(accordion, block_section, btn){
                         _addEvent(block_title_btn, 'click', function(){
                             if(!_hasClass(block_section, 'act')){
                                 _addClass(block_section, 'act');
@@ -566,21 +633,21 @@
                      * If block is not a button (no toggle defined),
                      * create a simple div instead
                      */
-                    var block_title = _createNode('div');
-                    block_title.className = 'b-tl';
-                    block_title.setAttribute('role', 'heading');
-                    block_title.setAttribute('aria-level', '3');
-                    block_title.insertAdjacentHTML('beforeend', all_blocks[i]['title']);
-                    block_title_container.appendChild(block_title);
+                    if(title_data){
+                        var block_title = _createNode('div');
+                        block_title.className = 'b-tl';
+                        block_title.setAttribute('role', 'heading');
+                        block_title.setAttribute('aria-level', '3');
+                        block_title.insertAdjacentHTML('beforeend', title_data);
+                        block_title_container.appendChild(block_title);
+                    }
                 }
 
-                block_section.appendChild(block_title_container);
-                block_table_container.appendChild(block_desc);
-
-                var remove_cookie_tables = conf_params['remove_cookie_tables'] === true;
+                title_data && block_section.appendChild(block_title_container);
+                description_data && block_table_container.appendChild(block_desc);
 
                 // if cookie table found, generate table for this block
-                if(!remove_cookie_tables && typeof all_blocks[i]['cookie_table'] !== 'undefined'){
+                if(!remove_cookie_tables && typeof cookie_table_data !== 'undefined'){
                     var tr_tmp_fragment = document.createDocumentFragment();
 
                     /**
@@ -614,7 +681,7 @@
                     var tbody_fragment = document.createDocumentFragment();
 
                     // create table content
-                    for(var n=0; n<all_blocks[i]['cookie_table'].length; n++){
+                    for(var n=0; n<cookie_table_data.length; n++){
                         var tr = _createNode('tr');
 
                         for(var g=0; g<all_table_headers.length; ++g){
@@ -626,7 +693,7 @@
                                 var td_tmp = _createNode('td');
 
                                 // Allow html inside table cells
-                                td_tmp.insertAdjacentHTML('beforeend', all_blocks[i]['cookie_table'][n][new_column_key]);
+                                td_tmp.insertAdjacentHTML('beforeend', cookie_table_data[n][new_column_key]);
                                 td_tmp.setAttribute('data-column', obj[new_column_key]);
 
                                 tr.appendChild(td_tmp);
@@ -641,14 +708,18 @@
                     tbody.appendChild(tbody_fragment);
                     block_table.appendChild(tbody);
 
-                    //block_section.appendChild(block_table);
                     block_table_container.appendChild(block_table);
                 }
-
-                block_section.appendChild(block_table_container);
-
-                // append block inside settings dom
-                settings_blocks.appendChild(block_section);
+                
+                /**
+                 * Append only if is either:
+                 * - togglable div with title
+                 * - a simple div with at least a title or description 
+                 */
+                if(toggle_data && title_data || (!toggle_data && (title_data || description_data))){
+                    block_section.appendChild(block_table_container);
+                    settings_blocks.appendChild(block_section);
+                }
             }
 
             // Create settings buttons
@@ -852,9 +923,17 @@
                 _manageExistingScripts();
             }
 
-            if(typeof onAccept === "function" && !cookie_consent_accepted){
+            if(!cookie_consent_accepted){
+
+                if(typeof onFirstAction === 'function')
+                    onFirstAction(_cookieconsent.getUserPreferences());
+
+                if(typeof onAccept === 'function')
+                    onAccept(saved_cookie_content);
+                
                 cookie_consent_accepted = true;
-                return onAccept(saved_cookie_content);
+
+                return;
             }
 
             // fire onChange only if settings were changed
@@ -1476,6 +1555,25 @@
         }
 
         /**
+         * @typedef {object} userPreferences
+         * @property {string} accept_type
+         * @property {string[]} accepted_categories
+         * @property {string[]} rejected_categories
+         */
+
+        /**
+         * Retrieve current user preferences (summary)
+         * @returns {userPreferences}
+         */
+        _cookieconsent.getUserPreferences = function(){
+            return {
+                'accept_type': accept_type,
+                'accepted_categories': accepted_categories,
+                'rejected_categories': rejected_categories
+            }
+        }
+
+        /**
          * Function which will run after script load
          * @callback scriptLoaded
          */
@@ -1676,6 +1774,27 @@
                 }
             }
 
+            // save accepted categories
+            accepted_categories = to_accept;
+
+            // number of categories marked as necessary/readonly
+            var necessary_categories_count = toggle_readonly.filter(function(readonly){
+                return readonly === true;
+            }).length;
+
+            // save rejected categories
+            rejected_categories = toggle_categories.filter(function(category){
+                return (_inArray(accepted_categories, category) === -1);
+            });
+
+            // set accept type based on accepted/rejected categories
+            if(accepted_categories.length === toggle_categories.length)
+                accept_type = 'all';
+            else if(rejected_categories.length >= 0 && accepted_categories.length === necessary_categories_count)
+                accept_type = 'necessary'
+            else
+                accept_type = 'custom'
+
             _saveCookiePreferences(to_accept);
         }
 
@@ -1709,10 +1828,15 @@
          */
         var _setCookie = function(name, value) {
 
+            var cookie_expiration = _config.cookie_expiration;
+
+            if(typeof _config.cookie_necessary_only_expiration === 'number' && accept_type === 'necessary')
+                cookie_expiration = _config.cookie_necessary_only_expiration;
+
             value = _config.use_rfc_cookie ? encodeURIComponent(value) : value;
 
             var date = new Date();
-            date.setTime(date.getTime() + (1000 * ( _config.cookie_expiration * 24 * 60 * 60)));
+            date.setTime(date.getTime() + (1000 * (cookie_expiration * 24 * 60 * 60)));
             var expires = "; expires=" + date.toUTCString();
 
             var cookieStr = name + "=" + (value || "") + expires + "; Path=" + _config.cookie_path + ";";
@@ -1729,7 +1853,7 @@
 
             document.cookie = cookieStr;
 
-            _log("CookieConsent [SET_COOKIE]: cookie "+ name + "='" + value + "' was set!");
+            _log("CookieConsent [SET_COOKIE]: cookie "+ name + "='" + value + "' was set! Expires after " + cookie_expiration + " days");
         }
 
         /**
