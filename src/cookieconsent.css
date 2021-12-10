@@ -550,7 +550,7 @@ CookieConsent settings modal
 
 #c-bns.swap button:first-child:active,
 #c-bns.swap button:first-child:hover{
-    background: #3e454a;
+    background: #d8e0e6;
     background: var(--cc-btn-secondary-hover-bg);
 }
 
