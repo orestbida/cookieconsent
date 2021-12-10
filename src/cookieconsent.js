@@ -926,7 +926,7 @@
             if(!cookie_consent_accepted){
 
                 if(typeof onFirstAction === 'function')
-                    onFirstAction(_cookieconsent.getUserPreferences());
+                    onFirstAction(_cookieconsent.getUserPreferences(), saved_cookie_content);
 
                 if(typeof onAccept === 'function')
                     onAccept(saved_cookie_content);
