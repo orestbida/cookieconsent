@@ -527,7 +527,7 @@
                 block_table_container.className = 'desc';
 
                 // Create toggle if specified (opt in/out)
-                if(title_data && typeof toggle_data !== 'undefined'){
+                if(typeof toggle_data !== 'undefined'){
 
                     var accordion_id = "c-ac-"+i;
 
@@ -1566,6 +1566,28 @@
          * @returns {userPreferences}
          */
         _cookieconsent.getUserPreferences = function(){
+
+            // get accepted categories
+            accepted_categories = saved_cookie_content['level'] || [];
+
+            // number of categories marked as necessary/readonly
+            var necessary_categories_count = toggle_readonly.filter(function(readonly){
+                return readonly === true;
+            }).length;
+
+            // calculate rejected categories (all_categories - accepted_categories)
+            rejected_categories = toggle_categories.filter(function(category){
+                return (_inArray(accepted_categories, category) === -1);
+            });
+
+            // set accept type based on accepted/rejected categories
+            if(accepted_categories.length === toggle_categories.length)
+                accept_type = 'all';
+            else if(rejected_categories.length >= 0 && accepted_categories.length === necessary_categories_count)
+                accept_type = 'necessary'
+            else
+                accept_type = 'custom'
+
             return {
                 'accept_type': accept_type,
                 'accepted_categories': accepted_categories,
@@ -1773,27 +1795,6 @@
                     to_accept.push(toggle_categories[i]);
                 }
             }
-
-            // save accepted categories
-            accepted_categories = to_accept;
-
-            // number of categories marked as necessary/readonly
-            var necessary_categories_count = toggle_readonly.filter(function(readonly){
-                return readonly === true;
-            }).length;
-
-            // save rejected categories
-            rejected_categories = toggle_categories.filter(function(category){
-                return (_inArray(accepted_categories, category) === -1);
-            });
-
-            // set accept type based on accepted/rejected categories
-            if(accepted_categories.length === toggle_categories.length)
-                accept_type = 'all';
-            else if(rejected_categories.length >= 0 && accepted_categories.length === necessary_categories_count)
-                accept_type = 'necessary'
-            else
-                accept_type = 'custom'
 
             _saveCookiePreferences(to_accept);
         }
