@@ -64,7 +64,7 @@
          * @type {string[]}
          */
         var accepted_categories=[];
-        
+
         /**
          * Contains all non-accepted (rejected) categories
          * @type {string[]}
@@ -145,7 +145,7 @@
 
             if(typeof conf_params['onAccept'] === "function")
                 onAccept = conf_params['onAccept'];
-            
+
             if(typeof conf_params['onFirstAction'] === "function")
                 onFirstAction = conf_params['onFirstAction'];
 
@@ -327,7 +327,7 @@
                 consent_modal = _createNode('div');
                 var consent_modal_inner = _createNode('div');
                 var consent_modal_inner_inner = _createNode('div');
-                
+
                 consent_text = _createNode('div');
                 var consent_buttons = _createNode('div');
                 var overlay = _createNode('div');
@@ -335,12 +335,12 @@
                 consent_modal.id = 'cm';
                 consent_modal_inner.id = 'c-inr';
                 consent_modal_inner_inner.id = 'c-inr-i';
-               
+
                 consent_text.id = 'c-txt';
                 consent_buttons.id = "c-bns";
                 overlay.id = 'cm-ov';
-       
-                
+
+
                 consent_modal.setAttribute('role', 'dialog');
                 consent_modal.setAttribute('aria-modal', 'true');
                 consent_modal.setAttribute('aria-hidden', 'false');
@@ -355,7 +355,7 @@
 
                 // Use insertAdjacentHTML instead of innerHTML
                 var consent_modal_title_value = conf_params.languages[lang]['consent_modal']['title'];
-                
+
                 // Add title (if valid)
                 if(consent_modal_title_value){
                     var consent_title = _createNode('div');
@@ -374,12 +374,12 @@
 
                 // Add primary button if not falsy
                 if(primary_btn_data){
-                    
+
                     var consent_primary_btn = _createNode('button');
                     consent_primary_btn.id = 'c-p-bn';
                     consent_primary_btn.className =  "c-bn";
                     consent_primary_btn[innerText] = conf_params.languages[lang]['consent_modal']['primary_btn']['text'];
-                    
+
                     var _accept_type;
 
                     if(primary_btn_data['role'] === 'accept_all')
@@ -508,7 +508,7 @@
                     cookie_table_data = all_blocks[i]['cookie_table'],
                     remove_cookie_tables = conf_params['remove_cookie_tables'] === true,
                     isExpandable = (description_data && 'truthy') || (!remove_cookie_tables && (cookie_table_data && 'truthy'));
-                
+
                 // Create title
                 var block_section = _createNode('div');
                 var block_table_container = _createNode('div');
@@ -525,7 +525,7 @@
 
                 block_section.className = 'c-bl';
                 block_table_container.className = 'desc';
- 
+
                 // Create toggle if specified (opt in/out)
                 if(title_data && typeof toggle_data !== 'undefined'){
 
@@ -710,11 +710,11 @@
 
                     block_table_container.appendChild(block_table);
                 }
-                
+
                 /**
                  * Append only if is either:
                  * - togglable div with title
-                 * - a simple div with at least a title or description 
+                 * - a simple div with at least a title or description
                  */
                 if(toggle_data && title_data || (!toggle_data && (title_data || description_data))){
                     block_section.appendChild(block_table_container);
@@ -926,11 +926,11 @@
             if(!cookie_consent_accepted){
 
                 if(typeof onFirstAction === 'function')
-                    onFirstAction(_cookieconsent.getUserPreferences());
+                    onFirstAction(_cookieconsent.getUserPreferences(), saved_cookie_content);
 
                 if(typeof onAccept === 'function')
                     onAccept(saved_cookie_content);
-                
+
                 cookie_consent_accepted = true;
 
                 return;
