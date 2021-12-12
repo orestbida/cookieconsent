@@ -601,8 +601,12 @@ The following functions have to be defined inside the configuration object passe
     - at the first moment that consent is given (just like `onFirstAction`)
     - after every page load, if consent (accept or "reject" action) has already been given
 
+    <br>
+
     parameters:
     - `cookie`: contains the current value of the cookie
+
+    <br>
 
     example:
     ```javascript
@@ -623,9 +627,13 @@ The following functions have to be defined inside the configuration object passe
     This function will be executed (only if consent has already been given):
     - when user changes his preferences (accepts/rejects a cookie category)
 
+    <br>
+
     parameters:
     - `cookie`: contains the current value of the cookie
     - `changed_categories`: array of categories whose state (accepted/rejected) just changed
+
+    <br>
 
     example:
     ```javascript
