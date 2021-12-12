@@ -20,12 +20,14 @@ A __lightweight__ & __gdpr compliant__ cookie consent plugin written in plain ja
 1. [Key features](#key-features)
 2. [Installation & Usage](#installation--usage)
 4. [Layout options & customization](#layout-options--customization)
-5. [API & config. parameters](#api--configuration-parameters)
-6. [Manage third party scripts](#manage-third-party-scripts)
-7. [Configuration examples](#full-example-configurations)
-8. [How to enable/manage revisions](#how-to-enablemanage-revisions)
-9. [FAQ](#faq)
-10. [License](#license)
+5. [API methods](#api-methods)
+6. [Available callbacks](#available-callbacks)
+7. [All configuration options](#all-configuration-options)
+8. [How to block/manage scripts](#how-to-blockmanage-scripts)
+9. [Configuration examples](#full-example-configurations)
+10. [How to enable/manage revisions](#how-to-enablemanage-revisions)
+11. [FAQ](#faq)
+12. [License](#license)
 
 ## Key features
 - __Lightweight__
@@ -101,11 +103,16 @@ A __lightweight__ & __gdpr compliant__ cookie consent plugin written in plain ja
                 // remove_cookie_tables: false             // default: false
                 // cookie_name: 'cc_cookie',               // default: 'cc_cookie'
                 // cookie_expiration: 182,                 // default: 182 (days)
+                // cookie_necessary_only_expiration: 182   // default: disabled
                 // cookie_domain: location.hostname,       // default: current domain
                 // cookie_path: '/',                       // default: root
                 // cookie_same_site: 'Lax',                // default: 'Lax'
                 // use_rfc_cookie: false,                  // default: false
                 // revision: 0,                            // default: 0
+
+                onFirstAction: function(user_preferences, cookie){
+                    // callback triggered only once
+                },
 
                 onAccept: function (cookie) {
                     // ...
@@ -226,18 +233,23 @@ A __lightweight__ & __gdpr compliant__ cookie consent plugin written in plain ja
                         // remove_cookie_tables: false             // default: false
                         // cookie_name: 'cc_cookie',               // default: 'cc_cookie'
                         // cookie_expiration: 182,                 // default: 182 (days)
+                        // cookie_necessary_only_expiration: 182   // default: disabled
                         // cookie_domain: location.hostname,       // default: current domain
                         // cookie_path: '/',                       // default: root
                         // cookie_same_site: 'Lax',                // default: 'Lax'
                         // use_rfc_cookie: false,                  // default: false
                         // revision: 0,                            // default: 0
 
-                        onAccept: function (cookie) {
-                            // ...
+                        onFirstAction: function(user_preferences, cookie){
+                            // callback triggered only once on the first accept/reject action
                         },
 
-                        onChange: function (cookie, changed_preferences) {
-                            // ...
+                        onAccept: function (cookie) {
+                            // callback triggered on the first accept/reject action, and after each page load
+                        },
+
+                        onChange: function (cookie, changed_categories) {
+                            // callback triggered when user changes preferences after consent has already been given
                         },
 
                         languages: {
@@ -337,6 +349,7 @@ cookieconsent.run({
             layout: 'cloud',               // box/cloud/bar
             position: 'bottom center',     // bottom/middle/top + left/right/center
             transition: 'slide'            // zoom/slide
+            swap_buttons: false            // enable to invert buttons
         },
         settings_modal: {
             layout: 'box',                 // box/bar
@@ -352,8 +365,8 @@ cookieconsent.run({
 #### ~~Note: if `force_consent` option is not enabled, the `middle` position will be ignored~~. As of v2.7.0 the `middle` position is allowed regardless of `force_consent`.
 <br>
 
-## Manage third party scripts
-You can easily manage third party scripts (enable/disable based on user's preferences) via the `page_scripts` option:
+## How to block/manage scripts
+You can manage any script (inline or external) via the `page_scripts` option:
 
 1. Enable page scripts management:
 
@@ -368,11 +381,15 @@ You can easily manage third party scripts (enable/disable based on user's prefer
 
     ```html
     <script type="text/plain" data-cookiecategory="analytics" src="analytics.js" defer></script>
+
+    <script type="text/plain" data-cookiecategory="ads">
+        console.log('"ads" category accepted');
+    </script>
     ```
     <i>Note: `data-cookiecategory` must be a valid category defined inside the configuration object</i>
     
 
-## API & configuration parameters
+## API methods
 After getting the plugin like so:
 
 ```javascript
@@ -563,9 +580,105 @@ Additional methods for an easier management of your scripts and cookie settings 
     ```
     </p>
     </details>
+- <details><summary>cookieconsent<code>.updateScripts()</code> [v2.7.0+]</summary>
+    <p>
 
+    This method allows the plugin to manage dynamically added/injected scripts that have been loaded after the plugin's execution.
+    
+    E.g. dynamic content generated by server side languages like php, node, ruby ...
+    </p>
+    </details>
 
-### All available options
+<br>
+
+## Available callbacks
+The following functions have to be defined inside the configuration object passed to the `.run()` method.
+
+- <details><summary><code>onAccept</code></summary>
+    <p>
+
+    This function will be executed:
+    - at the first moment that consent is given (just like `onFirstAction`)
+    - after every page load, if consent (accept or "reject" action) has already been given
+
+    <br>
+
+    parameters:
+    - `cookie`: contains the current value of the cookie
+
+    <br>
+
+    example:
+    ```javascript
+    //...
+    cc.run({
+        // ...
+        onAccept: function(cookie){
+            // load somescript, google analytics ...
+        },
+        // ...
+    });
+    ```
+    </p>
+    </details>
+- <details><summary><code>onChange</code></summary>
+    <p>
+
+    This function will be executed (only if consent has already been given):
+    - when user changes his preferences (accepts/rejects a cookie category)
+
+    <br>
+
+    parameters:
+    - `cookie`: contains the current value of the cookie
+    - `changed_categories`: array of categories whose state (accepted/rejected) just changed
+
+    <br>
+
+    example:
+    ```javascript
+    //...
+    cc.run({
+        // ...
+        onChange: function(cookie, changed_categories){
+            // cleanup logic ... (e.g. disable gtm if analytics category is disabled)
+        },
+        // ...
+    });
+    ```
+    </p>
+    </details>
+- <details><summary><code>onFirstAction</code> [v2.7.0+]</summary>
+    <p>
+
+    This function will be executed only once, when the user takes the first action (accept/reject).
+
+    parameters:
+    - `user_preferences`: contains the same data provided by the `.getUserPreferences()` API
+    - `cookie`: contains the current value of the cookie
+
+    <br>
+
+    example:
+    ```javascript
+    //...
+    cc.run({
+        // ...
+        onFirstAction: function(user_preferences, cookie){
+            console.log('User accept type:', user_preferences.accept_type);
+            console.log('User accepted these categories', user_preferences.accepted_categories)
+            console.log('User reject these categories:', user_preferences.rejected_categories);
+        },
+        // ...
+    });
+    ```
+    </p>
+    </details>
+
+<br>
+
+### All configuration options
+
 Below a table which sums up all of the available options (must be passed to the .run() method).
 | Option              	| Type     	| Default 	| Description                                                                                                                       |
 |---------------------	|----------	|---------	|---------------------------------------------------------------------------------------------------------------------------------- |
@@ -625,6 +738,10 @@ Below a table which sums up all of the available options (must be passed to the 
                 theme_css: '<path-to-cookieconsent.css>',
                 autoclear_cookies: true,
                 page_scripts: true,
+
+                onFirstAction: function(user_preferences, cookie){
+                    // callback triggered only once
+                },
 
                 onAccept: function (cookie) {
                     // ... cookieconsent accepted
