@@ -348,7 +348,7 @@ cookieconsent.run({
         consent_modal: {
             layout: 'cloud',               // box/cloud/bar
             position: 'bottom center',     // bottom/middle/top + left/right/center
-            transition: 'slide'            // zoom/slide
+            transition: 'slide',           // zoom/slide
             swap_buttons: false            // enable to invert buttons
         },
         settings_modal: {
