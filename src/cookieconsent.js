@@ -1,5 +1,5 @@
 /*!
- * CookieConsent v2.7.1
+ * CookieConsent v2.7.2
  * https://www.github.com/orestbida/cookieconsent
  * Author Orest Bida
  * Released under the MIT License
@@ -919,6 +919,12 @@
             // save cookie with preferences 'level' (only if never accepted or settings were updated)
             if(!cookie_consent_accepted || changedSettings.length > 0 || !valid_revision){
                 valid_revision = true;
+
+                /**
+                 * Update accept type
+                 */
+                accept_type = _getAcceptType(_getCurrentCategoriesState());
+
                 _setCookie(_config.cookie_name, JSON.stringify(saved_cookie_content));
                 _manageExistingScripts();
             }
@@ -1296,6 +1302,11 @@
                         _setCookie(_config.cookie_name, JSON.stringify(saved_cookie_content));
                     }
 
+                    /**
+                     * Update accept type
+                     */
+                    accept_type = _getAcceptType(_getCurrentCategoriesState());
+
                     _manageExistingScripts();
                     if(typeof conf_params['onAccept'] === "function"){
                         conf_params['onAccept'](saved_cookie_content);
@@ -1555,6 +1566,52 @@
         }
 
         /**
+         * Obtain accepted and rejected categories
+         * @returns {{accepted: string[], rejected: string[]}}
+         */
+        var _getCurrentCategoriesState = function(){
+            
+            // get accepted categories
+            accepted_categories = saved_cookie_content['level'] || [];
+
+            // calculate rejected categories (all_categories - accepted_categories)
+            rejected_categories = toggle_categories.filter(function(category){
+                return (_inArray(accepted_categories, category) === -1);
+            });
+
+            return {
+                accepted: accepted_categories,
+                rejected: rejected_categories 
+            }
+        }
+
+        /**
+         * Calculate "accept type" given current categories state
+         * @param {{accepted: string[], rejected: string[]}} currentCategoriesState 
+         * @returns {string}
+         */
+        var _getAcceptType = function(currentCategoriesState){
+
+            var type = 'custom';
+
+            // number of categories marked as necessary/readonly
+            var necessary_categories_count = toggle_readonly.filter(function(readonly){
+                return readonly === true;
+            }).length;
+
+            // calculate accept type based on accepted/rejected categories
+            if(currentCategoriesState.accepted.length === toggle_categories.length)
+                type = 'all';
+            else if(
+                currentCategoriesState.rejected.length >= 0 && 
+                currentCategoriesState.accepted.length === necessary_categories_count
+            )
+                type = 'necessary'
+
+            return type;
+        }
+
+        /**
          * @typedef {object} userPreferences
          * @property {string} accept_type
          * @property {string[]} accepted_categories
@@ -1566,32 +1623,13 @@
          * @returns {userPreferences}
          */
         _cookieconsent.getUserPreferences = function(){
-
-            // get accepted categories
-            accepted_categories = saved_cookie_content['level'] || [];
-
-            // number of categories marked as necessary/readonly
-            var necessary_categories_count = toggle_readonly.filter(function(readonly){
-                return readonly === true;
-            }).length;
-
-            // calculate rejected categories (all_categories - accepted_categories)
-            rejected_categories = toggle_categories.filter(function(category){
-                return (_inArray(accepted_categories, category) === -1);
-            });
-
-            // set accept type based on accepted/rejected categories
-            if(accepted_categories.length === toggle_categories.length)
-                accept_type = 'all';
-            else if(rejected_categories.length >= 0 && accepted_categories.length === necessary_categories_count)
-                accept_type = 'necessary'
-            else
-                accept_type = 'custom'
+            var currentCategoriesState = _getCurrentCategoriesState();
+            var accept_type = _getAcceptType(currentCategoriesState);
 
             return {
                 'accept_type': accept_type,
-                'accepted_categories': accepted_categories,
-                'rejected_categories': rejected_categories
+                'accepted_categories': currentCategoriesState.accepted,
+                'rejected_categories': currentCategoriesState.rejected
             }
         }
 
