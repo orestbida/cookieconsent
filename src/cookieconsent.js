@@ -1396,11 +1396,11 @@
 
                         // Copy attributes over to the new "revived" script
                         (function(destination, source){
-                            var attr, attributes = source.attributes;
+                            var attributes = source.attributes;
                             var len = attributes.length;
                             for(var i=0; i<len; i++){
-                                attr = attributes[i];
-                                destination.setAttribute(attr.nodeName, attr.nodeValue);
+                                var attr_name = attributes[i].nodeName;
+                                destination.setAttribute(attr_name , source[attr_name] || source.getAttribute(attr_name));
                             }
                         })(fresh_script, curr_script);
 
