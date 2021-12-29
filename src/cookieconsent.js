@@ -49,6 +49,7 @@
         var current_modal_focusable;
         var all_table_headers, all_blocks, onAccept, onChange, onFirstAction;
         var valid_revision=true, revision_enabled=false, data=null;
+        var changed_settings = [], reload_page = false;
 
         /**
          * Accept type:
@@ -157,8 +158,8 @@
                 revision_enabled = true;
             }
 
-            if(conf_params['autoclear_cookies'] === true)
-                _config.autoclear_cookies = true;
+            if(typeof conf_params['autoclear_cookies'] === "boolean")
+                _config.autoclear_cookies = conf_params['autoclear_cookies'];
 
             if(conf_params['use_rfc_cookie'] === true)
                 _config.use_rfc_cookie = true;
@@ -793,14 +794,104 @@
         }
 
         /**
+         * Delete all cookies which are unused (based on selected preferences)
+         *
+         * @param {boolean} [clearOnFirstAction] 
+         */
+        var _autoclearCookies = function(clearOnFirstAction){
+
+            // Get number of blocks
+            var len = all_blocks.length;
+            var count = -1;
+
+            // Retrieve all cookies
+            var all_cookies_array = _getCookie('', 'all');
+
+            // delete cookies on 'www.domain.com' and '.www.domain.com' (can also be without www)
+            var domains = [_config.cookie_domain, '.'+_config.cookie_domain];
+
+            // if domain has www, delete cookies also for 'domain.com' and '.domain.com'
+            if(_config.cookie_domain.slice(0, 4) === 'www.'){
+                var non_www_domain = _config.cookie_domain.substr(4);  // remove first 4 chars (www.)
+                domains.push(non_www_domain);
+                domains.push('.' + non_www_domain);
+            }
+
+            // For each block
+            for(var i=0; i<len; i++){
+
+                // Save current block (local scope & less accesses -> ~faster value retrieval)
+                var curr_block = all_blocks[i];
+
+                // If current block has a toggle for opt in/out
+                if(Object.prototype.hasOwnProperty.call(curr_block, "toggle")){
+
+                    // if current block has a cookie table, an off toggle,
+                    // and its preferences were just changed => delete cookies
+                    if(
+                        !toggle_states[++count] &&
+                        Object.prototype.hasOwnProperty.call(curr_block, "cookie_table") &&
+                        (clearOnFirstAction || _inArray(changed_settings, curr_block['toggle']['value']) > -1)
+                    ){
+                        var curr_cookie_table = curr_block['cookie_table'];
+
+                        // Get first property name
+                        var ckey = _getKeys(all_table_headers[0])[0];
+
+                        // Get number of cookies defined in cookie_table
+                        var clen = curr_cookie_table.length;
+
+                        // set "reload_page" to true if reload=on_disable
+                        if(curr_block['toggle']['reload'] === 'on_disable') reload_page = true;
+
+                        // for each row defined in the cookie table
+                        for(var j=0; j<clen; j++){
+
+                            // Get current row of table (corresponds to all cookie params)
+                            var curr_row = curr_cookie_table[j], found_cookies = [];
+                            var curr_cookie_name = curr_row[ckey];
+                            var is_regex = curr_row['is_regex'] || false;
+                            var curr_cookie_domain = curr_row['domain'] || null;
+                            var curr_cookie_path = curr_row['path'] || false;
+
+                            // set domain to the specified domain
+                            curr_cookie_domain && ( domains = [curr_cookie_domain, '.'+curr_cookie_domain]);
+
+                            // If regex provided => filter cookie array
+                            if(is_regex){
+                                for(var n=0; n<all_cookies_array.length; n++){
+                                    if(all_cookies_array[n].match(curr_cookie_name)){
+                                        found_cookies.push(all_cookies_array[n]);
+                                    }
+                                }
+                            }else{
+                                var found_index = _inArray(all_cookies_array, curr_cookie_name);
+                                if(found_index > -1) found_cookies.push(all_cookies_array[found_index]);
+                            }
+
+                            _log("CookieConsent [AUTOCLEAR]: search cookie: '" + curr_cookie_name + "', found:", found_cookies);
+
+                            // If cookie exists -> delete it
+                            if(found_cookies.length > 0){
+                                _eraseCookies(found_cookies, curr_cookie_path, domains);
+                                curr_block['toggle']['reload'] === 'on_clear' && (reload_page = true);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        /**
          * Set toggles/checkboxes based on accepted categories and save cookie
          * @param {string[]} accepted_categories - Array of categories to accept
          */
         var _saveCookiePreferences = function(accepted_categories){
 
+            changed_settings = [];
+
             // Retrieve all toggle/checkbox values
             var category_toggles = document.querySelectorAll('.c-tgl') || [];
-            var changedSettings = [], must_reload = false;
 
             // If there are opt in/out toggles ...
             if(category_toggles.length > 0){
@@ -809,105 +900,24 @@
                     if(_inArray(accepted_categories, toggle_categories[i]) !== -1){
                         category_toggles[i].checked = true;
                         if(!toggle_states[i]){
-                            changedSettings.push(toggle_categories[i]);
+                            changed_settings.push(toggle_categories[i]);
                             toggle_states[i] = true;
                         }
                     }else{
                         category_toggles[i].checked = false;
                         if(toggle_states[i]){
-                            changedSettings.push(toggle_categories[i]);
+                            changed_settings.push(toggle_categories[i]);
                             toggle_states[i] = false;
                         }
                     }
                 }
-
-                /**
-                 * If autoclear_cookies==true -> delete all cookies which are unused (based on selected preferences)
-                 */
-                if(_config.autoclear_cookies && cookie_consent_accepted && changedSettings.length > 0){
-
-                    // Get number of blocks
-                    var len = all_blocks.length;
-                    var count = -1;
-
-                    // Retrieve all cookies
-                    var all_cookies_array = _getCookie('', 'all');
-
-                    // delete cookies on 'www.domain.com' and '.www.domain.com' (can also be without www)
-                    var domains = [_config.cookie_domain, '.'+_config.cookie_domain];
-
-                    // if domain has www, delete cookies also for 'domain.com' and '.domain.com'
-                    if(_config.cookie_domain.slice(0, 4) === 'www.'){
-                        var non_www_domain = _config.cookie_domain.substr(4);  // remove first 4 chars (www.)
-                        domains.push(non_www_domain);
-                        domains.push('.' + non_www_domain);
-                    }
-
-                    // For each block
-                    for(var jk=0; jk<len; jk++){
-
-                        // Save current block (local scope & less accesses -> ~faster value retrieval)
-                        var curr_block = all_blocks[jk];
-
-                        // If current block has a toggle for opt in/out
-                        if(Object.prototype.hasOwnProperty.call(curr_block, "toggle")){
-
-                            // if current block has a cookie table, an off toggle,
-                            // and its preferences were just changed => delete cookies
-                            if(
-                                !toggle_states[++count] &&
-                                Object.prototype.hasOwnProperty.call(curr_block, "cookie_table") &&
-                                _inArray(changedSettings, curr_block['toggle']['value']) > -1
-                            ){
-                                var curr_cookie_table = curr_block['cookie_table'];
-
-                                // Get first property name
-                                var ckey = _getKeys(all_table_headers[0])[0];
-
-                                // Get number of cookies defined in cookie_table
-                                var clen = curr_cookie_table.length;
-
-                                // set "must_reload" to true if reload=on_disable
-                                if(curr_block['toggle']['reload'] === 'on_disable') must_reload = true;
-
-                                // for each row defined in the cookie table
-                                for(var hk=0; hk<clen; hk++){
-
-                                    // Get current row of table (corresponds to all cookie params)
-                                    var curr_row = curr_cookie_table[hk], found_cookies = [];
-                                    var curr_cookie_name = curr_row[ckey];
-                                    var is_regex = curr_row['is_regex'] || false;
-                                    var curr_cookie_domain = curr_row['domain'] || null;
-                                    var curr_cookie_path = curr_row['path'] || false;
-
-                                    // set domain to the specified domain
-                                    curr_cookie_domain && ( domains = [curr_cookie_domain, '.'+curr_cookie_domain]);
-
-                                    // If regex provided => filter cookie array
-                                    if(is_regex){
-                                        for(var n=0; n<all_cookies_array.length; n++){
-                                            if(all_cookies_array[n].match(curr_cookie_name)){
-                                                found_cookies.push(all_cookies_array[n]);
-                                            }
-                                        }
-                                    }else{
-                                        var found_index = _inArray(all_cookies_array, curr_cookie_name);
-                                        if(found_index > -1) found_cookies.push(all_cookies_array[found_index]);
-                                    }
-
-                                    _log("CookieConsent [AUTOCLEAR]: search cookie: '" + curr_cookie_name + "', found:", found_cookies);
-
-                                    // If cookie exists -> delete it
-                                    if(found_cookies.length > 0){
-                                        _eraseCookies(found_cookies, curr_cookie_path, domains);
-                                        curr_block['toggle']['reload'] === 'on_clear' && (must_reload = true);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
             }
+
+            /**
+             * Clear cookies when settings/preferences change
+             */
+            if(cookie_consent_accepted && _config.autoclear_cookies && changed_settings.length > 0)
+                _autoclearCookies();
 
             saved_cookie_content = {
                 "level": accepted_categories,
@@ -917,7 +927,7 @@
             }
 
             // save cookie with preferences 'level' (only if never accepted or settings were updated)
-            if(!cookie_consent_accepted || changedSettings.length > 0 || !valid_revision){
+            if(!cookie_consent_accepted || changed_settings.length > 0 || !valid_revision){
                 valid_revision = true;
 
                 /**
@@ -931,6 +941,12 @@
 
             if(!cookie_consent_accepted){
 
+                /**
+                 * Delete unused/"zoombie" cookies the very-first time
+                 */
+                if(_config.autoclear_cookies)
+                    _autoclearCookies(true);
+
                 if(typeof onFirstAction === 'function')
                     onFirstAction(_cookieconsent.getUserPreferences(), saved_cookie_content);
 
@@ -943,16 +959,14 @@
             }
 
             // fire onChange only if settings were changed
-            if(typeof onChange === "function" && changedSettings.length > 0){
-                onChange(saved_cookie_content, changedSettings);
-            }
+            if(typeof onChange === "function" && changed_settings.length > 0)
+                onChange(saved_cookie_content, changed_settings);
 
             /**
              * reload page if needed
              */
-            if(must_reload){
+            if(reload_page)
                 window.location.reload();
-            }
         }
 
         /**
