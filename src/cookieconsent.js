@@ -182,17 +182,60 @@
         }
 
         /**
-         * Search for all occurrences in the current page and add an onClick listener :
-         * when clicked => open settings modal
+         * Add an onClick listeners to all html elements with data-cc attribute
          */
-        var _addCookieSettingsButtonListener = function(){
-            var all_links = document.querySelectorAll('a[data-cc="c-settings"], button[data-cc="c-settings"]');
-            for(var x=0; x<all_links.length; x++){
-                all_links[x].setAttribute('aria-haspopup', 'dialog');
-                _addEvent(all_links[x], 'click', function(event){
-                    _cookieconsent.showSettings(0);
+        var _addDataButtonListeners = function(){
+            
+            var show_settings = _getElements('c-settings');
+            var accept_all = _getElements('accept-all');
+            var accept_necessary = _getElements('accept-necessary');
+            var accept_selection = _getElements('accept-selection');
+
+            for(var i=0; i<show_settings.length; i++){
+                show_settings[i].setAttribute('aria-haspopup', 'dialog');
+                _addEvent(show_settings[i], 'click', function(event){
                     event.preventDefault ? event.preventDefault() : event.returnValue = false;
+                    _cookieconsent.showSettings(0);
                 });
+            }
+
+            for(i=0; i<accept_all.length; i++){
+                _addEvent(accept_all[i], 'click', function(event){
+                    _acceptAction(event, 'all');
+                });
+            }
+
+            for(i=0; i<accept_selection.length; i++){
+                _addEvent(accept_selection[i], 'click', function(event){
+                    _acceptAction(event);
+                });
+            }
+
+            for(i=0; i<accept_necessary.length; i++){
+                _addEvent(accept_necessary[i], 'click', function(event){
+                    _acceptAction(event, []);
+                });
+            }
+
+            /**
+             * Return all elements with given data-cc role
+             * @param {string} data_role 
+             * @returns {NodeListOf<Element>}
+             */
+            function _getElements(data_role){
+                return document.querySelectorAll('a[data-cc="' + data_role + '"], button[data-cc="' + data_role + '"]');
+            }
+
+            /**
+             * Helper function: accept and then hide modals
+             * @param {PointerEvent} e source event
+             * @param {string} [accept_type]
+             */
+            function _acceptAction(e, accept_type){
+                e.preventDefault ? e.preventDefault() : e.returnValue = false;
+                _cookieconsent.accept(accept_type);
+                _cookieconsent.hideSettings();
+                _cookieconsent.hide();
             }
         }
 
@@ -942,7 +985,7 @@
             if(!cookie_consent_accepted){
 
                 /**
-                 * Delete unused/"zoombie" cookies the very-first time
+                 * Delete unused/"zombie" cookies the very-first time
                  */
                 if(_config.autoclear_cookies)
                     _autoclearCookies(true);
@@ -1292,7 +1335,7 @@
                 _loadCSS(conf_params['theme_css'], function(){
                     _getModalFocusableData();
                     _guiManager(conf_params['gui_options']);
-                    _addCookieSettingsButtonListener();
+                    _addDataButtonListeners();
 
                     if(_config.autorun && consent_modal_exists){
                         _cookieconsent.show(conf_params['delay'] || 0);
@@ -1772,7 +1815,7 @@
                     /**
                      * Restore focus to last page element which had focus before modal opening
                      */
-                    last_elem_before_modal.focus();
+                    last_elem_before_modal && last_elem_before_modal.focus();
                     current_modal_focusable = null;
                 }
 
