@@ -95,6 +95,7 @@ A __lightweight__ & __gdpr compliant__ cookie consent plugin written in plain ja
                 theme_css: '<path-to-cookieconsent.css>',  // 🚨 replace with a valid path
                 page_scripts: true,                        // default: false
 
+                // mode: 'opt-in'                          // default: 'opt-in'; value: 'opt-in' or 'opt-out'
                 // delay: 0,                               // default: 0
                 // auto_language: null                     // default: null; could also be 'browser' or 'document'
                 // autorun: true,                          // default: true
@@ -225,6 +226,7 @@ A __lightweight__ & __gdpr compliant__ cookie consent plugin written in plain ja
                         theme_css: '<path-to-cookieconsent.css>',  // 🚨 replace with a valid path
                         page_scripts: true,                        // default: false
 
+                        // mode: 'opt-in'                          // default: 'opt-in'; value: 'opt-in' or 'opt-out'
                         // delay: 0,                               // default: 0
                         // auto_language: '',                      // default: null; could also be 'browser' or 'document'
                         // autorun: true,                          // default: true
@@ -684,6 +686,7 @@ Below a table which sums up all of the available options (must be passed to the 
 |---------------------	|----------	|---------	|---------------------------------------------------------------------------------------------------------------------------------- |
 | `autorun`           	| boolean  	| true    	| If enabled, show the cookie consent as soon as possible (otherwise you need to manually call the `.show()` method)                |
 | `delay`             	| number   	| 0       	| Number of `milliseconds` before showing the consent-modal                                                                         |
+| `mode`             	| string   	| 'opt-in'  |Accepted values: <br> - `opt-in`: scripts will not run unless consent is given (gdpr compliant) <br> - `opt-out`: scripts — that have categories set as `enabled` by default — will run without consent, until an explicit choice is made                                                 |
 | `cookie_expiration` 	| number   	| 182     	| Number of days before the cookie expires (182 days = 6 months)                                                                    |
 | `cookie_necessary_only_expiration` 	| number   	| -     	| Specify if you want to set a different number of days - before the cookie expires - when the user accepts only the necessary categories                                                |
 | `cookie_path` 	    | string   	| "/"     	| Path where the cookie will be set                                                                                                 |

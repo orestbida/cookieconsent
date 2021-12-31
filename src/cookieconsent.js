@@ -18,6 +18,7 @@
         var ENABLE_LOGS = true;
 
         var _config = {
+            'mode': 'opt-in',                         // 'opt-in', 'opt-out'
             'current_lang': 'en',
             'auto_language': null,
             'autorun': true,                          // run as soon as loaded
@@ -71,6 +72,12 @@
          * @type {string[]}
          */
         var rejected_categories=[];
+
+        /**
+         * Contains all categories enabled by default
+         * @type {string[]}
+         */
+        var default_enabled_categories = [];
 
         // Don't run plugin (to avoid indexing its text content) if bot detected
         var is_bot = false;
@@ -152,6 +159,9 @@
 
             if(typeof conf_params['onChange'] === "function")
                 onChange = conf_params['onChange'];
+
+            if(conf_params['mode'] === 'opt-out')
+                _config.mode = 'opt-out';
 
             if(typeof conf_params['revision'] === "number"){
                 conf_params['revision'] > -1 && (_config.revision = conf_params['revision']);
@@ -626,6 +636,13 @@
                     }else if(toggle_data['enabled']){
                         block_switch.checked = true;
                         toggle_states.push(true);
+
+                        /**
+                         * Keep track of categories enabled by default (useful when mode=='opt-out')
+                         */
+                        if(toggle_data['enabled'])
+                            default_enabled_categories.push(cookie_category);
+
                     }else{
                         toggle_states.push(false);
                     }
@@ -1368,6 +1385,10 @@
                     if(typeof conf_params['onAccept'] === "function"){
                         conf_params['onAccept'](saved_cookie_content);
                     }
+
+                }else if(_config.mode === 'opt-out'){
+                    _log("CookieConsent [CONFIG] mode='" + _config.mode + "', default enabled categories:", default_enabled_categories);
+                    _manageExistingScripts(default_enabled_categories);
                 }
             }else{
                 _log("CookieConsent [NOTICE]: cookie consent already attached to body!");
@@ -1412,15 +1433,17 @@
         /**
          * This function handles the loading/activation logic of the already
          * existing scripts based on the current accepted cookie categories
+         * 
+         * @param {string[]} [must_enable_categories]
          */
-        var _manageExistingScripts = function(){
+        var _manageExistingScripts = function(must_enable_categories){
 
             if(!_config.page_scripts) return;
 
             // get all the scripts with "cookie-category" attribute
             var scripts = document.querySelectorAll('script[' + _config.script_selector + ']');
             var sequential_enabled = _config.page_scripts_order;
-            var accepted_categories = saved_cookie_content['level'] || [];
+            var accepted_categories = must_enable_categories || saved_cookie_content['level'] || [];
             _log("CookieConsent [SCRIPT_MANAGER]: sequential loading:", sequential_enabled);
 
             /**
