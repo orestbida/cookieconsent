@@ -1514,9 +1514,10 @@
                     accept_type = _getAcceptType(_getCurrentCategoriesState());
 
                     _manageExistingScripts();
-                    if(typeof user_config['onAccept'] === "function"){
-                        user_config['onAccept'](saved_cookie_content);
-                    }
+
+                    if(typeof onAccept === 'function')
+                        onAccept(saved_cookie_content);
+
 
                 }else if(_config.mode === 'opt-out'){
                     _log("CookieConsent [CONFIG] mode='" + _config.mode + "', default enabled categories:", default_enabled_categories);
