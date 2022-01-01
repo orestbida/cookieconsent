@@ -33,24 +33,47 @@
             'script_selector': 'data-cookiecategory'
         };
 
-        /**
-         * Object which holds the main methods/API (.show, .run, ...)
-         */
-        var _cookieconsent = {};
+        var
+            /**
+             * Object which holds the main methods/API (.show, .run, ...)
+            */
+            _cookieconsent = {},
 
-        /**
-         * Internal state variables
-         */
-        var saved_cookie_content = {};
-        var consent_modal_exists = false;
-        var cookie_consent_accepted = false;
-        var consent_modal_visible = false;
-        var settings_modal_visible = false;
-        var clicked_inside_modal = false;
-        var current_modal_focusable;
-        var all_table_headers, all_blocks, onAccept, onChange, onFirstAction;
-        var valid_revision=true, revision_enabled=false, data=null;
-        var changed_settings = [], reload_page = false;
+            /**
+             * Global user configuration object
+             */
+            user_config,
+
+            /**
+             * Internal state variables
+             */
+            saved_cookie_content = {},
+            cookie_data = null,
+            cookie_consent_accepted = false,
+
+            consent_modal_exists = false,
+            consent_modal_visible = false,
+
+            settings_modal_visible = false,
+            clicked_inside_modal = false,
+            current_modal_focusable,
+
+            all_table_headers,
+            all_blocks,
+
+            // Helper callback functions
+            // (avoid calling "user_config['onAccept']" all the time)
+            onAccept,
+            onChange,
+            onFirstAction,
+
+            revision_enabled = false,
+            valid_revision = true,
+            revision_message = '',
+
+            // State variables for the autoclearCookies function
+            changed_settings = [],
+            reload_page = false;
 
         /**
          * Accept type:
@@ -65,13 +88,13 @@
          * Contains all accepted categories
          * @type {string[]}
          */
-        var accepted_categories=[];
+        var accepted_categories = [];
 
         /**
          * Contains all non-accepted (rejected) categories
          * @type {string[]}
          */
-        var rejected_categories=[];
+        var rejected_categories = [];
 
         /**
          * Contains all categories enabled by default
@@ -118,88 +141,117 @@
         /**
          * Pointers to main dom elements (to avoid retrieving them later using document.getElementById)
          */
-        var html_dom = document.documentElement;
-        var main_container;
-        var consent_modal;
-        var settings_container, settings_inner;
+        var
+            /** @type {HTMLElement} */ html_dom = document.documentElement,
+            /** @type {HTMLElement} */ main_container,
+            /** @type {HTMLElement} */ all_modals_container,
+
+            /** @type {HTMLElement} */ consent_modal,
+            /** @type {HTMLElement} */ consent_modal_title,
+            /** @type {HTMLElement} */ consent_modal_description,
+            /** @type {HTMLElement} */ consent_primary_btn,
+            /** @type {HTMLElement} */ consent_secondary_btn,
+            /** @type {HTMLElement} */ consent_buttons,
+            /** @type {HTMLElement} */ consent_modal_inner,
+
+            /** @type {HTMLElement} */ settings_container,
+            /** @type {HTMLElement} */ settings_inner,
+            /** @type {HTMLElement} */ settings_title,
+            /** @type {HTMLElement} */ settings_close_btn,
+            /** @type {HTMLElement} */ settings_blocks,
+            /** @type {HTMLElement} */ new_settings_blocks,
+            /** @type {HTMLElement} */ settings_buttons,
+            /** @type {HTMLElement} */ settings_save_btn,
+            /** @type {HTMLElement} */ settings_accept_all_btn,
+            /** @type {HTMLElement} */ settings_reject_all_btn;
 
         /**
          * Update config settings
-         * @param {Object} conf_params
+         * @param {Object} user_config
          */
-        var _setConfig = function(conf_params){
-            _log("CookieConsent [CONFIG]: received_config_settings ", conf_params);
+        var _setConfig = function(_user_config){
 
-            if(typeof conf_params['cookie_expiration'] === "number")
-                _config.cookie_expiration = conf_params['cookie_expiration'];
+            /**
+             * Make user configuration globally available
+             */
+            user_config = _user_config;
 
-            if(typeof conf_params['cookie_necessary_only_expiration'] === "number")
-                _config.cookie_necessary_only_expiration  = conf_params['cookie_necessary_only_expiration'];
+            _log("CookieConsent [CONFIG]: received_config_settings ", user_config);
 
-            if(typeof conf_params['autorun'] === "boolean")
-                _config.autorun = conf_params['autorun'];
+            if(typeof user_config['cookie_expiration'] === "number")
+                _config.cookie_expiration = user_config['cookie_expiration'];
 
-            if(typeof conf_params['cookie_domain'] === "string")
-                _config.cookie_domain = conf_params['cookie_domain'];
+            if(typeof user_config['cookie_necessary_only_expiration'] === "number")
+                _config.cookie_necessary_only_expiration  = user_config['cookie_necessary_only_expiration'];
 
-            if(typeof conf_params['cookie_same_site'] === "string")
-                _config.cookie_same_site = conf_params['cookie_same_site'];
+            if(typeof user_config['autorun'] === "boolean")
+                _config.autorun = user_config['autorun'];
 
-            if(typeof conf_params['cookie_path'] === "string")
-                _config.cookie_path = conf_params['cookie_path'];
+            if(typeof user_config['cookie_domain'] === "string")
+                _config.cookie_domain = user_config['cookie_domain'];
 
-            if(typeof conf_params['cookie_name'] === "string")
-                _config.cookie_name = conf_params['cookie_name'];
+            if(typeof user_config['cookie_same_site'] === "string")
+                _config.cookie_same_site = user_config['cookie_same_site'];
 
-            if(typeof conf_params['onAccept'] === "function")
-                onAccept = conf_params['onAccept'];
+            if(typeof user_config['cookie_path'] === "string")
+                _config.cookie_path = user_config['cookie_path'];
 
-            if(typeof conf_params['onFirstAction'] === "function")
-                onFirstAction = conf_params['onFirstAction'];
+            if(typeof user_config['cookie_name'] === "string")
+                _config.cookie_name = user_config['cookie_name'];
 
-            if(typeof conf_params['onChange'] === "function")
-                onChange = conf_params['onChange'];
+            if(typeof user_config['onAccept'] === "function")
+                onAccept = user_config['onAccept'];
 
-            if(conf_params['mode'] === 'opt-out')
+            if(typeof user_config['onFirstAction'] === "function")
+                onFirstAction = user_config['onFirstAction'];
+
+            if(typeof user_config['onChange'] === "function")
+                onChange = user_config['onChange'];
+
+            if(user_config['mode'] === 'opt-out')
                 _config.mode = 'opt-out';
 
-            if(typeof conf_params['revision'] === "number"){
-                conf_params['revision'] > -1 && (_config.revision = conf_params['revision']);
+            if(typeof user_config['revision'] === "number"){
+                user_config['revision'] > -1 && (_config.revision = user_config['revision']);
                 revision_enabled = true;
             }
 
-            if(typeof conf_params['autoclear_cookies'] === "boolean")
-                _config.autoclear_cookies = conf_params['autoclear_cookies'];
+            if(typeof user_config['autoclear_cookies'] === "boolean")
+                _config.autoclear_cookies = user_config['autoclear_cookies'];
 
-            if(conf_params['use_rfc_cookie'] === true)
+            if(user_config['use_rfc_cookie'] === true)
                 _config.use_rfc_cookie = true;
 
-            if(conf_params['hide_from_bots'] === true){
+            if(user_config['hide_from_bots'] === true){
                 is_bot = navigator &&
                     ((navigator.userAgent && /bot|crawl|spider|slurp|teoma/i.test(navigator.userAgent)) || navigator.webdriver);
             }
 
-            _config.page_scripts = conf_params['page_scripts'] === true;
-            _config.page_scripts_order = conf_params['page_scripts_order'] !== false;
+            _config.page_scripts = user_config['page_scripts'] === true;
+            _config.page_scripts_order = user_config['page_scripts_order'] !== false; //[WARNING] Will be removed in v3
 
-            if (conf_params['auto_language'] === 'browser' || conf_params['auto_language'] === true) {
+            if (user_config['auto_language'] === 'browser' || user_config['auto_language'] === true) {
                 _config.auto_language = 'browser';
-            } else if (conf_params['auto_language'] === 'document') {
+            } else if (user_config['auto_language'] === 'document') {
                 _config.auto_language = 'document';
             }
 
-            _config.current_lang = _resolveCurrentLang(conf_params.languages, conf_params['current_lang']);
+            _log("CookieConsent [LANG]: auto_language strategy is '" + _config.auto_language + "'");
+
+            _config.current_lang = _resolveCurrentLang(user_config.languages, user_config['current_lang']);
         }
 
         /**
          * Add an onClick listeners to all html elements with data-cc attribute
          */
         var _addDataButtonListeners = function(){
-            
+
+            var _a = 'accept-';
+
             var show_settings = _getElements('c-settings');
-            var accept_all = _getElements('accept-all');
-            var accept_necessary = _getElements('accept-necessary');
-            var accept_selection = _getElements('accept-selection');
+            var accept_all = _getElements(_a + 'all');
+            var accept_necessary = _getElements(_a + 'necessary');
+            var accept_selection = _getElements(_a + 'selection');
 
             for(var i=0; i<show_settings.length; i++){
                 show_settings[i].setAttribute('aria-haspopup', 'dialog');
@@ -229,7 +281,7 @@
 
             /**
              * Return all elements with given data-cc role
-             * @param {string} data_role 
+             * @param {string} data_role
              * @returns {NodeListOf<Element>}
              */
             function _getElements(data_role){
@@ -331,69 +383,21 @@
             }
         }
 
-        var _conf_params, _createConsentModal, revision_message="", consent_text;
+        var _createConsentModal = function(lang){
 
-        /**
-         * Generate cookie consent html based on config settings
-         * @param {boolean} never_accepted - used to know whether to create both modals or not
-         * @param {Object} conf_params - user configuration parameters
-         */
-        var _createCookieConsentHTML = function(never_accepted, conf_params){
+            if(user_config['force_consent'] === true)
+                _addClass(html_dom, 'force--consent');
 
-            // Create main container which holds both consent modal & settings modal
-            main_container = _createNode('div');
-            main_container.id = 'cc--main';
-
-            // Fix layout flash
-            main_container.style.position = "fixed";
-            main_container.style.zIndex = "1000000";
-            main_container.innerHTML = '<!--[if lt IE 9 ]><div id="cc_div" class="cc_div ie"></div><![endif]--><!--[if (gt IE 8)|!(IE)]><!--><div id="cc_div" class="cc_div"></div><!--<![endif]-->'
-            var all_modals_container = main_container.children[0];
-
-            // Get current language
-            var lang = _config.current_lang;
-
-            // Feature detection :=> avoid IE exception since .textContent is not always supported
-            var innerText = (typeof html_dom.textContent === 'string' ? 'textContent' : 'innerText');
-
-            _conf_params = conf_params;
-            _createConsentModal = function(conf_params){
-
-                if(conf_params['force_consent'] === true){
-                    _addClass(html_dom, 'force--consent');
-                }
-
-                var description = conf_params.languages[lang]['consent_modal']['description'];
-
-                if(revision_enabled){
-                    if(!valid_revision){
-                        description = description.replace("{{revision_message}}", revision_message || conf_params.languages[lang]['consent_modal']['revision_message'] || "");
-                    }else{
-                        description = description.replace("{{revision_message}}", "");
-                    }
-                }
-
-                if(consent_modal){
-                    consent_text.innerHTML = description;
-                    return;
-                }
+            // Create modal if it doesn't exist
+            if(!consent_modal){
 
                 consent_modal = _createNode('div');
-                var consent_modal_inner = _createNode('div');
                 var consent_modal_inner_inner = _createNode('div');
-
-                consent_text = _createNode('div');
-                var consent_buttons = _createNode('div');
                 var overlay = _createNode('div');
 
                 consent_modal.id = 'cm';
-                consent_modal_inner.id = 'c-inr';
                 consent_modal_inner_inner.id = 'c-inr-i';
-
-                consent_text.id = 'c-txt';
-                consent_buttons.id = "c-bns";
                 overlay.id = 'cm-ov';
-
 
                 consent_modal.setAttribute('role', 'dialog');
                 consent_modal.setAttribute('aria-modal', 'true');
@@ -401,38 +405,63 @@
                 consent_modal.setAttribute('aria-labelledby', 'c-ttl');
                 consent_modal.setAttribute('aria-describedby', 'c-txt');
 
+                // Append consent modal to main container
+                all_modals_container.appendChild(consent_modal);
+                all_modals_container.appendChild(overlay);
+
                 /**
                  * Make modal by default hidden to prevent weird page jumps/flashes (shown only once css is loaded)
                  */
                 consent_modal.style.visibility = overlay.style.visibility = "hidden";
                 overlay.style.opacity = 0;
+            }
 
-                // Use insertAdjacentHTML instead of innerHTML
-                var consent_modal_title_value = conf_params.languages[lang]['consent_modal']['title'];
+            // Use insertAdjacentHTML instead of innerHTML
+            var consent_modal_title_value = user_config.languages[lang]['consent_modal']['title'];
 
-                // Add title (if valid)
-                if(consent_modal_title_value){
-                    var consent_title = _createNode('div');
-                    consent_title.id = 'c-ttl';
-                    consent_title.setAttribute('role', 'heading');
-                    consent_title.setAttribute('aria-level', '2');
-                    consent_title.insertAdjacentHTML('beforeend', consent_modal_title_value);
-                    consent_modal_inner_inner.appendChild(consent_title);
+            // Add title (if valid)
+            if(consent_modal_title_value){
+
+                if(!consent_modal_title){
+                    consent_modal_title = _createNode('div');
+                    consent_modal_title.id = 'c-ttl';
+                    consent_modal_title.setAttribute('role', 'heading');
+                    consent_modal_title.setAttribute('aria-level', '2');
+                    consent_modal_inner_inner.appendChild(consent_modal_title);
                 }
 
-                consent_text.insertAdjacentHTML('beforeend', description);
-                consent_modal_inner_inner.appendChild(consent_text);
+                consent_modal_title.innerHTML = consent_modal_title_value;
+            }
 
-                var primary_btn_data = conf_params.languages[lang]['consent_modal']['primary_btn'],   // accept current selection
-                    secondary_btn_data = conf_params.languages[lang]['consent_modal']['secondary_btn'];
+            var description = user_config.languages[lang]['consent_modal']['description'];
 
-                // Add primary button if not falsy
-                if(primary_btn_data){
+            if(revision_enabled){
+                if(!valid_revision){
+                    description = description.replace("{{revision_message}}", revision_message || user_config.languages[lang]['consent_modal']['revision_message'] || "");
+                }else{
+                    description = description.replace("{{revision_message}}", "");
+                }
+            }
 
-                    var consent_primary_btn = _createNode('button');
+            if(!consent_modal_description){
+                consent_modal_description = _createNode('div');
+                consent_modal_description.id = 'c-txt';
+                consent_modal_inner_inner.appendChild(consent_modal_description);
+            }
+
+            // Set description content
+            consent_modal_description.innerHTML = description;
+
+            var primary_btn_data = user_config.languages[lang]['consent_modal']['primary_btn'],   // accept current selection
+                secondary_btn_data = user_config.languages[lang]['consent_modal']['secondary_btn'];
+
+            // Add primary button if not falsy
+            if(primary_btn_data){
+
+                if(!consent_primary_btn){
+                    consent_primary_btn = _createNode('button');
                     consent_primary_btn.id = 'c-p-bn';
                     consent_primary_btn.className =  "c-bn";
-                    consent_primary_btn[innerText] = conf_params.languages[lang]['consent_modal']['primary_btn']['text'];
 
                     var _accept_type;
 
@@ -446,13 +475,16 @@
                     });
                 }
 
-                // Add secondary button if not falsy
-                if(secondary_btn_data){
+                consent_primary_btn.textContent = user_config.languages[lang]['consent_modal']['primary_btn']['text'];
+            }
 
-                    var consent_secondary_btn = _createNode('button');
+            // Add secondary button if not falsy
+            if(secondary_btn_data){
+
+                if(!consent_secondary_btn){
+                    consent_secondary_btn = _createNode('button');
                     consent_secondary_btn.id = 'c-s-bn';
                     consent_secondary_btn.className = "c-bn c_link";
-                    consent_secondary_btn[innerText] = conf_params.languages[lang]['consent_modal']['secondary_btn']['text'];
 
                     if(secondary_btn_data['role'] === 'accept_necessary'){
                         _addEvent(consent_secondary_btn, 'click', function(){
@@ -466,8 +498,23 @@
                     }
                 }
 
-                // Swap buttons
-                var gui_options_data = conf_params['gui_options'];
+                consent_secondary_btn.textContent = user_config.languages[lang]['consent_modal']['secondary_btn']['text'];
+            }
+
+            // Swap buttons
+            var gui_options_data = user_config['gui_options'];
+
+            if(!consent_modal_inner){
+                consent_modal_inner = _createNode('div');
+                consent_modal_inner.id = 'c-inr';
+
+                consent_modal_inner.appendChild(consent_modal_inner_inner);
+            }
+
+            if(!consent_buttons){
+                consent_buttons = _createNode('div');
+                consent_buttons.id = "c-bns";
+
                 if(gui_options_data && gui_options_data['consent_modal'] && gui_options_data['consent_modal']['swap_buttons'] === true){
                     secondary_btn_data && consent_buttons.appendChild(consent_secondary_btn);
                     primary_btn_data && consent_buttons.appendChild(consent_primary_btn);
@@ -477,81 +524,83 @@
                     secondary_btn_data && consent_buttons.appendChild(consent_secondary_btn);
                 }
 
-                consent_modal_inner.appendChild(consent_modal_inner_inner);
                 (primary_btn_data || secondary_btn_data ) && consent_modal_inner.appendChild(consent_buttons);
                 consent_modal.appendChild(consent_modal_inner);
-
-                // Append consent modal to main container
-                all_modals_container.appendChild(consent_modal);
-                all_modals_container.appendChild(overlay);
-
-                consent_modal_exists = true;
             }
 
-            // Create consent modal
-            if(!never_accepted) _createConsentModal(conf_params);
+            consent_modal_exists = true;
+        }
+
+        var _createSettingsModal = function(lang){
 
             /**
              * Create all consent_modal elements
              */
-            settings_container = _createNode('div');
-            var settings_container_valign = _createNode('div');
-            var settings = _createNode('div');
-            var settings_container_inner = _createNode('div');
-            settings_inner = _createNode('div');
-            var settings_title = _createNode('div');
-            var settings_header = _createNode('div');
-            var settings_close_btn = _createNode('button');
-            var settings_close_btn_container = _createNode('div');
-            var settings_blocks = _createNode('div');
-            var overlay = _createNode('div');
+            if(!settings_container){
+                settings_container = _createNode('div');
+                var settings_container_valign = _createNode('div');
+                var settings = _createNode('div');
+                var settings_container_inner = _createNode('div');
+                settings_inner = _createNode('div');
+                settings_title = _createNode('div');
+                var settings_header = _createNode('div');
+                settings_close_btn = _createNode('button');
+                var settings_close_btn_container = _createNode('div');
+                settings_blocks = _createNode('div');
+                var overlay = _createNode('div');
 
-            /**
-             * Set ids
-             */
-            settings_container.id = 's-cnt';
-            settings_container_valign.id = "c-vln";
-            settings_container_inner.id = "c-s-in";
-            settings.id = "cs";
-            settings_title.id = 's-ttl';
-            settings_inner.id = 's-inr';
-            settings_header.id = "s-hdr";
-            settings_blocks.id = 's-bl';
-            settings_close_btn.id = 's-c-bn';
-            overlay.id = 'cs-ov';
-            settings_close_btn_container.id = 's-c-bnc';
-            settings_close_btn.className = 'c-bn';
+                /**
+                 * Set ids
+                 */
+                settings_container.id = 's-cnt';
+                settings_container_valign.id = "c-vln";
+                settings_container_inner.id = "c-s-in";
+                settings.id = "cs";
+                settings_title.id = 's-ttl';
+                settings_inner.id = 's-inr';
+                settings_header.id = "s-hdr";
+                settings_blocks.id = 's-bl';
+                settings_close_btn.id = 's-c-bn';
+                overlay.id = 'cs-ov';
+                settings_close_btn_container.id = 's-c-bnc';
+                settings_close_btn.className = 'c-bn';
 
-            settings_close_btn.setAttribute('aria-label', conf_params.languages[lang]['settings_modal']['close_btn_label'] || 'Close');
-            settings_container.setAttribute('role', 'dialog');
-            settings_container.setAttribute('aria-modal', 'true');
-            settings_container.setAttribute('aria-hidden', 'true');
-            settings_container.setAttribute('aria-labelledby', 's-ttl');
-            settings_title.setAttribute('role', 'heading');
-            settings_container.style.visibility = overlay.style.visibility = "hidden";
-            overlay.style.opacity = 0;
+                settings_container.setAttribute('role', 'dialog');
+                settings_container.setAttribute('aria-modal', 'true');
+                settings_container.setAttribute('aria-hidden', 'true');
+                settings_container.setAttribute('aria-labelledby', 's-ttl');
+                settings_title.setAttribute('role', 'heading');
+                settings_container.style.visibility = overlay.style.visibility = "hidden";
+                overlay.style.opacity = 0;
 
-            settings_close_btn_container.appendChild(settings_close_btn);
+                settings_close_btn_container.appendChild(settings_close_btn);
 
-            // If 'esc' key is pressed inside settings_container div => hide settings
-            _addEvent(settings_container_valign, 'keydown', function(evt){
-                evt = evt || window.event;
-                if (evt.keyCode === 27) {
+                // If 'esc' key is pressed inside settings_container div => hide settings
+                _addEvent(settings_container_valign, 'keydown', function(evt){
+                    evt = evt || window.event;
+                    if (evt.keyCode === 27) {
+                        _cookieconsent.hideSettings(0);
+                    }
+                }, true);
+
+                _addEvent(settings_close_btn, 'click', function(){
                     _cookieconsent.hideSettings(0);
-                }
-            }, true);
+                });
+            }else{
+                new_settings_blocks = _createNode('div');
+                new_settings_blocks.id = 's-bl';
+            }
 
-            _addEvent(settings_close_btn, 'click', function(){
-                _cookieconsent.hideSettings(0);
-            });
+            // Add label to close button
+            settings_close_btn.setAttribute('aria-label', user_config.languages[lang]['settings_modal']['close_btn_label'] || 'Close');
 
-            all_blocks = conf_params.languages[_config.current_lang]['settings_modal']['blocks'];
-            all_table_headers = conf_params.languages[_config.current_lang]['settings_modal']['cookie_table_headers'];
+            all_blocks = user_config.languages[lang]['settings_modal']['blocks'];
+            all_table_headers = user_config.languages[lang]['settings_modal']['cookie_table_headers'];
 
             var n_blocks = all_blocks.length;
 
             // Set settings modal title
-            settings_title.insertAdjacentHTML('beforeend', conf_params.languages[_config.current_lang]['settings_modal']['title']);
+            settings_title.innerHTML = user_config.languages[lang]['settings_modal']['title'];
 
             // Create settings modal content (blocks)
             for(var i=0; i<n_blocks; ++i){
@@ -560,7 +609,7 @@
                     description_data = all_blocks[i]['description'],
                     toggle_data = all_blocks[i]['toggle'],
                     cookie_table_data = all_blocks[i]['cookie_table'],
-                    remove_cookie_tables = conf_params['remove_cookie_tables'] === true,
+                    remove_cookie_tables = user_config['remove_cookie_tables'] === true,
                     isExpandable = (description_data && 'truthy') || (!remove_cookie_tables && (cookie_table_data && 'truthy'));
 
                 // Create title
@@ -615,7 +664,7 @@
                     var cookie_category = toggle_data.value;
                     block_switch.value = cookie_category;
 
-                    label_text_span[innerText] = title_data;
+                    label_text_span.textContent = title_data;
                     block_title_btn.insertAdjacentHTML('beforeend', title_data);
 
                     block_title_container.appendChild(block_title_btn);
@@ -623,31 +672,31 @@
                     block_switch_span.appendChild(block_switch_span_off_icon);
 
                     /**
-                     * If never accepted => generate toggles with the states defined in the config. object
-                     * Otherwise, retrieve values from saved cookie
+                     * If consent modal does not exist => retrieve category states from cookie
+                     * Otherwise use states defined in the user_config. object
                      */
-                    if(never_accepted){
+                    if(!consent_modal_exists){
                         if(_inArray(saved_cookie_content['level'], cookie_category) > -1){
                             block_switch.checked = true;
-                            toggle_states.push(true);
+                            !new_settings_blocks && toggle_states.push(true);
                         }else{
-                            toggle_states.push(false);
+                            !new_settings_blocks && toggle_states.push(false);
                         }
                     }else if(toggle_data['enabled']){
                         block_switch.checked = true;
-                        toggle_states.push(true);
+                        !new_settings_blocks && toggle_states.push(true);
 
                         /**
                          * Keep track of categories enabled by default (useful when mode=='opt-out')
                          */
                         if(toggle_data['enabled'])
-                            default_enabled_categories.push(cookie_category);
+                            !new_settings_blocks && default_enabled_categories.push(cookie_category);
 
                     }else{
-                        toggle_states.push(false);
+                        !new_settings_blocks && toggle_states.push(false);
                     }
 
-                    toggle_categories.push(cookie_category);
+                    !new_settings_blocks && toggle_categories.push(cookie_category);
 
                     /**
                      * Set toggle as readonly if true (disable checkbox)
@@ -655,9 +704,9 @@
                     if(toggle_data['readonly']){
                         block_switch.disabled = true;
                         _addClass(block_switch_span, 'c-ro');
-                        toggle_readonly.push(true);
+                        !new_settings_blocks && toggle_readonly.push(true);
                     }else{
-                        toggle_readonly.push(false);
+                        !new_settings_blocks && toggle_readonly.push(false);
                     }
 
                     _addClass(block_table_container, 'b-acc');
@@ -723,7 +772,7 @@
                         // get custom header content
                         if(obj){
                             var new_column_key = obj && _getKeys(obj)[0];
-                            th1[innerText] = all_table_headers[p][new_column_key];
+                            th1.textContent = all_table_headers[p][new_column_key];
                             tr_tmp_fragment.appendChild(th1);
                         }
                     }
@@ -779,64 +828,86 @@
                  */
                 if(toggle_data && title_data || (!toggle_data && (title_data || description_data))){
                     block_section.appendChild(block_table_container);
-                    settings_blocks.appendChild(block_section);
+
+                    if(new_settings_blocks)
+                        new_settings_blocks.appendChild(block_section);
+                    else
+                        settings_blocks.appendChild(block_section);
                 }
             }
 
             // Create settings buttons
-            var settings_buttons = _createNode('div');
-            var settings_save_btn = _createNode('button');
-            var settings_accept_all_btn = _createNode('button');
+            if(!settings_buttons){
+                settings_buttons = _createNode('div');
+                settings_buttons.id = 's-bns';
+            }
 
-            settings_buttons.id = 's-bns';
-            settings_save_btn.id = 's-sv-bn';
-            settings_accept_all_btn.id = 's-all-bn';
-            settings_save_btn.className ='c-bn';
-            settings_accept_all_btn.className ='c-bn';
-            settings_save_btn.insertAdjacentHTML('beforeend', conf_params.languages[_config.current_lang]['settings_modal']['save_settings_btn']);
-            settings_accept_all_btn.insertAdjacentHTML('beforeend', conf_params.languages[_config.current_lang]['settings_modal']['accept_all_btn']);
+            if(!settings_accept_all_btn){
+                settings_accept_all_btn = _createNode('button');
+                settings_accept_all_btn.id = 's-all-bn';
+                settings_accept_all_btn.className ='c-bn';
+                settings_buttons.appendChild(settings_accept_all_btn);
 
-            settings_buttons.appendChild(settings_accept_all_btn);
+                _addEvent(settings_accept_all_btn, 'click', function(){
+                    _cookieconsent.hideSettings();
+                    _cookieconsent.hide();
+                    _cookieconsent.accept('all');
+                });
+            }
 
-            var reject_all_btn_text = conf_params.languages[_config.current_lang]['settings_modal']['reject_all_btn'];
+            settings_accept_all_btn.textContent = user_config.languages[lang]['settings_modal']['accept_all_btn'];
+
+            var reject_all_btn_text = user_config.languages[lang]['settings_modal']['reject_all_btn'];
 
             // Add third [optional] reject all button if provided
             if(reject_all_btn_text){
 
-                var reject_all_btn = _createNode('button');
-                reject_all_btn.id = 's-rall-bn';
-                reject_all_btn.className = 'c-bn';
-                reject_all_btn.insertAdjacentHTML('beforeend', reject_all_btn_text);
+                if(!settings_reject_all_btn){
+                    settings_reject_all_btn = _createNode('button');
+                    settings_reject_all_btn.id = 's-rall-bn';
+                    settings_reject_all_btn.className = 'c-bn';
 
-                _addEvent(reject_all_btn, 'click', function(){
-                    _cookieconsent.hideSettings();
-                    _cookieconsent.hide();
-                    _cookieconsent.accept([]);
-                });
+                    _addEvent(settings_reject_all_btn, 'click', function(){
+                        _cookieconsent.hideSettings();
+                        _cookieconsent.hide();
+                        _cookieconsent.accept([]);
+                    });
 
-                settings_inner.className = "bns-t";
-                settings_buttons.appendChild(reject_all_btn);
+                    settings_inner.className = "bns-t";
+                    settings_buttons.appendChild(settings_reject_all_btn);
+                }
+
+                settings_reject_all_btn.textContent = reject_all_btn_text;
             }
 
-            settings_buttons.appendChild(settings_save_btn);
 
-            // Add save preferences button onClick event
-            // Hide both settings modal and consent modal
-            _addEvent(settings_save_btn, 'click', function(){
-                _cookieconsent.hideSettings();
-                _cookieconsent.hide();
-                _cookieconsent.accept();
-            });
+            if(!settings_save_btn){
+                settings_save_btn = _createNode('button');
+                settings_save_btn.id = 's-sv-bn';
+                settings_save_btn.className ='c-bn';
+                settings_buttons.appendChild(settings_save_btn);
 
-            _addEvent(settings_accept_all_btn, 'click', function(){
-                _cookieconsent.hideSettings();
-                _cookieconsent.hide();
-                _cookieconsent.accept('all');
-            });
+                // Add save preferences button onClick event
+                // Hide both settings modal and consent modal
+                _addEvent(settings_save_btn, 'click', function(){
+                    _cookieconsent.hideSettings();
+                    _cookieconsent.hide();
+                    _cookieconsent.accept();
+                });
+            }
+
+            settings_save_btn.textContent = user_config.languages[lang]['settings_modal']['save_settings_btn'];
+
+
+            if(new_settings_blocks) {
+                // replace entire existing cookie category blocks with the new cookie categories new blocks (in a different language)
+                settings_inner.replaceChild(new_settings_blocks, settings_blocks);
+                settings_blocks = new_settings_blocks;
+                return;
+            };
 
             settings_header.appendChild(settings_title);
             settings_header.appendChild(settings_close_btn_container);
-
             settings_inner.appendChild(settings_header);
             settings_inner.appendChild(settings_blocks);
             settings_inner.appendChild(settings_buttons);
@@ -848,21 +919,76 @@
 
             all_modals_container.appendChild(settings_container);
             all_modals_container.appendChild(overlay);
+        }
 
-            // Finally append everything to body (main_container holds both modals)
+        /**
+         * Generate cookie consent html markup
+         */
+        var _createCookieConsentHTML = function(){
+
+            // Create main container which holds both consent modal & settings modal
+            main_container = _createNode('div');
+            main_container.id = 'cc--main';
+
+            // Fix layout flash
+            main_container.style.position = "fixed";
+            main_container.style.zIndex = "1000000";
+            main_container.innerHTML = '<!--[if lt IE 9 ]><div id="cc_div" class="cc_div ie"></div><![endif]--><!--[if (gt IE 8)|!(IE)]><!--><div id="cc_div" class="cc_div"></div><!--<![endif]-->'
+            all_modals_container = main_container.children[0];
+
+            // Get current language
+            var lang = _config.current_lang;
+
+            // Create consent modal
+            if(consent_modal_exists)
+                _createConsentModal(lang);
+
+            // Always create settings modal
+            _createSettingsModal(lang);
+
+            // Finally append everything (main_container holds both modals)
             (root || document.body).appendChild(main_container);
+        }
+
+        _cookieconsent.updateLanguage = function(lang){
+
+            if(typeof lang !== 'string') return;
+
+            /**
+             * Validate language to avoid errors
+             */
+            var new_validated_lang = _getValidatedLanguage(lang, user_config.languages);
+
+            /**
+             * Set language only if it differs from current
+             */
+            if(new_validated_lang !== _config.current_lang){
+                _config.current_lang = new_validated_lang;
+
+                consent_modal_exists && _createConsentModal(new_validated_lang);
+                _createSettingsModal(new_validated_lang);
+
+                _log("CookieConsent [LANGUAGE]: curr_lang: '" + new_validated_lang + "'");
+
+                return true;
+            }
+
+            return false;
         }
 
         /**
          * Delete all cookies which are unused (based on selected preferences)
          *
-         * @param {boolean} [clearOnFirstAction] 
+         * @param {boolean} [clearOnFirstAction]
          */
         var _autoclearCookies = function(clearOnFirstAction){
 
             // Get number of blocks
             var len = all_blocks.length;
             var count = -1;
+
+            // reset reload state
+            reload_page = false;
 
             // Retrieve all cookies
             var all_cookies_array = _getCookie('', 'all');
@@ -888,10 +1014,11 @@
 
                     // if current block has a cookie table, an off toggle,
                     // and its preferences were just changed => delete cookies
+                    var category_just_disabled = _inArray(changed_settings, curr_block['toggle']['value']) > -1;
                     if(
                         !toggle_states[++count] &&
                         Object.prototype.hasOwnProperty.call(curr_block, "cookie_table") &&
-                        (clearOnFirstAction || _inArray(changed_settings, curr_block['toggle']['value']) > -1)
+                        (clearOnFirstAction || category_just_disabled)
                     ){
                         var curr_cookie_table = curr_block['cookie_table'];
 
@@ -902,7 +1029,8 @@
                         var clen = curr_cookie_table.length;
 
                         // set "reload_page" to true if reload=on_disable
-                        if(curr_block['toggle']['reload'] === 'on_disable') reload_page = true;
+                        if(curr_block['toggle']['reload'] === 'on_disable')
+                            category_just_disabled && (reload_page = true);
 
                         // for each row defined in the cookie table
                         for(var j=0; j<clen; j++){
@@ -982,7 +1110,7 @@
             saved_cookie_content = {
                 "level": accepted_categories,
                 "revision": _config.revision,
-                "data": data,
+                "data": cookie_data,
                 "rfc_cookie": _config.use_rfc_cookie
             }
 
@@ -1015,7 +1143,7 @@
 
                 cookie_consent_accepted = true;
 
-                return;
+                if(_config.mode === 'opt-in') return;
             }
 
             // fire onChange only if settings were changed
@@ -1126,7 +1254,6 @@
          * @returns {string}
          */
         var _resolveCurrentLang = function (languages, requested_language) {
-            _log("CookieConsent [LANG]: auto_language strategy is '" + _config.auto_language + "'");
 
             if (_config.auto_language === 'browser') {
                 return _getValidatedLanguage(_getBrowserLang(), languages);
@@ -1318,13 +1445,13 @@
         }
 
         /**
-         * Check if cookieconsent is already attached to dom
-         * If not, create one, configure it and attach it to the body
+         * "Init" method. Will run once and only if modals do not exist
          */
-        _cookieconsent.run = function(conf_params){
+        _cookieconsent.run = function(user_config){
             if(!document.getElementById('cc_div')){
+
                 // configure all parameters
-                _setConfig(conf_params);
+                _setConfig(user_config);
 
                 // if is bot, don't run plugin
                 if(is_bot) return;
@@ -1332,12 +1459,17 @@
                 // Retrieve cookie value (if set)
                 saved_cookie_content = JSON.parse(_getCookie(_config.cookie_name, 'one', true) || "{}");
                 cookie_consent_accepted = saved_cookie_content['level'] !== undefined;
-                data = saved_cookie_content['data'] !== undefined ? saved_cookie_content['data'] : null;
+
+                /**
+                 * Immediately retrieve the 'data' field from cookie
+                 * (since this value is allowed to be accessed/used before the .run method)
+                 */
+                cookie_data = saved_cookie_content['data'] !== undefined ? saved_cookie_content['data'] : null;
 
                 // Compare current revision with the one retrieved from cookie
-                valid_revision = typeof conf_params['revision'] === "number"
+                valid_revision = typeof user_config['revision'] === "number"
                     ? cookie_consent_accepted
-                        ? conf_params['revision'] > -1
+                        ? user_config['revision'] > -1
                             ? saved_cookie_content['revision'] === _config.revision
                             : true
                         : true
@@ -1347,15 +1479,15 @@
                 consent_modal_exists = (!cookie_consent_accepted || !valid_revision);
 
                 // Generate cookie-settings dom (& consent modal)
-                _createCookieConsentHTML(!consent_modal_exists, conf_params);
+                _createCookieConsentHTML();
 
-                _loadCSS(conf_params['theme_css'], function(){
+                _loadCSS(user_config['theme_css'], function(){
                     _getModalFocusableData();
-                    _guiManager(conf_params['gui_options']);
+                    _guiManager(user_config['gui_options']);
                     _addDataButtonListeners();
 
                     if(_config.autorun && consent_modal_exists){
-                        _cookieconsent.show(conf_params['delay'] || 0);
+                        _cookieconsent.show(user_config['delay'] || 0);
                     }
 
                     // Add class to enable animations/transitions
@@ -1382,8 +1514,8 @@
                     accept_type = _getAcceptType(_getCurrentCategoriesState());
 
                     _manageExistingScripts();
-                    if(typeof conf_params['onAccept'] === "function"){
-                        conf_params['onAccept'](saved_cookie_content);
+                    if(typeof user_config['onAccept'] === "function"){
+                        user_config['onAccept'](saved_cookie_content);
                     }
 
                 }else if(_config.mode === 'opt-out'){
@@ -1433,7 +1565,7 @@
         /**
          * This function handles the loading/activation logic of the already
          * existing scripts based on the current accepted cookie categories
-         * 
+         *
          * @param {string[]} [must_enable_categories]
          */
         var _manageExistingScripts = function(must_enable_categories){
@@ -1545,29 +1677,29 @@
              * add/update only the specified props.
              */
             if(mode === 'update'){
-                data = _cookieconsent.get('data');
-                var same_type = typeof data === typeof new_data;
+                cookie_data = _cookieconsent.get('data');
+                var same_type = typeof cookie_data === typeof new_data;
 
-                if(same_type && typeof data === "object"){
-                    !data && (data = {});
+                if(same_type && typeof cookie_data === "object"){
+                    !cookie_data && (cookie_data = {});
 
                     for(var prop in new_data){
-                        if(data[prop] !== new_data[prop]){
-                            data[prop] = new_data[prop]
+                        if(cookie_data[prop] !== new_data[prop]){
+                            cookie_data[prop] = new_data[prop]
                             set = true;
                         }
                     }
-                }else if((same_type || !data) && data !== new_data){
-                    data = new_data;
+                }else if((same_type || !cookie_data) && cookie_data !== new_data){
+                    cookie_data = new_data;
                     set = true;
                 }
             }else{
-                data = new_data;
+                cookie_data = new_data;
                 set = true;
             }
 
             if(set){
-                saved_cookie_content['data'] = data;
+                saved_cookie_content['data'] = cookie_data;
                 _setCookie(_config.cookie_name, JSON.stringify(saved_cookie_content));
             }
 
@@ -1596,8 +1728,8 @@
 
                 // Show consent modal ?
                 if(prompt_consent === true){
-                    _createConsentModal(_conf_params);
-                    _guiManager(_conf_params['gui_options'], true);
+                    _createConsentModal(user_config);
+                    _guiManager(user_config['gui_options'], true);
                     _getModalFocusableData();
                     _cookieconsent.show();
                 }else {
@@ -1620,7 +1752,7 @@
         _cookieconsent.set = function(field, data){
             switch(field){
                 case 'data': return _setCookieData(data['value'], data['mode']);
-                case 'revision': return _setRevision(data['value'], data['prompt_consent'], data['message']);
+                case 'revision': return _setRevision(data['value'], data['prompt_consent'], data['message']);   //[WARNING] Will be removed in v3
                 default: return false;
             }
         }
@@ -1650,7 +1782,7 @@
          * @returns {{accepted: string[], rejected: string[]}}
          */
         var _getCurrentCategoriesState = function(){
-            
+
             // get accepted categories
             accepted_categories = saved_cookie_content['level'] || [];
 
@@ -1661,13 +1793,13 @@
 
             return {
                 accepted: accepted_categories,
-                rejected: rejected_categories 
+                rejected: rejected_categories
             }
         }
 
         /**
          * Calculate "accept type" given current categories state
-         * @param {{accepted: string[], rejected: string[]}} currentCategoriesState 
+         * @param {{accepted: string[], rejected: string[]}} currentCategoriesState
          * @returns {string}
          */
         var _getAcceptType = function(currentCategoriesState){
@@ -1683,7 +1815,7 @@
             if(currentCategoriesState.accepted.length === toggle_categories.length)
                 type = 'all';
             else if(
-                currentCategoriesState.rejected.length >= 0 && 
+                currentCategoriesState.rejected.length >= 0 &&
                 currentCategoriesState.accepted.length === necessary_categories_count
             )
                 type = 'necessary'
