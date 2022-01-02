@@ -1438,10 +1438,13 @@
          * @returns {boolean}
          */
         _cookieconsent.allowedCategory = function(cookie_category){
-            return _inArray(
-                JSON.parse(_getCookie(_config.cookie_name, 'one', true) || '{}')['level'] || [] ,
-                cookie_category
-            ) > -1;
+
+            if(cookie_consent_accepted || _config.mode === 'opt-in')
+                var allowed_categories = JSON.parse(_getCookie(_config.cookie_name, 'one', true) || '{}')['level'] || []
+            else  // mode is 'opt-out'
+                var allowed_categories = default_enabled_categories;
+
+            return _inArray(allowed_categories, cookie_category) > -1;
         }
 
         /**
