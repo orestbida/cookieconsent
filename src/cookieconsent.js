@@ -676,7 +676,7 @@
                      * Otherwise use states defined in the user_config. object
                      */
                     if(!consent_modal_exists){
-                        if(_inArray(saved_cookie_content['level'], cookie_category) > -1){
+                        if(saved_cookie_content['level'].indexOf(cookie_category) > -1){
                             block_switch.checked = true;
                             !new_settings_blocks && toggle_states.push(true);
                         }else{
@@ -1014,7 +1014,7 @@
 
                     // if current block has a cookie table, an off toggle,
                     // and its preferences were just changed => delete cookies
-                    var category_just_disabled = _inArray(changed_settings, curr_block['toggle']['value']) > -1;
+                    var category_just_disabled = changed_settings.indexOf(curr_block['toggle']['value']) > -1;
                     if(
                         !toggle_states[++count] &&
                         Object.prototype.hasOwnProperty.call(curr_block, "cookie_table") &&
@@ -1053,7 +1053,7 @@
                                     }
                                 }
                             }else{
-                                var found_index = _inArray(all_cookies_array, curr_cookie_name);
+                                var found_index = all_cookies_array.indexOf(curr_cookie_name);
                                 if(found_index > -1) found_cookies.push(all_cookies_array[found_index]);
                             }
 
@@ -1085,7 +1085,7 @@
             if(category_toggles.length > 0){
 
                 for(var i=0; i<category_toggles.length; i++){
-                    if(_inArray(accepted_categories, toggle_categories[i]) !== -1){
+                    if(accepted_categories.indexOf(toggle_categories[i]) !== -1){
                         category_toggles[i].checked = true;
                         if(!toggle_states[i]){
                             changed_settings.push(toggle_categories[i]);
@@ -1207,21 +1207,6 @@
             }else{
                 callback();
             }
-        }
-
-        /**
-         * Returns index of found element inside array, otherwise -1
-         * @param {Array} arr
-         * @param {Object} value
-         * @returns {number}
-         */
-        var _inArray = function(arr, value){
-            var len = arr.length;
-            for(var i=0; i<len; i++){
-                if(arr[i] === value)
-                    return i;
-            }
-            return -1;
         }
 
         /**
@@ -1390,13 +1375,13 @@
                 position = (position && position.split(" ")) || [];
 
                 // Check if specified layout is valid
-                if(_inArray(allowed_layouts, layout) > -1){
+                if(allowed_layouts.indexOf(layout) > -1){
 
                     // Add layout classes
                     _addClass(modal, layout);
 
                     // Add position class (if specified)
-                    if(!(layout === 'bar' && position[0] === 'middle') && _inArray(allowed_positions, position[0]) > -1){
+                    if(!(layout === 'bar' && position[0] === 'middle') && allowed_positions.indexOf(position[0]) > -1){
                         for(var i=0; i<position.length; i++){
                             _addClass(modal, position[i]);
                         }
@@ -1404,7 +1389,7 @@
                 }
 
                 // Add transition class
-                (_inArray(allowed_transitions, transition) > -1) && _addClass(modal, transition);
+                (allowed_transitions.indexOf(transition) > -1) && _addClass(modal, transition);
             }
 
             if(consent_modal_exists && consent_modal_options){
@@ -1444,7 +1429,7 @@
             else  // mode is 'opt-out'
                 var allowed_categories = default_enabled_categories;
 
-            return _inArray(allowed_categories, cookie_category) > -1;
+            return allowed_categories.indexOf(cookie_category) > -1;
         }
 
         /**
@@ -1598,7 +1583,7 @@
                      * If current script's category is on the array of categories
                      * accepted by the user => load script
                      */
-                    if(_inArray(accepted_categories, curr_script_category) > -1){
+                    if(accepted_categories.indexOf(curr_script_category) > -1){
 
                         curr_script.type = 'text/javascript';
                         curr_script.removeAttribute(_config.script_selector);
@@ -1792,7 +1777,7 @@
 
             // calculate rejected categories (all_categories - accepted_categories)
             rejected_categories = toggle_categories.filter(function(category){
-                return (_inArray(accepted_categories, category) === -1);
+                return (accepted_categories.indexOf(category) === -1);
             });
 
             return {
@@ -2018,14 +2003,14 @@
                     typeof categories.length === "number"
                 ){
                     for(var i=0; i<categories.length; i++){
-                        if(_inArray(toggle_categories, categories[i]) !== -1)
+                        if(toggle_categories.indexOf(categories[i]) !== -1)
                             to_accept.push(categories[i]);
                     }
                 }else if(typeof categories === "string"){
                     if(categories === 'all')
                         to_accept = toggle_categories.slice();
                     else{
-                        if(_inArray(toggle_categories, categories) !== -1)
+                        if(toggle_categories.indexOf(categories) !== -1)
                             to_accept.push(categories);
                     }
                 }
@@ -2044,7 +2029,7 @@
             for(i=0; i<toggle_categories.length; i++){
                 if(
                     toggle_readonly[i] === true &&
-                    _inArray(to_accept, toggle_categories[i]) === -1
+                    to_accept.indexOf(toggle_categories[i]) === -1
                 ){
                     to_accept.push(toggle_categories[i]);
                 }
