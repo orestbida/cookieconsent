@@ -834,8 +834,8 @@ html.force--consent.show--consent body{
 /** END BLOCK PAGE SCROLL */
 
 /** BEGIN ICONS **/
-.cc_div .b-bn .b-tl.exp::before,
-.cc_div .act .b-bn .b-tl.exp::before{
+.cc_div .b-bn .exp::before,
+.cc_div .act .b-bn .exp::before{
     border: solid #2d4156;
     border-color: var(--cc-btn-secondary-text);
     border-width: 0 2px 2px 0;
