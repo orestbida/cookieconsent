@@ -675,7 +675,7 @@
                      * If consent modal does not exist => retrieve category states from cookie
                      * Otherwise use states defined in the user_config. object
                      */
-                    if(!consent_modal_exists){
+                    if(cookie_consent_accepted){
                         if(_inArray(saved_cookie_content['level'], cookie_category) > -1){
                             block_switch.checked = true;
                             !new_settings_blocks && toggle_states.push(true);
@@ -1782,7 +1782,7 @@
          * @returns {any}
          */
         _cookieconsent.getConfig = function(field){
-            return _config[field];
+            return _config[field] || user_config[field];
         }
 
         /**
