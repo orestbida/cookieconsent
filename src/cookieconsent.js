@@ -244,7 +244,7 @@
         /**
          * Add an onClick listeners to all html elements with data-cc attribute
          */
-        var _addDataButtonListeners = function(){
+        var _addDataButtonListeners = function(elem){
 
             var _a = 'accept-';
 
@@ -285,7 +285,7 @@
              * @returns {NodeListOf<Element>}
              */
             function _getElements(data_role){
-                return document.querySelectorAll('a[data-cc="' + data_role + '"], button[data-cc="' + data_role + '"]');
+                return (elem || document).querySelectorAll('a[data-cc="' + data_role + '"], button[data-cc="' + data_role + '"]');
             }
 
             /**
@@ -967,6 +967,7 @@
 
                 consent_modal_exists && _createConsentModal(new_validated_lang);
                 _createSettingsModal(new_validated_lang);
+                _addDataButtonListeners(consent_modal_inner);
 
                 _log("CookieConsent [LANGUAGE]: curr_lang: '" + new_validated_lang + "'");
 
