@@ -950,7 +950,13 @@
             (root || document.body).appendChild(main_container);
         }
 
-        _cookieconsent.updateLanguage = function(lang){
+        /**
+         * Update/change modals language
+         * @param {String} lang new language
+         * @param {Boolean} [force] update language fields forcefully
+         * @returns {Boolean}
+         */
+        _cookieconsent.updateLanguage = function(lang, force){
 
             if(typeof lang !== 'string') return;
 
@@ -962,7 +968,7 @@
             /**
              * Set language only if it differs from current
              */
-            if(new_validated_lang !== _config.current_lang){
+            if(new_validated_lang !== _config.current_lang || force === true){
                 _config.current_lang = new_validated_lang;
 
                 if(consent_modal_exists){
