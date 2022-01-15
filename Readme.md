@@ -364,7 +364,6 @@ cookieconsent.run({
 ```
 <i>Default layout is `box` and default transition is `zoom`.</i>
 
-#### ~~Note: if `force_consent` option is not enabled, the `middle` position will be ignored~~. As of v2.7.0 the `middle` position is allowed regardless of `force_consent`.
 <br>
 
 ## How to block/manage scripts
@@ -621,6 +620,22 @@ Additional methods for an easier management of your scripts and cookie settings 
     </p>
     </details>
 
+<br>
+
+## Available `data-cc` actions
+Any button (or link) can use the custom `data-cc` attribute to perform a few actions without manually invoking the api methods.
+
+Valid values:
+- `c-settings`: show settings modal
+- `accept-all`: accept all categories
+- `accept-necessary`: accept only categories marked as necessary/readonly (reject all)
+- `accept-selection`: accept currently selected categories inside the settings modal
+
+Examples:
+```html
+<button type="button" data-cc="c-settings">Show cookie settings</button>
+<button type="button" data-cc="accept-all">Accept all cookies</button>
+```
 <br>
 
 ## Available callbacks
