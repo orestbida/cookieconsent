@@ -965,9 +965,12 @@
             if(new_validated_lang !== _config.current_lang){
                 _config.current_lang = new_validated_lang;
 
-                consent_modal_exists && _createConsentModal(new_validated_lang);
+                if(consent_modal_exists){
+                    _createConsentModal(new_validated_lang);
+                    _addDataButtonListeners(consent_modal_inner);
+                }
+
                 _createSettingsModal(new_validated_lang);
-                _addDataButtonListeners(consent_modal_inner);
 
                 _log("CookieConsent [LANGUAGE]: curr_lang: '" + new_validated_lang + "'");
 
