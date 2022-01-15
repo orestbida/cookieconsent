@@ -1,6 +1,6 @@
 {
   "name": "vanilla-cookieconsent",
-  "version": "2.7.2",
+  "version": "2.8.0",
   "description": "🍪 Simple cross-browser cookie-consent plugin written in vanilla js.",
   "main": "dist/cookieconsent.js",
   "scripts": {
