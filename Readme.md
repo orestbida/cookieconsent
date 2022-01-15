@@ -1013,9 +1013,9 @@ Note:
 -   <details><summary>How to add link/button to open cookie settings</summary>
     <p>
 
-    Create a link (or button) with `data-cc="c-settings"` attribute:
+    Create a button (or link) with `data-cc="c-settings"` attribute:
     ```javascript
-    <a href="javascript:void(0);" aria-label="View cookie settings" data-cc="c-settings">Cookie Settings</a>
+    <button type="button" aria-label="View cookie settings" data-cc="c-settings">Cookie Settings</button>
     ```
 
     </p>
