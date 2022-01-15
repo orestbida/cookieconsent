@@ -130,13 +130,13 @@
          * Stores all available categories
          * @type {string[]}
          */
-        var toggle_categories = [];
+        var all_categories = [];
 
         /**
          * Keep track of readonly toggles
          * @type {boolean[]}
          */
-        var toggle_readonly = [];
+        var readonly_categories = [];
 
         /**
          * Pointers to main dom elements (to avoid retrieving them later using document.getElementById)
@@ -696,7 +696,7 @@
                         !new_settings_blocks && toggle_states.push(false);
                     }
 
-                    !new_settings_blocks && toggle_categories.push(cookie_category);
+                    !new_settings_blocks && all_categories.push(cookie_category);
 
                     /**
                      * Set toggle as readonly if true (disable checkbox)
@@ -704,9 +704,9 @@
                     if(toggle_data['readonly']){
                         block_switch.disabled = true;
                         _addClass(block_switch_span, 'c-ro');
-                        !new_settings_blocks && toggle_readonly.push(true);
+                        !new_settings_blocks && readonly_categories.push(true);
                     }else{
-                        !new_settings_blocks && toggle_readonly.push(false);
+                        !new_settings_blocks && readonly_categories.push(false);
                     }
 
                     _addClass(block_table_container, 'b-acc');
@@ -1089,16 +1089,16 @@
             if(category_toggles.length > 0){
 
                 for(var i=0; i<category_toggles.length; i++){
-                    if(_inArray(accepted_categories, toggle_categories[i]) !== -1){
+                    if(_inArray(accepted_categories, all_categories[i]) !== -1){
                         category_toggles[i].checked = true;
                         if(!toggle_states[i]){
-                            changed_settings.push(toggle_categories[i]);
+                            changed_settings.push(all_categories[i]);
                             toggle_states[i] = true;
                         }
                     }else{
                         category_toggles[i].checked = false;
                         if(toggle_states[i]){
-                            changed_settings.push(toggle_categories[i]);
+                            changed_settings.push(all_categories[i]);
                             toggle_states[i] = false;
                         }
                     }
@@ -1610,6 +1610,9 @@
                         // get current script data-src
                         var src = curr_script.getAttribute('data-src');
 
+                        // some scripts (like ga) might throw warning if data-src is present
+                        src && curr_script.removeAttribute('data-src');
+
                         // create fresh script (with the same code)
                         var fresh_script = _createNode('script');
                         fresh_script.textContent = curr_script.innerHTML;
@@ -1795,7 +1798,7 @@
             accepted_categories = saved_cookie_content['level'] || [];
 
             // calculate rejected categories (all_categories - accepted_categories)
-            rejected_categories = toggle_categories.filter(function(category){
+            rejected_categories = all_categories.filter(function(category){
                 return (_inArray(accepted_categories, category) === -1);
             });
 
@@ -1815,17 +1818,14 @@
             var type = 'custom';
 
             // number of categories marked as necessary/readonly
-            var necessary_categories_count = toggle_readonly.filter(function(readonly){
+            var necessary_categories_length = readonly_categories.filter(function(readonly){
                 return readonly === true;
             }).length;
 
             // calculate accept type based on accepted/rejected categories
-            if(currentCategoriesState.accepted.length === toggle_categories.length)
+            if(currentCategoriesState.accepted.length === all_categories.length)
                 type = 'all';
-            else if(
-                currentCategoriesState.rejected.length >= 0 &&
-                currentCategoriesState.accepted.length === necessary_categories_count
-            )
+            else if(currentCategoriesState.accepted.length === necessary_categories_length)
                 type = 'necessary'
 
             return type;
@@ -2022,14 +2022,14 @@
                     typeof categories.length === "number"
                 ){
                     for(var i=0; i<categories.length; i++){
-                        if(_inArray(toggle_categories, categories[i]) !== -1)
+                        if(_inArray(all_categories, categories[i]) !== -1)
                             to_accept.push(categories[i]);
                     }
                 }else if(typeof categories === "string"){
                     if(categories === 'all')
-                        to_accept = toggle_categories.slice();
+                        to_accept = all_categories.slice();
                     else{
-                        if(_inArray(toggle_categories, categories) !== -1)
+                        if(_inArray(all_categories, categories) !== -1)
                             to_accept.push(categories);
                     }
                 }
@@ -2045,12 +2045,12 @@
             }
 
             // Add back all the categories set as "readonly/required"
-            for(i=0; i<toggle_categories.length; i++){
+            for(i=0; i<all_categories.length; i++){
                 if(
-                    toggle_readonly[i] === true &&
-                    _inArray(to_accept, toggle_categories[i]) === -1
+                    readonly_categories[i] === true &&
+                    _inArray(to_accept, all_categories[i]) === -1
                 ){
-                    to_accept.push(toggle_categories[i]);
+                    to_accept.push(all_categories[i]);
                 }
             }
 
