@@ -2222,7 +2222,8 @@
         var _getKeys = function(obj){
             if(typeof obj === "object"){
                 var keys = [], i = 0;
-                for (keys[i++] in obj);
+                for (var key in obj) 
+                    keys[i++] = key;
                 return keys;
             }
         }
