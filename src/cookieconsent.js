@@ -475,7 +475,7 @@
                     });
                 }
 
-                consent_primary_btn.textContent = user_config.languages[lang]['consent_modal']['primary_btn']['text'];
+                consent_primary_btn.innerHTML = user_config.languages[lang]['consent_modal']['primary_btn']['text'];
             }
 
             // Add secondary button if not falsy
@@ -498,7 +498,7 @@
                     }
                 }
 
-                consent_secondary_btn.textContent = user_config.languages[lang]['consent_modal']['secondary_btn']['text'];
+                consent_secondary_btn.innerHTML = user_config.languages[lang]['consent_modal']['secondary_btn']['text'];
             }
 
             // Swap buttons
@@ -855,7 +855,7 @@
                 });
             }
 
-            settings_accept_all_btn.textContent = user_config.languages[lang]['settings_modal']['accept_all_btn'];
+            settings_accept_all_btn.innerHTML = user_config.languages[lang]['settings_modal']['accept_all_btn'];
 
             var reject_all_btn_text = user_config.languages[lang]['settings_modal']['reject_all_btn'];
 
@@ -877,7 +877,7 @@
                     settings_buttons.appendChild(settings_reject_all_btn);
                 }
 
-                settings_reject_all_btn.textContent = reject_all_btn_text;
+                settings_reject_all_btn.innerHTML = reject_all_btn_text;
             }
 
 
@@ -896,7 +896,7 @@
                 });
             }
 
-            settings_save_btn.textContent = user_config.languages[lang]['settings_modal']['save_settings_btn'];
+            settings_save_btn.innerHTML = user_config.languages[lang]['settings_modal']['save_settings_btn'];
 
 
             if(new_settings_blocks) {
