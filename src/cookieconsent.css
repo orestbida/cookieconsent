@@ -48,6 +48,7 @@
 }
 
 .cc_div *,
+.cc_div *:hover,
 .cc_div :before,
 .cc_div :after{
     -webkit-box-sizing: border-box;
@@ -68,10 +69,13 @@
     color: inherit;
     background: none;
     border: none;
+    border-radius: unset;
     box-shadow: none;
     text-decoration: none;
     text-align: left;
     visibility: unset;
+    height: auto;
+    vertical-align: baseline;
 }
 
 .cc_div {
