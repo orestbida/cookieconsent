@@ -1,3 +1,5 @@
+var LOREM_IPSUM = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.';
+
 // obtain cookieconsent plugin
 var cc = initCookieConsent();
 
@@ -5,7 +7,6 @@ var cc = initCookieConsent();
 cc.run({
     current_lang: 'en',
     autoclear_cookies: true,                    // default: false
-    theme_css: '../src/cookieconsent.css',
     cookie_name: 'cc_cookie_demo2',             // default: 'cc_cookie'
     cookie_expiration: 365,                     // default: 182
     page_scripts: true,                         // default: false
@@ -35,43 +36,23 @@ cc.run({
         }
     },
 
-    /* End new options added in v2.4 */
+    onFirstAction: function(){
+        console.log('onFirstAction fired');
+    },
 
     onAccept: function (cookie) {
-        console.log('onAccept fired ...');
-        disableBtn('btn2');
-        disableBtn('btn3');
-
-        // Delete line below
-        document.getElementById('cookie_val') && (document.getElementById('cookie_val').innerHTML = JSON.stringify(cookie, null, 2));
+        console.log('onAccept fired!')
     },
 
     onChange: function (cookie, changed_preferences) {
-        console.log('onChange fired ...');
+        console.log('onChange fired!');
 
-        // If analytics category's status was changed ...
-        if (changed_preferences.indexOf('analytics') > -1) {
-
-            // If analytics category is disabled ...
-            if (!cc.allowedCategory('analytics')) {
-
-                // Disable gtag ...
-                console.log('disabling gtag')
-                window.dataLayer = window.dataLayer || [];
-
-                function gtag() {
-                    dataLayer.push(arguments);
-                }
-
-                gtag('consent', 'default', {
-                    'ad_storage': 'denied',
-                    'analytics_storage': 'denied'
-                });
-            }
+        // If analytics category is disabled => disable google analytics
+        if (!cc.allowedCategory('analytics')) {
+            typeof gtag === 'function' && gtag('consent', 'update', {
+                'analytics_storage': 'denied'
+            });
         }
-
-        // Delete line below
-        document.getElementById('cookie_val') && (document.getElementById('cookie_val').innerHTML = JSON.stringify(cookie, null, 2));
     },
 
     languages: {
@@ -103,10 +84,10 @@ cc.run({
                 blocks: [
                     {
                         title: 'Cookie usage',
-                        description: getLoremIpsum() + ' <a href="#" class="cc-link">Privacy Policy</a>.'
+                        description: LOREM_IPSUM + ' <a href="#" class="cc-link">Privacy Policy</a>.'
                     }, {
                         title: 'Strictly necessary cookies',
-                        description: getLoremIpsum() + getLoremIpsum() + "<br><br>" + getLoremIpsum() + getLoremIpsum(),
+                        description: LOREM_IPSUM + LOREM_IPSUM + "<br><br>" + LOREM_IPSUM + LOREM_IPSUM,
                         toggle: {
                             value: 'necessary',
                             enabled: true,
@@ -114,7 +95,7 @@ cc.run({
                         }
                     }, {
                         title: 'Analytics & Performance cookies',
-                        description: getLoremIpsum(),
+                        description: LOREM_IPSUM,
                         toggle: {
                             value: 'analytics',
                             enabled: false,
@@ -159,79 +140,10 @@ cc.run({
                         ]
                     }, {
                         title: 'More information',
-                        description: getLoremIpsum() + ' <a class="cc-link" href="https://orestbida.com/contact/">Contact me</a>.',
+                        description: LOREM_IPSUM + ' <a class="cc-link" href="https://orestbida.com/contact/">Contact me</a>.',
                     }
                 ]
             }
         }
     }
 });
-
-
-function getLoremIpsum() {
-    return 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.';
-}
-
-// DELETE ALL CONTENT BELOW THIS COMMENT!!!
-if (cc.validCookie('cc_cookie')) {
-    //if cookie is set => disable buttons
-    disableBtn('btn2');
-    disableBtn('btn3');
-}
-
-function disableBtn(id) {
-    document.getElementById(id).disabled = true;
-    document.getElementById(id).className = 'styled_btn disabled';
-}
-
-var darkmode = false;
-
-function toggleDarkmode() {
-    if (!darkmode) {
-        document.getElementById('theme').innerText = 'dark theme';
-        document.body.className = 'd_mode c_darkmode';
-        darkmode = true;
-    } else {
-        document.getElementById('theme').innerText = 'light theme';
-        document.body.className = 'd_mode';
-        darkmode = false;
-    }
-}
-
-/*
-* The following lines of code are for demo purposes (show api functions)
-*/
-if (document.addEventListener) {
-
-    document.getElementById('btn2').addEventListener('click', function () {
-        cc.show(0);
-    });
-
-    document.getElementById('btn3').addEventListener('click', function () {
-        cc.hide();
-    });
-
-    document.getElementById('btn5').addEventListener('click', function () {
-        cc.showSettings(0);
-    });
-
-    document.getElementById('btn6').addEventListener('click', function () {
-        toggleDarkmode();
-    });
-} else {
-    document.getElementById('btn2').attachEvent('onclick', function () {
-        cc.show(0);
-    });
-
-    document.getElementById('btn3').attachEvent('onclick', function () {
-        cc.hide();
-    });
-
-    document.getElementById('btn5').attachEvent('onclick', function () {
-        cc.showSettings(0);
-    });
-
-    document.getElementById('btn6').attachEvent('onclick', function () {
-        toggleDarkmode();
-    });
-}
