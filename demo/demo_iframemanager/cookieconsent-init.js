@@ -5,29 +5,29 @@ var manager = iframemanager();
 
 // obtain cookieconsent plugin
 var cc = initCookieConsent();
-    
+
 // Configure with youtube embed
 manager.run({
-	currLang: 'en',
-	services : {
-		youtube : {
-			embedUrl: 'https://www.youtube-nocookie.com/embed/{data-id}',
-			thumbnailUrl: 'https://i3.ytimg.com/vi/{data-id}/hqdefault.jpg',
-			iframe : {
-				allow : 'accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen;',
-			},
-			cookie : {
-				name : 'cc_youtube'
-			},
-			languages : {
-				en : {
-					notice: 'This content is hosted by a third party. By showing the external content you accept the <a rel="noreferrer" href="https://www.youtube.com/t/terms" title="Terms and conditions" target="_blank">terms and conditions</a> of youtube.com.',
-					loadBtn: 'Load video',
-					loadAllBtn: 'Don\'t ask again'
-				}
-			}
-		}
-	}
+    currLang: 'en',
+    services : {
+        youtube : {
+            embedUrl: 'https://www.youtube-nocookie.com/embed/{data-id}',
+            thumbnailUrl: 'https://i3.ytimg.com/vi/{data-id}/hqdefault.jpg',
+            iframe : {
+                allow : 'accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen;',
+            },
+            cookie : {
+                name : 'cc_youtube'
+            },
+            languages : {
+                en : {
+                    notice: 'This content is hosted by a third party. By showing the external content you accept the <a rel="noreferrer" href="https://www.youtube.com/t/terms" title="Terms and conditions" target="_blank">terms and conditions</a> of youtube.com.',
+                    loadBtn: 'Load video',
+                    loadAllBtn: 'Don\'t ask again'
+                }
+            }
+        }
+    }
 });
 
 // run plugin with config object
@@ -38,7 +38,7 @@ cc.run({
     cookie_expiration: 365,                     // default: 182
     // page_scripts: false,                         // default: false
     force_consent: true,                        // default: false
-    
+
     // auto_language: null,                     // default: null; could also be 'browser' or 'document'
     // autorun: true,                           // default: true
     // delay: 0,                                // default: 0
@@ -66,29 +66,25 @@ cc.run({
     onFirstAction: function(){
         console.log('onFirstAction fired');
     },
-	
-	onAccept: function(){
-		console.log('onAccept fired!')
-		
-		// If analytics category is disabled => load all iframes automatically
+
+    onAccept: function(){
+        console.log('onAccept fired!')
+
+        // If analytics category is disabled => load all iframes automatically
         if(cc.allowedCategory('analytics')){
-			console.log('iframemanager: loading all iframes');
+            console.log('iframemanager: loading all iframes');
             manager.acceptService('all');
-		}
-    },
-    
-    onChange: function(){
-        
+        }
     },
 
     onChange: function (cookie, changed_preferences) {
         console.log('onChange fired!');
-		
-		// If analytics category is disabled => ask for permission to load iframes
-		if(!cc.allowedCategory('analytics')){
-			console.log('iframemanager: disabling all iframes');
+
+        // If analytics category is disabled => ask for permission to load iframes
+        if(!cc.allowedCategory('analytics')){
+            console.log('iframemanager: disabling all iframes');
             manager.rejectService('all');
-		}else{
+        }else{
             console.log('iframemanager: loading all iframes');
             manager.acceptService('all');
         }
