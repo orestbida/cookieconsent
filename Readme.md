@@ -400,7 +400,7 @@ var cookieconsent = initCookieConsent();
 the following methods are available:
 
 - cookieconsent`.run(<config_object>)`
-- cookieconsent`.show(<optional_delay>)`
+- cookieconsent`.show(<optional_delay>, <create_modal>)`
 - cookieconsent`.hide()`
 - cookieconsent`.showSettings(<optional_delay>)`
 - cookieconsent`.hideSettings()`

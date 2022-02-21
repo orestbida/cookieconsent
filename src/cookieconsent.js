@@ -1922,9 +1922,14 @@
 
         /**
          * Show cookie consent modal (with delay parameter)
-         * @param {number} delay
+         * @param {number} [delay]
+         * @param {boolean} [create_modal] create modal if it doesn't exist
          */
-        _cookieconsent.show = function(delay){
+        _cookieconsent.show = function(delay, create_modal){
+
+            if(create_modal === true)
+                _createConsentModal(_config.current_lang);
+
             if(consent_modal_exists){
                 setTimeout(function() {
                     _addClass(html_dom, "show--consent");
@@ -1941,7 +1946,7 @@
                     }, 200);
 
                     _log("CookieConsent [MODAL]: show consent_modal");
-                }, delay > 0 ? delay : 0);
+                }, delay > 0 ? delay : (create_modal ? 30 : 0));
             }
         }
 
@@ -2222,7 +2227,7 @@
         var _getKeys = function(obj){
             if(typeof obj === "object"){
                 var keys = [], i = 0;
-                for (var key in obj) 
+                for (var key in obj)
                     keys[i++] = key;
                 return keys;
             }
