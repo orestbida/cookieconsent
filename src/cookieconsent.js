@@ -1169,58 +1169,6 @@
         }
 
         /**
-         * Function to run after css load
-         * @callback cssLoaded
-         */
-
-        /**
-         * Load style via ajax in background (and then show modal)
-         * @param {string} css_path
-         * @param {cssLoaded} callback
-         */
-        var _loadCSS = function(css_path, callback){
-
-            // Enable if given path is string and non empty
-            var enable = typeof css_path === 'string' && css_path !== "";
-
-            if(enable && !document.getElementById('cc--style')){
-
-                // Create style tag
-                var style = _createNode('style');
-
-                // ad an id so that in SPA apps (react-like) the style doesn't get loaded multiple times when plugin is called
-                style.id = 'cc--style';
-
-                var xhr = new XMLHttpRequest();
-
-                xhr.onreadystatechange = function() {
-                    if(this.readyState === 4 && this.status === 200){
-
-                        // Necessary for <IE9
-                        style.setAttribute('type', 'text/css');
-
-                        if(style.styleSheet){ // if <IE9
-                            style.styleSheet.cssText = this.responseText;
-                        }else{ // all other browsers
-                            style.appendChild(document.createTextNode(this.responseText));
-                        }
-
-                        // Append css text content
-                        document.getElementsByTagName('head')[0].appendChild(style);
-                        _log("CookieConsent [AUTOLOAD_CSS]: loaded style = '"+ css_path + "'");
-
-                        callback();
-                    }
-                };
-
-                xhr.open("GET", css_path);
-                xhr.send();
-            }else{
-                callback();
-            }
-        }
-
-        /**
          * Returns index of found element inside array, otherwise -1
          * @param {Array} arr
          * @param {Object} value
@@ -1495,21 +1443,19 @@
                 // Generate cookie-settings dom (& consent modal)
                 _createCookieConsentHTML();
 
-                _loadCSS(user_config['theme_css'], function(){
-                    _getModalFocusableData();
-                    _guiManager(user_config['gui_options']);
-                    _addDataButtonListeners();
+                _getModalFocusableData();
+                _guiManager(user_config['gui_options']);
+                _addDataButtonListeners();
 
-                    if(_config.autorun && consent_modal_exists){
-                        _cookieconsent.show(user_config['delay'] || 0);
-                    }
+                if(_config.autorun && consent_modal_exists){
+                    _cookieconsent.show(user_config['delay'] || 0);
+                }
 
-                    // Add class to enable animations/transitions
-                    setTimeout(function(){_addClass(main_container, 'c--anim');}, 30);
+                // Add class to enable animations/transitions
+                setTimeout(function(){_addClass(main_container, 'c--anim');}, 30);
 
-                    // Accessibility :=> if tab pressed => trap focus inside modal
-                    setTimeout(function(){_handleFocusTrap();}, 100);
-                });
+                // Accessibility :=> if tab pressed => trap focus inside modal
+                setTimeout(function(){_handleFocusTrap();}, 100);
 
                 if(cookie_consent_accepted && valid_revision){
                     var rfc_prop_exists = typeof saved_cookie_content['rfc_cookie'] === "boolean";

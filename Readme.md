@@ -92,7 +92,6 @@ A __lightweight__ & __gdpr compliant__ cookie consent plugin written in plain ja
             cc.run({
                 current_lang: 'en',
                 autoclear_cookies: true,                   // default: false
-                theme_css: '<path-to-cookieconsent.css>',  // 🚨 replace with a valid path
                 page_scripts: true,                        // default: false
 
                 // mode: 'opt-in'                          // default: 'opt-in'; value: 'opt-in' or 'opt-out'
@@ -223,7 +222,6 @@ A __lightweight__ & __gdpr compliant__ cookie consent plugin written in plain ja
                     cc.run({
                         current_lang: 'en',
                         autoclear_cookies: true,                   // default: false
-                        theme_css: '<path-to-cookieconsent.css>',  // 🚨 replace with a valid path
                         page_scripts: true,                        // default: false
 
                         // mode: 'opt-in'                          // default: 'opt-in'; value: 'opt-in' or 'opt-out'
@@ -729,7 +727,6 @@ Below a table which sums up all of the available options (must be passed to the 
 | `cookie_domain` 	    | string   	| location.hostname | Specify your domain (will be grabbed by default) or a subdomain                                                           |
 | `cookie_same_site` 	| string   	| "Lax"     | SameSite attribute                                                           |
 | `use_rfc_cookie` 	    | boolean   | false     | Enable if you want the value of the cookie to be rfc compliant                                            |
-| `theme_css`         	| string   	| -       	| Specify path to the .css file                                             |
 | `force_consent`       | boolean   | false     | Enable if you want to block page navigation until user action (check [faq](#faq) for a proper implementation) |
 | `revision`            | number  	| 0   	    | Specify this option to enable revisions. [Check below](#how-to-enablemanage-revisions) for a proper usage |
 | `current_lang`      	| string   	| -       	| Specify one of the languages you have defined (can also be dynamic): `'en'`, `'de'` ...                                           |
@@ -774,7 +771,6 @@ Below a table which sums up all of the available options (must be passed to the 
             cookieconsent.run({
                 autorun: true,
                 current_lang: 'en',
-                theme_css: '<path-to-cookieconsent.css>',
                 autoclear_cookies: true,
                 page_scripts: true,
 
@@ -1106,21 +1102,6 @@ Note:
         ```
         </p>
         </details>
-
-    </p>
-    </details>
--   <details><summary>How to autoload the .css file</summary>
-    <p id="autoload-css">
-
-    You need to set `theme_css` to a valid path.
-
-    ```javascript
-    cookieconsent.run({
-        // ...
-        theme_css: '../src/cookieconsent.css',
-        // ...
-    });
-    ```
 
     </p>
     </details>
