@@ -230,8 +230,7 @@
             }
 
             _config.page_scripts = user_config['page_scripts'] === true;
-            _config.page_scripts_order = user_config['page_scripts_order'] !== false; //[WARNING] Will be removed in v3
-            
+
             if (user_config['auto_language'] === 'browser' || user_config['auto_language'] === true) {
                 _config.auto_language = 'browser';
             } else if (user_config['auto_language'] === 'document') {
@@ -1590,9 +1589,7 @@
 
             // get all the scripts with "cookie-category" attribute
             var scripts = document.querySelectorAll('script[' + _config.script_selector + ']');
-            var sequential_enabled = _config.page_scripts_order;
             var accepted_categories = must_enable_categories || saved_cookie_content['categories'] || [];
-            _log("CookieConsent [SCRIPT_MANAGER]: sequential loading:", sequential_enabled);
 
             /**
              * Load scripts (sequentially), using a recursive function
@@ -1641,26 +1638,20 @@
                         // if script has "src" attribute
                         // try loading it sequentially
                         if(src){
-                            if(sequential_enabled){
-                                // load script sequentially => the next script will not be loaded
-                                // until the current's script onload event triggers
-                                if(fresh_script.readyState) {  // only required for IE <9
-                                    fresh_script.onreadystatechange = function() {
-                                        if (fresh_script.readyState === "loaded" || fresh_script.readyState === "complete" ) {
-                                            fresh_script.onreadystatechange = null;
-                                            _loadScripts(scripts, ++index);
-                                        }
-                                    };
-                                }else{  // others
-                                    fresh_script.onload = function(){
-                                        fresh_script.onload = null;
+                            // load script sequentially => the next script will not be loaded
+                            // until the current's script onload event triggers
+                            if(fresh_script.readyState) {  // only required for IE <9
+                                fresh_script.onreadystatechange = function() {
+                                    if (fresh_script.readyState === "loaded" || fresh_script.readyState === "complete" ) {
+                                        fresh_script.onreadystatechange = null;
                                         _loadScripts(scripts, ++index);
-                                    };
-                                }
-                            }else{
-                                // if sequential option is disabled
-                                // treat current script as inline (without onload event)
-                                src = false;
+                                    }
+                                };
+                            }else{  // others
+                                fresh_script.onload = function(){
+                                    fresh_script.onload = null;
+                                    _loadScripts(scripts, ++index);
+                                };
                             }
                         }
 
