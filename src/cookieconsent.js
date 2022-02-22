@@ -252,7 +252,7 @@
             var show_settings = _getElements('c-settings');
             var accept_all = _getElements(_a + 'all');
             var accept_necessary = _getElements(_a + 'necessary');
-            var accept_selection = _getElements(_a + 'selection');
+            var accept_custom_selection = _getElements(_a + 'custom');
 
             for(var i=0; i<show_settings.length; i++){
                 show_settings[i].setAttribute('aria-haspopup', 'dialog');
@@ -268,8 +268,8 @@
                 });
             }
 
-            for(i=0; i<accept_selection.length; i++){
-                _addEvent(accept_selection[i], 'click', function(event){
+            for(i=0; i<accept_custom_selection.length; i++){
+                _addEvent(accept_custom_selection[i], 'click', function(event){
                     _acceptAction(event);
                 });
             }
