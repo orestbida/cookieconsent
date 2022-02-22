@@ -230,7 +230,6 @@
             }
 
             _config.page_scripts = user_config['page_scripts'] === true;
-            _config.page_scripts_order = user_config['page_scripts_order'] !== false; //[WARNING] Will be removed in v3
 
             if (user_config['auto_language'] === 'browser' || user_config['auto_language'] === true) {
                 _config.auto_language = 'browser';
@@ -1170,58 +1169,6 @@
         }
 
         /**
-         * Function to run after css load
-         * @callback cssLoaded
-         */
-
-        /**
-         * Load style via ajax in background (and then show modal)
-         * @param {string} css_path
-         * @param {cssLoaded} callback
-         */
-        var _loadCSS = function(css_path, callback){
-
-            // Enable if given path is string and non empty
-            var enable = typeof css_path === 'string' && css_path !== "";
-
-            if(enable && !document.getElementById('cc--style')){
-
-                // Create style tag
-                var style = _createNode('style');
-
-                // ad an id so that in SPA apps (react-like) the style doesn't get loaded multiple times when plugin is called
-                style.id = 'cc--style';
-
-                var xhr = new XMLHttpRequest();
-
-                xhr.onreadystatechange = function() {
-                    if(this.readyState === 4 && this.status === 200){
-
-                        // Necessary for <IE9
-                        style.setAttribute('type', 'text/css');
-
-                        if(style.styleSheet){ // if <IE9
-                            style.styleSheet.cssText = this.responseText;
-                        }else{ // all other browsers
-                            style.appendChild(document.createTextNode(this.responseText));
-                        }
-
-                        // Append css text content
-                        document.getElementsByTagName('head')[0].appendChild(style);
-                        _log("CookieConsent [AUTOLOAD_CSS]: loaded style = '"+ css_path + "'");
-
-                        callback();
-                    }
-                };
-
-                xhr.open("GET", css_path);
-                xhr.send();
-            }else{
-                callback();
-            }
-        }
-
-        /**
          * Returns index of found element inside array, otherwise -1
          * @param {Array} arr
          * @param {Object} value
@@ -1496,21 +1443,19 @@
                 // Generate cookie-settings dom (& consent modal)
                 _createCookieConsentHTML();
 
-                _loadCSS(user_config['theme_css'], function(){
-                    _getModalFocusableData();
-                    _guiManager(user_config['gui_options']);
-                    _addDataButtonListeners();
+                _getModalFocusableData();
+                _guiManager(user_config['gui_options']);
+                _addDataButtonListeners();
 
-                    if(_config.autorun && consent_modal_exists){
-                        _cookieconsent.show(user_config['delay'] || 0);
-                    }
+                if(_config.autorun && consent_modal_exists){
+                    _cookieconsent.show(user_config['delay'] || 0);
+                }
 
-                    // Add class to enable animations/transitions
-                    setTimeout(function(){_addClass(main_container, 'c--anim');}, 30);
+                // Add class to enable animations/transitions
+                setTimeout(function(){_addClass(main_container, 'c--anim');}, 30);
 
-                    // Accessibility :=> if tab pressed => trap focus inside modal
-                    setTimeout(function(){_handleFocusTrap();}, 100);
-                });
+                // Accessibility :=> if tab pressed => trap focus inside modal
+                setTimeout(function(){_handleFocusTrap();}, 100);
 
                 if(cookie_consent_accepted && valid_revision){
                     var rfc_prop_exists = typeof saved_cookie_content['rfc_cookie'] === "boolean";
@@ -1590,9 +1535,7 @@
 
             // get all the scripts with "cookie-category" attribute
             var scripts = document.querySelectorAll('script[' + _config.script_selector + ']');
-            var sequential_enabled = _config.page_scripts_order;
             var accepted_categories = must_enable_categories || saved_cookie_content['categories'] || [];
-            _log("CookieConsent [SCRIPT_MANAGER]: sequential loading:", sequential_enabled);
 
             /**
              * Load scripts (sequentially), using a recursive function
@@ -1641,26 +1584,20 @@
                         // if script has "src" attribute
                         // try loading it sequentially
                         if(src){
-                            if(sequential_enabled){
-                                // load script sequentially => the next script will not be loaded
-                                // until the current's script onload event triggers
-                                if(fresh_script.readyState) {  // only required for IE <9
-                                    fresh_script.onreadystatechange = function() {
-                                        if (fresh_script.readyState === "loaded" || fresh_script.readyState === "complete" ) {
-                                            fresh_script.onreadystatechange = null;
-                                            _loadScripts(scripts, ++index);
-                                        }
-                                    };
-                                }else{  // others
-                                    fresh_script.onload = function(){
-                                        fresh_script.onload = null;
+                            // load script sequentially => the next script will not be loaded
+                            // until the current's script onload event triggers
+                            if(fresh_script.readyState) {  // only required for IE <9
+                                fresh_script.onreadystatechange = function() {
+                                    if (fresh_script.readyState === "loaded" || fresh_script.readyState === "complete" ) {
+                                        fresh_script.onreadystatechange = null;
                                         _loadScripts(scripts, ++index);
-                                    };
-                                }
-                            }else{
-                                // if sequential option is disabled
-                                // treat current script as inline (without onload event)
-                                src = false;
+                                    }
+                                };
+                            }else{  // others
+                                fresh_script.onload = function(){
+                                    fresh_script.onload = null;
+                                    _loadScripts(scripts, ++index);
+                                };
                             }
                         }
 
@@ -1771,7 +1708,6 @@
         _cookieconsent.set = function(field, data){
             switch(field){
                 case 'data': return _setCookieData(data['value'], data['mode']);
-                case 'revision': return _setRevision(data['value'], data['prompt_consent'], data['message']);   //[WARNING] Will be removed in v3
                 default: return false;
             }
         }
