@@ -678,7 +678,7 @@
                      * Otherwise use states defined in the user_config. object
                      */
                     if(cookie_consent_accepted){
-                        if(_inArray(saved_cookie_content['level'], cookie_category) > -1){
+                        if(_inArray(saved_cookie_content['categories'], cookie_category) > -1){
                             block_switch.checked = true;
                             !new_settings_blocks && toggle_states.push(true);
                         }else{
@@ -1120,13 +1120,13 @@
                 _autoclearCookies();
 
             saved_cookie_content = {
-                "level": accepted_categories,
+                "categories": accepted_categories,
                 "revision": _config.revision,
                 "data": cookie_data,
                 "rfc_cookie": _config.use_rfc_cookie
             }
 
-            // save cookie with preferences 'level' (only if never accepted or settings were updated)
+            // save cookie with preferences 'categories' (only if never accepted or settings were updated)
             if(!cookie_consent_accepted || changed_settings.length > 0 || !valid_revision){
                 valid_revision = true;
 
@@ -1452,7 +1452,7 @@
         _cookieconsent.allowedCategory = function(cookie_category){
 
             if(cookie_consent_accepted || _config.mode === 'opt-in')
-                var allowed_categories = JSON.parse(_getCookie(_config.cookie_name, 'one', true) || '{}')['level'] || []
+                var allowed_categories = JSON.parse(_getCookie(_config.cookie_name, 'one', true) || '{}')['categories'] || []
             else  // mode is 'opt-out'
                 var allowed_categories = default_enabled_categories;
 
@@ -1473,7 +1473,7 @@
 
                 // Retrieve cookie value (if set)
                 saved_cookie_content = JSON.parse(_getCookie(_config.cookie_name, 'one', true) || "{}");
-                cookie_consent_accepted = saved_cookie_content['level'] !== undefined;
+                cookie_consent_accepted = saved_cookie_content['categories'] !== undefined;
 
                 /**
                  * Immediately retrieve the 'data' field from cookie
@@ -1591,7 +1591,7 @@
             // get all the scripts with "cookie-category" attribute
             var scripts = document.querySelectorAll('script[' + _config.script_selector + ']');
             var sequential_enabled = _config.page_scripts_order;
-            var accepted_categories = must_enable_categories || saved_cookie_content['level'] || [];
+            var accepted_categories = must_enable_categories || saved_cookie_content['categories'] || [];
             _log("CookieConsent [SCRIPT_MANAGER]: sequential loading:", sequential_enabled);
 
             /**
@@ -1803,7 +1803,7 @@
         var _getCurrentCategoriesState = function(){
 
             // get accepted categories
-            accepted_categories = saved_cookie_content['level'] || [];
+            accepted_categories = saved_cookie_content['categories'] || [];
 
             // calculate rejected categories (all_categories - accepted_categories)
             rejected_categories = all_categories.filter(function(category){
