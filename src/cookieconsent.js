@@ -22,6 +22,8 @@
             'current_lang': 'en',
             'auto_language': null,
             'autorun': true,                          // run as soon as loaded
+            'page_scripts': true,
+            'hide_from_bots': true,
             'cookie_name': 'cc_cookie',
             'cookie_expiration': 182,                 // default: 6 months (in days)
             'cookie_domain': window.location.hostname,       // default: current domain
