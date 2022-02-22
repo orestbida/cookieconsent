@@ -231,7 +231,7 @@
 
             _config.page_scripts = user_config['page_scripts'] === true;
             _config.page_scripts_order = user_config['page_scripts_order'] !== false; //[WARNING] Will be removed in v3
-
+            
             if (user_config['auto_language'] === 'browser' || user_config['auto_language'] === true) {
                 _config.auto_language = 'browser';
             } else if (user_config['auto_language'] === 'document') {
@@ -1771,7 +1771,6 @@
         _cookieconsent.set = function(field, data){
             switch(field){
                 case 'data': return _setCookieData(data['value'], data['mode']);
-                case 'revision': return _setRevision(data['value'], data['prompt_consent'], data['message']);   //[WARNING] Will be removed in v3
                 default: return false;
             }
         }

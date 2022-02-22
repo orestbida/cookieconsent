@@ -535,15 +535,6 @@ Additional methods for an easier management of your scripts and cookie settings 
     // Only add/update the specified props.
     cookieconsent.set('data', {value: {id: 22, new_prop: 'new prop value'}, mode: 'update'});
     ```
-
-    How to enforce/set a new `revision`:
-    ```javascript
-    // Update revision to the new value (without prompting the user)
-    cookieconsent.set('revision', {value: 2});
-
-    // Update revision to the new value (ask consent before setting the new revision)
-    cookieconsent.set('revision', {value: 2, prompt_consent: true});
-    ```
     </p>
     </details>
 - <details><summary>cookieconsent<code>.get(&lt;field&gt;)</code> [v2.6.0+]</summary>
