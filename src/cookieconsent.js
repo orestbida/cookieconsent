@@ -1175,12 +1175,7 @@
          * @returns {number}
          */
         var _inArray = function(arr, value){
-            var len = arr.length;
-            for(var i=0; i<len; i++){
-                if(arr[i] === value)
-                    return i;
-            }
-            return -1;
+            return arr.indexOf(value);
         }
 
         /**
