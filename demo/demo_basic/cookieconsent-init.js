@@ -9,7 +9,6 @@ var cookie = '🍪';
 cc.run({
     current_lang : 'en',
     autoclear_cookies : true,                   // default: false
-    theme_css: '../src/cookieconsent.css',
     cookie_name: 'cc_cookie_demo1',             // default: 'cc_cookie'
     cookie_expiration : 365,                    // default: 182
     page_scripts: true,                         // default: false
@@ -39,43 +38,22 @@ cc.run({
         }
     },
 
+    onFirstAction: function(){
+        console.log('onFirstAction fired');
+    },
+
     onAccept: function (cookie) {
         console.log('onAccept fired ...');
-
-        // delete line below
-        typeof doDemoThings === 'function' && doDemoThings(cookie);
     },
 
     onChange: function (cookie, changed_preferences) {
         console.log('onChange fired ...');
-
-        // If analytics category's status was changed ...
-        if (changed_preferences.indexOf('analytics') > -1) {
-
-            // If analytics category is disabled ...
-            if (!cc.allowedCategory('analytics')) {
-
-                // Disable gtag ...
-                console.log('disabling gtag')
-                window.dataLayer = window.dataLayer || [];
-
-                function gtag() { dataLayer.push(arguments); }
-
-                gtag('consent', 'default', {
-                    'ad_storage': 'denied',
-                    'analytics_storage': 'denied'
-                });
-            }
-        }
-
-        // delete line below
-        typeof doDemoThings === 'function' && doDemoThings(cookie);
     },
 
     languages: {
         'en': {
             consent_modal: {
-                title: cookie + ' We use cookies!',
+                title: cookie + ' We use cookies! ',
                 description: 'Hi, this website uses essential cookies to ensure its proper operation and tracking cookies to understand how you interact with it. The latter will be set only after consent. <button type="button" data-cc="c-settings" class="cc-link">Let me choose</button>',
                 primary_btn: {
                     text: 'Accept all',
@@ -149,4 +127,5 @@ cc.run({
             }
         }
     }
+
 });

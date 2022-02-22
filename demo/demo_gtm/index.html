@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CookieConsent demo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../assets/demo.css">
+    <script src="../assets/demo.js" defer></script>
+
+    <!-- Load plugin css -->
+    <!-- <link rel="stylesheet" href="../../dist/cookieconsent.css"> -->
+    <!-- Optimized css loading -->
+    <link rel="stylesheet" href="../../dist/cookieconsent.css" media="print" onload="this.media='all'">
+</head>
+<body>
+
+    <h1><a href="https://orestbida.com/demo-projects/cookieconsent/" target="_blank" class="demo-title">CookieConsent 🡥</a></h1>
+    <h2>Example configuration with Google Tag Manager</h2>
+    <br>
+    <p>Check your <a href="https://developer.chrome.com/docs/devtools/shortcuts/#open" target="_blank">browser's console 🡥</a> to see what's happening!</p>
+    <button type="button" data-cc="c-settings">Cookie settings</button>
+
+    <script defer src="../../src/cookieconsent.js"></script>
+    <script defer src="cookieconsent-init.js"></script>
+
+    <!--
+        You can manage any script by settings these 2 attributes:
+
+        - type="text/plain"
+        - data-cookiecategory="category-name" (replace "category-name" with a valid category)
+    -->
+
+    <script type="text/plain" data-cookiecategory="analytics">
+        console.log('analytics enabled!');
+    </script>
+
+    <!-- INLINE GTM (replace "GTM-XXXXXXX" with your id)-->
+    <script type="text/plain" data-cookiecategory="analytics">
+        // Google Tag Manager (configured with GA internally)
+        (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+        'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+        })(window,document,'script','dataLayer','GTM-XXXXXXX');
+    </script>
+</body>
+</html>

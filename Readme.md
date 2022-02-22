@@ -97,7 +97,6 @@ A __lightweight__ & __gdpr compliant__ cookie consent plugin written in plain ja
             cc.run({
                 current_lang: 'en',
                 autoclear_cookies: true,                   // default: false
-                theme_css: '<path-to-cookieconsent.css>',  // 🚨 replace with a valid path
                 page_scripts: true,                        // default: false
 
                 // mode: 'opt-in'                          // default: 'opt-in'; value: 'opt-in' or 'opt-out'
@@ -228,7 +227,6 @@ A __lightweight__ & __gdpr compliant__ cookie consent plugin written in plain ja
                     cc.run({
                         current_lang: 'en',
                         autoclear_cookies: true,                   // default: false
-                        theme_css: '<path-to-cookieconsent.css>',  // 🚨 replace with a valid path
                         page_scripts: true,                        // default: false
 
                         // mode: 'opt-in'                          // default: 'opt-in'; value: 'opt-in' or 'opt-out'
@@ -369,7 +367,6 @@ cookieconsent.run({
 ```
 <i>Default layout is `box` and default transition is `zoom`.</i>
 
-#### ~~Note: if `force_consent` option is not enabled, the `middle` position will be ignored~~. As of v2.7.0 the `middle` position is allowed regardless of `force_consent`.
 <br>
 
 ## How to block/manage scripts
@@ -406,7 +403,7 @@ var cookieconsent = initCookieConsent();
 the following methods are available:
 
 - cookieconsent`.run(<config_object>)`
-- cookieconsent`.show(<optional_delay>)`
+- cookieconsent`.show(<optional_delay>, <create_modal>)`
 - cookieconsent`.hide()`
 - cookieconsent`.showSettings(<optional_delay>)`
 - cookieconsent`.hideSettings()`
@@ -541,15 +538,6 @@ Additional methods for an easier management of your scripts and cookie settings 
     // Only add/update the specified props.
     cookieconsent.set('data', {value: {id: 22, new_prop: 'new prop value'}, mode: 'update'});
     ```
-
-    How to enforce/set a new `revision`:
-    ```javascript
-    // Update revision to the new value (without prompting the user)
-    cookieconsent.set('revision', {value: 2});
-
-    // Update revision to the new value (ask consent before setting the new revision)
-    cookieconsent.set('revision', {value: 2, prompt_consent: true});
-    ```
     </p>
     </details>
 - <details><summary>cookieconsent<code>.get(&lt;field&gt;)</code> [v2.6.0+]</summary>
@@ -626,6 +614,22 @@ Additional methods for an easier management of your scripts and cookie settings 
     </p>
     </details>
 
+<br>
+
+## Available `data-cc` actions
+Any button (or link) can use the custom `data-cc` attribute to perform a few actions without manually invoking the api methods.
+
+Valid values:
+- `c-settings`: show settings modal
+- `accept-all`: accept all categories
+- `accept-necessary`: accept only categories marked as necessary/readonly (reject all)
+- `accept-custom`: accept currently selected categories inside the settings modal
+
+Examples:
+```html
+<button type="button" data-cc="c-settings">Show cookie settings</button>
+<button type="button" data-cc="accept-all">Accept all cookies</button>
+```
 <br>
 
 ## Available callbacks
@@ -728,7 +732,6 @@ Below a table which sums up all of the available options (must be passed to the 
 | `cookie_domain` 	    | string   	| location.hostname | Specify your domain (will be grabbed by default) or a subdomain                                                           |
 | `cookie_same_site` 	| string   	| "Lax"     | SameSite attribute                                                           |
 | `use_rfc_cookie` 	    | boolean   | false     | Enable if you want the value of the cookie to be rfc compliant                                            |
-| `theme_css`         	| string   	| -       	| Specify path to the .css file                                             |
 | `force_consent`       | boolean   | false     | Enable if you want to block page navigation until user action (check [faq](#faq) for a proper implementation) |
 | `revision`            | number  	| 0   	    | Specify this option to enable revisions. [Check below](#how-to-enablemanage-revisions) for a proper usage |
 | `current_lang`      	| string   	| -       	| Specify one of the languages you have defined (can also be dynamic): `'en'`, `'de'` ...                                           |
@@ -773,7 +776,6 @@ Below a table which sums up all of the available options (must be passed to the 
             cookieconsent.run({
                 autorun: true,
                 current_lang: 'en',
-                theme_css: '<path-to-cookieconsent.css>',
                 autoclear_cookies: true,
                 page_scripts: true,
 
@@ -1105,21 +1107,6 @@ Note:
         ```
         </p>
         </details>
-
-    </p>
-    </details>
--   <details><summary>How to autoload the .css file</summary>
-    <p id="autoload-css">
-
-    You need to set `theme_css` to a valid path.
-
-    ```javascript
-    cookieconsent.run({
-        // ...
-        theme_css: '../src/cookieconsent.css',
-        // ...
-    });
-    ```
 
     </p>
     </details>

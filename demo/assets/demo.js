@@ -1,61 +1,23 @@
-if(cc.validCookie('cc_cookie')){
-    //if cookie is set => disable buttons
-    disableBtn('btn2');
-    disableBtn('btn3');
+/**
+ * The file is for demo purposes,
+ * don't use in your configuration!
+ */
+
+if(location.protocol.slice(0, 4) !== 'http'){
+    var warning = document.createElement('p');
+    warning.innerHTML = '❗ If you see this message, it means that you are viewing this demo file directly! You need a webserver to test cookies! <br><br><em>Ensure that the URL begins with "<i>http</i>" rather than "<i>file</i>"!</em>';
+    warning.className = 'warning';
+    document.body.appendChild(warning);
 }
 
-function disableBtn(id){
-    document.getElementById(id).disabled = true;
-    document.getElementById(id).className = "styled_btn disabled";
-}
+var cookieSettingsBtn = document.querySelector('[data-cc="c-settings"]');
+var resetCookiesBtn = document.createElement('button');
+resetCookiesBtn.type = 'button';
+resetCookiesBtn.innerText = 'Reset cookieconsent';
+cookieSettingsBtn.parentNode.insertBefore(resetCookiesBtn, cookieSettingsBtn.nextSibling);
 
-function themeText(){
-    if(!darkmode){
-        document.getElementById('theme').innerText = 'dark theme';
-        darkmode = true;
-    }else{
-        document.getElementById('theme').innerText = 'light theme';
-        darkmode = false;
-    }
-}
-
-var darkmode = false;
-
-/*
-* The following lines of code are for demo purposes (show api functions)
-*/ 
-if(document.addEventListener){
-
-    document.getElementById("btn2").addEventListener('click', function(){
-        cc.show(0);
-    });
-
-    document.getElementById("btn3").addEventListener('click', function(){
-        cc.hide();
-    });
-
-    document.getElementById("btn5").addEventListener('click', function(){
-        cc.showSettings(0);  
-    });
-
-    document.getElementById("btn6").addEventListener('click', function(){
-        document.body.classList.toggle('c_darkmode');
-        themeText();
-    });
-}else{
-    document.getElementById("btn2").attachEvent('onclick', function(){
-        cc.show(0);
-    });
-
-    document.getElementById("btn3").attachEvent('onclick', function(){
-        cc.hide();
-    });
-
-    document.getElementById("btn5").attachEvent('onclick', function(){
-        cc.showSettings(0);  
-    });
-
-    document.getElementById("btn6").attachEvent('onclick', function(){
-        document.body.className='d_mode c_darkmode';
-    });
-}
+resetCookiesBtn.addEventListener('click', function(){
+    cc.accept([]);
+    cc.eraseCookies(['cc_cookie_demo1', 'cc_cookie_demo2', 'cc_youtube']);
+    window.location.reload();
+});
