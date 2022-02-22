@@ -618,7 +618,7 @@ Valid values:
 - `c-settings`: show settings modal
 - `accept-all`: accept all categories
 - `accept-necessary`: accept only categories marked as necessary/readonly (reject all)
-- `accept-selection`: accept currently selected categories inside the settings modal
+- `accept-custom`: accept currently selected categories inside the settings modal
 
 Examples:
 ```html
