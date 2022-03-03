@@ -1501,13 +1501,13 @@
                 // Retrieve "data"
                 cookie_data = saved_cookie_content['data'] !== undefined ? saved_cookie_content['data'] : null;
 
-                // If revision is enabled and current value == saved value inside the cookie => revision is valid
+                // If revision is enabled and current value !== saved value inside the cookie => revision is not valid
                 if(
                     typeof user_config['revision'] === 'number'
                     && user_config['revision'] > -1
-                    && saved_cookie_content['revision'] === _config.revision
+                    && saved_cookie_content['revision'] !== _config.revision
                 ){
-                    valid_revision = true;
+                    valid_revision = false;
                 }
 
                 // If consent is not valid => create consent modal
