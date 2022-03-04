@@ -292,7 +292,7 @@
             for(var i=0; i<show_settings.length; i++){
                 show_settings[i].setAttribute('aria-haspopup', 'dialog');
                 _addEvent(show_settings[i], 'click', function(event){
-                    event.preventDefault ? event.preventDefault() : event.returnValue = false;
+                    event.preventDefault();
                     _cookieconsent.showSettings(0);
                 });
             }
@@ -330,7 +330,7 @@
              * @param {string} [accept_type]
              */
             function _acceptAction(e, accept_type){
-                e.preventDefault ? e.preventDefault() : e.returnValue = false;
+                e.preventDefault();
                 _cookieconsent.accept(accept_type);
                 _cookieconsent.hideSettings();
                 _cookieconsent.hide();
@@ -1502,11 +1502,7 @@
                 cookie_data = saved_cookie_content['data'] !== undefined ? saved_cookie_content['data'] : null;
 
                 // If revision is enabled and current value !== saved value inside the cookie => revision is not valid
-                if(
-                    typeof user_config['revision'] === 'number'
-                    && user_config['revision'] > -1
-                    && saved_cookie_content['revision'] !== _config.revision
-                ){
+                if(revision_enabled && saved_cookie_content['revision'] !== _config.revision){
                     valid_revision = false;
                 }
 
@@ -1741,43 +1737,6 @@
         }
 
         /**
-         * Forcefully set a specific revision and show consent modal
-         * @param {number} new_revision
-         * @param {boolean} [prompt_consent]
-         * @returns {boolean}
-         */
-        var _setRevision = function(new_revision, prompt_consent, message){
-
-            // If plugin has been initialized and new revision is valid
-            if(
-                main_container
-                && typeof new_revision === "number"
-                && saved_cookie_content['revision'] !== new_revision
-            ){
-
-                revision_enabled = true;
-                revision_message = message;
-                valid_revision = false;
-                _config.revision = new_revision;
-
-                // Show consent modal ?
-                if(prompt_consent === true){
-                    _createConsentModal(user_config);
-                    _guiManager(user_config['gui_options'], true);
-                    _getModalFocusableData();
-                    _cookieconsent.show();
-                }else {
-                    // If revision was modified, save cookie with the new revision
-                    _cookieconsent.accept();
-                }
-
-                return true;
-            }
-
-            return false;
-        }
-
-        /**
          * Helper method to set a variety of fields
          * @param {string} field
          * @param {object} data
@@ -1884,7 +1843,7 @@
          * Dynamically load script (append to head)
          * @param {string} src
          * @param {scriptLoaded} callback
-         * @param {string[]} attrs
+         * @param {object[]} [attrs] Custom attributes
          */
         _cookieconsent.loadScript = function(src, callback, attrs){
 
@@ -1904,16 +1863,7 @@
 
                 // if callback function defined => run callback onload
                 if(function_defined){
-                    if(script.readyState) {  // only required for IE <9
-                        script.onreadystatechange = function() {
-                            if ( script.readyState === "loaded" || script.readyState === "complete" ) {
-                                script.onreadystatechange = null;
-                                callback();
-                            }
-                        };
-                    }else{  //Others
-                        script.onload = callback;
-                    }
+                    script.onload = callback;
                 }
 
                 script.src = src;
@@ -1921,7 +1871,7 @@
                 /**
                  * Append script to head
                  */
-                (document.head ? document.head : document.getElementsByTagName('head')[0]).appendChild(script);
+                document.head.appendChild(script);
             }else{
                 function_defined && callback();
             }
@@ -2148,8 +2098,8 @@
          * returns the cookie value if found (or an array
          * of cookies if filter provided), otherwise empty string: ""
          * @param {string} name
-         * @param {string} filter - 'one' or 'all'
-         * @param {boolean} get_value - set to true to obtain its value
+         * @param {string} filter 'one' or 'all'
+         * @param {boolean} [get_value] set to true to obtain its value
          * @returns {string|string[]}
          */
         var _getCookie = function(name, filter, get_value) {
@@ -2221,20 +2171,10 @@
          * @param {Element} elem
          * @param {string} event
          * @param {eventFired} fn
-         * @param {boolean} passive
+         * @param {boolean} [isPasive]
          */
-        var _addEvent = function(elem, event, fn, _passive) {
-            var passive = _passive === true;
-
-            if (elem.addEventListener) {
-                passive ? elem.addEventListener(event, fn , { passive: true }) : elem.addEventListener(event, fn, false);
-            } else {
-                /**
-                 * For old browser, add 'on' before event:
-                 * 'click':=> 'onclick'
-                 */
-                elem.attachEvent("on" + event, fn);
-            }
+        var _addEvent = function(elem, event, fn, isPasive) {
+            elem.addEventListener(event, fn , isPasive === true ? { passive: true } : false);
         }
 
         /**
@@ -2243,10 +2183,7 @@
          */
         var _getKeys = function(obj){
             if(typeof obj === "object"){
-                var keys = [], i = 0;
-                for (var key in obj)
-                    keys[i++] = key;
-                return keys;
+                return Object.keys(obj);
             }
         }
 
@@ -2256,12 +2193,7 @@
          * @param {string} classname
          */
         var _addClass = function (elem, classname){
-            if(elem.classList)
-                elem.classList.add(classname)
-            else{
-                if(!_hasClass(elem, classname))
-                    elem.className += ' '+classname;
-            }
+            elem.classList.add(classname);
         }
 
         /**
@@ -2270,7 +2202,7 @@
          * @param {string} classname
          */
         var _removeClass = function (el, className) {
-            el.classList ? el.classList.remove(className) : el.className = el.className.replace(new RegExp('(\\s|^)' + className + '(\\s|$)'), ' ');
+            el.classList.remove(className);
         }
 
         /**
@@ -2279,10 +2211,7 @@
          * @param {string} className
          */
         var _hasClass = function(el, className) {
-            if (el.classList) {
-                return el.classList.contains(className);
-            }
-            return !!el.className.match(new RegExp('(\\s|^)' + className + '(\\s|$)'));
+            return el.classList.contains(className);
         }
 
         return _cookieconsent;
