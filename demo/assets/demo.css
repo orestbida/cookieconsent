@@ -26,6 +26,10 @@ em{
     font-weight: 600;
 }
 
+h1{
+    font-size: 1.5em;
+}
+
 h2{
     font-size: 1.15em;
 }
@@ -35,25 +39,14 @@ a{
     text-decoration: none;
 }
 
-.demo-title{
-    text-decoration: none;
-    border-bottom: none;
-    color: #081120;
-}
-
-
-.demo-title:hover{
-    border-bottom: 3px dotted #081120;
-}
-
-[data-cc="c-settings"]{
+[data-cc="show-preferences"]{
     margin-right: .5em;
 }
 
 .warning{
     margin-top: 2em;
-    color: #5a4c4c;
-    background: #ffefef;
+    color: #810000;
+    background: #ffeadf;
     padding: 1em;
     border-radius: 0.5em;
 }
