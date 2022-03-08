@@ -31,9 +31,7 @@
                 'path': '/',
                 'sameSite': 'Lax',
                 'rfcCompliant': false
-            },
-
-            _scriptTagSelector: 'data-cookiecategory',
+            }
         };
 
         var
@@ -51,6 +49,8 @@
             allTranslations,
             currentTranslation,
 
+            scriptTagSelector = 'data-cookiecategory',
+
             /**
              * @type {{
              *  name: string,
@@ -64,10 +64,19 @@
             cookieConfig = _config.cookie,
 
             /**
+             * Pointers to callback functions,
+             * avoid calling userConfig['<callback_name>']
+             */
+
+            onFirstConsent,
+            onConsent,
+            onChange,
+
+            /**
              * Can be number of function
              * @type {number | Function}
              */
-            _expiresAfterDays,
+            expiresAfterDays,
 
             /**
              * Internal state variables
@@ -102,89 +111,110 @@
             clickedInsideModal = false,
             currentModalFocusableElements,
 
-            allSections,
-
-            // Helper callback functions
-            onFirstConsent,
-            onConsent,
-            onChange,
-
             revisionEnabled = false,
             validRevision = true,
 
-            // State variables for the autoclearCookies function
-            changedPreferences = [],
-            reloadPage = false;
+            /**
+             * Array containing the last changed categories (enabled/disabled)
+             * @type {string[]}
+             */
+            lastChangedCategoryNames = [],
 
-        /**
-         * Accept type:
-         *  - "all"
-         *  - "necessary"
-         *  - "custom"
-         * @type {string}
-         */
-        var acceptType;
+            reloadPage = false,
 
-        /**
-         * Stores all available categories
-         * @type {string[]}
-         */
-         var allCategories = [];
+            /**
+             * Accept type:
+             *  - "all"
+             *  - "necessary"
+             *  - "custom"
+             * @type {string}
+             */
+            acceptType,
 
-        /**
-         * Contains all accepted categories
-         * @type {string[]}
-         */
-        var acceptedCategories = [];
+            /**
+             * Cookie's structure inside autoClear object
+             * @typedef {Object} Cookie
+             * @property {string|RegExp} name
+             * @property {string} [domain]
+             * @property {string} [path]
+             */
 
-        /**
-         * Contains all non-accepted (rejected) categories
-         * @type {string[]}
-         */
-        var rejectedCategories = [];
+            /**
+             * autoClear's object structure
+             * @typedef {Object} AutoClear
+             * @property {Cookie} cookies
+             * @property {boolean} reloadPage
+             */
 
-        /**
-         * Keep track of readonly toggles
-         * @type {boolean[]}
-         */
-        var readonlyCategories = [];
+            /**
+             * Structure of each category
+             * @typedef {Object} Category
+             * @property {AutoClear} autoClear
+             * @property {boolean} enabled
+             * @property {boolean} readOnly
+             */
 
-        /**
-         * Contains all categories enabled by default
-         * @type {string[]}
-         */
-        var defaultEnabledCategories = [];
+            /**
+             * Object containing all user's defined categories
+             * @type {Object.<string, Category>}
+             */
+            allDefinedCategories,
 
-        /**
-         * Don't run plugin (to avoid indexing its text content) if bot detected
-         */
-        var botAgentDetected = false;
+            /**
+             * Stores all available categories
+             * @type {string[]}
+             */
+            allCategoryNames,
 
-        /**
-         * Save reference to the last focused element on the page
-         * (used later to restore focus when both modals are closed)
-         */
-        var lastFocusedElemBeforeModal,
-            lastFocusedModalElement;
+            /**
+             * Contains all accepted categories
+             * @type {string[]}
+             */
+            acceptedCategories = [],
 
-        /**
-         * Both of the arrays below have the same structure:
-         * [0] => holds reference to the FIRST focusable element inside modal
-         * [1] => holds reference to the LAST focusable element inside modal
-         */
-        var allConsentModalFocusableElements = [],
-            allPreferencesModalFocusableElements = [];
+            /**
+             * Keep track of readonly toggles
+             * @type {boolean[]}
+             */
+            readOnlyCategories = [],
 
-        /**
-         * Keep track of enabled/disabled categories
-         * @type {boolean[]}
-         */
-        var allToggleStates = [];
+            /**
+             * Contains all categories enabled by default
+             * @type {string[]}
+             */
+            defaultEnabledCategories = [],
 
-        /**
-         * Pointers to main dom elements (to avoid retrieving them later using document.getElementById)
-         */
-        var
+            /**
+             * Don't run plugin (to avoid indexing its text content) if bot detected
+             */
+            botAgentDetected = false,
+
+            /**
+             * Save reference to the last focused element on the page
+             * (used later to restore focus when both modals are closed)
+             */
+            lastFocusedElemBeforeModal,
+            lastFocusedModalElement,
+
+            /**
+             * Both of the arrays below have the same structure:
+             * [0] => holds reference to the FIRST focusable element inside modal
+             * [1] => holds reference to the LAST focusable element inside modal
+             */
+            allConsentModalFocusableElements = [],
+            allPreferencesModalFocusableElements = [],
+
+            /**
+             * Keep track of enabled/disabled categories
+             * @type {boolean[]}
+             */
+            allToggleStates = [],
+
+            /**
+             * Pointers to main dom elements
+             * (avoid retrieving them later using document.getElementById)
+             */
+
             /** @type {HTMLElement} */ htmlDom = document.documentElement,
             /** @type {HTMLElement} */ mainContainer,
             /** @type {HTMLElement} */ allModalsContainer,
@@ -201,8 +231,8 @@
             /** @type {HTMLElement} */ preferencesInner,
             /** @type {HTMLElement} */ preferencesTitle,
             /** @type {HTMLElement} */ preferencesCloseBtn,
-            /** @type {HTMLElement} */ sections,
-            /** @type {HTMLElement} */ newSections,
+            /** @type {HTMLElement} */ sectionsContainer,
+            /** @type {HTMLElement} */ newSectionsContainer,
             /** @type {HTMLElement} */ preferencesButtonsContainer,
             /** @type {HTMLElement} */ preferencesSaveBtn,
             /** @type {HTMLElement} */ preferencesacceptAllBtn,
@@ -213,103 +243,90 @@
          * @param {Object} userConfig
          */
         var _setConfig = function(_userConfig){
-            
+
             /**
              * Make user configuration globally available
              */
             userConfig = _userConfig;
-   
+            cookieConfig = _config.cookie;
             allTranslations = userConfig['language']['translations'];
 
-            _log("CookieConsent [CONFIG]: userConfig:", userConfig);
+            _log("CookieConsent [CONFIG]: configuration:", userConfig);
 
             if(typeof userConfig['autoShow'] === "boolean")
                 _config.autoShow = userConfig['autoShow'];
 
-            var cookieSettings = userConfig['cookie'];
+            var newCookieConfig = userConfig['cookie'];
 
-            if(typeof cookieSettings === 'object' && _getKeys(cookieSettings).length > 0){
+            if(!!newCookieConfig && typeof newCookieConfig === 'object'){
 
-                var
-                    name = cookieSettings['name'],
-                    domain = cookieSettings['domain'],
-                    path = cookieSettings['path'],
-                    sameSite = cookieSettings['sameSite'],
-                    rfcCompliant = cookieSettings['rfcCompliant'];
-                    _expiresAfterDays = cookieSettings['expiresAfterDays'];
+                var name = newCookieConfig['name'],
+                    domain = newCookieConfig['domain'],
+                    path = newCookieConfig['path'],
+                    sameSite = newCookieConfig['sameSite'],
+                    rfcCompliant = newCookieConfig['rfcCompliant'];
 
-                cookieConfig = _config.cookie;
+                expiresAfterDays = newCookieConfig['expiresAfterDays'];
 
                 name && (cookieConfig.name = name);
                 domain && (cookieConfig.domain = domain);
                 path && (cookieConfig.path = path);
                 sameSite && (cookieConfig.sameSite = sameSite);
                 rfcCompliant && (cookieConfig.rfcCompliant = rfcCompliant);
-                _expiresAfterDays && (cookieConfig.expiresAfterDays = _expiresAfterDays);
+                expiresAfterDays && (cookieConfig.expiresAfterDays = expiresAfterDays);
             }
 
-            if(typeof userConfig['onConsent'] === "function")
-                onConsent = userConfig['onConsent'];
+            expiresAfterDays = cookieConfig.expiresAfterDays;
 
-            if(typeof userConfig['onFirstConsent'] === "function")
-                onFirstConsent = userConfig['onFirstConsent'];
+            /**
+             * Save references to callback functions
+             */
+            onFirstConsent = userConfig['onFirstConsent'];
+            onConsent = userConfig['onConsent'];
+            onChange = userConfig['onChange'];
 
-            if(typeof userConfig['onChange'] === "function")
-                onChange = userConfig['onChange'];
+            var mode = userConfig['mode'];
+            var revision = userConfig['revision'];
+            var autoClearCookies = userConfig['autoClearCookies'];
+            var manageScriptTags = userConfig['manageScriptTags'];
 
-            if(userConfig['mode'] === 'opt-out')
-                _config.mode = 'opt-out';
+            if(mode === 'opt-out'){
+                _config.mode = mode;
+            }
 
-            if(typeof userConfig['revision'] === "number"){
-                userConfig['revision'] > -1 && (_config.revision = userConfig['revision']);
+            if(typeof revision === 'number'){
+                revision > -1 && (_config.revision = revision);
                 revisionEnabled = true;
             }
 
-            if(typeof userConfig['autoClearCookies'] === "boolean")
-                _config.autoClearCookies = userConfig['autoClearCookies'];
+            if(typeof autoClearCookies === 'boolean'){
+                _config.autoClearCookies = autoClearCookies;
+            }
+
+            if(typeof manageScriptTags === 'boolean'){
+                _config.manageScriptTags = manageScriptTags;
+            }
 
             if(userConfig['hideFromBots'] === true){
                 botAgentDetected = navigator &&
                     ((navigator.userAgent && /bot|crawl|spider|slurp|teoma/i.test(navigator.userAgent)) || navigator.webdriver);
             }
 
-            _config.manageScriptTags = userConfig['manageScriptTags'] === true;
-
-            var autoDetect = userConfig.language['autoDetect'];
-
-            if (autoDetect === 'browser' || autoDetect === 'document'){
-                _config.autoDetect = autoDetect;
-                _log("CookieConsent [LANG]: autoDetect strategy is '" + autoDetect + "'");
-            }
-
-            currentLanguageCode = _resolveCurrentLanguageCode(userConfig.language['default'], allTranslations);
+            _log("CookieConsent [CONFIG]: autoClearCookies:", _config.autoClearCookies);
+            _log("CookieConsent [CONFIG]: revision enabled:", revisionEnabled);
+            _log("CookieConsent [CONFIG]: manageScriptTags:", _config.manageScriptTags);
 
             /**
-             * Store translation of the current language
+             * Determine current language code
+             */
+            currentLanguageCode = _resolveCurrentLanguageCode();
+
+            /**
+             * Get translation relative to the current language code
              */
             currentTranslation = allTranslations[currentLanguageCode];
 
-            _log("CookieConsent [LANG]: current language is '" + currentLanguageCode + "'");
-        }
-
-        /**
-         * Print consent date
-         */
-        var _printconsentTimestampHTML = function(){
-            if(!consentTimestamp) return;
-
-            var consentTimestampElements = document.querySelectorAll('[data-cc="consent-timestamp"]');
-            var lastconsentTimestampElements = document.querySelectorAll('[data-cc="last-consent-timestamp"]');
-            var consentIdElements = document.querySelectorAll('[data-cc="consent-id"]');
-
-            for(var i=0; i<consentTimestampElements.length; i++)
-                consentTimestampElements[i].textContent = consentTimestamp.toLocaleString();
-
-            for(var i=0; i<lastconsentTimestampElements.length; i++)
-                lastconsentTimestampElements[i].textContent = lastConsentTimestamp.toLocaleString();
-
-            for(var i=0; i<consentIdElements.length; i++)
-                consentIdElements[i].textContent = consentId;
+            _log("CookieConsent [LANG]: current language: '" + currentLanguageCode + "'");
         }
 
         /**
@@ -325,7 +342,7 @@
             var acceptCustomElements = _getElements(_a + 'custom');
 
             for(var i=0; i<showPreferencesElements.length; i++){
-                showPreferencesElements[i].setAttribute('aria-haspopup', 'dialog');
+                _setAttribute(showPreferencesElements[i], 'aria-haspopup', 'dialog');
                 _addEvent(showPreferencesElements[i], 'click', function(event){
                     event.preventDefault();
                     cookieconsent.showPreferences(0);
@@ -370,26 +387,25 @@
                 cookieconsent.hidePreferences();
                 cookieconsent.hide();
             }
-
-            _printconsentTimestampHTML();
         }
 
         /**
-         * Get a valid language (at least 1 must be defined)
-         * @param {string} lang - desired language
-         * @param {Object} allTranslations - all defined languages
+         * Get a valid language code
+         * (assumes that there is at least one translation defined)
+         * @param {string} languageCode - desired language
          * @returns {string} validated language
          */
-        var _getValidLanguageCode = function(languageCode, allTranslations){
-            if(Object.prototype.hasOwnProperty.call(allTranslations, languageCode)){
-                return languageCode;
-            }else if(_getKeys(allTranslations).length > 0){
-                if(Object.prototype.hasOwnProperty.call(allTranslations, currentLanguageCode)){
-                    return currentLanguageCode;
-                }else{
-                    return _getKeys(allTranslations)[0];
-                }
-            }
+        var _getValidLanguageCode = function(languageCode){
+
+            var allLanguageCodes = _getKeys(allTranslations);
+
+            if(_inArray(allLanguageCodes, languageCode) > -1) return languageCode;
+            if(_inArray(allLanguageCodes, currentLanguageCode) > -1) return currentLanguageCode;
+
+            /**
+             * If we got here, return the very first language code (hopefully there is one)
+             */
+            return allLanguageCodes[0];
         }
 
         /**
@@ -478,15 +494,15 @@
                 consentModalInner_inner.id = 'c-inr-i';
                 overlay.id = 'cm-ov';
 
-                consentModal.setAttribute('role', 'dialog');
-                consentModal.setAttribute('aria-modal', 'true');
-                consentModal.setAttribute('aria-hidden', 'false');
-                consentModal.setAttribute('aria-labelledby', 'c-ttl');
-                consentModal.setAttribute('aria-describedby', 'c-txt');
+                _setAttribute(consentModal, 'role', 'dialog');
+                _setAttribute(consentModal, 'aria-modal', 'true');
+                _setAttribute(consentModal, 'aria-hidden', 'false');
+                _setAttribute(consentModal, 'aria-labelledby', 'c-ttl');
+                _setAttribute(consentModal, 'aria-describedby', 'c-txt');
 
                 // Append consent modal to main container
-                allModalsContainer.appendChild(consentModal);
-                allModalsContainer.appendChild(overlay);
+                _appendChild(allModalsContainer, consentModal);
+                _appendChild(allModalsContainer, overlay);
 
                 /**
                  * Make modal by default hidden to prevent weird page jumps/flashes (shown only once css is loaded)
@@ -504,9 +520,9 @@
                 if(!consentModalTitle){
                     consentModalTitle = _createNode('div');
                     consentModalTitle.id = 'c-ttl';
-                    consentModalTitle.setAttribute('role', 'heading');
-                    consentModalTitle.setAttribute('aria-level', '2');
-                    consentModalInner_inner.appendChild(consentModalTitle);
+                    _setAttribute(consentModalTitle, 'role', 'heading');
+                    _setAttribute(consentModalTitle, 'aria-level', '2');
+                    _appendChild(consentModalInner_inner, consentModalTitle);
                 }
 
                 consentModalTitle.innerHTML = consentModalTitle_value;
@@ -526,7 +542,7 @@
             if(!consentModalDescription){
                 consentModalDescription = _createNode('div');
                 consentModalDescription.id = 'c-txt';
-                consentModalInner_inner.appendChild(consentModalDescription);
+                _appendChild(consentModalInner_inner, consentModalDescription);
             }
 
             // Set description content
@@ -545,7 +561,7 @@
 
                     _addEvent(consentAcceptAllBtn, "click", function(){
                         cookieconsent.hide();
-                        _log("CookieConsent [ACCEPT]: cookie_consent was accepted!");
+                        _log("CookieConsent [ACCEPT]: all");
                         cookieconsent.accept('all');
                     });
                 }
@@ -563,6 +579,7 @@
 
                     _addEvent(consentAcceptNecessaryBtn, 'click', function(){
                         cookieconsent.hide();
+                        _log("CookieConsent [ACCEPT]: necessary");
                         cookieconsent.accept([]); // accept necessary only
                     });
                 }
@@ -577,7 +594,7 @@
                 consentModalInner = _createNode('div');
                 consentModalInner.id = 'c-inr';
 
-                consentModalInner.appendChild(consentModalInner_inner);
+                _appendChild(consentModalInner, consentModalInner_inner);
             }
 
             if(!consentButtonsContainer){
@@ -585,16 +602,16 @@
                 consentButtonsContainer.id = "c-bns";
 
                 if(guiOptionsData && guiOptionsData['consentModal'] && guiOptionsData['consentModal']['swapButtons'] === true){
-                    acceptNecessaryBtnData && consentButtonsContainer.appendChild(consentAcceptNecessaryBtn);
-                    acceptAllBtnData && consentButtonsContainer.appendChild(consentAcceptAllBtn);
+                    acceptNecessaryBtnData && _appendChild(consentButtonsContainer, consentAcceptNecessaryBtn);
+                    acceptAllBtnData && _appendChild(consentButtonsContainer, consentAcceptAllBtn);
                     consentButtonsContainer.className = 'swap';
                 }else{
-                    acceptAllBtnData && consentButtonsContainer.appendChild(consentAcceptAllBtn);
-                    acceptNecessaryBtnData && consentButtonsContainer.appendChild(consentAcceptNecessaryBtn);
+                    acceptAllBtnData && _appendChild(consentButtonsContainer, consentAcceptAllBtn);
+                    acceptNecessaryBtnData && _appendChild(consentButtonsContainer, consentAcceptNecessaryBtn);
                 }
 
-                (acceptAllBtnData || acceptNecessaryBtnData ) && consentModalInner.appendChild(consentButtonsContainer);
-                consentModal.appendChild(consentModalInner);
+                (acceptAllBtnData || acceptNecessaryBtnData ) && _appendChild(consentModalInner, consentButtonsContainer);
+                _appendChild(consentModal, consentModalInner);
             }
 
             consentModalExists = true;
@@ -618,7 +635,7 @@
                 var preferencesHeader = _createNode('div');
                 preferencesCloseBtn = _createNode('button');
                 var preferencesCloseBtnContainer = _createNode('div');
-                sections = _createNode('div');
+                sectionsContainer = _createNode('div');
                 var overlay = _createNode('div');
 
                 /**
@@ -631,21 +648,21 @@
                 preferencesTitle.id = 's-ttl';
                 preferencesInner.id = 's-inr';
                 preferencesHeader.id = "s-hdr";
-                sections.id = 's-bl';
+                sectionsContainer.id = 's-bl';
                 preferencesCloseBtn.id = 's-c-bn';
                 overlay.id = 'cs-ov';
                 preferencesCloseBtnContainer.id = 's-c-bnc';
                 preferencesCloseBtn.className = 'c-bn';
 
-                preferencesContainer.setAttribute('role', 'dialog');
-                preferencesContainer.setAttribute('aria-modal', 'true');
-                preferencesContainer.setAttribute('aria-hidden', 'true');
-                preferencesContainer.setAttribute('aria-labelledby', 's-ttl');
-                preferencesTitle.setAttribute('role', 'heading');
+                _setAttribute(preferencesContainer, 'role', 'dialog');
+                _setAttribute(preferencesContainer, 'aria-modal', 'true');
+                _setAttribute(preferencesContainer, 'aria-hidden', 'true');
+                _setAttribute(preferencesContainer, 'aria-labelledby', 's-ttl');
+                _setAttribute(preferencesTitle, 'role', 'heading');
                 preferencesContainer.style.visibility = overlay.style.visibility = "hidden";
                 overlay.style.opacity = 0;
 
-                preferencesCloseBtnContainer.appendChild(preferencesCloseBtn);
+                _appendChild(preferencesCloseBtnContainer, preferencesCloseBtn);
 
                 // If 'esc' key is pressed inside preferencesContainer div => hide preferences
                 _addEvent(preferencesContainerValign, 'keydown', function(evt){
@@ -661,33 +678,33 @@
 
                 _guiManager(1);
             }else{
-                newSections = _createNode('div');
-                newSections.id = 's-bl';
+                newSectionsContainer = _createNode('div');
+                newSectionsContainer.id = 's-bl';
             }
 
             // Add label to close button
-            preferencesCloseBtn.setAttribute('aria-label', preferencesModalData['closeBtnLabel'] || '');
+            _setAttribute(preferencesCloseBtn, 'aria-label', preferencesModalData['closeIconLabel'] || '');
 
-            allSections = preferencesModalData['sections'];
-
-            var nSections = allSections.length;
-            var _allCategories = userConfig['categories'];   /* todo: already declared this once */
+            allDefinedCategories = userConfig['categories'];
+            allCategoryNames = _getKeys(allDefinedCategories);
 
             // Set preferences modal title
             preferencesTitle.innerHTML = preferencesModalData['title'];
 
-            // Create preferences modal content (sections)
-            for(var i=0; i<nSections; ++i){
+            var allSections = preferencesModalData['sections'];
 
-                var title_data = allSections[i]['title'],
+            // Create preferences modal content (sectionsContainer)
+            for(var i=0; i<allSections.length; ++i){
+
+                var titleData = allSections[i]['title'],
                     descriptionTextData = allSections[i]['description'],
-                    toggleCategory = allSections[i]['linkedCategory'],
-                    categoryData = toggleCategory && _allCategories[toggleCategory],
+                    linkedCategory = allSections[i]['linkedCategory'],
+                    currentCategoryObject = linkedCategory && allDefinedCategories[linkedCategory],
                     cookieTableData = allSections[i]['cookieTable'],
                     cookieTableHeaders = cookieTableData && cookieTableData['headers'],
                     cookieTableBody = cookieTableData && cookieTableData['body'],
                     createCookieTable = cookieTableBody && cookieTableBody.length > 0,
-                    isExpandable = (descriptionTextData && 'truthy') || createCookieTable;
+                    isExpandable = !!descriptionTextData || createCookieTable;
 
                 // Create title
                 var section = _createNode('div');
@@ -707,7 +724,7 @@
                 tableParent.className = 'desc';
 
                 // Create toggle if specified (opt in/out)
-                if(typeof categoryData !== 'undefined'){
+                if(typeof currentCategoryObject !== 'undefined'){
 
                     var expandableDivId = "c-ac-"+i;
 
@@ -732,59 +749,56 @@
                     toggleLabelSpan.className = "t-lb";
 
                     if(isExpandable){
-                        sectionTitleBtn.setAttribute('aria-expanded', 'false');
-                        sectionTitleBtn.setAttribute('aria-controls', expandableDivId);
+                        _setAttribute(sectionTitleBtn, 'aria-expanded', 'false');
+                        _setAttribute(sectionTitleBtn, 'aria-controls', expandableDivId);
                     }
 
                     toggle.type = 'checkbox';
-                    toggleSpan.setAttribute('aria-hidden', 'true');
+                    _setAttribute(toggleSpan, 'aria-hidden', 'true');
 
-                    toggle.value = toggleCategory;
+                    toggle.value = linkedCategory;
 
-                    toggleLabelSpan.textContent = title_data;
+                    toggleLabelSpan.textContent = titleData;
 
-                    sectionTitleBtn.insertAdjacentHTML('beforeend', title_data);
+                    sectionTitleBtn.insertAdjacentHTML('beforeend', titleData);
 
-                    titleContainer.appendChild(sectionTitleBtn);
-                    toggleSpan.appendChild(toggleOnIcon);
-                    toggleSpan.appendChild(toggleOffIcon);
+                    _appendChild(titleContainer, sectionTitleBtn);
+                    _appendChild(toggleSpan, toggleOnIcon);
+                    _appendChild(toggleSpan, toggleOffIcon);
 
                     /**
                      * If consent is valid => retrieve category states from cookie
                      * Otherwise use states defined in the userConfig. object
                      */
                     if(!invalidConsent){
-                        if(_inArray(savedCookieContent['categories'], toggleCategory) > -1){
+                        if(_inArray(savedCookieContent['categories'], linkedCategory) > -1){
                             toggle.checked = true;
-                            !newSections && allToggleStates.push(true);
+                            !newSectionsContainer && allToggleStates.push(true);
                         }else{
-                            !newSections && allToggleStates.push(false);
+                            !newSectionsContainer && allToggleStates.push(false);
                         }
-                    }else if(_allCategories[toggleCategory]['enabled']){
+                    }else if(currentCategoryObject && currentCategoryObject['enabled']){
                         toggle.checked = true;
-                        !newSections && allToggleStates.push(true);
+                        !newSectionsContainer && allToggleStates.push(true);
 
                         /**
                          * Keep track of categories enabled by default (useful when mode=='opt-out')
                          */
-                        if(_allCategories[toggleCategory]['enabled'])
-                            !newSections && defaultEnabledCategories.push(toggleCategory);
-
+                        if(currentCategoryObject['enabled'])
+                            !newSectionsContainer && defaultEnabledCategories.push(linkedCategory);
                     }else{
-                        !newSections && allToggleStates.push(false);
+                        !newSectionsContainer && allToggleStates.push(false);
                     }
-
-                    !newSections && allCategories.push(toggleCategory);
 
                     /**
                      * Set toggle as readonly if true (disable checkbox)
                      */
-                    if(_allCategories[toggleCategory]['readOnly']){
+                    if(currentCategoryObject && currentCategoryObject['readOnly']){
                         toggle.disabled = true;
                         _addClass(toggleSpan, 'c-ro');
-                        !newSections && readonlyCategories.push(true);
+                        !newSectionsContainer && readOnlyCategories.push(true);
                     }else{
-                        !newSections && readonlyCategories.push(false);
+                        !newSectionsContainer && readOnlyCategories.push(false);
                     }
 
                     _addClass(tableParent, 'b-acc');
@@ -792,12 +806,12 @@
                     _addClass(section, 'b-ex');
 
                     tableParent.id = expandableDivId;
-                    tableParent.setAttribute('aria-hidden', 'true');
+                    _setAttribute(tableParent, 'aria-hidden', 'true');
 
-                    toggleLabel.appendChild(toggle);
-                    toggleLabel.appendChild(toggleSpan);
-                    toggleLabel.appendChild(toggleLabelSpan);
-                    titleContainer.appendChild(toggleLabel);
+                    _appendChild(toggleLabel, toggle);
+                    _appendChild(toggleLabel, toggleSpan);
+                    _appendChild(toggleLabel, toggleLabelSpan);
+                    _appendChild(titleContainer, toggleLabel);
 
                     /**
                      * On button click handle the following :=> aria-expanded, aria-hidden and act class for current section
@@ -806,12 +820,12 @@
                         _addEvent(sectionTitleBtn, 'click', function(){
                             if(!_hasClass(section, 'act')){
                                 _addClass(section, 'act');
-                                btn.setAttribute('aria-expanded', 'true');
-                                accordion.setAttribute('aria-hidden', 'false');
+                                _setAttribute(btn, 'aria-expanded', 'true');
+                                _setAttribute(accordion, 'aria-hidden', 'false');
                             }else{
                                 _removeClass(section, 'act');
-                                btn.setAttribute('aria-expanded', 'false');
-                                accordion.setAttribute('aria-hidden', 'true');
+                                _setAttribute(btn, 'aria-expanded', 'false');
+                                _setAttribute(accordion, 'aria-hidden', 'true');
                             }
                         }, false);
                     })(tableParent, section, sectionTitleBtn);
@@ -821,23 +835,23 @@
                      * If section is not a button (no toggle defined),
                      * create a simple div instead
                      */
-                    if(title_data){
+                    if(titleData){
                         var title = _createNode('div');
                         title.className = 'b-tl';
-                        title.setAttribute('role', 'heading');
-                        title.setAttribute('aria-level', '3');
-                        title.insertAdjacentHTML('beforeend', title_data);
-                        titleContainer.appendChild(title);
+                        _setAttribute(title, 'role', 'heading');
+                        _setAttribute(title, 'aria-level', '3');
+                        title.insertAdjacentHTML('beforeend', titleData);
+                        _appendChild(titleContainer, title);
                     }
                 }
 
-                title_data && section.appendChild(titleContainer);
-                descriptionTextData && tableParent.appendChild(description);
+                titleData && _appendChild(section, titleContainer);
+                descriptionTextData && _appendChild(tableParent, description);
 
                 // if cookie table found, generate table for this section
                 if(createCookieTable){
                     var allTableKeys = _getKeys(cookieTableHeaders);
-                    var tr_tmp_fragment = document.createDocumentFragment();
+                    var trTmpFragment = document.createDocumentFragment();
 
                     if(allTableKeys){
                         /**
@@ -847,27 +861,27 @@
                             // create new header
                             var th1 = _createNode('th');
                             var key = allTableKeys[p];
-                            th1.setAttribute('scope', 'col');
+                            _setAttribute(th1, 'scope', 'col')
 
                             if(key){
                                 th1.textContent = cookieTableHeaders[key];
-                                tr_tmp_fragment.appendChild(th1);
+                                _appendChild(trTmpFragment, th1);
                             }
                         }
 
 
-                        var tr_tmp = _createNode('tr');
-                        tr_tmp.appendChild(tr_tmp_fragment);
+                        var trTmp = _createNode('tr');
+                        _appendChild(trTmp, trTmpFragment);
 
                         // create table header & append fragment
                         var thead = _createNode('thead');
-                        thead.appendChild(tr_tmp);
+                        _appendChild(thead, trTmp);
 
                         // append header to table
                         var table = _createNode('table');
-                        table.appendChild(thead);
+                        _appendChild(table, thead);
 
-                        var tbody_fragment = document.createDocumentFragment();
+                        var tbodyFragment = document.createDocumentFragment();
 
                         // create table content
                         for(var n=0; n<cookieTableBody.length; n++){
@@ -883,20 +897,20 @@
 
                                 // Allow html inside table cells
                                 td_tmp.insertAdjacentHTML('beforeend', columnValue);
-                                td_tmp.setAttribute('data-column', columnHeader);
+                                _setAttribute(td_tmp, 'data-column', columnHeader);
 
-                                tr.appendChild(td_tmp);
+                                _appendChild(tr, td_tmp);
                             }
 
-                            tbody_fragment.appendChild(tr);
+                            _appendChild(tbodyFragment, tr);
                         }
 
-                        // append tbody_fragment to tbody & append the latter into the table
+                        // append tbodyFragment to tbody & append the latter into the table
                         var tbody = _createNode('tbody');
-                        tbody.appendChild(tbody_fragment);
-                        table.appendChild(tbody);
+                        _appendChild(tbody, tbodyFragment);
+                        _appendChild(table, tbody);
 
-                        tableParent.appendChild(table);
+                        _appendChild(tableParent, table);
                     }
                 }
 
@@ -905,13 +919,13 @@
                  * - togglable div with title
                  * - a simple div with at least a title or description
                  */
-                if(allCategories[toggleCategory] && title_data || (!allCategories[toggleCategory] && (title_data || descriptionTextData))){
-                    section.appendChild(tableParent);
+                if(allCategoryNames[linkedCategory] && titleData || (!allCategoryNames[linkedCategory] && (titleData || descriptionTextData))){
+                    _appendChild(section, tableParent);
 
-                    if(newSections)
-                        newSections.appendChild(section);
+                    if(newSectionsContainer)
+                        _appendChild(newSectionsContainer, section);
                     else
-                        sections.appendChild(section);
+                        _appendChild(sectionsContainer, section);
                 }
             }
 
@@ -925,7 +939,7 @@
                 preferencesacceptAllBtn = _createNode('button');
                 preferencesacceptAllBtn.id = 's-all-bn';
                 preferencesacceptAllBtn.className ='c-bn';
-                preferencesButtonsContainer.appendChild(preferencesacceptAllBtn);
+                _appendChild(preferencesButtonsContainer, preferencesacceptAllBtn);
 
                 _addEvent(preferencesacceptAllBtn, 'click', function(){
                     cookieconsent.hidePreferences();
@@ -953,7 +967,7 @@
                     });
 
                     preferencesInner.className = "bns-t";
-                    preferencesButtonsContainer.appendChild(preferencesacceptNecessaryBtn);
+                    _appendChild(preferencesButtonsContainer, preferencesacceptNecessaryBtn);
                 }
 
                 preferencesacceptNecessaryBtn.innerHTML = acceptNecessaryBtnText;
@@ -963,7 +977,7 @@
                 preferencesSaveBtn = _createNode('button');
                 preferencesSaveBtn.id = 's-sv-bn';
                 preferencesSaveBtn.className ='c-bn';
-                preferencesButtonsContainer.appendChild(preferencesSaveBtn);
+                _appendChild(preferencesButtonsContainer, preferencesSaveBtn);
 
                 // Add save preferences button onClick event
                 // Hide both preferences modal and consent modal
@@ -974,28 +988,28 @@
                 });
             }
 
-            preferencesSaveBtn.innerHTML = preferencesModalData['acceptCustomBtn'];
+            preferencesSaveBtn.innerHTML = preferencesModalData['savePreferencesBtn'];
 
-            if(newSections) {
-                // replace entire existing cookie category sections with the new cookie categories new sections (in a different language)
-                preferencesInner.replaceChild(newSections, sections);
-                sections = newSections;
+            if(newSectionsContainer) {
+                // replace entire existing cookie category sectionsContainer with the new cookie categories new sectionsContainer (in a different language)
+                preferencesInner.replaceChild(newSectionsContainer, sectionsContainer);
+                sectionsContainer = newSectionsContainer;
                 return;
             };
 
-            preferencesHeader.appendChild(preferencesTitle);
-            preferencesHeader.appendChild(preferencesCloseBtnContainer);
-            preferencesInner.appendChild(preferencesHeader);
-            preferencesInner.appendChild(sections);
-            preferencesInner.appendChild(preferencesButtonsContainer);
-            preferencesContainerInner.appendChild(preferencesInner);
+            _appendChild(preferencesHeader, preferencesTitle);
+            _appendChild(preferencesHeader, preferencesCloseBtnContainer);
+            _appendChild(preferencesInner, preferencesHeader);
+            _appendChild(preferencesInner, sectionsContainer);
+            _appendChild(preferencesInner, preferencesButtonsContainer);
+            _appendChild(preferencesContainerInner, preferencesInner);
 
-            preferences.appendChild(preferencesContainerInner);
-            preferencesContainerValign.appendChild(preferences);
-            preferencesContainer.appendChild(preferencesContainerValign);
+            _appendChild(preferences, preferencesContainerInner);
+            _appendChild(preferencesContainerValign, preferences);
+            _appendChild(preferencesContainer, preferencesContainerValign);
 
-            allModalsContainer.appendChild(preferencesContainer);
-            allModalsContainer.appendChild(overlay);
+            _appendChild(allModalsContainer, preferencesContainer);
+            _appendChild(allModalsContainer, overlay);
         }
 
         /**
@@ -1021,14 +1035,14 @@
             _createPreferencesModal();
 
             // Finally append everything (mainContainer holds both modals)
-            (userConfig['root'] || document.body).appendChild(mainContainer);
+            _appendChild((userConfig['root'] || document.body), mainContainer);
         }
 
         /**
          * Update/change modals language
-         * @param {String} lang new language
-         * @param {Boolean} [force] update language fields forcefully
-         * @returns {Boolean}
+         * @param {string} lang new language
+         * @param {boolean} [force] update language fields forcefully
+         * @returns {boolean}
          */
         cookieconsent.updateLanguage = function(newLanguage, forceUpdate){
 
@@ -1037,13 +1051,13 @@
             /**
              * Validate language to avoid errors
              */
-            var newValidatedLanguage = _getValidLanguageCode(newLanguage, allTranslations);
+            var newLanguageCode = _getValidLanguageCode(newLanguage);
 
             /**
              * Set language only if it differs from current
              */
-            if(newValidatedLanguage !== currentLanguageCode || forceUpdate === true){
-                currentLanguageCode = newValidatedLanguage;
+            if(newLanguageCode !== currentLanguageCode || forceUpdate === true){
+                currentLanguageCode = newLanguageCode;
 
                 _loadTranslationData(currentLanguageCode, function(){
                     if(consentModalExists){
@@ -1053,7 +1067,7 @@
 
                     _createPreferencesModal();
 
-                    _log("CookieConsent [LANGUAGE]: current language: '" + newValidatedLanguage + "'");
+                    _log("CookieConsent [LANG]: current language: '" + newLanguageCode + "'");
                 });
 
                 return true;
@@ -1062,6 +1076,8 @@
             return false;
         }
 
+
+
         /**
          * Delete all cookies which are unused (based on selected preferences)
          *
@@ -1069,11 +1085,10 @@
          */
         var _autoclearCookies = function(clearOnFirstConsent){
 
-            var allCategories = userConfig['categories'];
-
-            // Get number of sections
-            var len = allSections.length;
-            var count = -1;
+            /**
+             *  @type {string}
+             */
+            var currentDomain = cookieConfig.domain;
 
             // reset reload state
             reloadPage = false;
@@ -1081,82 +1096,93 @@
             // Retrieve all cookies
             var allCookiesArray = _getCookie('', 'all');
 
-            // delete cookies on 'www.domain.com' and '.www.domain.com' (can also be without www)
-            var domains = [cookieConfig.domain, '.'+cookieConfig.domain];
+            // delete cookies on current domain
+            var domains = [currentDomain, '.'+currentDomain];
 
-            // if domain has www, delete cookies also for 'domain.com' and '.domain.com'
-            if(cookieConfig.domain.slice(0, 4) === 'www.'){
-                var non_www_domain = cookieConfig.domain.substr(4);  // remove first 4 chars (www.)
-                domains.push(non_www_domain);
-                domains.push('.' + non_www_domain);
+            // if domain has the "www" prefix, delete cookies also for 'domain.com' and '.domain.com'
+            if(currentDomain.slice(0, 4) === 'www.'){
+                var domainWithoutPrefix = currentDomain.substring(4);  // remove first 4 chars (www.)
+                domains.push(domainWithoutPrefix, '.' + domainWithoutPrefix);
             }
 
-            // For each section
-            for(var i=0; i<len; i++){
+            var categoriesToCheck = clearOnFirstConsent ? allCategoryNames : lastChangedCategoryNames;
 
-                // Save current section (local scope & less accesses -> ~faster value retrieval)
-                var currSection = allSections[i];
+            /**
+             * Filter out categories with readOnly=true or don't have an autoClear object
+             */
+            categoriesToCheck = categoriesToCheck.filter(function(categoryName){
+                var currentCategoryObject = allDefinedCategories[categoryName];
 
-                // If current section has a toggle for opt in/out
-                var toggleCategory = currSection['linkedCategory'];
+                /**
+                 * Make sure that:
+                 *  category != falsy
+                 *  readOnly = falsy
+                 *  autoClear = truthy (assuming that it is a valid object)
+                 */
+                return(
+                    !!currentCategoryObject
+                    && !currentCategoryObject['readOnly']
+                    && !!currentCategoryObject['autoClear']
+                );
+            });
 
-                if(typeof toggleCategory === 'string'){
+            // For each category that was just changed (enabled/disabled)
+            for(var i=0; i<categoriesToCheck.length; i++){
 
-                    var currentCategory = allCategories[toggleCategory];
-                    var currentCategoryAutoClear = currentCategory && currentCategory['autoClear'];
-                    var currentAutoClearCookies = currentCategoryAutoClear && currentCategoryAutoClear['cookies'];
+                var currentCategoryName = categoriesToCheck[i],
+                    currentCategoryObject = allDefinedCategories[currentCategoryName],
+                    currentCategoryAutoClear = currentCategoryObject['autoClear'],
+                    currentAutoClearCookies = currentCategoryAutoClear && currentCategoryAutoClear['cookies'] || [],
 
-                    // if current section has a cookie table, an off toggle,
-                    // and its preferences were just changed => delete cookies
-                    var categoryWasJustDisabled = _inArray(changedPreferences, toggleCategory) > -1;
+                    categoryWasJustChanged = _inArray(lastChangedCategoryNames, currentCategoryName) > -1,
+                    categoryIsDisabled = _inArray(acceptedCategories, currentCategoryName) === -1,
+                    categoryWasJustDisabled = categoryWasJustChanged && categoryIsDisabled;
 
-                    if(
-                        !allToggleStates[++count] &&
-                        currentAutoClearCookies &&
-                        (clearOnFirstConsent || categoryWasJustDisabled)
-                    ){
+                if((clearOnFirstConsent && categoryIsDisabled) || (!clearOnFirstConsent && categoryWasJustDisabled)){
 
-                        // Get number of cookies defined in cookie_table
-                        var clen = currentAutoClearCookies.length;
+                    // Get number of cookies defined in cookie_table
+                    var cookiesToClear = currentAutoClearCookies.length;
 
-                        // check if page needs to be reloaded after autoClear
-                        if(currentCategoryAutoClear['reloadPage'] === true)
-                            categoryWasJustDisabled && (reloadPage = true);
+                    // check if page needs to be reloaded after autoClear (if category was just disabled)
+                    if(currentCategoryAutoClear['reloadPage'] === true && categoryWasJustDisabled)
+                        reloadPage = true;
 
-                        // delete each cookie in the cookies array
-                        for(var j=0; j<clen; j++){
+                    // delete each cookie in the cookies array
+                    for(var j=0; j<cookiesToClear; j++){
 
-                            // Get current row of table (corresponds to all cookie params)
-                            var foundCookies = [];
-                            /**
-                             * @type {RegExp}
-                             */
-                            var currCookieName = currentAutoClearCookies[j]['name'];
-                            var isRegex = currCookieName && typeof currCookieName !== 'string';
-                            var currCookieDomain = currentAutoClearCookies[j]['domain'] || null;
-                            var currCookiePath = currentAutoClearCookies[j]['path'] || false;
+                        /**
+                         * List of all cookies matching the current cookie name
+                         * @type {string[]}
+                         */
+                        var foundCookies = [];
 
-                            // set domain to the specified domain
-                            currCookieDomain && ( domains = [currCookieDomain, '.'+currCookieDomain]);
+                        /**
+                         * @type {string|RegExp}
+                         */
+                        var currCookieName = currentAutoClearCookies[j]['name'];
+                        var isRegex = currCookieName && typeof currCookieName !== 'string';
+                        var currCookieDomain = currentAutoClearCookies[j]['domain'] || null;
+                        var currCookiePath = currentAutoClearCookies[j]['path'] || false;
 
-                            // If regex provided => filter cookie array
-                            if(isRegex){
-                                for(var n=0; n<allCookiesArray.length; n++){
-                                    if(currCookieName.test(allCookiesArray[n]))
-                                        foundCookies.push(allCookiesArray[n]);
-                                }
-                            }else{
-                                var found_index = _inArray(allCookiesArray, currCookieName);
-                                if(found_index > -1) foundCookies.push(allCookiesArray[found_index]);
+                        // set domain to the specified domain
+                        currCookieDomain && ( domains = [currCookieDomain, '.'+currCookieDomain]);
+
+                        // If regex provided => filter cookie array
+                        if(isRegex){
+                            for(var n=0; n<allCookiesArray.length; n++){
+                                if(currCookieName.test(allCookiesArray[n]))
+                                    foundCookies.push(allCookiesArray[n]);
                             }
+                        }else{
+                            var foundCookieIndex = _inArray(allCookiesArray, currCookieName);
+                            if(foundCookieIndex > -1) foundCookies.push(allCookiesArray[foundCookieIndex]);
+                        }
 
-                            /* todo: fix this line, printing regex throws error */
-                            _log("CookieConsent [AUTOCLEAR]: search cookie: '" + currCookieName + "', found:", foundCookies);
+                        _log("CookieConsent [AUTOCLEAR]: search cookie: '" + currCookieName + "', found:", foundCookies);
 
-                            // If cookie exists -> delete it
-                            if(foundCookies.length > 0){
-                                _eraseCookies(foundCookies, currCookiePath, domains);
-                            }
+                        // Delete cookie(s)
+                        if(foundCookies.length > 0){
+                            _eraseCookies(foundCookies, currCookiePath, domains);
                         }
                     }
                 }
@@ -1169,25 +1195,25 @@
          */
         var _saveCookiePreferences = function(acceptedCategories){
 
-            changedPreferences = [];
+            lastChangedCategoryNames = [];
 
             // Retrieve all toggle/checkbox values
-            var category_toggles = document.querySelectorAll('.c-tgl') || [];
+            var categoryToggle = document.querySelectorAll('.c-tgl') || [];
 
             // If there are opt in/out toggles ...
-            if(category_toggles.length > 0){
+            if(categoryToggle.length > 0){
 
-                for(var i=0; i<category_toggles.length; i++){
-                    if(_inArray(acceptedCategories, allCategories[i]) !== -1){
-                        category_toggles[i].checked = true;
+                for(var i=0; i<categoryToggle.length; i++){
+                    if(_inArray(acceptedCategories, allCategoryNames[i]) !== -1){
+                        categoryToggle[i].checked = true;
                         if(!allToggleStates[i]){
-                            changedPreferences.push(allCategories[i]);
+                            lastChangedCategoryNames.push(allCategoryNames[i]);
                             allToggleStates[i] = true;
                         }
                     }else{
-                        category_toggles[i].checked = false;
+                        categoryToggle[i].checked = false;
                         if(allToggleStates[i]){
-                            changedPreferences.push(allCategories[i]);
+                            lastChangedCategoryNames.push(allCategoryNames[i]);
                             allToggleStates[i] = false;
                         }
                     }
@@ -1197,7 +1223,7 @@
             /**
              * Clear cookies when preferences/preferences change
              */
-            if(!invalidConsent && _config.autoClearCookies && changedPreferences.length > 0)
+            if(!invalidConsent && _config.autoClearCookies && lastChangedCategoryNames.length > 0)
                 _autoclearCookies();
 
             if(!consentTimestamp) consentTimestamp = new Date();
@@ -1214,7 +1240,7 @@
 
             var firstUserConsent = false;
 
-            if(invalidConsent || changedPreferences.length > 0){
+            if(invalidConsent || lastChangedCategoryNames.length > 0){
                 /**
                  * Set consent as valid
                  */
@@ -1237,8 +1263,6 @@
 
                 _setCookie(cookieConfig.name, JSON.stringify(savedCookieContent));
                 _manageExistingScripts();
-
-                _printconsentTimestampHTML();
             }
 
             if(firstUserConsent){
@@ -1257,12 +1281,12 @@
                 if(_config.mode === 'opt-in') return;
             }
 
-            // fire onChange only if preferences were changed
-            if(typeof onChange === "function" && changedPreferences.length > 0)
-                onChange(savedCookieContent, changedPreferences);
+            // Fire onChange only if preferences were changed
+            if(typeof onChange === 'function' && lastChangedCategoryNames.length > 0)
+                onChange(savedCookieContent, lastChangedCategoryNames);
 
             /**
-             * reload page if needed
+             * Reload page if needed
              */
             if(reloadPage)
                 window.location.reload();
@@ -1280,11 +1304,11 @@
 
         /**
          * Helper function which prints info (console.log())
-         * @param {Object} print_msg
-         * @param {Object} [optional_param]
+         * @param {Object} printMsg
+         * @param {Object} [optionalParam]
          */
-        var _log = function(print_msg, optional_param, error){
-            ENABLE_LOGS && (!error ? console.log(print_msg, optional_param !== undefined ? optional_param : ' ') : console.error(print_msg, optional_param || ""));
+        var _log = function(printMsg, optionalParam, error){
+            ENABLE_LOGS && (!error ? console.log(printMsg, optionalParam !== undefined ? optionalParam : ' ') : console.error(printMsg, optionalParam || ""));
         }
 
         /**
@@ -1295,9 +1319,28 @@
         var _createNode = function(type){
             var el = document.createElement(type);
             if(type === 'button'){
-                el.setAttribute('type', type);
+                _setAttribute(el, 'type', type);
             }
             return el;
+        }
+
+        /**
+         * Helper function to set attribute
+         * @param {HTMLElement} el
+         * @param {string} attribute
+         * @param {string|number|boolean} value
+         */
+        var _setAttribute = function(el, attribute, value){
+            el.setAttribute(attribute, value);
+        }
+
+        /**
+         * Helper function to append child to parent
+         * @param {Node} parent
+         * @param {Node} child
+         */
+        var _appendChild = function(parent, child){
+            parent.appendChild(child);
         }
 
         /**
@@ -1313,25 +1356,25 @@
 
         /**
          * Resolve which language should be used.
-         *
-         * @param {Object} languages Object with language translations
-         * @param {string} requested_languag Language specified by given configuration parameters
-         * @returns {string}
          */
-        var _resolveCurrentLanguageCode = function (requestedLanguageCode, translations) {
+        var _resolveCurrentLanguageCode = function () {
+            var autoDetect = userConfig.language['autoDetect'];
 
-            if (_config.autoDetect === 'browser') {
-                return _getValidLanguageCode(_getBrowserLanguageCode(), translations);
-            } else if (_config.autoDetect === 'document') {
-                return _getValidLanguageCode(document.documentElement.lang, translations);
-            } else {
-                if (typeof requestedLanguageCode === 'string') {
-                    return currentLanguageCode = _getValidLanguageCode(requestedLanguageCode, translations);
-                }
+            if(autoDetect){
+                _log("CookieConsent [LANG]: autoDetect strategy: '" + autoDetect + "'");
+
+                if (autoDetect === 'browser')
+                    return _getValidLanguageCode(_getBrowserLanguageCode());
+
+                if(autoDetect === 'document')
+                    return _getValidLanguageCode(document.documentElement.lang);
             }
 
-            _log("CookieConsent [LANG]: setting currentLanguageCode = '" + currentLanguageCode + "'");
-            return currentLanguageCode; // otherwise return default
+            /**
+             * If we got here, autoDetect value is not valid,
+             * use default language
+             */
+            return _getValidLanguageCode(userConfig['language']['default']);
         }
 
         /**
@@ -1339,10 +1382,10 @@
          * @returns {string}
          */
         var _getBrowserLanguageCode = function(){
-            var browser_lang = navigator.language || navigator.browserLanguage;
-            browser_lang.length > 2 && (browser_lang = browser_lang[0]+browser_lang[1]);
-            _log("CookieConsent [LANG]: browser language is '"+ browser_lang + "'");
-            return browser_lang.toLowerCase();
+            var browserLanguage = navigator.language || navigator.browserLanguage;
+            browserLanguage.length > 2 && (browserLanguage = browserLanguage[0]+browserLanguage[1]);
+            _log("CookieConsent [LANG]: browser language is '"+ browserLanguage + "'");
+            return browserLanguage.toLowerCase();
         }
 
         /**
@@ -1519,7 +1562,7 @@
          * @returns {number}
          */
         var _getExpiresAfterDaysValue = function(){
-            return typeof _expiresAfterDays === 'function' ? _expiresAfterDays(acceptType) : _expiresAfterDays;
+            return typeof expiresAfterDays === 'function' ? expiresAfterDays(acceptType) : expiresAfterDays;
         }
 
         /**
@@ -1540,7 +1583,7 @@
             /**
              * Make sure languageCode is valid before retrieving the translation object
              */
-            desiredLanguageCode && (currentLanguageCode = _getValidLanguageCode(desiredLanguageCode, allTranslations));
+            desiredLanguageCode && (currentLanguageCode = _getValidLanguageCode(desiredLanguageCode));
             currentTranslation = allTranslations[currentLanguageCode];
 
             /**
@@ -1573,7 +1616,7 @@
                 // configure all parameters
                 _setConfig(config);
 
-                // if is bot, don't run plugin
+                // Don't run plugin if bot is detected
                 if(botAgentDetected) return;
 
                 // Retrieve cookie value (if set)
@@ -1594,7 +1637,8 @@
                 lastConsentTimestamp && (lastConsentTimestamp = new Date(lastConsentTimestamp));
 
                 // Retrieve "data"
-                cookieData = savedCookieContent['data'] !== undefined ? savedCookieContent['data'] : null;
+                var dataTemp = savedCookieContent['data'];
+                cookieData = typeof dataTemp !== 'undefined' ? dataTemp : null;
 
                 // If revision is enabled and current value !== saved value inside the cookie => revision is not valid
                 if(revisionEnabled && cookieConsentAccepted && savedCookieContent['revision'] !== _config.revision)
@@ -1603,6 +1647,7 @@
                 // If consent is not valid => create consent modal
                 consentModalExists = invalidConsent = (!cookieConsentAccepted || !validRevision || !consentTimestamp || !lastConsentTimestamp || !consentId);
 
+                _log("CookieConsent [STATUS] valid consent:", !invalidConsent);
                 /**
                  * Load translation before generating modals
                  */
@@ -1618,52 +1663,38 @@
                         cookieconsent.show();
 
                     // Add class to enable animations/transitions
-                    setTimeout(function(){_addClass(mainContainer, 'c--anim');}, 30);
+                    setTimeout(function(){_addClass(mainContainer, 'c--anim');}, 50);
 
                     // Accessibility :=> if tab pressed => trap focus inside modal
                     setTimeout(function(){_handleFocusTrap();}, 100);
+
+                    // If consent is valid
+                    if(!invalidConsent){
+
+                        var rfcPropExists = typeof savedCookieContent['rfcCompliant'] === "boolean";
+
+                        /*
+                        * Convert cookie to rfc format (if `use_rfcCompliant` is enabled)
+                        */
+                        if(!rfcPropExists || (rfcPropExists && savedCookieContent['rfcCompliant'] !== cookieConfig.rfcCompliant)){
+
+                            savedCookieContent['rfcCompliant'] = cookieConfig.rfcCompliant;
+
+                            _setCookie(cookieConfig.name, JSON.stringify(savedCookieContent), true);
+                        }
+
+                        _manageExistingScripts();
+
+                        if(typeof onConsent === 'function')
+                            onConsent(savedCookieContent);
+
+                    }else{
+                        if(_config.mode === 'opt-out'){
+                            _log("CookieConsent [CONFIG] mode='" + _config.mode + "', default enabled categories:", defaultEnabledCategories);
+                            _manageExistingScripts(defaultEnabledCategories);
+                        }
+                    }
                 });
-
-                // If consent is valid
-                if(!invalidConsent){
-
-                    var rfcPropExists = typeof savedCookieContent['rfcCompliant'] === "boolean";
-
-                    /*
-                     * Convert cookie to rfc format (if `use_rfcCompliant` is enabled)
-                     */
-                    if(!rfcPropExists || (rfcPropExists && savedCookieContent['rfcCompliant'] !== cookieConfig.rfcCompliant)){
-
-                        savedCookieContent['rfcCompliant'] = cookieConfig.rfcCompliant;
-
-                        /**
-                         * Before converting the cookie to/from its rfcCompliant version,
-                         * calculate the existing cookie's remaining time until expiration
-                         * to avoid re-setting it for the full "cookieExpiresAfterDays" duration
-                         * (which should only happen when preferences are changed or consent is renewed)
-                         */
-                        var elapsedTimeMilliseconds = new Date() - lastConsentTimestamp,
-                            remainingTimeMilliseconds = _getExpiresAfterDaysValue()*86400000 - elapsedTimeMilliseconds;
-
-                        _setCookie(cookieConfig.name, JSON.stringify(savedCookieContent), remainingTimeMilliseconds);
-                    }
-
-                    _manageExistingScripts();
-
-                    if(typeof onConsent === 'function')
-                        onConsent(savedCookieContent);
-
-                    _log("CookieConsent [NOTICE]: consent already given!", savedCookieContent);
-
-                }else{
-                    if(_config.mode === 'opt-out'){
-                        _log("CookieConsent [CONFIG] mode='" + _config.mode + "', default enabled categories:", defaultEnabledCategories);
-                        _manageExistingScripts(defaultEnabledCategories);
-                    }
-                    _log("CookieConsent [NOTICE]: ask for consent!");
-                }
-            }else{
-                _log("CookieConsent [NOTICE]: cookie consent already attached to body!");
             }
         }
 
@@ -1674,7 +1705,7 @@
         cookieconsent.showPreferences = function(delay){
             setTimeout(function() {
                 _addClass(htmlDom, "show--settings");
-                preferencesContainer.setAttribute('aria-hidden', 'false');
+                _setAttribute(preferencesContainer, 'aria-hidden', 'false');
                 preferencesModalVisible = true;
 
                 /**
@@ -1698,7 +1729,7 @@
                     currentModalFocusableElements = allPreferencesModalFocusableElements;
                 }, 200);
 
-                _log("CookieConsent [preferences]: show preferencesModal");
+                _log("CookieConsent [TOGGLE]: show preferencesModal");
             }, delay > 0 ? delay : 0);
         }
 
@@ -1706,15 +1737,15 @@
          * This function handles the loading/activation logic of the already
          * existing scripts based on the current accepted cookie categories
          *
-         * @param {string[]} [must_enable_categories]
+         * @param {string[]} [mustEnableCategories]
          */
-        var _manageExistingScripts = function(must_enable_categories){
+        var _manageExistingScripts = function(mustEnableCategories){
 
             if(!_config.manageScriptTags) return;
 
             // get all the scripts with "cookie-category" attribute
-            var scripts = document.querySelectorAll('script[' + _config._scriptTagSelector + ']');
-            var acceptedCategories = must_enable_categories || savedCookieContent['categories'] || [];
+            var scripts = document.querySelectorAll('script[' + scriptTagSelector + ']');
+            var acceptedCategories = mustEnableCategories || savedCookieContent['categories'] || [];
 
             /**
              * Load scripts (sequentially), using a recursive function
@@ -1726,7 +1757,7 @@
                 if(index < scripts.length){
 
                     var currScript = scripts[index];
-                    var currScript_category = currScript.getAttribute(_config._scriptTagSelector);
+                    var currScript_category = currScript.getAttribute(scriptTagSelector);
 
                     /**
                      * If current script's category is on the array of categories
@@ -1735,7 +1766,7 @@
                     if(_inArray(acceptedCategories, currScript_category) > -1){
 
                         currScript.type = 'text/javascript';
-                        currScript.removeAttribute(_config._scriptTagSelector);
+                        currScript.removeAttribute(scriptTagSelector);
 
                         // get current script data-src
                         var src = currScript.getAttribute('data-src');
@@ -1753,7 +1784,7 @@
                             var len = attributes.length;
                             for(var i=0; i<len; i++){
                                 var attrName = attributes[i].nodeName;
-                                destination.setAttribute(attrName , source[attrName] || source.getAttribute(attrName));
+                                _setAttribute(destination, attrName , source[attrName] || source.getAttribute(attrName));
                             }
                         })(freshScript, currScript);
 
@@ -1840,7 +1871,7 @@
 
             if(set){
                 savedCookieContent['data'] = cookieData;
-                _setCookie(cookieConfig.name, JSON.stringify(savedCookieContent));
+                _setCookie(cookieConfig.name, JSON.stringify(savedCookieContent), true);
             }
 
             return set;
@@ -1871,11 +1902,8 @@
          */
         var _getCurrentCategoriesState = function(){
 
-            // get accepted categories
-            acceptedCategories = savedCookieContent['categories'] || [];
-
-            // calculate rejected categories (allCategories - acceptedCategories)
-            rejectedCategories = allCategories.filter(function(category){
+            // calculate rejected categories (allCategoryNames - acceptedCategories)
+            var rejectedCategories = allCategoryNames.filter(function(category){
                 return (_inArray(acceptedCategories, category) === -1);
             });
 
@@ -1895,12 +1923,12 @@
             var type = 'custom';
 
             // number of categories marked as necessary/readonly
-            var necessaryCategoriesLength = readonlyCategories.filter(function(readonly){
+            var necessaryCategoriesLength = readOnlyCategories.filter(function(readonly){
                 return readonly === true;
             }).length;
 
             // calculate accept type based on accepted/rejected categories
-            if(currentCategoriesState.accepted.length === allCategories.length)
+            if(currentCategoriesState.accepted.length === allCategoryNames.length)
                 type = 'all';
             else if(currentCategoriesState.accepted.length === necessaryCategoriesLength)
                 type = 'necessary'
@@ -1952,7 +1980,7 @@
                 // if an array is provided => add custom attributes
                 if(attrs && attrs.length > 0){
                     for(var i=0; i<attrs.length; ++i){
-                        attrs[i] && script.setAttribute(attrs[i]['name'], attrs[i]['value']);
+                        attrs[i] && _setAttribute(script, attrs[i]['name'], attrs[i]['value']);
                     }
                 }
 
@@ -1966,7 +1994,7 @@
                 /**
                  * Append script to head
                  */
-                document.head.appendChild(script);
+                _appendChild(document.head, script);
             }else{
                 function_defined && callback();
             }
@@ -1999,7 +2027,7 @@
                     /**
                      * Update attributes/internal statuses
                      */
-                    consentModal.setAttribute('aria-hidden', 'false');
+                    _setAttribute(consentModal, 'aria-hidden', 'false');
                     consentModalVisible = true;
 
                     setTimeout(function(){
@@ -2007,7 +2035,7 @@
                         currentModalFocusableElements = allConsentModalFocusableElements;
                     }, 200);
 
-                    _log("CookieConsent [MODAL]: show consentModal");
+                    _log("CookieConsent [TOGGLE]: show consentModal");
                 }, delay > 0 ? delay : (createModal ? 30 : 0));
             }
         }
@@ -2018,7 +2046,7 @@
         cookieconsent.hide = function(){
             if(consentModalExists){
                 _removeClass(htmlDom, "show--consent");
-                consentModal.setAttribute('aria-hidden', 'true');
+                _setAttribute(consentModal, 'aria-hidden', 'true');
                 consentModalVisible = false;
 
                 setTimeout(function(){
@@ -2027,7 +2055,7 @@
                     currentModalFocusableElements = null;
                 }, 200);
 
-                _log("CookieConsent [MODAL]: hide");
+                _log("CookieConsent [TOGGLE]: hide consentModal");
             }
         }
 
@@ -2037,8 +2065,7 @@
         cookieconsent.hidePreferences = function(){
             _removeClass(htmlDom, "show--settings");
             preferencesModalVisible = false;
-            preferencesContainer.setAttribute('aria-hidden', 'true');
-
+            _setAttribute(preferencesContainer, 'aria-hidden', 'true');
 
             setTimeout(function(){
                 /**
@@ -2058,7 +2085,7 @@
                 clickedInsideModal = false;
             }, 200);
 
-            _log("CookieConsent [preferences]: hide preferencesModal");
+            _log("CookieConsent [TOGGLE]: hide preferencesModal");
         }
 
         /**
@@ -2069,7 +2096,7 @@
         cookieconsent.accept = function(_categories, _exclusions){
             var categories = _categories || undefined;
             var exclusions = _exclusions || [];
-            var to_accept = [];
+            var categoriesToAccept = [];
 
             /**
              * Get all accepted categories
@@ -2088,22 +2115,22 @@
             }
 
             if(!categories){
-                to_accept = _getCurrentPreferences();
+                categoriesToAccept = _getCurrentPreferences();
             }else{
                 if(
                     typeof categories === "object" &&
                     typeof categories.length === "number"
                 ){
                     for(var i=0; i<categories.length; i++){
-                        if(_inArray(allCategories, categories[i]) !== -1)
-                            to_accept.push(categories[i]);
+                        if(_inArray(allCategoryNames, categories[i]) !== -1)
+                            categoriesToAccept.push(categories[i]);
                     }
                 }else if(typeof categories === "string"){
                     if(categories === 'all')
-                        to_accept = allCategories.slice();
+                        categoriesToAccept = allCategoryNames.slice();
                     else{
-                        if(_inArray(allCategories, categories) !== -1)
-                            to_accept.push(categories);
+                        if(_inArray(allCategoryNames, categories) !== -1)
+                            categoriesToAccept.push(categories);
                     }
                 }
             }
@@ -2111,68 +2138,82 @@
             // Remove excluded categories
             if(exclusions.length >= 1){
                 for(i=0; i<exclusions.length; i++){
-                    to_accept = to_accept.filter(function(item) {
+                    categoriesToAccept = categoriesToAccept.filter(function(item) {
                         return item !== exclusions[i]
                     })
                 }
             }
 
             // Add back all the categories set as "readonly/required"
-            for(i=0; i<allCategories.length; i++){
+            for(i=0; i<allCategoryNames.length; i++){
                 if(
-                    readonlyCategories[i] === true &&
-                    _inArray(to_accept, allCategories[i]) === -1
+                    readOnlyCategories[i] === true &&
+                    _inArray(categoriesToAccept, allCategoryNames[i]) === -1
                 ){
-                    to_accept.push(allCategories[i]);
+                    categoriesToAccept.push(allCategoryNames[i]);
                 }
             }
+            /**
+             * Keep acceptedCategories array updated
+             */
+            acceptedCategories = categoriesToAccept;
 
-            _saveCookiePreferences(to_accept);
+            _saveCookiePreferences(categoriesToAccept);
         }
 
         /**
          * API function to easily erase cookies
-         * @param {(string|string[])} _cookies
-         * @param {string} [_path] - optional
-         * @param {string} [_domain] - optional
+         * @param {(string|string[])} cookies
+         * @param {string} [path] - optional
+         * @param {string} [domain] - optional
          */
-        cookieconsent.eraseCookies = function(_cookies, _path, _domain){
-            var cookies = [];
-            var domains = _domain
-                ? [_domain, "."+_domain]
+        cookieconsent.eraseCookies = function(cookies, path, domain){
+            var allCookies = [];
+            var domains = domain
+                ? [domain, "."+domain]
                 : [cookieConfig.domain, "."+cookieConfig.domain];
 
-            if(typeof _cookies === "object" && _cookies.length > 0){
-                for(var i=0; i<_cookies.length; i++){
-                    this.validCookie(_cookies[i]) && cookies.push(_cookies[i]);
+            if(typeof cookies === "object" && cookies.length > 0){
+                for(var i=0; i<cookies.length; i++){
+                    cookieconsent.validCookie(cookies[i]) && allCookies.push(cookies[i]);
                 }
             }else{
-                this.validCookie(_cookies) && cookies.push(_cookies);
+                cookieconsent.validCookie(cookies) && allCookies.push(cookies);
             }
 
-            _eraseCookies(cookies, _path, domains);
+            _eraseCookies(allCookies, path, domains);
+        }
+
+        /**
+         * Calculate the existing cookie's remaining time until expiration (in milliseconds)
+         * @returns {number}
+         */
+        var _getRemainingExpirationTimeMS = function(){
+            var elapsedTimeMilliseconds = lastConsentTimestamp ? new Date() - lastConsentTimestamp : 0;
+            return _getExpiresAfterDaysValue()*86400000 - elapsedTimeMilliseconds;
         }
 
         /**
          * Set cookie, by specifying name and value
          * @param {string} name
          * @param {string} value
-         * @param {number} [customExpirationMilliseconds] - used only when converting to/from "rfcCompliant" version
+         * @param {number} [useRemainingExpirationTime]
          */
-        var _setCookie = function(name, value, customExpirationMilliseconds) {
+        var _setCookie = function(name, value, useRemainingExpirationTime) {
 
-            value = cookieConfig.rfcCompliant ? encodeURIComponent(value) : value;
-            var expirationMs = typeof customExpirationMilliseconds === 'number' ? customExpirationMilliseconds : _getExpiresAfterDaysValue()*86400000;
+            var cookieValue = cookieConfig.rfcCompliant ? encodeURIComponent(value) : value;
+            var expiresAfterMs = useRemainingExpirationTime ? _getRemainingExpirationTimeMS() : _getExpiresAfterDaysValue()*86400000;
 
             var date = new Date();
-            date.setTime(date.getTime() + expirationMs);
+            date.setTime(date.getTime() + expiresAfterMs);
 
             /**
-             * Specify expires only if expirationMs != 0 (allows cookie to have same duration as current session)
+             * Specify "expires" field only if expiresAfterMs != 0 
+             * (allow cookie to have same duration as current session)
              */
-            var expires = expirationMs !== 0 ? "; expires=" + date.toUTCString() : '';
+            var expires = expiresAfterMs !== 0 ? "; expires=" + date.toUTCString() : '';
 
-            var cookieStr = name + "=" + (value || "") + expires + "; Path=" + cookieConfig.path + ";";
+            var cookieStr = name + "=" + (cookieValue || "") + expires + "; Path=" + cookieConfig.path + ";";
             cookieStr += " SameSite=" + cookieConfig.sameSite + ";";
 
             // assures cookie works with localhost (=> don't specify domain if on localhost)
@@ -2186,7 +2227,7 @@
 
             document.cookie = cookieStr;
 
-            _log("CookieConsent [SET_COOKIE]: cookie '" + name + "'=", JSON.parse(decodeURIComponent(value)));
+            _log("CookieConsent [SET_COOKIE]: " + name + ":", JSON.parse(decodeURIComponent(cookieValue)));
         }
 
         /**
@@ -2237,11 +2278,11 @@
         /**
          * Delete cookie by name & path
          * @param {string[]} cookies
-         * @param {string} [custom_path] - optional
+         * @param {string} [customPath] - optional
          * @param {string[]} domains - example: ['domain.com', '.domain.com']
          */
-        var _eraseCookies = function(cookies, custom_path, domains) {
-            var path = custom_path ? custom_path : '/';
+        var _eraseCookies = function(cookies, customPath, domains) {
+            var path = customPath ? customPath : '/';
             var expires = 'Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
 
             for(var i=0; i<cookies.length; i++){
