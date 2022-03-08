@@ -29,8 +29,7 @@
                 'expiresAfterDays': 182,
                 'domain': window.location.hostname,
                 'path': '/',
-                'sameSite': 'Lax',
-                'rfcCompliant': false
+                'sameSite': 'Lax'
             }
         };
 
@@ -57,8 +56,7 @@
              *  expiresAfterDays: number | Function,
              *  domain: string,
              *  path: string,
-             *  sameSite: string,
-             *  rfcCompliant: boolean
+             *  sameSite: string
              * }}
              */
             cookieConfig = _config.cookie,
@@ -263,8 +261,7 @@
                 var name = newCookieConfig['name'],
                     domain = newCookieConfig['domain'],
                     path = newCookieConfig['path'],
-                    sameSite = newCookieConfig['sameSite'],
-                    rfcCompliant = newCookieConfig['rfcCompliant'];
+                    sameSite = newCookieConfig['sameSite'];
 
                 expiresAfterDays = newCookieConfig['expiresAfterDays'];
 
@@ -272,7 +269,6 @@
                 domain && (cookieConfig.domain = domain);
                 path && (cookieConfig.path = path);
                 sameSite && (cookieConfig.sameSite = sameSite);
-                rfcCompliant && (cookieConfig.rfcCompliant = rfcCompliant);
                 expiresAfterDays && (cookieConfig.expiresAfterDays = expiresAfterDays);
             }
 
@@ -1233,7 +1229,6 @@
                 'categories': acceptedCategories,
                 'revision': _config.revision,
                 'data': cookieData,
-                'rfcCompliant': cookieConfig.rfcCompliant,
                 'consentTimestamp': consentTimestamp.toISOString(),
                 'consentId': consentId
             }
@@ -1670,18 +1665,6 @@
 
                     // If consent is valid
                     if(!invalidConsent){
-
-                        var rfcPropExists = typeof savedCookieContent['rfcCompliant'] === "boolean";
-
-                        /*
-                        * Convert cookie to rfc format (if `use_rfcCompliant` is enabled)
-                        */
-                        if(!rfcPropExists || (rfcPropExists && savedCookieContent['rfcCompliant'] !== cookieConfig.rfcCompliant)){
-
-                            savedCookieContent['rfcCompliant'] = cookieConfig.rfcCompliant;
-
-                            _setCookie(cookieConfig.name, JSON.stringify(savedCookieContent), true);
-                        }
 
                         _manageExistingScripts();
 
@@ -2201,7 +2184,10 @@
          */
         var _setCookie = function(name, value, useRemainingExpirationTime) {
 
-            var cookieValue = cookieConfig.rfcCompliant ? encodeURIComponent(value) : value;
+            /**
+             * Encode cookie's value so that it is rfcCompliant
+             */
+            var cookieValue = encodeURIComponent(value);
             var expiresAfterMs = useRemainingExpirationTime ? _getRemainingExpirationTimeMS() : _getExpiresAfterDaysValue()*86400000;
 
             var date = new Date();
