@@ -10,7 +10,7 @@
     <!-- Load plugin css -->
     <!-- <link rel="stylesheet" href="../../dist/cookieconsent.css"> -->
     <!-- Optimized css loading -->
-    <link rel="stylesheet" href="../../dist/cookieconsent.css" media="print" onload="this.media='all'">
+    <link rel="stylesheet" href="../../src/cookieconsent.css" media="print" onload="this.media='all'">
 
     <!-- Load iframemanager css -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orestbida/iframemanager@v1.0/dist/iframemanager.css" media="print" onload="this.media='all'">
@@ -21,7 +21,7 @@
     <h2>Example configuration with <a href="https://github.com/orestbida/iframemanager" target="_blank">iframemanager 🡥</a> (iframe blocking)</h2>
     <br>
     <p>Check your <a href="https://developer.chrome.com/docs/devtools/shortcuts/#open" target="_blank">browser's console 🡥</a> to see what's happening!</p>
-    <button type="button" data-cc="c-settings">Cookie settings</button>
+    <button type="button" data-cc="show-preferences">Cookie settings</button>
     <br>
     <br>
 
@@ -37,5 +37,15 @@
     <script defer src="https://cdn.jsdelivr.net/gh/orestbida/iframemanager@v1.0/dist/iframemanager.js"></script>
     <script defer src="../../src/cookieconsent.js"></script>
     <script defer src="cookieconsent-init.js"></script>
+    <script type="text/plain" data-cookiecategory="analytics">
+        console.log('analytics enabled!');
+    </script>
+    <script type="text/plain" data-cookiecategory="necessary">
+        console.log('necessary enabled!');
+        var cookie = cc.getCookie();
+        document.getElementById('consent-id').innerText = cookie.consentId;
+        document.getElementById('consent-timestamp').innerText = new Date(cookie.consentTimestamp).toLocaleString();
+        document.getElementById('last-consent-timestamp').innerText = new Date(cookie.lastConsentTimestamp).toLocaleString();
+    </script>
 </body>
 </html>

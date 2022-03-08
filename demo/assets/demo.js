@@ -10,7 +10,7 @@ if(location.protocol.slice(0, 4) !== 'http'){
     document.body.appendChild(warning);
 }
 
-var cookieSettingsBtn = document.querySelector('[data-cc="c-settings"]');
+var cookieSettingsBtn = document.querySelector('[data-cc="show-preferences"]');
 var resetCookiesBtn = document.createElement('button');
 resetCookiesBtn.type = 'button';
 resetCookiesBtn.innerText = 'Reset cookieconsent';
@@ -18,6 +18,6 @@ cookieSettingsBtn.parentNode.insertBefore(resetCookiesBtn, cookieSettingsBtn.nex
 
 resetCookiesBtn.addEventListener('click', function(){
     cc.accept([]);
-    cc.eraseCookies(['cc_cookie_demo1', 'cc_cookie_demo2', 'cc_youtube']);
+    cc.eraseCookies(['cc_cookie_demo1', 'cc_cookie_demo2', 'cc_youtube', 'cc_cookie']);
     window.location.reload();
 });
