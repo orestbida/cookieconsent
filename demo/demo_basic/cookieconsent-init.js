@@ -25,7 +25,7 @@ cc.run({
     },
 
     onConsent: function () {
-        console.log('onAccept fired ...');
+        console.log('onConsent fired ...');
     },
 
     onChange: function () {
