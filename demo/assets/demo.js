@@ -18,6 +18,6 @@ cookieSettingsBtn.parentNode.insertBefore(resetCookiesBtn, cookieSettingsBtn.nex
 
 resetCookiesBtn.addEventListener('click', function(){
     cc.accept([]);
-    cc.eraseCookies(['cc_cookie_demo1', 'cc_cookie_demo2', 'cc_youtube', 'cc_cookie']);
+    cc.eraseCookies(['cc_cookie_demo1', 'cc_cookie_demo2', 'cc_cookie_demo3','cc_youtube', 'cc_cookie']);
     window.location.reload();
 });

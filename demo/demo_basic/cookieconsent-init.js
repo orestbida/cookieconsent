@@ -57,7 +57,7 @@ cc.run({
                     title: 'Hello traveller, it\'s cookie time!',
                     description: 'Our website uses essential cookies to ensure its proper operation and tracking cookies to understand how you interact with it. The latter will be set only after consent. <a href="#privacy-policy" class="cc-link">Privacy policy</a>',
                     acceptAllBtn: 'Accept',
-                    acceptNecessaryBtn: 'Rejec'
+                    acceptNecessaryBtn: 'Reject'
                 },
                 preferencesModal: {
                     title: 'Demo preferences',
