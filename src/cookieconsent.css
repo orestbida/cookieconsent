@@ -485,6 +485,9 @@ CookieConsent settings modal
     padding: 1.3em 2.1em;
     display: block;
     width: 100%;
+	scrollbar-width: thin;
+	scrollbar-color: var(--cc-webkit-scrollbar-bg);
+	overscroll-behavior: none;
 }
 
 #s-bns{
