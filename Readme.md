@@ -376,10 +376,10 @@ You can manage any script (inline or external) via the `page_scripts` option:
         // ...
     });
     ```
-2. Set `type="text/plain"` and `data-cookiecategory="<category>"` to any `script` tag you want to manage:
+2. Set `type="text/plain"`, `data-cookiecategory="<category>"` and change `src` to `data-src` to any `script` tag you want to manage:
 
     ```html
-    <script type="text/plain" data-cookiecategory="analytics" src="analytics.js" defer></script>
+    <script type="text/plain" data-cookiecategory="analytics" data-src="analytics.js" defer></script>
 
     <script type="text/plain" data-cookiecategory="ads">
         console.log('"ads" category accepted');
