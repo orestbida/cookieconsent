@@ -13,6 +13,7 @@ if(location.protocol.slice(0, 4) !== 'http'){
 var cookieSettingsBtn = document.querySelector('[data-cc="show-preferences"]');
 var resetCookiesBtn = document.createElement('button');
 resetCookiesBtn.type = 'button';
+resetCookiesBtn.className = 'btn';
 resetCookiesBtn.innerText = 'Reset cookieconsent';
 cookieSettingsBtn.parentNode.insertBefore(resetCookiesBtn, cookieSettingsBtn.nextSibling);
 

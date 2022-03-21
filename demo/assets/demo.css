@@ -1,3 +1,8 @@
+/*
+ * The file is for demo purposes,
+ * don't use in your configuration!
+ */
+
 *,
 :after,
 :before {
@@ -18,6 +23,7 @@ body {
     margin: 0 auto;
     padding: 1em;
     max-width: 27em;
+    color: #455361;
 }
 
 h1,
@@ -28,6 +34,7 @@ em{
 
 h1{
     font-size: 1.5em;
+    color: #92a2c1!important;
 }
 
 h2{
@@ -37,10 +44,37 @@ h2{
 a{
     border-bottom: 2px dotted;
     text-decoration: none;
+    color: inherit;
+    transition: transform .15s ease;
+
+}
+
+a:active{
+    color: #263577;
+    transform: translateY(3px);
 }
 
 [data-cc="show-preferences"]{
-    margin-right: .5em;
+    margin: 0 .5em .5em 0;
+}
+
+.btn {
+    border: none;
+    padding: 1em 1.5em;
+    border-radius: .4em;
+    font-family: inherit;
+    font-weight: 600;
+    background: #dce8ff;
+    color: #263577;
+    transition: background-color .25s ease, transform .15s ease;
+}
+
+.btn:hover{
+    background-color: #c8dbff;
+}
+
+.btn:active{
+    transform: translateY(3px);
 }
 
 .warning{

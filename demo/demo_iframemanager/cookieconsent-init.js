@@ -2,7 +2,7 @@
 var manager = iframemanager();
 
 // obtain cookieconsent plugin
-var cc = initCookieConsent();
+var cc = CookieConsent.init();
 
 // Configure with youtube embed
 manager.run({
@@ -33,6 +33,15 @@ cc.run({
 
     cookie: {
         name: 'cc_cookie_demo3',
+        expiresAfterDays: function(acceptType){
+            if(acceptType === 'all'){
+                console.log('long duration!');
+                return 640;
+            }
+
+            console.log("short duration!");
+            return 0;
+        }
     },
 
     guiOptions: {

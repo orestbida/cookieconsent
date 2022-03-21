@@ -1,0 +1,31 @@
+{
+  "name": "cookieconsent",
+  "version": "3.0.0-b.0",
+  "description": "",
+  "main": "dist/cookieconsent.js",
+  "scripts": {
+    "build": "webpack --stats-error-details && node minify.js",
+    "build:es5": "webpack --stats-error-details --config ./webpack.config.es5.js && node minify.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/orestbida/modular-babel-webpack-test.git"
+  },
+  "author": "Orest Bida",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/orestbida/cookieconsent/issues"
+  },
+  "homepage": "https://github.com/orestbida/cookieconsent#readme",
+  "devDependencies": {
+    "@babel/cli": "^7.16.0",
+    "@babel/core": "^7.16.0",
+    "@babel/preset-env": "^7.16.4",
+    "babel-loader": "^8.2.3",
+    "core-js": "^3.19.2",
+    "eslint": "^8.4.0",
+    "uglify-js": "^3.14.4",
+    "webpack": "^5.64.4",
+    "webpack-cli": "^4.9.1"
+  }
+}

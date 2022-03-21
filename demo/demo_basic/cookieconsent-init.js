@@ -1,5 +1,5 @@
 // obtain cookieconsent plugin
-var cc = initCookieConsent();
+var cc = CookieConsent.init();
 
 // run plugin with config object
 cc.run({
