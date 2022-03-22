@@ -47,15 +47,18 @@ export const _guiManager = (applyToModal) => {
     }
 
     if(applyToModal === 0 && state._consentModalExists && consentModalOptions){
-        _setLayout(
-            dom._consentModal,
-            ['box', 'bar', 'cloud'],
-            ['top', 'middle', 'bottom'],
-            ['zoom', 'slide'],
-            consentModalOptions['layout'],
-            consentModalOptions['position'],
-            consentModalOptions['transition']
-        );
+        // [TODO]
+
+        dom._consentModal.classList.add('cm--box', 'cm--middle-center');
+        // _setLayout(
+        //     dom._consentModal,
+        //     ['box', 'bar', 'cloud'],
+        //     ['top', 'middle', 'bottom'],
+        //     ['zoom', 'slide'],
+        //     consentModalOptions['layout'],
+        //     consentModalOptions['position'],
+        //     consentModalOptions['transition']
+        // );
     }
 
     if(applyToModal === 1 && preferencesModalOptions){

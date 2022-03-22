@@ -26,7 +26,7 @@ import {
     _createConsentModal,
     _createPreferencesModal,
     _createCookieConsentHTML
-} from '../modals/modals';
+} from './modals/modals';
 
 import { _getValidLanguageCode, _loadTranslationData } from '../utils/language';
 
@@ -354,7 +354,7 @@ export const api = {
                     state._currentModalFocusableElements = state._allConsentModalFocusableElements;
                 }, 200);
 
-                _log("CookieConsent [TOGGLE]: show _consentModal");
+                _log("CookieConsent [TOGGLE]: show consentModal");
             }, delay > 0 ? delay : (createModal ? 30 : 0));
         }
     },
@@ -515,7 +515,7 @@ export const api = {
                     api.show();
 
                 // Add class to enable animations/transitions
-                setTimeout(() => {_addClass(dom._mainContainer, 'c--anim');}, 50);
+                setTimeout(() => {_addClass(dom._ccMain, 'c--anim');}, 100);
 
                 // Accessibility :=> if tab pressed => trap focus inside modal
                 setTimeout(() => {_handleFocusTrap(api);}, 100);

@@ -1,14 +1,21 @@
-import { state, dom } from "../../core/global";
-import { _createNode, _addClass, _setAttribute, _removeClass, _addEvent, _appendChild, _inArray, _getKeys, _hasClass } from "../../utils/general";
-import { _guiManager } from "../../utils/gui-manager";
+import { state, dom } from "../../global";
+import { _createNode, _addClass, _setAttribute, _removeClass, _addEvent, _appendChild, _inArray, _getKeys, _hasClass } from "../../../utils/general";
+import { _guiManager } from "../../../utils/gui-manager";
 
 export const _createPreferencesModal = (api) => {
+
+    /** TODO */
+    if(state) return;
+
     var preferencesModalData = state._currentTranslation['preferencesModal'];
 
     /**
      * Create all _consentModal elements
      */
-    if(!dom._preferencesContainer){
+    if(!dom._pmContainer){
+        dom._pmContainer = _createNode('div');
+        dom._pmContainer.className = 'pm-container';
+
         dom._preferencesContainer = _createNode('div');
         var preferencesContainerValign = _createNode('div');
         var preferences = _createNode('div');
@@ -19,7 +26,6 @@ export const _createPreferencesModal = (api) => {
         dom._preferencesCloseBtn = _createNode('button');
         var preferencesCloseBtnContainer = _createNode('div');
         dom._sectionsContainer = _createNode('div');
-        var overlay = _createNode('div');
 
         /**
          * Set ids
@@ -33,7 +39,6 @@ export const _createPreferencesModal = (api) => {
         preferencesHeader.id = "s-hdr";
         dom._sectionsContainer.id = 's-bl';
         dom._preferencesCloseBtn.id = 's-c-bn';
-        overlay.id = 'cs-ov';
         preferencesCloseBtnContainer.id = 's-c-bnc';
         dom._preferencesCloseBtn.className = 'c-bn';
 
@@ -42,8 +47,6 @@ export const _createPreferencesModal = (api) => {
         _setAttribute(dom._preferencesContainer, 'aria-hidden', 'true');
         _setAttribute(dom._preferencesContainer, 'aria-labelledby', 's-ttl');
         _setAttribute(dom._preferencesTitle, 'role', 'heading');
-        dom._preferencesContainer.style.visibility = overlay.style.visibility = "hidden";
-        overlay.style.opacity = 0;
 
         _appendChild(preferencesCloseBtnContainer, dom._preferencesCloseBtn);
 
@@ -399,6 +402,6 @@ export const _createPreferencesModal = (api) => {
     _appendChild(preferencesContainerValign, preferences);
     _appendChild(dom._preferencesContainer, preferencesContainerValign);
 
-    _appendChild(dom._allModalsContainer, dom._preferencesContainer);
-    _appendChild(dom._allModalsContainer, overlay);
+    _appendChild(dom._pmContainer, dom._preferencesContainer);
+    _appendChild(dom._ccMain, dom._pmContainer);
 }

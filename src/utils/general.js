@@ -335,7 +335,7 @@ export const _handleFocusTrap = (api) => {
     });
 
     if(document.contains){
-        _addEvent(dom._mainContainer, 'click', (e) => {
+        _addEvent(dom._ccMain, 'click', (e) => {
             e = e || window.event;
             /**
              * If click is on the foreground overlay (and not inside preferencesModal),
@@ -414,7 +414,8 @@ export const _getModalFocusableData = () => {
      * Get preferences modal's all focusable elements
      * Save first and last elements (used to lock/trap focus inside modal)
      */
-    _getAllFocusableElements(dom._preferencesInner, state._allPreferencesModalFocusableElements);
+    // [TODO]
+    // _getAllFocusableElements(dom._preferencesInner, state._allPreferencesModalFocusableElements);
 
     /**
      * If consent modal exists, do the same
