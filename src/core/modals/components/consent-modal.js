@@ -1,6 +1,6 @@
-import { state, dom } from "../../global";
-import { _log, _createNode, _addClass, _setAttribute, _appendChild, _addEvent } from "../../../utils/general";
-import { _guiManager } from "../../../utils/gui-manager";
+import { state, dom } from '../../global';
+import { _log, _createNode, _addClass, _setAttribute, _appendChild, _addEvent } from '../../../utils/general';
+import { _guiManager } from '../../../utils/gui-manager';
 
 /**
  * Create consent modal and append it to main div
@@ -42,7 +42,7 @@ export const _createConsentModal = (api) => {
         /**
          * Make modal by default hidden to prevent weird page jumps/flashes (shown only once css is loaded)
          */
-        dom._consentModal.style.visibility = "hidden";
+        dom._consentModal.style.visibility = 'hidden';
 
         // Append consent modal to main container
         _appendChild(dom._consentModalBody, dom._consentModalTexts);
@@ -101,8 +101,8 @@ export const _createConsentModal = (api) => {
             dom._consentAcceptAllBtn = _createNode('button');
             dom._consentAcceptAllBtn.className = 'cm__btn';
 
-            _addEvent(dom._consentAcceptAllBtn, "click", () => {
-                _log("CookieConsent [ACCEPT]: all");
+            _addEvent(dom._consentAcceptAllBtn, 'click', () => {
+                _log('CookieConsent [ACCEPT]: all');
                 api.hide();
                 api.accept('all');
             });
@@ -116,10 +116,10 @@ export const _createConsentModal = (api) => {
 
         if(!dom._consentAcceptNecessaryBtn){
             dom._consentAcceptNecessaryBtn = _createNode('button');
-            dom._consentAcceptNecessaryBtn.className = "cm__btn";
+            dom._consentAcceptNecessaryBtn.className = 'cm__btn';
 
             _addEvent(dom._consentAcceptNecessaryBtn, 'click', () => {
-                _log("CookieConsent [ACCEPT]: necessary");
+                _log('CookieConsent [ACCEPT]: necessary');
                 api.hide();
                 api.accept([]); // accept necessary only
             });
@@ -131,7 +131,7 @@ export const _createConsentModal = (api) => {
     if(showPreferencesBtnData){
         if(!dom._consentShowPreferencesBtn){
             dom._consentShowPreferencesBtn = _createNode('button');
-            dom._consentShowPreferencesBtn.className = "cm__btn cm__btn-preferences";
+            dom._consentShowPreferencesBtn.className = 'cm__btn cm__btn-preferences';
 
             _addEvent(dom._consentShowPreferencesBtn, 'click', () => {
                 api.showPreferences();
@@ -145,18 +145,18 @@ export const _createConsentModal = (api) => {
 
     if(!dom._consentModalBtnGroup){
         dom._consentModalBtnGroup = _createNode('div');
-        dom._consentModalBtnGroup.className = "cm__btn-group";
+        dom._consentModalBtnGroup.className = 'cm__btn-group';
 
         acceptAllBtnData && _appendChild(dom._consentModalBtnGroup, dom._consentAcceptAllBtn);
         acceptNecessaryBtnData && _appendChild(dom._consentModalBtnGroup, dom._consentAcceptNecessaryBtn);
 
         (acceptAllBtnData || acceptNecessaryBtnData ) && _appendChild(dom._consentModalBody, dom._consentModalBtnGroup);
-        _appendChild(dom._consentModalBtns, dom._consentModalBtnGroup)
+        _appendChild(dom._consentModalBtns, dom._consentModalBtnGroup);
     }
 
     if(!dom._consentModalBtnGroup2 && showPreferencesBtnData){
         dom._consentModalBtnGroup2 = _createNode('div');
-        dom._consentModalBtnGroup2.className = "cm__btn-group";
+        dom._consentModalBtnGroup2.className = 'cm__btn-group';
         _appendChild(dom._consentModalBtnGroup2, dom._consentShowPreferencesBtn);
         _appendChild(dom._consentModalBtns, dom._consentModalBtnGroup2);
     }
@@ -166,11 +166,11 @@ export const _createConsentModal = (api) => {
             var _consentModalFooter = _createNode('div');
             var _consentModalFooterLinks = _createNode('div');
 
-            _consentModalFooter.className = "cm__footer";
-            _consentModalFooterLinks.className = "cm__links";
+            _consentModalFooter.className = 'cm__footer';
+            _consentModalFooterLinks.className = 'cm__links';
 
             dom._consentModalFooterLinksGroup = _createNode('div');
-            dom._consentModalFooterLinksGroup.className = "cm__link-group";
+            dom._consentModalFooterLinksGroup.className = 'cm__link-group';
             _appendChild(_consentModalFooterLinks, dom._consentModalFooterLinksGroup);
             _appendChild(_consentModalFooter, _consentModalFooterLinks);
             _appendChild(dom._consentModal, _consentModalFooter);
@@ -181,4 +181,4 @@ export const _createConsentModal = (api) => {
     state._consentModalExists = true;
 
     _guiManager(0);
-}
+};

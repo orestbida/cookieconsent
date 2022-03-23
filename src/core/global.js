@@ -117,7 +117,7 @@ export const config = {
 /**
  * Fix "window is undefined error"
  */
-Object.defineProperty(config.cookie, "domain",{
+Object.defineProperty(config.cookie, 'domain',{
     get: () => window.location.hostname
 });
 
@@ -129,7 +129,7 @@ export const callbacks = {
     _onFirstConsent: null,
     _onConsent: null,
     _onChange: null
-}
+};
 
 /**
  * Pointers to main dom elements
@@ -165,7 +165,7 @@ export const dom = {
     /** @type {HTMLElement} */ _preferencesSaveBtn: null,
     /** @type {HTMLElement} */ _preferencesacceptAllBtn: null,
     /** @type {HTMLElement} */ _preferencesacceptNecessaryBtn: null
-}
+};
 
 /**
  * @type {CookieConfig}
@@ -293,4 +293,4 @@ export const state = {
      * @type {boolean[]}
      */
     _allToggleStates : [],
-}
+};

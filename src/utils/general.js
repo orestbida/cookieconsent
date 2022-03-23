@@ -1,4 +1,4 @@
-import { state, dom, cookieConfig } from "../core/global";
+import { state, dom, cookieConfig } from '../core/global';
 
 /**
  * Helper function which prints info (console.log())
@@ -6,8 +6,8 @@ import { state, dom, cookieConfig } from "../core/global";
  * @param {Object} [optionalParam]
  */
 export const _log = (printMsg, optionalParam, error) => {
-    !error ? console.log(printMsg, optionalParam !== undefined ? optionalParam : ' ') : console.error(printMsg, optionalParam || "");
-}
+    !error ? console.log(printMsg, optionalParam !== undefined ? optionalParam : ' ') : console.error(printMsg, optionalParam || '');
+};
 
 /**
  * Returns index of found element inside array, otherwise -1
@@ -17,7 +17,7 @@ export const _log = (printMsg, optionalParam, error) => {
  */
 export const _inArray = (arr, value) => {
     return arr.indexOf(value);
-}
+};
 
 /**
  * Helper function which creates an HTMLElement object based on 'type' and returns it.
@@ -30,7 +30,7 @@ export const _createNode = (type) => {
         _setAttribute(el, 'type', type);
     }
     return el;
-}
+};
 
 /**
  * Helper function to set attribute
@@ -40,7 +40,7 @@ export const _createNode = (type) => {
  */
 export const _setAttribute = (el, attribute, value) => {
     el.setAttribute(attribute, value);
-}
+};
 
 /**
  * Helper function to append child to parent
@@ -49,7 +49,7 @@ export const _setAttribute = (el, attribute, value) => {
  */
 export const _appendChild = (parent, child) => {
     parent.appendChild(child);
-}
+};
 
 /**
  * Generate RFC4122-compliant UUIDs.
@@ -58,9 +58,9 @@ export const _appendChild = (parent, child) => {
  */
 export const _uuidv4 = () => {
     return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, (c) => {
-        return (c ^ (window.crypto || window.msCrypto).getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+        return (c ^ (window.crypto || window.msCrypto).getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16);
     });
-}
+};
 
 /**
  * Function to run when event is fired
@@ -76,17 +76,17 @@ export const _uuidv4 = () => {
  */
 export const _addEvent = (elem, event, fn, isPasive) => {
     elem.addEventListener(event, fn , isPasive === true ? { passive: true } : false);
-}
+};
 
 /**
  * Get all prop. keys defined inside object
  * @param {Object} obj
  */
 export const _getKeys = obj => {
-    if(typeof obj === "object"){
+    if(typeof obj === 'object'){
         return Object.keys(obj);
     }
-}
+};
 
 /**
  * Append class to the specified dom element
@@ -95,7 +95,7 @@ export const _getKeys = obj => {
  */
 export const _addClass = (elem, classname) => {
     elem.classList.add(classname);
-}
+};
 
 /**
  * Remove specified class from dom element
@@ -104,7 +104,7 @@ export const _addClass = (elem, classname) => {
  */
 export const _removeClass = (el, className) => {
     el.classList.remove(className);
-}
+};
 
 /**
  * Check if html element has class
@@ -113,7 +113,7 @@ export const _removeClass = (el, className) => {
  */
 export const _hasClass = (el, className) => {
     return el.classList.contains(className);
-}
+};
 
 /**
  * Calculate the existing cookie's remaining time until expiration (in milliseconds)
@@ -122,7 +122,7 @@ export const _hasClass = (el, className) => {
 export const _getRemainingExpirationTimeMS = () => {
     var elapsedTimeMilliseconds = state._lastConsentTimestamp ? new Date() - state._lastConsentTimestamp : 0;
     return _getExpiresAfterDaysValue()*86400000 - elapsedTimeMilliseconds;
-}
+};
 
 /**
  * Helper function to create xhr objects
@@ -144,10 +144,10 @@ export const _xhr = (params, callback) => {
                 try{
                     data = JSON.parse(httpRequest.responseText);
                 }catch(e){
-                    _log("CookieConsent [XHR] JSON.parse error:", e);
+                    _log('CookieConsent [XHR] JSON.parse error:', e);
                 }
             }else{
-                _log("CookieConsent [XHR] error:", httpRequest.statusText);
+                _log('CookieConsent [XHR] error:', httpRequest.statusText);
             }
 
             if (typeof callback === 'function') callback(status, data);
@@ -156,7 +156,7 @@ export const _xhr = (params, callback) => {
 
     httpRequest.open(params.method, params.path);
     httpRequest.send(params.data);
-}
+};
 
 
 /**
@@ -166,14 +166,14 @@ export const _xhr = (params, callback) => {
 export const _getExpiresAfterDaysValue = () => {
     var expiresAfterDays = cookieConfig['expiresAfterDays'];
     return typeof expiresAfterDays === 'function' ? expiresAfterDays(state._acceptType) : expiresAfterDays;
-}
+};
 
 /**
  * Calculate "accept type" given current categories state
  * @param {{accepted: string[], rejected: string[]}} currentCategoriesState
  * @returns {string}
  */
- export const _getAcceptType = (currentCategoriesState) => {
+export const _getAcceptType = (currentCategoriesState) => {
 
     var type = 'custom';
 
@@ -186,10 +186,10 @@ export const _getExpiresAfterDaysValue = () => {
     if(currentCategoriesState.accepted.length === state._allCategoryNames.length)
         type = 'all';
     else if(currentCategoriesState.accepted.length === necessaryCategoriesLength)
-        type = 'necessary'
+        type = 'necessary';
 
     return type;
-}
+};
 
 /**
  * Update global "acceptType" variable
@@ -197,7 +197,7 @@ export const _getExpiresAfterDaysValue = () => {
  */
 export const _updateAcceptType = () => {
     state._acceptType = _getAcceptType(_getCurrentCategoriesState());
-}
+};
 
 /**
  * Add an onClick listeners to all html elements with data-cc attribute
@@ -257,7 +257,7 @@ export const _addDataButtonListeners = (elem, api) => {
         api.hidePreferences();
         api.hide();
     }
-}
+};
 
 /**
  * Obtain accepted and rejected categories
@@ -273,8 +273,8 @@ export const _getCurrentCategoriesState = () => {
     return {
         accepted: state._acceptedCategories,
         rejected: rejectedCategories
-    }
-}
+    };
+};
 
 /**
  * Trap focus inside modal and focus the first
@@ -358,7 +358,7 @@ export const _handleFocusTrap = (api) => {
 
         }, true);
     }
-}
+};
 
 /**
  * Save reference to first and last focusable elements inside each modal
@@ -384,12 +384,12 @@ export const _getModalFocusableData = () => {
 
                 attr = focusableElements[i].getAttribute('data-focus');
 
-                if(!focusFirst && attr === "1"){
+                if(!focusFirst && attr === '1'){
                     focusFirst = focusableElements[i];
 
-                }else if(attr === "0"){
+                }else if(attr === '0'){
                     focusLater = focusableElements[i];
-                    if(!focusFirst && focusableElements[i+1].getAttribute('data-focus') !== "0"){
+                    if(!focusFirst && focusableElements[i+1].getAttribute('data-focus') !== '0'){
                         focusFirst = focusableElements[i+1];
                     }
                 }
@@ -423,4 +423,4 @@ export const _getModalFocusableData = () => {
     if(state._consentModalExists){
         _getAllFocusableElements(dom._consentModal, state._allConsentModalFocusableElements);
     }
-}
+};

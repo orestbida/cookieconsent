@@ -1,5 +1,5 @@
-import { state } from "../core/global";
-import { _log, _inArray, _getKeys, _xhr } from "./general";
+import { state } from '../core/global';
+import { _log, _inArray, _getKeys, _xhr } from './general';
 
 /**
  * Get a valid language code
@@ -18,7 +18,7 @@ export const _getValidLanguageCode = (languageCode) => {
      * If we got here, return the very first language code (hopefully there is one)
      */
     return allLanguageCodes[0];
-}
+};
 
 /**
  * Get current client's browser language
@@ -27,9 +27,9 @@ export const _getValidLanguageCode = (languageCode) => {
 export const _getBrowserLanguageCode = () => {
     var browserLanguage = navigator.language || navigator.browserLanguage;
     browserLanguage.length > 2 && (browserLanguage = browserLanguage[0]+browserLanguage[1]);
-    _log("CookieConsent [LANG]: browser language is '"+ browserLanguage + "'");
+    _log('CookieConsent [LANG]: browser language is \''+ browserLanguage + '\'');
     return browserLanguage.toLowerCase();
-}
+};
 
 /**
  * Resolve which language should be used.
@@ -38,7 +38,7 @@ export const _resolveCurrentLanguageCode = function () {
     var autoDetect = state._userConfig['language']['autoDetect'];
 
     if(autoDetect){
-        _log("CookieConsent [LANG]: autoDetect strategy: '" + autoDetect + "'");
+        _log('CookieConsent [LANG]: autoDetect strategy: \'' + autoDetect + '\'');
 
         if (autoDetect === 'browser')
             return _getValidLanguageCode(_getBrowserLanguageCode());
@@ -52,7 +52,7 @@ export const _resolveCurrentLanguageCode = function () {
      * use default language
      */
     return _getValidLanguageCode(state._userConfig['language']['default']);
-}
+};
 
 /**
  * Load translation (asynchronously using xhr if needed)
@@ -86,4 +86,4 @@ export const _loadTranslationData = (desiredLanguageCode, callback) => {
         state._currentTranslation = state._allTranslations[state._currentLanguageCode];
         callback();
     }
-}
+};

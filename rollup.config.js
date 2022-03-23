@@ -2,6 +2,7 @@ import { defineConfig } from 'rollup';
 import { terser } from "rollup-plugin-terser";
 import { babel } from '@rollup/plugin-babel';
 import postcss from 'rollup-plugin-postcss';
+import eslint from '@rollup/plugin-eslint';
 import fs from "fs";
 
 const srcDir = './src';
@@ -19,7 +20,13 @@ export default defineConfig(
                 format: 'umd',
             },
             plugins: [
+                eslint({
+                    fix: true,
+                    include: ['./src/**'],
+                    exclude: ['./src/scss/**']
+                }),
                 isIE11 && babel({
+                    exclude:'node_modules/**',
                     babelHelpers: 'bundled',
                     configFile: './babel.config.js'
                 }),

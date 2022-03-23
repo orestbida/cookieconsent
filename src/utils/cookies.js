@@ -1,6 +1,6 @@
-import { state, config, cookieConfig, callbacks } from "../core/global";
-import { _log, _inArray, _uuidv4, _updateAcceptType, _getRemainingExpirationTimeMS, _getExpiresAfterDaysValue } from "./general";
-import { _manageExistingScripts } from "./scripts";
+import { state, config, cookieConfig, callbacks } from '../core/global';
+import { _log, _inArray, _uuidv4, _updateAcceptType, _getRemainingExpirationTimeMS, _getExpiresAfterDaysValue } from './general';
+import { _manageExistingScripts } from './scripts';
 
 /**
  * Delete all cookies which are unused (based on selected preferences)
@@ -102,7 +102,7 @@ export const _autoclearCookies = (clearOnFirstConsent) => {
                     if(foundCookieIndex > -1) foundCookies.push(allCookiesArray[foundCookieIndex]);
                 }
 
-                _log("CookieConsent [AUTOCLEAR]: search cookie: '" + currCookieName + "', found:", foundCookies);
+                _log('CookieConsent [AUTOCLEAR]: search cookie: \'' + currCookieName + '\', found:', foundCookies);
 
                 // Delete cookie(s)
                 if(foundCookies.length > 0){
@@ -111,7 +111,7 @@ export const _autoclearCookies = (clearOnFirstConsent) => {
             }
         }
     }
-}
+};
 
 /**
  * Set toggles/checkboxes based on accepted categories and save cookie
@@ -159,7 +159,7 @@ export const _saveCookiePreferences = (_acceptedCategories, api) => {
         data: state._cookieData,
         consentTimestamp: state._consentTimestamp.toISOString(),
         consentId: state._consentId
-    }
+    };
 
     var firstUserConsent = false;
 
@@ -213,7 +213,7 @@ export const _saveCookiePreferences = (_acceptedCategories, api) => {
      */
     if(state._reloadPage)
         window.location.reload();
-}
+};
 
 /**
  * Set cookie, by specifying name and value
@@ -236,24 +236,24 @@ export const _setCookie = (name, value, useRemainingExpirationTime) => {
      * Specify "expires" field only if expiresAfterMs != 0
      * (allow cookie to have same duration as current session)
      */
-    var expires = expiresAfterMs !== 0 ? "; expires=" + date.toUTCString() : '';
+    var expires = expiresAfterMs !== 0 ? '; expires=' + date.toUTCString() : '';
 
-    var cookieStr = name + "=" + (cookieValue || "") + expires + "; Path=" + cookieConfig.path + ";";
-    cookieStr += " SameSite=" + cookieConfig.sameSite + ";";
+    var cookieStr = name + '=' + (cookieValue || '') + expires + '; Path=' + cookieConfig.path + ';';
+    cookieStr += ' SameSite=' + cookieConfig.sameSite + ';';
 
     // assures cookie works with localhost (=> don't specify domain if on localhost)
-    if(window.location.hostname.indexOf(".") > -1){
-        cookieStr += " Domain=" + cookieConfig.domain + ";";
+    if(window.location.hostname.indexOf('.') > -1){
+        cookieStr += ' Domain=' + cookieConfig.domain + ';';
     }
 
-    if(window.location.protocol === "https:") {
-        cookieStr += " Secure;";
+    if(window.location.protocol === 'https:') {
+        cookieStr += ' Secure;';
     }
 
     document.cookie = cookieStr;
 
-    _log("CookieConsent [SET_COOKIE]: " + name + ":", JSON.parse(decodeURIComponent(cookieValue)));
-}
+    _log('CookieConsent [SET_COOKIE]: ' + name + ':', JSON.parse(decodeURIComponent(cookieValue)));
+};
 
 /**
  * Get cookie value by name,
@@ -269,7 +269,7 @@ export const _getCookie = (name, filter, getValue, ignoreName) => {
     var found;
 
     if(filter === 'one'){
-        found = document.cookie.match("(^|;)\\s*" + name + "\\s*=\\s*([^;]+)");
+        found = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
         found = found ? (getValue ? found.pop() : name) : '';
 
         /**
@@ -298,7 +298,7 @@ export const _getCookie = (name, filter, getValue, ignoreName) => {
     }
 
     return found;
-}
+};
 
 /**
  * Delete cookie by name & path
@@ -313,8 +313,8 @@ export const _eraseCookies = (cookies, customPath, domains) => {
     for(var i=0; i<cookies.length; i++){
         for(var j=0; j<domains.length; j++){
             document.cookie = cookies[i] + '=; path=' + path +
-            (domains[j].indexOf('.') > -1 ? '; domain=' + domains[j] : "") + '; ' + expires;
+            (domains[j].indexOf('.') > -1 ? '; domain=' + domains[j] : '') + '; ' + expires;
         }
-        _log("CookieConsent [AUTOCLEAR]: deleting cookie: '" + cookies[i] + "' path: '" + path + "' domain:", domains);
+        _log('CookieConsent [AUTOCLEAR]: deleting cookie: \'' + cookies[i] + '\' path: \'' + path + '\' domain:', domains);
     }
-}
+};

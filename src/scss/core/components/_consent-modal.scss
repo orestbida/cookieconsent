@@ -336,11 +336,11 @@
 #cc-main{
 
     .cm{
-        transform: translateY(30px);
+        transform: translateY(40px) scale(.98);
     }
 
     [class*=middle]{
-        transform: translateY(calc(-50% + 30px));
+        transform: translateY(calc(-50% + 40px)) scale(.98);
     }
 
     .cm--bar{

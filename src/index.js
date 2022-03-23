@@ -1,5 +1,5 @@
-import { api } from "./core/api";
+import { api } from './core/api';
 
 export default {
     init: () => api
-}
+};

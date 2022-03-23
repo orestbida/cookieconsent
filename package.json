@@ -17,6 +17,7 @@
     "devDependencies": {
         "@babel/preset-env": "^7.16.11",
         "@rollup/plugin-babel": "^5.3.1",
+        "@rollup/plugin-eslint": "^8.0.1",
         "autoprefixer": "^10.4.4",
         "cssnano": "^5.1.4",
         "rollup": "^2.70.1",
