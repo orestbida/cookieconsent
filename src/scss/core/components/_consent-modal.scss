@@ -105,7 +105,7 @@
         &__texts{
             display: flex;
             flex-direction: column;
-            justify-content: inherit;
+            justify-content: center;
         }
 
         &__title{
@@ -278,7 +278,8 @@
     /* END: Cloud layout */
 
     /* START: Bar layout */
-    .cm--bar{
+    .cm--bar,
+    .cm--bar-thin{
         max-width: 100%;
         top: auto;
         bottom: 0;
@@ -291,20 +292,19 @@
 
         .cm__body,
         .cm__links{
-            max-width: 42em;
+            max-width: 45em;
             margin: 0 auto;
             width: 100%
         }
 
         .cm__body{
-            padding: 0.2em 0 0.5em 0;
+            padding: 0.3em 0 0.5em 0;
         }
 
         .cm__btns{
             border-top: none;
             flex-direction: row;
             justify-content: space-between;
-            padding-top: .5em;
         }
 
         .cm__btn-group:nth-child(2){
@@ -319,6 +319,28 @@
 
         .cm__link-group{
             justify-content: flex-start;
+        }
+    }
+
+    .cm--bar-thin{
+
+        .cm__body,
+        .cm__links{
+            max-width: 64em;
+        }
+
+        .cm__body{
+            padding: 0;
+            flex-direction: row;
+        }
+
+
+        .cm__btns{
+            flex-direction: column;
+        }
+
+        .cm__btn-group:nth-child(2){
+            margin: .4em 0 0 0;
         }
     }
     /* END: Bar layout */
@@ -447,6 +469,10 @@
         }
 
         .cm--bar{
+
+            .cm__body{
+                padding: 0;
+            }
 
             .cm__btns{
                 border-top: 1px solid $btns-separator-border;
