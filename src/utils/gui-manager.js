@@ -49,7 +49,7 @@ export const _guiManager = (applyToModal) => {
     if(applyToModal === 0 && state._consentModalExists && consentModalOptions){
         // [TODO]
 
-        dom._consentModal.classList.add('cm--box', 'cm--middle-center');
+        dom._consentModal.classList.add('cm--cloud', 'cm--bottom-center');
         // _setLayout(
         //     dom._consentModal,
         //     ['box', 'bar', 'cloud'],
