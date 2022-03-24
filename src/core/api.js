@@ -9,7 +9,8 @@ import {
     _handleFocusTrap,
     _getCurrentCategoriesState,
     _addDataButtonListeners,
-    _getModalFocusableData
+    _getModalFocusableData,
+    _getAcceptType
 } from '../utils/general';
 
 import { _manageExistingScripts } from '../utils/scripts';
@@ -98,20 +99,17 @@ export const api = {
         }
 
         // Add back all the categories set as "readonly/required"
-        for(i=0; i<state._allCategoryNames.length; i++){
-            if(
-                state._readOnlyCategories[i] === true &&
-                _inArray(categoriesToAccept, state._allCategoryNames[i]) === -1
-            ){
-                categoriesToAccept.push(state._allCategoryNames[i]);
-            }
+        for(i=0; i<state._readOnlyCategories.length; i++){
+            if(_inArray(categoriesToAccept, state._readOnlyCategories[i]) === -1)
+                categoriesToAccept.push(state._readOnlyCategories[i]);
         }
+
         /**
          * Keep state._acceptedCategories array updated
          */
         state._acceptedCategories = categoriesToAccept;
 
-        _saveCookiePreferences(categoriesToAccept, api);
+        _saveCookiePreferences(api);
     },
 
     /**
@@ -500,6 +498,16 @@ export const api = {
             state._consentModalExists = state._invalidConsent = (!cookieConsentAccepted || !state._validRevision || !state._consentTimestamp || !state._lastConsentTimestamp || !state._consentId);
 
             _log('CookieConsent [STATUS] valid consent:', !state._invalidConsent);
+
+            /**
+             * Retrieve last accepted categories from cookie
+             * and calculate acceptType
+             */
+            if(!state._invalidConsent){
+                state._acceptedCategories = state._savedCookieContent.categories,
+                state._acceptType = _getAcceptType(_getCurrentCategoriesState());
+            }
+
             /**
              * Load translation before generating modals
              */

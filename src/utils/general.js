@@ -177,15 +177,10 @@ export const _getAcceptType = (currentCategoriesState) => {
 
     var type = 'custom';
 
-    // number of categories marked as necessary/readonly
-    var necessaryCategoriesLength = state._readOnlyCategories.filter((readonly) => {
-        return readonly === true;
-    }).length;
-
     // calculate accept type based on accepted/rejected categories
     if(currentCategoriesState.accepted.length === state._allCategoryNames.length)
         type = 'all';
-    else if(currentCategoriesState.accepted.length === necessaryCategoriesLength)
+    else if(currentCategoriesState.accepted.length === state._readOnlyCategories.length)
         type = 'necessary';
 
     return type;

@@ -258,7 +258,7 @@ export const state = {
 
     /**
      * Keep track of readonly toggles
-     * @type {boolean[]}
+     * @type {string[]}
      */
     _readOnlyCategories : [],
 

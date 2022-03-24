@@ -1,5 +1,5 @@
 import { state, config, cookieConfig, callbacks, dom } from './global';
-import { _log } from '../utils/general';
+import { _log, _getKeys } from '../utils/general';
 import { _resolveCurrentLanguageCode } from '../utils/language';
 
 /**
@@ -13,6 +13,16 @@ export const _setConfig = (_userConfig) => {
      */
     state._userConfig = _userConfig;
     state._allTranslations = _userConfig.language.translations;
+    state._allDefinedCategories = state._userConfig.categories;
+    state._allCategoryNames = _getKeys(state._allDefinedCategories);
+
+    /**
+     * Save names of categories marked as readonly
+     */
+    for(var i=0; i<state._allCategoryNames.length; i++){
+        if(state._allDefinedCategories[state._allCategoryNames[i]].readOnly === true)
+            state._readOnlyCategories.push(state._allCategoryNames[i]);
+    }
 
     _log('CookieConsent [CONFIG]: configuration:', _userConfig);
 
@@ -20,7 +30,7 @@ export const _setConfig = (_userConfig) => {
         config.autoShow = _userConfig.autoShow;
 
     /**
-     * @type {import("./global").CookieConfig}
+     * @type {i .CookieConfig}
      */
     var newCookieConfig = _userConfig.cookie;
 

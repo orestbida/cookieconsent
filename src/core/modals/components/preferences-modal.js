@@ -71,9 +71,6 @@ export const _createPreferencesModal = (api) => {
     // Add label to close button
     _setAttribute(dom._preferencesCloseBtn, 'aria-label', preferencesModalData['closeIconLabel'] || '');
 
-    state._allDefinedCategories = state._userConfig['categories'];
-    state._allCategoryNames = _getKeys(state._allDefinedCategories);
-
     // Set preferences modal title
     dom._preferencesTitle.innerHTML = preferencesModalData['title'];
 
@@ -182,9 +179,6 @@ export const _createPreferencesModal = (api) => {
             if(currentCategoryObject && currentCategoryObject['readOnly']){
                 toggle.disabled = true;
                 _addClass(toggleSpan, 'c-ro');
-                !dom._newSectionsContainer && state._readOnlyCategories.push(true);
-            }else{
-                !dom._newSectionsContainer && state._readOnlyCategories.push(false);
             }
 
             _addClass(tableParent, 'b-acc');

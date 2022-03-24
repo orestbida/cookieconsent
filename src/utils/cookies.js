@@ -113,31 +113,39 @@ export const _autoclearCookies = (clearOnFirstConsent) => {
     }
 };
 
-/**
- * Set toggles/checkboxes based on accepted categories and save cookie
- * @param {string[]} _acceptedCategories - Array of categories to accept
- */
-export const _saveCookiePreferences = (_acceptedCategories, api) => {
+
+export const _saveCookiePreferences = (api) => {
 
     state._lastChangedCategoryNames = [];
 
+    /**
+     * Update array of changed categories
+     */
+    state._acceptedCategories.forEach(acceptedCategory => {
+        /**
+         * If current array of accepted categories is different
+         * from the array of categories saved into the cookie => preferences were changed
+         */
+        if(_inArray(state._savedCookieContent.categories || [], acceptedCategory) === -1)
+            state._lastChangedCategoryNames.push(acceptedCategory);
+    });
+
     // Retrieve all toggle/checkbox values
-    var categoryToggle = document.querySelectorAll('.c-tgl') || [];
+    var categoryToggles = document.querySelectorAll('.c-tgl') || [];
 
     // If there are opt in/out toggles ...
-    if(categoryToggle.length > 0){
+    // [TODO] this can rewritten in a better (clearer) way
+    if(categoryToggles.length > 0){
 
-        for(var i=0; i<categoryToggle.length; i++){
-            if(_inArray(_acceptedCategories, state._allCategoryNames[i]) !== -1){
-                categoryToggle[i].checked = true;
+        for(var i=0; i<categoryToggles.length; i++){
+            if(_inArray(state._acceptedCategories, state._allCategoryNames[i]) !== -1){
+                categoryToggles[i].checked = true;
                 if(!state._allToggleStates[i]){
-                    state._lastChangedCategoryNames.push(state._allCategoryNames[i]);
                     state._allToggleStates[i] = true;
                 }
             }else{
-                categoryToggle[i].checked = false;
+                categoryToggles[i].checked = false;
                 if(state._allToggleStates[i]){
-                    state._lastChangedCategoryNames.push(state._allCategoryNames[i]);
                     state._allToggleStates[i] = false;
                 }
             }
@@ -154,7 +162,7 @@ export const _saveCookiePreferences = (_acceptedCategories, api) => {
     if(!state._consentId) state._consentId = _uuidv4();
 
     state._savedCookieContent = {
-        categories: _acceptedCategories,
+        categories: JSON.parse(JSON.stringify(state._acceptedCategories)),
         revision: config.revision,
         data: state._cookieData,
         consentTimestamp: state._consentTimestamp.toISOString(),
