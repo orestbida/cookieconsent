@@ -63,6 +63,26 @@
  */
 
 /**
+ * @typedef {object} Api
+ * @property {Function} run
+ * @property {Function} show
+ * @property {Function} hide
+ * @property {Function} showPreferences
+ * @property {Function} hidePreferences
+ * @property {Function} accept
+ * @property {Function} acceptedCategory
+ * @property {Function} validCookie
+ * @property {Function} eraseCookies
+ * @property {Function} updateLanguage
+ * @property {Function} updateScripts
+ * @property {Function} loadScript
+ * @property {Function} getConfig
+ * @property {Function} getCookie
+ * @property {Function} getUserPreferences
+ * @property {Function} setCookieData
+ */
+
+/**
  * @typedef {object} CookieStructure
  * @property {string[]} categories Array of accepted categories
  * @property {number} revision Current revision number
@@ -97,7 +117,7 @@ export const config = {
 /**
  * Fix "window is undefined error"
  */
-Object.defineProperty(config.cookie, "domain",{
+Object.defineProperty(config.cookie, 'domain',{
     get: () => window.location.hostname
 });
 
@@ -109,7 +129,7 @@ export const callbacks = {
     _onFirstConsent: null,
     _onConsent: null,
     _onChange: null
-}
+};
 
 /**
  * Pointers to main dom elements
@@ -118,16 +138,22 @@ export const callbacks = {
 export const dom = {
 
     /** @type {HTMLElement} */ _htmlDom: null, // defined after config
-    /** @type {HTMLElement} */ _mainContainer: null,
-    /** @type {HTMLElement} */ _allModalsContainer: null,
+    /** @type {HTMLElement} */ _ccMain: null,
+    /** @type {HTMLElement} */ _cmContainer: null,
+    /** @type {HTMLElement} */ _pmContainer: null,
 
     /** @type {HTMLElement} */ _consentModal: null,
+    /** @type {HTMLElement} */ _consentModalBody: null,
+    /** @type {HTMLElement} */ _consentModalTexts: null,
     /** @type {HTMLElement} */ _consentModalTitle: null,
     /** @type {HTMLElement} */ _consentModalDescription: null,
+    /** @type {HTMLElement} */ _consentModalBtns: null,
+    /** @type {HTMLElement} */ _consentModalBtnGroup: null,
+    /** @type {HTMLElement} */ _consentModalBtnGroup2: null,
     /** @type {HTMLElement} */ _consentAcceptAllBtn: null,
     /** @type {HTMLElement} */ _consentAcceptNecessaryBtn: null,
-    /** @type {HTMLElement} */ _consentButtonsContainer: null,
-    /** @type {HTMLElement} */ _consentModalInner: null,
+    /** @type {HTMLElement} */ _consentShowPreferencesBtn: null,
+    /** @type {HTMLElement} */ _consentModalFooterLinksGroup: null,
 
     /** @type {HTMLElement} */ _preferencesContainer: null,
     /** @type {HTMLElement} */ _preferencesInner: null,
@@ -139,7 +165,7 @@ export const dom = {
     /** @type {HTMLElement} */ _preferencesSaveBtn: null,
     /** @type {HTMLElement} */ _preferencesacceptAllBtn: null,
     /** @type {HTMLElement} */ _preferencesacceptNecessaryBtn: null
-}
+};
 
 /**
  * @type {CookieConfig}
@@ -222,7 +248,7 @@ export const state = {
      * Stores all available categories
      * @type {string[]}
      */
-    _allCategoryNames: false,
+    _allCategoryNames: [],
 
     /**
      * Contains all accepted categories
@@ -232,7 +258,7 @@ export const state = {
 
     /**
      * Keep track of readonly toggles
-     * @type {boolean[]}
+     * @type {string[]}
      */
     _readOnlyCategories : [],
 
@@ -267,4 +293,4 @@ export const state = {
      * @type {boolean[]}
      */
     _allToggleStates : [],
-}
+};

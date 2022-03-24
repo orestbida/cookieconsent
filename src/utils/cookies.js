@@ -1,6 +1,6 @@
-import { state, config, cookieConfig, callbacks } from "../core/global";
-import { _log, _inArray, _uuidv4, _updateAcceptType, _getRemainingExpirationTimeMS, _getExpiresAfterDaysValue } from "./general";
-import { _manageExistingScripts } from "./scripts";
+import { state, config, cookieConfig, callbacks } from '../core/global';
+import { _log, _inArray, _uuidv4, _updateAcceptType, _getRemainingExpirationTimeMS, _getExpiresAfterDaysValue } from './general';
+import { _manageExistingScripts } from './scripts';
 
 /**
  * Delete all cookies which are unused (based on selected preferences)
@@ -102,7 +102,7 @@ export const _autoclearCookies = (clearOnFirstConsent) => {
                     if(foundCookieIndex > -1) foundCookies.push(allCookiesArray[foundCookieIndex]);
                 }
 
-                _log("CookieConsent [AUTOCLEAR]: search cookie: '" + currCookieName + "', found:", foundCookies);
+                _log('CookieConsent [AUTOCLEAR]: search cookie: \'' + currCookieName + '\', found:', foundCookies);
 
                 // Delete cookie(s)
                 if(foundCookies.length > 0){
@@ -111,33 +111,41 @@ export const _autoclearCookies = (clearOnFirstConsent) => {
             }
         }
     }
-}
+};
 
-/**
- * Set toggles/checkboxes based on accepted categories and save cookie
- * @param {string[]} _acceptedCategories - Array of categories to accept
- */
-export const _saveCookiePreferences = (_acceptedCategories, api) => {
+
+export const _saveCookiePreferences = (api) => {
 
     state._lastChangedCategoryNames = [];
 
+    /**
+     * Update array of changed categories
+     */
+    state._acceptedCategories.forEach(acceptedCategory => {
+        /**
+         * If current array of accepted categories is different
+         * from the array of categories saved into the cookie => preferences were changed
+         */
+        if(_inArray(state._savedCookieContent.categories || [], acceptedCategory) === -1)
+            state._lastChangedCategoryNames.push(acceptedCategory);
+    });
+
     // Retrieve all toggle/checkbox values
-    var categoryToggle = document.querySelectorAll('.c-tgl') || [];
+    var categoryToggles = document.querySelectorAll('.c-tgl') || [];
 
     // If there are opt in/out toggles ...
-    if(categoryToggle.length > 0){
+    // [TODO] this can rewritten in a better (clearer) way
+    if(categoryToggles.length > 0){
 
-        for(var i=0; i<categoryToggle.length; i++){
-            if(_inArray(_acceptedCategories, state._allCategoryNames[i]) !== -1){
-                categoryToggle[i].checked = true;
+        for(var i=0; i<categoryToggles.length; i++){
+            if(_inArray(state._acceptedCategories, state._allCategoryNames[i]) !== -1){
+                categoryToggles[i].checked = true;
                 if(!state._allToggleStates[i]){
-                    state._lastChangedCategoryNames.push(state._allCategoryNames[i]);
                     state._allToggleStates[i] = true;
                 }
             }else{
-                categoryToggle[i].checked = false;
+                categoryToggles[i].checked = false;
                 if(state._allToggleStates[i]){
-                    state._lastChangedCategoryNames.push(state._allCategoryNames[i]);
                     state._allToggleStates[i] = false;
                 }
             }
@@ -154,12 +162,12 @@ export const _saveCookiePreferences = (_acceptedCategories, api) => {
     if(!state._consentId) state._consentId = _uuidv4();
 
     state._savedCookieContent = {
-        categories: _acceptedCategories,
+        categories: JSON.parse(JSON.stringify(state._acceptedCategories)),
         revision: config.revision,
         data: state._cookieData,
         consentTimestamp: state._consentTimestamp.toISOString(),
         consentId: state._consentId
-    }
+    };
 
     var firstUserConsent = false;
 
@@ -213,7 +221,7 @@ export const _saveCookiePreferences = (_acceptedCategories, api) => {
      */
     if(state._reloadPage)
         window.location.reload();
-}
+};
 
 /**
  * Set cookie, by specifying name and value
@@ -236,24 +244,24 @@ export const _setCookie = (name, value, useRemainingExpirationTime) => {
      * Specify "expires" field only if expiresAfterMs != 0
      * (allow cookie to have same duration as current session)
      */
-    var expires = expiresAfterMs !== 0 ? "; expires=" + date.toUTCString() : '';
+    var expires = expiresAfterMs !== 0 ? '; expires=' + date.toUTCString() : '';
 
-    var cookieStr = name + "=" + (cookieValue || "") + expires + "; Path=" + cookieConfig.path + ";";
-    cookieStr += " SameSite=" + cookieConfig.sameSite + ";";
+    var cookieStr = name + '=' + (cookieValue || '') + expires + '; Path=' + cookieConfig.path + ';';
+    cookieStr += ' SameSite=' + cookieConfig.sameSite + ';';
 
     // assures cookie works with localhost (=> don't specify domain if on localhost)
-    if(window.location.hostname.indexOf(".") > -1){
-        cookieStr += " Domain=" + cookieConfig.domain + ";";
+    if(window.location.hostname.indexOf('.') > -1){
+        cookieStr += ' Domain=' + cookieConfig.domain + ';';
     }
 
-    if(window.location.protocol === "https:") {
-        cookieStr += " Secure;";
+    if(window.location.protocol === 'https:') {
+        cookieStr += ' Secure;';
     }
 
     document.cookie = cookieStr;
 
-    _log("CookieConsent [SET_COOKIE]: " + name + ":", JSON.parse(decodeURIComponent(cookieValue)));
-}
+    _log('CookieConsent [SET_COOKIE]: ' + name + ':', JSON.parse(decodeURIComponent(cookieValue)));
+};
 
 /**
  * Get cookie value by name,
@@ -269,7 +277,7 @@ export const _getCookie = (name, filter, getValue, ignoreName) => {
     var found;
 
     if(filter === 'one'){
-        found = document.cookie.match("(^|;)\\s*" + name + "\\s*=\\s*([^;]+)");
+        found = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
         found = found ? (getValue ? found.pop() : name) : '';
 
         /**
@@ -298,7 +306,7 @@ export const _getCookie = (name, filter, getValue, ignoreName) => {
     }
 
     return found;
-}
+};
 
 /**
  * Delete cookie by name & path
@@ -313,8 +321,8 @@ export const _eraseCookies = (cookies, customPath, domains) => {
     for(var i=0; i<cookies.length; i++){
         for(var j=0; j<domains.length; j++){
             document.cookie = cookies[i] + '=; path=' + path +
-            (domains[j].indexOf('.') > -1 ? '; domain=' + domains[j] : "") + '; ' + expires;
+            (domains[j].indexOf('.') > -1 ? '; domain=' + domains[j] : '') + '; ' + expires;
         }
-        _log("CookieConsent [AUTOCLEAR]: deleting cookie: '" + cookies[i] + "' path: '" + path + "' domain:", domains);
+        _log('CookieConsent [AUTOCLEAR]: deleting cookie: \'' + cookies[i] + '\' path: \'' + path + '\' domain:', domains);
     }
-}
+};

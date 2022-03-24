@@ -1,5 +1,5 @@
-import { state, dom } from "../core/global";
-import { _inArray, _addClass } from "./general";
+import { state, dom } from '../core/global';
+import { _inArray, _addClass } from './general';
 
 /**
  * Manage each modal's layout
@@ -26,7 +26,7 @@ export const _guiManager = (applyToModal) => {
      * @param {string[]} position
      */
     function _setLayout(modal, allowedLayouts, allowedPositions, allowed_transitions, layout, position, transition){
-        position = (position && position.split(" ")) || [];
+        position = (position && position.split(' ')) || [];
 
         // Check if specified layout is valid
         if(_inArray(allowedLayouts, layout) > -1){
@@ -47,15 +47,19 @@ export const _guiManager = (applyToModal) => {
     }
 
     if(applyToModal === 0 && state._consentModalExists && consentModalOptions){
-        _setLayout(
-            dom._consentModal,
-            ['box', 'bar', 'cloud'],
-            ['top', 'middle', 'bottom'],
-            ['zoom', 'slide'],
-            consentModalOptions['layout'],
-            consentModalOptions['position'],
-            consentModalOptions['transition']
-        );
+        // [TODO]
+
+        dom._consentModal.classList.add('cm--bar');
+        dom._consentModal.classList.add('cm--bottom-center');
+        // _setLayout(
+        //     dom._consentModal,
+        //     ['box', 'bar', 'cloud'],
+        //     ['top', 'middle', 'bottom'],
+        //     ['zoom', 'slide'],
+        //     consentModalOptions['layout'],
+        //     consentModalOptions['position'],
+        //     consentModalOptions['transition']
+        // );
     }
 
     if(applyToModal === 1 && preferencesModalOptions){
@@ -69,4 +73,4 @@ export const _guiManager = (applyToModal) => {
             preferencesModalOptions['transition']
         );
     }
-}
+};

@@ -1,14 +1,21 @@
-import { state, dom } from "../../core/global";
-import { _createNode, _addClass, _setAttribute, _removeClass, _addEvent, _appendChild, _inArray, _getKeys, _hasClass } from "../../utils/general";
-import { _guiManager } from "../../utils/gui-manager";
+import { state, dom } from '../../global';
+import { _createNode, _addClass, _setAttribute, _removeClass, _addEvent, _appendChild, _inArray, _getKeys, _hasClass } from '../../../utils/general';
+import { _guiManager } from '../../../utils/gui-manager';
 
 export const _createPreferencesModal = (api) => {
+
+    /** TODO */
+    if(state) return;
+
     var preferencesModalData = state._currentTranslation['preferencesModal'];
 
     /**
      * Create all _consentModal elements
      */
-    if(!dom._preferencesContainer){
+    if(!dom._pmContainer){
+        dom._pmContainer = _createNode('div');
+        dom._pmContainer.className = 'pm-container';
+
         dom._preferencesContainer = _createNode('div');
         var preferencesContainerValign = _createNode('div');
         var preferences = _createNode('div');
@@ -19,21 +26,19 @@ export const _createPreferencesModal = (api) => {
         dom._preferencesCloseBtn = _createNode('button');
         var preferencesCloseBtnContainer = _createNode('div');
         dom._sectionsContainer = _createNode('div');
-        var overlay = _createNode('div');
 
         /**
          * Set ids
          */
         dom._preferencesContainer.id = 's-cnt';
-        preferencesContainerValign.id = "c-vln";
-        preferencesContainerInner.id = "c-s-in";
-        preferences.id = "cs";
+        preferencesContainerValign.id = 'c-vln';
+        preferencesContainerInner.id = 'c-s-in';
+        preferences.id = 'cs';
         dom._preferencesTitle.id = 's-ttl';
         dom._preferencesInner.id = 's-inr';
-        preferencesHeader.id = "s-hdr";
+        preferencesHeader.id = 's-hdr';
         dom._sectionsContainer.id = 's-bl';
         dom._preferencesCloseBtn.id = 's-c-bn';
-        overlay.id = 'cs-ov';
         preferencesCloseBtnContainer.id = 's-c-bnc';
         dom._preferencesCloseBtn.className = 'c-bn';
 
@@ -42,8 +47,6 @@ export const _createPreferencesModal = (api) => {
         _setAttribute(dom._preferencesContainer, 'aria-hidden', 'true');
         _setAttribute(dom._preferencesContainer, 'aria-labelledby', 's-ttl');
         _setAttribute(dom._preferencesTitle, 'role', 'heading');
-        dom._preferencesContainer.style.visibility = overlay.style.visibility = "hidden";
-        overlay.style.opacity = 0;
 
         _appendChild(preferencesCloseBtnContainer, dom._preferencesCloseBtn);
 
@@ -67,9 +70,6 @@ export const _createPreferencesModal = (api) => {
 
     // Add label to close button
     _setAttribute(dom._preferencesCloseBtn, 'aria-label', preferencesModalData['closeIconLabel'] || '');
-
-    state._allDefinedCategories = state._userConfig['categories'];
-    state._allCategoryNames = _getKeys(state._allDefinedCategories);
 
     // Set preferences modal title
     dom._preferencesTitle.innerHTML = preferencesModalData['title'];
@@ -109,7 +109,7 @@ export const _createPreferencesModal = (api) => {
         // Create toggle if specified (opt in/out)
         if(typeof currentCategoryObject !== 'undefined'){
 
-            var expandableDivId = "c-ac-"+i;
+            var expandableDivId = 'c-ac-'+i;
 
             // Create button (to collapse/expand section description)
             var sectionTitleBtn = isExpandable ? _createNode('button') : _createNode('div');
@@ -129,7 +129,7 @@ export const _createPreferencesModal = (api) => {
             toggleOnIcon.className = 'on-i';
             toggleOffIcon.className = 'off-i';
             toggleSpan.className = 'c-tg';
-            toggleLabelSpan.className = "t-lb";
+            toggleLabelSpan.className = 't-lb';
 
             if(isExpandable){
                 _setAttribute(sectionTitleBtn, 'aria-expanded', 'false');
@@ -179,9 +179,6 @@ export const _createPreferencesModal = (api) => {
             if(currentCategoryObject && currentCategoryObject['readOnly']){
                 toggle.disabled = true;
                 _addClass(toggleSpan, 'c-ro');
-                !dom._newSectionsContainer && state._readOnlyCategories.push(true);
-            }else{
-                !dom._newSectionsContainer && state._readOnlyCategories.push(false);
             }
 
             _addClass(tableParent, 'b-acc');
@@ -244,7 +241,7 @@ export const _createPreferencesModal = (api) => {
                     // create new header
                     var th1 = _createNode('th');
                     var key = allTableKeys[p];
-                    _setAttribute(th1, 'scope', 'col')
+                    _setAttribute(th1, 'scope', 'col');
 
                     if(key){
                         th1.textContent = cookieTableHeaders[key];
@@ -335,7 +332,7 @@ export const _createPreferencesModal = (api) => {
         });
     }
 
-    _preferencesacceptAllBtn.innerHTML = preferencesModalData["acceptAllBtn"];
+    _preferencesacceptAllBtn.innerHTML = preferencesModalData['acceptAllBtn'];
 
     var acceptNecessaryBtnText = preferencesModalData['acceptNecessaryBtn'];
 
@@ -355,7 +352,7 @@ export const _createPreferencesModal = (api) => {
                 api.accept([]);
             });
 
-            dom._preferencesInner.className = "bns-t";
+            dom._preferencesInner.className = 'bns-t';
             _appendChild(_preferencesButtonsContainer, _preferencesacceptNecessaryBtn);
         }
 
@@ -399,6 +396,6 @@ export const _createPreferencesModal = (api) => {
     _appendChild(preferencesContainerValign, preferences);
     _appendChild(dom._preferencesContainer, preferencesContainerValign);
 
-    _appendChild(dom._allModalsContainer, dom._preferencesContainer);
-    _appendChild(dom._allModalsContainer, overlay);
-}
+    _appendChild(dom._pmContainer, dom._preferencesContainer);
+    _appendChild(dom._ccMain, dom._pmContainer);
+};

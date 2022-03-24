@@ -9,10 +9,11 @@ import {
     _handleFocusTrap,
     _getCurrentCategoriesState,
     _addDataButtonListeners,
-    _getModalFocusableData
+    _getModalFocusableData,
+    _getAcceptType
 } from '../utils/general';
 
-import { _manageExistingScripts } from "../utils/scripts"
+import { _manageExistingScripts } from '../utils/scripts';
 
 import {
     config,
@@ -20,13 +21,13 @@ import {
     dom,
     callbacks,
     cookieConfig,
-} from "./global"
+} from './global';
 
 import {
     _createConsentModal,
     _createPreferencesModal,
     _createCookieConsentHTML
-} from '../modals/modals';
+} from './modals/modals';
 
 import { _getValidLanguageCode, _loadTranslationData } from '../utils/language';
 
@@ -37,7 +38,7 @@ import {
     _saveCookiePreferences
 } from '../utils/cookies';
 
-import { _setConfig } from "./config-init";
+import { _setConfig } from './config-init';
 
 export const api = {
 
@@ -65,20 +66,20 @@ export const api = {
                 }
             }
             return states;
-        }
+        };
 
         if(!categories){
             categoriesToAccept = _getCurrentPreferences();
         }else{
             if(
-                typeof categories === "object" &&
-                typeof categories.length === "number"
+                typeof categories === 'object' &&
+                typeof categories.length === 'number'
             ){
                 for(var i=0; i<categories.length; i++){
                     if(_inArray(state._allCategoryNames, categories[i]) !== -1)
                         categoriesToAccept.push(categories[i]);
                 }
-            }else if(typeof categories === "string"){
+            }else if(typeof categories === 'string'){
                 if(categories === 'all')
                     categoriesToAccept = state._allCategoryNames.slice();
                 else{
@@ -92,26 +93,23 @@ export const api = {
         if(exclusions.length >= 1){
             for(i=0; i<exclusions.length; i++){
                 categoriesToAccept = categoriesToAccept.filter((item) => {
-                    return item !== exclusions[i]
-                })
+                    return item !== exclusions[i];
+                });
             }
         }
 
         // Add back all the categories set as "readonly/required"
-        for(i=0; i<state._allCategoryNames.length; i++){
-            if(
-                state._readOnlyCategories[i] === true &&
-                _inArray(categoriesToAccept, state._allCategoryNames[i]) === -1
-            ){
-                categoriesToAccept.push(state._allCategoryNames[i]);
-            }
+        for(i=0; i<state._readOnlyCategories.length; i++){
+            if(_inArray(categoriesToAccept, state._readOnlyCategories[i]) === -1)
+                categoriesToAccept.push(state._readOnlyCategories[i]);
         }
+
         /**
          * Keep state._acceptedCategories array updated
          */
         state._acceptedCategories = categoriesToAccept;
 
-        _saveCookiePreferences(categoriesToAccept, api);
+        _saveCookiePreferences(api);
     },
 
     /**
@@ -135,10 +133,10 @@ export const api = {
         var configDomain = cookieConfig.domain;
 
         var domains = domain
-            ? [domain, "."+domain]
-            : [configDomain, "." + configDomain];
+            ? [domain, '.'+domain]
+            : [configDomain, '.' + configDomain];
 
-        if(typeof cookies === "object" && cookies.length > 0){
+        if(typeof cookies === 'object' && cookies.length > 0){
             for(var i=0; i<cookies.length; i++){
                 api.validCookie(cookies[i]) && allCookies.push(cookies[i]);
             }
@@ -178,7 +176,7 @@ export const api = {
 
                 _createPreferencesModal(api);
 
-                _log("CookieConsent [LANG]: current language: '" + newLanguageCode + "'");
+                _log('CookieConsent [LANG]: current language: \'' + newLanguageCode + '\'');
             });
 
             return true;
@@ -205,7 +203,7 @@ export const api = {
             'acceptType': state._acceptType,
             'acceptedCategories': !state._invalidConsent ? currentCategoriesState.accepted : [],
             'rejectedCategories': !state._invalidConsent ? currentCategoriesState.rejected : []
-        }
+        };
     },
 
     /**
@@ -274,12 +272,12 @@ export const api = {
             state._cookieData = api.getCookie('data');
             var sameType = typeof state._cookieData === typeof newData;
 
-            if(sameType && typeof state._cookieData === "object"){
+            if(sameType && typeof state._cookieData === 'object'){
                 !state._cookieData && (state._cookieData = {});
 
                 for(var prop in newData){
                     if(state._cookieData[prop] !== newData[prop]){
-                        state._cookieData[prop] = newData[prop]
+                        state._cookieData[prop] = newData[prop];
                         set = true;
                     }
                 }
@@ -307,7 +305,7 @@ export const api = {
      * @returns {any}
      */
     getCookie: (field, cookieName) => {
-        var cookie = JSON.parse(_getCookie(cookieName || cookieConfig.name, 'one', true, true) || "{}");
+        var cookie = JSON.parse(_getCookie(cookieName || cookieConfig.name, 'one', true, true) || '{}');
         return field ? cookie[field] : cookie;
     },
 
@@ -341,7 +339,7 @@ export const api = {
 
         if(state._consentModalExists){
             setTimeout(() => {
-                _addClass(dom._htmlDom, "show--consent");
+                _addClass(dom._htmlDom, 'show--consent');
 
                 /**
                  * Update attributes/internal statuses
@@ -354,7 +352,7 @@ export const api = {
                     state._currentModalFocusableElements = state._allConsentModalFocusableElements;
                 }, 200);
 
-                _log("CookieConsent [TOGGLE]: show _consentModal");
+                _log('CookieConsent [TOGGLE]: show consentModal');
             }, delay > 0 ? delay : (createModal ? 30 : 0));
         }
     },
@@ -364,7 +362,7 @@ export const api = {
      */
     hide: () => {
         if(state._consentModalExists){
-            _removeClass(dom._htmlDom, "show--consent");
+            _removeClass(dom._htmlDom, 'show--consent');
             _setAttribute(dom._consentModal, 'aria-hidden', 'true');
             state._consentModalVisible = false;
 
@@ -374,7 +372,7 @@ export const api = {
                 state._currentModalFocusableElements = null;
             }, 200);
 
-            _log("CookieConsent [TOGGLE]: hide _consentModal");
+            _log('CookieConsent [TOGGLE]: hide _consentModal');
         }
     },
 
@@ -382,7 +380,7 @@ export const api = {
      * Hide preferences modal
      */
     hidePreferences: () => {
-        _removeClass(dom._htmlDom, "show--settings");
+        _removeClass(dom._htmlDom, 'show--settings');
         state._preferencesModalVisible = false;
         _setAttribute(dom._preferencesContainer, 'aria-hidden', 'true');
 
@@ -404,7 +402,7 @@ export const api = {
             state._clickedInsideModal = false;
         }, 200);
 
-        _log("CookieConsent [TOGGLE]: hide preferencesModal");
+        _log('CookieConsent [TOGGLE]: hide preferencesModal');
     },
 
     /**
@@ -429,7 +427,7 @@ export const api = {
      */
     showPreferences: (delay) => {
         setTimeout(() => {
-            _addClass(dom._htmlDom, "show--settings");
+            _addClass(dom._htmlDom, 'show--settings');
             _setAttribute(dom._preferencesContainer, 'aria-hidden', 'false');
             state._preferencesModalVisible = true;
 
@@ -454,7 +452,7 @@ export const api = {
                 state._currentModalFocusableElements = state._allPreferencesModalFocusableElements;
             }, 200);
 
-            _log("CookieConsent [TOGGLE]: show preferencesModal");
+            _log('CookieConsent [TOGGLE]: show preferencesModal');
         }, delay > 0 ? delay : 0);
     },
 
@@ -472,7 +470,7 @@ export const api = {
             if(state._botAgentDetected) return;
 
             // Retrieve cookie value (if set)
-            state._savedCookieContent = JSON.parse(_getCookie(cookieConfig.name, 'one', true) || "{}");
+            state._savedCookieContent = JSON.parse(_getCookie(cookieConfig.name, 'one', true) || '{}');
 
             // Retrieve "_consentId"
             state._consentId = state._savedCookieContent['consentId'];
@@ -494,12 +492,22 @@ export const api = {
 
             // If revision is enabled and current value !== saved value inside the cookie => revision is not valid
             if(state._revisionEnabled && cookieConsentAccepted && state._savedCookieContent['revision'] !== config.revision)
-            state._validRevision = false;
+                state._validRevision = false;
 
             // If consent is not valid => create consent modal
             state._consentModalExists = state._invalidConsent = (!cookieConsentAccepted || !state._validRevision || !state._consentTimestamp || !state._lastConsentTimestamp || !state._consentId);
 
-            _log("CookieConsent [STATUS] valid consent:", !state._invalidConsent);
+            _log('CookieConsent [STATUS] valid consent:', !state._invalidConsent);
+
+            /**
+             * Retrieve last accepted categories from cookie
+             * and calculate acceptType
+             */
+            if(!state._invalidConsent){
+                state._acceptedCategories = state._savedCookieContent.categories,
+                state._acceptType = _getAcceptType(_getCurrentCategoriesState());
+            }
+
             /**
              * Load translation before generating modals
              */
@@ -515,7 +523,7 @@ export const api = {
                     api.show();
 
                 // Add class to enable animations/transitions
-                setTimeout(() => {_addClass(dom._mainContainer, 'c--anim');}, 50);
+                setTimeout(() => {_addClass(dom._ccMain, 'c--anim');}, 100);
 
                 // Accessibility :=> if tab pressed => trap focus inside modal
                 setTimeout(() => {_handleFocusTrap(api);}, 100);
@@ -530,11 +538,11 @@ export const api = {
 
                 }else{
                     if(config.mode === 'opt-out'){
-                        _log("CookieConsent [CONFIG] mode='" + config.mode + "', default enabled categories:", state._defaultEnabledCategories);
+                        _log('CookieConsent [CONFIG] mode=\'' + config.mode + '\', default enabled categories:', state._defaultEnabledCategories);
                         _manageExistingScripts(state._defaultEnabledCategories);
                     }
                 }
             });
         }
     }
-}
+};

@@ -1,6 +1,6 @@
-import { state, config, cookieConfig, callbacks, dom } from "./global";
-import { _log } from "../utils/general";
-import { _resolveCurrentLanguageCode } from "../utils/language";
+import { state, config, cookieConfig, callbacks, dom } from './global';
+import { _log, _getKeys } from '../utils/general';
+import { _resolveCurrentLanguageCode } from '../utils/language';
 
 /**
  * Update config preferences
@@ -13,14 +13,24 @@ export const _setConfig = (_userConfig) => {
      */
     state._userConfig = _userConfig;
     state._allTranslations = _userConfig.language.translations;
+    state._allDefinedCategories = state._userConfig.categories;
+    state._allCategoryNames = _getKeys(state._allDefinedCategories);
 
-    _log("CookieConsent [CONFIG]: configuration:", _userConfig);
+    /**
+     * Save names of categories marked as readonly
+     */
+    for(var i=0; i<state._allCategoryNames.length; i++){
+        if(state._allDefinedCategories[state._allCategoryNames[i]].readOnly === true)
+            state._readOnlyCategories.push(state._allCategoryNames[i]);
+    }
 
-    if(typeof _userConfig.autoShow === "boolean")
+    _log('CookieConsent [CONFIG]: configuration:', _userConfig);
+
+    if(typeof _userConfig.autoShow === 'boolean')
         config.autoShow = _userConfig.autoShow;
 
     /**
-     * @type {import("./global").CookieConfig}
+     * @type {i .CookieConfig}
      */
     var newCookieConfig = _userConfig.cookie;
 
@@ -49,7 +59,7 @@ export const _setConfig = (_userConfig) => {
     var mode = _userConfig;
     var revision = _userConfig.revision;
     var autoClearCookies = _userConfig.autoClearCookies;
-    var manageScriptTags = _userConfig.manageScriptTags
+    var manageScriptTags = _userConfig.manageScriptTags;
     var hideFromBots = _userConfig.hideFromBots;
 
     if(mode === 'opt-out'){
@@ -90,11 +100,11 @@ export const _setConfig = (_userConfig) => {
      */
     state._currentTranslation = state._allTranslations[state._currentLanguageCode];
 
-    _log("CookieConsent [LANG]: current language: '" + state._currentLanguageCode + "'");
+    _log('CookieConsent [LANG]: current language: \'' + state._currentLanguageCode + '\'');
 
     /**
      * Define document properties after config.
      * to avoid errors like "document is not defined"
      */
     dom._htmlDom = document.documentElement;
-}
+};

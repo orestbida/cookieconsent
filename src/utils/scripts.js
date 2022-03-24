@@ -1,5 +1,5 @@
-import { state, config } from "../core/global";
-import { _createNode, _setAttribute, _inArray } from "./general";
+import { state, config } from '../core/global';
+import { _createNode, _setAttribute, _inArray } from './general';
 
 const scriptTagSelector = 'data-cookiecategory';
 
@@ -84,7 +84,7 @@ export const _manageExistingScripts = (mustEnableCategories) => {
             // Go to next script right away
             _loadScripts(scripts, ++index);
         }
-    }
+    };
 
     _loadScripts(scripts, 0);
-}
+};
