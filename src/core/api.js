@@ -457,6 +457,25 @@ export const api = {
     },
 
     /**
+     * Register an event handler
+     * @param {string} eventName
+     * @param {Function} callback
+     */
+    on: (eventName, callback) => {
+        if(typeof callback !== 'function' || !['change', 'consent', 'firstConsent'].includes(eventName))
+            return;
+
+        if(eventName === 'change')
+            callbacks._onChange.push(callback);
+
+        if(eventName === 'consent')
+            callbacks._onConsent.push(callback);
+
+        if(eventName === 'firstConsent')
+            callbacks._onFirstConsent.push(callback);
+    },
+
+    /**
      * "Init" method. Will run once and only if modals do not exist
      */
     run: (conf) => {
@@ -533,8 +552,12 @@ export const api = {
 
                     _manageExistingScripts();
 
-                    if(typeof callbacks._onConsent === 'function')
-                        callbacks._onConsent(state._savedCookieContent);
+                    if(callbacks._onConsent.length > 0){
+                        for(var i=0; i<callbacks._onConsent.length; i++){
+                            if(typeof callbacks._onConsent[i] === 'function')
+                                callbacks._onConsent[i](state._savedCookieContent);
+                        }
+                    }
 
                 }else{
                     if(config.mode === 'opt-out'){

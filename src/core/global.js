@@ -66,6 +66,7 @@
  * @property {Function} hide
  * @property {Function} showPreferences
  * @property {Function} hidePreferences
+ * @property {Function} on
  * @property {Function} accept
  * @property {Function} acceptedCategory
  * @property {Function} validCookie
@@ -119,13 +120,12 @@ Object.defineProperty(config.cookie, 'domain',{
 });
 
 /**
- * Pointers to callback functions,
- * avoid calling userConfig['<callback_name>']
+ * Pointers to callback functions
  */
 export const callbacks = {
-    _onFirstConsent: null,
-    _onConsent: null,
-    _onChange: null
+    _onFirstConsent: [],
+    _onConsent: [],
+    _onChange: []
 };
 
 /**

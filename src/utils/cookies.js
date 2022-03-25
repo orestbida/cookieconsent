@@ -203,18 +203,31 @@ export const _saveCookiePreferences = (api) => {
         if(config.autoClearCookies)
             _autoclearCookies(true);
 
-        if(typeof callbacks._onFirstConsent === 'function')
-            callbacks._onFirstConsent(api.getUserPreferences(), state._savedCookieContent);
+        if(callbacks._onFirstConsent.length > 0){
+            var userPreferences = api.getUserPreferences();
+            for(var j=0; j<callbacks._onFirstConsent.length; j++){
+                if(typeof callbacks._onFirstConsent[j] === 'function')
+                    callbacks._onFirstConsent[j](userPreferences, state._savedCookieContent);
+            }
+        }
 
-        if(typeof callbacks._onConsent === 'function')
-            callbacks._onConsent(state._savedCookieContent);
+        if(callbacks._onConsent.length > 0){
+            for(var k=0; k<callbacks._onConsent.length; k++){
+                if(typeof callbacks._onConsent[k] === 'function')
+                    callbacks._onConsent[k](state._savedCookieContent);
+            }
+        }
 
         if(config.mode === 'opt-in') return;
     }
 
     // Fire _onChange only if preferences were changed
-    if(typeof callbacks._onChange === 'function' && state._lastChangedCategoryNames.length > 0)
-        callbacks._onChange(state._savedCookieContent, state._lastChangedCategoryNames);
+    if(callbacks._onChange.length > 0 && state._lastChangedCategoryNames.length > 0){
+        for(var m=0; m<callbacks._onConsent.length; m++){
+            if(typeof callbacks._onChange[m] === 'function')
+                callbacks._onChange[m](state._savedCookieContent, state._lastChangedCategoryNames);
+        }
+    }
 
     /**
      * Reload page if needed
