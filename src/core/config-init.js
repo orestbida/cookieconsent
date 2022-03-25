@@ -1,4 +1,4 @@
-import { state, config, cookieConfig, callbacks, dom } from './global';
+import { state, config, cookieConfig, dom } from './global';
 import { _log, _getKeys } from '../utils/general';
 import { _resolveCurrentLanguageCode } from '../utils/language';
 
@@ -48,13 +48,6 @@ export const _setConfig = (_userConfig) => {
         sameSite && (cookieConfig.sameSite = sameSite);
         expiresAfterDays && (cookieConfig.expiresAfterDays = expiresAfterDays);
     }
-
-    /**
-     * Save references to callback functions
-     */
-    callbacks._onFirstConsent = _userConfig.onFirstConsent;
-    callbacks._onConsent = _userConfig.onConsent;
-    callbacks._onChange = _userConfig.onChange;
 
     var mode = _userConfig;
     var revision = _userConfig.revision;
