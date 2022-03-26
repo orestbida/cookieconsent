@@ -476,6 +476,31 @@ export const api = {
     },
 
     /**
+     * Unegister an event handler
+     * @param {string} eventName
+     * @param {Function} callback
+     */
+    off: (eventName, callback) => {
+        if(typeof callback !== 'function' || !['change', 'consent', 'firstConsent'].includes(eventName))
+            return;
+
+        if(eventName === 'change')
+            callbacks._onChange = callbacks._onChange.filter(existingCallback => {
+                return existingCallback !== callback;
+            });
+
+        if(eventName === 'consent')
+            callbacks._onConsent = callbacks._onConsent.filter(existingCallback => {
+                return existingCallback !== callback;
+            });
+
+        if(eventName === 'firstConsent')
+            callbacks._onFirstConsent = callbacks._onFirstConsent.filter(existingCallback => {
+                return existingCallback !== callback;
+            });
+    },
+
+    /**
      * "Init" method. Will run once and only if modals do not exist
      */
     run: (conf) => {

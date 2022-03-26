@@ -67,6 +67,7 @@
  * @property {Function} showPreferences
  * @property {Function} hidePreferences
  * @property {Function} on
+ * @property {Function} off
  * @property {Function} accept
  * @property {Function} acceptedCategory
  * @property {Function} validCookie
