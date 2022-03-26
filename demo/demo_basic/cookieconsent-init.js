@@ -20,18 +20,6 @@ cc.run({
         }
     },
 
-    onFirstConsent: function(){
-        console.log('onFirstAction fired');
-    },
-
-    onConsent: function () {
-        console.log('onConsent fired ...');
-    },
-
-    onChange: function () {
-        console.log('onChange fired ...');
-    },
-
     categories: {
         necessary: {
             readOnly: true,
@@ -86,4 +74,16 @@ cc.run({
             }
         }
     }
+});
+
+cc.on('firstConsent', (userPreferences, savedCookieContent) => {
+    console.log('onFirstConsent fired', userPreferences, savedCookieContent);
+});
+
+cc.on('consent', (savedCookieContent) => {
+    console.log('onConsent fired', savedCookieContent);
+});
+
+cc.on('change', (savedCookieContent, lastChangedCategoryNames) => {
+    console.log('onChange fired', savedCookieContent, lastChangedCategoryNames);
 });
