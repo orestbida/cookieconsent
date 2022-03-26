@@ -117,7 +117,8 @@ export const config = {
  * Fix "window is undefined error"
  */
 Object.defineProperty(config.cookie, 'domain',{
-    get: () => window.location.hostname
+    get: () => window.location.hostname,
+    set: () => {} 
 });
 
 /**
