@@ -108,3 +108,10 @@ export const _setConfig = (_userConfig) => {
      */
     dom._htmlDom = document.documentElement;
 };
+
+export const setWindowData = () => {
+    /**
+     * Fix "window is not defined" error
+     */
+    cookieConfig.domain = window.location.hostname;
+};

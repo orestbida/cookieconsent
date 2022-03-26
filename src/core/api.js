@@ -19,8 +19,9 @@ import {
     config,
     state,
     dom,
-    callbacks,
     cookieConfig,
+    customEvents,
+    _fireEvent
 } from './global';
 
 import {
@@ -533,8 +534,7 @@ export const api = {
 
                     _manageExistingScripts();
 
-                    if(typeof callbacks._onConsent === 'function')
-                        callbacks._onConsent(state._savedCookieContent);
+                    _fireEvent(customEvents._onConsent);
 
                 }else{
                     if(config.mode === 'opt-out'){

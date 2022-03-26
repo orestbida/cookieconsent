@@ -1,4 +1,4 @@
-import { state, config, cookieConfig, callbacks } from '../core/global';
+import { state, config, cookieConfig, _fireEvent, customEvents } from '../core/global';
 import { _log, _inArray, _uuidv4, _updateAcceptType, _getRemainingExpirationTimeMS, _getExpiresAfterDaysValue } from './general';
 import { _manageExistingScripts } from './scripts';
 
@@ -114,21 +114,18 @@ export const _autoclearCookies = (clearOnFirstConsent) => {
 };
 
 
-export const _saveCookiePreferences = (api) => {
+export const _saveCookiePreferences = () => {
 
     state._lastChangedCategoryNames = [];
 
     /**
      * Update array of changed categories
      */
-    state._acceptedCategories.forEach(acceptedCategory => {
-        /**
-         * If current array of accepted categories is different
-         * from the array of categories saved into the cookie => preferences were changed
-         */
-        if(_inArray(state._savedCookieContent.categories || [], acceptedCategory) === -1)
-            state._lastChangedCategoryNames.push(acceptedCategory);
-    });
+    state._lastChangedCategoryNames = state._acceptedCategories
+        .filter(x => !(state._savedCookieContent.categories || []).includes(x))
+        .concat((state._savedCookieContent.categories || [])
+            .filter(x => !state._acceptedCategories.includes(x))
+        );
 
     // Retrieve all toggle/checkbox values
     var categoryToggles = document.querySelectorAll('.c-tgl') || [];
@@ -203,18 +200,16 @@ export const _saveCookiePreferences = (api) => {
         if(config.autoClearCookies)
             _autoclearCookies(true);
 
-        if(typeof callbacks._onFirstConsent === 'function')
-            callbacks._onFirstConsent(api.getUserPreferences(), state._savedCookieContent);
 
-        if(typeof callbacks._onConsent === 'function')
-            callbacks._onConsent(state._savedCookieContent);
+        _fireEvent(customEvents._onFirstConsent);
+        _fireEvent(customEvents._onConsent);
 
         if(config.mode === 'opt-in') return;
     }
 
     // Fire _onChange only if preferences were changed
-    if(typeof callbacks._onChange === 'function' && state._lastChangedCategoryNames.length > 0)
-        callbacks._onChange(state._savedCookieContent, state._lastChangedCategoryNames);
+    if(state._lastChangedCategoryNames.length > 0)
+        _fireEvent(customEvents._onChange);
 
     /**
      * Reload page if needed

@@ -115,13 +115,6 @@ export const config = {
 };
 
 /**
- * Fix "window is undefined error"
- */
-Object.defineProperty(config.cookie, 'domain',{
-    get: () => window.location.hostname
-});
-
-/**
  * Pointers to callback functions,
  * avoid calling userConfig['<callback_name>']
  */
@@ -129,6 +122,33 @@ export const callbacks = {
     _onFirstConsent: null,
     _onConsent: null,
     _onChange: null
+};
+
+export const customEvents = {
+    _onFirstConsent: new Event('onFirstConsent'),
+    _onConsent: new Event('onConsent'),
+    _onChange: new Event('onChange')
+};
+
+/**
+ * Fire custom event
+ * @param {Event} event
+ */
+export const _fireEvent = (event) => {
+    window.dispatchEvent(event);
+
+    if(event === customEvents._onFirstConsent && isFunction(callbacks._onFirstConsent))
+        callbacks._onFirstConsent(state._savedCookieContent);
+
+    if(event === customEvents._onConsent && isFunction(callbacks._onConsent))
+        callbacks._onConsent(state._savedCookieContent);
+
+    if(event === customEvents._onChange && isFunction(callbacks._onChange))
+        callbacks._onChange(state._savedCookieContent, state._lastChangedCategoryNames);
+
+    function isFunction(fn){
+        return typeof fn === 'function';
+    }
 };
 
 /**

@@ -1,5 +1,9 @@
 import { api } from './core/api';
+import { setWindowData } from './core/config-init';
 
 export default {
-    init: () => api
+    init: () => {
+        setWindowData();
+        return api;
+    }
 };
