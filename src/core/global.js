@@ -124,6 +124,8 @@ export const callbacks = {
     _onChange: null
 };
 
+
+
 export const customEvents = {
     _onFirstConsent: new Event('onFirstConsent'),
     _onConsent: new Event('onConsent'),
@@ -174,6 +176,18 @@ export const dom = {
     /** @type {HTMLElement} */ _consentAcceptNecessaryBtn: null,
     /** @type {HTMLElement} */ _consentShowPreferencesBtn: null,
     /** @type {HTMLElement} */ _consentModalFooterLinksGroup: null,
+
+    /** @type {HTMLElement} */ _pm: null,
+    /** @type {HTMLElement} */ _pmHeader: null,
+    /** @type {HTMLElement} */ _pmTitle: null,
+    /** @type {HTMLElement} */ _pmCloseBtn: null,
+    /** @type {HTMLElement} */ _pmBody: null,
+    /** @type {HTMLElement} */ _pmNewBody: null,
+    /** @type {HTMLElement} */ _pmSections: null,
+    /** @type {HTMLElement} */ _pmFooter: null,
+    /** @type {HTMLElement} */ _pmAcceptAllBtn: null,
+    /** @type {HTMLElement} */ _pmAcceptNecessaryBtn: null,
+    /** @type {HTMLElement} */ _pmSavePreferencesBtn: null,
 
     /** @type {HTMLElement} */ _preferencesContainer: null,
     /** @type {HTMLElement} */ _preferencesInner: null,

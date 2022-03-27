@@ -49,8 +49,8 @@ export const _guiManager = (applyToModal) => {
     if(applyToModal === 0 && state._consentModalExists && consentModalOptions){
         // [TODO]
 
-        dom._consentModal.classList.add('cm--bar');
-        dom._consentModal.classList.add('cm--bottom-center');
+        dom._consentModal.classList.add('cm--box-wide');
+        dom._consentModal.classList.add('cm--middle-center');
         // _setLayout(
         //     dom._consentModal,
         //     ['box', 'bar', 'cloud'],
@@ -64,7 +64,7 @@ export const _guiManager = (applyToModal) => {
 
     if(applyToModal === 1 && preferencesModalOptions){
         _setLayout(
-            dom._preferencesContainer,
+            dom._pm,
             ['bar'],
             ['left', 'right'],
             ['zoom', 'slide'],

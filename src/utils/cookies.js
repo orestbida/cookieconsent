@@ -122,9 +122,9 @@ export const _saveCookiePreferences = () => {
      * Update array of changed categories
      */
     state._lastChangedCategoryNames = state._acceptedCategories
-        .filter(x => !(state._savedCookieContent.categories || []).includes(x))
+        .filter(x => !(state._savedCookieContent.categories || []).indexOf(x) !== -1)
         .concat((state._savedCookieContent.categories || [])
-            .filter(x => !state._acceptedCategories.includes(x))
+            .filter(x => !state._acceptedCategories.indexOf(x) !== -1)
         );
 
     // Retrieve all toggle/checkbox values

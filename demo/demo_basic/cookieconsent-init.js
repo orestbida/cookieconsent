@@ -65,6 +65,7 @@ cc.run({
                     acceptAllBtn: 'Accept all',
                     acceptNecessaryBtn: 'Reject all',
                     savePreferencesBtn: 'Save preferences',
+                    closeBtnLabel: 'Close',
                     sections: [
                         {
                             title: 'Cookie usage 📢',

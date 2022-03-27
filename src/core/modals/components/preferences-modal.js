@@ -1,14 +1,168 @@
+/* eslint-disable no-unreachable */
 import { state, dom } from '../../global';
 import { _createNode, _addClass, _setAttribute, _removeClass, _addEvent, _appendChild, _inArray, _getKeys, _hasClass } from '../../../utils/general';
 import { _guiManager } from '../../../utils/gui-manager';
 
 export const _createPreferencesModal = (api) => {
 
-    /** TODO */
-    if(state) return;
+    var modalData = state._currentTranslation['preferencesModal'];
 
-    var preferencesModalData = state._currentTranslation['preferencesModal'];
+    if(!modalData) return;
 
+    var titleData = modalData.title,
+        closeBtnLabelData = modalData.closeBtnLabel,
+        acceptAllBtnData = modalData.acceptAllBtn,
+        acceptNecessaryBtnData = modalData.acceptNecessaryBtn,
+        savePreferencesBtnData = modalData.savePreferencesBtn,
+        sectionsData = modalData.sections;
+
+    if(!dom._pmContainer){
+
+        // modal container
+        dom._pmContainer = _createNode('div');
+        dom._pmContainer.className = 'pm-container';
+
+        // preferences modal
+        dom._pm = _createNode('div');
+        dom._pm.className = 'pm';
+
+        // modal header
+        dom._pmHeader = _createNode('div');
+        dom._pmHeader.className = 'pm__header';
+
+        // modal title
+        dom._pmTitle = _createNode('div');
+        dom._pmTitle.className = 'pm__title';
+
+        dom._pmCloseBtn = _createNode('button');
+        dom._pmCloseBtn.className = 'pm__close-btn';
+
+        // modal body
+        dom._pmBody = _createNode('div');
+        dom._pmBody.className = 'pm__body';
+
+        // modal footer
+        dom._pmFooter = _createNode('div');
+        dom._pmFooter.className = 'pm__footer';
+
+        var _pmBtnContainer = _createNode('div');
+        _pmBtnContainer.className = 'pm__btns';
+
+        var _pmBtnGroup1 = _createNode('div');
+        var _pmBtnGroup2 = _createNode('div');
+        _pmBtnGroup1.className = _pmBtnGroup2.className = 'pm__btn-group';
+
+        _appendChild(dom._pmFooter, _pmBtnGroup1);
+
+        _appendChild(dom._pmHeader, dom._pmTitle);
+        _appendChild(dom._pmHeader, dom._pmCloseBtn);
+
+        _appendChild(dom._pm, dom._pmHeader);
+        _appendChild(dom._pm, dom._pmBody);
+        _appendChild(dom._pm, dom._pmFooter);
+
+        _appendChild(dom._pmContainer, dom._pm);
+        _appendChild(dom._ccMain, dom._pmContainer);
+    }else{
+        dom._pmNewBody = _createNode('div');
+        dom._pmNewBody.className = 'pm__body';
+    }
+
+    if(titleData){
+        dom._pmTitle.innerHTML = titleData;
+        closeBtnLabelData && _setAttribute(dom._pmCloseBtn, 'aria-label', closeBtnLabelData);
+    }
+
+    sectionsData.forEach(section => {
+        var sTitleData = section.title,
+            sDescriptionData = section.description,
+            sLinkedCategory = section.linkedCategory,
+            sCurrentCategoryObject = sLinkedCategory && state._allDefinedCategories[sLinkedCategory],
+            sCookieTableData = section.cookieTable,
+            sCookieTableHeaders = cookieTableData && cookieTableData.headers,
+            sCookieTableBody = cookieTableData && cookieTableData.body,
+            sCreateCookieTable = cookieTableBody && cookieTableBody.length > 0,
+            sIsExpandable = !!sCurrentCategoryObject || createCookieTable;
+
+        var s = _createNode('div');
+        s.className = 'pm__section';
+
+        if(sTitleData){
+
+            var sTitleContainer = _createNode('div');
+            var sTitle = sIsExpandable ? _createNode('button') : _createNode('div');
+
+            sTitleContainer.className = 'pm__section-title-wrapper';
+            sTitle.className = 'pm__section-title';
+
+            if(sIsExpandable){
+                sTitleContainer.className += ' has-btn';
+                s.className += '--expandable';
+            }
+
+            sTitle.innerHTML = sTitleData;
+
+            _appendChild(sTitleContainer, sTitle);
+            _appendChild(s, sTitleContainer);
+        }
+
+        if(sDescriptionData){
+
+            var sDescContainer = _createNode('div');
+            var sDesc = _createNode('div');
+
+            sDescContainer.className = 'pm__section-desc-container';
+            sDesc.className = 'pm__section-desc';
+
+            sDesc.innerHTML = sDescriptionData;
+
+            _appendChild(sDescContainer, sDesc);
+            _appendChild(s, sDescContainer);
+        }
+
+        _appendChild(dom._pmBody, s);
+    });
+
+    // acceptAllBtnData = modalData.acceptAllBtn,
+    // acceptNecessaryBtnData = modalData.acceptNecessaryBtn,
+    // savePreferencesBtnData
+
+    if(acceptAllBtnData || acceptNecessaryBtnData){
+
+        if(acceptAllBtnData){
+            if(!dom._pmAcceptAllBtn){
+                dom._pmAcceptAllBtn = _createNode('button');
+                dom._pmAcceptAllBtn.className = 'pm__btn';
+                _appendChild(_pmBtnGroup1, dom._pmAcceptAllBtn);
+            }
+
+            dom._pmAcceptAllBtn.innerHTML = acceptAllBtnData;
+        }
+
+        if(acceptNecessaryBtnData){
+            if(!dom._pmAcceptNecessaryBtn){
+                dom._pmAcceptNecessaryBtn = _createNode('button');
+                dom._pmAcceptNecessaryBtn.className = 'pm__btn';
+                _appendChild(_pmBtnGroup1, dom._pmAcceptNecessaryBtn);
+            }
+
+            dom._pmAcceptNecessaryBtn.innerHTML = acceptNecessaryBtnData;
+        }
+    }
+
+    if(savePreferencesBtnData){
+        if(!dom._pmSavePreferencesBtn){
+            dom._pmSavePreferencesBtn = _createNode('button');
+            dom._pmSavePreferencesBtn.className = 'pm__btn pm__btn-preferences';
+            _appendChild(_pmBtnGroup2, dom._pmSavePreferencesBtn);
+            _appendChild(dom._pmFooter, _pmBtnGroup2);
+        }
+
+        dom._pmSavePreferencesBtn.innerHTML = savePreferencesBtnData;
+    }
+
+
+    return;
     /**
      * Create all _consentModal elements
      */
@@ -69,16 +223,17 @@ export const _createPreferencesModal = (api) => {
     }
 
     // Add label to close button
-    _setAttribute(dom._preferencesCloseBtn, 'aria-label', preferencesModalData['closeIconLabel'] || '');
+    _setAttribute(dom._preferencesCloseBtn, 'aria-label', modalData['closeIconLabel'] || '');
 
     // Set preferences modal title
-    dom._preferencesTitle.innerHTML = preferencesModalData['title'];
+    dom._preferencesTitle.innerHTML = modalData['title'];
 
-    var allSections = preferencesModalData['sections'];
+    var allSections = modalData['sections'];
 
     // Create preferences modal content (_sectionsContainer)
     for(var i=0; i<allSections.length; ++i){
 
+        // eslint-disable-next-line no-redeclare
         var titleData = allSections[i]['title'],
             descriptionTextData = allSections[i]['description'],
             linkedCategory = allSections[i]['linkedCategory'],
@@ -332,9 +487,9 @@ export const _createPreferencesModal = (api) => {
         });
     }
 
-    _preferencesacceptAllBtn.innerHTML = preferencesModalData['acceptAllBtn'];
+    _preferencesacceptAllBtn.innerHTML = modalData['acceptAllBtn'];
 
-    var acceptNecessaryBtnText = preferencesModalData['acceptNecessaryBtn'];
+    var acceptNecessaryBtnText = modalData['acceptNecessaryBtn'];
 
     // Add third [optional] reject all button if provided
     if(acceptNecessaryBtnText){
@@ -376,7 +531,7 @@ export const _createPreferencesModal = (api) => {
         });
     }
 
-    _preferencesSaveBtn.innerHTML = preferencesModalData['savePreferencesBtn'];
+    _preferencesSaveBtn.innerHTML = modalData['savePreferencesBtn'];
 
     if(dom._newSectionsContainer) {
         // replace entire existing cookie category _sectionsContainer with the new cookie categories new _sectionsContainer (in a different language)
