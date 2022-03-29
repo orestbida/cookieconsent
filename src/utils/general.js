@@ -91,16 +91,16 @@ export const _getKeys = obj => {
 /**
  * Append class to the specified dom element
  * @param {HTMLElement} elem
- * @param {string} classname
+ * @param {string} className
  */
-export const _addClass = (elem, classname) => {
-    elem.classList.add(classname);
+export const _addClass = (elem, className) => {
+    elem.classList.add(className);
 };
 
 /**
  * Remove specified class from dom element
  * @param {HTMLElement} elem
- * @param {string} classname
+ * @param {string} className
  */
 export const _removeClass = (el, className) => {
     el.classList.remove(className);
@@ -164,7 +164,7 @@ export const _xhr = (params, callback) => {
  * @returns {number}
  */
 export const _getExpiresAfterDaysValue = () => {
-    var expiresAfterDays = cookieConfig['expiresAfterDays'];
+    var expiresAfterDays = cookieConfig.expiresAfterDays;
     return typeof expiresAfterDays === 'function' ? expiresAfterDays(state._acceptType) : expiresAfterDays;
 };
 
@@ -196,6 +196,8 @@ export const _updateAcceptType = () => {
 
 /**
  * Add an onClick listeners to all html elements with data-cc attribute
+ * @param {HTMLElement} [elem]
+ * @param {import("../core/global").Api} api
  */
 export const _addDataButtonListeners = (elem, api) => {
 
@@ -274,6 +276,7 @@ export const _getCurrentCategoriesState = () => {
 /**
  * Trap focus inside modal and focus the first
  * focusable element of current active modal
+ * @param {import("../core/global").Api} api
  */
 export const _handleFocusTrap = (api) => {
     var tabbedOutsideDiv = false;

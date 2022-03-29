@@ -50,13 +50,17 @@ export const _autoclearCookies = (clearOnFirstConsent) => {
         );
     });
 
-    // For each category that was just changed (enabled/disabled)
+    // For each category that is not readOnly
     for(var i=0; i<categoriesToCheck.length; i++){
 
         var currentCategoryName = categoriesToCheck[i],
+
+            /**
+             * @type {import("../core/global").Category}
+             */
             currentCategoryObject = state._allDefinedCategories[currentCategoryName],
-            currentCategoryAutoClear = currentCategoryObject['autoClear'],
-            currentAutoClearCookies = currentCategoryAutoClear && currentCategoryAutoClear['cookies'] || [],
+            currentCategoryAutoClear = currentCategoryObject.autoClear,
+            currentAutoClearCookies = currentCategoryAutoClear && currentCategoryAutoClear.cookies || [],
 
             categoryWasJustChanged = _inArray(state._lastChangedCategoryNames, currentCategoryName) > -1,
             categoryIsDisabled = _inArray(state._acceptedCategories, currentCategoryName) === -1,
@@ -68,7 +72,7 @@ export const _autoclearCookies = (clearOnFirstConsent) => {
             var cookiesToClear = currentAutoClearCookies.length;
 
             // check if page needs to be reloaded after autoClear (if category was just disabled)
-            if(currentCategoryAutoClear['_reloadPage'] === true && categoryWasJustDisabled)
+            if(currentCategoryAutoClear.reloadPage === true && categoryWasJustDisabled)
                 state._reloadPage = true;
 
             // delete each cookie in the cookies array
@@ -80,13 +84,10 @@ export const _autoclearCookies = (clearOnFirstConsent) => {
                  */
                 var foundCookies = [];
 
-                /**
-                 * @type {string|RegExp}
-                 */
-                var currCookieName = currentAutoClearCookies[j]['name'];
+                var currCookieName = currentAutoClearCookies[j].name;
                 var isRegex = currCookieName && typeof currCookieName !== 'string';
-                var currCookieDomain = currentAutoClearCookies[j]['domain'] || null;
-                var currCookiePath = currentAutoClearCookies[j]['path'] || false;
+                var currCookieDomain = currentAutoClearCookies[j].domain || null;
+                var currCookiePath = currentAutoClearCookies[j].path || false;
 
                 // set domain to the specified domain
                 currCookieDomain && ( domains = [currCookieDomain, '.'+currCookieDomain]);
@@ -131,7 +132,6 @@ export const _saveCookiePreferences = () => {
     var categoryToggles = document.querySelectorAll('.c-tgl') || [];
 
     // If there are opt in/out toggles ...
-    // [TODO] this can rewritten in a better (clearer) way
     if(categoryToggles.length > 0){
 
         for(var i=0; i<categoryToggles.length; i++){
@@ -149,9 +149,6 @@ export const _saveCookiePreferences = () => {
         }
     }
 
-    /**
-     * Clear cookies when preferences/preferences change
-     */
     if(!state._invalidConsent && config.autoClearCookies && state._lastChangedCategoryNames.length > 0)
         _autoclearCookies();
 
@@ -200,7 +197,6 @@ export const _saveCookiePreferences = () => {
         if(config.autoClearCookies)
             _autoclearCookies(true);
 
-
         _fireEvent(customEvents._onFirstConsent);
         _fireEvent(customEvents._onConsent);
 
@@ -222,7 +218,7 @@ export const _saveCookiePreferences = () => {
  * Set cookie, by specifying name and value
  * @param {string} name
  * @param {string} value
- * @param {number} [useRemainingExpirationTime]
+ * @param {boolean} [useRemainingExpirationTime]
  */
 export const _setCookie = (name, value, useRemainingExpirationTime) => {
 

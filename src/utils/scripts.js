@@ -14,7 +14,7 @@ export const _manageExistingScripts = (mustEnableCategories) => {
     if(!config.manageScriptTags) return;
 
     var scripts = document.querySelectorAll('script[' + scriptTagSelector + ']');
-    var _acceptedCategories = mustEnableCategories || state._savedCookieContent['categories'] || [];
+    var _acceptedCategories = mustEnableCategories || state._savedCookieContent.categories || [];
 
     /**
      * Load scripts (sequentially), using a recursive function

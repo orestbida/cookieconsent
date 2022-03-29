@@ -1,7 +1,7 @@
 /**
  * Cookie's structure inside autoClear object
  * @typedef {Object} Cookie
- * @property {string|RegExp} name
+ * @property {string | RegExp} name
  * @property {string} [domain]
  * @property {string} [path]
  */
@@ -9,7 +9,7 @@
 /**
  * autoClear's object structure
  * @typedef {Object} AutoClear
- * @property {Cookie} cookies
+ * @property {Cookie[]} cookies
  * @property {boolean} [reloadPage]
  */
 
@@ -25,15 +25,51 @@
  * @typedef {object} CookieConfig
  * @property {string} [name]
  * @property {string | Function} [expiresAfterDays]
- * @property {string | Function} [domain]
+ * @property {string} [domain]
  * @property {string} [path]
  * @property {string} [sameSite]
  */
 
+
+/**
+ * @typedef {object} ConsentModal
+ * @property {string} [title]
+ * @property {string} [description]
+ * @property {string} [acceptAllBtn]
+ * @property {string} [acceptNecessaryBtn]
+ * @property {string} [showPreferencesBtn]
+ * @property {string} [revisionMessage]
+ * @property {string} [footer] html string
+ */
+
+/**
+ * @typedef {object} CookieTable
+ * @property {Object.<string, string>} headers
+ * @property {Object.<string, string>} body
+ */
+
+/**
+ * @typedef {object} Section
+ * @property {string} [title]
+ * @property {string} [description]
+ * @property {string} [linkedCategory]
+ * @property {CookieTable} [cookieTable]
+ */
+
+/**
+ * @typedef {object} PreferencesModal
+ * @property {string} [title]
+ * @property {string} [acceptAllBtn]
+ * @property {string} [acceptNecessaryBtn]
+ * @property {string} [savePreferencesBtn]
+ * @property {string} [closeIconLabel]
+ * @property {Section[]} [sections]
+ */
+
 /**
  * @typedef {object} Translation
- * @property {{}} consentModal Default language
- * @property {{}} preferencesModal Language detection strategy
+ * @property {ConsentModal} consentModal Default language
+ * @property {PreferencesModal} preferencesModal Language detection strategy
  */
 
 /**
@@ -55,11 +91,18 @@
  * @property {Function} [onFirstConsent]
  * @property {Function} [onConsent]
  * @property {Function} [onChange]
- * @property {cookieConfig} [cookie]
+ * @property {CookieConfig} [cookie]
  * @property {Object.<string, Category>} [categories]
  * @property {boolean} [hideFromBots]
  * @property {{}} [guiOptions]
  * @property {Language} language
+ */
+
+/**
+ * @typedef {object} UserPreferences
+ * @property {string} acceptType
+ * @property {string[]} acceptedCategories
+ * @property {string[]} rejectedCategories
  */
 
 /**
@@ -87,8 +130,9 @@
  * @property {string[]} categories Array of accepted categories
  * @property {number} revision Current revision number
  * @property {string} consentId Unique id
- * @property {object} consentTimestamp First consent timestamp
- * @property {object} lastConsentTimestamp Last update timestamp
+ * @property {any} data Unique id
+ * @property {string} consentTimestamp First consent timestamp
+ * @property {string} lastConsentTimestamp Last update timestamp
  */
 
 /**
@@ -123,8 +167,6 @@ export const callbacks = {
     _onConsent: null,
     _onChange: null
 };
-
-
 
 export const customEvents = {
     _onFirstConsent: new Event('onFirstConsent'),
@@ -201,10 +243,8 @@ export const dom = {
     /** @type {HTMLElement} */ _preferencesacceptNecessaryBtn: null
 };
 
-/**
- * @type {CookieConfig}
- */
 export const cookieConfig = config.cookie;
+
 
 export const state = {
 
@@ -215,6 +255,10 @@ export const state = {
 
     _currentLanguageCode: '',
     _allTranslations: [],
+
+    /**
+     * @type {Translation}
+     */
     _currentTranslation: null,
 
     /**

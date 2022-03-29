@@ -44,13 +44,17 @@ import { _setConfig } from './config-init';
 export const api = {
 
     /**
-     * Accept cookieconsent function API
+     * Accept API
      * @param {string[]|string} _categories - Categories to accept
      * @param {string[]} [_exclusions] - Excluded categories [optional]
      */
     accept : (_categories, _exclusions) => {
         var categories = _categories || undefined;
         var exclusions = _exclusions || [];
+
+        /**
+         * @type {string[]}
+         */
         var categoriesToAccept = [];
 
         /**
@@ -114,7 +118,7 @@ export const api = {
     },
 
     /**
-     * Returns true if cookie was found and has valid value (not empty string)
+     * Returns true if cookie was found and has valid value (not an empty string)
      * @param {string} cookieName
      * @returns {boolean}
      */
@@ -123,10 +127,10 @@ export const api = {
     },
 
     /**
-     * API function to easily erase cookies
+     * Erase cookies API
      * @param {(string|string[])} cookies
-     * @param {string} [path] - optional
-     * @param {string} [domain] - optional
+     * @param {string} [path]
+     * @param {string} [domain]
      */
     eraseCookies: (cookies, path, domain) => {
         var allCookies = [];
@@ -149,9 +153,9 @@ export const api = {
     },
 
     /**
-     * Update/change modals language
+     * Update/change modal's language
      * @param {string} lang new language
-     * @param {boolean} [force] update language fields forcefully
+     * @param {boolean} [forceUpdate] update language fields forcefully
      * @returns {boolean}
      */
     updateLanguage: (newLanguage, forceUpdate) => {
@@ -187,15 +191,8 @@ export const api = {
     },
 
     /**
-     * @typedef {object} userPreferences
-     * @property {string} acceptType
-     * @property {string[]} acceptedCategories
-     * @property {string[]} rejectedCategories
-     */
-
-    /**
      * Retrieve current user preferences (summary)
-     * @returns {userPreferences}
+     * @returns {import("./global").UserPreferences}
      */
     getUserPreferences: () => {
         var currentCategoriesState = !state._invalidConsent && _getCurrentCategoriesState();
@@ -215,7 +212,7 @@ export const api = {
     /**
      * Dynamically load script (append to head)
      * @param {string} src
-     * @param {scriptLoaded} callback
+     * @param {scriptLoaded} [callback]
      * @param {object[]} [attrs] Custom attributes
      */
     loadScript: (src, callback, attrs) => {
@@ -260,10 +257,9 @@ export const api = {
      */
     setCookieData: (props) => {
 
-        var newData = props['value'],
-            mode = props['mode'],
+        var newData = props.value,
+            mode = props.mode,
             set = false;
-
 
         /**
          * If mode is 'update':
@@ -292,7 +288,7 @@ export const api = {
         }
 
         if(set){
-            state._savedCookieContent['data'] = state._cookieData;
+            state._savedCookieContent.data = state._cookieData;
             _setCookie(cookieConfig.name, JSON.stringify(state._savedCookieContent), true);
         }
 
@@ -407,7 +403,7 @@ export const api = {
     },
 
     /**
-     * Returns true if cookie category is accepted by the user
+     * Returns true if cookie category is accepted
      * @param {string} category
      * @returns {boolean}
      */
@@ -458,7 +454,8 @@ export const api = {
     },
 
     /**
-     * "Init" method. Will run once and only if modals do not exist
+     * Will run once and only if modals do not exist.
+     * @param {import("./global").UserConfig} conf
      */
     run: (conf) => {
 
@@ -474,25 +471,25 @@ export const api = {
             state._savedCookieContent = JSON.parse(_getCookie(cookieConfig.name, 'one', true) || '{}');
 
             // Retrieve "_consentId"
-            state._consentId = state._savedCookieContent['consentId'];
+            state._consentId = state._savedCookieContent.consentId;
 
             // If "_consentId" is present => assume that consent was previously given
             var cookieConsentAccepted = state._consentId !== undefined;
 
             // Retrieve "_consentTimestamp"
-            state._consentTimestamp = state._savedCookieContent['consentTimestamp'];
+            state._consentTimestamp = state._savedCookieContent.consentTimestamp;
             state._consentTimestamp && (state._consentTimestamp = new Date(state._consentTimestamp));
 
             // Retrieve "_lastConsentTimestamp"
-            state._lastConsentTimestamp = state._savedCookieContent['lastConsentTimestamp'];
+            state._lastConsentTimestamp = state._savedCookieContent.lastConsentTimestamp;
             state._lastConsentTimestamp && (state._lastConsentTimestamp = new Date(state._lastConsentTimestamp));
 
             // Retrieve "data"
-            var dataTemp = state._savedCookieContent['data'];
+            var dataTemp = state._savedCookieContent.data;
             state._cookieData = typeof dataTemp !== 'undefined' ? dataTemp : null;
 
             // If revision is enabled and current value !== saved value inside the cookie => revision is not valid
-            if(state._revisionEnabled && cookieConsentAccepted && state._savedCookieContent['revision'] !== config.revision)
+            if(state._revisionEnabled && cookieConsentAccepted && state._savedCookieContent.revision !== config.revision)
                 state._validRevision = false;
 
             // If consent is not valid => create consent modal

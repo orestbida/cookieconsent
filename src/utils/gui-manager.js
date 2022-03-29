@@ -3,7 +3,7 @@ import { _inArray, _addClass } from './general';
 
 /**
  * Manage each modal's layout
- * @param {Object} guiOptions
+ * @param {number} applyToModal 0: consentModal, 1: preferencesModal
  */
 export const _guiManager = (applyToModal) => {
 

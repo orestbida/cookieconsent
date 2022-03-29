@@ -35,7 +35,7 @@ export const _getBrowserLanguageCode = () => {
  * Resolve which language should be used.
  */
 export const _resolveCurrentLanguageCode = function () {
-    var autoDetect = state._userConfig['language']['autoDetect'];
+    var autoDetect = state._userConfig.language.autoDetect;
 
     if(autoDetect){
         _log('CookieConsent [LANG]: autoDetect strategy: \'' + autoDetect + '\'');

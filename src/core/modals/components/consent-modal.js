@@ -3,20 +3,23 @@ import { _log, _createNode, _addClass, _setAttribute, _appendChild, _addEvent } 
 import { _guiManager } from '../../../utils/gui-manager';
 
 /**
- * Create consent modal and append it to main div
+ * Create consent modal and append it to "cc-main" el.
  * @param {import("../../global").Api} api
  */
 export const _createConsentModal = (api) => {
 
-    if(state._userConfig['disablePageInteraction'] === true)
+    if(state._userConfig.disablePageInteraction === true)
         _addClass(dom._htmlDom, 'force--consent');
 
-    var consentModalData = state._currentTranslation['consentModal'];
+    /**
+     * @type {import("../../global").ConsentModal}
+     */
+    var consentModalData = state._currentTranslation.consentModal;
 
-    var acceptAllBtnData = consentModalData['acceptAllBtn'],   // accept current selection
-        acceptNecessaryBtnData = consentModalData['acceptNecessaryBtn'],
-        showPreferencesBtnData = consentModalData['showPreferencesBtn'],
-        footerData = consentModalData['footer'];
+    var acceptAllBtnData = consentModalData.acceptAllBtn,
+        acceptNecessaryBtnData = consentModalData.acceptNecessaryBtn,
+        showPreferencesBtnData = consentModalData.showPreferencesBtn,
+        footerData = consentModalData.footer;
 
     // Create modal if it doesn't exist
     if(!dom._cmContainer){
@@ -55,10 +58,8 @@ export const _createConsentModal = (api) => {
         _appendChild(dom._ccMain, dom._cmContainer);
     }
 
-    // Use insertAdjacentHTML instead of innerHTML
-    var consentModalTitle_value = consentModalData['title'];
+    var consentModalTitle_value = consentModalData.title;
 
-    // Add title (if valid)
     if(consentModalTitle_value){
 
         if(!dom._consentModalTitle){
@@ -72,7 +73,7 @@ export const _createConsentModal = (api) => {
         dom._consentModalTitle.innerHTML = consentModalTitle_value;
     }
 
-    var description = consentModalData['description'];
+    var description = consentModalData.description;
 
     if(description){
         if(state._revisionEnabled){
@@ -80,7 +81,7 @@ export const _createConsentModal = (api) => {
                 '{{revisionMessage}}',
                 state._validRevision
                     ? ''
-                    : consentModalData['revisionMessage'] || ''
+                    : consentModalData.revisionMessage || ''
             );
         }
 
@@ -90,11 +91,9 @@ export const _createConsentModal = (api) => {
             _appendChild(dom._consentModalTexts, dom._consentModalDescription);
         }
 
-        // Set description content
         dom._consentModalDescription.innerHTML = description;
     }
 
-    // Add primary button if not falsy
     if(acceptAllBtnData){
 
         if(!dom._consentAcceptAllBtn){
@@ -111,7 +110,6 @@ export const _createConsentModal = (api) => {
         dom._consentAcceptAllBtn.innerHTML = acceptAllBtnData;
     }
 
-    // Add secondary button if not falsy
     if(acceptNecessaryBtnData){
 
         if(!dom._consentAcceptNecessaryBtn){
