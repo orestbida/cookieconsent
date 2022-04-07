@@ -3,6 +3,8 @@ var cc = CookieConsent.init();
 
 // run plugin with config object
 cc.run({
+    disablePageInteraction: true,
+
     cookie: {
         name: 'cc_cookie_demo1',
     },
@@ -55,20 +57,21 @@ cc.run({
             en: {
                 consentModal: {
                     title: 'Hello traveller, it\'s cookie time!',
-                    description: 'Our website uses essential cookies to ensure its proper operation and tracking cookies to understand how you interact with it. The latter will be set only after consent. <a href="#privacy-policy" class="cc-link">Privacy policy</a>',
-                    acceptAllBtn: 'Accept',
-                    acceptNecessaryBtn: 'Reject',
-                    showPreferencesBtn: 'Manage preferences'
+                    description: 'Our website uses tracking cookies to understand how you interact with it. The tracking will be enabled only if you accept explicitly. <a href="#privacy-policy" data-cc="show-preferences" class="cc-link">Manage preferences</a>',
+                    acceptAllBtn: 'Accept all',
+                    acceptNecessaryBtn: 'Reject all',
+                    showPreferencesBtn: 'Manage preferences',
+                    footer: '<span>Privacy Policy</span><span>Impressum</span>'
                 },
                 preferencesModal: {
-                    title: 'Demo preferences',
+                    title: 'Cookie preferences',
                     acceptAllBtn: 'Accept all',
                     acceptNecessaryBtn: 'Reject all',
                     savePreferencesBtn: 'Save preferences',
-                    closeBtnLabel: 'Close',
+                    closeIconLabel: 'Close',
                     sections: [
                         {
-                            title: 'Cookie usage 📢',
+                            title: 'Cookie usage disclaimer',
                             description: 'I use cookies to ensure the basic functionalities of the website and to enhance your online experience. You can choose for each category to opt-in/out whenever you want. For more details relative to cookies and other sensitive data, please read the full <a href="#" class="cc-link">privacy policy</a>.'
                         }, {
                             title: 'Strictly necessary cookies',
@@ -77,7 +80,29 @@ cc.run({
                         }, {
                             title: 'Performance and Analytics cookies',
                             description: 'These cookies allow the website to remember the choices you have made in the past',
-                            linkedCategory: 'analytics'
+                            linkedCategory: 'analytics',
+                            cookieTable: {
+                                headers: {
+                                    name: 'Name',
+                                    domain: 'Service',
+                                    description: 'Description',
+                                    expiration: 'Expiration'
+                                },
+                                body: [
+                                    {
+                                        name: '_ga',
+                                        domain: 'Google Analytics',
+                                        description: 'Cookie set by <a href="#das">Google Analytics</a>.',
+                                        expiration: 'Expires after 12 days'
+                                    },
+                                    {
+                                        name: '_gid',
+                                        domain: 'Google Analytics',
+                                        description: 'Cookie set by <a href="#das">Google Analytics</a>',
+                                        expiration: 'Session'
+                                    }
+                                ]
+                            }
                         }, {
                             title: 'More information',
                             description: 'For any queries in relation to my policy on cookies and your choices, please <a class="cc-link" href="#yourdomain.com">contact me</a>.',

@@ -42,12 +42,15 @@
         console.log('analytics enabled!');
     </script>
 
-    <!-- <script type="text/plain" data-cookiecategory="necessary">
-        console.log('necessary enabled!');
-        var cookie = cc.getCookie();
-        document.getElementById('consent-id').innerText = cookie.consentId;
-        document.getElementById('consent-timestamp').innerText = new Date(cookie.consentTimestamp).toLocaleString();
-        document.getElementById('last-consent-timestamp').innerText = new Date(cookie.lastConsentTimestamp).toLocaleString();
-    </script> -->
+    <script>
+        function updateFields(){
+            var cookie = cc.getCookie();
+            document.getElementById('consent-id').innerText = cookie.consentId;
+            document.getElementById('consent-timestamp').innerText = new Date(cookie.consentTimestamp).toLocaleString();
+            document.getElementById('last-consent-timestamp').innerText = new Date(cookie.lastConsentTimestamp).toLocaleString();
+        }
+        window.addEventListener('onChange', updateFields);
+        window.addEventListener('onConsent', updateFields);
+    </script>
 </body>
 </html>

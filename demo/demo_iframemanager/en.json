@@ -44,7 +44,7 @@
             },
             {
                 "title": "Your consent details",
-                "description": "</p><p>consent id: <span id=\"consent-id\">-</span><p>consent date: <span id=\"consent-timestamp\">-</span></p><p>last consent: <span id=\"last-consent-timestamp\">-</span></p>"
+                "description": "</p><p>consent id: <span id=\"consent-id\">-</span><p>consent date: <span id=\"consent-timestamp\">-</span></p><p>last update: <span id=\"last-consent-timestamp\">-</span></p>"
             },
             {
                 "title": "More information",

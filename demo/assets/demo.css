@@ -84,3 +84,16 @@ a:active{
     padding: 1em;
     border-radius: 0.5em;
 }
+
+#cc-main p{
+    display: flex;
+    margin-bottom: 1px!important;
+}
+
+#cc-main p>span{
+    background: rgba(143, 174, 189, .22);
+    border-radius: 5px;
+    padding: 1px 6px;
+    font-size: .95em;
+    margin-left: 0.5em;
+}
