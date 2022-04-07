@@ -1,13 +1,17 @@
 /**
  * Global styles/variables
  */
+
+$translate-y: 40px;
+
 #cc-main {
 
     --cc-font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
-    --cc-translate-y: 40px;
-    --cc-modal-border-radius: .5em;
+    --cc-modal-border-radius: .4em;
     --cc-btn-border-radius: .35em;
+    --cc-transition-easing: cubic-bezier(0.23, 1, 0.32, 1);
 
+    color: var(--cc-primary-color);
     font-family: var(--cc-font-family);
     font-size: 16px;
     font-weight: 400;
@@ -15,9 +19,6 @@
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
     position: relative;
-    color: var(--cc-primary-color);
-    position: fixed;
-	z-index: 2147483647;
 
     b,
     em,

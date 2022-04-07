@@ -1,9 +1,9 @@
+$toggle-knob-height: 1.4em;
+
 #cc-main{
 
-    --cc-pm-max-width: 44em;
     --cc-pm-max-height: 37.5em;
     --cc-pm-toggle-border-radius: 4em;
-    --cc-pm-toggle-knob-height: 1.4em;
 
     /* Dark overlay */
     .pm-wrapper::before{
@@ -26,7 +26,7 @@
         margin: 0 auto;
         top: 50%;
         transform: translateY(-50%);
-        max-width: var(--cc-pm-max-width);
+        max-width: 44em;
         width: 100%;
         width: unset;
         display: flex;
@@ -212,7 +212,7 @@
     .toggle__label,
     .toggle__icon{
         width: 3.4em;
-        height: var(--cc-pm-toggle-knob-height);
+        height: $toggle-knob-height;
         border-radius: var(--cc-pm-toggle-border-radius);
     }
 
@@ -275,8 +275,8 @@
             display: block;
             left: 0;
             top: 0;
-            width: var(--cc-pm-toggle-knob-height);
-            height: var(--cc-pm-toggle-knob-height);
+            width: $toggle-knob-height;
+            height: $toggle-knob-height;
             border: none;
             background: var(--cc-toggle-knob-bg);
             box-shadow: 0 1px 2px rgba(24, 32, 3, .36);
@@ -449,6 +449,7 @@
         border: 1px solid var(--cc-btn-primary-border-color);
         text-align: center;
         flex: auto;
+        min-width: 120px;
         font-weight: 600;
         font-size: 0.82em;
         padding: 0.85em 1.5em;
@@ -483,7 +484,7 @@
         .pm-wrapper::before{
             transition: opacity .3s ease,
                     visibility .3s ease,
-                    transform .6s cubic-bezier(0.23, 1, 0.32, 1);
+                    transform .5s var(--cc-transition-easing);
         }
     }
 }
@@ -492,7 +493,7 @@
 #cc-main{
     .pm{
         transform: translateY(-45%) scale(.98); //IE11 Fallback
-        transform: translateY(calc(-50% + var(--cc-translate-y))) scale(.98);
+        transform: translateY(calc(-50% + $translate-y)) scale(.98);
     }
 }
 
@@ -524,7 +525,7 @@
             bottom: 0;
             max-height: 100%;
             height: auto;
-            transform: translateY(var(--cc-translate-y)) scale(0.98);
+            transform: translateY($translate-y) scale(0.98);
             border-radius: 0;
         }
 
