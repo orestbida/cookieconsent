@@ -9,7 +9,7 @@ import { _guiManager } from '../../../utils/gui-manager';
 export const _createConsentModal = (api) => {
 
     if(state._userConfig.disablePageInteraction === true)
-        _addClass(dom._htmlDom, 'force--consent');
+        _addClass(dom._htmlDom, 'disable--interaction');
 
     /**
      * @type {import("../../global").ConsentModal}
@@ -30,7 +30,7 @@ export const _createConsentModal = (api) => {
         dom._consentModalTexts = _createNode('div');
         dom._consentModalBtns = _createNode('div');
 
-        dom._cmContainer.className = 'cm-container';
+        dom._cmContainer.className = 'cm-wrapper';
         dom._consentModal.className = 'cm';
         dom._consentModalBody.className = 'cm__body';
         dom._consentModalTexts.className = 'cm__texts';
@@ -129,7 +129,7 @@ export const _createConsentModal = (api) => {
     if(showPreferencesBtnData){
         if(!dom._consentShowPreferencesBtn){
             dom._consentShowPreferencesBtn = _createNode('button');
-            dom._consentShowPreferencesBtn.className = 'cm__btn cm__btn-preferences';
+            dom._consentShowPreferencesBtn.className = 'cm__btn cm__btn--secondary';
 
             _addEvent(dom._consentShowPreferencesBtn, 'click', () => {
                 api.showPreferences();
@@ -141,22 +141,22 @@ export const _createConsentModal = (api) => {
 
     // [TODO] swapButtons option
 
-    if(!dom._consentModalBtnGroup){
-        dom._consentModalBtnGroup = _createNode('div');
-        dom._consentModalBtnGroup.className = 'cm__btn-group';
-
-        acceptAllBtnData && _appendChild(dom._consentModalBtnGroup, dom._consentAcceptAllBtn);
-        acceptNecessaryBtnData && _appendChild(dom._consentModalBtnGroup, dom._consentAcceptNecessaryBtn);
-
-        (acceptAllBtnData || acceptNecessaryBtnData ) && _appendChild(dom._consentModalBody, dom._consentModalBtnGroup);
-        _appendChild(dom._consentModalBtns, dom._consentModalBtnGroup);
-    }
-
     if(!dom._consentModalBtnGroup2 && showPreferencesBtnData){
         dom._consentModalBtnGroup2 = _createNode('div');
         dom._consentModalBtnGroup2.className = 'cm__btn-group';
         _appendChild(dom._consentModalBtnGroup2, dom._consentShowPreferencesBtn);
         _appendChild(dom._consentModalBtns, dom._consentModalBtnGroup2);
+    }
+
+    if(!dom._consentModalBtnGroup){
+        dom._consentModalBtnGroup = _createNode('div');
+        dom._consentModalBtnGroup.className = 'cm__btn-group';
+
+        acceptNecessaryBtnData && _appendChild(dom._consentModalBtnGroup, dom._consentAcceptNecessaryBtn);
+        acceptAllBtnData && _appendChild(dom._consentModalBtnGroup, dom._consentAcceptAllBtn);
+
+        (acceptAllBtnData || acceptNecessaryBtnData ) && _appendChild(dom._consentModalBody, dom._consentModalBtnGroup);
+        _appendChild(dom._consentModalBtns, dom._consentModalBtnGroup);
     }
 
     if(footerData){
