@@ -70,6 +70,8 @@ function processStylesIndividually (){
                     extract: true,
                     plugins: [
                         require('autoprefixer'),
+                        require('postcss-combine-duplicated-selectors'),
+                        isIE11 && require('postcss-css-variables'),
                         productionMode && require('cssnano')({
                             preset: ["default", {
                                 discardComments: {

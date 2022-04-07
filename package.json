@@ -20,6 +20,8 @@
         "@rollup/plugin-eslint": "^8.0.1",
         "autoprefixer": "^10.4.4",
         "cssnano": "^5.1.4",
+        "postcss-combine-duplicated-selectors": "^10.0.3",
+        "postcss-css-variables": "^0.18.0",
         "rollup": "^2.70.1",
         "rollup-plugin-postcss": "^4.0.2",
         "rollup-plugin-terser": "^7.0.2",
