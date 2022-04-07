@@ -5,12 +5,12 @@ import {
     _addClass,
     _removeClass,
     _log,
-    _inArray,
     _handleFocusTrap,
     _getCurrentCategoriesState,
     _addDataButtonListeners,
     _getModalFocusableData,
-    _getAcceptType
+    _getAcceptType,
+    _elContains
 } from '../utils/general';
 
 import { _manageExistingScripts } from '../utils/scripts';
@@ -62,7 +62,7 @@ export const api = {
          * @returns {string[]}
          */
         var _getCurrentPreferences = () => {
-            var toggles = document.querySelectorAll('.c-tgl') || [];
+            var toggles = document.querySelectorAll('.section__toggle') || [];
             var states = [];
 
             for(var i=0; i<toggles.length; i++){
@@ -81,14 +81,14 @@ export const api = {
                 typeof categories.length === 'number'
             ){
                 for(var i=0; i<categories.length; i++){
-                    if(_inArray(state._allCategoryNames, categories[i]) !== -1)
+                    if(_elContains(state._allCategoryNames, categories[i]))
                         categoriesToAccept.push(categories[i]);
                 }
             }else if(typeof categories === 'string'){
                 if(categories === 'all')
                     categoriesToAccept = state._allCategoryNames.slice();
                 else{
-                    if(_inArray(state._allCategoryNames, categories) !== -1)
+                    if(_elContains(state._allCategoryNames, categories))
                         categoriesToAccept.push(categories);
                 }
             }
@@ -105,7 +105,7 @@ export const api = {
 
         // Add back all the categories set as "readonly/required"
         for(i=0; i<state._readOnlyCategories.length; i++){
-            if(_inArray(categoriesToAccept, state._readOnlyCategories[i]) === -1)
+            if(!_elContains(categoriesToAccept, state._readOnlyCategories[i]))
                 categoriesToAccept.push(state._readOnlyCategories[i]);
         }
 
@@ -369,7 +369,7 @@ export const api = {
                 state._currentModalFocusableElements = null;
             }, 200);
 
-            _log('CookieConsent [TOGGLE]: hide _consentModal');
+            _log('CookieConsent [TOGGLE]: hide consentModal');
         }
     },
 
@@ -377,9 +377,9 @@ export const api = {
      * Hide preferences modal
      */
     hidePreferences: () => {
-        _removeClass(dom._htmlDom, 'show--settings');
+        _removeClass(dom._htmlDom, 'show--preferences');
         state._preferencesModalVisible = false;
-        _setAttribute(dom._preferencesContainer, 'aria-hidden', 'true');
+        _setAttribute(dom._pm, 'aria-hidden', 'true');
 
         setTimeout(() => {
             /**
@@ -415,7 +415,7 @@ export const api = {
         else  // mode is 'opt-out'
             categories = state._defaultEnabledCategories;
 
-        return _inArray(categories, category) > -1;
+        return _elContains(categories, category);
     },
 
     /**
@@ -424,8 +424,8 @@ export const api = {
      */
     showPreferences: (delay) => {
         setTimeout(() => {
-            _addClass(dom._htmlDom, 'show--settings');
-            _setAttribute(dom._preferencesContainer, 'aria-hidden', 'false');
+            _addClass(dom._htmlDom, 'show--preferences');
+            _setAttribute(dom._pm, 'aria-hidden', 'false');
             state._preferencesModalVisible = true;
 
             /**

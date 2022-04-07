@@ -45,7 +45,7 @@
 /**
  * @typedef {object} CookieTable
  * @property {Object.<string, string>} headers
- * @property {Object.<string, string>} body
+ * @property {Object.<string, string>[]} body
  */
 
 /**
@@ -163,9 +163,9 @@ export const config = {
  * avoid calling userConfig['<callback_name>']
  */
 export const callbacks = {
-    _onFirstConsent: null,
-    _onConsent: null,
-    _onChange: null
+    _onFirstConsent: 0,
+    _onConsent: 0,
+    _onChange: 0
 };
 
 export const customEvents = {
@@ -201,46 +201,35 @@ export const _fireEvent = (event) => {
  */
 export const dom = {
 
-    /** @type {HTMLElement} */ _htmlDom: null, // defined after config
-    /** @type {HTMLElement} */ _ccMain: null,
-    /** @type {HTMLElement} */ _cmContainer: null,
-    /** @type {HTMLElement} */ _pmContainer: null,
+    /** @type {HTMLElement} */ _htmlDom: 0, // defined after config
+    /** @type {HTMLElement} */ _ccMain: 0,
+    /** @type {HTMLElement} */ _cmContainer: 0,
+    /** @type {HTMLElement} */ _pmContainer: 0,
 
-    /** @type {HTMLElement} */ _consentModal: null,
-    /** @type {HTMLElement} */ _consentModalBody: null,
-    /** @type {HTMLElement} */ _consentModalTexts: null,
-    /** @type {HTMLElement} */ _consentModalTitle: null,
-    /** @type {HTMLElement} */ _consentModalDescription: null,
-    /** @type {HTMLElement} */ _consentModalBtns: null,
-    /** @type {HTMLElement} */ _consentModalBtnGroup: null,
-    /** @type {HTMLElement} */ _consentModalBtnGroup2: null,
-    /** @type {HTMLElement} */ _consentAcceptAllBtn: null,
-    /** @type {HTMLElement} */ _consentAcceptNecessaryBtn: null,
-    /** @type {HTMLElement} */ _consentShowPreferencesBtn: null,
-    /** @type {HTMLElement} */ _consentModalFooterLinksGroup: null,
+    /** @type {HTMLElement} */ _consentModal: 0,
+    /** @type {HTMLElement} */ _consentModalBody: 0,
+    /** @type {HTMLElement} */ _consentModalTexts: 0,
+    /** @type {HTMLElement} */ _consentModalTitle: 0,
+    /** @type {HTMLElement} */ _consentModalDescription: 0,
+    /** @type {HTMLElement} */ _consentModalBtns: 0,
+    /** @type {HTMLElement} */ _consentModalBtnGroup: 0,
+    /** @type {HTMLElement} */ _consentModalBtnGroup2: 0,
+    /** @type {HTMLElement} */ _consentAcceptAllBtn: 0,
+    /** @type {HTMLElement} */ _consentAcceptNecessaryBtn: 0,
+    /** @type {HTMLElement} */ _consentShowPreferencesBtn: 0,
+    /** @type {HTMLElement} */ _consentModalFooterLinksGroup: 0,
 
-    /** @type {HTMLElement} */ _pm: null,
-    /** @type {HTMLElement} */ _pmHeader: null,
-    /** @type {HTMLElement} */ _pmTitle: null,
-    /** @type {HTMLElement} */ _pmCloseBtn: null,
-    /** @type {HTMLElement} */ _pmBody: null,
-    /** @type {HTMLElement} */ _pmNewBody: null,
-    /** @type {HTMLElement} */ _pmSections: null,
-    /** @type {HTMLElement} */ _pmFooter: null,
-    /** @type {HTMLElement} */ _pmAcceptAllBtn: null,
-    /** @type {HTMLElement} */ _pmAcceptNecessaryBtn: null,
-    /** @type {HTMLElement} */ _pmSavePreferencesBtn: null,
-
-    /** @type {HTMLElement} */ _preferencesContainer: null,
-    /** @type {HTMLElement} */ _preferencesInner: null,
-    /** @type {HTMLElement} */ _preferencesTitle: null,
-    /** @type {HTMLElement} */ _preferencesCloseBtn: null,
-    /** @type {HTMLElement} */ _sectionsContainer: null,
-    /** @type {HTMLElement} */ _newSectionsContainer: null,
-    /** @type {HTMLElement} */ _preferencesButtonsContainer: null,
-    /** @type {HTMLElement} */ _preferencesSaveBtn: null,
-    /** @type {HTMLElement} */ _preferencesacceptAllBtn: null,
-    /** @type {HTMLElement} */ _preferencesacceptNecessaryBtn: null
+    /** @type {HTMLElement} */ _pm: 0,
+    /** @type {HTMLElement} */ _pmHeader: 0,
+    /** @type {HTMLElement} */ _pmTitle: 0,
+    /** @type {HTMLElement} */ _pmCloseBtn: 0,
+    /** @type {HTMLElement} */ _pmBody: 0,
+    /** @type {HTMLElement} */ _pmNewBody: 0,
+    /** @type {HTMLElement} */ _pmSections: 0,
+    /** @type {HTMLElement} */ _pmFooter: 0,
+    /** @type {HTMLElement} */ _pmAcceptAllBtn: 0,
+    /** @type {HTMLElement} */ _pmAcceptNecessaryBtn: 0,
+    /** @type {HTMLElement} */ _pmSavePreferencesBtn: 0
 };
 
 export const cookieConfig = config.cookie;

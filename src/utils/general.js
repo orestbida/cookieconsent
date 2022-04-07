@@ -10,13 +10,23 @@ export const _log = (printMsg, optionalParam, error) => {
 };
 
 /**
- * Returns index of found element inside array, otherwise -1
- * @param {Array} arr
+ * Helper indexOf
+ * @param {Array|String} el
  * @param {Object} value
  * @returns {number}
  */
-export const _inArray = (arr, value) => {
-    return arr.indexOf(value);
+export const _indexOf = (el, value) => {
+    return el.indexOf(value);
+};
+
+/**
+ * Returns true if el. (array or string) contains the specified value
+ * @param {Array|String} el
+ * @param {*} value
+ * @returns {boolean}
+ */
+export const _elContains = (el, value) => {
+    return el.indexOf(value) !== -1;
 };
 
 /**
@@ -264,7 +274,7 @@ export const _getCurrentCategoriesState = () => {
 
     // calculate rejected categories (_allCategoryNames - _acceptedCategories)
     var rejectedCategories = state._allCategoryNames.filter((category) => {
-        return (_inArray(state._acceptedCategories, category) === -1);
+        return !_elContains(state._acceptedCategories, category);
     });
 
     return {
@@ -342,7 +352,7 @@ export const _handleFocusTrap = (api) => {
              * Notice: click on div is not supported in IE
              */
             if(state._preferencesModalVisible){
-                if(!dom._preferencesInner.contains(e.target)){
+                if(!dom._pm.contains(e.target)){
                     api.hidePreferences(0);
                     state._clickedInsideModal = false;
                 }else{
@@ -412,8 +422,7 @@ export const _getModalFocusableData = () => {
      * Get preferences modal's all focusable elements
      * Save first and last elements (used to lock/trap focus inside modal)
      */
-    // [TODO]
-    // _getAllFocusableElements(dom._preferencesInner, state._allPreferencesModalFocusableElements);
+    _getAllFocusableElements(dom._pm, state._allPreferencesModalFocusableElements);
 
     /**
      * If consent modal exists, do the same

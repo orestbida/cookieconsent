@@ -1,5 +1,5 @@
 import { state, dom } from '../core/global';
-import { _inArray, _addClass } from './general';
+import { _addClass, _elContains } from './general';
 
 /**
  * Manage each modal's layout
@@ -9,7 +9,6 @@ export const _guiManager = (applyToModal) => {
 
     var guiOptions = state._userConfig['guiOptions'];
 
-    // If guiOptions is not object => exit
     if(typeof guiOptions !== 'object') return;
 
     var consentModalOptions = guiOptions['consentModal'];
@@ -29,13 +28,13 @@ export const _guiManager = (applyToModal) => {
         position = (position && position.split(' ')) || [];
 
         // Check if specified layout is valid
-        if(_inArray(allowedLayouts, layout) > -1){
+        if(_elContains(allowedLayouts, layout)){
 
             // Add layout classes
             _addClass(modal, layout);
 
             // Add position class (if specified)
-            if(!(layout === 'bar' && position[0] === 'middle') && _inArray(allowedPositions, position[0]) > -1){
+            if(!(layout === 'bar' && position[0] === 'middle') && _elContains(allowedPositions, position[0])){
                 for(var i=0; i<position.length; i++){
                     _addClass(modal, position[i]);
                 }
@@ -43,7 +42,7 @@ export const _guiManager = (applyToModal) => {
         }
 
         // Add transition class
-        (_inArray(allowed_transitions, transition) > -1) && _addClass(modal, transition);
+        _elContains(allowed_transitions, transition) && _addClass(modal, transition);
     }
 
     if(applyToModal === 0 && state._consentModalExists && consentModalOptions){
