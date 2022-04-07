@@ -1,38 +1,24 @@
-$color: #444b57;
-$background: #fff;
-$border-color: #eaecee;
-
-$btn-color: #fff;
-$btn-background: #32373b;
-$btn-background-hover: #000;
-
-$btn-preferences-color: $color;
-$btn-preferences-background: transparent;
-$btn-preferences-border-color: #abb3bc;
-
-$close-btn-background: #f1f1f1;
-$close-btn-background-hover: #f1f1f1;
-
-$btns-separator-border: #f1f1f1;
-
-$footer-background: #f1f1f1;
-$overlay-background: rgba(49, 54, 58, 0.8);
-
+/**
+ * Global styles/variables
+ */
 #cc-main {
 
-    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+    --cc-font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+    --cc-translate-y: 40px;
+    --cc-modal-border-radius: .5em;
+    --cc-btn-border-radius: .35em;
+
+    font-family: var(--cc-font-family);
     font-size: 16px;
     font-weight: 400;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
     position: relative;
-    color: $color;
+    color: var(--cc-primary-color);
     position: fixed;
 	z-index: 2147483647;
 
-    /* Prefer font-weight: 600 rather than "bold" */
-    a,
     b,
     em,
     strong,
@@ -41,9 +27,38 @@ $overlay-background: rgba(49, 54, 58, 0.8);
     }
 
     a,
-    a:hover{
+    .cc-link{
         border-bottom: 1px dashed;
-        color: inherit;
+        color: var(--cc-primary-color);
+    }
+
+    /* Use Firefox's thin style scrollbar */
+    .cm__desc,
+    .pm__body{
+        scrollbar-width: thin;
+    }
+
+    /* Show webkit's "cool" scrollbar only on non mobile screens */
+    @media screen and (min-width: 640px){
+        .cm__desc,
+        .pm__body {
+            &::-webkit-scrollbar-thumb{
+                border: .25em solid var(--cc-bg);
+                -webkit-background-clip: padding-box;
+                background-clip: padding-box;
+                border-radius: 10px;
+                background: #d2d7dd;
+            }
+
+            &::-webkit-scrollbar-thumb:hover {
+                background: var(--cc-btn-primary-bg);
+            }
+
+            &::-webkit-scrollbar {
+                background: transparent;
+                width: 12px;
+            }
+        }
     }
 }
 
