@@ -24,17 +24,4 @@
         color: inherit;
         font-size: inherit;
     }
-
-    /* Restore outline and cursor*/
-    a,
-    button,
-    input{
-        outline: revert;
-        outline-offset: .3em;
-        cursor: pointer;
-    }
-
-    p{
-        margin: 0
-    }
 }
