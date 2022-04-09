@@ -1,7 +1,7 @@
 /* eslint-disable no-unreachable */
 import { state, dom } from '../../global';
 import { _createNode, _addClass, _setAttribute, _removeClass, _addEvent, _appendChild,  _getKeys, _hasClass, _elContains } from '../../../utils/general';
-// import { _guiManager } from '../../../utils/gui-manager';
+import { _guiManager } from '../../../utils/gui-manager';
 
 /**
  * Generates the preferences modal's html and appends it to "cc-main" el.
@@ -28,12 +28,13 @@ export const _createPreferencesModal = (api) => {
 
         // modal container
         dom._pmContainer = _createNode('div');
-        dom._pmContainer.className = 'pm-wrapper';
+        _addClass(dom._pmContainer, 'pm-wrapper');
 
         // preferences modal
         dom._pm = _createNode('div');
-        dom._pm.className = 'pm';
         dom._pm.style.visibility = 'hidden';
+
+        _addClass(dom._pm, 'pm');
         _setAttribute(dom._pm, 'role', 'dialog');
         _setAttribute(dom._pm, 'aria-hidden', true);
         _setAttribute(dom._pm, 'aria-modal', true);
@@ -48,32 +49,33 @@ export const _createPreferencesModal = (api) => {
 
         // modal header
         dom._pmHeader = _createNode('div');
-        dom._pmHeader.className = 'pm__header';
+        _addClass(dom._pmHeader, 'pm__header');
 
         // modal title
         dom._pmTitle = _createNode('div');
-        dom._pmTitle.className = 'pm__title';
+        _addClass(dom._pmTitle, 'pm__title');
         _setAttribute(dom._pmTitle, 'role', 'heading');
 
         dom._pmCloseBtn = _createNode('button');
-        dom._pmCloseBtn.className = 'pm__close-btn';
+        _addClass(dom._pmCloseBtn, 'pm__close-btn');
         _setAttribute(dom._pmCloseBtn, 'aria-label', modalData.closeIconLabel || '');
         _addEvent(dom._pmCloseBtn, 'click', ()=>{api.hidePreferences();});
 
         // modal body
         dom._pmBody = _createNode('div');
-        dom._pmBody.className = 'pm__body';
+        _addClass(dom._pmBody, 'pm__body');
 
         // modal footer
         dom._pmFooter = _createNode('div');
-        dom._pmFooter.className = 'pm__footer';
+        _addClass(dom._pmFooter, 'pm__footer');
 
         var _pmBtnContainer = _createNode('div');
-        _pmBtnContainer.className = 'pm__btns';
+        _addClass(_pmBtnContainer, 'pm__btns');
 
         var _pmBtnGroup1 = _createNode('div');
         var _pmBtnGroup2 = _createNode('div');
-        _pmBtnGroup1.className = _pmBtnGroup2.className = 'pm__btn-group';
+        _addClass(_pmBtnGroup1, 'pm__btn-group');
+        _addClass(_pmBtnGroup2, 'pm__btn-group');
 
         _appendChild(dom._pmFooter, _pmBtnGroup2);
         _appendChild(dom._pmFooter, _pmBtnGroup1);
@@ -89,7 +91,7 @@ export const _createPreferencesModal = (api) => {
         _appendChild(dom._ccMain, dom._pmContainer);
     }else{
         dom._pmNewBody = _createNode('div');
-        dom._pmNewBody.className = 'pm__body';
+        _addClass(dom._pmNewBody, 'pm__body');
     }
 
     if(titleData){
@@ -109,15 +111,18 @@ export const _createPreferencesModal = (api) => {
 
         // section
         var s = _createNode('div');
-        s.className = 'pm__section';
+        _addClass(s, 'pm__section');
 
         if(sTitleData){
 
             var sTitleContainer = _createNode('div');
             var sTitle = sIsExpandable ? _createNode('button') : _createNode('div');
 
-            sTitleContainer.className = 'pm__section-title-wrapper';
-            sTitle.className = 'pm__section-title';
+            _addClass(sTitleContainer, 'pm__section-title-wrapper');
+            _addClass(sTitle, 'pm__section-title');
+
+            sTitle.innerHTML = sTitleData;
+            _appendChild(sTitleContainer, sTitle);
 
             if(sIsExpandable){
 
@@ -141,12 +146,12 @@ export const _createPreferencesModal = (api) => {
 
                 toggle.type = 'checkbox';
 
-                toggleLabel.className = 'section__toggle-wrapper';
-                toggle.className = 'section__toggle';
-                toggleOnIcon.className = 'toggle__icon-on';
-                toggleOffIcon.className = 'toggle__icon-off';
-                toggleIcon.className = 'toggle__icon';
-                toggleLabelSpan.className = 'toggle__label';
+                _addClass(toggleLabel, 'section__toggle-wrapper');
+                _addClass(toggle, 'section__toggle');
+                _addClass(toggleOnIcon, 'toggle__icon-on');
+                _addClass(toggleOffIcon, 'toggle__icon-off');
+                _addClass(toggleIcon, 'toggle__icon');
+                _addClass(toggleLabelSpan, 'toggle__label');
 
                 _setAttribute(toggleIcon, 'aria-hidden', 'true');
 
@@ -192,9 +197,6 @@ export const _createPreferencesModal = (api) => {
                 _setAttribute(sTitle, 'aria-level', '3');
             }
 
-            sTitle.innerHTML = sTitleData;
-
-            _appendChild(sTitleContainer, sTitle);
             _appendChild(s, sTitleContainer);
         }
 
@@ -203,8 +205,8 @@ export const _createPreferencesModal = (api) => {
             var sDescContainer = _createNode('div');
             var sDesc = _createNode('div');
 
-            sDescContainer.className = 'pm__section-desc-wrapper';
-            sDesc.className = 'pm__section-desc';
+            _addClass(sDescContainer, 'pm__section-desc-wrapper');
+            _addClass(sDesc, 'pm__section-desc');
 
             sDesc.innerHTML = sDescriptionData;
 
@@ -237,9 +239,9 @@ export const _createPreferencesModal = (api) => {
                     var thead = _createNode('thead');
                     var tbody = _createNode('tbody');
 
-                    table.className = 'pm__section-table';
-                    thead.className = 'pm__table-head';
-                    tbody.className = 'pm__table-body';
+                    _addClass(table, 'pm__section-table');
+                    _addClass(thead, 'pm__table-head');
+                    _addClass(tbody, 'pm__table-body');
 
                     var headerData = sCookieTableData.headers;
                     var tableHeadersKeys = _getKeys(headerData);
@@ -249,13 +251,17 @@ export const _createPreferencesModal = (api) => {
                      */
                     var trHeadFragment = document.createDocumentFragment();
                     var trHead = _createNode('tr');
+                    _setAttribute(trHead, 'role', 'row');
 
                     for(var i=0; i<tableHeadersKeys.length; i++){
                         var headerKey = tableHeadersKeys[i];
                         var headerName = headerData[headerKey];
 
                         var th = _createNode('th');
-                        th.className = 'pm__table-th';
+                        th.id = 'cc__row-' + headerName;
+                        _setAttribute(th, 'role', 'columnheader');
+                        _setAttribute(th, 'scope', 'col');
+                        _addClass(th, 'pm__table-th');
 
                         th.innerHTML = headerName;
                         _appendChild(trHeadFragment, th);
@@ -272,7 +278,8 @@ export const _createPreferencesModal = (api) => {
                     for(i=0; i<sCookieTableBody.length; i++){
                         var currentCookieData = sCookieTableBody[i];
                         var tr = _createNode('tr');
-                        tr.className = 'pm__table-tr';
+                        _setAttribute(tr, 'role', 'row');
+                        _addClass(tr, 'pm__table-tr');
 
                         for(var j=0; j<tableHeadersKeys.length; j++){
 
@@ -282,10 +289,12 @@ export const _createPreferencesModal = (api) => {
 
                             var td = _createNode('td');
                             var tdInner = _createNode('div');
-                            td.className = 'pm__table-td';
+                            _addClass(td, 'pm__table-td');
                             _setAttribute(td, 'data-column', tdHeaderName);
+                            _setAttribute(td, 'headers', 'cc__row-' + tdHeaderName);
 
                             tdInner.insertAdjacentHTML('beforeend', tdValue);
+
                             _appendChild(td, tdInner);
                             _appendChild(tr, td);
                         }
@@ -321,7 +330,7 @@ export const _createPreferencesModal = (api) => {
         if(acceptNecessaryBtnData){
             if(!dom._pmAcceptNecessaryBtn){
                 dom._pmAcceptNecessaryBtn = _createNode('button');
-                dom._pmAcceptNecessaryBtn.className = 'pm__btn';
+                _addClass(dom._pmAcceptNecessaryBtn, 'pm__btn');
                 _appendChild(_pmBtnGroup1, dom._pmAcceptNecessaryBtn);
                 _addEvent(dom._pmAcceptNecessaryBtn, 'click', () => {
                     acceptHelper([]);
@@ -334,7 +343,7 @@ export const _createPreferencesModal = (api) => {
         if(acceptAllBtnData){
             if(!dom._pmAcceptAllBtn){
                 dom._pmAcceptAllBtn = _createNode('button');
-                dom._pmAcceptAllBtn.className = 'pm__btn';
+                _addClass(dom._pmAcceptAllBtn, 'pm__btn');
                 _appendChild(_pmBtnGroup1, dom._pmAcceptAllBtn);
                 _addEvent(dom._pmAcceptAllBtn, 'click', () => {
                     acceptHelper('all');
@@ -369,4 +378,6 @@ export const _createPreferencesModal = (api) => {
         dom._pm.replaceChild(dom._pmNewBody, dom._pmBody);
         dom._pmBody = dom._pmNewBody;
     }
+
+    _guiManager(1);
 };
