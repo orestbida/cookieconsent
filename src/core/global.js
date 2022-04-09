@@ -38,6 +38,7 @@
  * @property {string} [acceptAllBtn]
  * @property {string} [acceptNecessaryBtn]
  * @property {string} [showPreferencesBtn]
+ * @property {string} [closeIconLabel]
  * @property {string} [revisionMessage]
  * @property {string} [footer] html string
  */
@@ -80,6 +81,20 @@
  */
 
 /**
+ * @typedef {object} GuiModalOption
+ * @property {string} [layout]
+ * @property {string} [position]
+ * @property {boolean} [flipButtons]
+ * @property {boolean} [sameWeightButtons]
+ */
+
+/**
+ * @typedef {object} GuiOptions
+ * @property {GuiModalOption} [consentModal]
+ * @property {GuiModalOption} [preferencesModal]
+ */
+
+/**
  * @typedef {object} UserConfig
  * @property {HTMLElement} [root]
  * @property {string} [mode]
@@ -94,7 +109,7 @@
  * @property {CookieConfig} [cookie]
  * @property {Object.<string, Category>} [categories]
  * @property {boolean} [hideFromBots]
- * @property {{}} [guiOptions]
+ * @property {GuiOptions} [guiOptions]
  * @property {Language} language
  */
 
@@ -218,6 +233,7 @@ export const dom = {
     /** @type {HTMLElement} */ _consentAcceptNecessaryBtn: 0,
     /** @type {HTMLElement} */ _consentShowPreferencesBtn: 0,
     /** @type {HTMLElement} */ _consentModalFooterLinksGroup: 0,
+    /** @type {HTMLElement} */ _cmCloseIconBtn: 0,
 
     /** @type {HTMLElement} */ _pm: 0,
     /** @type {HTMLElement} */ _pmHeader: 0,
