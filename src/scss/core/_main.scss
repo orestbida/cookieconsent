@@ -1,51 +1,95 @@
-$color: #444b57;
-$background: #fff;
-$border-color: #eaecee;
+/**
+ * Global styles/variables
+ */
 
-$btn-color: #fff;
-$btn-background: #32373b;
-$btn-background-hover: #000;
+$translate-y: 30px;
+$transition-easing: cubic-bezier(0.34, .98, 0.44, 1);
+$modal-box-shadow: 0 0.625em 1.875em rgba(0, 0, 2, .3);
+$font-weight-bold: 600;
 
-$btn-preferences-color: $color;
-$btn-preferences-background: transparent;
-$btn-preferences-border-color: #abb3bc;
-
-$close-btn-background: #f1f1f1;
-$close-btn-background-hover: #f1f1f1;
-
-$btns-separator-border: #f1f1f1;
-
-$footer-background: #f1f1f1;
-$overlay-background: rgba(49, 54, 58, 0.8);
+:root{
+    --cc-font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+    --cc-modal-border-radius: .4em;
+    --cc-btn-border-radius: 6px;
+}
 
 #cc-main {
 
-    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+    color: var(--cc-primary-color);
+    font-family: var(--cc-font-family);
     font-size: 16px;
     font-weight: 400;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
     position: relative;
-    color: $color;
-    position: fixed;
-	z-index: 2147483647;
 
-    /* Prefer font-weight: 600 rather than "bold" */
-    a,
     b,
     em,
     strong,
+    .cc-link,
+    .pm__body a,
     .cm__title{
-        font-weight: 600;
+        font-weight: $font-weight-bold;
     }
 
     a,
-    a:hover{
-        border-bottom: 1px dashed;
-        color: inherit;
+    .cc-link{
+        position: relative;
+        background-image: linear-gradient(currentColor, currentColor);
+        background-position: 0% 100%;
+        background-repeat: no-repeat;
+        background-size: 0% 1px;
+        transition: background-size .25s, color .25s ease;
+
+        &:hover{
+            color: var(--cc-primary-color);
+            background-size: 100% 1px;
+        }
+    }
+
+    .cc-link{
+        color: var(--cc-primary-color);
+    }
+
+    /* Use Firefox's thin style scrollbar */
+    .cm__desc,
+    .pm__body{
+        scrollbar-width: thin;
+    }
+
+    /* Restore outline and cursor*/
+    a,
+    button,
+    input{
+        outline: revert;
+        outline-offset: .3em;
+        cursor: pointer;
+    }
+
+    /* Show webkit's "cool" scrollbar only on non mobile screens */
+    @media screen and (min-width: 640px){
+        .cm__desc,
+        .pm__body {
+            &::-webkit-scrollbar-thumb{
+                border: .25em solid var(--cc-bg);
+                -webkit-background-clip: padding-box;
+                background-clip: padding-box;
+                border-radius: 1em;
+                background: var(--cc-webkit-scrollbar-bg);
+            }
+
+            &::-webkit-scrollbar-thumb:hover {
+                background: var(--cc-webkit-scrollbar-hover-bg);
+            }
+
+            &::-webkit-scrollbar {
+                background: transparent;
+                width: 12px;
+            }
+        }
     }
 }
 
 @import "./components/consent-modal";
-@import "./components/consent-modal";
+@import "./components/preferences-modal";

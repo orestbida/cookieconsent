@@ -8,7 +8,7 @@ import fs from "fs";
 const srcDir = './src';
 const distDir = './dist';
 const productionMode = !process.env.ROLLUP_WATCH;
-const isIE11 = process.env.BROWSER === 'IE11';
+const isIE = process.env.BROWSER === 'IE';
 
 export default defineConfig(
     [
@@ -25,7 +25,7 @@ export default defineConfig(
                     include: ['./src/**'],
                     exclude: ['./src/scss/**']
                 }),
-                isIE11 && babel({
+                isIE && babel({
                     exclude:'node_modules/**',
                     babelHelpers: 'bundled',
                     configFile: './babel.config.js'
@@ -69,6 +69,17 @@ function processStylesIndividually (){
                     include: `${scssDir}/${fileName}`,
                     extract: true,
                     plugins: [
+                        require('postcss-preset-env')({
+                            browsers: [
+                                'last 1 version',
+                                '> 1%',
+                                isIE && 'ie >= 8'
+                            ],
+                            features: {
+                                "custom-properties": isIE
+                            }
+                        }),
+                        require('postcss-combine-duplicated-selectors'),
                         require('autoprefixer'),
                         productionMode && require('cssnano')({
                             preset: ["default", {

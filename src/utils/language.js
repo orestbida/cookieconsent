@@ -1,5 +1,5 @@
 import { state } from '../core/global';
-import { _log, _inArray, _getKeys, _xhr } from './general';
+import { _log, _getKeys, _xhr, _elContains } from './general';
 
 /**
  * Get a valid language code
@@ -11,8 +11,8 @@ export const _getValidLanguageCode = (languageCode) => {
 
     var allLanguageCodes = _getKeys(state._allTranslations);
 
-    if(_inArray(allLanguageCodes, languageCode) > -1) return languageCode;
-    if(_inArray(allLanguageCodes, state._currentLanguageCode) > -1) return state._currentLanguageCode;
+    if(_elContains(allLanguageCodes, languageCode)) return languageCode;
+    if(_elContains(allLanguageCodes, state._currentLanguageCode)) return state._currentLanguageCode;
 
     /**
      * If we got here, return the very first language code (hopefully there is one)
@@ -35,7 +35,7 @@ export const _getBrowserLanguageCode = () => {
  * Resolve which language should be used.
  */
 export const _resolveCurrentLanguageCode = function () {
-    var autoDetect = state._userConfig['language']['autoDetect'];
+    var autoDetect = state._userConfig.language.autoDetect;
 
     if(autoDetect){
         _log('CookieConsent [LANG]: autoDetect strategy: \'' + autoDetect + '\'');

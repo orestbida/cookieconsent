@@ -5,12 +5,12 @@ import {
     _addClass,
     _removeClass,
     _log,
-    _inArray,
     _handleFocusTrap,
     _getCurrentCategoriesState,
     _addDataButtonListeners,
     _getModalFocusableData,
-    _getAcceptType
+    _getAcceptType,
+    _elContains
 } from '../utils/general';
 
 import { _manageExistingScripts } from '../utils/scripts';
@@ -44,13 +44,17 @@ import { _setConfig } from './config-init';
 export const api = {
 
     /**
-     * Accept cookieconsent function API
+     * Accept API
      * @param {string[]|string} _categories - Categories to accept
      * @param {string[]} [_exclusions] - Excluded categories [optional]
      */
     accept : (_categories, _exclusions) => {
         var categories = _categories || undefined;
         var exclusions = _exclusions || [];
+
+        /**
+         * @type {string[]}
+         */
         var categoriesToAccept = [];
 
         /**
@@ -58,7 +62,7 @@ export const api = {
          * @returns {string[]}
          */
         var _getCurrentPreferences = () => {
-            var toggles = document.querySelectorAll('.c-tgl') || [];
+            var toggles = document.querySelectorAll('.section__toggle') || [];
             var states = [];
 
             for(var i=0; i<toggles.length; i++){
@@ -77,14 +81,14 @@ export const api = {
                 typeof categories.length === 'number'
             ){
                 for(var i=0; i<categories.length; i++){
-                    if(_inArray(state._allCategoryNames, categories[i]) !== -1)
+                    if(_elContains(state._allCategoryNames, categories[i]))
                         categoriesToAccept.push(categories[i]);
                 }
             }else if(typeof categories === 'string'){
                 if(categories === 'all')
                     categoriesToAccept = state._allCategoryNames.slice();
                 else{
-                    if(_inArray(state._allCategoryNames, categories) !== -1)
+                    if(_elContains(state._allCategoryNames, categories))
                         categoriesToAccept.push(categories);
                 }
             }
@@ -101,7 +105,7 @@ export const api = {
 
         // Add back all the categories set as "readonly/required"
         for(i=0; i<state._readOnlyCategories.length; i++){
-            if(_inArray(categoriesToAccept, state._readOnlyCategories[i]) === -1)
+            if(!_elContains(categoriesToAccept, state._readOnlyCategories[i]))
                 categoriesToAccept.push(state._readOnlyCategories[i]);
         }
 
@@ -114,7 +118,7 @@ export const api = {
     },
 
     /**
-     * Returns true if cookie was found and has valid value (not empty string)
+     * Returns true if cookie was found and has valid value (not an empty string)
      * @param {string} cookieName
      * @returns {boolean}
      */
@@ -123,10 +127,10 @@ export const api = {
     },
 
     /**
-     * API function to easily erase cookies
+     * Erase cookies API
      * @param {(string|string[])} cookies
-     * @param {string} [path] - optional
-     * @param {string} [domain] - optional
+     * @param {string} [path]
+     * @param {string} [domain]
      */
     eraseCookies: (cookies, path, domain) => {
         var allCookies = [];
@@ -149,9 +153,9 @@ export const api = {
     },
 
     /**
-     * Update/change modals language
+     * Update/change modal's language
      * @param {string} lang new language
-     * @param {boolean} [force] update language fields forcefully
+     * @param {boolean} [forceUpdate] update language fields forcefully
      * @returns {boolean}
      */
     updateLanguage: (newLanguage, forceUpdate) => {
@@ -187,15 +191,8 @@ export const api = {
     },
 
     /**
-     * @typedef {object} userPreferences
-     * @property {string} acceptType
-     * @property {string[]} acceptedCategories
-     * @property {string[]} rejectedCategories
-     */
-
-    /**
      * Retrieve current user preferences (summary)
-     * @returns {userPreferences}
+     * @returns {import("./global").UserPreferences}
      */
     getUserPreferences: () => {
         var currentCategoriesState = !state._invalidConsent && _getCurrentCategoriesState();
@@ -215,7 +212,7 @@ export const api = {
     /**
      * Dynamically load script (append to head)
      * @param {string} src
-     * @param {scriptLoaded} callback
+     * @param {scriptLoaded} [callback]
      * @param {object[]} [attrs] Custom attributes
      */
     loadScript: (src, callback, attrs) => {
@@ -260,10 +257,9 @@ export const api = {
      */
     setCookieData: (props) => {
 
-        var newData = props['value'],
-            mode = props['mode'],
+        var newData = props.value,
+            mode = props.mode,
             set = false;
-
 
         /**
          * If mode is 'update':
@@ -292,7 +288,7 @@ export const api = {
         }
 
         if(set){
-            state._savedCookieContent['data'] = state._cookieData;
+            state._savedCookieContent.data = state._cookieData;
             _setCookie(cookieConfig.name, JSON.stringify(state._savedCookieContent), true);
         }
 
@@ -373,7 +369,7 @@ export const api = {
                 state._currentModalFocusableElements = null;
             }, 200);
 
-            _log('CookieConsent [TOGGLE]: hide _consentModal');
+            _log('CookieConsent [TOGGLE]: hide consentModal');
         }
     },
 
@@ -381,9 +377,9 @@ export const api = {
      * Hide preferences modal
      */
     hidePreferences: () => {
-        _removeClass(dom._htmlDom, 'show--settings');
+        _removeClass(dom._htmlDom, 'show--preferences');
         state._preferencesModalVisible = false;
-        _setAttribute(dom._preferencesContainer, 'aria-hidden', 'true');
+        _setAttribute(dom._pm, 'aria-hidden', 'true');
 
         setTimeout(() => {
             /**
@@ -407,7 +403,7 @@ export const api = {
     },
 
     /**
-     * Returns true if cookie category is accepted by the user
+     * Returns true if cookie category is accepted
      * @param {string} category
      * @returns {boolean}
      */
@@ -419,7 +415,7 @@ export const api = {
         else  // mode is 'opt-out'
             categories = state._defaultEnabledCategories;
 
-        return _inArray(categories, category) > -1;
+        return _elContains(categories, category);
     },
 
     /**
@@ -428,8 +424,8 @@ export const api = {
      */
     showPreferences: (delay) => {
         setTimeout(() => {
-            _addClass(dom._htmlDom, 'show--settings');
-            _setAttribute(dom._preferencesContainer, 'aria-hidden', 'false');
+            _addClass(dom._htmlDom, 'show--preferences');
+            _setAttribute(dom._pm, 'aria-hidden', 'false');
             state._preferencesModalVisible = true;
 
             /**
@@ -458,7 +454,8 @@ export const api = {
     },
 
     /**
-     * "Init" method. Will run once and only if modals do not exist
+     * Will run once and only if modals do not exist.
+     * @param {import("./global").UserConfig} conf
      */
     run: (conf) => {
 
@@ -474,25 +471,25 @@ export const api = {
             state._savedCookieContent = JSON.parse(_getCookie(cookieConfig.name, 'one', true) || '{}');
 
             // Retrieve "_consentId"
-            state._consentId = state._savedCookieContent['consentId'];
+            state._consentId = state._savedCookieContent.consentId;
 
             // If "_consentId" is present => assume that consent was previously given
             var cookieConsentAccepted = state._consentId !== undefined;
 
             // Retrieve "_consentTimestamp"
-            state._consentTimestamp = state._savedCookieContent['consentTimestamp'];
+            state._consentTimestamp = state._savedCookieContent.consentTimestamp;
             state._consentTimestamp && (state._consentTimestamp = new Date(state._consentTimestamp));
 
             // Retrieve "_lastConsentTimestamp"
-            state._lastConsentTimestamp = state._savedCookieContent['lastConsentTimestamp'];
+            state._lastConsentTimestamp = state._savedCookieContent.lastConsentTimestamp;
             state._lastConsentTimestamp && (state._lastConsentTimestamp = new Date(state._lastConsentTimestamp));
 
             // Retrieve "data"
-            var dataTemp = state._savedCookieContent['data'];
+            var dataTemp = state._savedCookieContent.data;
             state._cookieData = typeof dataTemp !== 'undefined' ? dataTemp : null;
 
             // If revision is enabled and current value !== saved value inside the cookie => revision is not valid
-            if(state._revisionEnabled && cookieConsentAccepted && state._savedCookieContent['revision'] !== config.revision)
+            if(state._revisionEnabled && cookieConsentAccepted && state._savedCookieContent.revision !== config.revision)
                 state._validRevision = false;
 
             // If consent is not valid => create consent modal

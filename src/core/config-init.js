@@ -29,9 +29,6 @@ export const _setConfig = (_userConfig) => {
     if(typeof _userConfig.autoShow === 'boolean')
         config.autoShow = _userConfig.autoShow;
 
-    /**
-     * @type {i .CookieConfig}
-     */
     var newCookieConfig = _userConfig.cookie;
 
     if(!!newCookieConfig && typeof newCookieConfig === 'object'){
@@ -109,6 +106,9 @@ export const _setConfig = (_userConfig) => {
     dom._htmlDom = document.documentElement;
 };
 
+/**
+ * This function needs to be called right after .init()
+ */
 export const setWindowData = () => {
     /**
      * Fix "window is not defined" error

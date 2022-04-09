@@ -1,5 +1,5 @@
 import { state, config } from '../core/global';
-import { _createNode, _setAttribute, _inArray } from './general';
+import { _createNode, _setAttribute, _elContains } from './general';
 
 const scriptTagSelector = 'data-cookiecategory';
 
@@ -14,7 +14,7 @@ export const _manageExistingScripts = (mustEnableCategories) => {
     if(!config.manageScriptTags) return;
 
     var scripts = document.querySelectorAll('script[' + scriptTagSelector + ']');
-    var _acceptedCategories = mustEnableCategories || state._savedCookieContent['categories'] || [];
+    var _acceptedCategories = mustEnableCategories || state._savedCookieContent.categories || [];
 
     /**
      * Load scripts (sequentially), using a recursive function
@@ -32,7 +32,7 @@ export const _manageExistingScripts = (mustEnableCategories) => {
              * If current script's category is on the array of categories
              * accepted by the user => load script
              */
-            if(_inArray(_acceptedCategories, currScript_category) > -1){
+            if(_elContains(_acceptedCategories, currScript_category)){
 
                 currScript.removeAttribute('type');
                 currScript.removeAttribute(scriptTagSelector);

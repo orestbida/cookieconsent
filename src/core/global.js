@@ -1,7 +1,7 @@
 /**
  * Cookie's structure inside autoClear object
  * @typedef {Object} Cookie
- * @property {string|RegExp} name
+ * @property {string | RegExp} name
  * @property {string} [domain]
  * @property {string} [path]
  */
@@ -9,7 +9,7 @@
 /**
  * autoClear's object structure
  * @typedef {Object} AutoClear
- * @property {Cookie} cookies
+ * @property {Cookie[]} cookies
  * @property {boolean} [reloadPage]
  */
 
@@ -25,15 +25,52 @@
  * @typedef {object} CookieConfig
  * @property {string} [name]
  * @property {string | Function} [expiresAfterDays]
- * @property {string | Function} [domain]
+ * @property {string} [domain]
  * @property {string} [path]
  * @property {string} [sameSite]
  */
 
+
+/**
+ * @typedef {object} ConsentModal
+ * @property {string} [title]
+ * @property {string} [description]
+ * @property {string} [acceptAllBtn]
+ * @property {string} [acceptNecessaryBtn]
+ * @property {string} [showPreferencesBtn]
+ * @property {string} [closeIconLabel]
+ * @property {string} [revisionMessage]
+ * @property {string} [footer] html string
+ */
+
+/**
+ * @typedef {object} CookieTable
+ * @property {Object.<string, string>} headers
+ * @property {Object.<string, string>[]} body
+ */
+
+/**
+ * @typedef {object} Section
+ * @property {string} [title]
+ * @property {string} [description]
+ * @property {string} [linkedCategory]
+ * @property {CookieTable} [cookieTable]
+ */
+
+/**
+ * @typedef {object} PreferencesModal
+ * @property {string} [title]
+ * @property {string} [acceptAllBtn]
+ * @property {string} [acceptNecessaryBtn]
+ * @property {string} [savePreferencesBtn]
+ * @property {string} [closeIconLabel]
+ * @property {Section[]} [sections]
+ */
+
 /**
  * @typedef {object} Translation
- * @property {{}} consentModal Default language
- * @property {{}} preferencesModal Language detection strategy
+ * @property {ConsentModal} consentModal Default language
+ * @property {PreferencesModal} preferencesModal Language detection strategy
  */
 
 /**
@@ -41,6 +78,20 @@
  * @property {string} default Default language
  * @property {string} [autoDetect] Language detection strategy
  * @property {Object.<string, Translation | string>} translations
+ */
+
+/**
+ * @typedef {object} GuiModalOption
+ * @property {string} [layout]
+ * @property {string} [position]
+ * @property {boolean} [flipButtons]
+ * @property {boolean} [equalWeightButtons]
+ */
+
+/**
+ * @typedef {object} GuiOptions
+ * @property {GuiModalOption} [consentModal]
+ * @property {GuiModalOption} [preferencesModal]
  */
 
 /**
@@ -55,11 +106,18 @@
  * @property {Function} [onFirstConsent]
  * @property {Function} [onConsent]
  * @property {Function} [onChange]
- * @property {cookieConfig} [cookie]
+ * @property {CookieConfig} [cookie]
  * @property {Object.<string, Category>} [categories]
  * @property {boolean} [hideFromBots]
- * @property {{}} [guiOptions]
+ * @property {GuiOptions} [guiOptions]
  * @property {Language} language
+ */
+
+/**
+ * @typedef {object} UserPreferences
+ * @property {string} acceptType
+ * @property {string[]} acceptedCategories
+ * @property {string[]} rejectedCategories
  */
 
 /**
@@ -87,8 +145,9 @@
  * @property {string[]} categories Array of accepted categories
  * @property {number} revision Current revision number
  * @property {string} consentId Unique id
- * @property {object} consentTimestamp First consent timestamp
- * @property {object} lastConsentTimestamp Last update timestamp
+ * @property {any} data Unique id
+ * @property {string} consentTimestamp First consent timestamp
+ * @property {string} lastConsentTimestamp Last update timestamp
  */
 
 /**
@@ -119,9 +178,9 @@ export const config = {
  * avoid calling userConfig['<callback_name>']
  */
 export const callbacks = {
-    _onFirstConsent: null,
-    _onConsent: null,
-    _onChange: null
+    _onFirstConsent: 0,
+    _onConsent: 0,
+    _onChange: 0
 };
 
 export const customEvents = {
@@ -157,40 +216,40 @@ export const _fireEvent = (event) => {
  */
 export const dom = {
 
-    /** @type {HTMLElement} */ _htmlDom: null, // defined after config
-    /** @type {HTMLElement} */ _ccMain: null,
-    /** @type {HTMLElement} */ _cmContainer: null,
-    /** @type {HTMLElement} */ _pmContainer: null,
+    /** @type {HTMLElement} */ _htmlDom: 0, // defined after config
+    /** @type {HTMLElement} */ _ccMain: 0,
+    /** @type {HTMLElement} */ _cmContainer: 0,
+    /** @type {HTMLElement} */ _pmContainer: 0,
 
-    /** @type {HTMLElement} */ _consentModal: null,
-    /** @type {HTMLElement} */ _consentModalBody: null,
-    /** @type {HTMLElement} */ _consentModalTexts: null,
-    /** @type {HTMLElement} */ _consentModalTitle: null,
-    /** @type {HTMLElement} */ _consentModalDescription: null,
-    /** @type {HTMLElement} */ _consentModalBtns: null,
-    /** @type {HTMLElement} */ _consentModalBtnGroup: null,
-    /** @type {HTMLElement} */ _consentModalBtnGroup2: null,
-    /** @type {HTMLElement} */ _consentAcceptAllBtn: null,
-    /** @type {HTMLElement} */ _consentAcceptNecessaryBtn: null,
-    /** @type {HTMLElement} */ _consentShowPreferencesBtn: null,
-    /** @type {HTMLElement} */ _consentModalFooterLinksGroup: null,
+    /** @type {HTMLElement} */ _consentModal: 0,
+    /** @type {HTMLElement} */ _consentModalBody: 0,
+    /** @type {HTMLElement} */ _consentModalTexts: 0,
+    /** @type {HTMLElement} */ _consentModalTitle: 0,
+    /** @type {HTMLElement} */ _consentModalDescription: 0,
+    /** @type {HTMLElement} */ _consentModalBtns: 0,
+    /** @type {HTMLElement} */ _consentModalBtnGroup: 0,
+    /** @type {HTMLElement} */ _consentModalBtnGroup2: 0,
+    /** @type {HTMLElement} */ _consentAcceptAllBtn: 0,
+    /** @type {HTMLElement} */ _consentAcceptNecessaryBtn: 0,
+    /** @type {HTMLElement} */ _consentShowPreferencesBtn: 0,
+    /** @type {HTMLElement} */ _consentModalFooterLinksGroup: 0,
+    /** @type {HTMLElement} */ _cmCloseIconBtn: 0,
 
-    /** @type {HTMLElement} */ _preferencesContainer: null,
-    /** @type {HTMLElement} */ _preferencesInner: null,
-    /** @type {HTMLElement} */ _preferencesTitle: null,
-    /** @type {HTMLElement} */ _preferencesCloseBtn: null,
-    /** @type {HTMLElement} */ _sectionsContainer: null,
-    /** @type {HTMLElement} */ _newSectionsContainer: null,
-    /** @type {HTMLElement} */ _preferencesButtonsContainer: null,
-    /** @type {HTMLElement} */ _preferencesSaveBtn: null,
-    /** @type {HTMLElement} */ _preferencesacceptAllBtn: null,
-    /** @type {HTMLElement} */ _preferencesacceptNecessaryBtn: null
+    /** @type {HTMLElement} */ _pm: 0,
+    /** @type {HTMLElement} */ _pmHeader: 0,
+    /** @type {HTMLElement} */ _pmTitle: 0,
+    /** @type {HTMLElement} */ _pmCloseBtn: 0,
+    /** @type {HTMLElement} */ _pmBody: 0,
+    /** @type {HTMLElement} */ _pmNewBody: 0,
+    /** @type {HTMLElement} */ _pmSections: 0,
+    /** @type {HTMLElement} */ _pmFooter: 0,
+    /** @type {HTMLElement} */ _pmAcceptAllBtn: 0,
+    /** @type {HTMLElement} */ _pmAcceptNecessaryBtn: 0,
+    /** @type {HTMLElement} */ _pmSavePreferencesBtn: 0
 };
 
-/**
- * @type {CookieConfig}
- */
 export const cookieConfig = config.cookie;
+
 
 export const state = {
 
@@ -201,6 +260,10 @@ export const state = {
 
     _currentLanguageCode: '',
     _allTranslations: [],
+
+    /**
+     * @type {Translation}
+     */
     _currentTranslation: null,
 
     /**

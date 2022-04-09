@@ -3,26 +3,25 @@
     /* Reset only specific elements */
     div,
     span,
-    p,
     a,
     button,
     input,
-    table,
-    th,
-    td,
-    tr,
     :before,
     :after{
         all: unset;
         box-sizing: border-box;
     }
 
-    /* Restore outline and cursor*/
-    a,
-    button,
-    input{
-        outline: revert;
-        outline-offset: .3em;
-        cursor: pointer;
+    table,
+    thead,
+    tbody,
+    tr,
+    th,
+    td {
+        all: revert;
+        font-family: inherit;
+        font-weight: inherit;
+        color: inherit;
+        font-size: inherit;
     }
 }

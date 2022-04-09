@@ -3,20 +3,25 @@ import { _log, _createNode, _addClass, _setAttribute, _appendChild, _addEvent } 
 import { _guiManager } from '../../../utils/gui-manager';
 
 /**
- * Create consent modal and append it to main div
+ * Create consent modal and append it to "cc-main" el.
  * @param {import("../../global").Api} api
  */
 export const _createConsentModal = (api) => {
+    /**
+     * @type {import("../../global").ConsentModal}
+     */
+    var consentModalData = state._currentTranslation.consentModal;
 
-    if(state._userConfig['disablePageInteraction'] === true)
-        _addClass(dom._htmlDom, 'force--consent');
+    if(!consentModalData) return;
 
-    var consentModalData = state._currentTranslation['consentModal'];
+    if(state._userConfig.disablePageInteraction === true)
+        _addClass(dom._htmlDom, 'disable--interaction');
 
-    var acceptAllBtnData = consentModalData['acceptAllBtn'],   // accept current selection
-        acceptNecessaryBtnData = consentModalData['acceptNecessaryBtn'],
-        showPreferencesBtnData = consentModalData['showPreferencesBtn'],
-        footerData = consentModalData['footer'];
+    var acceptAllBtnData = consentModalData.acceptAllBtn,
+        acceptNecessaryBtnData = consentModalData.acceptNecessaryBtn,
+        showPreferencesBtnData = consentModalData.showPreferencesBtn,
+        closeIconLabelData = consentModalData.closeIconLabel,
+        footerData = consentModalData.footer;
 
     // Create modal if it doesn't exist
     if(!dom._cmContainer){
@@ -27,11 +32,11 @@ export const _createConsentModal = (api) => {
         dom._consentModalTexts = _createNode('div');
         dom._consentModalBtns = _createNode('div');
 
-        dom._cmContainer.className = 'cm-container';
-        dom._consentModal.className = 'cm';
-        dom._consentModalBody.className = 'cm__body';
-        dom._consentModalTexts.className = 'cm__texts';
-        dom._consentModalBtns.className = 'cm__btns';
+        _addClass(dom._cmContainer, 'cm-wrapper');
+        _addClass(dom._consentModal, 'cm');
+        _addClass(dom._consentModalBody, 'cm__body');
+        _addClass(dom._consentModalTexts, 'cm__texts');
+        _addClass(dom._consentModalBtns, 'cm__btns');
 
         _setAttribute(dom._consentModal, 'role', 'dialog');
         _setAttribute(dom._consentModal, 'aria-modal', 'true');
@@ -44,6 +49,24 @@ export const _createConsentModal = (api) => {
          */
         dom._consentModal.style.visibility = 'hidden';
 
+        /**
+         * Close icon-button (visible only in the 'box' layout)
+         */
+        if(closeIconLabelData){
+            if(!dom._cmCloseIconBtn){
+                dom._cmCloseIconBtn = _createNode('button');
+                dom._cmCloseIconBtn.className = 'cm__btn cm__btn--close';
+                _addEvent(dom._cmCloseIconBtn, 'click', ()=>{
+                    _log('CookieConsent [ACCEPT]: necessary');
+                    api.hide();
+                    api.accept([]);
+                });
+                _appendChild(dom._consentModalBody, dom._cmCloseIconBtn);
+            }
+
+            _setAttribute(dom._cmCloseIconBtn, 'aria-label', closeIconLabelData);
+        }
+
         // Append consent modal to main container
         _appendChild(dom._consentModalBody, dom._consentModalTexts);
 
@@ -55,15 +78,15 @@ export const _createConsentModal = (api) => {
         _appendChild(dom._ccMain, dom._cmContainer);
     }
 
-    // Use insertAdjacentHTML instead of innerHTML
-    var consentModalTitle_value = consentModalData['title'];
 
-    // Add title (if valid)
+
+    var consentModalTitle_value = consentModalData.title;
+
     if(consentModalTitle_value){
 
         if(!dom._consentModalTitle){
             dom._consentModalTitle = _createNode('div');
-            dom._consentModalTitle.className = 'cm__title';
+            dom._consentModalTitle.className = dom._consentModalTitle.id = 'cm__title';
             _setAttribute(dom._consentModalTitle, 'role', 'heading');
             _setAttribute(dom._consentModalTitle, 'aria-level', '2');
             _appendChild(dom._consentModalTexts, dom._consentModalTitle);
@@ -72,7 +95,7 @@ export const _createConsentModal = (api) => {
         dom._consentModalTitle.innerHTML = consentModalTitle_value;
     }
 
-    var description = consentModalData['description'];
+    var description = consentModalData.description;
 
     if(description){
         if(state._revisionEnabled){
@@ -80,26 +103,24 @@ export const _createConsentModal = (api) => {
                 '{{revisionMessage}}',
                 state._validRevision
                     ? ''
-                    : consentModalData['revisionMessage'] || ''
+                    : consentModalData.revisionMessage || ''
             );
         }
 
         if(!dom._consentModalDescription){
             dom._consentModalDescription = _createNode('div');
-            dom._consentModalDescription.className = 'cm__desc';
+            dom._consentModalDescription.className = dom._consentModalDescription.id = 'cm__desc';
             _appendChild(dom._consentModalTexts, dom._consentModalDescription);
         }
 
-        // Set description content
         dom._consentModalDescription.innerHTML = description;
     }
 
-    // Add primary button if not falsy
     if(acceptAllBtnData){
 
         if(!dom._consentAcceptAllBtn){
             dom._consentAcceptAllBtn = _createNode('button');
-            dom._consentAcceptAllBtn.className = 'cm__btn';
+            _addClass(dom._consentAcceptAllBtn, 'cm__btn');
 
             _addEvent(dom._consentAcceptAllBtn, 'click', () => {
                 _log('CookieConsent [ACCEPT]: all');
@@ -111,12 +132,11 @@ export const _createConsentModal = (api) => {
         dom._consentAcceptAllBtn.innerHTML = acceptAllBtnData;
     }
 
-    // Add secondary button if not falsy
     if(acceptNecessaryBtnData){
 
         if(!dom._consentAcceptNecessaryBtn){
             dom._consentAcceptNecessaryBtn = _createNode('button');
-            dom._consentAcceptNecessaryBtn.className = 'cm__btn';
+            _addClass(dom._consentAcceptNecessaryBtn, 'cm__btn');
 
             _addEvent(dom._consentAcceptNecessaryBtn, 'click', () => {
                 _log('CookieConsent [ACCEPT]: necessary');
@@ -131,7 +151,7 @@ export const _createConsentModal = (api) => {
     if(showPreferencesBtnData){
         if(!dom._consentShowPreferencesBtn){
             dom._consentShowPreferencesBtn = _createNode('button');
-            dom._consentShowPreferencesBtn.className = 'cm__btn cm__btn-preferences';
+            dom._consentShowPreferencesBtn.className = 'cm__btn cm__btn--secondary';
 
             _addEvent(dom._consentShowPreferencesBtn, 'click', () => {
                 api.showPreferences();
@@ -141,36 +161,34 @@ export const _createConsentModal = (api) => {
         dom._consentShowPreferencesBtn.innerHTML = showPreferencesBtnData;
     }
 
-    // [TODO] swapButtons option
+    if(!dom._consentModalBtnGroup2 && showPreferencesBtnData){
+        dom._consentModalBtnGroup2 = _createNode('div');
+        _addClass(dom._consentModalBtnGroup2, 'cm__btn-group');
+        _appendChild(dom._consentModalBtnGroup2, dom._consentShowPreferencesBtn);
+        _appendChild(dom._consentModalBtns, dom._consentModalBtnGroup2);
+    }
 
     if(!dom._consentModalBtnGroup){
         dom._consentModalBtnGroup = _createNode('div');
-        dom._consentModalBtnGroup.className = 'cm__btn-group';
+        _addClass(dom._consentModalBtnGroup, 'cm__btn-group');
 
-        acceptAllBtnData && _appendChild(dom._consentModalBtnGroup, dom._consentAcceptAllBtn);
         acceptNecessaryBtnData && _appendChild(dom._consentModalBtnGroup, dom._consentAcceptNecessaryBtn);
+        acceptAllBtnData && _appendChild(dom._consentModalBtnGroup, dom._consentAcceptAllBtn);
 
         (acceptAllBtnData || acceptNecessaryBtnData ) && _appendChild(dom._consentModalBody, dom._consentModalBtnGroup);
         _appendChild(dom._consentModalBtns, dom._consentModalBtnGroup);
-    }
-
-    if(!dom._consentModalBtnGroup2 && showPreferencesBtnData){
-        dom._consentModalBtnGroup2 = _createNode('div');
-        dom._consentModalBtnGroup2.className = 'cm__btn-group';
-        _appendChild(dom._consentModalBtnGroup2, dom._consentShowPreferencesBtn);
-        _appendChild(dom._consentModalBtns, dom._consentModalBtnGroup2);
     }
 
     if(footerData){
         if(!dom._consentModalFooterLinksGroup){
             var _consentModalFooter = _createNode('div');
             var _consentModalFooterLinks = _createNode('div');
-
-            _consentModalFooter.className = 'cm__footer';
-            _consentModalFooterLinks.className = 'cm__links';
-
             dom._consentModalFooterLinksGroup = _createNode('div');
-            dom._consentModalFooterLinksGroup.className = 'cm__link-group';
+
+            _addClass(_consentModalFooter, 'cm__footer');
+            _addClass(_consentModalFooterLinks, 'cm__links');
+            _addClass(dom._consentModalFooterLinksGroup, 'cm__link-group');
+
             _appendChild(_consentModalFooterLinks, dom._consentModalFooterLinksGroup);
             _appendChild(_consentModalFooter, _consentModalFooterLinks);
             _appendChild(dom._consentModal, _consentModalFooter);

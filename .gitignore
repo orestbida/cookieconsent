@@ -11,6 +11,9 @@ node_modules
 dist-ssr
 *.local
 
+# Ignore _dynamic-reset.scss (created before build)
+src/scss/core/_dynamic-reset.scss
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

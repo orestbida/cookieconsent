@@ -1,24 +1,41 @@
 /** Light color-scheme **/
-#cc-main{
+:root{
     --cc-bg: #fff;
-    --cc-text: #2d4156;
-    --cc-btn-primary-bg: #2d4156;
-    --cc-btn-primary-text: var(--cc-bg);
-    --cc-btn-primary-hover-bg: #1d2e38;
-    --cc-btn-secondary-bg: #eaeff2;
-    --cc-btn-secondary-text: var(--cc-text);
-    --cc-btn-secondary-hover-bg: #d8e0e6;
+    --cc-primary-color: #444b57;
+    --cc-secondary-color: #626872;
+
+    --cc-btn-primary-bg: #32373b;
+    --cc-btn-primary-color: var(--cc-bg);
+    --cc-btn-primary-border-color: var(--cc-btn-primary-bg);
+    --cc-btn-primary-hover-bg: #000000;
+    --cc-btn-primary-hover-color: var(--cc-btn-primary-color);
+    --cc-btn-primary-hover-border-color: var(--cc-btn-primary-hover-bg);
+
+    --cc-btn-secondary-bg: transparent;
+    --cc-btn-secondary-color: var(--cc-primary-color);
+    --cc-btn-secondary-border-color: #abb3bc;
+    --cc-btn-secondary-hover-bg: #e0e4e9;
+    --cc-btn-secondary-hover-color: #1d2022;
+    --cc-btn-secondary-hover-border-color: #d9dee4;
+
+    --cc-separator-border-color: #f1f1f1;
+
     --cc-toggle-bg-off: #919ea6;
     --cc-toggle-bg-on: var(--cc-btn-primary-bg);
     --cc-toggle-bg-readonly: #d5dee2;
     --cc-toggle-knob-bg: #fff;
     --cc-toggle-knob-icon-color: #ecf2fa;
-    --cc-block-text: var(--cc-text);
-    --cc-cookie-category-block-bg: #f0f4f7;
-    --cc-cookie-category-block-bg-hover: #e9eff4;
-    --cc-section-border: #f1f3f5;
-    --cc-cookie-table-border: #e9edf2;
-    --cc-overlay-bg: rgba(4, 6, 8, .85);
-    --cc-webkit-scrollbar-bg: #cfd5db;
-    --cc-webkit-scrollbar-bg-hover: #9199a0;
+
+    //TODO: Some of these might not be in use
+    --cc-cookie-category-block-bg: #fff;
+    --cc-cookie-category-block-bg-hover: #f1f4f7;
+    --cc-section-category-border: #d5dce4;
+
+    --cc-overlay-bg: rgba(18, 21, 23, 0.541);
+    --cc-webkit-scrollbar-bg: var(--cc-section-category-border);
+    --cc-webkit-scrollbar-hover-bg: var(--cc-btn-primary-hover-bg);
+
+    --cc-footer-bg: #f1f1f1;
+    --cc-footer-color: var(--cc-secondary-color);
+    --cc-footer-border-color: #e5eaec;
 }

@@ -1,76 +1,138 @@
 import { state, dom } from '../core/global';
-import { _inArray, _addClass } from './general';
+import { _addClass, _elContains } from './general';
+
+/**
+ * @typedef {Object} Layout
+ * @property {string[]} _variants
+ * @property {string[]} _alignV
+ * @property {string[]} _alignH
+ * @property {string} _defaultAlignV
+ * @property {string} _defaultAlignH
+ */
+
+/**
+ * @typedef {Object.<string, Layout>} Layouts
+ */
+
+var appliedStyle0 = false; //if true, don't apply style to consentModal again
+var appliedStyle1 = false; //if true, don't apply style to preferencesModal again
 
 /**
  * Manage each modal's layout
- * @param {Object} guiOptions
+ * @param {number} applyToModal 0: consentModal, 1: preferencesModal
  */
 export const _guiManager = (applyToModal) => {
 
-    var guiOptions = state._userConfig['guiOptions'];
+    /**
+     * @type {import("../core/global").GuiOptions}
+     */
+    var guiOptions = state._userConfig.guiOptions;
 
-    // If guiOptions is not object => exit
-    if(typeof guiOptions !== 'object') return;
-
-    var consentModalOptions = guiOptions['consentModal'];
-    var preferencesModalOptions = guiOptions['preferencesModal'];
+    var consentModalOptions = guiOptions && guiOptions.consentModal;
+    var preferencesModalOptions = guiOptions && guiOptions.preferencesModal;
 
     /**
-     * Helper function which adds layout and
-     * position classes to given modal
-     *
+     * Helper function to set the proper layout classes
      * @param {HTMLElement} modal
-     * @param {string[]} allowedLayouts
-     * @param {string[]} allowedPositions
-     * @param {string} layout
-     * @param {string[]} position
+     * @param {Layouts} allowedLayoutsObj
+     * @param {import("../core/global").GuiModalOption} userGuiOptions
+     * @param {string} prefix
+     * @param {string} defaultLayoutName
      */
-    function _setLayout(modal, allowedLayouts, allowedPositions, allowed_transitions, layout, position, transition){
-        position = (position && position.split(' ')) || [];
+    function _setLayout(modal, allowedLayoutsObj, userGuiOptions, prefix, defaultLayoutName){
 
-        // Check if specified layout is valid
-        if(_inArray(allowedLayouts, layout) > -1){
+        var layout = userGuiOptions && userGuiOptions.layout;
+        var position = userGuiOptions && userGuiOptions.position;
+        var flipButtons = userGuiOptions && userGuiOptions.flipButtons === true;
+        var notSameWeightButtons = userGuiOptions && userGuiOptions.equalWeightButtons === false;
+        var userLayoutStr = layout && layout.split(' ') || [];
+        var userPositionStr = position && position.split(' ') || [];
 
-            // Add layout classes
-            _addClass(modal, layout);
+        var userLayoutName = userLayoutStr[0];
+        var userLayoutVariant = userLayoutStr[1];
+        var userAlignV = userPositionStr[0];
+        var userAlignH = prefix === 'pm--' ? userPositionStr[0] : userPositionStr[1];
 
-            // Add position class (if specified)
-            if(!(layout === 'bar' && position[0] === 'middle') && _inArray(allowedPositions, position[0]) > -1){
-                for(var i=0; i<position.length; i++){
-                    _addClass(modal, position[i]);
-                }
-            }
+        var currentLayoutName = userLayoutName,
+            currentLayout = allowedLayoutsObj[userLayoutName];
+
+        if(!currentLayout){
+            currentLayout = allowedLayoutsObj[defaultLayoutName];
+            currentLayoutName = defaultLayoutName;
         }
 
-        // Add transition class
-        (_inArray(allowed_transitions, transition) > -1) && _addClass(modal, transition);
+        var currentLayoutVariant = _elContains(currentLayout._variants, userLayoutVariant) && userLayoutVariant;
+        var currentAlignV = _elContains(currentLayout._alignV, userAlignV) ? userAlignV : currentLayout._defaultAlignV;
+        var currentAlignH = _elContains(currentLayout._alignH, userAlignH) ? userAlignH : currentLayout._defaultAlignH;
+
+        _addClass(modal, prefix + currentLayoutName);
+        currentLayoutVariant && _addClass(modal, prefix + currentLayoutVariant);
+        currentAlignV && _addClass(modal, prefix + currentAlignV);
+        currentAlignH && _addClass(modal, prefix + currentAlignH);
+        flipButtons && _addClass(modal, prefix + 'flip');
+
+        if(notSameWeightButtons){
+            var secondaryBtnClass = 'btn--secondary';
+            if(prefix === 'cm--'){
+                dom._consentAcceptNecessaryBtn && _addClass(dom._consentAcceptNecessaryBtn, 'cm__' + secondaryBtnClass);
+                dom._cmCloseIconBtn && _addClass(dom._cmCloseIconBtn, 'cm__' + secondaryBtnClass);
+            }else
+                dom._pmAcceptNecessaryBtn &&  _addClass(dom._pmAcceptNecessaryBtn, 'pm__' + secondaryBtnClass);
+        }
+
+        applyToModal === 0 ? (appliedStyle0=true) : (appliedStyle1=true);
     }
 
-    if(applyToModal === 0 && state._consentModalExists && consentModalOptions){
-        // [TODO]
+    if(applyToModal === 0 && !appliedStyle0 && state._consentModalExists){
 
-        dom._consentModal.classList.add('cm--bar');
-        dom._consentModal.classList.add('cm--bottom-center');
-        // _setLayout(
-        //     dom._consentModal,
-        //     ['box', 'bar', 'cloud'],
-        //     ['top', 'middle', 'bottom'],
-        //     ['zoom', 'slide'],
-        //     consentModalOptions['layout'],
-        //     consentModalOptions['position'],
-        //     consentModalOptions['transition']
-        // );
+        var alignV = ['middle', 'top', 'bottom'];
+        var alignH = ['left', 'center', 'right'];
+
+        var cmLayouts = {
+            box: {
+                _variants: ['wide', 'inline'],
+                _alignV: alignV,
+                _alignH: alignH,
+                _defaultAlignV: 'bottom',
+                _defaultAlignH: 'right'
+            },
+            cloud: {
+                _variants: ['inline'],
+                _alignV: alignV,
+                _alignH: alignH,
+                _defaultAlignV: 'bottom',
+                _defaultAlignH: 'center'
+            },
+            bar: {
+                _variants: ['inline'],
+                _alignV: alignV.slice(1),   //remove the first "middle" option
+                _alignH: [],
+                _defaultAlignV: 'bottom',
+                _defaultAlignH: ''
+            }
+        };
+
+        _setLayout(dom._consentModal, cmLayouts, consentModalOptions, 'cm--', 'box');
     }
 
-    if(applyToModal === 1 && preferencesModalOptions){
-        _setLayout(
-            dom._preferencesContainer,
-            ['bar'],
-            ['left', 'right'],
-            ['zoom', 'slide'],
-            preferencesModalOptions['layout'],
-            preferencesModalOptions['position'],
-            preferencesModalOptions['transition']
-        );
+    if(applyToModal === 1 && !appliedStyle1){
+        var pmLayouts = {
+            box: {
+                _variants: [],
+                _alignV: [],
+                _alignH: [],
+                _defaultAlignV: '',
+                _defaultAlignH: ''
+            },
+            bar: {
+                _variants: ['wide'],
+                _alignV: [],
+                _alignH: ['left', 'right'],
+                _defaultAlignV: '',
+                _defaultAlignH: 'left'
+            }
+        };
+
+        _setLayout(dom._pm, pmLayouts, preferencesModalOptions, 'pm--', 'box');
     }
 };
