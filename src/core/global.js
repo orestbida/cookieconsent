@@ -85,7 +85,7 @@
  * @property {string} [layout]
  * @property {string} [position]
  * @property {boolean} [flipButtons]
- * @property {boolean} [sameWeightButtons]
+ * @property {boolean} [equalWeightButtons]
  */
 
 /**

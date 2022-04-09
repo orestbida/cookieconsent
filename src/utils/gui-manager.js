@@ -44,7 +44,7 @@ export const _guiManager = (applyToModal) => {
         var layout = userGuiOptions && userGuiOptions.layout;
         var position = userGuiOptions && userGuiOptions.position;
         var flipButtons = userGuiOptions && userGuiOptions.flipButtons === true;
-        var notSameWeightButtons = userGuiOptions && userGuiOptions.sameWeightButtons === false;
+        var notSameWeightButtons = userGuiOptions && userGuiOptions.equalWeightButtons === false;
         var userLayoutStr = layout && layout.split(' ') || [];
         var userPositionStr = position && position.split(' ') || [];
 
