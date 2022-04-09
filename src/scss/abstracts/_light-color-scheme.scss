@@ -1,20 +1,22 @@
 /** Light color-scheme **/
-#cc-main{
+:root{
     --cc-bg: #fff;
     --cc-primary-color: #444b57;
     --cc-secondary-color: #626872;
 
     --cc-btn-primary-bg: #32373b;
-    --cc-btn-primary-hover-bg: #000000;
     --cc-btn-primary-color: var(--cc-bg);
     --cc-btn-primary-border-color: var(--cc-btn-primary-bg);
+    --cc-btn-primary-hover-bg: #000000;
+    --cc-btn-primary-hover-color: var(--cc-btn-primary-color);
     --cc-btn-primary-hover-border-color: var(--cc-btn-primary-hover-bg);
 
     --cc-btn-secondary-bg: transparent;
-    --cc-btn-secondary-hover-bg: transparent;
     --cc-btn-secondary-color: var(--cc-primary-color);
     --cc-btn-secondary-border-color: #abb3bc;
-    --cc-btn-secondary-hover-border-color: var(--cc-btn-secondary-color);
+    --cc-btn-secondary-hover-bg: #e0e4e9;
+    --cc-btn-secondary-hover-color: #1d2022;
+    --cc-btn-secondary-hover-border-color: #d9dee4;
 
     --cc-separator-border-color: #f1f1f1;
 
@@ -25,15 +27,13 @@
     --cc-toggle-knob-icon-color: #ecf2fa;
 
     //TODO: Some of these might not be in use
-    --cc-block-color: var(--cc-primary-color);
     --cc-cookie-category-block-bg: #fff;
     --cc-cookie-category-block-bg-hover: #f1f4f7;
-    --cc-section-border-color: #f1f3f5;
     --cc-section-category-border: #d5dce4;
-    --cc-cookie-table-border: #e9edf2;
-    --cc-overlay-bg: rgba(0, 0, 0, 0.541);
-    --cc-webkit-scrollbar-bg: #cfd5db;
-    --cc-webkit-scrollbar-bg-hover: #9199a0;
+
+    --cc-overlay-bg: rgba(18, 21, 23, 0.541);
+    --cc-webkit-scrollbar-bg: var(--cc-section-category-border);
+    --cc-webkit-scrollbar-hover-bg: var(--cc-btn-primary-hover-bg);
 
     --cc-footer-bg: #f1f1f1;
     --cc-footer-color: var(--cc-secondary-color);
