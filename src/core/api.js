@@ -158,7 +158,7 @@ export const api = {
      * @param {boolean} [forceUpdate] update language fields forcefully
      * @returns {boolean}
      */
-    updateLanguage: (newLanguage, forceUpdate) => {
+    setLanguage: (newLanguage, forceUpdate) => {
 
         if(typeof newLanguage !== 'string') return;
 
