@@ -213,16 +213,25 @@ export const _addDataButtonListeners = (elem, api) => {
 
     var _a = 'accept-';
 
-    var showPreferencesElements = _getElements('show-preferences');
+    var showPreferencesModalElements = _getElements('show-preferencesModal');
+    var showConsentModalElements = _getElements('show-consentModal');
     var acceptAllElements = _getElements(_a + 'all');
     var acceptNecessaryElements = _getElements(_a + 'necessary');
     var acceptCustomElements = _getElements(_a + 'custom');
 
-    for(var i=0; i<showPreferencesElements.length; i++){
-        _setAttribute(showPreferencesElements[i], 'aria-haspopup', 'dialog');
-        _addEvent(showPreferencesElements[i], 'click', (event) => {
+    for(var i=0; i<showPreferencesModalElements.length; i++){
+        _setAttribute(showPreferencesModalElements[i], 'aria-haspopup', 'dialog');
+        _addEvent(showPreferencesModalElements[i], 'click', (event) => {
             event.preventDefault();
             api.showPreferences(0);
+        });
+    }
+
+    for(i=0; i<showConsentModalElements.length; i++){
+        _setAttribute(showConsentModalElements[i], 'aria-haspopup', 'dialog');
+        _addEvent(showConsentModalElements[i], 'click', (event) => {
+            event.preventDefault();
+            api.show(0, true);
         });
     }
 
