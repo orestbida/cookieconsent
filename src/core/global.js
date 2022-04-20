@@ -131,7 +131,8 @@
  * @property {Function} acceptedCategory
  * @property {Function} validCookie
  * @property {Function} eraseCookies
- * @property {Function} updateLanguage
+ * @property {Function} setLanguage
+ * @property {Function} validConsent
  * @property {Function} updateScripts
  * @property {Function} loadScript
  * @property {Function} getConfig
