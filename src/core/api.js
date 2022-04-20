@@ -454,6 +454,14 @@ export const api = {
     },
 
     /**
+     * Returns true if consent is valid
+     * @returns {boolean}
+     */
+    validConsent: () => {
+        return !state._invalidConsent;
+    },
+
+    /**
      * Will run once and only if modals do not exist.
      * @param {import("./global").UserConfig} conf
      */
