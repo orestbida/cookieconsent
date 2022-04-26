@@ -285,7 +285,7 @@
              * @returns {NodeListOf<Element>}
              */
             function _getElements(data_role){
-                return (elem || document).querySelectorAll('a[data-cc="' + data_role + '"], button[data-cc="' + data_role + '"]');
+                return (elem || document).querySelectorAll('[data-cc="' + data_role + '"]');
             }
 
             /**
