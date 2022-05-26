@@ -1279,7 +1279,7 @@
 
             if (_config.auto_language === 'browser') {
                 return _getValidatedLanguage(_getBrowserLang(), languages);
-            } else if (_config.auto_language === 'document') {
+            } else if (_config.auto_language === 'document' && document.documentElement.lang) {
                 return _getValidatedLanguage(document.documentElement.lang, languages);
             } else {
                 if (typeof requested_language === 'string') {
