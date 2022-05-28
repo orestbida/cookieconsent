@@ -1,8 +1,4 @@
 @import "./core/dynamic-reset";
 @import "./abstracts/light-color-scheme";
-
-.cc--darkmode{
-    @import "./abstracts/dark-color-scheme";
-}
-
+@import "./abstracts/dark-color-scheme";
 @import "./core/main";
