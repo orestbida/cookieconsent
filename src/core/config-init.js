@@ -53,7 +53,7 @@ export const _setConfig = (_userConfig) => {
     callbacks._onConsent = _userConfig.onConsent;
     callbacks._onChange = _userConfig.onChange;
 
-    var mode = _userConfig;
+    var mode = _userConfig.mode;
     var revision = _userConfig.revision;
     var autoClearCookies = _userConfig.autoClearCookies;
     var manageScriptTags = _userConfig.manageScriptTags;
