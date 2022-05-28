@@ -45,8 +45,8 @@ export const _autoclearCookies = (clearOnFirstConsent) => {
          */
         return(
             !!currentCategoryObject
-            && !currentCategoryObject['readOnly']
-            && !!currentCategoryObject['autoClear']
+            && !currentCategoryObject.readOnly
+            && !!currentCategoryObject.autoClear
         );
     });
 
