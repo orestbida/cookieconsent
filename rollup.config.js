@@ -3,12 +3,12 @@ import { terser } from "rollup-plugin-terser";
 import { babel } from '@rollup/plugin-babel';
 import postcss from 'rollup-plugin-postcss';
 import eslint from '@rollup/plugin-eslint';
-import fs from "fs";
+
+import {main, module} from './package.json';
 
 const srcDir = './src';
 const distDir = './dist';
 const input = `${srcDir}/index.js`;
-const libName = 'CookieConsent';
 const productionMode = !process.env.ROLLUP_WATCH;
 const isIE = process.env.BROWSER === 'IE';
 
@@ -48,8 +48,8 @@ export default defineConfig(
         {
             input: input,
             output: {
-                name: libName,
-                file: `${distDir}/cookieconsent.js`,
+                name: 'CookieConsent',
+                file: main,
                 format: 'umd'
             },
             plugins: plugins
@@ -57,56 +57,45 @@ export default defineConfig(
         {
             input: input,
             output: {
-                file: `${distDir}/esm/cookieconsent.js`,
+                file: module,
                 format: "esm",
                 exports: "named"
             },
             plugins: plugins,
         },
-        ...processStylesIndividually()
+        {
+            input: `${srcDir}/scss/index.scss`,
+            output: {
+                file: `${distDir}/cookieconsent.css`,
+            },
+            plugins: postcss({
+                extract: true,
+                plugins: [
+                    require('postcss-preset-env')({
+                        browsers: [
+                            'last 1 version',
+                            '> 1%',
+                            isIE && 'ie >= 10'
+                        ],
+                        features: {
+                            "custom-properties": isIE
+                        }
+                    }),
+                    require('postcss-combine-duplicated-selectors'),
+                    require('autoprefixer'),
+                    productionMode && require('cssnano')({
+                        preset: ["default", {
+                            discardComments: {
+                                removeAll: true,
+                            }
+                        }]
+                    })
+                ]
+            }),
+            onwarn(warning, warn) {
+                if(warning.code === 'FILE_NAME_CONFLICT') return;
+                warn(warning);
+            }
+        }
     ]
 );
-
-function processStylesIndividually (){
-    const scssDir = `${srcDir}/scss`;
-
-    return fs.readdirSync(scssDir)
-        .filter(fileName => fileName.match(/.*\.(scss|css)$/))
-        .map(fileName => {
-            return {
-                input: `${scssDir}/${fileName}`,
-                output: {
-                    file: `${distDir}/${fileName.replace('.scss', '.css')}`,
-                },
-                plugins: postcss({
-                    include: `${scssDir}/${fileName}`,
-                    extract: true,
-                    plugins: [
-                        require('postcss-preset-env')({
-                            browsers: [
-                                'last 1 version',
-                                '> 1%',
-                                isIE && 'ie >= 10'
-                            ],
-                            features: {
-                                "custom-properties": isIE
-                            }
-                        }),
-                        require('postcss-combine-duplicated-selectors'),
-                        require('autoprefixer'),
-                        productionMode && require('cssnano')({
-                            preset: ["default", {
-                                discardComments: {
-                                    removeAll: true,
-                                }
-                            }]
-                        })
-                    ]
-                }),
-                onwarn(warning, warn) {
-                    if(warning.code === 'FILE_NAME_CONFLICT') return;
-                    warn(warning);
-                }
-            }
-        });
-}
