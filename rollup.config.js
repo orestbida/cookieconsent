@@ -7,48 +7,61 @@ import fs from "fs";
 
 const srcDir = './src';
 const distDir = './dist';
+const input = `${srcDir}/index.js`;
+const libName = 'CookieConsent';
 const productionMode = !process.env.ROLLUP_WATCH;
 const isIE = process.env.BROWSER === 'IE';
+
+const plugins = [
+    eslint({
+        fix: true,
+        include: ['./src/**'],
+        exclude: ['./src/scss/**']
+    }),
+    isIE && babel({
+        exclude:'node_modules/**',
+        babelHelpers: 'bundled',
+        configFile: './babel.config.js'
+    }),
+    productionMode && terser({
+        toplevel: true,
+        format: {
+            quote_style: 1,
+            comments: false
+        },
+        mangle: {
+            properties: {
+                regex: /^_/,
+                keep_quoted: true
+            }
+        },
+        compress: {
+            drop_console: true,
+            passes: 3,
+            pure_funcs: [ '_log']
+        }
+    }),
+];
 
 export default defineConfig(
     [
         {
-            input: `${srcDir}/index.js`,
+            input: input,
             output: {
-                name: 'CookieConsent',
+                name: libName,
                 file: `${distDir}/cookieconsent.js`,
-                format: 'umd',
+                format: 'umd'
             },
-            plugins: [
-                eslint({
-                    fix: true,
-                    include: ['./src/**'],
-                    exclude: ['./src/scss/**']
-                }),
-                isIE && babel({
-                    exclude:'node_modules/**',
-                    babelHelpers: 'bundled',
-                    configFile: './babel.config.js'
-                }),
-                productionMode && terser({
-                    toplevel: true,
-                    format: {
-                        quote_style: 1,
-                        comments: false
-                    },
-                    mangle: {
-                        properties: {
-                            regex: /^_/,
-                            keep_quoted: true
-                        }
-                    },
-                    compress: {
-                        drop_console: true,
-                        passes: 3,
-                        pure_funcs: [ '_log']
-                    }
-                }),
-            ]
+            plugins: plugins
+        },
+        {
+            input: input,
+            output: {
+                file: `${distDir}/esm/cookieconsent.js`,
+                format: "esm",
+                exports: "named"
+            },
+            plugins: plugins,
         },
         ...processStylesIndividually()
     ]
@@ -73,7 +86,7 @@ function processStylesIndividually (){
                             browsers: [
                                 'last 1 version',
                                 '> 1%',
-                                isIE && 'ie >= 8'
+                                isIE && 'ie >= 10'
                             ],
                             features: {
                                 "custom-properties": isIE
