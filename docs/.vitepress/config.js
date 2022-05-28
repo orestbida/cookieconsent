@@ -17,6 +17,7 @@ export default defineConfig({
     themeConfig: {
         repo: 'orestbida/cookieconsent',
         docsDir: 'docs',
+        docsBranch: 'v3.0-beta',
         editLinks: true,
         editLinkText: 'Suggest changes to this page',
         algolia: {
