@@ -1,11 +1,17 @@
 # Callbacks and Events
 There are a few callbacks/events at your disposal to handle different kinds of situations. Each callback has a corresponding custom event, named after the callback function itself.
 
-Available callbacks/events:
+Available callbacks:
 
 - `onFirstConsent`
 - `onConsent`
 - `onChange`
+
+Available events:
+
+- `cc:onFirstConsent`
+- `cc:onConsent`
+- `cc:onChange`
 
 ## onFirstConsent
 This event is triggered only the very first time that the user expresses their choice of consent (accept/reject).
@@ -27,7 +33,7 @@ This event is triggered only the very first time that the user expresses their c
 
     using event listener:
     ```javascript
-    window.addEventListener('onFirstConsent', function(){
+    window.addEventListener('cc:onFirstConsent', function(){
         // do something
     });
     ```
@@ -52,7 +58,7 @@ This event is triggered the very first time the user expresses expresses their c
 
     using event listener:
     ```javascript
-    window.addEventListener('onConsent', function(){
+    window.addEventListener('cc:onConsent', function(){
         // do something
     });
     ```
@@ -77,7 +83,7 @@ This event is triggered when the user modifies their preferences and only if con
 
     using event listener:
     ```javascript
-    window.addEventListener('onChange', function(){
+    window.addEventListener('cc:onChange', function(){
         // do something
     });
     ```
