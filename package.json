@@ -2,7 +2,9 @@
     "name": "cookieconsent",
     "version": "3.0.0-beta.1",
     "description": "🍪 Simple cross-browser cookie-consent plugin written in vanilla js.",
-    "main": "dist/cookieconsent.js",
+    "main": "dist/cookieconsent.umd.js",
+    "module": "dist/cookieconsent.esm.js",
+    "files": ["dist"],
     "scripts": {
         "dev": "rollup --config --watch",
         "build": "node src/utils/dynamic-reset.js &&rollup --config",
