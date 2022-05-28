@@ -198,7 +198,7 @@ export default{
         display: flex;
         flex-direction: row;
         justify-content: space-between;
-        align-items: center;
+        align-items: stretch;
         margin-top: 10px;
     }
 
@@ -208,7 +208,7 @@ export default{
 
     .c-block{
         padding: 1.5rem 1.5rem;
-        height: 180px;
+        height: auto;
         background-color: #16181B;
         border-radius: 6px;
         flex: 1;
@@ -223,7 +223,8 @@ export default{
     .c-block__title{
         font-size: 1.25em;
         display: flex;
-        align-items: center;
+        flex-direction: column;
+        align-items: flex-start;
         margin-bottom: 1rem;
         color: #BBC7CF;
         transition: color .2s ease;
@@ -235,6 +236,7 @@ export default{
 
     .c-block__title-icon{
         margin-right: .75rem;
+        margin-bottom: 1em;
     }
 
     .c-block__title-text{
