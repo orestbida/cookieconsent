@@ -87,11 +87,12 @@ a:active{
 
 #cc-main p{
     display: flex;
+    margin: 0;
     margin-bottom: 1px!important;
 }
 
 #cc-main p>span{
-    background: rgba(143, 174, 189, .22);
+    background: rgba(143, 174, 189, .13);
     border-radius: 5px;
     padding: 1px 6px;
     font-size: .95em;
