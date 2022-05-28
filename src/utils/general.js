@@ -389,7 +389,12 @@ export const _getModalFocusableData = () => {
      */
     var allowed_focusable_types = ['[href]', 'button', 'input', 'details', '[tabindex="0"]'];
 
-    function _getAllFocusableElements(modal, _array){
+    /**
+     * Saves all focusable elements inside modal, into the array
+     * @param {HTMLElement} modal
+     * @param {Element[]} _array
+     */
+    function _saveAllFocusableElements(modal, _array){
         var focusLater=false, focusFirst=false;
 
         // ie might throw exception due to complex unsupported selector => a:not([tabindex="-1"])
@@ -431,12 +436,12 @@ export const _getModalFocusableData = () => {
      * Get preferences modal's all focusable elements
      * Save first and last elements (used to lock/trap focus inside modal)
      */
-    _getAllFocusableElements(dom._pm, state._allPreferencesModalFocusableElements);
+    _saveAllFocusableElements(dom._pm, state._allPreferencesModalFocusableElements);
 
     /**
      * If consent modal exists, do the same
      */
     if(state._consentModalExists){
-        _getAllFocusableElements(dom._consentModal, state._allConsentModalFocusableElements);
+        _saveAllFocusableElements(dom._consentModal, state._allConsentModalFocusableElements);
     }
 };

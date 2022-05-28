@@ -179,15 +179,15 @@ export const config = {
  * avoid calling userConfig['<callback_name>']
  */
 export const callbacks = {
-    _onFirstConsent: 0,
-    _onConsent: 0,
-    _onChange: 0
+    /** @type {number|Function} **/ _onFirstConsent: 0,
+    /** @type {number|Function} **/ _onConsent: 0,
+    /** @type {number|Function} **/ _onChange: 0
 };
 
 export const customEvents = {
-    _onFirstConsent: new Event('onFirstConsent'),
-    _onConsent: new Event('onConsent'),
-    _onChange: new Event('onChange')
+    _onFirstConsent: new Event('cc:onFirstConsent'),
+    _onConsent: new Event('cc:onConsent'),
+    _onChange: new Event('cc:onChange')
 };
 
 /**
@@ -206,6 +206,11 @@ export const _fireEvent = (event) => {
     if(event === customEvents._onChange && isFunction(callbacks._onChange))
         callbacks._onChange(state._savedCookieContent, state._lastChangedCategoryNames);
 
+    /**
+     * Check if el is a function
+     * @param {any} fn
+     * @returns {boolean}
+     */
     function isFunction(fn){
         return typeof fn === 'function';
     }
@@ -217,36 +222,36 @@ export const _fireEvent = (event) => {
  */
 export const dom = {
 
-    /** @type {HTMLElement} */ _htmlDom: 0, // defined after config
-    /** @type {HTMLElement} */ _ccMain: 0,
-    /** @type {HTMLElement} */ _cmContainer: 0,
-    /** @type {HTMLElement} */ _pmContainer: 0,
+    /** @type {number|HTMLElement} */ _htmlDom: 0, // defined after config
+    /** @type {number|HTMLElement} */ _ccMain: 0,
+    /** @type {number|HTMLElement} */ _cmContainer: 0,
+    /** @type {number|HTMLElement} */ _pmContainer: 0,
 
-    /** @type {HTMLElement} */ _consentModal: 0,
-    /** @type {HTMLElement} */ _consentModalBody: 0,
-    /** @type {HTMLElement} */ _consentModalTexts: 0,
-    /** @type {HTMLElement} */ _consentModalTitle: 0,
-    /** @type {HTMLElement} */ _consentModalDescription: 0,
-    /** @type {HTMLElement} */ _consentModalBtns: 0,
-    /** @type {HTMLElement} */ _consentModalBtnGroup: 0,
-    /** @type {HTMLElement} */ _consentModalBtnGroup2: 0,
-    /** @type {HTMLElement} */ _consentAcceptAllBtn: 0,
-    /** @type {HTMLElement} */ _consentAcceptNecessaryBtn: 0,
-    /** @type {HTMLElement} */ _consentShowPreferencesBtn: 0,
-    /** @type {HTMLElement} */ _consentModalFooterLinksGroup: 0,
-    /** @type {HTMLElement} */ _cmCloseIconBtn: 0,
+    /** @type {number|HTMLElement} */ _consentModal: 0,
+    /** @type {number|HTMLElement} */ _consentModalBody: 0,
+    /** @type {number|HTMLElement} */ _consentModalTexts: 0,
+    /** @type {number|HTMLElement} */ _consentModalTitle: 0,
+    /** @type {number|HTMLElement} */ _consentModalDescription: 0,
+    /** @type {number|HTMLElement} */ _consentModalBtns: 0,
+    /** @type {number|HTMLElement} */ _consentModalBtnGroup: 0,
+    /** @type {number|HTMLElement} */ _consentModalBtnGroup2: 0,
+    /** @type {number|HTMLElement} */ _consentAcceptAllBtn: 0,
+    /** @type {number|HTMLElement} */ _consentAcceptNecessaryBtn: 0,
+    /** @type {number|HTMLElement} */ _consentShowPreferencesBtn: 0,
+    /** @type {number|HTMLElement} */ _consentModalFooterLinksGroup: 0,
+    /** @type {number|HTMLElement} */ _cmCloseIconBtn: 0,
 
-    /** @type {HTMLElement} */ _pm: 0,
-    /** @type {HTMLElement} */ _pmHeader: 0,
-    /** @type {HTMLElement} */ _pmTitle: 0,
-    /** @type {HTMLElement} */ _pmCloseBtn: 0,
-    /** @type {HTMLElement} */ _pmBody: 0,
-    /** @type {HTMLElement} */ _pmNewBody: 0,
-    /** @type {HTMLElement} */ _pmSections: 0,
-    /** @type {HTMLElement} */ _pmFooter: 0,
-    /** @type {HTMLElement} */ _pmAcceptAllBtn: 0,
-    /** @type {HTMLElement} */ _pmAcceptNecessaryBtn: 0,
-    /** @type {HTMLElement} */ _pmSavePreferencesBtn: 0
+    /** @type {number|HTMLElement} */ _pm: 0,
+    /** @type {number|HTMLElement} */ _pmHeader: 0,
+    /** @type {number|HTMLElement} */ _pmTitle: 0,
+    /** @type {number|HTMLElement} */ _pmCloseBtn: 0,
+    /** @type {number|HTMLElement} */ _pmBody: 0,
+    /** @type {number|HTMLElement} */ _pmNewBody: 0,
+    /** @type {number|HTMLElement} */ _pmSections: 0,
+    /** @type {number|HTMLElement} */ _pmFooter: 0,
+    /** @type {number|HTMLElement} */ _pmAcceptAllBtn: 0,
+    /** @type {number|HTMLElement} */ _pmAcceptNecessaryBtn: 0,
+    /** @type {number|HTMLElement} */ _pmSavePreferencesBtn: 0
 };
 
 export const cookieConfig = config.cookie;
@@ -260,7 +265,11 @@ export const state = {
     _userConfig: null,
 
     _currentLanguageCode: '',
-    _allTranslations: [],
+
+    /**
+     * @type {Object.<string, Translation>}
+     */
+    _allTranslations: {},
 
     /**
      * @type {Translation}
@@ -273,6 +282,9 @@ export const state = {
      */
     _savedCookieContent : null,
 
+    /**
+     * @type {any}
+     */
     _cookieData : null,
 
     /**
@@ -290,9 +302,6 @@ export const state = {
      */
     _consentId: '',
 
-    /**
-     * @type {boolean}
-     */
     _invalidConsent : true,
 
     _consentModalExists : false,
@@ -300,6 +309,10 @@ export const state = {
 
     _preferencesModalVisible : false,
     _clickedInsideModal : false,
+
+    /**
+     * @type {HTMLElement[]}
+     */
     _currentModalFocusableElements: [],
 
     _revisionEnabled : false,
@@ -361,16 +374,16 @@ export const state = {
      * Save reference to the last focused element on the page
      * (used later to restore focus when both modals are closed)
      */
-    _lastFocusedElemBeforeModal: false,
-    _lastFocusedModalElement: false,
+    /** @type {HTMLElement} **/_lastFocusedElemBeforeModal: false,
+    /** @type {HTMLElement} **/_lastFocusedModalElement: false,
 
     /**
      * Both of the arrays below have the same structure:
      * [0] :> holds reference to the FIRST focusable element inside modal
      * [1] :> holds reference to the LAST focusable element inside modal
      */
-    _allConsentModalFocusableElements : [],
-    _allPreferencesModalFocusableElements : [],
+    /** @type {HTMLElement[]} **/ _allConsentModalFocusableElements : [],
+    /** @type {HTMLElement[]} **/ _allPreferencesModalFocusableElements : [],
 
     /**
      * Keep track of enabled/disabled categories
