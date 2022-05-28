@@ -1,4 +1,7 @@
-$toggle-knob-height: 1.4em;
+$toggle-knob-height: 23px;
+$toggle-knob-width: 50px;
+$btn-margin: 7px;
+$btn-height: 40px;
 
 :root{
     --cc-pm-toggle-border-radius: 4em;
@@ -24,7 +27,7 @@ $toggle-knob-height: 1.4em;
     .pm__header,
     .pm__body,
     .pm__footer{
-        padding: 1em 1.75em;
+        padding: 1em 1.6em;
     }
 
     .pm__header{
@@ -37,11 +40,12 @@ $toggle-knob-height: 1.4em;
     .pm__title{
         flex: 1;
         font-weight: $font-weight-bold;
+        padding-right: 2em;
     }
 
     .pm__close-btn{
-        width: 2.6em;
-        height: 2.6em;
+        width: $btn-height;
+        height: $btn-height;
         position: relative;
         background: var(--cc-btn-secondary-bg);
         border-radius: var(--cc-btn-border-radius);
@@ -53,10 +57,12 @@ $toggle-knob-height: 1.4em;
             content: '';
             position: absolute;
             top: 50%;
-            left: 1.2em;
-            margin: 0 auto;
-            height: 0.87em;
-            width: 1.5px;
+            left: 0;
+            right: 0;
+            margin: auto;
+            height: 0.9em;
+            width: 2px;
+            border-radius: 2px;
             background: var(--cc-btn-secondary-color);
             transform: translateY(-50%) rotate(45deg);
             transition: all .15s ease;
@@ -65,7 +71,6 @@ $toggle-knob-height: 1.4em;
         &::after {
             transform: translateY(-50%) rotate(-45deg);
         }
-
 
         &:hover{
             border-color: var(--cc-btn-secondary-hover-border-color);
@@ -102,7 +107,7 @@ $toggle-knob-height: 1.4em;
         padding: 1em;
         margin-bottom: 0.5em;
         border: 1px solid var(--cc-separator-border-color);
-        transition: background-color .25s ease;
+        transition: background-color .25s ease, border-color .25s ease;
 
         &:first-child{
             margin-bottom: 2em;
@@ -117,7 +122,8 @@ $toggle-knob-height: 1.4em;
             transition: background-color .25s ease;
 
             &:hover{
-                background: var(--cc-cookie-category-block-bg-hover);
+                background: var(--cc-cookie-category-block-bg);
+                border-color: var(--cc-cookie-category-block-border);
             }
         }
 
@@ -128,15 +134,15 @@ $toggle-knob-height: 1.4em;
             .pm__section-title{
                 width: 100%;
                 display: block;
-                padding: 1em;
                 background: var(--cc-cookie-category-block-bg);
                 position: relative;
-                padding: 1.2em 6.4em 1.2em 2.7em;
-                border: 1px solid var(--cc-section-category-border);
-                transition: background-color .25s ease;
+                padding: 1.1em 6.4em 1.1em 2.7em;
+                border: 1px solid var(--cc-cookie-category-block-border);
+                transition: background-color .25s ease, border-color .25s ease;
 
                 &:hover{
-                    background: var(--cc-cookie-category-block-bg-hover);
+                    background: var(--cc-cookie-category-block-hover-bg);
+                    border-color: var(--cc-cookie-category-block-hover-border);
                 }
 
                 &::before{
@@ -158,7 +164,7 @@ $toggle-knob-height: 1.4em;
             /* Hide description by default */
             .pm__section-desc-wrapper{
                 display: none;
-                border: 1px solid var(--cc-section-category-border);
+                border: 1px solid var(--cc-cookie-category-block-border);
                 border-top: none;
                 border-bottom-left-radius: var(--cc-btn-border-radius);
                 border-bottom-right-radius: var(--cc-btn-border-radius);
@@ -210,7 +216,7 @@ $toggle-knob-height: 1.4em;
     .section__toggle,
     .toggle__label,
     .toggle__icon{
-        width: 3.4em;
+        width: $toggle-knob-width;
         height: $toggle-knob-height;
         border-radius: var(--cc-pm-toggle-border-radius);
     }
@@ -259,12 +265,16 @@ $toggle-knob-height: 1.4em;
         left: 0;
         margin: 0;
         border: 0;
+
+        &:disabled {
+            cursor: not-allowed;
+        }
     }
 
     .toggle__icon{
         position: absolute;
-        background: var(--cc-toggle-bg-off);
-        box-shadow: 0 0 0 2px var(--cc-toggle-bg-off);
+        background: var(--cc-toggle-off-bg);
+        box-shadow: 0 0 0 1px var(--cc-toggle-off-bg);
         transition: all .25s ease;
         pointer-events: none;
 
@@ -277,15 +287,11 @@ $toggle-knob-height: 1.4em;
             width: $toggle-knob-height;
             height: $toggle-knob-height;
             border: none;
-            background: var(--cc-toggle-knob-bg);
+            background: var(--cc-toggle-off-knob-bg);
             box-shadow: 0 1px 2px rgba(24, 32, 3, .36);
-            transition: transform .25s ease;
+            transition: transform .25s ease, background-color .25s ease;
             border-radius: 100%;
         }
-    }
-
-    .section__toggle:disabled {
-        cursor: not-allowed;
     }
 
     .toggle__icon-on,
@@ -294,7 +300,9 @@ $toggle-knob-height: 1.4em;
         width: 50%;
         position: absolute;
         right: 0;
-        display: block;
+        display: flex;
+        justify-content: center;
+        align-items: center;
         text-align: center;
         transition: opacity .15s ease;
     }
@@ -304,16 +312,17 @@ $toggle-knob-height: 1.4em;
         opacity: 0;
 
         &::before{
-            border: solid var(--cc-toggle-knob-icon-color);
+            border: solid var(--cc-toggle-enabled-icon-color);
             border-width: 0 2px 2px 0;
-            padding: 0.1em;
+            padding: 1.5px;
             display: inline-block;
-            padding-bottom: 0.45em;
+            padding-bottom: 7px;
             content: '';
             margin: 0 auto;
-            transform: rotate(45deg);
-            top: 0.37em;
-            left: 0.75em;
+            top: 50%;
+            transform: rotate(45deg) translate(-50%);
+            margin-top: -4.5px;
+            margin-left: 7px;
             position: absolute;
         }
     }
@@ -323,35 +332,37 @@ $toggle-knob-height: 1.4em;
 
         &::after,
         &::before {
-            right: 0.8em;
-            top: 0.42em;
-            content: ' ';
+            content: '';
+            top: 50%;
             height: 0.7em;
             width: 0.09375em;
             display: block;
-            background: var(--cc-toggle-knob-icon-color);
+            background: var(--cc-toggle-disabled-icon-color);
             margin: 0 auto;
+            margin-right: 2px;
+            margin-top: .5px;
             position: absolute;
             transform-origin: center;
         }
 
         &::before{
-            transform: rotate(45deg);
+            transform: translateY(-50%) rotate(45deg);
         }
 
         &::after{
-            transform: rotate(-45deg);
+            transform: translateY(-50%) rotate(-45deg);
         }
     }
 
     .section__toggle:checked{
 
         &~.toggle__icon{
-            background: var(--cc-toggle-bg-on);
-            box-shadow: 0 0 0 2px var(--cc-toggle-bg-on);
+            background: var(--cc-toggle-on-bg);
+            box-shadow: 0 0 0 1px var(--cc-toggle-on-bg);
 
             &:after{
-                transform: translateX(2em);
+                transform: translateX(calc($toggle-knob-width - $toggle-knob-height));
+                background-color: var(--cc-toggle-on-knob-bg);
             }
 
             .toggle__icon-on{
@@ -365,8 +376,19 @@ $toggle-knob-height: 1.4em;
 
         &:disabled{
             &~.toggle__icon{
-                background: var(--cc-toggle-bg-readonly);
-                box-shadow: 0 0 0 2px var(--cc-toggle-bg-readonly);
+                background: var(--cc-toggle-readonly-bg);
+                box-shadow: 0 0 0 1px var(--cc-toggle-readonly-bg);
+
+                &::after{
+                    background: var(--cc-toggle-readonly-knob-bg);
+                    box-shadow: none;
+                }
+
+                .toggle__icon-on::before,
+                .toggle__icon-off::before,
+                .toggle__icon-off::after{
+                    border-color: var(--cc-toggle-readonly-knob-icon-color)
+                }
             }
         }
     }
@@ -401,7 +423,7 @@ $toggle-knob-height: 1.4em;
         padding: 0;
         margin: 0;
         overflow: hidden;
-        font-size: .92em;
+        font-size: .9em;
     }
 
     .pm__table-head > tr{
@@ -412,7 +434,7 @@ $toggle-knob-height: 1.4em;
         transition: background-color .15s ease;
 
         &:hover{
-            background: var(--cc-cookie-category-block-bg-hover);
+            background: var(--cc-cookie-category-block-hover-bg);
         }
     }
 
@@ -448,7 +470,8 @@ $toggle-knob-height: 1.4em;
         min-width: 110px;
         font-weight: $font-weight-bold;
         font-size: 0.82em;
-        padding: 0.85em 1.5em;
+        padding: 0 1.5em;
+        height: $btn-height;
         border-radius: var(--cc-btn-border-radius);
         transition: background-color .15s ease,
                     border-color .15s ease,
@@ -481,13 +504,13 @@ $toggle-knob-height: 1.4em;
         right: 1em;
         margin: 0 auto;
         top: 50%;
-        max-width: 44em;
+        max-width: 43em;
         max-height: 37.5em;
         height: calc(100% - 2em);
 
         .pm__btn-group:nth-child(2),
         .pm__btn:nth-child(2){
-            margin: 0 0 0 0.6em;
+            margin: 0 0 0 $btn-margin;
         }
 
         &.pm--flip{
@@ -498,7 +521,7 @@ $toggle-knob-height: 1.4em;
 
             .pm__btn-group:nth-child(2),
             .pm__btn:nth-child(2){
-                margin: 0 .6em 0 0;
+                margin: 0 $btn-margin 0 0;
             }
         }
     }
@@ -568,7 +591,7 @@ $toggle-knob-height: 1.4em;
 
             .pm__btn-group:nth-child(2),
             .pm__btn:nth-child(2){
-                margin: 0.4em 0 0 0;
+                margin: $btn-margin 0 0 0;
             }
 
             &.pm--flip{
@@ -579,7 +602,7 @@ $toggle-knob-height: 1.4em;
 
                 .pm__btn-group:nth-child(2),
                 .pm__btn:nth-child(2){
-                    margin: 0 0 0.4em 0;
+                    margin: 0 0 $btn-margin 0;
                 }
             }
         }
@@ -603,7 +626,7 @@ $toggle-knob-height: 1.4em;
 
             .pm__btn-group:nth-child(2),
             .pm__btn:nth-child(2){
-                margin: 0 0 0 .6em;
+                margin: 0 0 0 $btn-margin;
             }
 
             &.pm--flip{
@@ -614,7 +637,7 @@ $toggle-knob-height: 1.4em;
 
                 .pm__btn-group:nth-child(2),
                 .pm__btn:nth-child(2){
-                    margin: 0 .6em 0 0;
+                    margin: 0 $btn-margin 0 0;
                 }
             }
         }
@@ -639,7 +662,7 @@ $toggle-knob-height: 1.4em;
         .pm,
         .pm-wrapper::before{
             transition: opacity .3s ease,
-                    visibility .3s ease,
+                    visibility .5s ease,
                     transform .5s $transition-easing;
         }
     }
@@ -757,7 +780,7 @@ $toggle-knob-height: 1.4em;
 
         .pm__btn-group:nth-child(2),
         .pm__btn:nth-child(2){
-            margin: .4em 0 0 0!important;
+            margin: $btn-margin 0 0 0!important;
         }
 
         .pm--flip{
@@ -768,7 +791,7 @@ $toggle-knob-height: 1.4em;
 
             .pm__btn-group:nth-child(2),
             .pm__btn:nth-child(2){
-                margin: 0 0 .4em 0!important;
+                margin: 0 0 $btn-margin 0!important;
             }
         }
     }

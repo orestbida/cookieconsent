@@ -1,5 +1,6 @@
-$btn-vertical-padding: .85em;
-$btn-margin: .35em;
+$btn-vertical-padding: 0;
+$btn-margin: 7px;
+$btn-height: 40px;
 
 :root{
     --cc-modal-margin: 1em;
@@ -125,6 +126,7 @@ $btn-margin: .35em;
         line-height: 1.5;
         font-size: .9em;
         max-height: 40vh;
+        overflow-x: visible;
         overflow-y: auto;
         padding-bottom: 1em;
     }
@@ -153,6 +155,7 @@ $btn-margin: .35em;
         flex: auto;
         font-weight: $font-weight-bold;
         font-size: .82em;
+        height: $btn-height;
         padding: $btn-vertical-padding 1em;
         border-radius: var(--cc-btn-border-radius);
 
@@ -180,14 +183,15 @@ $btn-margin: .35em;
             position: absolute;
             right: 0;
             top: 0;
-            width: 3.2em;
-            height: 3.2em;
+            width: $btn-height;
+            height: $btn-height;
             border-radius: 0;
             border-bottom-left-radius: var(--cc-btn-border-radius);
             border-top: none;
             border-right: none;
             padding: 0!important;
             min-width: auto!important;
+            font-size: 1em;
 
             &::after,
             &::before {
@@ -196,10 +200,11 @@ $btn-margin: .35em;
                 top: 50%;
                 left: 0;
                 right: 0;
-                margin: 0 auto;
+                margin: auto;
                 background: var(--cc-btn-primary-color);
-                height: 1em;
-                width: 1.5px;
+                height: .9em;
+                width: 2px;
+                margin-top: 1px;
                 transform: translateY(-50%) rotate(45deg);
                 transition: all 0.15s ease;
             }
@@ -229,6 +234,12 @@ $btn-margin: .35em;
                     }
                 }
             }
+
+            & + .cm__texts{
+                .cm__title {
+                    padding-right: 2em;
+                }
+            }
         }
     }
 
@@ -236,7 +247,7 @@ $btn-margin: .35em;
         color: var(--cc-footer-color);
         background: var(--cc-footer-bg);
         border-top: 1px solid var(--cc-footer-border-color);
-        padding: .4em 0;
+        padding: .4em 0 .5em 0;
     }
 
     .cm__links{
@@ -459,13 +470,13 @@ $btn-margin: .35em;
 
         .cm__body,
         .cm__links{
-            max-width: 45em;
+            max-width: 55em;
             margin: 0 auto;
             width: 100%
         }
 
         .cm__body{
-            padding: 0 0 0.3em 0;
+            padding: .5em 0 .9em 0;
         }
 
         .cm__btns{

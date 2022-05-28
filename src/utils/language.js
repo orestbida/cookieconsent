@@ -51,7 +51,7 @@ export const _resolveCurrentLanguageCode = function () {
      * If we got here, autoDetect value is not valid,
      * use default language
      */
-    return _getValidLanguageCode(state._userConfig['language']['default']);
+    return _getValidLanguageCode(state._userConfig.language.default);
 };
 
 /**
