@@ -99,7 +99,7 @@ export const _createPreferencesModal = (api) => {
         closeIconLabelData && _setAttribute(dom._pmCloseBtn, 'aria-label', closeIconLabelData);
     }
 
-    sectionsData.forEach(section => {
+    sectionsData && sectionsData.forEach(section => {
         var sTitleData = section.title,
             sDescriptionData = section.description,
             sLinkedCategory = section.linkedCategory,
