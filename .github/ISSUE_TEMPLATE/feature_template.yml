@@ -27,7 +27,7 @@ body:
       label: Additional details
       description: Anything you find useful. E.g. usage examples, screenshots ...
     validations:
-      required: true
+      required: false
   - type: checkboxes
     id: terms
     attributes:
