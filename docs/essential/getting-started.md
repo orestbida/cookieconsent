@@ -264,10 +264,10 @@ You can also use [callbacks or custom events](/advanced/callbacks-events) for mo
 
 ## Open preferences modal
 The simplest way to open the preferences modal is by creating a `button` (or a link) with the following attribute:
-- `data-cc="show-preferences"`
+- `data-cc="show-preferencesModal"`
 
 ```html
-<button type="button" data-cc="show-preferences">Manage cookie preferences</button>
+<button type="button" data-cc="show-preferencesModal">Manage cookie preferences</button>
 ```
 
 Check out all the possible [data-cc](/advanced/custom-attribute)  values.
