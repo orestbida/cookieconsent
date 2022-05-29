@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Check the docs
+    url: https://cookieconsent.orestbida.com
+    about: If you need help to set-up CookieConsent, check out the docs!
