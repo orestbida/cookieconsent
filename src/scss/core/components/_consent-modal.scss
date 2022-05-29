@@ -458,15 +458,20 @@ $btn-height: 40px;
     /* START: Bar layout */
     .cm--bar{
         max-width: 100%;
-        top: auto;
-        bottom: 0;
         left: 0;
         right: 0;
         margin: 0;
         transform: translateY(0);
-        border-bottom-left-radius: 0;
-        border-bottom-right-radius: 0;
+        border-radius: 0;
         opacity: 1;
+
+        &.cm--top{
+            top: 0;
+        }
+
+        &.cm--bottom{
+            bottom: 0;
+        }
 
         .cm__body,
         .cm__links{
@@ -594,8 +599,12 @@ $btn-height: 40px;
         }
 
         &--bar{
-            top: auto;
-            transform: translateY(100%);
+            &.cm--bottom{
+                transform: translateY(100%);
+            }
+            &.cm--top{
+                transform: translateY(-100%);
+            }
         }
     }
 }
@@ -638,6 +647,7 @@ $btn-height: 40px;
 
         .cm__body{
             flex-direction: column!important;
+            padding: 0!important;
         }
 
         .cm__texts,
