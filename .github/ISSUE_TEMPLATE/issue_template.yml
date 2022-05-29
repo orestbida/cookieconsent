@@ -13,7 +13,6 @@ body:
       label: Expected Behavior
       description: What is the correct/expected behavior?
       placeholder: E.g. button should close the modal
-      value: ""
     validations:
       required: true
   - type: textarea
@@ -22,7 +21,6 @@ body:
       label: Current Behavior
       description: Describe the incorrect/current behavior?
       placeholder: E.g. button does not close the modal
-      value: ""
     validations:
       required: true
   - type: textarea
@@ -31,7 +29,6 @@ body:
       label: Steps to reproduce
       description: Which steps do we need to take to reproduce this error?
       placeholder: Concise list of steps
-      value: ""
     validations:
       required: true
   - type: dropdown
