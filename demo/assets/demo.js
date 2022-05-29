@@ -12,7 +12,7 @@ if(location.protocol.slice(0, 4) !== 'http'){
     document.body.appendChild(warning);
 }
 
-var cookieSettingsBtn = document.querySelector('[data-cc="show-preferences"]');
+var cookieSettingsBtn = document.querySelector('[data-cc="show-preferencesModal"]');
 var resetCookiesBtn = document.createElement('button');
 resetCookiesBtn.type = 'button';
 resetCookiesBtn.className = 'btn';

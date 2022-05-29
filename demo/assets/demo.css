@@ -54,7 +54,7 @@ a:active{
     transform: translateY(3px);
 }
 
-[data-cc="show-preferences"]{
+[data-cc="show-preferencesModal"]{
     margin: 0 .5em .5em 0;
 }
 
