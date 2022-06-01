@@ -179,6 +179,19 @@ export const _getExpiresAfterDaysValue = () => {
 };
 
 /**
+ * Symmetric difference between 2 arrays (detect changed preferences)
+ * @param {any[]} arr1
+ * @param {any[]} arr2
+ */
+export const _arrayDiff = (arr1, arr2) => {
+    var difference = arr1
+        .filter(x => !arr2.includes(x))
+        .concat(arr2.filter(x => !arr1.includes(x)));
+
+    return difference;
+};
+
+/**
  * Calculate "accept type" given current categories state
  * @param {{accepted: string[], rejected: string[]}} currentCategoriesState
  * @returns {string}
@@ -259,7 +272,7 @@ export const _addDataButtonListeners = (elem, api) => {
      * @returns {NodeListOf<Element>}
      */
     function _getElements(dataRole){
-        return (elem || document).querySelectorAll('a[data-cc="' + dataRole + '"], button[data-cc="' + dataRole + '"]');
+        return (elem || document).querySelectorAll('[data-cc="' + dataRole + '"]');
     }
 
     /**
