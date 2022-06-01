@@ -65,8 +65,8 @@ export const _manageExistingScripts = (mustEnableCategories) => {
                 if(src){
                     // load script sequentially => the next script will not be loaded
                     // until the current's script onload event triggers
-                    freshScript.onload = () => {
-                        freshScript.onload = null;
+                    freshScript.onload = freshScript.onerror = () => {
+                        freshScript.onload = freshScript.onerror = null;
                         _loadScripts(scripts, ++index);
                     };
                 }
