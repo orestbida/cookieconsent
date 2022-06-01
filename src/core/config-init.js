@@ -87,6 +87,14 @@ export const _setConfig = (_userConfig) => {
     _log('CookieConsent [CONFIG]: revision enabled:', state._revisionEnabled);
     _log('CookieConsent [CONFIG]: manageScriptTags:', config.manageScriptTags);
 
+
+    var defaultLanguageCode = state._userConfig.language.default;
+
+    // Set default language as currentLanguage
+    if(defaultLanguageCode){
+        state._currentLanguageCode = defaultLanguageCode;
+    }
+
     /**
      * Determine current language code
      */
