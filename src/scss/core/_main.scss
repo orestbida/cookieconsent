@@ -10,7 +10,7 @@ $font-weight-bold: 600;
 :root{
     --cc-font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
     --cc-modal-border-radius: .4em;
-    --cc-btn-border-radius: 4px;
+    --cc-btn-border-radius: 5px;
 }
 
 #cc-main {
@@ -27,7 +27,7 @@ $font-weight-bold: 600;
     b,
     em,
     strong,
-    .pm__body a,
+    a,
     .cm__title{
         font-weight: $font-weight-bold;
     }
