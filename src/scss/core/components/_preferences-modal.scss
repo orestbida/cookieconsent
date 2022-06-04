@@ -152,20 +152,7 @@ $toggle-knob-icon-width: 2px;
                     border-color: var(--cc-cookie-category-block-hover-border);
                 }
 
-                &::before{
-                    content: '';
-                    border: solid var(--cc-btn-secondary-color);
-                    border-width: 0 2px 2px 0;
-                    padding: 0.2em;
-                    display: inline-block;
-                    position: absolute;
-                    margin-right: 15px;
-                    position: absolute;
-                    transform: translateY(-50%) rotate(45deg);
-                    left: 1.2em;
-                    top: 50%;
-                    z-index: 1;
-                }
+
             }
 
             /* Hide description by default */
@@ -205,6 +192,23 @@ $toggle-knob-icon-width: 2px;
              */
             & + .pm__section{
                 margin-top: 2em;
+            }
+        }
+
+        &--expandable{
+            .pm__section-title::before{
+                content: '';
+                border: solid var(--cc-btn-secondary-color);
+                border-width: 0 2px 2px 0;
+                padding: 0.2em;
+                display: inline-block;
+                position: absolute;
+                margin-right: 15px;
+                position: absolute;
+                transform: translateY(-50%) rotate(45deg);
+                left: 1.2em;
+                top: 50%;
+                z-index: 1;
             }
         }
     }
