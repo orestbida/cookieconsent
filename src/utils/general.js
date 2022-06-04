@@ -20,6 +20,15 @@ export const _indexOf = (el, value) => {
 };
 
 /**
+ * Returns true if el is an object
+ * @param {any} el
+ * @returns {boolean}
+ */
+export const _isObject = (el) => {
+    return typeof el === 'object' && !Array.isArray(el);
+};
+
+/**
  * Returns true if el. (array or string) contains the specified value
  * @param {Array|String} el
  * @param {*} value
@@ -184,11 +193,9 @@ export const _getExpiresAfterDaysValue = () => {
  * @param {any[]} arr2
  */
 export const _arrayDiff = (arr1, arr2) => {
-    var difference = arr1
-        .filter(x => !arr2.includes(x))
-        .concat(arr2.filter(x => !arr1.includes(x)));
-
-    return difference;
+    return arr1
+        .filter(x => !_elContains(arr2, x))
+        .concat(arr2.filter(x => !_elContains(arr1, x)));
 };
 
 /**
@@ -314,7 +321,7 @@ export const _handleFocusTrap = (api) => {
     var tabbedOutsideDiv = false;
     var tabbedInsideModal = false;
 
-    _addEvent(document, 'keydown', (e) => {
+    _addEvent(dom._document, 'keydown', (e) => {
         e = e || window.event;
 
         // If is tab key => ok
@@ -324,12 +331,12 @@ export const _handleFocusTrap = (api) => {
         if(state._currentModalFocusableElements){
             // If reached natural end of the tab sequence => restart
             if(e.shiftKey){
-                if (document.activeElement === state._currentModalFocusableElements[0]) {
+                if (dom._document.activeElement === state._currentModalFocusableElements[0]) {
                     state._currentModalFocusableElements[1].focus();
                     e.preventDefault();
                 }
             }else{
-                if (document.activeElement === state._currentModalFocusableElements[1]) {
+                if (dom._document.activeElement === state._currentModalFocusableElements[1]) {
                     state._currentModalFocusableElements[0].focus();
                     e.preventDefault();
                 }
@@ -364,7 +371,7 @@ export const _handleFocusTrap = (api) => {
         !tabbedInsideModal && (tabbedOutsideDiv = true);
     });
 
-    if(document.contains){
+    if(dom._document.contains){
         _addEvent(dom._ccMain, 'click', (e) => {
             e = e || window.event;
             /**
