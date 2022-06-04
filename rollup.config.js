@@ -11,6 +11,14 @@ const input = `${srcDir}/index.js`;
 const productionMode = !process.env.ROLLUP_WATCH;
 const isIE = process.env.BROWSER === 'IE';
 
+const banner = `/*!
+* CookieConsent ${pkg.version}
+* ${pkg.repository.url}
+* Author ${pkg.author}
+* Released under the ${pkg.license} License
+*/
+`;
+
 export default defineConfig(
     [
         {
@@ -19,12 +27,14 @@ export default defineConfig(
                 {
                     file: pkg.main,
                     format: 'umd',
-                    name: 'CookieConsent'
+                    name: 'CookieConsent',
+                    banner: banner
                 },
                 {
                     file: pkg.module,
                     format: "esm",
-                    exports: "named"
+                    exports: "named",
+                    banner: banner
                 }
             ],
             plugins: [
@@ -42,7 +52,7 @@ export default defineConfig(
                     toplevel: true,
                     format: {
                         quote_style: 1,
-                        comments: false
+                        comments: /^!/
                     },
                     mangle: {
                         properties: {
