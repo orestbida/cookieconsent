@@ -24,7 +24,7 @@ export const _createCookieConsentHTML = (api) => {
     _createPreferencesModal(api);
 
     // Finally append everything (_ccMain holds both modals)
-    _appendChild((state._userConfig.root || document.body), dom._ccMain);
+    _appendChild((state._userConfig.root || dom._document.body), dom._ccMain);
 };
 
 export {

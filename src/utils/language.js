@@ -1,4 +1,4 @@
-import { state } from '../core/global';
+import { state, dom } from '../core/global';
 import { _log, _getKeys, _xhr, _elContains } from './general';
 
 /**
@@ -44,7 +44,7 @@ export const _resolveCurrentLanguageCode = function () {
             return _getValidLanguageCode(_getBrowserLanguageCode());
 
         if(autoDetect === 'document')
-            return _getValidLanguageCode(document.documentElement.lang);
+            return _getValidLanguageCode(dom._document.documentElement.lang);
     }
 
     /**
