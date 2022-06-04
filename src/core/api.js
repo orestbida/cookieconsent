@@ -10,7 +10,9 @@ import {
     _addDataButtonListeners,
     _getModalFocusableData,
     _getAcceptType,
-    _elContains
+    _elContains,
+    _updateAcceptType,
+    _getKeys
 } from '../utils/general';
 
 import { _manageExistingScripts } from '../utils/scripts';
@@ -51,6 +53,7 @@ export const api = {
     accept : (_categories, _exclusions) => {
         var categories = _categories || undefined;
         var exclusions = _exclusions || [];
+        var customAcceptType = false;
 
         /**
          * @type {string[]}
@@ -62,12 +65,12 @@ export const api = {
          * @returns {string[]}
          */
         var _getCurrentPreferences = () => {
-            var toggles = document.querySelectorAll('.section__toggle') || [];
+            var toggles = dom._categoryCheckboxInputs;
             var states = [];
 
-            for(var i=0; i<toggles.length; i++){
-                if(toggles[i].checked){
-                    states.push(toggles[i].value);
+            for(var toggleName in toggles){
+                if(toggles[toggleName].checked){
+                    states.push(toggles[toggleName].value);
                 }
             }
             return states;
@@ -75,6 +78,7 @@ export const api = {
 
         if(!categories){
             categoriesToAccept = _getCurrentPreferences();
+            customAcceptType = true;
         }else{
             if(
                 typeof categories === 'object' &&
@@ -114,7 +118,123 @@ export const api = {
          */
         state._acceptedCategories = categoriesToAccept;
 
+        _updateAcceptType();
+
+        if(!customAcceptType) state._customServicesSelection = {};
+
+        /**
+         * Save previously enabled services to calculate later on which of them was changed
+         */
+        state._lastEnabledServices = JSON.parse(JSON.stringify(state._enabledServices));
+
+
+        state._allCategoryNames.forEach(categoryName => {
+
+            var categoryServices = dom._serviceCheckboxInputs[categoryName];
+
+            /**
+             * Stop here if there are no services
+             */
+            if(_getKeys(categoryServices).length === 0) return;
+
+            const services = state._allDefinedServices[categoryName];
+            const serviceNames = _getKeys(services);
+
+            state._enabledServices[categoryName] = [];
+
+            // If category is marked as readOnly => enable all its services
+            if(_elContains(state._readOnlyCategories, categoryName)){
+                serviceNames.forEach(serviceName => {
+                    state._enabledServices[categoryName].push(serviceName);
+                });
+            }else{
+                if(state._acceptType === 'all'){
+                    if(
+                        customAcceptType
+                        && !!state._customServicesSelection[categoryName]
+                        && state._customServicesSelection[categoryName].length > 0
+                    ){
+                        state._customServicesSelection[categoryName].forEach(serviceName => {
+                            state._enabledServices[categoryName].push(serviceName);
+                        });
+                    }else{
+                        serviceNames.forEach(serviceName => {
+                            state._enabledServices[categoryName].push(serviceName);
+                        });
+                    }
+                }else if(state._acceptType === 'necessary'){
+                    state._enabledServices[categoryName] = [];
+                }else {
+                    if(customAcceptType && !!state._customServicesSelection[categoryName] && state._customServicesSelection[categoryName].length > 0){
+                        state._customServicesSelection[categoryName].forEach(serviceName => {
+                            state._enabledServices[categoryName].push(serviceName);
+                        });
+                    }else{
+                        for(let serviceName in categoryServices){
+                            const serviceToggle = categoryServices[serviceName];
+                            if(serviceToggle.checked){
+                                state._enabledServices[categoryName].push(serviceToggle.value);
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
         _saveCookiePreferences(api);
+    },
+
+    /**
+     *
+     * @param {string|string[]} service
+     * @param {string} category
+     */
+    acceptService: (service, category) => {
+
+        if(
+            !service
+            || !category
+            || typeof category !== 'string'
+            || !_elContains(state._allCategoryNames, category)) return;
+
+        const servicesInputs = dom._serviceCheckboxInputs[category] || {};
+
+        state._customServicesSelection[category] = [];
+
+        if(typeof service === 'string'){
+            if(service === 'all'){
+                for(var serviceName in servicesInputs){
+                    servicesInputs[serviceName].checked = true;
+                    _dispatchInputEvent(servicesInputs[serviceName]);
+                }
+            }else{
+                for(serviceName in servicesInputs){
+                    if(service === serviceName)
+                        servicesInputs[serviceName].checked = true;
+                    else
+                        servicesInputs[serviceName].checked = false;
+                    _dispatchInputEvent(servicesInputs[serviceName]);
+                }
+            }
+        }else if(typeof service === 'object' && Array.isArray(service)){
+            for(serviceName in servicesInputs){
+                if(_elContains(service, serviceName))
+                    servicesInputs[serviceName].checked = true;
+                else
+                    servicesInputs[serviceName].checked = false;
+                _dispatchInputEvent(servicesInputs[serviceName]);
+            }
+        }
+
+        /**
+         * Dispatch the 'change' event to the input
+         * @param {HTMLElement} input
+         */
+        function _dispatchInputEvent(input){
+            input.dispatchEvent(new Event('change'));
+        }
+
+        api.accept();
     },
 
     /**
@@ -220,7 +340,7 @@ export const api = {
         var callbackExists = typeof callback === 'function';
 
         // Load script only if not already loaded
-        if(!document.querySelector('script[src="' + src + '"]')){
+        if(!dom._document.querySelector('script[src="' + src + '"]')){
 
             var script = _createNode('script');
 
@@ -241,7 +361,7 @@ export const api = {
             /**
              * Append script to head
              */
-            _appendChild(document.head, script);
+            _appendChild(dom._document.head, script);
         }else{
             callbackExists && callback();
         }
@@ -345,7 +465,7 @@ export const api = {
                 state._consentModalVisible = true;
 
                 setTimeout(() => {
-                    state._lastFocusedElemBeforeModal = document.activeElement;
+                    state._lastFocusedElemBeforeModal = dom._document.activeElement;
                     state._currentModalFocusableElements = state._allConsentModalFocusableElements;
                 }, 200);
 
@@ -434,9 +554,9 @@ export const api = {
             setTimeout(() => {
                 // If there is no consent-modal, keep track of the last focused elem.
                 if(!state._consentModalVisible){
-                    state._lastFocusedElemBeforeModal = document.activeElement;
+                    state._lastFocusedElemBeforeModal = dom._document.activeElement;
                 }else{
-                    state._lastFocusedModalElement = document.activeElement;
+                    state._lastFocusedModalElement = dom._document.activeElement;
                 }
 
                 if (state._allPreferencesModalFocusableElements.length === 0) return;
@@ -467,7 +587,7 @@ export const api = {
      */
     run: (conf) => {
 
-        if(!document.getElementById('cc-main')){
+        if(!dom._document.getElementById('cc-main')){
 
             // configure all parameters
             _setConfig(conf);
@@ -512,6 +632,7 @@ export const api = {
             if(!state._invalidConsent){
                 state._acceptedCategories = state._savedCookieContent.categories,
                 state._acceptType = _getAcceptType(_getCurrentCategoriesState());
+                state._enabledServices = state._savedCookieContent.services || {};
             }
 
             /**

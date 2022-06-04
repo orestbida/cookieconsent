@@ -1,4 +1,4 @@
-import { state, config } from '../core/global';
+import { state, config, dom } from '../core/global';
 import { _createNode, _setAttribute, _elContains } from './general';
 
 const scriptTagSelector = 'data-cookiecategory';
@@ -13,7 +13,7 @@ export const _manageExistingScripts = (mustEnableCategories) => {
 
     if(!config.manageScriptTags) return;
 
-    var scripts = document.querySelectorAll('script[' + scriptTagSelector + ']');
+    var scripts = dom._document.querySelectorAll('script[' + scriptTagSelector + ']');
     var _acceptedCategories = mustEnableCategories || state._savedCookieContent.categories || [];
 
     /**
@@ -85,6 +85,33 @@ export const _manageExistingScripts = (mustEnableCategories) => {
             _loadScripts(scripts, ++index);
         }
     };
+
+    /**
+     * Automatically Enable/Disable services
+     */
+    state._allCategoryNames.forEach(categoryName => {
+        const lastChangedServices = state._lastChangedServices[categoryName] || state._enabledServices[categoryName] || [];
+
+        lastChangedServices.forEach(serviceName => {
+            const service = state._allDefinedServices[categoryName][serviceName];
+
+            if(
+                !service.enabled
+                && _elContains(state._enabledServices[categoryName], serviceName)
+                && typeof service.onAccept === 'function'
+            ){
+                service.enabled = true;
+                service.onAccept();
+            }else if(
+                service.enabled
+                && !_elContains(state._enabledServices[categoryName], serviceName)
+                && typeof service.onAccept === 'function'
+            ){
+                service.enabled = false;
+                service.onReject();
+            }
+        });
+    });
 
     _loadScripts(scripts, 0);
 };

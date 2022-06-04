@@ -1,5 +1,5 @@
-import { state, config, cookieConfig, _fireEvent, customEvents } from '../core/global';
-import { _log, _indexOf, _uuidv4, _updateAcceptType, _getRemainingExpirationTimeMS, _getExpiresAfterDaysValue, _elContains } from './general';
+import { state, config, cookieConfig, _fireEvent, customEvents, dom } from '../core/global';
+import { _log, _indexOf, _uuidv4, _updateAcceptType, _getRemainingExpirationTimeMS, _getExpiresAfterDaysValue, _elContains, _arrayDiff } from './general';
 import { _manageExistingScripts } from './scripts';
 
 /**
@@ -120,28 +120,52 @@ export const _saveCookiePreferences = () => {
     /**
      * Determine if categories were changed from last state (saved in the cookie)
      */
-    state._lastChangedCategoryNames = state._acceptedCategories
-        .filter(x => !_elContains(state._savedCookieContent.categories || [], x))
-        .concat((state._savedCookieContent.categories || [])
-            .filter(x => !_elContains(state._acceptedCategories, x))
+    state._lastChangedCategoryNames = _arrayDiff(state._acceptedCategories, state._savedCookieContent.categories || []);
+
+    var categoriesWereChanged = state._lastChangedCategoryNames.length > 0,
+        servicesWereChanged = false;
+
+    /**
+     * Determine if services were changed from last state
+     */
+    state._allCategoryNames.forEach(categoryName => {
+
+        state._lastChangedServices[categoryName] = _arrayDiff(
+            state._enabledServices[categoryName] || [],
+            state._lastEnabledServices[categoryName] || []
         );
 
-    var categoriesWereChanged = state._lastChangedCategoryNames.length > 0;
+        if(state._lastChangedServices[categoryName].length > 0) servicesWereChanged = true;
+    });
 
-    // Retrieve all checkboxes (toggles) from the modal
-    var categoryToggles = document.querySelectorAll('.section__toggle');
+    var categoryToggles = dom._categoryCheckboxInputs;
 
     /**
      * For each checkbox, if its value is inside
      * the "state._acceptedCategories" array => enable checkbox
      * otherwise disable it
      */
-    for(var i=0; i<categoryToggles.length; i++){
-        if(_elContains(state._acceptedCategories, categoryToggles[i].value))
-            categoryToggles[i].checked = true;
+    for(var categoryName in categoryToggles){
+        if(_elContains(state._acceptedCategories, categoryName))
+            categoryToggles[categoryName].checked = true;
         else
-            categoryToggles[i].checked = false;
+            categoryToggles[categoryName].checked = false;
     }
+
+    state._allCategoryNames.forEach(categoryName => {
+
+        var servicesToggles = dom._serviceCheckboxInputs[categoryName];
+        var enabledServices = state._enabledServices[categoryName];
+
+        for(var serviceName in servicesToggles){
+            const serviceInput = servicesToggles[serviceName];
+            if(_elContains(enabledServices, serviceName))
+                serviceInput.checked = true;
+            else
+                serviceInput.checked = false;
+        }
+    });
+
 
     if(!state._invalidConsent && config.autoClearCookies && categoriesWereChanged)
         _autoclearCookies();
@@ -154,12 +178,13 @@ export const _saveCookiePreferences = () => {
         revision: config.revision,
         data: state._cookieData,
         consentTimestamp: state._consentTimestamp.toISOString(),
-        consentId: state._consentId
+        consentId: state._consentId,
+        services: JSON.parse(JSON.stringify(state._enabledServices))
     };
 
     var firstUserConsent = false;
 
-    if(state._invalidConsent || categoriesWereChanged){
+    if(state._invalidConsent || categoriesWereChanged || servicesWereChanged){
         /**
          * Set consent as valid
          */
@@ -243,7 +268,7 @@ export const _setCookie = (name, value, useRemainingExpirationTime) => {
         cookieStr += ' Secure;';
     }
 
-    document.cookie = cookieStr;
+    dom._document.cookie = cookieStr;
 
     _log('CookieConsent [SET_COOKIE]: ' + name + ':', JSON.parse(decodeURIComponent(cookieValue)));
 };
@@ -262,7 +287,7 @@ export const _getCookie = (name, filter, getValue, ignoreName) => {
     var found;
 
     if(filter === 'one'){
-        found = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
+        found = dom._document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
         found = found ? (getValue ? found.pop() : name) : '';
 
         /**
@@ -280,7 +305,7 @@ export const _getCookie = (name, filter, getValue, ignoreName) => {
     }else if(filter === 'all'){
 
         // Get all existing cookies (<cookie_name>=<cookie_value>)
-        var allCookies = document.cookie.split(/;\s*/); found = [];
+        var allCookies = dom._document.cookie.split(/;\s*/); found = [];
 
         /**
          * Save only the cookie names
@@ -305,7 +330,7 @@ export const _eraseCookies = (cookies, customPath, domains) => {
 
     for(var i=0; i<cookies.length; i++){
         for(var j=0; j<domains.length; j++){
-            document.cookie = cookies[i] + '=; path=' + path +
+            dom._document.cookie = cookies[i] + '=; path=' + path +
             (_elContains(domains[j], '.') ? '; domain=' + domains[j] : '') + '; ' + expires;
         }
         _log('CookieConsent [AUTOCLEAR]: deleting cookie: \'' + cookies[i] + '\' path: \'' + path + '\' domain:', domains);

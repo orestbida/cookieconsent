@@ -1,4 +1,19 @@
 /**
+ * Service's object structure
+ * @typedef {Object} Service
+ * @property {string} [label]
+ * @property {boolean} [enabled]
+ * @property {boolean} [runOnce]
+ * @property {Element} [script]
+ * @property {Function} [onAccept]
+ * @property {Function} [onReject]
+ */
+
+/**
+ * @typedef {Object.<string, Service>} Services
+ */
+
+/**
  * Cookie's structure inside autoClear object
  * @typedef {Object} Cookie
  * @property {string | RegExp} name
@@ -19,6 +34,7 @@
  * @property {AutoClear} [autoClear]
  * @property {boolean} [enabled]
  * @property {boolean} [readOnly]
+ * @property {Services} [services]
  */
 
 /**
@@ -149,6 +165,12 @@
  * @property {any} data Unique id
  * @property {string} consentTimestamp First consent timestamp
  * @property {string} lastConsentTimestamp Last update timestamp
+ * @property {Object.<string, string[]>} services
+ */
+
+
+/**
+ * @typedef {Object.<string, HTMLElement>} ServiceToggle
  */
 
 /**
@@ -218,11 +240,12 @@ export const _fireEvent = (event) => {
 
 /**
  * Pointers to main dom elements
- * (avoid retrieving them later using document.getElementById)
+ * (avoid retrieving them later using dom._document.getElementById)
  */
 export const dom = {
-
+    /** @type {number|HTMLElement} */ _document: 0, // defined after config
     /** @type {number|HTMLElement} */ _htmlDom: 0, // defined after config
+
     /** @type {number|HTMLElement} */ _ccMain: 0,
     /** @type {number|HTMLElement} */ _cmContainer: 0,
     /** @type {number|HTMLElement} */ _pmContainer: 0,
@@ -251,14 +274,16 @@ export const dom = {
     /** @type {number|HTMLElement} */ _pmFooter: 0,
     /** @type {number|HTMLElement} */ _pmAcceptAllBtn: 0,
     /** @type {number|HTMLElement} */ _pmAcceptNecessaryBtn: 0,
-    /** @type {number|HTMLElement} */ _pmSavePreferencesBtn: 0
+    /** @type {number|HTMLElement} */ _pmSavePreferencesBtn: 0,
+
+    /** @type {Object.<string, HTMLElement>} */ _categoryCheckboxInputs: {},
+    /** @type {Object.<string, ServiceToggle>} */ _serviceCheckboxInputs: {}
 };
 
 export const cookieConfig = config.cookie;
 
 
 export const state = {
-
     /**
      * @type {UserConfig}
      */
@@ -390,4 +415,29 @@ export const state = {
      * @type {boolean[]}
      */
     _allToggleStates : [],
+
+    /**
+     * @type {Object.<string, Services>}
+     */
+    _allDefinedServices: {},
+
+    /**
+     * @type {Object.<string, string[]>}
+     */
+    _enabledServices: {},
+
+    /**
+     * @type {Object.<string, string[]>}
+     */
+    _customServicesSelection: {},
+
+    /**
+     * @type {Object.<string, string[]>}
+     */
+    _lastChangedServices: {},
+
+    /**
+     * @type {Object.<string, string[]>}
+     */
+    _lastEnabledServices: {}
 };

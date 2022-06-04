@@ -1,5 +1,5 @@
 import { state, config, cookieConfig, callbacks, dom } from './global';
-import { _log, _getKeys } from '../utils/general';
+import { _log, _getKeys, _isObject } from '../utils/general';
 import { _resolveCurrentLanguageCode } from '../utils/language';
 
 /**
@@ -15,6 +15,22 @@ export const _setConfig = (_userConfig) => {
     state._allTranslations = _userConfig.language.translations;
     state._allDefinedCategories = state._userConfig.categories;
     state._allCategoryNames = _getKeys(state._allDefinedCategories);
+
+    state._allCategoryNames.forEach(categoryName => {
+        const services = state._allDefinedCategories[categoryName].services || {};
+        const serviceNames = services && _isObject(services) && _getKeys(services) || [];
+        state._allDefinedServices[categoryName] = {};
+        dom._serviceCheckboxInputs[categoryName] = {};
+
+        if(serviceNames.length === 0)
+            return;
+
+        serviceNames.forEach(serviceName => {
+            const service = services[serviceName];
+            service.enabled = false;
+            state._allDefinedServices[categoryName][serviceName] = service;
+        });
+    });
 
     /**
      * Save names of categories marked as readonly
@@ -111,7 +127,7 @@ export const _setConfig = (_userConfig) => {
      * Define document properties after config.
      * to avoid errors like "document is not defined"
      */
-    dom._htmlDom = document.documentElement;
+    dom._htmlDom = dom._document.documentElement;
 };
 
 /**
@@ -122,4 +138,5 @@ export const setWindowData = () => {
      * Fix "window is not defined" error
      */
     cookieConfig.domain = window.location.hostname;
+    dom._document = document;
 };
