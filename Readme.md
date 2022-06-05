@@ -21,6 +21,7 @@ Thanks to all the people who already contributed
 </a>
 
 <br>
+<br>
 
 A special thanks goes [Till Sanders](https://github.com/tillsanders) for creating and maintaining the npm package!
 
