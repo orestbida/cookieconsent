@@ -11,13 +11,18 @@ A __lightweight__ & __gdpr compliant__ cookie consent plugin written in plain ja
 ## Documentation
 To check out docs, visit [cookieconsent.orestbida.com](https://cookieconsent.orestbida.com)
 
-## Contribution
-TODO: Create Contributing Guide
+## Contributing
+TODO: Add Contributing Guide
 
-## Contributors
+Thanks to all the people who already contributed
+
 <a href="https://github.com/orestbida/cookieconsent/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=orestbida/cookieconsent" />
 </a>
+
+<br>
+
+A special thanks goes [Till Sanders](https://github.com/tillsanders) for creating and maintaining the npm package!
 
 ## License
 Distributed under the MIT License. See [LICENSE](https://github.com/orestbida/cookieconsent/blob/master/LICENSE) for more information.
