@@ -39,6 +39,8 @@
     --cc-cookie-category-block-border: var(--cc-section-category-border);
     --cc-cookie-category-block-hover-bg: #242c31;
     --cc-cookie-category-block-hover-border: #232a2f;
+    --cc-cookie-category-expanded-block-bg: transparent;
+    --cc-cookie-category-expanded-block-hover-bg: var(--cc-toggle-readonly-bg);
 
     --cc-overlay-bg: rgba(0, 0, 0, 0.541);
     --cc-webkit-scrollbar-bg: var(--cc-section-category-border);

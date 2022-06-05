@@ -170,8 +170,8 @@ $toggle-knob-icon-width: 2px;
             }
 
             &.is-expanded{
-                --cc-cookie-category-block-bg: transparent;
-                --cc-cookie-category-block-border: #dee4e9;
+                --cc-cookie-category-block-bg: var(--cc-cookie-category-expanded-block-bg);
+                --cc-cookie-category-block-border: var(--cc-cookie-category-expanded-block-hover-bg);
 
                 .pm__section-title{
                     border-bottom-left-radius: 0;
