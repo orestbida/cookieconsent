@@ -1,4 +1,4 @@
-import { state, config, dom } from '../core/global';
+import { state, config} from '../core/global';
 import { _createNode, _setAttribute, _elContains } from './general';
 
 const scriptTagSelector = 'data-cookiecategory';
@@ -13,8 +13,9 @@ export const _manageExistingScripts = (mustEnableCategories) => {
 
     if(!config.manageScriptTags) return;
 
-    var scripts = dom._document.querySelectorAll('script[' + scriptTagSelector + ']');
+    var scripts = state._allScriptTags;
     var _acceptedCategories = mustEnableCategories || state._savedCookieContent.categories || [];
+    var _acceptedServices = state._enabledServices;
 
     /**
      * Load scripts (sequentially), using a recursive function
@@ -26,13 +27,19 @@ export const _manageExistingScripts = (mustEnableCategories) => {
         if(index < scripts.length){
 
             var currScript = scripts[index];
-            var currScript_category = currScript.getAttribute(scriptTagSelector);
+            var currScriptInfo = state._allScriptTagsInfo[index];
+            var currScriptCategory = currScriptInfo._categoryName;
+            var currScriptService = currScriptInfo._serviceName;
+            var categoryAccepted = _elContains(_acceptedCategories, currScriptCategory);
+            var serviceAccepted = currScriptService ? _elContains(_acceptedServices[currScriptCategory], currScriptService) : true;
 
             /**
-             * If current script's category is on the array of categories
-             * accepted by the user => load script
+             * Load script if its category is accepted
+             * if it has a service name, check if it is accepted
              */
-            if(_elContains(_acceptedCategories, currScript_category)){
+            if(categoryAccepted && serviceAccepted && !currScriptInfo._enabled){
+
+                currScriptInfo._enabled = true;
 
                 currScript.removeAttribute('type');
                 currScript.removeAttribute(scriptTagSelector);
@@ -87,7 +94,7 @@ export const _manageExistingScripts = (mustEnableCategories) => {
     };
 
     /**
-     * Automatically Enable/Disable services
+     * Automatically Enable/Disable internal services
      */
     state._allCategoryNames.forEach(categoryName => {
         const lastChangedServices = state._lastChangedServices[categoryName] || state._enabledServices[categoryName] || [];
@@ -114,4 +121,23 @@ export const _manageExistingScripts = (mustEnableCategories) => {
     });
 
     _loadScripts(scripts, 0);
+};
+
+/**
+ * Keep track of categories enabled by default (useful when mode=='opt-out')
+ */
+export const _retrieveEnabledCategoriesAndServices = () => {
+    state._allCategoryNames.forEach(categoryName => {
+        const category = state._allDefinedCategories[categoryName];
+
+        if(category.enabled){
+            state._defaultEnabledCategories.push(categoryName);
+
+            const services = state._allDefinedServices[categoryName] || {};
+
+            for(var serviceName in services){
+                state._enabledServices[categoryName].push(serviceName);
+            }
+        }
+    });
 };

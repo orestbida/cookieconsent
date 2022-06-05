@@ -29,6 +29,40 @@ export const _isObject = (el) => {
 };
 
 /**
+ * Retrieves all script elements with 'data-cookiecategory' attribute
+ * + saves their info: category-name and service-name
+ */
+export const _retrieveScriptElements = () => {
+    state._allScriptTags = dom._document.querySelectorAll('script[data-cookiecategory]');
+
+    state._allScriptTagsInfo = [];
+    state._allScriptTags.forEach(scriptTag => {
+
+        const scriptCategoryName = scriptTag.dataset.cookiecategory || '';
+        const scriptServiceName = scriptTag.dataset.service || '';
+
+        if(_elContains(state._allCategoryNames, scriptCategoryName)){
+
+            state._allScriptTagsInfo.push({
+                _enabled: false,
+                _categoryName: scriptCategoryName,
+                _serviceName: scriptServiceName
+            });
+
+            if(scriptServiceName){
+                const categoryServices = state._allDefinedServices[scriptCategoryName];
+                if(!categoryServices[scriptServiceName]){
+                    categoryServices[scriptServiceName] = {
+                        enabled: false,
+                        script: scriptTag,
+                    };
+                }
+            }
+        }
+    });
+};
+
+/**
  * Returns true if el. (array or string) contains the specified value
  * @param {Array|String} el
  * @param {*} value
