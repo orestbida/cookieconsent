@@ -1,7 +1,7 @@
 {
     "consentModal": {
         "title": "Hello traveller, it's cookie time!",
-        "description": "Our website uses essential cookies to ensure its proper operation and tracking cookies to understand how you interact with it. The latter will be set only after consent. <button type=\"button\" data-cc=\"show-preferences\" class=\"cc-link\">Manage preferences</button>",
+        "description": "Our website uses essential cookies to ensure its proper operation and tracking cookies to understand how you interact with it. The latter will be set only after consent. <button type=\"button\" data-cc=\"show-preferencesModal\" class=\"cc-link\">Manage preferences</button>",
         "acceptAllBtn": "Accept all",
         "acceptNecessaryBtn": "Reject all",
         "showPreferencesBtn": "Manage preferences",

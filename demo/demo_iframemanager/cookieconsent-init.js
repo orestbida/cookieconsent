@@ -46,14 +46,13 @@ cc.run({
 
     guiOptions: {
         consentModal: {
-            layout: 'cloud',                      // box,cloud,bar
-            position: 'bottom',           // bottom,middle,top + left,right,center
-            transition: 'slide'                 // zoom,slide
+            layout: 'cloud',
+            position: 'bottom center',
+
         },
         preferencesModal: {
-            layout: 'bar',                      // box,bar
-            position: 'right',                // right,left (available only if bar layout selected)
-            transition: 'slide'                 // zoom,slide
+            layout: 'bar',
+            position: 'right'
         }
     },
 
@@ -63,25 +62,10 @@ cc.run({
 
     onConsent: function(){
         console.log('onConsent fired!')
-
-        // If analytics category is disabled => load all iframes automatically
-        if(cc.acceptedCategory('analytics')){
-            console.log('iframemanager: loading all iframes');
-            manager.acceptService('all');
-        }
     },
 
     onChange: function () {
         console.log('onChange fired!');
-
-        // If analytics category is disabled => ask for permission to load iframes
-        if(!cc.acceptedCategory('analytics')){
-            console.log('iframemanager: disabling all iframes');
-            manager.rejectService('all');
-        }else{
-            console.log('iframemanager: loading all iframes');
-            manager.acceptService('all');
-        }
     },
 
     categories: {
@@ -96,6 +80,35 @@ cc.run({
                         name: /^(_ga|_gid)/
                     }
                 ]
+            },
+            services: {
+                iframemanager: {
+                    label: 'Youtube Embeds',
+                    onAccept: () => {
+                        manager.acceptService('all');
+                        console.log('iframe manager enabled')
+                    },
+                    onReject: () => {
+                        manager.rejectService('all');
+                        console.log('iframe manager disabled')
+                    }
+                },
+                'Google Analytics (GA4)' : {
+                    onAccept: function(){
+                        console.log('google analytics enabled')
+                    },
+                    onReject: function(){
+                        console.log('disabling google analaytics')
+                    }
+                },
+                'Clarity' : {
+                    onAccept: function(){
+                        console.log('clarity enabled')
+                    },
+                    onReject: function(){
+                        console.log('disabling clarity')
+                    }
+                }
             }
         }
     },
