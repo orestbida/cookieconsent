@@ -46,9 +46,8 @@ cc.run({
 
     guiOptions: {
         consentModal: {
-            layout: 'cloud',
+            layout: 'cloud inline',
             position: 'bottom center',
-
         },
         preferencesModal: {
             layout: 'bar',
@@ -71,7 +70,7 @@ cc.run({
     categories: {
         necessary: {
             readOnly: true,
-            enabled: false
+            enabled: true
         },
         analytics: {
             autoClear: {
@@ -82,31 +81,12 @@ cc.run({
                 ]
             },
             services: {
-                iframemanager: {
-                    label: 'Youtube Embeds',
+                IframeManager:{
                     onAccept: () => {
                         manager.acceptService('all');
-                        console.log('iframe manager enabled')
                     },
                     onReject: () => {
                         manager.rejectService('all');
-                        console.log('iframe manager disabled')
-                    }
-                },
-                'Google Analytics (GA4)' : {
-                    onAccept: function(){
-                        console.log('google analytics enabled')
-                    },
-                    onReject: function(){
-                        console.log('disabling google analaytics')
-                    }
-                },
-                'Clarity' : {
-                    onAccept: function(){
-                        console.log('clarity enabled')
-                    },
-                    onReject: function(){
-                        console.log('disabling clarity')
                     }
                 }
             }
