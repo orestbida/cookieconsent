@@ -175,20 +175,18 @@ export const _createPreferencesModal = (api) => {
             _appendChild(sTitleContainer, sTitle);
 
             if(hasToggle){
-
-                var expandableDivId = sLinkedCategory + '-desc';
                 s.className += '--toggle';
-                _setAttribute(sTitle, 'aria-expanded', false);
-                _setAttribute(sTitle, 'aria-controls', expandableDivId);
 
-                var toggleLabel = _createToggleLabel(sTitle, sLinkedCategory, sCurrentCategoryObject, servicesContainer);
+                var toggleLabel = _createToggleLabel(sTitleData, sLinkedCategory, sCurrentCategoryObject, servicesContainer);
 
                 if(sIsExpandableToggle){
                     _addClass(s, 'pm__section--expandable');
+                    var expandableDivId = sLinkedCategory + '-desc';
+                    _setAttribute(sTitle, 'aria-expanded', false);
+                    _setAttribute(sTitle, 'aria-controls', expandableDivId);
                 }
 
                 _appendChild(sTitleContainer, toggleLabel);
-
 
             }else{
                 _setAttribute(sTitle, 'role', 'heading');
@@ -488,12 +486,6 @@ function _createToggleLabel(label, value, sCurrentCategoryObject, servicesContai
         }
     }else if(sCurrentCategoryObject.enabled || sCurrentCategoryObject.readOnly){
         toggle.checked = true;
-
-        /**
-         * Keep track of categories enabled by default (useful when mode=='opt-out')
-         */
-        if(sCurrentCategoryObject.enabled)
-            !dom._pmNewBody && state._defaultEnabledCategories.push(value);
     }
 
     /**
