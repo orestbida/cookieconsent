@@ -15,7 +15,7 @@ import {
     _getKeys
 } from '../utils/general';
 
-import { _manageExistingScripts } from '../utils/scripts';
+import { _manageExistingScripts, _retrieveEnabledCategoriesAndServices } from '../utils/scripts';
 
 import {
     config,
@@ -318,9 +318,10 @@ export const api = {
         var currentCategoriesState = !state._invalidConsent && _getCurrentCategoriesState();
 
         return {
-            'acceptType': state._acceptType,
-            'acceptedCategories': !state._invalidConsent ? currentCategoriesState.accepted : [],
-            'rejectedCategories': !state._invalidConsent ? currentCategoriesState.rejected : []
+            acceptType: state._acceptType,
+            acceptedCategories: !state._invalidConsent ? currentCategoriesState.accepted : [],
+            rejectedCategories: !state._invalidConsent ? currentCategoriesState.rejected : [],
+            acceptedServices: !state._invalidConsent ? state._enabledServices : []
         };
     },
 
@@ -539,6 +540,17 @@ export const api = {
     },
 
     /**
+     * Returns true if the service in the specified
+     * category is accepted/enabled
+     * @param {string} service
+     * @param {string} category
+     * @returns {boolean}
+     */
+    acceptedService: (service, category) => {
+        return _elContains(state._enabledServices[category] || [], service);
+    },
+
+    /**
      * Show preferences modal (with optional delay)
      * @param {number} [delay]
      */
@@ -633,6 +645,10 @@ export const api = {
                 state._acceptedCategories = state._savedCookieContent.categories,
                 state._acceptType = _getAcceptType(_getCurrentCategoriesState());
                 state._enabledServices = state._savedCookieContent.services || {};
+            }else{
+                if(config.mode === 'opt-out'){
+                    _retrieveEnabledCategoriesAndServices();
+                }
             }
 
             /**
@@ -657,11 +673,8 @@ export const api = {
 
                 // If consent is valid
                 if(!state._invalidConsent){
-
                     _manageExistingScripts();
-
                     _fireEvent(customEvents._onConsent);
-
                 }else{
                     if(config.mode === 'opt-out'){
                         _log('CookieConsent [CONFIG] mode=\'' + config.mode + '\', default enabled categories:', state._defaultEnabledCategories);

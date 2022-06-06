@@ -10,6 +10,14 @@
  */
 
 /**
+ * Script tag info
+ * @typedef {Object} ScriptInfo
+ * @property {string} _categoryName
+ * @property {string} [_serviceName]
+ * @property {boolean} _enabled
+ */
+
+/**
  * @typedef {Object.<string, Service>} Services
  */
 
@@ -243,7 +251,7 @@ export const _fireEvent = (event) => {
  * (avoid retrieving them later using dom._document.getElementById)
  */
 export const dom = {
-    /** @type {number|HTMLElement} */ _document: 0, // defined after config
+    /** @type {number|Document} */ _document: 0, // defined after config
     /** @type {number|HTMLElement} */ _htmlDom: 0, // defined after config
 
     /** @type {number|HTMLElement} */ _ccMain: 0,
@@ -439,5 +447,15 @@ export const state = {
     /**
      * @type {Object.<string, string[]>}
      */
-    _lastEnabledServices: {}
+    _lastEnabledServices: {},
+
+    /**
+     * @type {NodeListOf<Element>}
+     */
+    _allScriptTags: [],
+
+    /**
+     * @type {ScriptInfo[]}
+     */
+    _allScriptTagsInfo: []
 };

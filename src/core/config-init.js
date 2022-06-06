@@ -1,5 +1,5 @@
 import { state, config, cookieConfig, callbacks, dom } from './global';
-import { _log, _getKeys, _isObject } from '../utils/general';
+import { _log, _getKeys, _isObject, _retrieveScriptElements } from '../utils/general';
 import { _resolveCurrentLanguageCode } from '../utils/language';
 
 /**
@@ -14,31 +14,6 @@ export const _setConfig = (_userConfig) => {
     state._userConfig = _userConfig;
     state._allTranslations = _userConfig.language.translations;
     state._allDefinedCategories = state._userConfig.categories;
-    state._allCategoryNames = _getKeys(state._allDefinedCategories);
-
-    state._allCategoryNames.forEach(categoryName => {
-        const services = state._allDefinedCategories[categoryName].services || {};
-        const serviceNames = services && _isObject(services) && _getKeys(services) || [];
-        state._allDefinedServices[categoryName] = {};
-        dom._serviceCheckboxInputs[categoryName] = {};
-
-        if(serviceNames.length === 0)
-            return;
-
-        serviceNames.forEach(serviceName => {
-            const service = services[serviceName];
-            service.enabled = false;
-            state._allDefinedServices[categoryName][serviceName] = service;
-        });
-    });
-
-    /**
-     * Save names of categories marked as readonly
-     */
-    for(var i=0; i<state._allCategoryNames.length; i++){
-        if(state._allDefinedCategories[state._allCategoryNames[i]].readOnly === true)
-            state._readOnlyCategories.push(state._allCategoryNames[i]);
-    }
 
     _log('CookieConsent [CONFIG]: configuration:', _userConfig);
 
@@ -123,11 +98,34 @@ export const _setConfig = (_userConfig) => {
 
     _log('CookieConsent [LANG]: current language: \'' + state._currentLanguageCode + '\'');
 
+    state._allCategoryNames = _getKeys(state._allDefinedCategories);
+
+    state._allCategoryNames.forEach(categoryName => {
+        const services = state._allDefinedCategories[categoryName].services || {};
+        const serviceNames = services && _isObject(services) && _getKeys(services) || [];
+        state._allDefinedServices[categoryName] = {};
+        state._enabledServices[categoryName] = [];
+        dom._serviceCheckboxInputs[categoryName] = {};
+
+        if(serviceNames.length === 0)
+            return;
+
+        serviceNames.forEach(serviceName => {
+            const service = services[serviceName];
+            service.enabled = false;
+            state._allDefinedServices[categoryName][serviceName] = service;
+        });
+    });
+
     /**
-     * Define document properties after config.
-     * to avoid errors like "document is not defined"
+     * Save names of categories marked as readonly
      */
-    dom._htmlDom = dom._document.documentElement;
+    for(var i=0; i<state._allCategoryNames.length; i++){
+        if(state._allDefinedCategories[state._allCategoryNames[i]].readOnly === true)
+            state._readOnlyCategories.push(state._allCategoryNames[i]);
+    }
+
+    _retrieveScriptElements();
 };
 
 /**
@@ -138,5 +136,11 @@ export const setWindowData = () => {
      * Fix "window is not defined" error
      */
     cookieConfig.domain = window.location.hostname;
+
+    /**
+     * Define document properties after config.
+     * to avoid errors like "document is not defined"
+     */
     dom._document = document;
+    dom._htmlDom = dom._document.documentElement;
 };
