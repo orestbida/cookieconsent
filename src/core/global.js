@@ -88,6 +88,7 @@
  * @property {string} [acceptNecessaryBtn]
  * @property {string} [savePreferencesBtn]
  * @property {string} [closeIconLabel]
+ * @property {string} [serviceCounterLabel]
  * @property {Section[]} [sections]
  */
 

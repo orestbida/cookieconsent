@@ -179,6 +179,20 @@ export const _createPreferencesModal = (api) => {
 
                 var toggleLabel = _createToggleLabel(sTitleData, sLinkedCategory, sCurrentCategoryObject, servicesContainer);
 
+                if(sServiceNames.length > 0){
+                    var serviceCounter = _createNode('span');
+                    _addClass(serviceCounter, 'pm__service-counter');
+                    _setAttribute(serviceCounter, 'aria-hidden', true);
+                    _setAttribute(serviceCounter, 'data-servicecounter', sServiceNames.length);
+
+                    var serviceCounterLabel = modalData.serviceCounterLabel;
+
+                    if(serviceCounterLabel && typeof serviceCounterLabel === 'string')
+                        _setAttribute(serviceCounter, 'data-counterlabel', serviceCounterLabel);
+
+                    _appendChild(sTitle, serviceCounter);
+                }
+
                 if(sIsExpandableToggle){
                     _addClass(s, 'pm__section--expandable');
                     var expandableDivId = sLinkedCategory + '-desc';
