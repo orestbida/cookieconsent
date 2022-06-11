@@ -18,7 +18,7 @@ export const _autoclearCookies = (clearOnFirstConsent) => {
     state._reloadPage = false;
 
     // Retrieve all cookies
-    var allCookiesArray = _getCookie('', 'all');
+    var allCookiesArray = _getAllCookies();
 
     // delete cookies on current domain
     var domains = [currentDomain, '.'+currentDomain];
@@ -223,7 +223,7 @@ export const _saveCookiePreferences = () => {
         if(config.mode === 'opt-in') return;
     }
 
-    if(categoriesWereChanged)
+    if(categoriesWereChanged || servicesWereChanged)
         _fireEvent(customEvents._onChange);
 
     /**
@@ -274,48 +274,19 @@ export const _setCookie = (name, value, useRemainingExpirationTime) => {
 };
 
 /**
- * Get cookie value by name,
- * returns the cookie value if found (or an array
- * of cookies if filter provided), otherwise empty string: ""
- * @param {string} name
- * @param {string} filter 'one' or 'all'
- * @param {boolean} [getValue] set to true to obtain its value
- * @param {boolean} [ignoreName]
- * @returns {string|string[]}
+ * Parse cookie value using JSON.parse
+ * @param {string} value
+ * @returns {any}
  */
-export const _getCookie = (name, filter, getValue, ignoreName) => {
-    var found;
-
-    if(filter === 'one'){
-        found = dom._document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
-        found = found ? (getValue ? found.pop() : name) : '';
-
-        /**
-         * If we are retrieving cookieconsent's own cookie
-         * => verify that its value is a valid json string
-         */
-        if(found && (name === cookieConfig.name || ignoreName)){
-            try{
-                found = JSON.parse(decodeURIComponent(found));
-            }catch(e){
-                found = {}; // If I got here => cookie value is not valid
-            }
-            found = JSON.stringify(found);
-        }
-    }else if(filter === 'all'){
-
-        // Get all existing cookies (<cookie_name>=<cookie_value>)
-        var allCookies = dom._document.cookie.split(/;\s*/); found = [];
-
-        /**
-         * Save only the cookie names
-         */
-        for(var i=0; i<allCookies.length; i++){
-            found.push(allCookies[i].split('=')[0]);
-        }
+export const _parseCookie = (value) => {
+    let parsedValue;
+    try{
+        parsedValue = JSON.parse(decodeURIComponent(value));
+    }catch(e){
+        parsedValue = {}; // If I got here => cookie value is not valid
     }
 
-    return found;
+    return parsedValue;
 };
 
 /**
@@ -335,4 +306,51 @@ export const _eraseCookies = (cookies, customPath, domains) => {
         }
         _log('CookieConsent [AUTOCLEAR]: deleting cookie: \'' + cookies[i] + '\' path: \'' + path + '\' domain:', domains);
     }
+};
+
+/**
+ * Returns the cookie name/value, if it exists
+ * @param {string} name
+ * @param {boolean} getValue
+ * @returns {string}
+ */
+export const _getSingleCookie = (name, getValue) => {
+    let found = dom._document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
+    found = found ? (getValue ? found.pop() : name) : '';
+
+    return found;
+};
+
+/**
+ * Returns array with all the cookie names
+ * @param {RegExp} regex
+ * @returns {string[]}
+ */
+export const _getAllCookies = (regex) => {
+    // Get all existing cookies (<cookie_name>=<cookie_value>)
+
+    const allCookies = dom._document.cookie.split(/;\s*/);
+
+    /**
+     * @type {string[]}
+     */
+    let cookieNames = [];
+
+    /**
+     * Save only the cookie names
+     */
+    for(var i=0; i<allCookies.length; i++){
+        let name = allCookies[i].split('=')[0];
+
+        if(regex){
+            try{
+                regex.test(name) && cookieNames.push(name);
+            // eslint-disable-next-line no-empty
+            }catch(e){}
+        }else{
+            cookieNames.push(name);
+        }
+    }
+
+    return cookieNames;
 };

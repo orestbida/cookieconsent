@@ -35,10 +35,12 @@ import {
 import { _getValidLanguageCode, _loadTranslationData } from '../utils/language';
 
 import {
-    _getCookie,
     _setCookie,
     _eraseCookies,
-    _saveCookiePreferences
+    _saveCookiePreferences,
+    _getSingleCookie,
+    _parseCookie,
+    _getAllCookies
 } from '../utils/cookies';
 
 import { _setConfig } from './config-init';
@@ -243,12 +245,12 @@ export const api = {
      * @returns {boolean}
      */
     validCookie : (cookieName) => {
-        return _getCookie(cookieName, 'one', true) !== '';
+        return _getSingleCookie(cookieName, true) !== '';
     },
 
     /**
      * Erase cookies API
-     * @param {(string|string[])} cookies
+     * @param {(string|RegExp|(string|RegExp)[])} cookies
      * @param {string} [path]
      * @param {string} [domain]
      */
@@ -261,13 +263,28 @@ export const api = {
             ? [domain, '.'+domain]
             : [configDomain, '.' + configDomain];
 
-        if(typeof cookies === 'object' && cookies.length > 0){
+        if(Array.isArray(cookies)){
             for(var i=0; i<cookies.length; i++){
-                api.validCookie(cookies[i]) && allCookies.push(cookies[i]);
+                addCookieIfExists(cookies[i]);
             }
         }else{
-            api.validCookie(cookies) && allCookies.push(cookies);
+            addCookieIfExists(cookies);
         }
+
+        /**
+         * Add cookie to allCookies array if it exists
+         * @param {string | RegExp} cookieName
+         */
+        function addCookieIfExists(cookieName){
+            if(typeof cookieName === 'string'){
+                let name = _getSingleCookie(cookieName);
+                name !== '' && allCookies.push(name);
+            }else{
+                allCookies = allCookies.concat(_getAllCookies(cookieName));
+            }
+        }
+
+        console.log('erasing cookie:', allCookies);
 
         _eraseCookies(allCookies, path, domains);
     },
@@ -318,9 +335,9 @@ export const api = {
         var currentCategoriesState = !state._invalidConsent && _getCurrentCategoriesState();
 
         return {
-            'acceptType': state._acceptType,
-            'acceptedCategories': !state._invalidConsent ? currentCategoriesState.accepted : [],
-            'rejectedCategories': !state._invalidConsent ? currentCategoriesState.rejected : []
+            acceptType: state._acceptType,
+            acceptedCategories: !state._invalidConsent ? currentCategoriesState.accepted : [],
+            rejectedCategories: !state._invalidConsent ? currentCategoriesState.rejected : []
         };
     },
 
@@ -422,7 +439,7 @@ export const api = {
      * @returns {any}
      */
     getCookie: (field, cookieName) => {
-        var cookie = JSON.parse(_getCookie(cookieName || cookieConfig.name, 'one', true, true) || '{}');
+        var cookie = _parseCookie(_getSingleCookie(cookieName || cookieConfig.name, true));
         return field ? cookie[field] : cookie;
     },
 
@@ -607,7 +624,7 @@ export const api = {
             if(state._botAgentDetected) return;
 
             // Retrieve cookie value (if set)
-            state._savedCookieContent = JSON.parse(_getCookie(cookieConfig.name, 'one', true) || '{}');
+            state._savedCookieContent = _parseCookie(_getSingleCookie(cookieConfig.name, true));
 
             // Retrieve "_consentId"
             state._consentId = state._savedCookieContent.consentId;
