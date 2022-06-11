@@ -1,7 +1,5 @@
-import { state, config} from '../core/global';
+import { state, config, scriptTagSelector} from '../core/global';
 import { _createNode, _setAttribute, _elContains } from './general';
-
-const scriptTagSelector = 'data-cookiecategory';
 
 /**
  * This function handles the loading/activation logic of the already
@@ -27,6 +25,7 @@ export const _manageExistingScripts = (mustEnableCategories) => {
         if(index < scripts.length){
 
             var currScript = scripts[index];
+
             var currScriptInfo = state._allScriptTagsInfo[index];
             var currScriptCategory = currScriptInfo._categoryName;
             var currScriptService = currScriptInfo._serviceName;

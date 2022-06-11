@@ -291,6 +291,7 @@ export const dom = {
 
 export const cookieConfig = config.cookie;
 
+export const scriptTagSelector = 'data-category';
 
 export const state = {
     /**

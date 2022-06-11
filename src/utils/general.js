@@ -1,4 +1,4 @@
-import { state, dom, cookieConfig } from '../core/global';
+import { state, dom, cookieConfig, scriptTagSelector } from '../core/global';
 
 /**
  * Helper function which prints info (console.log())
@@ -29,16 +29,16 @@ export const _isObject = (el) => {
 };
 
 /**
- * Retrieves all script elements with 'data-cookiecategory' attribute
+ * Retrieves all script elements with 'data-category' attribute
  * + saves their info: category-name and service-name
  */
 export const _retrieveScriptElements = () => {
-    state._allScriptTags = dom._document.querySelectorAll('script[data-cookiecategory]');
+    state._allScriptTags = dom._document.querySelectorAll('script[' + scriptTagSelector +']');
 
     state._allScriptTagsInfo = [];
     state._allScriptTags.forEach(scriptTag => {
 
-        const scriptCategoryName = scriptTag.dataset.cookiecategory || '';
+        const scriptCategoryName = scriptTag.getAttribute(scriptTagSelector) || '';
         const scriptServiceName = scriptTag.dataset.service || '';
 
         if(_elContains(state._allCategoryNames, scriptCategoryName)){
