@@ -229,7 +229,8 @@ $toggle-knob-icon-width: 2px;
     /* TODO: Services counter */
     .pm__service-counter{
         display: flex;
-        background: var(--cc-toggle-readonly-bg);
+        background: var(--cc-btn-primary-bg);
+        color: var(--cc-btn-primary-color);
         margin-left: 1em;
         border-radius: 5em;
         font-weight: $font-weight-bold;
