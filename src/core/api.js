@@ -284,8 +284,6 @@ export const api = {
             }
         }
 
-        console.log('erasing cookie:', allCookies);
-
         _eraseCookies(allCookies, path, domains);
     },
 
