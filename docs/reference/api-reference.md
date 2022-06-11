@@ -176,6 +176,39 @@ Returns `true` if the specified category was accepted, otherwise `false`.
     }
     ```
 
+## acceptService
+
+Accepts or rejects services.
+
+- **Type**
+
+    ```javascript
+    function(
+        categoriesToAccept?: string | string[],
+        exclusions?: string[]
+    ): void
+    ```
+- **Details**
+
+    The first argument accepts either a `string` or an `array` of strings. Special values:
+
+    - `'all'` accept all
+    - `[]`: empty array, accept none (reject all)
+    - ` `: empty argument, accept only the categories selected in the preferences modal
+
+- **Examples**
+    ```javascript
+    cc.accept('all');                // accept all categories
+    cc.accept([]);                   // reject all (accept only categories marked as readOnly/necessary)
+    cc.accept();                     // accept currently selected categories inside the preferences modal
+
+    cc.accept('analytics');          // accept only the "analytics" category
+    cc.accept(['cat_1', 'cat_2']);   // accept only these 2 categories
+
+    cc.accept('all', ['analytics']); // accept all categories except the "analytics" category
+    cc.accept('all', ['cat_1', 'cat_2']); // accept all categories except these 2
+    ```
+
 ## validConsent
 Returns `true` if consent is valid.
 
@@ -229,7 +262,7 @@ Removes one or multiple cookies.
 
     ```javascript
     function(
-        cookies: string[],
+        cookies: string | RegExp | (string | RegExp)[],
         path?: string,
         domains?: string[]
     ): boolean
@@ -240,12 +273,12 @@ Removes one or multiple cookies.
     Delete the plugin's own cookie
 
     ```javascript
-    cc.eraseCookies(['cc_cookie']);
+    cc.eraseCookies('cc_cookie');
     ```
 
-    Delete the `_gid` and `_ga` cookies:
+    Delete the `_gid` and  all cookies starting with `_ga` cookies:
     ```javascript
-    cc.eraseCookies(['_ga', '_gid'], '/', [location.hostname]);
+    cc.eraseCookies(['_gid', /^_ga/], '/', [location.hostname]);
     ```
 
 

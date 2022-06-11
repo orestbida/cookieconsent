@@ -238,7 +238,7 @@ If you're having trouble setting up the plugin, you can check out a few [demo ex
 You can block any `script` tag by simply adding the following 2 attributes:
 
 - `type="text/plain"` disables the script
-- `data-cookiecategory="category-name"` enables the script if the specified category is accepted
+- `data-category="category-name"` enables the script if the specified category is accepted
 
 Before:
 ```html
@@ -251,9 +251,9 @@ Before:
 
 After:
 ```html
-<script src="external.js" type="text/plain" data-cookiecategory="analytics"></script>
+<script src="external.js" type="text/plain" data-category="analytics"></script>
 
-<script type="text/plain" data-cookiecategory="analytics">
+<script type="text/plain" data-category="analytics">
     console.log("Hi, I'm an inline script!");
 </script>
 ```

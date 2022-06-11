@@ -8,7 +8,7 @@ There are two ways to manage your scripts:
 Given any script element, all you need to do  is to add the following attributes to the script tag itself:
 
 - `type="text/plain"`
-- `data-cookiecategory="category-name"`
+- `data-category="category-name"`
 
 Before:
 ```html
@@ -20,14 +20,14 @@ Before:
 
 After:
 ```html
-<script type="text/plain" data-cookiecategory="analytics">
+<script type="text/plain" data-category="analytics">
     console.log("User accepted the analytics category!");
 <script>
 ```
 
 
 <CustomBlock type="info" title="Info">
-The `type="text/plain"` attribute prevents the script from executing. `data-cookiecategory` is used by the plugin to enable the script when the specified category is accepted by the user.
+The `type="text/plain"` attribute prevents the script from executing. `data-category` is used by the plugin to enable the script when the specified category is accepted by the user.
 
 </CustomBlock>
 

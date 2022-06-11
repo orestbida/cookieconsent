@@ -116,7 +116,7 @@ Manages consent revisions.
 - Type: `boolean`
 - default: `true`
 
-Intercepts all `<script>` tags with a `data-cookiecategory` attribute, and enables them based on the accepted categories. Check out the [scripts management](/advanced/manage-scripts.html#using-script-tags) section for details and examples.
+Intercepts all `<script>` tags with a `data-category` attribute, and enables them based on the accepted categories. Check out the [scripts management](/advanced/manage-scripts.html#using-script-tags) section for details and examples.
 
 ## autoClearCookies
 
