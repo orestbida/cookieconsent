@@ -129,7 +129,7 @@ Accepts or rejects categories.
 
     The first argument accepts either a `string` or an `array` of strings. Special values:
 
-    - `'all'` accept all
+    - `'all'`: accept all
     - `[]`: empty array, accept none (reject all)
     - ` `: empty argument, accept only the categories selected in the preferences modal
 
@@ -184,29 +184,24 @@ Accepts or rejects services.
 
     ```javascript
     function(
-        categoriesToAccept?: string | string[],
-        exclusions?: string[]
+        services: string | string[],
+        category: string
     ): void
     ```
 - **Details**
 
-    The first argument accepts either a `string` or an `array` of strings. Special values:
+    Special values for the `services` argument:
 
-    - `'all'` accept all
+    - `'all'`: accept all services
     - `[]`: empty array, accept none (reject all)
-    - ` `: empty argument, accept only the categories selected in the preferences modal
 
 - **Examples**
     ```javascript
-    cc.accept('all');                // accept all categories
-    cc.accept([]);                   // reject all (accept only categories marked as readOnly/necessary)
-    cc.accept();                     // accept currently selected categories inside the preferences modal
+    cc.acceptService('all', 'analytics');   // accept all services (in the 'analytics' category)
+    cc.acceptService([], 'analytics');      // reject all services
 
-    cc.accept('analytics');          // accept only the "analytics" category
-    cc.accept(['cat_1', 'cat_2']);   // accept only these 2 categories
-
-    cc.accept('all', ['analytics']); // accept all categories except the "analytics" category
-    cc.accept('all', ['cat_1', 'cat_2']); // accept all categories except these 2
+    cc.acceptService('service1', 'analytics');     // accept only this specific service (reject all the others)
+    cc.acceptService(['service1', 'service2'], 'analytics');   // accept only these 2 services (reject all the others)
     ```
 
 ## validConsent
