@@ -187,7 +187,7 @@ export const api = {
     },
 
     /**
-     *
+     * Accept one or multiple services under a specific category
      * @param {string|string[]} service
      * @param {string} category
      */
