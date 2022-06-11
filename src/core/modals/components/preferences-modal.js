@@ -1,5 +1,5 @@
 /* eslint-disable no-unreachable */
-import { state, dom } from '../../global';
+import { state, dom, scriptTagSelector } from '../../global';
 import { _createNode, _addClass, _setAttribute, _removeClass, _addEvent, _appendChild,  _getKeys, _hasClass, _elContains } from '../../../utils/general';
 import { _guiManager } from '../../../utils/gui-manager';
 
@@ -423,7 +423,7 @@ function _createToggleLabel(label, value, sCurrentCategoryObject, servicesContai
     if(isService){
         _addClass(toggleLabel, 'toggle-service');
         _addClass(toggle, 'toggle-service');
-        _setAttribute(toggle, 'data-cookieCategory', categoryName);
+        _setAttribute(toggle, scriptTagSelector, categoryName);
 
         // Save reference to toggles to avoid using document.querySelector later on
         dom._serviceCheckboxInputs[categoryName][value] = toggle;
