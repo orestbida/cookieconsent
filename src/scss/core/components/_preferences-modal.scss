@@ -14,6 +14,12 @@ $toggle-knob-icon-width: 2px;
 
 #cc-main{
 
+    /* Make sure the preferences modal is always on top of the consent modal */
+    .pm-wrapper{
+        position: relative;
+        z-index: 2;
+    }
+
     .pm{
         position: fixed;
         display: flex;
