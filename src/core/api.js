@@ -12,7 +12,8 @@ import {
     _getAcceptType,
     _elContains,
     _updateAcceptType,
-    _getKeys
+    _getKeys,
+    _retrieveRejectedServices
 } from '../utils/general';
 
 import { _manageExistingScripts, _retrieveEnabledCategoriesAndServices } from '../utils/scripts';
@@ -335,7 +336,9 @@ export const api = {
         return {
             acceptType: state._acceptType,
             acceptedCategories: !state._invalidConsent ? currentCategoriesState.accepted : [],
-            rejectedCategories: !state._invalidConsent ? currentCategoriesState.rejected : []
+            rejectedCategories: !state._invalidConsent ? currentCategoriesState.rejected : [],
+            acceptedServices: !state._invalidConsent ? state._enabledServices : {},
+            rejectedServices: !state._invalidConsent ? _retrieveRejectedServices() : {}
         };
     },
 
@@ -546,7 +549,7 @@ export const api = {
         var categories;
 
         if(!state._invalidConsent || config.mode === 'opt-in')
-            categories = api.getUserPreferences().acceptedCategories;
+            categories = _getCurrentCategoriesState().accepted || [];
         else  // mode is 'opt-out'
             categories = state._defaultEnabledCategories;
 
