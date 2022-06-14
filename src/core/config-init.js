@@ -125,7 +125,8 @@ export const _setConfig = (_userConfig) => {
             state._readOnlyCategories.push(state._allCategoryNames[i]);
     }
 
-    _retrieveScriptElements();
+    if(config.manageScriptTags)
+        _retrieveScriptElements();
 };
 
 /**
