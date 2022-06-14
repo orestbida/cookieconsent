@@ -38,13 +38,28 @@ export const _retrieveScriptElements = () => {
     state._allScriptTagsInfo = [];
     state._allScriptTags.forEach(scriptTag => {
 
-        const scriptCategoryName = scriptTag.getAttribute(scriptTagSelector) || '';
-        const scriptServiceName = scriptTag.dataset.service || '';
+        let scriptCategoryName = scriptTag.getAttribute(scriptTagSelector) || '';
+        let scriptServiceName = scriptTag.dataset.service || '';
+        let runOnDisable = false;
+
+        /**
+         * Remove the '!' char if it is present
+         */
+        if(scriptCategoryName.charAt(0) === '!'){
+            scriptCategoryName = scriptCategoryName.slice(1);
+            runOnDisable = true;
+        }
+
+        if(scriptServiceName.charAt(0) === '!'){
+            scriptServiceName = scriptServiceName.slice(1);
+            runOnDisable = true;
+        }
 
         if(_elContains(state._allCategoryNames, scriptCategoryName)){
 
             state._allScriptTagsInfo.push({
-                _enabled: false,
+                _executed: false,
+                _runOnDisable: runOnDisable,
                 _categoryName: scriptCategoryName,
                 _serviceName: scriptServiceName
             });
@@ -53,13 +68,29 @@ export const _retrieveScriptElements = () => {
                 const categoryServices = state._allDefinedServices[scriptCategoryName];
                 if(!categoryServices[scriptServiceName]){
                     categoryServices[scriptServiceName] = {
-                        enabled: false,
-                        script: scriptTag,
+                        enabled: false
                     };
                 }
             }
         }
     });
+};
+
+/**
+ * Calculate rejected services (all services - enabled services)
+ * @returns {Object.<string, string[]>}
+ */
+export const _retrieveRejectedServices = () => {
+    var rejectedServices = {};
+
+    state._allCategoryNames.forEach(categoryName => {
+        rejectedServices[categoryName] = _arrayDiff(
+            state._enabledServices[categoryName] || [],
+            _getKeys(state._allDefinedServices[categoryName]) || []
+        );
+    });
+
+    return rejectedServices;
 };
 
 /**

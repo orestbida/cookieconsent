@@ -3,8 +3,6 @@
  * @typedef {Object} Service
  * @property {string} [label]
  * @property {boolean} [enabled]
- * @property {boolean} [runOnce]
- * @property {Element} [script]
  * @property {Function} [onAccept]
  * @property {Function} [onReject]
  */
@@ -14,7 +12,8 @@
  * @typedef {Object} ScriptInfo
  * @property {string} _categoryName
  * @property {string} [_serviceName]
- * @property {boolean} _enabled
+ * @property {boolean} _executed
+ * @property {boolean} _runOnDisable
  */
 
 /**
@@ -216,26 +215,36 @@ export const callbacks = {
 };
 
 export const customEvents = {
-    _onFirstConsent: new Event('cc:onFirstConsent'),
-    _onConsent: new Event('cc:onConsent'),
-    _onChange: new Event('cc:onChange')
+    _onFirstConsent: 'cc:onFirstConsent',
+    _onConsent: 'cc:onConsent',
+    _onChange: 'cc:onChange'
 };
 
 /**
  * Fire custom event
- * @param {Event} event
+ * @param {string} eventName
  */
-export const _fireEvent = (event) => {
-    window.dispatchEvent(event);
+export const _fireEvent = (eventName) => {
 
-    if(event === customEvents._onFirstConsent && isFunction(callbacks._onFirstConsent))
-        callbacks._onFirstConsent(state._savedCookieContent);
+    const params = {
+        cookie: state._savedCookieContent
+    };
 
-    if(event === customEvents._onConsent && isFunction(callbacks._onConsent))
-        callbacks._onConsent(state._savedCookieContent);
+    if(eventName === customEvents._onFirstConsent){
+        isFunction(callbacks._onFirstConsent) && callbacks._onFirstConsent(copyObject(params));
+    }
 
-    if(event === customEvents._onChange && isFunction(callbacks._onChange))
-        callbacks._onChange(state._savedCookieContent, state._lastChangedCategoryNames);
+    if(eventName === customEvents._onConsent){
+        isFunction(callbacks._onConsent) && callbacks._onConsent(copyObject(params));
+    }
+
+    if(eventName === customEvents._onChange){
+        params.changedCategories = state._lastChangedCategoryNames;
+        params.changedServices = state._lastChangedServices;
+        isFunction(callbacks._onChange) && callbacks._onChange(copyObject(params));
+    }
+
+    window.dispatchEvent(new CustomEvent(eventName, {detail: copyObject(params)}));
 
     /**
      * Check if el is a function
@@ -244,6 +253,15 @@ export const _fireEvent = (event) => {
      */
     function isFunction(fn){
         return typeof fn === 'function';
+    }
+
+    /**
+     * Returns a copy/clone of the object
+     * @param {any} obj
+     * @returns {any}
+     */
+    function copyObject(obj){
+        return JSON.parse(JSON.stringify(obj));
     }
 };
 

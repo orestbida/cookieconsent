@@ -30,61 +30,73 @@ export const _manageExistingScripts = (mustEnableCategories) => {
             var currScriptCategory = currScriptInfo._categoryName;
             var currScriptService = currScriptInfo._serviceName;
             var categoryAccepted = _elContains(_acceptedCategories, currScriptCategory);
-            var serviceAccepted = currScriptService ? _elContains(_acceptedServices[currScriptCategory], currScriptService) : true;
+            var serviceAccepted = currScriptService ? _elContains(_acceptedServices[currScriptCategory], currScriptService) : false;
 
             /**
-             * Load script if its category is accepted
-             * if it has a service name, check if it is accepted
+             * Skip script if it was already executed
              */
-            if(categoryAccepted && serviceAccepted && !currScriptInfo._enabled){
+            if(!currScriptInfo._executed){
 
-                currScriptInfo._enabled = true;
+                var categoryWasJustEnabled = !currScriptInfo._runOnDisable && categoryAccepted;
+                var serviceWasJustEnabled = !currScriptInfo._runOnDisable && serviceAccepted;
+                var categoryWasJustDisabled = currScriptInfo._runOnDisable && !categoryAccepted && _elContains(state._lastChangedCategoryNames, currScriptCategory);
+                var serviceWasJustDisabled = currScriptInfo._runOnDisable && !serviceAccepted && _elContains(state._lastChangedServices[currScriptCategory] || [], currScriptService);
 
-                currScript.removeAttribute('type');
-                currScript.removeAttribute(scriptTagSelector);
+                if(
+                    categoryWasJustEnabled
+                    || categoryWasJustDisabled
+                    || serviceWasJustEnabled
+                    || serviceWasJustDisabled
+                ){
 
-                // Get current script data-src (if there is one)
-                var src = currScript.getAttribute('data-src');
+                    currScriptInfo._executed = true;
 
-                // Some scripts (like ga) might throw warning if data-src is present
-                src && currScript.removeAttribute('data-src');
+                    currScript.removeAttribute('type');
+                    currScript.removeAttribute(scriptTagSelector);
 
-                // Create a "fresh" script (with the same code)
-                var freshScript = _createNode('script');
-                freshScript.textContent = currScript.innerHTML;
+                    // Get current script data-src (if there is one)
+                    var src = currScript.getAttribute('data-src');
 
-                // Copy attributes over to the new "revived" script
-                ((destination, source) => {
-                    var attributes = source.attributes;
-                    var len = attributes.length;
-                    for(var i=0; i<len; i++){
-                        var attrName = attributes[i].nodeName;
-                        _setAttribute(destination, attrName , source[attrName] || source.getAttribute(attrName));
+                    // Some scripts (like ga) might throw warning if data-src is present
+                    src && currScript.removeAttribute('data-src');
+
+                    // Create a "fresh" script (with the same code)
+                    var freshScript = _createNode('script');
+                    freshScript.textContent = currScript.innerHTML;
+
+                    // Copy attributes over to the new "revived" script
+                    ((destination, source) => {
+                        var attributes = source.attributes;
+                        var len = attributes.length;
+                        for(var i=0; i<len; i++){
+                            var attrName = attributes[i].nodeName;
+                            _setAttribute(destination, attrName , source[attrName] || source.getAttribute(attrName));
+                        }
+                    })(freshScript, currScript);
+
+                    // Set src (if data-src found)
+                    src ? (freshScript.src = src) : (src = currScript.src);
+
+                    // If script has valid "src" attribute
+                    // try loading it sequentially
+                    if(src){
+                        // load script sequentially => the next script will not be loaded
+                        // until the current's script onload event triggers
+                        freshScript.onload = freshScript.onerror = () => {
+                            freshScript.onload = freshScript.onerror = null;
+                            _loadScripts(scripts, ++index);
+                        };
                     }
-                })(freshScript, currScript);
 
-                // Set src (if data-src found)
-                src ? (freshScript.src = src) : (src = currScript.src);
+                    // Replace current "sleeping" script with the new "revived" one
+                    currScript.parentNode.replaceChild(freshScript, currScript);
 
-                // If script has valid "src" attribute
-                // try loading it sequentially
-                if(src){
-                    // load script sequentially => the next script will not be loaded
-                    // until the current's script onload event triggers
-                    freshScript.onload = freshScript.onerror = () => {
-                        freshScript.onload = freshScript.onerror = null;
-                        _loadScripts(scripts, ++index);
-                    };
+                    /**
+                     * If we managed to get here and src is still set, it means that
+                     * the script is loading/loaded sequentially so don't go any further
+                     */
+                    if(src) return;
                 }
-
-                // Replace current "sleeping" script with the new "revived" one
-                currScript.parentNode.replaceChild(freshScript, currScript);
-
-                /**
-                 * If we managed to get here and src is still set, it means that
-                 * the script is loading/loaded sequentially so don't go any further
-                 */
-                if(src) return;
             }
 
             // Go to next script right away
