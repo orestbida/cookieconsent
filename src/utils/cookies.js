@@ -63,7 +63,7 @@ export const _autoclearCookies = (clearOnFirstConsent) => {
             currentAutoClearCookies = currentCategoryAutoClear && currentCategoryAutoClear.cookies || [],
 
             categoryWasJustChanged = _elContains(state._lastChangedCategoryNames, currentCategoryName),
-            categoryIsDisabled = !_indexOf(state._acceptedCategories, currentCategoryName),
+            categoryIsDisabled = !_elContains(state._acceptedCategories, currentCategoryName),
             categoryWasJustDisabled = categoryWasJustChanged && categoryIsDisabled;
 
         if((clearOnFirstConsent && categoryIsDisabled) || (!clearOnFirstConsent && categoryWasJustDisabled)){
@@ -85,7 +85,7 @@ export const _autoclearCookies = (clearOnFirstConsent) => {
                 var foundCookies = [];
 
                 var currCookieName = currentAutoClearCookies[j].name;
-                var isRegex = currCookieName && typeof currCookieName !== 'string';
+                var isRegex = !!currCookieName && typeof currCookieName !== 'string';
                 var currCookieDomain = currentAutoClearCookies[j].domain || null;
                 var currCookiePath = currentAutoClearCookies[j].path || false;
 
