@@ -1,0 +1,138 @@
+const config = {
+    root: document.body,
+    autoShow: false,
+    revision: 0,
+    autoClearCookies: true,
+    manageScriptTags: true,
+    hideFromBots: true,
+    disablePageInteraction: true,
+
+    onFirstConsent: () => {},
+    onConsent: () => {},
+    onChange: () => {},
+
+    cookie: {
+        name: 'cc_cookie',
+        path: '/',
+        domain: location.host,
+        sameSite: 'Lax',
+        expiresAfterDays: 200
+    },
+
+    guiOptions: {
+        consentModal: {
+            layout: 'box wide',
+            position: 'bottom left',
+            flipButtons: false,
+            equalWeightButtons: true
+        },
+        preferencesModal: {
+            layout: 'bar',
+            position: 'left',
+            flipButtons: false,
+            equalWeightButtons: true
+        }
+    },
+
+    categories: {
+        necessary: {
+            enabled: true,
+            readOnly: true,
+            services: {
+                service1: {
+                    label: 'Necessary Service 1',
+                    onAccept: () => {},
+                    onReject: () => {}
+                }
+            }
+        },
+        analytics: {
+            enabled: false,
+            readOnly: false,
+            autoClear: {
+                cookies: [
+                    {
+                        name: /^(_ga|_gid)/
+                    }
+                ]
+            },
+            services: {
+                service1: {
+                    label: 'Service 1',
+                    onAccept: () => {},
+                    onReject: () => {}
+                },
+                service2: {
+                    label: 'Service 2',
+                    onAccept: () => {},
+                    onReject: () => {}
+                }
+
+            }
+        },
+        ads: {
+            enabled: false,
+            readOnly: false
+        }
+    },
+    language: {
+        default: 'en',
+
+        translations: {
+            it: 'it.json',
+            en: {
+                consentModal: {
+                    title: 'title',
+                    description: 'desc',
+                    acceptAllBtn: 'accept all',
+                    acceptNecessaryBtn: 'accept necessary',
+                    showPreferencesBtn: 'Show preferences',
+                    closeIconLabel: 'Reject all',
+                    footer: `
+                        <a href="#">Link</a>
+                    `
+                },
+                preferencesModal: {
+                    title: 'title',
+                    acceptAllBtn: 'ACCEPT ALL',
+                    acceptNecessaryBtn: 'ACCEPT MNECESSARY',
+                    savePreferencesBtn: 'Show preferences',
+                    closeIconLabel: 'Close',
+                    serviceCounterLabel: 'Services',
+                    sections: [
+                        {
+                            title: 'Initial section',
+                            description: 'SECTION DESC'
+                        },
+                        {
+                            title: 'Necessary Cookies',
+                            description: 'SECTION DESC',
+                            linkedCategory: 'necessary'
+                        },
+                        {
+                            title: 'Analytics Cookies',
+                            description: 'SECTION DESC',
+                            linkedCategory: 'analytics',
+                            cookieTable: {
+                                headers: {
+                                    name: "Name",
+                                    description: "Description",
+                                    Service: "Provider"
+                                },
+                                body: [
+                                    {
+                                        name: "_ga_*, _gid",
+                                        description: "Used to track you ...",
+                                        Service: "Google Analytics"
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                }
+            }
+        }
+    }
+}
+
+export default config;
