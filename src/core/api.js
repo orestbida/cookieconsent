@@ -517,6 +517,10 @@ export const api = {
         state._preferencesModalVisible = false;
         _setAttribute(dom._pm, 'aria-hidden', 'true');
 
+        setTimeout(()=>{
+            state._preferencesModalVisibleDelayed = false;
+        }, 1);
+
         /**
          * If consent modal is visible, focus him (instead of page document)
          */
@@ -571,6 +575,10 @@ export const api = {
         _addClass(dom._htmlDom, 'show--preferences');
         _setAttribute(dom._pm, 'aria-hidden', 'false');
         state._preferencesModalVisible = true;
+
+        setTimeout(()=>{
+            state._preferencesModalVisibleDelayed = true;
+        }, 1);
 
         /**
          * Set focus to the first focusable element inside preferences modal

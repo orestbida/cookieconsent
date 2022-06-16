@@ -363,6 +363,8 @@ export const state = {
     _preferencesModalVisible : false,
     _clickedInsideModal : false,
 
+    _preferencesModalVisibleDelayed : false,
+
     /**
      * @type {HTMLElement[]}
      */
