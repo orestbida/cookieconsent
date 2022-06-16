@@ -380,12 +380,13 @@ export const _getCurrentCategoriesState = () => {
 /**
  * Trap focus inside modal and focus the first
  * focusable element of current active modal
+ * @param {import("../core/global").Api} api
  */
-export const _handleFocusTrap = () => {
+export const _handleFocusTrap = (api) => {
     var tabbedOutsideDiv = false;
     var tabbedInsideModal = false;
 
-    _addEvent(document.body, 'keydown', (e) => {
+    _addEvent(dom._htmlDom, 'keydown', (e) => {
 
         // If is tab key => ok
         if(e.key !== 'Tab') return;
@@ -433,6 +434,27 @@ export const _handleFocusTrap = () => {
 
         !tabbedInsideModal && (tabbedOutsideDiv = true);
     });
+
+    _addEvent(dom._ccMain, 'click', (e) => {
+        /**
+         * If click is on the foreground overlay (and not inside preferencesModal),
+         * hide preferences modal
+         */
+        if(state._preferencesModalVisibleDelayed){
+            if(!dom._pm.contains(e.target)){
+                api.hidePreferences(0);
+                state._clickedInsideModal = false;
+            }else{
+                state._clickedInsideModal = true;
+            }
+        }else if(state._consentModalVisible){
+            if(dom._consentModal.contains(e.target)){
+                state._clickedInsideModal = true;
+            }
+        }
+
+    }, true);
+
 };
 
 /**
