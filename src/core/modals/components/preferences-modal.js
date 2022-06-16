@@ -40,9 +40,8 @@ export const _createPreferencesModal = (api) => {
         _setAttribute(dom._pm, 'aria-modal', true);
 
         // If 'esc' key is pressed inside _preferencesContainer div => hide preferences
-        _addEvent(dom._htmlDom, 'keydown', (evt) => {
-            evt = evt || window.event;
-            if (evt.keyCode === 27) {
+        _addEvent(dom._htmlDom, 'keydown', (event) => {
+            if (event.keyCode === 27) {
                 api.hidePreferences();
             }
         }, true);

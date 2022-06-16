@@ -25,7 +25,7 @@ export const _indexOf = (el, value) => {
  * @returns {boolean}
  */
 export const _isObject = (el) => {
-    return typeof el === 'object' && !Array.isArray(el);
+    return !!el && typeof el === 'object' && !Array.isArray(el);
 };
 
 /**
@@ -308,7 +308,7 @@ export const _addDataButtonListeners = (elem, api) => {
         _setAttribute(showPreferencesModalElements[i], 'aria-haspopup', 'dialog');
         _addEvent(showPreferencesModalElements[i], 'click', (event) => {
             event.preventDefault();
-            api.showPreferences(0);
+            api.showPreferences();
         });
     }
 
@@ -316,7 +316,7 @@ export const _addDataButtonListeners = (elem, api) => {
         _setAttribute(showConsentModalElements[i], 'aria-haspopup', 'dialog');
         _addEvent(showConsentModalElements[i], 'click', (event) => {
             event.preventDefault();
-            api.show(0, true);
+            api.show(true);
         });
     }
 
@@ -380,14 +380,12 @@ export const _getCurrentCategoriesState = () => {
 /**
  * Trap focus inside modal and focus the first
  * focusable element of current active modal
- * @param {import("../core/global").Api} api
  */
-export const _handleFocusTrap = (api) => {
+export const _handleFocusTrap = () => {
     var tabbedOutsideDiv = false;
     var tabbedInsideModal = false;
 
-    _addEvent(dom._document, 'keydown', (e) => {
-        e = e || window.event;
+    _addEvent(document.body, 'keydown', (e) => {
 
         // If is tab key => ok
         if(e.key !== 'Tab') return;
@@ -435,31 +433,6 @@ export const _handleFocusTrap = (api) => {
 
         !tabbedInsideModal && (tabbedOutsideDiv = true);
     });
-
-    if(dom._document.contains){
-        _addEvent(dom._ccMain, 'click', (e) => {
-            e = e || window.event;
-            /**
-             * If click is on the foreground overlay (and not inside preferencesModal),
-             * hide preferences modal
-             *
-             * Notice: click on div is not supported in IE
-             */
-            if(state._preferencesModalVisible){
-                if(!dom._pm.contains(e.target)){
-                    api.hidePreferences(0);
-                    state._clickedInsideModal = false;
-                }else{
-                    state._clickedInsideModal = true;
-                }
-            }else if(state._consentModalVisible){
-                if(dom._consentModal.contains(e.target)){
-                    state._clickedInsideModal = true;
-                }
-            }
-
-        }, true);
-    }
 };
 
 /**

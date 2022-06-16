@@ -462,33 +462,31 @@ export const api = {
     },
 
     /**
-     * Show cookie consent modal (with delay parameter)
-     * @param {number} [delay]
-     * @param {boolean} [create_modal] create modal if it doesn't exist
+     * Show cookie consent modal
+     * @param {boolean} [createModal] create modal if it doesn't exist
      */
-    show: (delay, createModal) => {
+    show: (createModal) => {
 
         if(createModal === true){
             _createConsentModal(api);
         }
 
         if(state._consentModalExists){
+
+            _addClass(dom._htmlDom, 'show--consent');
+
+            /**
+             * Update attributes/internal statuses
+             */
+            _setAttribute(dom._consentModal, 'aria-hidden', 'false');
+            state._consentModalVisible = true;
+
             setTimeout(() => {
-                _addClass(dom._htmlDom, 'show--consent');
+                state._lastFocusedElemBeforeModal = dom._document.activeElement;
+                state._currentModalFocusableElements = state._allConsentModalFocusableElements;
+            }, 200);
 
-                /**
-                 * Update attributes/internal statuses
-                 */
-                _setAttribute(dom._consentModal, 'aria-hidden', 'false');
-                state._consentModalVisible = true;
-
-                setTimeout(() => {
-                    state._lastFocusedElemBeforeModal = dom._document.activeElement;
-                    state._currentModalFocusableElements = state._allConsentModalFocusableElements;
-                }, 200);
-
-                _log('CookieConsent [TOGGLE]: show consentModal');
-            }, delay > 0 ? delay : (createModal ? 30 : 0));
+            _log('CookieConsent [TOGGLE]: show consentModal');
         }
     },
 
@@ -519,23 +517,21 @@ export const api = {
         state._preferencesModalVisible = false;
         _setAttribute(dom._pm, 'aria-hidden', 'true');
 
-        setTimeout(() => {
+        /**
+         * If consent modal is visible, focus him (instead of page document)
+         */
+        if(state._consentModalVisible){
+            state._lastFocusedModalElement && state._lastFocusedModalElement.focus();
+            state._currentModalFocusableElements = state._allConsentModalFocusableElements;
+        }else{
             /**
-             * If consent modal is visible, focus him (instead of page document)
+             * Restore focus to last page element which had focus before modal opening
              */
-            if(state._consentModalVisible){
-                state._lastFocusedModalElement && state._lastFocusedModalElement.focus();
-                state._currentModalFocusableElements = state._allConsentModalFocusableElements;
-            }else{
-                /**
-                 * Restore focus to last page element which had focus before modal opening
-                 */
-                state._lastFocusedElemBeforeModal && state._lastFocusedElemBeforeModal.focus();
-                state._currentModalFocusableElements = null;
-            }
+            state._lastFocusedElemBeforeModal && state._lastFocusedElemBeforeModal.focus();
+            state._currentModalFocusableElements = null;
+        }
 
-            state._clickedInsideModal = false;
-        }, 200);
+        state._clickedInsideModal = false;
 
         _log('CookieConsent [TOGGLE]: hide preferencesModal');
     },
@@ -568,38 +564,36 @@ export const api = {
     },
 
     /**
-     * Show preferences modal (with optional delay)
-     * @param {number} [delay]
+     * Show preferences modal
      */
-    showPreferences: (delay) => {
+    showPreferences: () => {
+
+        _addClass(dom._htmlDom, 'show--preferences');
+        _setAttribute(dom._pm, 'aria-hidden', 'false');
+        state._preferencesModalVisible = true;
+
+        /**
+         * Set focus to the first focusable element inside preferences modal
+         */
         setTimeout(() => {
-            _addClass(dom._htmlDom, 'show--preferences');
-            _setAttribute(dom._pm, 'aria-hidden', 'false');
-            state._preferencesModalVisible = true;
+            // If there is no consent-modal, keep track of the last focused elem.
+            if(!state._consentModalVisible){
+                state._lastFocusedElemBeforeModal = dom._document.activeElement;
+            }else{
+                state._lastFocusedModalElement = dom._document.activeElement;
+            }
 
-            /**
-             * Set focus to the first focusable element inside preferences modal
-             */
-            setTimeout(() => {
-                // If there is no consent-modal, keep track of the last focused elem.
-                if(!state._consentModalVisible){
-                    state._lastFocusedElemBeforeModal = dom._document.activeElement;
-                }else{
-                    state._lastFocusedModalElement = dom._document.activeElement;
-                }
+            if (state._allPreferencesModalFocusableElements.length === 0) return;
 
-                if (state._allPreferencesModalFocusableElements.length === 0) return;
+            if(state._allPreferencesModalFocusableElements[3]){
+                state._allPreferencesModalFocusableElements[3].focus();
+            }else{
+                state._allPreferencesModalFocusableElements[0].focus();
+            }
+            state._currentModalFocusableElements = state._allPreferencesModalFocusableElements;
+        }, 200);
 
-                if(state._allPreferencesModalFocusableElements[3]){
-                    state._allPreferencesModalFocusableElements[3].focus();
-                }else{
-                    state._allPreferencesModalFocusableElements[0].focus();
-                }
-                state._currentModalFocusableElements = state._allPreferencesModalFocusableElements;
-            }, 200);
-
-            _log('CookieConsent [TOGGLE]: show preferencesModal');
-        }, delay > 0 ? delay : 0);
+        _log('CookieConsent [TOGGLE]: show preferencesModal');
     },
 
     /**
