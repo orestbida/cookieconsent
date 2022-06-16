@@ -1,5 +1,5 @@
 import { state, dom } from '../core/global';
-import { _addClass, _elContains } from './general';
+import { _addClass, _elContains, _removeClass } from './general';
 
 /**
  * @typedef {Object} Layout
@@ -13,9 +13,6 @@ import { _addClass, _elContains } from './general';
 /**
  * @typedef {Object.<string, Layout>} Layouts
  */
-
-var appliedStyle0 = false; //if true, don't apply style to consentModal again
-var appliedStyle1 = false; //if true, don't apply style to preferencesModal again
 
 /**
  * Manage each modal's layout
@@ -39,7 +36,7 @@ export const _guiManager = (applyToModal) => {
      * @param {string} prefix
      * @param {string} defaultLayoutName
      */
-    function _setLayout(modal, allowedLayoutsObj, userGuiOptions, prefix, defaultLayoutName){
+    function _setLayout(modal, allowedLayoutsObj, userGuiOptions, prefix, defaultLayoutName, modalClassName){
 
         var layout = userGuiOptions && userGuiOptions.layout;
         var position = userGuiOptions && userGuiOptions.position;
@@ -65,25 +62,42 @@ export const _guiManager = (applyToModal) => {
         var currentAlignV = _elContains(currentLayout._alignV, userAlignV) ? userAlignV : currentLayout._defaultAlignV;
         var currentAlignH = _elContains(currentLayout._alignH, userAlignH) ? userAlignH : currentLayout._defaultAlignH;
 
+        /**
+         * Reset modal classes to default
+         */
+        modal.className = modalClassName;
+
+        /**
+         * Add layout + position classes
+         */
         _addClass(modal, prefix + currentLayoutName);
         currentLayoutVariant && _addClass(modal, prefix + currentLayoutVariant);
         currentAlignV && _addClass(modal, prefix + currentAlignV);
         currentAlignH && _addClass(modal, prefix + currentAlignH);
         flipButtons && _addClass(modal, prefix + 'flip');
 
-        if(notSameWeightButtons){
-            var secondaryBtnClass = 'btn--secondary';
-            if(prefix === 'cm--'){
-                dom._consentAcceptNecessaryBtn && _addClass(dom._consentAcceptNecessaryBtn, 'cm__' + secondaryBtnClass);
-                dom._cmCloseIconBtn && _addClass(dom._cmCloseIconBtn, 'cm__' + secondaryBtnClass);
-            }else
-                dom._pmAcceptNecessaryBtn &&  _addClass(dom._pmAcceptNecessaryBtn, 'pm__' + secondaryBtnClass);
-        }
+        var secondaryBtnClass = 'btn--secondary';
+        var classPrefix = modalClassName + '__';
 
-        applyToModal === 0 ? (appliedStyle0=true) : (appliedStyle1=true);
+        /**
+         * Add classes to buttons
+         */
+        if(modalClassName === 'cm'){
+            dom._consentAcceptNecessaryBtn && _removeClass(dom._consentAcceptNecessaryBtn, classPrefix + secondaryBtnClass);
+            dom._cmCloseIconBtn && _removeClass(dom._cmCloseIconBtn, classPrefix + secondaryBtnClass);
+            if(notSameWeightButtons){
+                dom._consentAcceptNecessaryBtn && _addClass(dom._consentAcceptNecessaryBtn, classPrefix + secondaryBtnClass);
+                dom._cmCloseIconBtn && _addClass(dom._cmCloseIconBtn, classPrefix + secondaryBtnClass);
+            }
+        }else{
+            dom._pmAcceptNecessaryBtn &&  _removeClass(dom._pmAcceptNecessaryBtn, classPrefix + secondaryBtnClass);
+            if(notSameWeightButtons){
+                dom._pmAcceptNecessaryBtn &&  _addClass(dom._pmAcceptNecessaryBtn, classPrefix + secondaryBtnClass);
+            }
+        }
     }
 
-    if(applyToModal === 0 && !appliedStyle0 && state._consentModalExists){
+    if(applyToModal === 0 && state._consentModalExists){
 
         var alignV = ['middle', 'top', 'bottom'];
         var alignH = ['left', 'center', 'right'];
@@ -112,10 +126,10 @@ export const _guiManager = (applyToModal) => {
             }
         };
 
-        _setLayout(dom._consentModal, cmLayouts, consentModalOptions, 'cm--', 'box');
+        _setLayout(dom._consentModal, cmLayouts, consentModalOptions, 'cm--', 'box', 'cm');
     }
 
-    if(applyToModal === 1 && !appliedStyle1){
+    if(applyToModal === 1){
         var pmLayouts = {
             box: {
                 _variants: [],
@@ -133,6 +147,6 @@ export const _guiManager = (applyToModal) => {
             }
         };
 
-        _setLayout(dom._pm, pmLayouts, preferencesModalOptions, 'pm--', 'box');
+        _setLayout(dom._pm, pmLayouts, preferencesModalOptions, 'pm--', 'box', 'pm');
     }
 };
