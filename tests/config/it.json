@@ -1,0 +1,49 @@
+{
+    "consentModal": {
+        "title": "Titolo",
+        "description": "Descrizione",
+        "acceptAllBtn": "Accetta tutto",
+        "acceptNecessaryBtn": "Accetta solo i necessari",
+        "showPreferencesBtn": "Mostra centro preferenze",
+        "closeIconLabel": "Rifiuta tutto",
+        "footer": "<a href=\"#\">Link</a>"
+    },
+    "preferencesModal": {
+        "title": "Titolo",
+        "acceptAllBtn": "Accetta tutto",
+        "acceptNecessaryBtn": "Accetta solo i necessari",
+        "savePreferencesBtn": "Salva preferenze",
+        "closeIconLabel": "Chiudi",
+        "serviceCounterLabel": "Servizi",
+        "sections": [
+            {
+                "title": "Sezione iniziale",
+                "description": "Descrizione"
+            },
+            {
+                "title": "Cookie necessari",
+                "description": "Descrizione",
+                "linkedCategory": "necessary"
+            },
+            {
+                "title": "Cookie analitici",
+                "description": "Descrizione",
+                "linkedCategory": "analytics",
+                "cookieTable": {
+                    "headers": {
+                        "name": "Nome",
+                        "description": "Descrizione",
+                        "Service": "Provider"
+                    },
+                    "body": [
+                        {
+                            "name": "_ga_*, _gid",
+                            "description": "Used to track you ...",
+                            "Service": "Google Analytics"
+                        }
+                    ]
+                }
+            }
+        ]
+    }
+}

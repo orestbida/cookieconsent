@@ -24,3 +24,5 @@ src/scss/core/_dynamic-reset.scss
 *.njsproj
 *.sln
 *.sw?
+
+coverage
