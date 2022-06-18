@@ -77,7 +77,7 @@ cc.run({
                             description: 'I use cookies to ensure the basic functionalities of the website and to enhance your online experience. You can choose for each category to opt-in/out whenever you want. For more details relative to cookies and other sensitive data, please read the full <a href="#" class="cc-link">privacy policy</a>.'
                         }, {
                             title: 'Strictly necessary cookies',
-
+                            description: 'Description',
                             linkedCategory: 'necessary'
                         }, {
                             title: 'Performance and Analytics cookies',
