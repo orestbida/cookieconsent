@@ -1,98 +1,106 @@
 import CookieConsent from "../src/index"
 import testConfig from "./config/full-config";
-import { _elContains, _getKeys, _isObject } from "../src/utils/general";
-import { _setCookie } from "../src/utils/cookies";
-import { dom } from "../src/core/global";
-import { defineCryptoRandom } from "./config/mocs-utils";
+import { defineCryptoRandom, resetCookieConsent } from "./config/mocs-utils";
 
 let api;
-
-const guiOptions = {
-    consentModal: {
-        equalWeightButtons: false,
-    },
-    preferencesModal: {
-        equalWeightButtons: false
-    }
-}
 
 describe("CookieConsent Clean state", () =>{
 
     beforeAll(()=>{
         defineCryptoRandom(global);
-
-        testConfig.guiOptions = guiOptions;
         api = CookieConsent.init();
     })
 
     afterEach(()=>{
-        destroyPluginHTML();
-        api = CookieConsent.init();
+        resetCookieConsent()
     });
 
     it('Should add the box layout', () => {
         testConfig.guiOptions.consentModal.layout = 'box wide';
         api.run(testConfig);
-        const modal = document.querySelector('.cm');
-        expect(modal.classList.contains('cm--box')).toBe(true);
-        expect(modal.classList.contains('cm--wide')).toBe(true);
+        const classList = getModalClassList('.cm');
+        expect(classList.contains('cm--box')).toBe(true);
+        expect(classList.contains('cm--wide')).toBe(true);
+    })
+
+    it('Should add the bar layout', () => {
+        testConfig.guiOptions.consentModal.layout = 'bar inline';
+        api.run(testConfig);
+        const classList = getModalClassList('.cm');
+        expect(classList.contains('cm--bar')).toBe(true);
+        expect(classList.contains('cm--inline')).toBe(true);
     })
 
     it('Should add the cloud layout', () => {
         testConfig.guiOptions.consentModal.layout = 'cloud';
         api.run(testConfig);
-        const modal = document.querySelector('.cm');
-        expect(modal.classList.contains('cm--cloud')).toBe(true);
+        const classList = getModalClassList('.cm');
+        expect(classList.contains('cm--cloud')).toBe(true);
     })
 
+    it('Should set the preferences modal layout to "bar"', () => {
+        testConfig.guiOptions.preferencesModal.layout = 'bar';
+        api.run(testConfig);
+        const classList = getModalClassList('.pm');
+        expect(classList.contains('pm--bar')).toBe(true);
+    })
+
+    it('Should set position to "top"', () => {
+        testConfig.guiOptions.consentModal.position = 'top';
+        api.run(testConfig);
+        const classList = getModalClassList('.cm');
+        expect(classList.contains('cm--top')).toBe(true);
+    })
+
+    it('Should set position to "middle"', () => {
+        testConfig.guiOptions.consentModal.position = 'middle';
+        api.run(testConfig);
+        const classList = getModalClassList('.cm');
+        expect(classList.contains('cm--middle')).toBe(true);
+    })
+
+    it('Should set position to "bottom"', () => {
+        testConfig.guiOptions.consentModal.position = 'bottom';
+        api.run(testConfig);
+        const classList = getModalClassList('.cm');
+        expect(classList.contains('cm--bottom')).toBe(true);
+    })
+
+    it('Should set position to "top-left"', () => {
+        testConfig.guiOptions.consentModal.position = 'top left';
+        api.run(testConfig);
+        const classList = getModalClassList('.cm');
+        expect(classList.contains('cm--top')).toBe(true);
+        expect(classList.contains('cm--left')).toBe(true);
+    })
+
+    it('Should set position to "top-center"', () => {
+        testConfig.guiOptions.consentModal.position = 'top center';
+        api.run(testConfig);
+        const classList = getModalClassList('.cm');
+        expect(classList.contains('cm--top')).toBe(true);
+        expect(classList.contains('cm--center')).toBe(true);
+    })
+
+    it('Should set position to "top-right"', () => {
+        testConfig.guiOptions.consentModal.position = 'top right';
+        api.run(testConfig);
+        const classList = getModalClassList('.cm');
+        expect(classList.contains('cm--top')).toBe(true);
+        expect(classList.contains('cm--right')).toBe(true);
+    })
+
+    it('Should flip buttons', () => {
+        testConfig.guiOptions.consentModal.flipButtons = true;
+        testConfig.guiOptions.preferencesModal.flipButtons = true;
+        api.run(testConfig);
+        const classList = getModalClassList('.cm');
+        const classList2 = getModalClassList('.pm');
+        expect(classList.contains('cm--flip')).toBe(true);
+        expect(classList2.contains('pm--flip')).toBe(true);
+    })
 })
 
-function htmlHasClass(className){
-    return document.documentElement.className.includes(className);
-}
-
-function resetConsentModal(){
-    dom._cmContainer = 0;
-    dom._consentModal = 0;
-    dom._consentModalBody = 0;
-    dom._consentModalTexts = 0;
-    dom._consentModalTitle = 0;
-    dom._consentModalDescription = 0;
-    dom._consentModalBtns = 0;
-    dom._consentModalBtnGroup = 0;
-    dom._consentModalBtnGroup2 = 0;
-    dom._consentAcceptAllBtn = 0;
-    dom._consentAcceptNecessaryBtn = 0;
-    dom._consentShowPreferencesBtn = 0;
-    dom._consentModalFooterLinksGroup = 0;
-    dom._cmCloseIconBtn = 0;
-    const modal = document.querySelector('.cm-wrapper');
-    modal && modal.remove();
-}
-
-function resetPreferencesModal(){
-    dom._pmContainer = 0;
-    dom._pm = 0;
-    dom._pmHeader = 0;
-    dom._pmTitle = 0;
-    dom._pmCloseBtn = 0;
-    dom._pmBody = 0;
-    dom._pmNewBody = 0;
-    dom._pmSections = 0;
-    dom._pmFooter = 0;
-    dom._pmAcceptAllBtn = 0;
-    dom._pmAcceptNecessaryBtn = 0;
-    dom._pmSavePreferencesBtn = 0;
-    const modal = document.querySelector('.pm-wrapper');
-    modal && modal.remove();
-}
-
-function destroyPluginHTML(){
-    resetConsentModal();
-    resetPreferencesModal();
-    dom._ccMain = 0;
-    dom._categoryCheckboxInputs = {};
-    dom._serviceCheckboxInputs = {};
-    const ccMain = document.getElementById('cc-main');
-    ccMain && ccMain.remove();
+function getModalClassList(selector){
+    return document.querySelector(selector).classList;
 }

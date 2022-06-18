@@ -3,7 +3,7 @@ import testConfig from "./config/full-config";
 import { _elContains, _getKeys, _isObject } from "../src/utils/general";
 import { _setCookie } from "../src/utils/cookies";
 import { dom, state } from "../src/core/global";
-import { defineCryptoRandom } from "./config/mocs-utils";
+import { defineCryptoRandom, htmlHasClass, resetConsentModal } from "./config/mocs-utils";
 
 let api;
 const consentModalClassToggle = 'show--consent';
@@ -25,8 +25,21 @@ describe("CookieConsent Clean state", () =>{
     })
 
     it('Modals should exist', () => {
-        const ccMain = document.getElementById('cc-main');
-        expect(ccMain).toBeInstanceOf(HTMLElement);
+        const cm = document.querySelector('.cm');
+        const pm = document.querySelector('.pm');
+        expect(cm).toBeInstanceOf(HTMLElement);
+        expect(pm).toBeInstanceOf(HTMLElement);
+    })
+
+    it('User preferences should be empty if consent is not valid', () => {
+        const userPreferences = api.getUserPreferences();
+        expect(userPreferences).toMatchObject({
+            acceptType: '',
+            acceptedCategories: [],
+            rejectedCategories: [],
+            acceptedServices: {},
+            rejectedServices: {}
+        })
     })
 
     it('Consent modal should be hidden when autoShow=false', () => {
@@ -68,7 +81,7 @@ describe("CookieConsent Clean state", () =>{
         expect(api.acceptedCategory('analytics')).toBe(true)
     })
 
-    it('Should accept current selection inside modal categories', () => {
+    it('Should accept the current selection inside the preferences modal', () => {
         const analyticsToggle = document.querySelector('.section__toggle[value="analytics"]');
         analyticsToggle.checked = false;
         api.accept();
@@ -76,7 +89,7 @@ describe("CookieConsent Clean state", () =>{
         expect(api.acceptedCategory('analytics')).toBe(false)
     })
 
-    it('Should accept a specific category ', () => {
+    it('Should accept a specific category', () => {
         api.accept(['analytics']);
         api.accept('analytics');
         expect(api.acceptedCategory('necessary')).toBe(true)
@@ -112,16 +125,16 @@ describe("CookieConsent Clean state", () =>{
         expect(userPreferences).toHaveProperty('rejectedServices');
     })
 
-    it('Should return true if cookie exists', () => {
+    it('Should return true when cookie exists', () => {
         expect(api.validCookie('cc_cookie')).toBe(true);
     })
 
-    it('Should return false if cookie is empty', () => {
+    it('Should return false when cookie has empty value', () => {
         document.cookie = 'empty_cookie=; expires=Sun, 1 Jan 2063 00:00:00 UTC; path=/';
         expect(api.validCookie('empty_cookie')).toBe(false);
     })
 
-    it('Should return false cookie if does not exist', () => {
+    it('Should return false when cookie does not exist', () => {
         expect(api.validCookie('non_existing_cookie')).toBe(false);
     })
 
@@ -139,7 +152,7 @@ describe("CookieConsent Clean state", () =>{
         expect(api.validCookie('test_cookie2')).toBe(false);
     })
 
-    it('Should erase array of cookies by by regex and string', () => {
+    it('Should erase array of cookies by regex and string', () => {
         document.cookie = 'test_cookie1=21; expires=Sun, 1 Jan 2063 00:00:00 UTC; path=/';
         document.cookie = 'test_cookie2=21; expires=Sun, 1 Jan 2063 00:00:00 UTC; path=/';
         document.cookie = 'new_cookie=21; expires=Sun, 1 Jan 2063 00:00:00 UTC; path=/';
@@ -158,18 +171,12 @@ describe("CookieConsent Clean state", () =>{
     it('Should show the consent modal', () => {
         api.show();
         expect(htmlHasClass(consentModalClassToggle)).toBe(true);
-    })
-
-    it('aria-hidden should be false when modal is visible', () => {
         expect(dom._consentModal.getAttribute('aria-hidden')).toBe('false');
     })
 
     it('Should hide the consent modal', () => {
         api.hide();
         expect(htmlHasClass(consentModalClassToggle)).toBe(false);
-    })
-
-    it('aria-hidden should be true when modal is not visible', () => {
         expect(dom._consentModal.getAttribute('aria-hidden')).toBe('true');
     })
 
@@ -213,20 +220,30 @@ describe("CookieConsent Clean state", () =>{
         expect(state._enabledServices['analytics'].length).toBe(0);
     })
 
-    it('Should accept specific service only', () => {
+    it('Should accept a specific service', () => {
         api.acceptService('service1', 'analytics');
         expect(state._enabledServices['analytics'].length).toBe(1);
     })
 
-    it('Should return true if service is enabled', () => {
+    it('Accepting a non existing service should reject all services', () => {
+        api.acceptService('does_not_exist', 'analytics');
+        expect(state._enabledServices['analytics'].length).toBe(0);
+    })
+
+    it('Should return true when service is enabled', () => {
+        api.acceptService('service1', 'analytics');
         expect(api.acceptedService('service1', 'analytics')).toBe(true);
     })
 
-    it('Should return false if service is disabled', () => {
+    it('Accepting a service in a non existing category should not do anything', () => {
+        expect(api.acceptService('service1', 'category_does_not_exist')).toBe(false);
+    })
+
+    it('Should return false when service is disabled', () => {
         expect(api.acceptedService('service2', 'analytics')).toBe(false);
     })
 
-    it('Should change the language to "it"', () => {
+    it('Should set the language to "it"', () => {
         expect(state._currentLanguageCode).toBe('en');
         const set = api.setLanguage('it');
         expect(set).toBe(true);
@@ -240,7 +257,7 @@ describe("CookieConsent Clean state", () =>{
         expect(api.getCookie('data').id).toBe(21)
     })
 
-    it('Should add new prop to cookie data', () => {
+    it('Should add new prop. to cookie data', () => {
         api.setCookieData({
             value: {new_prop: 'new_value'},
             mode: 'update'
@@ -249,28 +266,4 @@ describe("CookieConsent Clean state", () =>{
         expect(cookieData).toHaveProperty('id');
         expect(cookieData).toHaveProperty('new_prop');
     })
-
 })
-
-function htmlHasClass(className){
-    return document.documentElement.className.includes(className);
-}
-
-function resetConsentModal(){
-    dom._cmContainer = 0;
-    dom._consentModal = 0;
-    dom._consentModalBody = 0;
-    dom._consentModalTexts = 0;
-    dom._consentModalTitle = 0;
-    dom._consentModalDescription = 0;
-    dom._consentModalBtns = 0;
-    dom._consentModalBtnGroup = 0;
-    dom._consentModalBtnGroup2 = 0;
-    dom._consentAcceptAllBtn = 0;
-    dom._consentAcceptNecessaryBtn = 0;
-    dom._consentShowPreferencesBtn = 0;
-    dom._consentModalFooterLinksGroup = 0;
-    dom._cmCloseIconBtn = 0;
-    const modal = document.querySelector('.cm-wrapper');
-    modal && modal.remove();
-}

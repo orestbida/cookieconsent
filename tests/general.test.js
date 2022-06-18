@@ -24,6 +24,14 @@ describe("Test add/remove/toggle classes", () => {
     let el;
     const className = 'test_class';
 
+
+    beforeAll(()=>{
+        defineCryptoRandom(global);
+        let api = CookieConsent.init();
+        api.run(testConfig);
+        api.accept();
+    })
+
     it("Should create element", () => {
         el = _createNode('div');
         console.debug(el);
@@ -94,70 +102,3 @@ describe("Array/Object tests", () =>{
         expect(_uuidv4().length).toBe(36);
     })
 })
-
-describe("Test data-cc attributes", () =>{
-
-    let api;
-
-    beforeAll(()=>{
-        defineCryptoRandom(global);
-
-        document.body.innerHTML = `
-            <button type="button" data-cc="show-preferencesModal">Show preferences modal</button>
-            <button type="button" data-cc="show-consentModal">Show consent modal</button>
-            <button type="button" data-cc="accept-all">Accept all</button>
-            <button type="button" data-cc="accept-necessary">Accept necessary</button>
-            <button type="button" data-cc="accept-custom">Accept current selection</button>
-        `;
-
-        api = CookieConsent.init();
-        api.run(testConfig);
-        api.accept('all');
-        api.accept([]);
-    })
-
-    it('Should show the preferences modal onClick', () => {
-        const showPreferencesBtn = document.querySelector('button[data-cc="show-preferencesModal"]');
-        const clickEvent = new Event('click');
-        showPreferencesBtn.dispatchEvent(clickEvent);
-        expect(document.documentElement.classList.contains('show--preferences')).toBe(true);
-    })
-
-    it('Should show the consent modal onClick', () => {
-        document.documentElement.classList.remove('show--consent')
-        const showConsentModal = document.querySelector('button[data-cc="show-consentModal"]');
-        const clickEvent = new Event('click');
-        showConsentModal.dispatchEvent(clickEvent);
-        expect(document.documentElement.classList.contains('show--consent')).toBe(true);
-    })
-
-    it('Should accept all categories onClick', () => {
-        const acceptAllBtn = document.querySelector('button[data-cc="accept-all"]');
-        const clickEvent = new Event('click');
-        acceptAllBtn.dispatchEvent(clickEvent);
-        const userPreferences = api.getUserPreferences();
-        expect(userPreferences.acceptType).toBe('all');
-        expect(userPreferences.acceptedCategories.length).toBe(_getKeys(testConfig.categories).length);
-    })
-
-    it('Should accept necessary categories onClick', () => {
-        const acceptNecessaryBtn = document.querySelector('button[data-cc="accept-necessary"]');
-        const clickEvent = new Event('click');
-        acceptNecessaryBtn.dispatchEvent(clickEvent);
-        const userPreferences = api.getUserPreferences();
-        expect(userPreferences.acceptType).toBe('necessary');
-        expect(userPreferences.acceptedCategories.length).toBe(1);
-    })
-
-    it('Should accept necessary categories onClick', () => {
-        const acceptCustomBtn = document.querySelector('button[data-cc="accept-custom"]');
-        const checkbox = document.querySelector('.section__toggle[value="analytics"]');
-        checkbox.checked = true;
-        const clickEvent = new Event('click');
-        acceptCustomBtn.dispatchEvent(clickEvent);
-        const userPreferences = api.getUserPreferences();
-        expect(userPreferences.acceptType).toBe('custom');
-        expect(userPreferences.acceptedCategories.length).toBe(2);
-    })
-
-});

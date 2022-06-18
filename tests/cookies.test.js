@@ -39,8 +39,9 @@ describe("Cookie should be created successfully", () =>{
     });
 
     it('Should erase cc_cookie', () => {
-        _eraseCookies(['cc_cookie'], '/', [location.host]);
-        const ccCookie = _getSingleCookie('cc_cookie');
+        _setCookie('test_cookie', '{"ciao": 21}');
+        _eraseCookies(['test_cookie'], '/', [location.host]);
+        const ccCookie = _getSingleCookie('test_cookie');
         expect(ccCookie).toBeFalsy();
     });
 
@@ -48,5 +49,16 @@ describe("Cookie should be created successfully", () =>{
         _setCookie('test_cookie', '{"ciao": 21}');
         const cookieValue = _parseCookie(_getSingleCookie('test_cookie', true));
         expect(cookieValue.ciao).toBe(21);
+    })
+
+    it('Should return all cookies', () => {
+        _setCookie('test_cookie_2', '{"ciao": 22}');
+        const allCookies = _getAllCookies();
+        expect(allCookies.length).toBe(3);
+    })
+
+    it('Should return only the cookies that match the regex', () => {
+        const allCookies = _getAllCookies(/^test_/);
+        expect(allCookies.length).toBe(2);
     })
 })
