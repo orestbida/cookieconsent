@@ -43,6 +43,11 @@
                         }
                     ]
                 }
+            },
+            {
+                "title": "ADS",
+                "description": "SECTION DESC",
+                "linkedCategory": "ads"
             }
         ]
     }

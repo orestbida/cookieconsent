@@ -127,7 +127,12 @@ const config = {
                                     }
                                 ]
                             }
-                        }
+                        },
+                        {
+                            title: 'Ads cookies',
+                            description: 'SECTION DESC',
+                            linkedCategory: 'ads'
+                        },
                     ]
                 }
             }
