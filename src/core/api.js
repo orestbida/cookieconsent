@@ -198,7 +198,7 @@ export const api = {
             !service
             || !category
             || typeof category !== 'string'
-            || !_elContains(state._allCategoryNames, category)) return;
+            || !_elContains(state._allCategoryNames, category)) return false;
 
         const servicesInputs = dom._serviceCheckboxInputs[category] || {};
 
