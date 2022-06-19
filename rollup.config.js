@@ -1,6 +1,5 @@
 import { defineConfig } from 'rollup';
 import { terser } from "rollup-plugin-terser";
-import { babel } from '@rollup/plugin-babel';
 import postcss from 'rollup-plugin-postcss';
 import eslint from '@rollup/plugin-eslint';
 import pkg from './package.json';
@@ -9,7 +8,6 @@ const srcDir = './src';
 const distDir = './dist';
 const input = `${srcDir}/index.js`;
 const productionMode = !process.env.ROLLUP_WATCH;
-const isIE = process.env.BROWSER === 'IE';
 
 const banner = `/*!
 * CookieConsent ${pkg.version}
@@ -43,11 +41,6 @@ export default defineConfig(
                     include: ['./src/**'],
                     exclude: ['./src/scss/**']
                 }),
-                isIE && babel({
-                    exclude:'node_modules/**',
-                    babelHelpers: 'bundled',
-                    configFile: './babel.config.js'
-                }),
                 productionMode && terser({
                     toplevel: true,
                     format: {
@@ -79,12 +72,8 @@ export default defineConfig(
                     require('postcss-preset-env')({
                         browsers: [
                             'last 1 version',
-                            '> 1%',
-                            isIE && 'ie >= 10'
-                        ],
-                        features: {
-                            "custom-properties": isIE
-                        }
+                            '> 1%'
+                        ]
                     }),
                     require('postcss-combine-duplicated-selectors'),
                     require('autoprefixer'),

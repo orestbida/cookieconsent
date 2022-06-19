@@ -8,9 +8,8 @@
         "dist"
     ],
     "scripts": {
-        "dev": "node src/utils/dynamic-reset.js &&rollup --config --watch",
-        "build": "node src/utils/dynamic-reset.js &&rollup --config",
-        "build:ie11": "set BROWSER=IE&& node src/utils/dynamic-reset.js &&rollup --config",
+        "dev": "rollup --config --watch",
+        "build": "rollup --config",
         "docs:dev": "vitepress dev docs",
         "docs:build": "node ./docs/generate-sitemap.js && vitepress build docs ",
         "docs:serve": "vitepress serve docs",
@@ -35,12 +34,13 @@
     "author": "Orest Bida",
     "license": "MIT",
     "devDependencies": {
+        "@babel/core": "^7.18.5",
         "@babel/preset-env": "^7.18.2",
-        "@rollup/plugin-babel": "^5.3.1",
         "@rollup/plugin-eslint": "^8.0.2",
-        "@types/jest": "^28.1.1",
+        "@types/jest": "^28.1.2",
         "autoprefixer": "^10.4.7",
-        "cssnano": "^5.1.11",
+        "babel-jest": "^28.1.1",
+        "cssnano": "^5.1.12",
         "fast-glob": "^3.2.11",
         "jest": "^28.1.1",
         "jest-environment-jsdom": "^28.1.1",
@@ -53,5 +53,10 @@
         "sass": "^1.52.3",
         "sitemap": "^7.1.1",
         "vitepress": "^0.22.4"
+    },
+    "jest": {
+        "transform": {
+            "\\.[jt]sx?$": "babel-jest"
+        }
     }
 }

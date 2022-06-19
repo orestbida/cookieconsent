@@ -41,8 +41,7 @@ $btn-height: 40px;
             left: var(--cc-modal-margin);
             right: var(--cc-modal-margin);
             margin: 0 auto;
-            width: 100%; 	/*IE11*/
-            width: unset; 	/*IE11*/
+            width: unset;
         }
 
         &--left{
@@ -67,8 +66,7 @@ $btn-height: 40px;
     .cm__texts,
     .cm__btns,
     .cm__links{
-        width: 100%;  /*IE11*/
-        width: unset; /*IE11*/
+        width: unset;
         padding: 1em 1.4em;
     }
 
@@ -375,8 +373,7 @@ $btn-height: 40px;
 
     /** START: Cloud layout **/
     .cm--cloud{
-        width: 100%;  /* IE11 */
-        width: unset; /* IE11 */
+        width: unset;
         max-width: 54em;
 
         .cm__body{
@@ -594,7 +591,6 @@ $btn-height: 40px;
         transform: translateY($translate-y) scale(.98);
 
         &--middle{
-            transform: translateY(-45%) scale(.98); //IE Fallback
             transform: translateY(calc(-50% + $translate-y)) scale(.98);
         }
 
@@ -679,7 +675,7 @@ $btn-height: 40px;
         }
 
         .cm__btn{
-            flex: auto!important; /* IE 11 */
+            flex: auto!important;
 
             &:nth-child(2){
                 margin: $btn-margin 0 0 0!important;

@@ -786,7 +786,6 @@ $toggle-knob-icon-width: 2px;
 
 #cc-main{
     .pm--box{
-        transform: translateY(-45%) scale(.98); //IE Fallback
         transform: translateY(calc(-50% + $translate-y)) scale(.98);
     }
 
