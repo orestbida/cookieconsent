@@ -18,26 +18,26 @@ describe("Consent Modal buttons test", () =>{
         api.eraseCookies('cc_cookie');
     })
 
-    it('Modal accept necessary btn onClick', () => {
-        api.run(testConfig);
+    it('Modal accept necessary btn onClick', async () => {
+        await api.run(testConfig);
         fireClickEvent(dom._consentAcceptNecessaryBtn);
         const userPreferences = api.getUserPreferences();
         expect(userPreferences.acceptType).toBe('necessary');
         expect(userPreferences.acceptedCategories.length).toBe(1);
     })
 
-    it('Modal accept all btn onClick', () => {
-        api.run(testConfig);
+    it('Modal accept all btn onClick', async () => {
+        await api.run(testConfig);
         fireClickEvent(dom._consentAcceptAllBtn);
         const userPreferences = api.getUserPreferences();
         expect(userPreferences.acceptType).toBe('all');
         expect(userPreferences.rejectedCategories.length).toBe(0);
     })
 
-    it('Should accept necessary when closeIconLabel (x) is pressed', () => {
+    it('Should accept necessary when closeIconLabel (x) is pressed', async () => {
         testConfig.guiOptions.consentModal.layout = 'box';
         testConfig.language.translations.en.consentModal.closeIconLabel = 'Reject all';
-        api.run(testConfig);
+        await api.run(testConfig);
         fireClickEvent(dom._cmCloseIconBtn);
         const userPreferences = api.getUserPreferences();
         expect(userPreferences.acceptType).toBe('necessary');
@@ -51,8 +51,8 @@ describe('Preferences Modal buttons test', () =>{
         api = CookieConsent.init();
     })
 
-    beforeEach(()=>{
-        api.run(testConfig);
+    beforeEach(async ()=>{
+        await api.run(testConfig);
     })
 
     afterEach(()=>{
@@ -107,8 +107,8 @@ describe("Test data-cc attributes", () =>{
         api = CookieConsent.init();
     })
 
-    beforeEach(()=>{
-        api.run(testConfig);
+    beforeEach(async ()=>{
+        await api.run(testConfig);
     })
 
     afterEach(()=>{

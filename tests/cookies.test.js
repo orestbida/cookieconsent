@@ -13,10 +13,10 @@ import { defineCryptoRandom } from "./config/mocs-utils";
 let api;
 
 describe("Cookie should be created successfully", () =>{
-    beforeAll(()=>{
+    beforeAll(async ()=>{
         defineCryptoRandom();
         api = CookieConsent.init();
-        api.run(testConfig);
+        await api.run(testConfig);
         api.accept('all');
     })
 

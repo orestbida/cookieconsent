@@ -5,7 +5,6 @@ import {
     _getValidLanguageCode
 } from '../src/utils/language'
 
-
 describe('Test language utils', () => {
 
     beforeAll(()=>{

@@ -23,10 +23,10 @@ describe("Test add/remove/toggle classes", () => {
     let el, api;
     const className = 'test_class';
 
-    beforeAll(()=>{
+    beforeAll(async ()=>{
         defineCryptoRandom();
         api = CookieConsent.init();
-        api.run(testConfig);
+        await api.run(testConfig);
         api.accept();
     })
 

@@ -79,7 +79,7 @@ const config = {
         default: 'en',
 
         translations: {
-            it: 'it.json',
+            it: './it.json',
             en: {
                 consentModal: {
                     title: 'title',

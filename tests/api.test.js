@@ -3,7 +3,7 @@ import testConfig from "./config/full-config";
 import { _elContains, _getKeys, _isObject } from "../src/utils/general";
 import { _setCookie } from "../src/utils/cookies";
 import { dom, state } from "../src/core/global";
-import { defineCryptoRandom, htmlHasClass, resetConsentModal } from "./config/mocs-utils";
+import { defineCryptoRandom, htmlHasClass, mockFetch, resetConsentModal } from "./config/mocs-utils";
 
 let api;
 const consentModalClassToggle = 'show--consent';
@@ -11,8 +11,9 @@ const preferencesModalClassToggle = 'show--preferences'
 
 describe("API tests", () =>{
 
-    beforeAll(()=>{
+    beforeAll(async ()=>{
         defineCryptoRandom();
+        mockFetch(true);
         document.body.innerHTML = `
             <script type="text/plain" data-category="analytics">console.log("enabled analytics")</script>
             <script type="text/plain" data-category="!analytics">console.log("disabled analytics")</script>
@@ -22,7 +23,7 @@ describe("API tests", () =>{
         `;
 
         api = CookieConsent.init();
-        api.run(testConfig);
+        await api.run(testConfig);
     })
 
     it('Modals should exist', () => {
@@ -178,7 +179,7 @@ describe("API tests", () =>{
         expect(dom._consentModal.getAttribute('aria-hidden')).toBe('true');
     })
 
-    it('Should create the consent modal if it does not exist', () => {
+    it('Should create the consent modal if it does not exist', async () => {
 
         /**
          * Remove consent modal (simulate page reload)
@@ -187,7 +188,7 @@ describe("API tests", () =>{
 
         let modal = document.querySelector('#cc-main .cm');
         expect(modal).toBeFalsy();
-        api.run(testConfig);
+        await api.run(testConfig);
 
         modal = document.querySelector('#cc-main .cm')
         expect(modal).toBeNull();
@@ -245,9 +246,9 @@ describe("API tests", () =>{
         expect(api.acceptedService('service2', 'analytics')).toBe(false);
     })
 
-    it('Should set the language to "it"', () => {
+    it('Should set the language to "it"', async () => {
         expect(state._currentLanguageCode).toBe('en');
-        const set = api.setLanguage('it');
+        const set = await api.setLanguage('it');
         expect(set).toBe(true);
         expect(state._currentLanguageCode).toBe('it');
     })
