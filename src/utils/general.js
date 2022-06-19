@@ -209,39 +209,18 @@ export const _getRemainingExpirationTimeMS = () => {
 };
 
 /**
- * Helper function to create xhr objects
- * @param {{
- *  method: string,
- *  path: string,
- *  data: any
- * }} params
- * @param {Function} [callback]
+ * Used to fetch external language files (.json)
+ * @param {string} url
+ * @returns {Promise<import('../core/global').Translation | boolean>}
  */
-export const _xhr = (params, callback) => {
-    var httpRequest = new XMLHttpRequest();
-
-    httpRequest.onreadystatechange = () => {
-        if (httpRequest.readyState === 4) {
-            var status = httpRequest.status, data;
-
-            if (status === 200) {
-                try{
-                    data = JSON.parse(httpRequest.responseText);
-                }catch(e){
-                    _log('CookieConsent [XHR] JSON.parse error:', e);
-                }
-            }else{
-                _log('CookieConsent [XHR] error:', httpRequest.statusText);
-            }
-
-            if (typeof callback === 'function') callback(status, data);
-        }
-    };
-
-    httpRequest.open(params.method, params.path);
-    httpRequest.send(params.data);
+export const _fetchJson = async (url) => {
+    try{
+        const response = await fetch(url, {method: 'GET'});
+        return response.ok ? await response.json() : false;
+    }catch(e){
+        return false;
+    }
 };
-
 
 /**
  * Helper function to retrieve cookie duration

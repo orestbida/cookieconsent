@@ -292,11 +292,11 @@ export const api = {
      * Update/change modal's language
      * @param {string} lang new language
      * @param {boolean} [forceUpdate] update language fields forcefully
-     * @returns {boolean}
+     * @returns {Promise<boolean>}
      */
-    setLanguage: (newLanguage, forceUpdate) => {
+    setLanguage: async (newLanguage, forceUpdate) => {
 
-        if(typeof newLanguage !== 'string') return;
+        if(typeof newLanguage !== 'string') return false;
 
         /**
          * Validate language to avoid errors
@@ -309,16 +309,16 @@ export const api = {
         if(newLanguageCode !== state._currentLanguageCode || forceUpdate === true){
             state._currentLanguageCode = newLanguageCode;
 
-            _loadTranslationData(state._currentLanguageCode, () => {
-                if(state._consentModalExists){
-                    _createConsentModal(api);
-                    _addDataButtonListeners(dom._consentModalInner, api);
-                }
+            const translationLoaded = await _loadTranslationData(state._currentLanguageCode);
+            if(!translationLoaded) return false;
 
-                _createPreferencesModal(api);
+            if(state._consentModalExists){
+                _createConsentModal(api);
+                _addDataButtonListeners(dom._consentModalInner, api);
+            }
 
-                _log('CookieConsent [LANG]: current language: \'' + newLanguageCode + '\'');
-            });
+            _createPreferencesModal(api);
+            _log('CookieConsent [LANG]: current language: \'' + newLanguageCode + '\'');
 
             return true;
         }
@@ -617,7 +617,7 @@ export const api = {
      * Will run once and only if modals do not exist.
      * @param {import("./global").UserConfig} conf
      */
-    run: (conf) => {
+    run: async (conf) => {
 
         if(!dom._document.getElementById('cc-main')){
 
@@ -674,34 +674,34 @@ export const api = {
             /**
              * Load translation before generating modals
              */
-            _loadTranslationData(null, () => {
+            const translationLoaded = await _loadTranslationData(null);
+            if(!translationLoaded) return;
 
-                // Generate cookie-preferences dom (& consent modal)
-                _createCookieConsentHTML(api);
+            // Generate cookie-preferences dom (& consent modal)
+            _createCookieConsentHTML(api);
 
-                _getModalFocusableData();
-                _addDataButtonListeners(null, api);
+            _getModalFocusableData();
+            _addDataButtonListeners(null, api);
 
-                if(config.autoShow && state._consentModalExists)
-                    api.show();
+            if(config.autoShow && state._consentModalExists)
+                api.show();
 
-                // Add class to enable animations/transitions
-                setTimeout(() => {_addClass(dom._ccMain, 'c--anim');}, 100);
+            // Add class to enable animations/transitions
+            setTimeout(() => {_addClass(dom._ccMain, 'c--anim');}, 100);
 
-                // Accessibility :=> if tab pressed => trap focus inside modal
-                _handleFocusTrap(api);
+            // Accessibility :=> if tab pressed => trap focus inside modal
+            _handleFocusTrap(api);
 
-                // If consent is valid
-                if(!state._invalidConsent){
-                    _manageExistingScripts();
-                    _fireEvent(customEvents._onConsent);
-                }else{
-                    if(config.mode === 'opt-out'){
-                        _log('CookieConsent [CONFIG] mode=\'' + config.mode + '\', default enabled categories:', state._defaultEnabledCategories);
-                        _manageExistingScripts(state._defaultEnabledCategories);
-                    }
+            // If consent is valid
+            if(!state._invalidConsent){
+                _manageExistingScripts();
+                _fireEvent(customEvents._onConsent);
+            }else{
+                if(config.mode === 'opt-out'){
+                    _log('CookieConsent [CONFIG] mode=\'' + config.mode + '\', default enabled categories:', state._defaultEnabledCategories);
+                    _manageExistingScripts(state._defaultEnabledCategories);
                 }
-            });
+            }
         }
     }
 };

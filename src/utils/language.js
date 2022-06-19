@@ -1,5 +1,5 @@
 import { state, dom } from '../core/global';
-import { _log, _getKeys, _xhr, _elContains } from './general';
+import { _log, _getKeys, _elContains, _fetchJson } from './general';
 
 /**
  * Get a valid language code
@@ -57,9 +57,8 @@ export const _resolveCurrentLanguageCode = function () {
 /**
  * Load translation (asynchronously using xhr if needed)
  * @param {string | null} desiredLanguageCode
- * @param {Function} callback
  */
-export const _loadTranslationData = (desiredLanguageCode, callback) => {
+export const _loadTranslationData = async (desiredLanguageCode) => {
 
     /**
      * Make sure languageCode is valid before retrieving the translation object
@@ -72,18 +71,13 @@ export const _loadTranslationData = (desiredLanguageCode, callback) => {
      * the string (path to json file) with parsed language object
      */
     if(typeof state._currentTranslation === 'string'){
-        _xhr({
-            method: 'GET',
-            path: state._currentTranslation
-        }, (status, translationData) => {
-            if(status === 200){
-                state._currentTranslation = translationData;
-                state._allTranslations[state._currentLanguageCode] = translationData;
-                callback();
-            }
-        });
+        const translationData = await _fetchJson(state._currentTranslation);
+        if(!translationData) return false;
+        state._currentTranslation = translationData;
+        state._allTranslations[state._currentLanguageCode] = translationData;
+        return true;
     }else{
         state._currentTranslation = state._allTranslations[state._currentLanguageCode];
-        callback();
+        return true;
     }
 };
