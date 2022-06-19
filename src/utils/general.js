@@ -477,9 +477,8 @@ export const _getModalFocusableData = () => {
     function _saveAllFocusableElements(modal, _array){
         var focusLater=false, focusFirst=false;
 
-        // ie might throw exception due to complex unsupported selector => a:not([tabindex="-1"])
         try{
-            var focusableElements = modal.querySelectorAll(allowed_focusable_types.join(':not([tabindex="-1"]), '));
+            var focusableElements = modal && modal.querySelectorAll(allowed_focusable_types.join(':not([tabindex="-1"]), '));
             var attr, len=focusableElements.length, i=0;
 
             while(i < len){
@@ -500,7 +499,7 @@ export const _getModalFocusableData = () => {
             }
 
         }catch(e){
-            return modal.querySelectorAll(allowed_focusable_types.join(', '));
+            return [];
         }
 
         /**
