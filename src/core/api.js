@@ -371,7 +371,8 @@ export const api = {
 
             // if callback function defined => run callback onload
             if(callbackExists){
-                script.onload = callback;
+                script.onload = ()=>{callback(true);};
+                script.onerror = ()=>{callback(false);};
             }
 
             script.src = src;
@@ -381,7 +382,7 @@ export const api = {
              */
             _appendChild(dom._document.head, script);
         }else{
-            callbackExists && callback();
+            callbackExists && callback(true);
         }
     },
 
@@ -688,7 +689,7 @@ export const api = {
                 setTimeout(() => {_addClass(dom._ccMain, 'c--anim');}, 100);
 
                 // Accessibility :=> if tab pressed => trap focus inside modal
-                setTimeout(() => {_handleFocusTrap(api);}, 100);
+                _handleFocusTrap(api);
 
                 // If consent is valid
                 if(!state._invalidConsent){
