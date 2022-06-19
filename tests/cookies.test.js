@@ -10,13 +10,14 @@ import {
 }from '../src/utils/cookies';
 import { defineCryptoRandom } from "./config/mocs-utils";
 
+let api;
 
 describe("Cookie should be created successfully", () =>{
     beforeAll(()=>{
-        defineCryptoRandom(global);
-        const cc = CookieConsent.init();
-        cc.run(testConfig);
-        cc.accept('all');
+        defineCryptoRandom();
+        api = CookieConsent.init();
+        api.run(testConfig);
+        api.accept('all');
     })
 
     it('Should retrieve the cookie with all the fields', () => {
@@ -38,7 +39,7 @@ describe("Cookie should be created successfully", () =>{
         });
     });
 
-    it('Should erase cc_cookie', () => {
+    it('Should erase "cc_cookie"', () => {
         _setCookie('test_cookie', '{"ciao": 21}');
         _eraseCookies(['test_cookie'], '/', [location.host]);
         const ccCookie = _getSingleCookie('test_cookie');

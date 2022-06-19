@@ -1,21 +1,23 @@
+import { dom } from "../src/core/global";
 import CookieConsent from "../src/index"
 import testConfig from "./config/full-config";
 import { defineCryptoRandom, resetCookieConsent } from "./config/mocs-utils";
 
 let api;
 
-describe("CookieConsent Clean state", () =>{
+describe("Test UI options", () =>{
 
     beforeAll(()=>{
-        defineCryptoRandom(global);
+        defineCryptoRandom();
         api = CookieConsent.init();
     })
 
     afterEach(()=>{
         resetCookieConsent()
+        api.eraseCookies('cc_cookie');
     });
 
-    it('Should add the box layout', () => {
+    it('Should set the "box" layout', () => {
         testConfig.guiOptions.consentModal.layout = 'box wide';
         api.run(testConfig);
         const classList = getModalClassList('.cm');
@@ -23,7 +25,14 @@ describe("CookieConsent Clean state", () =>{
         expect(classList.contains('cm--wide')).toBe(true);
     })
 
-    it('Should add the bar layout', () => {
+    it('Should add a closeIconLabel (x) when the layout="box"', () => {
+        testConfig.guiOptions.consentModal.layout = 'box wide';
+        testConfig.language.translations.en.consentModal.closeIconLabel = 'Reject all';
+        api.run(testConfig);
+        expect(dom._cmCloseIconBtn).toBeInstanceOf(HTMLElement);
+    })
+
+    it('Should set the "bar" layout', () => {
         testConfig.guiOptions.consentModal.layout = 'bar inline';
         api.run(testConfig);
         const classList = getModalClassList('.cm');
@@ -31,14 +40,14 @@ describe("CookieConsent Clean state", () =>{
         expect(classList.contains('cm--inline')).toBe(true);
     })
 
-    it('Should add the cloud layout', () => {
+    it('Should set the "cloud" layout', () => {
         testConfig.guiOptions.consentModal.layout = 'cloud';
         api.run(testConfig);
         const classList = getModalClassList('.cm');
         expect(classList.contains('cm--cloud')).toBe(true);
     })
 
-    it('Should set the preferences modal layout to "bar"', () => {
+    it('Should set the preferences modal\'s layout to "bar"', () => {
         testConfig.guiOptions.preferencesModal.layout = 'bar';
         api.run(testConfig);
         const classList = getModalClassList('.pm');

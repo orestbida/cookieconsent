@@ -1,7 +1,7 @@
 import crypto from 'crypto';
 import { dom, state } from '../../src/core/global';
 
-export const defineCryptoRandom = (global) => {
+export const defineCryptoRandom = () => {
     if(!global.crypto){
         Object.defineProperty(global, 'crypto', {
             value: {
@@ -91,8 +91,8 @@ export function htmlHasClass(className){
     return document.documentElement.className.includes(className);
 }
 
-export function setUserAgent(userAgent, global) {
-    Object.defineProperty(global.self.navigator, "userAgent", {
+export function setUserAgent(userAgent) {
+    Object.defineProperty(global.navigator, "userAgent", {
         get: function () {
             return userAgent; // customized user agent
         },

@@ -9,15 +9,16 @@ let api;
 const consentModalClassToggle = 'show--consent';
 const preferencesModalClassToggle = 'show--preferences'
 
-describe("CookieConsent Clean state", () =>{
+describe("API tests", () =>{
 
     beforeAll(()=>{
-        defineCryptoRandom(global);
+        defineCryptoRandom();
         document.body.innerHTML = `
             <script type="text/plain" data-category="analytics">console.log("enabled analytics")</script>
             <script type="text/plain" data-category="!analytics">console.log("disabled analytics")</script>
             <script type="text/plain" data-category="analytics" data-service="my-service">console.log("enabled my-service")</script>
             <script type="text/plain" data-category="analytics" data-service="!my-service">console.log("disabled my-service")</script>
+            <script type="text/plain" data-category="analytics" data-src="./config/testScriptLoad.js"></script>
         `;
 
         api = CookieConsent.init();
@@ -102,10 +103,8 @@ describe("CookieConsent Clean state", () =>{
         expect(api.acceptedCategory('analytics')).toBe(false)
     })
 
-    it('Should return the plugin\'s cookie', () => {
-
+    it("Should return the plugin's cookie", () => {
         const cookie = api.getCookie();
-
         expect(cookie).toHaveProperty('categories');
         expect(cookie).toHaveProperty('revision');
         expect(cookie).toHaveProperty('data');
@@ -117,7 +116,6 @@ describe("CookieConsent Clean state", () =>{
 
     it('Should return user preferences', () => {
         const userPreferences = api.getUserPreferences();
-        expect(_isObject(userPreferences)).toBeTruthy();
         expect(userPreferences).toHaveProperty('acceptedCategories');
         expect(userPreferences).toHaveProperty('rejectedCategories');
         expect(userPreferences).toHaveProperty('acceptType');
@@ -129,7 +127,7 @@ describe("CookieConsent Clean state", () =>{
         expect(api.validCookie('cc_cookie')).toBe(true);
     })
 
-    it('Should return false when cookie has empty value', () => {
+    it('Should return false when cookie has an empty value', () => {
         document.cookie = 'empty_cookie=; expires=Sun, 1 Jan 2063 00:00:00 UTC; path=/';
         expect(api.validCookie('empty_cookie')).toBe(false);
     })
@@ -189,6 +187,10 @@ describe("CookieConsent Clean state", () =>{
 
         let modal = document.querySelector('#cc-main .cm');
         expect(modal).toBeFalsy();
+        api.run(testConfig);
+
+        modal = document.querySelector('#cc-main .cm')
+        expect(modal).toBeNull();
 
         /**
          * Create modal
@@ -265,5 +267,23 @@ describe("CookieConsent Clean state", () =>{
         const cookieData = api.getCookie('data');
         expect(cookieData).toHaveProperty('id');
         expect(cookieData).toHaveProperty('new_prop');
+    })
+
+    it('Should load script', (next) => {
+        api.loadScript('./config/testScriptLoad.js', (loaded) => {
+            expect(loaded).toBe(true);
+            next();
+        })
+    })
+
+    it('Should autoClearCookies when category is rejected', () => {
+        api.accept('all');
+        _setCookie('test_cookie_1', JSON.stringify({test_key: 'test_value'}));
+        _setCookie('test_cookie_2', JSON.stringify({test_key: 'test_value'}));
+        expect(api.validCookie('test_cookie_1')).toBe(true);
+        expect(api.validCookie('test_cookie_2')).toBe(true);
+        api.accept('all', ['analytics']);
+        expect(api.validCookie('test_cookie_1')).toBe(false);
+        expect(api.validCookie('test_cookie_2')).toBe(false);
     })
 })

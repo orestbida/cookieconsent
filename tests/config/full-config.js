@@ -24,13 +24,13 @@ const config = {
             layout: 'box wide',
             position: 'bottom left',
             flipButtons: false,
-            equalWeightButtons: true
+            equalWeightButtons: false
         },
         preferencesModal: {
             layout: 'bar',
             position: 'left',
             flipButtons: false,
-            equalWeightButtons: true
+            equalWeightButtons: false
         }
     },
 
@@ -52,7 +52,7 @@ const config = {
             autoClear: {
                 cookies: [
                     {
-                        name: /^(_ga|_gid)/
+                        name: /^test_cookie/
                     }
                 ]
             },

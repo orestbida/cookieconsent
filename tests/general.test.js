@@ -15,19 +15,17 @@ import {
 
 import CookieConsent from "../src/index"
 import testConfig from "./config/basic-config"
-import { defineCryptoRandom } from './config/mocs-utils';
+import { defineCryptoRandom, htmlHasClass } from './config/mocs-utils';
+import { state } from '../src/core/global';
 
 describe("Test add/remove/toggle classes", () => {
-    /**
-     * @type {HTMLElement}
-     */
-    let el;
+
+    let el, api;
     const className = 'test_class';
 
-
     beforeAll(()=>{
-        defineCryptoRandom(global);
-        let api = CookieConsent.init();
+        defineCryptoRandom();
+        api = CookieConsent.init();
         api.run(testConfig);
         api.accept();
     })
@@ -50,7 +48,7 @@ describe("Test add/remove/toggle classes", () => {
         expect(el.className).toBe('');
     })
 
-    it("Should append child to el", () => {
+    it("Should append child to el.", () => {
         const child = _createNode('span');
         expect(el.children.length).toBe(0);
 
@@ -58,9 +56,17 @@ describe("Test add/remove/toggle classes", () => {
         expect(el.children.length).toBe(1);
     })
 
-    it("Should add attribute to el", () => {
+    it("Should add attribute to el.", () => {
         _setAttribute(el, 'data-custom', 'my_value');
         expect(el.dataset.custom).toBe('my_value');
+    })
+
+    it("Should hide the preferences modal when esc key is pressed", () => {
+        api.showPreferences();
+        expect(state._preferencesModalVisible).toBe(true);
+        document.documentElement.dispatchEvent(new KeyboardEvent("keydown", {keyCode: 27}));
+        expect(state._preferencesModalVisible).toBe(false);
+        expect(htmlHasClass('show--preferences')).toBe(false);
     })
 })
 
@@ -70,21 +76,21 @@ describe("Array/Object tests", () =>{
     const arr2 = [1, 2]
 
     beforeAll(()=>{
-        defineCryptoRandom(global);
+        defineCryptoRandom();
     })
 
-    it('It should give array difference', () => {
+    it('It should return symmetric array difference', () => {
         const diff = _arrayDiff(arr1, arr2);
         expect(diff).toEqual([2]);
         expect(_elContains(diff, 2)).toBe(true);
     });
 
-    it('It should give index of el inside array', () => {
+    it('It should return index of el. inside array', () => {
         expect(_indexOf(arr2, 2)).toBe(1);
         expect(_indexOf(arr2, 21)).toBe(-1);
     });
 
-    it('Should determine if an el is a valid object', () => {
+    it('Should determine if an el. is a "valid" object', () => {
         expect(_isObject('string_example')).toBe(false);
         expect(_isObject(null)).toBe(false);
         expect(_isObject(arr2)).toBe(false);
@@ -93,12 +99,10 @@ describe("Array/Object tests", () =>{
 
     it('Should return the object keys', () => {
         expect(_getKeys({id: 21})).toContain('id');
-        expect(_getKeys({name: 'Johny', age: 21})).not.toContain('id');
         expect(_getKeys({name: 'Johny', surname: 'Depp', age: 21, })).toHaveLength(3)
     })
 
     it('Should return a 36 char long string', () => {
-        expect(typeof _uuidv4()).toBe('string');
         expect(_uuidv4().length).toBe(36);
     })
 })

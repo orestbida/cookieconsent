@@ -12,12 +12,12 @@ describe('Test language utils', () => {
         Object.defineProperty(global.navigator, 'language', {value: 'it-IT', configurable: true});
     })
 
-    it('Should return the browser language code', () => {
+    it("Should return the browser's language code", () => {
         const language = _getBrowserLanguageCode();
         expect(language).toBe('it');
     });
 
-    it('Should use the browser\'s language', () => {
+    it("Should use the browser's language", () => {
         state._allTranslations = {
             it: {},
             en: {}
@@ -38,9 +38,7 @@ describe('Test language utils', () => {
         state._userConfig.language.autoDetect = 'browser';
         state._currentLanguageCode = 'en';
         state._userConfig.language.default = 'en';
-
         const currentLanguage = _getValidLanguageCode('en');
-
         expect(currentLanguage).toBe('it');
     })
 });

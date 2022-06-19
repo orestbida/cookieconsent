@@ -2,14 +2,52 @@ import { dom } from "../src/core/global";
 import CookieConsent from "../src/index"
 import { _getKeys } from "../src/utils/general";
 import testConfig from "./config/full-config";
-import { defineCryptoRandom, resetCookieConsent, fireClickEvent } from "./config/mocs-utils";
+import { defineCryptoRandom, resetCookieConsent, fireClickEvent, htmlHasClass } from "./config/mocs-utils";
 
 let api;
 
 describe("Consent Modal buttons test", () =>{
 
     beforeAll(()=>{
-        defineCryptoRandom(global);
+        defineCryptoRandom();
+        api = CookieConsent.init();
+    })
+
+    afterEach(()=>{
+        resetCookieConsent();
+        api.eraseCookies('cc_cookie');
+    })
+
+    it('Modal accept necessary btn onClick', () => {
+        api.run(testConfig);
+        fireClickEvent(dom._consentAcceptNecessaryBtn);
+        const userPreferences = api.getUserPreferences();
+        expect(userPreferences.acceptType).toBe('necessary');
+        expect(userPreferences.acceptedCategories.length).toBe(1);
+    })
+
+    it('Modal accept all btn onClick', () => {
+        api.run(testConfig);
+        fireClickEvent(dom._consentAcceptAllBtn);
+        const userPreferences = api.getUserPreferences();
+        expect(userPreferences.acceptType).toBe('all');
+        expect(userPreferences.rejectedCategories.length).toBe(0);
+    })
+
+    it('Should accept necessary when closeIconLabel (x) is pressed', () => {
+        testConfig.guiOptions.consentModal.layout = 'box';
+        testConfig.language.translations.en.consentModal.closeIconLabel = 'Reject all';
+        api.run(testConfig);
+        fireClickEvent(dom._cmCloseIconBtn);
+        const userPreferences = api.getUserPreferences();
+        expect(userPreferences.acceptType).toBe('necessary');
+    })
+})
+
+describe('Preferences Modal buttons test', () =>{
+
+    beforeAll(()=>{
+        defineCryptoRandom();
         api = CookieConsent.init();
     })
 
@@ -22,29 +60,41 @@ describe("Consent Modal buttons test", () =>{
         api.eraseCookies('cc_cookie');
     })
 
-    it('Modal accept necessary btn onClick', () => {
-        fireClickEvent(dom._consentAcceptNecessaryBtn);
+    it('Should accept necessary only on acceptNecessaryBtn click', () => {
+        fireClickEvent(dom._pmAcceptNecessaryBtn);
         const userPreferences = api.getUserPreferences();
         expect(userPreferences.acceptType).toBe('necessary');
         expect(userPreferences.acceptedCategories.length).toBe(1);
     })
 
-    it('Modal accept all btn onClick', () => {
-        fireClickEvent(dom._consentAcceptAllBtn);
+    it('Should accept all categories on acceptAllBtn click', () => {
+        fireClickEvent(dom._pmAcceptAllBtn);
         const userPreferences = api.getUserPreferences();
-        expect(api.validConsent()).toBe(true);
         expect(userPreferences.acceptType).toBe('all');
+        expect(userPreferences.rejectedCategories.length).toBe(0);
+    })
+
+    it('Should accept selected only categories on savePreferencesBtn click', () => {
+        api.accept('all');
+        document.querySelector('.section__toggle[value="analytics"]').checked = false;
+        fireClickEvent(dom._pmSavePreferencesBtn);
+        const userPreferences = api.getUserPreferences();
+        expect(userPreferences.acceptType).toBe('custom');
+        expect(userPreferences.rejectedCategories).toContain('analytics');
+    })
+
+    it('Should close the preferences modal when (x) icon is pressed', () => {
+        api.showPreferences();
+        expect(htmlHasClass('show--preferences')).toBe(true)
+        fireClickEvent(dom._pmCloseBtn);
+        expect(htmlHasClass('show--preferences')).toBe(false)
     })
 })
-
-// describe('Preferences Modal buttons test', () => {
-
-// });
 
 describe("Test data-cc attributes", () =>{
 
     beforeAll(()=>{
-        defineCryptoRandom(global);
+        defineCryptoRandom();
 
         document.body.innerHTML = `
             <button type="button" data-cc="show-preferencesModal">Show preferences modal</button>
@@ -69,14 +119,13 @@ describe("Test data-cc attributes", () =>{
     it('Should show the preferences modal onClick', () => {
         const showPreferencesBtn = document.querySelector('button[data-cc="show-preferencesModal"]');
         fireClickEvent(showPreferencesBtn)
-        expect(document.documentElement.classList.contains('show--preferences')).toBe(true);
+        expect(htmlHasClass('show--preferences')).toBe(true);
     })
 
     it('Should show the consent modal onClick', () => {
-        document.documentElement.classList.remove('show--consent')
         const showConsentModal = document.querySelector('button[data-cc="show-consentModal"]');
         fireClickEvent(showConsentModal)
-        expect(document.documentElement.classList.contains('show--consent')).toBe(true);
+        expect(htmlHasClass('show--consent')).toBe(true);
     })
 
     it('Should accept all categories onClick', () => {
@@ -92,7 +141,6 @@ describe("Test data-cc attributes", () =>{
         fireClickEvent(acceptNecessaryBtn)
         console.log(acceptNecessaryBtn)
         const userPreferences = api.getUserPreferences();
-
         expect(userPreferences.acceptType).toBe('necessary');
         expect(userPreferences.acceptedCategories.length).toBe(1);
     })
