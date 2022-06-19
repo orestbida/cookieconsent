@@ -8,7 +8,7 @@ import {
     _parseCookie,
     _setCookie
 }from '../src/utils/cookies';
-import { defineCryptoRandom } from "./config/mocs-utils";
+import { defineCryptoRandom } from "./config/mocks-utils";
 
 let api;
 

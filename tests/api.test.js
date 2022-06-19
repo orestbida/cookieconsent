@@ -3,7 +3,7 @@ import testConfig from "./config/full-config";
 import { _elContains, _getKeys, _isObject } from "../src/utils/general";
 import { _setCookie } from "../src/utils/cookies";
 import { dom, state } from "../src/core/global";
-import { defineCryptoRandom, htmlHasClass, mockFetch, resetConsentModal } from "./config/mocs-utils";
+import { defineCryptoRandom, htmlHasClass, mockFetch, resetConsentModal } from "./config/mocks-utils";
 
 let api;
 const consentModalClassToggle = 'show--consent';

@@ -2,7 +2,7 @@ import { dom } from "../src/core/global";
 import CookieConsent from "../src/index"
 import { _getKeys } from "../src/utils/general";
 import testConfig from "./config/full-config";
-import { defineCryptoRandom, resetCookieConsent, fireClickEvent, htmlHasClass } from "./config/mocs-utils";
+import { defineCryptoRandom, resetCookieConsent, fireClickEvent, htmlHasClass } from "./config/mocks-utils";
 
 let api;
 

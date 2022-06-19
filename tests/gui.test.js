@@ -1,7 +1,7 @@
 import { dom } from "../src/core/global";
 import CookieConsent from "../src/index"
 import testConfig from "./config/full-config";
-import { defineCryptoRandom, resetCookieConsent } from "./config/mocs-utils";
+import { defineCryptoRandom, resetCookieConsent } from "./config/mocks-utils";
 
 let api;
 

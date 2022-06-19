@@ -15,7 +15,7 @@ import {
 
 import CookieConsent from "../src/index"
 import testConfig from "./config/basic-config"
-import { defineCryptoRandom, htmlHasClass } from './config/mocs-utils';
+import { defineCryptoRandom, htmlHasClass } from './config/mocks-utils';
 import { state } from '../src/core/global';
 
 describe("Test add/remove/toggle classes", () => {
