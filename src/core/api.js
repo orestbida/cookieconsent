@@ -53,7 +53,7 @@ export const api = {
      * @param {string[]|string} _categories - Categories to accept
      * @param {string[]} [_exclusions] - Excluded categories [optional]
      */
-    accept : (_categories, _exclusions) => {
+    acceptCategory: (_categories, _exclusions) => {
         var categories = _categories || undefined;
         var exclusions = _exclusions || [];
         var customAcceptType = false;
@@ -237,7 +237,7 @@ export const api = {
             input.dispatchEvent(new Event('change'));
         }
 
-        api.accept();
+        api.acceptCategory();
     },
 
     /**
@@ -296,21 +296,23 @@ export const api = {
      */
     setLanguage: async (newLanguage, forceUpdate) => {
 
-        if(typeof newLanguage !== 'string') return false;
-
         /**
          * Validate language to avoid errors
          */
-        var newLanguageCode = _getValidLanguageCode(newLanguage);
+        var validatedLanguageCode = _getValidLanguageCode(newLanguage);
+
+        if(newLanguage !== validatedLanguageCode) return false;
 
         /**
          * Set language only if it differs from current
          */
-        if(newLanguageCode !== state._currentLanguageCode || forceUpdate === true){
-            state._currentLanguageCode = newLanguageCode;
+        if(validatedLanguageCode !== state._currentLanguageCode || forceUpdate === true){
 
-            const translationLoaded = await _loadTranslationData(state._currentLanguageCode);
+            const translationLoaded = await _loadTranslationData(validatedLanguageCode);
+
             if(!translationLoaded) return false;
+
+            state._currentLanguageCode = validatedLanguageCode;
 
             if(state._consentModalExists){
                 _createConsentModal(api);
@@ -318,7 +320,7 @@ export const api = {
             }
 
             _createPreferencesModal(api);
-            _log('CookieConsent [LANG]: current language: \'' + newLanguageCode + '\'');
+            _log('CookieConsent [LANG]: current language: \'' + validatedLanguageCode + '\'');
 
             return true;
         }
