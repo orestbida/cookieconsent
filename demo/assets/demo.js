@@ -20,7 +20,7 @@ resetCookiesBtn.innerText = 'Reset cookieconsent';
 cookieSettingsBtn.parentNode.insertBefore(resetCookiesBtn, cookieSettingsBtn.nextSibling);
 
 resetCookiesBtn.addEventListener('click', function(){
-    cc.accept([]);
+    cc.acceptCategory([]);
     cc.eraseCookies(['cc_cookie_demo1', 'cc_cookie_demo2', 'cc_cookie_demo3','cc_youtube', 'cc_cookie']);
     window.location.reload();
 });
