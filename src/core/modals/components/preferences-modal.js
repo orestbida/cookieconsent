@@ -13,7 +13,7 @@ export const _createPreferencesModal = (api) => {
     /**
      * @type {import("../../global").PreferencesModal}
      */
-    var modalData = state._currentTranslation.preferencesModal;
+    var modalData = state._currentTranslation && state._currentTranslation.preferencesModal;
 
     if(!modalData) return;
 
@@ -372,7 +372,7 @@ export const _createPreferencesModal = (api) => {
     }
 
     function acceptHelper(acceptType){
-        api.accept(acceptType);
+        api.acceptCategory(acceptType);
         api.hidePreferences();
         api.hide();
     }

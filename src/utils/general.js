@@ -1,4 +1,4 @@
-import { state, dom, cookieConfig, scriptTagSelector } from '../core/global';
+import { state, dom, cookieConfig, scriptTagSelector, config } from '../core/global';
 
 /**
  * Helper function which prints info (console.log())
@@ -33,6 +33,9 @@ export const _isObject = (el) => {
  * + saves their info: category-name and service-name
  */
 export const _retrieveScriptElements = () => {
+
+    if(!config.manageScriptTags) return;
+
     state._allScriptTags = dom._document.querySelectorAll('script[' + scriptTagSelector +']');
 
     state._allScriptTagsInfo = [];
@@ -156,10 +159,10 @@ export const _uuidv4 = () => {
  * @param {Element} elem
  * @param {string} event
  * @param {eventFired} fn
- * @param {boolean} [isPasive]
+ * @param {boolean} [isPassive]
  */
-export const _addEvent = (elem, event, fn, isPasive) => {
-    elem.addEventListener(event, fn , isPasive === true ? { passive: true } : false);
+export const _addEvent = (elem, event, fn, isPassive) => {
+    elem.addEventListener(event, fn , isPassive === true ? { passive: true } : false);
 };
 
 /**
@@ -333,7 +336,7 @@ export const _addDataButtonListeners = (elem, api) => {
      */
     function _acceptAction(e, acceptType){
         e.preventDefault();
-        api.accept(acceptType);
+        api.acceptCategory(acceptType);
         api.hidePreferences();
         api.hide();
     }

@@ -60,11 +60,15 @@ export const _resolveCurrentLanguageCode = function () {
  */
 export const _loadTranslationData = async (desiredLanguageCode) => {
 
+    let validatedLanguageCode = state._currentLanguageCode;
+
     /**
      * Make sure languageCode is valid before retrieving the translation object
      */
-    desiredLanguageCode && (state._currentLanguageCode = _getValidLanguageCode(desiredLanguageCode));
-    state._currentTranslation = state._allTranslations[state._currentLanguageCode];
+    desiredLanguageCode && (validatedLanguageCode = _getValidLanguageCode(desiredLanguageCode));
+    state._currentTranslation = state._allTranslations[validatedLanguageCode];
+
+    if(!state._currentTranslation) return false;
 
     /**
      * If translation is a string, fetch the external json file and replace
@@ -74,10 +78,10 @@ export const _loadTranslationData = async (desiredLanguageCode) => {
         const translationData = await _fetchJson(state._currentTranslation);
         if(!translationData) return false;
         state._currentTranslation = translationData;
-        state._allTranslations[state._currentLanguageCode] = translationData;
-        return true;
+        state._allTranslations[validatedLanguageCode] = translationData;
     }else{
-        state._currentTranslation = state._allTranslations[state._currentLanguageCode];
-        return true;
+        state._currentTranslation = state._allTranslations[validatedLanguageCode];
     }
+    state._currentLanguageCode = validatedLanguageCode;
+    return true;
 };
