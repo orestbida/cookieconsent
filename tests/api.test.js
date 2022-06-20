@@ -3,17 +3,24 @@ import testConfig from "./config/full-config";
 import { _elContains, _getKeys, _isObject } from "../src/utils/general";
 import { _setCookie } from "../src/utils/cookies";
 import { dom, state } from "../src/core/global";
-import { defineCryptoRandom, htmlHasClass, mockFetch, resetConsentModal } from "./config/mocks-utils";
+import { defineCryptoRandom, htmlHasClass, mockLanguageFetch, resetConsentModal } from "./config/mocks-utils";
 
 let api;
 const consentModalClassToggle = 'show--consent';
 const preferencesModalClassToggle = 'show--preferences'
 
+global.fetch = jest.fn(() =>
+    Promise.resolve({
+        ok: true,
+        json: () => Promise.resolve(require('./config/it.json')),
+    })
+);
+
 describe("API tests", () =>{
 
     beforeAll(async ()=>{
         defineCryptoRandom();
-        mockFetch(true);
+
         document.body.innerHTML = `
             <script type="text/plain" data-category="analytics">console.log("enabled analytics")</script>
             <script type="text/plain" data-category="!analytics">console.log("disabled analytics")</script>
@@ -26,12 +33,9 @@ describe("API tests", () =>{
         await api.run(testConfig);
     })
 
-    it('Modals should exist', () => {
-        const cm = document.querySelector('.cm');
-        const pm = document.querySelector('.pm');
-        expect(cm).toBeInstanceOf(HTMLElement);
-        expect(pm).toBeInstanceOf(HTMLElement);
-    })
+    afterEach(() => {
+        fetch.mockClear();
+    });
 
     it('User preferences should be empty if consent is not valid', () => {
         const userPreferences = api.getUserPreferences();
@@ -67,18 +71,18 @@ describe("API tests", () =>{
     })
 
     it('Should accept only the necessary categories', () => {
-        api.accept([]);
+        api.acceptCategory([]);
         expect(api.acceptedCategory('necessary')).toBe(true)
         expect(api.acceptedCategory('analytics')).toBe(false)
     })
 
     it('Should return valid consent', () => {
-        api.accept();
+        api.acceptCategory();
         expect(api.validConsent()).toBe(true);
     })
 
     it('Should accept all categories', () => {
-        api.accept('all');
+        api.acceptCategory('all');
         expect(api.acceptedCategory('necessary')).toBe(true)
         expect(api.acceptedCategory('analytics')).toBe(true)
     })
@@ -86,20 +90,20 @@ describe("API tests", () =>{
     it('Should accept the current selection inside the preferences modal', () => {
         const analyticsToggle = document.querySelector('.section__toggle[value="analytics"]');
         analyticsToggle.checked = false;
-        api.accept();
+        api.acceptCategory();
         expect(api.acceptedCategory('necessary')).toBe(true)
         expect(api.acceptedCategory('analytics')).toBe(false)
     })
 
     it('Should accept a specific category', () => {
-        api.accept(['analytics']);
-        api.accept('analytics');
+        api.acceptCategory(['analytics']);
+        api.acceptCategory('analytics');
         expect(api.acceptedCategory('necessary')).toBe(true)
         expect(api.acceptedCategory('analytics')).toBe(true)
     })
 
     it('Should accept all categories except one', () => {
-        api.accept('all', ['analytics']);
+        api.acceptCategory('all', ['analytics']);
         expect(api.acceptedCategory('necessary')).toBe(true)
         expect(api.acceptedCategory('analytics')).toBe(false)
     })
@@ -253,6 +257,28 @@ describe("API tests", () =>{
         expect(state._currentLanguageCode).toBe('it');
     })
 
+    it('Should fail when language does not exists the language to "it"', async () => {
+        fetch.mockReturnValueOnce(false);
+        const set = await api.setLanguage('en-IT', true);
+        expect(set).toBe(false);
+        expect(state._currentLanguageCode).not.toBe('en-IT');
+    })
+
+    it('Should fail when fetch fails', async () => {
+        fetch.mockImplementationOnce(() => Promise.reject("json file not found"));
+        api.getConfig('language').translations.it = './it.json';
+        await api.setLanguage('en');
+        const set = await api.setLanguage('it');
+        expect(set).toBe(false);
+        expect(state._currentLanguageCode).not.toBe('it');
+    })
+
+    it('Should fail when trying to set a language already in use', async () => {
+        await api.setLanguage('en');
+        const set = await api.setLanguage('en');
+        expect(set).toBe(false);
+    })
+
     it('Should set cookie data', () => {
         api.setCookieData({
             value: {id: 21}
@@ -271,6 +297,7 @@ describe("API tests", () =>{
     })
 
     it('Should load script', (next) => {
+        api.acceptCategory('all');
         api.loadScript('./config/testScriptLoad.js', (loaded) => {
             expect(loaded).toBe(true);
             next();
@@ -278,12 +305,12 @@ describe("API tests", () =>{
     })
 
     it('Should autoClearCookies when category is rejected', () => {
-        api.accept('all');
+        api.acceptCategory('all');
         _setCookie('test_cookie_1', JSON.stringify({test_key: 'test_value'}));
         _setCookie('test_cookie_2', JSON.stringify({test_key: 'test_value'}));
         expect(api.validCookie('test_cookie_1')).toBe(true);
         expect(api.validCookie('test_cookie_2')).toBe(true);
-        api.accept('all', ['analytics']);
+        api.acceptCategory('all', ['analytics']);
         expect(api.validCookie('test_cookie_1')).toBe(false);
         expect(api.validCookie('test_cookie_2')).toBe(false);
     })

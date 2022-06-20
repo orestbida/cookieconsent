@@ -17,7 +17,7 @@ describe("Cookie should be created successfully", () =>{
         defineCryptoRandom();
         api = CookieConsent.init();
         await api.run(testConfig);
-        api.accept('all');
+        api.acceptCategory('all');
     })
 
     it('Should retrieve the cookie with all the fields', () => {

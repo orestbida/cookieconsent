@@ -20,7 +20,7 @@ describe("Check modals' html generation under different settings", () =>{
 
     it('Consent Modal should not appear if consent is valid', async () => {
         await api.run(testConfig);
-        api.accept();
+        api.acceptCategory();
         resetCookieConsent();
         await api.run(testConfig);
         expect(api.validConsent()).toBe(true);
@@ -61,8 +61,15 @@ describe("Check modals' html generation under different settings", () =>{
         document.body.innerHTML = '<script type="text/plain" data-category="analytics" data-service="my_service"></script>';
         testConfig.manageScriptTags = false;
         await api.run(testConfig);
-        api.accept('all');
+        api.acceptCategory('all');
         expect(state._allScriptTags.length).toBe(0);
         expect(document.body.querySelectorAll('script[data-category]').length).toBe(1);
+    })
+
+    it('Should automatically enable & execute scripts when mode="opt-out"', async () => {
+        testConfig.mode = 'opt-out';
+        api.eraseCookies('cc_cookie');
+        await api.run(testConfig);
+        expect(api.acceptedCategory('analytics')).toBe(true);
     })
 })

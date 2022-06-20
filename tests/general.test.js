@@ -27,7 +27,7 @@ describe("Test add/remove/toggle classes", () => {
         defineCryptoRandom();
         api = CookieConsent.init();
         await api.run(testConfig);
-        api.accept();
+        api.acceptCategory();
     })
 
     it("Should create element", () => {
@@ -97,7 +97,7 @@ describe("Array/Object tests", () =>{
         expect(_isObject({})).toBe(true);
     });
 
-    it('Should return the object keys', () => {
+    it('Should return the object\'s keys', () => {
         expect(_getKeys({id: 21})).toContain('id');
         expect(_getKeys({name: 'Johny', surname: 'Depp', age: 21, })).toHaveLength(3)
     })

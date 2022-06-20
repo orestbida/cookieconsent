@@ -1,15 +1,6 @@
 import crypto from 'crypto';
 import { dom, state } from '../../src/core/global';
 
-export const mockFetch = (success)=> {
-    global.fetch = jest.fn((url) => {
-        return Promise.resolve({
-            ok: success,
-            json: () => Promise.resolve(require(url)),
-        })
-    });
-}
-
 export const defineCryptoRandom = () => {
     if(!global.crypto){
         Object.defineProperty(global, 'crypto', {

@@ -18,6 +18,14 @@ describe("Consent Modal buttons test", () =>{
         api.eraseCookies('cc_cookie');
     })
 
+    it('Modals should exist', async () => {
+        await api.run(testConfig);
+        const cm = document.querySelector('.cm');
+        const pm = document.querySelector('.pm');
+        expect(cm).toBeInstanceOf(HTMLElement);
+        expect(pm).toBeInstanceOf(HTMLElement);
+    })
+
     it('Modal accept necessary btn onClick', async () => {
         await api.run(testConfig);
         fireClickEvent(dom._consentAcceptNecessaryBtn);
@@ -75,7 +83,7 @@ describe('Preferences Modal buttons test', () =>{
     })
 
     it('Should accept selected only categories on savePreferencesBtn click', () => {
-        api.accept('all');
+        api.acceptCategory('all');
         document.querySelector('.section__toggle[value="analytics"]').checked = false;
         fireClickEvent(dom._pmSavePreferencesBtn);
         const userPreferences = api.getUserPreferences();
@@ -139,7 +147,6 @@ describe("Test data-cc attributes", () =>{
     it('Should accept necessary categories onClick', () => {
         const acceptNecessaryBtn = document.querySelector('button[data-cc="accept-necessary"]');
         fireClickEvent(acceptNecessaryBtn)
-        console.log(acceptNecessaryBtn)
         const userPreferences = api.getUserPreferences();
         expect(userPreferences.acceptType).toBe('necessary');
         expect(userPreferences.acceptedCategories.length).toBe(1);

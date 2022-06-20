@@ -1,5 +1,6 @@
 const config = {
     root: document.body,
+    mode: 'opt-in',
     autoShow: false,
     revision: 0,
     autoClearCookies: true,
@@ -47,7 +48,7 @@ const config = {
             }
         },
         analytics: {
-            enabled: false,
+            enabled: true,
             readOnly: false,
             autoClear: {
                 cookies: [
