@@ -1,7 +1,7 @@
 # API Reference
 
 <CustomBlock type="info" title="Note">
-The `?` symbol means that the parameter/property is optional.
+The `?` means that the parameter/property is optional.
 
 </CustomBlock>
 
