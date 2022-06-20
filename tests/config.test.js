@@ -3,10 +3,10 @@ import CookieConsent from "../src/index"
 import testConfig from "./config/full-config";
 import { defineCryptoRandom, resetCookieConsent, htmlHasClass, setUserAgent } from "./config/mocks-utils";
 
-let api;
 const botUserAgent = 'Mozilla/5.0 (Linux; Android 5.0; SM-G920A) AppleWebKit (KHTML, like Gecko) Chrome Mobile Safari (compatible; AdsBot-Google-Mobile; +http://www.google.com/mobile/adsbot.html)';
 
 describe("Check modals' html generation under different settings", () =>{
+    let api;
 
     beforeAll(()=>{
         defineCryptoRandom();
