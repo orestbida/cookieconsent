@@ -275,7 +275,7 @@ describe("API tests", () =>{
 
     it('Should fail when trying to set a language already in use', async () => {
         await api.setLanguage('en');
-        const set = await api.setLanguage('en', true);
+        const set = await api.setLanguage('en');
         expect(set).toBe(false);
     })
 
