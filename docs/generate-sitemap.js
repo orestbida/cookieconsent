@@ -14,7 +14,7 @@ const domain = 'https://cookieconsent.orestbida.com';
      * An array with your links
      * [{url: 'advanced/buttons-actions.html'}, {url: '...'}, ...]
      */
-    const entries = (await fg([`${docsDir}/**/*.md`]))
+    const entries = (await fg([`${docsDir}/**/*.md`], {cwd: './docs'}))
         .map(filePath => ({ url: filePath.replace(`${docsDir}`, '').replace(/\.md$/, '.html')}));
 
     if(!entries) return;
@@ -31,7 +31,5 @@ const domain = 'https://cookieconsent.orestbida.com';
             sitemap,
         )
     });
-
-    console.log("Sitemap generated!");
 
 })();
