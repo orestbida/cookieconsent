@@ -401,13 +401,13 @@ Changes the modal's language. Returns `true` if the language was changed.
     Assuming that the current language is set to `'en'`:
 
     ```javascript
-    cc.setLanguage('it');       // true
-    cc.setLanguage('en');       // false, en is already the current language
+    cc.setLanguage('it');        // true
+    cc.setLanguage('en');        // false, en is already the current language
     ```
 
     If you've changed the `'en'` translation's content, and you'd like to reflect the changes:
     ```javascript
-    cc.setLanguage('en', true); // true
+    cc.setLanguage('en', true);  // true
     ```
 
 ## setCookieData
