@@ -14,7 +14,7 @@
         "docs:dev": "vitepress dev docs",
         "docs:build": "node ./docs/generate-sitemap.js && vitepress build docs ",
         "docs:serve": "vitepress serve docs",
-        "test": "jest --env=jsdom --watchAll --coverage --verbose --silent ./tests",
+        "test": "jest --env=jsdom ---coverage --verbose --silent ./tests",
         "postinstall": "patch-package --patch-dir docs/patches"
     },
     "repository": {
