@@ -9,7 +9,6 @@ const publicDir = 'public';
 const domain = 'https://cookieconsent.orestbida.com';
 
 (async () => {
-
     /**
      * An array with your links
      * [{url: 'advanced/buttons-actions.html'}, {url: '...'}, ...]
@@ -31,5 +30,4 @@ const domain = 'https://cookieconsent.orestbida.com';
             sitemap,
         )
     });
-
 })();
