@@ -7,13 +7,14 @@
     "files": [
         "dist"
     ],
+    "types": "src/index.d.ts",
     "scripts": {
         "dev": "rollup --config --watch",
         "build": "rollup --config",
         "docs:dev": "vitepress dev docs",
         "docs:build": "node ./docs/generate-sitemap.js && vitepress build docs ",
         "docs:serve": "vitepress serve docs",
-        "test": "jest --env=jsdom --watchAll --coverage --silent",
+        "test": "jest --env=jsdom --watchAll --coverage --verbose --silent ./tests",
         "postinstall": "patch-package --patch-dir docs/patches"
     },
     "repository": {
