@@ -151,13 +151,12 @@
  * @property {Function} hide
  * @property {Function} showPreferences
  * @property {Function} hidePreferences
- * @property {Function} accept
+ * @property {Function} acceptCategory
  * @property {Function} acceptedCategory
  * @property {Function} validCookie
  * @property {Function} eraseCookies
  * @property {Function} setLanguage
  * @property {Function} validConsent
- * @property {Function} updateScripts
  * @property {Function} loadScript
  * @property {Function} getConfig
  * @property {Function} getCookie

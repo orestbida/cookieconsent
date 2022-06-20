@@ -112,8 +112,7 @@ Hides the preferences modal.
     cc.hidePreferences();
     ```
 
-
-## accept
+## acceptCategory
 
 Accepts or rejects categories.
 
@@ -135,15 +134,15 @@ Accepts or rejects categories.
 
 - **Examples**
     ```javascript
-    cc.accept('all');                // accept all categories
-    cc.accept([]);                   // reject all (accept only categories marked as readOnly/necessary)
-    cc.accept();                     // accept currently selected categories inside the preferences modal
+    cc.acceptCategory('all');                // accept all categories
+    cc.acceptCategory([]);                   // reject all (accept only categories marked as readOnly/necessary)
+    cc.acceptCategory();                     // accept currently selected categories inside the preferences modal
 
-    cc.accept('analytics');          // accept only the "analytics" category
-    cc.accept(['cat_1', 'cat_2']);   // accept only these 2 categories
+    cc.acceptCategory('analytics');          // accept only the "analytics" category
+    cc.acceptCategory(['cat_1', 'cat_2']);   // accept only these 2 categories
 
-    cc.accept('all', ['analytics']); // accept all categories except the "analytics" category
-    cc.accept('all', ['cat_1', 'cat_2']); // accept all categories except these 2
+    cc.acceptCategory('all', ['analytics']); // accept all categories except the "analytics" category
+    cc.acceptCategory('all', ['cat_1', 'cat_2']); // accept all categories except these 2
     ```
 
 
@@ -321,22 +320,6 @@ Loads script files (`.js`).
         {name: 'id', value: 'ga_script'},
         {name: 'another-attribute', value: 'value'}
     ]);
-    ```
-
-## updateScripts
-
-Notifies the plugin that there are new `<script>` tags to handle. Useful if you dynamically inject html which contains script tags.
-
-- **Type**
-
-    ```javascript
-    function(): void
-    ```
-
-- **Example**
-
-    ```javascript
-    cc.updateScripts();
     ```
 
 

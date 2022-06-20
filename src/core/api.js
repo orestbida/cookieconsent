@@ -456,15 +456,6 @@ export const api = {
     },
 
     /**
-     * Manage dynamically loaded scripts: https://github.com/orestbida/cookieconsent/issues/101
-     * If plugin has already run, call this method to enable
-     * the newly added scripts based on currently selected preferences
-     */
-    updateScripts: () => {
-        _manageExistingScripts();
-    },
-
-    /**
      * Show cookie consent modal
      * @param {boolean} [createModal] create modal if it doesn't exist
      */
