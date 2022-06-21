@@ -14,8 +14,7 @@
         "docs:dev": "vitepress dev docs",
         "docs:build": "node ./docs/generate-sitemap.js && vitepress build docs ",
         "docs:serve": "vitepress serve docs",
-        "test": "jest --env=jsdom ---coverage --verbose --silent ./tests",
-        "postinstall": "patch-package --patch-dir docs/patches"
+        "test": "jest --env=jsdom ---coverage --verbose --silent ./tests"
     },
     "repository": {
         "type": "git",
@@ -45,15 +44,14 @@
         "fast-glob": "^3.2.11",
         "jest": "^28.1.1",
         "jest-environment-jsdom": "^28.1.1",
-        "patch-package": "^6.4.7",
         "postcss-combine-duplicated-selectors": "^10.0.3",
         "postcss-preset-env": "^7.7.1",
-        "rollup": "^2.75.6",
+        "rollup": "^2.75.7",
         "rollup-plugin-postcss": "^4.0.2",
         "rollup-plugin-terser": "^7.0.2",
         "sass": "^1.52.3",
         "sitemap": "^7.1.1",
-        "vitepress": "^0.22.4"
+        "vitepress": "^1.0.0-alpha.2"
     },
     "jest": {
         "transform": {
