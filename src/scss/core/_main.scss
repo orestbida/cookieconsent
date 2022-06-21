@@ -10,7 +10,7 @@ $font-weight-bold: 600;
 :root{
     --cc-font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
     --cc-modal-border-radius: .4em;
-    --cc-btn-border-radius: 5px;
+    --cc-btn-border-radius: 4px;
 }
 
 #cc-main {
@@ -34,6 +34,7 @@ $font-weight-bold: 600;
 
     a,
     .cc__link{
+        color: var(--cc-primary-color);
         position: relative;
         background-image: linear-gradient(currentColor, currentColor);
         background-position: 0% 100%;
@@ -75,11 +76,11 @@ $font-weight-bold: 600;
                 -webkit-background-clip: padding-box;
                 background-clip: padding-box;
                 border-radius: 1em;
-                background: var(--cc-webkit-scrollbar-bg);
-            }
+                background: var(--cc-toggle-readonly-bg);
 
-            &::-webkit-scrollbar-thumb:hover {
-                background: var(--cc-webkit-scrollbar-hover-bg);
+                &:hover {
+                    background: var(--cc-toggle-off-bg);
+                }
             }
 
             &::-webkit-scrollbar {

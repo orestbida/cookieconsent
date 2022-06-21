@@ -1,8 +1,8 @@
 $padding-y: 1em;
-$padding-x: 1.4em;
+$padding-x: 1.2em;
 
-$btn-margin: 7px;
-$btn-height: 40px;
+$btn-margin: 6px;
+$btn-height: 41px;
 
 $toggle-knob-height: 23px;
 $toggle-knob-width: 50px;
@@ -108,6 +108,7 @@ $toggle-knob-icon-width: 2px;
         border-radius: var(--cc-btn-border-radius);
     }
 
+
     .pm__section--toggle{
         .pm__section-desc-wrapper{
             overflow: hidden;
@@ -117,7 +118,6 @@ $toggle-knob-icon-width: 2px;
 
     .pm__section{
         padding: 1em;
-        margin-bottom: 0.5em;
         border: 1px solid var(--cc-separator-border-color);
         transition: background-color .25s ease, border-color .25s ease;
 
@@ -142,6 +142,7 @@ $toggle-knob-icon-width: 2px;
         &--toggle{
             background: var(--cc-cookie-category-block-bg);
             border-top: none;
+            margin-bottom: $btn-margin;
 
             .pm__section-title{
                 width: 100%;
@@ -587,7 +588,7 @@ $toggle-knob-icon-width: 2px;
         font-weight: $font-weight-bold;
         font-size: 0.82em;
         padding: 0 1.5em;
-        height: $btn-height;
+        min-height: $btn-height;
         border-radius: var(--cc-btn-border-radius);
         transition: background-color .15s ease,
                     border-color .15s ease,
@@ -697,7 +698,7 @@ $toggle-knob-icon-width: 2px;
             .pm__header,
             .pm__body,
             .pm__footer{
-                padding: 1em 1.4em;
+                padding: 1em 1.3em;
             }
 
             .pm__footer,

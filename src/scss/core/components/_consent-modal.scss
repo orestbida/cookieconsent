@@ -1,6 +1,7 @@
-$btn-vertical-padding: 0;
-$btn-margin: 7px;
-$btn-height: 40px;
+$btn-vertical-padding: .3em;
+$btn-margin: 6px;
+$btn-height: 41px;
+$sections-padding: 1em 1.3em;
 
 :root{
     --cc-modal-margin: 1em;
@@ -67,7 +68,7 @@ $btn-height: 40px;
     .cm__btns,
     .cm__links{
         width: unset;
-        padding: 1em 1.4em;
+        padding: $sections-padding;
     }
 
     /* START: Close (x) icon */
@@ -150,10 +151,10 @@ $btn-height: 40px;
         background: var(--cc-btn-primary-bg);
         border: 1px solid var(--cc-btn-primary-border-color);
         text-align: center;
-        flex: auto;
+
         font-weight: $font-weight-bold;
         font-size: .82em;
-        height: $btn-height;
+        min-height: $btn-height;
         padding: $btn-vertical-padding 1em;
         border-radius: var(--cc-btn-border-radius);
 
@@ -274,7 +275,6 @@ $btn-height: 40px;
         }
 
         .cm__btn{
-            flex: auto;
 
             &:nth-child(2){
                 margin: $btn-margin 0 0 0;
@@ -331,7 +331,6 @@ $btn-height: 40px;
             }
 
             .cm__btn{
-                flex: auto;
                 min-width: 120px;
                 padding-right: 1.8em;
                 padding-left: 1.8em;
@@ -395,12 +394,11 @@ $btn-height: 40px;
         }
 
         .cm__btns{
-            max-width: 26em;
+            max-width: 23em;
         }
 
         .cm__btn{
-            padding: $btn-vertical-padding 1em;
-            min-width: 17em;
+            min-width: 19em;
 
             &:nth-child(2){
                 margin: $btn-margin 0 0 0;
@@ -425,9 +423,8 @@ $btn-height: 40px;
             }
 
             .cm__btn{
-                min-width: auto;
-                flex: auto;
-                padding: $btn-vertical-padding 1.7em;
+                min-width: 10em;
+                flex: 1;
 
                 &:nth-child(2){
                     margin: 0 0 0 $btn-margin;
