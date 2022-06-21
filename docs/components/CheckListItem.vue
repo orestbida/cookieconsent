@@ -52,7 +52,6 @@ export default {
 }
 
 .c-checklist__text{
-    margin-top: 1px;
     color: v-bind(colors[type].text);
 }
 

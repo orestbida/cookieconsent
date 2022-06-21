@@ -31,11 +31,11 @@ Each modal has a different set of possible layouts and positions. A layout may a
 
 ### consentModal
 
-| Layout        | Variant(s)      | Position-Y               | Position-X
-| ------------- |-----------------|--------------------------|--------------------------
-| `box`         | `wide`, `inline`| `top`, `middle`, `bottom`| `left`, `center`, `right`
-| `cloud`       | `inline`        | `top`, `middle`, `bottom`| `left`, `center`, `right`
-| `bar `        | `inline`        | `bottom`                 | -
+| Layout  | Variant(s)       | Position-Y                | Position-X                |
+| ------- | ---------------- | ------------------------- | ------------------------- |
+| `box`   | `wide`, `inline` | `top`, `middle`, `bottom` | `left`, `center`, `right` |
+| `cloud` | `inline`         | `top`, `middle`, `bottom` | `left`, `center`, `right` |
+| `bar `  | `inline`         | `bottom`                  | -                         |
 
 Example:
 ```javascript
@@ -47,18 +47,17 @@ guiOptions: {
 }
 ```
 
-<CustomBlock type="warning" title="Note">
+::: warning Note
 Valid `layout` syntax: `"layoutName layoutVariant"`. <br>
 Valid `position` syntax: `"positionY positionX"`.
-
-</CustomBlock>
+:::
 
 ### preferencesModal
 
-| Layout        | Variant(s)      | Position-Y               | Position-X
-| ------------- |-----------------|--------------------------|--------------------------
-| `box`         | -               | -                        | -
-| `bar `        | `wide`          | -                        | `left`, `right`
+| Layout | Variant(s) | Position-Y | Position-X      |
+| ------ | ---------- | ---------- | --------------- |
+| `box`  | -          | -          | -               |
+| `bar ` | `wide`     | -          | `left`, `right` |
 
 Example:
 ```javascript

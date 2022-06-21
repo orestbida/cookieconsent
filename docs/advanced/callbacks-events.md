@@ -91,7 +91,6 @@ This event is triggered when the user modifies their preferences and only if con
 <br>
 
 
-<CustomBlock type="warning" title="Note">
+::: warning Note
 If you're using custom events, make sure to subscribe to the specific event prior to the plugin's execution, to avoid potential inconsistent behaviors.
-
-</CustomBlock>
+:::

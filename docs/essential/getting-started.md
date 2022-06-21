@@ -47,11 +47,9 @@ Import `cookieconsent.css` and `cookieconsent.js` files respectively in the head
 </html>
 ```
 
-<CustomBlock type="warning" title="Note">
-
+::: warning Note
 Replace `path-to-cookieconsent.js`, `path-to-cookieconsent.css` and `path-to-cookieconsent-init.js` with valid paths.
-
-</CustomBlock>
+:::
 
 
 [Configure](#configuration) the plugin inside `cookieconsent-init.js`:
@@ -106,11 +104,9 @@ export default {
 }
 ```
 
-<CustomBlock type="info" title="Info">
-
+::: info
 The newly created VUE Plugin will allow you to access CookieConsent from any component, using either `this.$cc` or `$cc`.
-
-</CustomBlock>
+:::
 
 "Register" the plugin in your root/APP component, inside `main.js`:
 ```javascript{5,9-11}
@@ -224,10 +220,9 @@ The most basic configuration requires the definition of the following 2 fields:
 
 You should now see the consent modal pop up!
 
-<CustomBlock type="tip" title="Tip">
+::: tip
 You can also define [external translation files](/advanced/language-configuration.html#external-translations).
-
-</CustomBlock>
+:::
 
 If you're having trouble setting up the plugin, you can check out a few [demo examples](https://github.com/orestbida/cookieconsent/tree/master/demo) on github.
 

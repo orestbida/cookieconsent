@@ -1,9 +1,8 @@
 # API Reference
 
-<CustomBlock type="info" title="Note">
-The `?` means that the parameter/property is optional.
-
-</CustomBlock>
+::: info
+`?` means that the parameter/property is optional.
+:::
 
 ## run
 
@@ -405,7 +404,7 @@ Changes the modal's language. Returns `true` if the language was changed.
     cc.setLanguage('en');        // false, en is already the current language
     ```
 
-    If you've changed the `'en'` translation's content, and you'd like to reflect the changes:
+    Forcefully refresh modals (re-generates the html content):
     ```javascript
     cc.setLanguage('en', true);  // true
     ```
@@ -427,10 +426,9 @@ Save custom data into the cookie. Returns `true` if the data was set successfull
     - `'update'`: sets the new value only if its different from the previous value, and both are of the same type.
     - `'overwrite'` (default): always sets the new value (overwrites any existing value).
 
-    <CustomBlock type="info" title="Note">
+    ::: info Note
     This API method is safe to use, as it does not alter the cookies' current expiration time.
-
-    </CustomBlock>
+    :::
 
 
 - **Examples** <br>

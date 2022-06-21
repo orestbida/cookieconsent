@@ -11,10 +11,9 @@ cc.run({
 });
 ```
 
-<CustomBlock type="warning" title="Note">
+::: warning Note
 The new revision number must be different from the current revision number.
-
-</CustomBlock>
+:::
 
 Once enabled, users who had already consented to revision 0, will be prompted again for consent.
 

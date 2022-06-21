@@ -3,24 +3,17 @@ Overview of all the available configuration options.
 
 **Before diving in:**
 
-- <CustomBlock type="warning" title="Categories & Languages">
-    There are no default categories or languages. You must define at least one category and one language.
+::: info What is Invalid Consent
+Consent is not valid when at least one of following situations occurs:
+- consent is missing (e.g. user has not yet made a choice)
+- revision numbers don't match
+- the plugin's cookie does not exist/has expired
+- the plugin's cookie is structurally not valid (e.g. empty)
+:::
 
-    </CustomBlock>
-
-- <CustomBlock type="info" title="What is 'Invalid Consent'">
-
-    Consent is not valid when at least one of following situations occurs:
-    - consent is missing (e.g. user has not yet made a choice)
-    - revision numbers don't match
-    - the plugin's cookie does not exist/has expired
-    - the plugin's cookie is structurally not valid (e.g. empty)
-
-    </CustomBlock>
-- <CustomBlock type="info" title="About the examples">
-    All the examples in this section are partial code snippets. They do not represent full/valid configurations.
-
-    </CustomBlock>
+::: info About the examples
+All the examples in this section are partial code snippets. They do not represent full/valid configurations.
+:::
 
 
 ## root
@@ -54,10 +47,9 @@ Changes the scripts' activation logic when consent is not valid
 
     Once the user has provided consent, this option is ignored.
 
-    <CustomBlock type="tip" title="Dynamic mode">
+    ::: tip
     If you are able to determine the country of the current user, you can set this mode to `opt-out`, assuming that the user's country is not under the GDPR law.
-
-    </CustomBlock>
+    :::
 
 * **Example** <br>
 
@@ -191,14 +183,13 @@ Number of days before the cookie expires. Some countries require a minimum of 18
 
 This field also accepts a `function` that must return a number!
 
-<CustomBlock type="info" title="Info">
+::: tip acceptType
 
 The `acceptType` parameter is a `string` with one of the following values:
 - `'all'`: user accepted all the categories
 - `'custom'`: user accepted a custom selection
 - `'necessary'`: user accepted only the necessary categories (or rejected all)
-
-</CustomBlock>
+:::
 
 - **Example**: <br>
 

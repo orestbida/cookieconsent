@@ -26,10 +26,9 @@ After:
 ```
 
 
-<CustomBlock type="info" title="Info">
+::: info
 The `type="text/plain"` attribute prevents the script from executing. `data-category` is used by the plugin to enable the script when the specified category is accepted by the user.
-
-</CustomBlock>
+:::
 
 Although using script tags is very easy, they are also very limited and might not be suitable for specific use cases. That's where callbacks/custom events might come in handy.
 

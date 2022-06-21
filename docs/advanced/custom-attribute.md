@@ -26,10 +26,9 @@ Use this value to show the `consentModal`. If the consent modal does not exist, 
 <button type="button" data-cc="show-consentModal">View Consent Modal</button>
 ```
 
-<CustomBlock type="warning" title="Note">
+::: warning Note
 Unless really needed, it is recommended to avoid this option in favor of `show-preferencesModal`.
-
-</CustomBlock>
+:::
 
 
 
