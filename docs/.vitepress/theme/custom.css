@@ -36,6 +36,10 @@
     --vp-custom-block-info-code-bg: #32373a;
 }
 
+body{
+    width: 100vw;
+}
+
 #app .custom-block{
     font-size: 15px;
     padding: 1em 1.4em;
@@ -135,13 +139,8 @@
     font-family: inherit!important;
 }
 
-.dark .DocSearch-Commands li::before{
+.DocSearch-Commands li::before{
     display: none;
-}
-
-.dark .algolia-search-box .DocSearch-Button-Placeholder{
-    font-size: 1em!important;
-    font-weight: 600!important;
 }
 
 .dark .DocSearch {
@@ -168,40 +167,45 @@
     --docsearch-logo-color: var(--c-brand)!important;
 }
 
-.dark .DocSearch-Dropdown{
+.DocSearch-Dropdown{
     margin-top: 10px!important;
 }
 
-.dark .DocSearch-Button{
-    transition: background-color .15s ease, color .15s ease;
-}
-
-.dark .DocSearch-Button:active,
-.dark .DocSearch-Button:hover{
+.DocSearch-Button:active,
+.DocSearch-Button:hover{
     box-shadow: none!important;
 }
 
-.dark .DocSearch-Input{
-    font-size: 1.1em!important;
-    padding-bottom: 1px;
+.DocSearch-Input{
+    font-size: .95em!important;
+    margin-bottom: -1px!important;
+    padding-left: 12px!important;
+    font-family: inherit!important;
+    font-weight: 500!important;
 }
 
-
-.dark .DocSearch-Prefill{
-    font-weight: 600!important;
-}
-
-.dark .DocSearch-Help{
+.DocSearch-Help{
     font-size: 1em!important;
 }
 
 .dark .DocSearch-Label{
     font-size: .8em!important;
 }
-.dark .DocSearch-Footer{
-    border-top: none;
-    background: none;
+
+.DocSearch-Form{
+    border-radius: 6px!important;
 }
+
+.DocSearch-LoadingIndicator svg, .DocSearch-MagnifierLabel svg{
+    width: 20px!important;
+    height: 20px!important;
+}
+
+.DocSearch-Footer{
+    border-top: none!important;
+    background: none!important;
+}
+
 /* END: Algolia Search */
 /*
 :root {
