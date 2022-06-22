@@ -5,10 +5,10 @@
     "main": "dist/cookieconsent.umd.js",
     "module": "dist/cookieconsent.esm.js",
     "files": [
-        "src/index.d.ts",
-        "dist"
+        "dist",
+        "types"
     ],
-    "types": "src/index.d.ts",
+    "types": "types/index.d.ts",
     "scripts": {
         "dev": "rollup --config --watch",
         "build": "rollup --config",

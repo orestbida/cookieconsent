@@ -34,7 +34,7 @@ interface AutoClear {
     /**
      * Reload the page after the autoClear function
      *
-     * - default: false
+     * @default false
      */
     reloadPage?: boolean
 }
@@ -85,14 +85,14 @@ interface Category {
      * If mode="opt-out" and consent has not yet been expressed, the category
      * is automatically enabled (and scripts under this category will be executed)
      *
-     * - default: false
+     * @default false
      */
     enabled?: boolean
 
     /**
      * Treat the category as necessary. The user won't be able to disable the category.
      *
-     * - default: false
+     * @default false
      */
     readOnly?: boolean
 
@@ -116,7 +116,7 @@ interface CookieValue {
     /**
      * Last accepted revision number.
      *
-     * - default: 0 (revision disabled)
+     * @default 0
      */
     revision: number
 
@@ -150,35 +150,35 @@ interface CookieOptions {
     /**
      * Cookie name.
      *
-     * - default: 'cc_cookie'
+     * @default 'cc_cookie'
      */
     name?: string
 
     /**
      * Cookie domain.
      *
-     * - default: location.host
+     * @default location.hostname
      */
     domain?: string
 
     /**
      * Cookie path.
      *
-     * - default: '/'
+     * @default '/'
      */
     path?: string
 
     /**
      * Cookie sameSite.
      *
-     * - default: 'Lax'
+     * @default 'Lax'
      */
     sameSite?: 'Lax' | 'Strict' | 'None'
 
     /**
      * Cookie duration.
      *
-     * - default: 182 (days)
+     * @default 182
      */
     expiresAfterDays?: number | ((acceptType: AcceptType) => number)
 }
@@ -188,7 +188,7 @@ interface GuiOptions {
         /**
          * Change consentModal layout.
          *
-         * - default: box
+         * @default 'box'
          */
         layout?: ConsentModalLayout
 
@@ -200,14 +200,14 @@ interface GuiOptions {
         /**
          * Flip buttons.
          *
-         * - default: false
+         * @default false
          */
         flipButtons?: boolean
 
         /**
          * Stylize the accept and reject buttons the same way (GDPR compliant).
          *
-         * - default: true
+         * @default true
          */
         equalWeightButtons?: boolean
     }
@@ -225,14 +225,14 @@ interface GuiOptions {
 
         /**
          * Flip buttons.
-         * - default: false
+         * @default false
          */
         flipButtons?: boolean
 
         /**
          * Stylize the accept and reject buttons the same way (GDPR compliant).
          *
-         * - default: true
+         * @default true
          */
         equalWeightButtons?: boolean
     }
@@ -324,49 +324,49 @@ interface ConfigOptions {
     /**
      * Root element where the modal will be appended.
      *
-     * - default: document.body
+     * @default document.body
      */
     root?: HTMLElement
 
     /**
      * Check out the [docs](https://cookieconsent.orestbida.com/reference/configuration-reference.html#mode) for details.
      *
-     * - default: 'opt-in'
+     * @default 'opt-in'
      */
     mode?: 'opt-in' | 'opt-out'
 
     /**
      * Automatically show the consentModal if consent is not valid.
      *
-     * - default: true
+     * @default true
      */
     autoShow?: boolean
 
     /**
      * Manage revisions. Check out the [docs](https://cookieconsent.orestbida.com/reference/configuration-reference.html#revision) for details and examples.
      *
-     * - default: 0 (disabled)
+     * @default 0
      */
     revision?: number
 
     /**
      * Intercept script tags with a "data-category" attribute.
      *
-     * - default: true
+     * @default true
      */
     manageScriptTags?: boolean
 
     /**
      * Automatically erase cookies when the user opts-out of a category. Check out the [docs](https://cookieconsent.orestbida.com/reference/configuration-reference.html#categories-autoclear).
      *
-     * - default: true
+     * @default true
      */
     autoClearCookies?: boolean
 
     /**
      * Create dark overlay and disable page scroll until consent.
      *
-     * - default: false
+     * @default false
      */
     disablePageInteraction?: boolean
 
@@ -374,7 +374,7 @@ interface ConfigOptions {
      * Stop the plugin's execution if a bot/crawler is detected
      * to prevent the indexing of the modal's content.
      *
-     * - default: true
+     * @default true
      */
     hideFromBots?: boolean
 
