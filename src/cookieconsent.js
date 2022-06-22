@@ -1,5 +1,5 @@
 /*!
- * CookieConsent v3.0.0-beta.1
+ * CookieConsent v2.8.1
  * https://www.github.com/orestbida/cookieconsent
  * Author Orest Bida
  * Released under the MIT License
@@ -2171,10 +2171,10 @@
          * @param {Element} elem
          * @param {string} event
          * @param {eventFired} fn
-         * @param {boolean} [isPasive]
+         * @param {boolean} [isPassive]
          */
-        var _addEvent = function(elem, event, fn, isPasive) {
-            elem.addEventListener(event, fn , isPasive === true ? { passive: true } : false);
+        var _addEvent = function(elem, event, fn, isPassive) {
+            elem.addEventListener(event, fn , isPassive === true ? { passive: true } : false);
         }
 
         /**
@@ -2221,7 +2221,7 @@
     /**
      * Make CookieConsent object accessible globally
      */
-    if(typeof window[init] !== 'function'){
+    if(typeof window !== 'undefined' && typeof window[init] !== 'function'){
         window[init] = CookieConsent
     }
 })();
