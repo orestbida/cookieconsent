@@ -5,6 +5,7 @@
     "main": "dist/cookieconsent.umd.js",
     "module": "dist/cookieconsent.esm.js",
     "files": [
+        "src/index.d.ts",
         "dist"
     ],
     "types": "src/index.d.ts",
