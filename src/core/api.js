@@ -448,11 +448,14 @@ export const api = {
     },
 
     /**
-     * Read current configuration value
+     * Return configuration object or just one of its fields.
+     * @param {string} field
      * @returns {any}
      */
     getConfig: (field) => {
-        return  config[field] || state._userConfig[field];
+        return field
+            ? config[field] || state._userConfig[field]
+            : {...config, ...state._userConfig, cookie:{...config.cookie}};
     },
 
     /**
