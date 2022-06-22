@@ -36,10 +36,6 @@
     --vp-custom-block-info-code-bg: #32373a;
 }
 
-body{
-    width: 100vw;
-}
-
 #app .custom-block{
     font-size: 15px;
     padding: 1em 1.4em;
