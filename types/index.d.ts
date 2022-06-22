@@ -567,7 +567,7 @@ interface CookieConsentAPI {
      * @param forceSet forcefully set language and reload modals
      * @returns boolean: true if language is set successfully
      */
-    setLanguage(languageCode: string, forceSet?: boolean): boolean
+    setLanguage(languageCode: string, forceSet?: boolean): Promise<boolean>
 }
 
 declare namespace CookieConsent {
