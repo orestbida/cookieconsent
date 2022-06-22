@@ -133,12 +133,12 @@ interface CookieValue {
     /**
      * User's first consent timestamp.
      */
-    consentTimestamp: Date
+    consentTimestamp: string
 
     /**
      * User's last consent update.
      */
-    lastConsentTimestamp: Date
+    lastConsentTimestamp: string
 
     /**
      * All enabled services.
@@ -391,17 +391,25 @@ interface ConfigOptions {
     /**
      * Callback fired on the very first consent action.
      */
-    onFirstConsent?: () => void
+    onFirstConsent?: (param: {
+        cookie: CookieValue
+    }) => void
 
     /**
      * Callback fired on the very first consent action and also after each page load.
      */
-    onConsent?: () => void
+    onConsent?: (param: {
+        cookie: CookieValue
+    }) => void
 
     /**
      * Callback fired when categories or services are changed.
      */
-    onChange?: () => void
+    onChange?: (param: {
+        cookie: CookieValue
+        changedCategories: string[],
+        changedServices: {[key: string]: string[]}
+    }) => void
 
     /**
      * Configure cookie categories.
@@ -519,7 +527,7 @@ interface CookieConsentAPI {
      * @param data Object containing the value to save, and the write method
      * @returns boolean: true on success
      */
-    setCookieData(data: {value: any, mode: 'overwrite' | 'update'}): boolean
+    setCookieData(data: {value: any, mode?: 'overwrite' | 'update'}): boolean
 
     /**
      * Get the entire cookie object.
@@ -535,7 +543,13 @@ interface CookieConsentAPI {
     getCookie<Field extends keyof CookieValue>(field: Field): CookieValue[Field]
 
     /**
-     * Returns one of the configuration options passed to the `.run` method.
+     * Get the full config. object.
+     * @returns config. object
+     */
+    getConfig<Field>(): ConfigOptions
+
+    /**
+     * Get one of the configuration options.
      * @param field Configuration option
      * @returns value of the specified field
      */
