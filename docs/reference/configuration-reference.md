@@ -25,9 +25,9 @@ Root (parent) element where the modal will be appended as a last child.
 
 * **Example** <br>
 
-    set a different root element:
     ```javascript
     cc.run({
+        // set a different root element
         root: document.getElementById('app')
     })
     ```
@@ -37,8 +37,8 @@ Root (parent) element where the modal will be appended as a last child.
 Changes the scripts' activation logic when consent is not valid
 
 - Type: `string`
-- allowed values: `'opt-in'`, `'opt-out'`
-- default: `'opt-in'`
+- Values: `'opt-in'`, `'opt-out'`
+- Default: `'opt-in'`
 
 * **Details**
 
@@ -48,7 +48,7 @@ Changes the scripts' activation logic when consent is not valid
     Once the user has provided consent, this option is ignored.
 
     ::: tip
-    If you are able to determine the country of the current user, you can set this mode to `opt-out`, assuming that the user's country is not under the GDPR law.
+    If you are able to determine the country of the current user, you can set the mode to `opt-out` — assuming that the user's country is not under the GDPR law.
     :::
 
 * **Example** <br>
@@ -56,10 +56,6 @@ Changes the scripts' activation logic when consent is not valid
     Setting the mode on a per-country basis (concept):
 
     ```javascript
-    /**
-     * The following values are generally retrieved
-     * using some kind of server API (via PHP, NODE ...)
-     */
     const euCountries = ['DE', 'FR', 'IT',  ...];
     const userCountry = "IT";
 
@@ -124,6 +120,13 @@ Clears all cookies listed inside a specific category, when the user rejects that
 
 Stops the plugin's execution if a bot/crawler is detected, to prevent them from indexing the modal's content (for SEO purposes).
 
+
+## disablePageInteraction
+
+- Type: `boolean`
+- default: `false`
+
+Creates a dark overlay and blocks the page scroll until consent is expressed.
 
 ## cookie
 
@@ -213,6 +216,180 @@ The `acceptType` parameter is a `string` with one of the following values:
 
 By default the cookie is restricted to same-site context only request. Check the official [MDN Docs.](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie/SameSite) for more insight.
 
+## onFirstConsent
+
+Callback function executed once, on the user's first consent action.
+
+- Type:
+  ```javascript
+  function({
+      cookie: {} // same value as cc.getCookie()
+  }): void
+  ```
+
+* **Example** <br>
+    ```javascript
+    cc.run({
+        onFirstConsent: function({cookie}) {
+            // do something
+        }
+    })
+    ```
+
+## onConsent
+
+Callback function executed on the user's first consent action and after each page load.
+
+- Type:
+  ```javascript
+  function({
+      cookie: {} // same value as cc.getCookie()
+  }): void
+  ```
+
+* **Example** <br>
+    ```javascript
+    cc.run({
+        onConsent: function({cookie}) {
+            // do something
+        }
+    })
+    ```
+
+## onChange
+
+Callback function executed when the user's preferences — such as accepted categories and/or services — change.
+
+- Type:
+  ```javascript
+  function({
+      cookie: {},   // same value as cc.getCookie()
+      changedCategories: string[],
+      changedPreferences: {[key: string]: string[]}
+  }): void
+  ```
+
+* **Example** <br>
+    ```javascript
+    cc.run({
+        onChange: function({cookie, changedPreferences, changedCategories}) {
+            // do something
+        }
+    })
+    ```
+
+## guiOptions
+
+Tweak main UI aspects such as Layout and Buttons.
+
+- Type:
+  ```javascript
+  {
+      consentModal?: {}
+      preferencesModal?: {}
+  }
+  ```
+
+### guiOptions.consentModal
+
+- Type:
+
+    ```javascript
+    {
+        layout?: string,
+        position?: string,
+        equalWeightButtons?: boolean,
+        flipButtons?: boolean
+    }
+    ```
+
+- Default:
+
+    ```javascript
+    {
+        layout: 'box',
+        position: 'bottom right',
+        flipButtons: false,
+        equalWeightButtons: true
+    }
+    ```
+
+- Details:
+
+    All available `layout` and `position` options.
+
+    | Layout  | Variant(s)       | Position-Y                | Position-X                |
+    | ------- | ---------------- | ------------------------- | ------------------------- |
+    | `box`   | `wide`, `inline` | `top`, `middle`, `bottom` | `left`, `center`, `right` |
+    | `cloud` | `inline`         | `top`, `middle`, `bottom` | `left`, `center`, `right` |
+    | `bar `  | `inline`         | `bottom`                  | -                         |
+
+    ::: warning Note
+    Valid `layout` syntax: `<layoutName> <layoutVariant>`. <br>
+    Valid `position` syntax: `<positionY> <positionX>`.
+    :::
+
+- Example:
+
+    ```javascript
+    guiOptions: {
+        consentModal: {
+            layout: 'cloud inline',
+            position: 'bottom center'
+        }
+    }
+    ```
+
+### guiOptions.preferencesModal
+
+- Type:
+
+    ```javascript
+    {
+        layout?: string,
+        position?: string,
+        flipButtons?: boolean,
+        equalWeightButtons?: boolean
+    }
+    ```
+
+- Default:
+
+    ```javascript
+    {
+        layout: 'box',
+        // position: 'right',
+        flipButtons: false,
+        equalWeightButtons: true
+    }
+    ```
+
+- Details:
+
+    All available `layout` and `position` options.
+
+    | Layout | Variant(s) | Position-Y | Position-X      |
+    | ------ | ---------- | ---------- | --------------- |
+    | `box`  | -          | -          | -               |
+    | `bar ` | `wide`     | -          | `left`, `right` |
+
+    ::: warning Note
+    Valid `layout` syntax: `<layoutName> <layoutVariant>`. <br>
+    Valid `position` syntax: `<positionX>` (if any available).
+    :::
+
+- Example:
+
+    ```javascript
+    guiOptions: {
+        preferencesModal: {
+            layout: 'bar',
+            position: 'left',
+            equalWeightButtons: false,
+            flipButtons: true
+        }
+    }
+    ```
 
 ## categories <span class="required">required</span>
 
@@ -293,10 +470,73 @@ Clear cookies when user rejects the cookie category. Available options for the a
     })
     ```
 
+### categories.services
+
+
+- Type:
+    ```javascript
+    {
+        [key: string]: {
+            label?: string,
+            onAccept: () => void,
+            onReject: () => void
+        }
+    }
+    ```
+
+- **Details**:
+
+    `key`: service name (unique) <br>
+    `label`: overwrites the visible name in the preferencesModal (can be html)
+
+
+* **Example**: <br>
+    ```javascript
+    cc.run({
+        categories: {
+            analytics: {
+                services: {
+                    ga: {
+                        label: 'Google Analytics',
+                        onAccept: function() {
+                            // enable ga
+                        },
+                        onReject: function() {
+                            // disable ga
+                        }
+                    },
+                    new_service: {
+                        label: 'Another Service',
+                        onAccept: function() {
+                            // enable new_service
+                        },
+                        onReject: function() {
+                            // disable new_service
+                        }
+                    }
+                }
+            }
+        }
+    })
+    ```
+
 ## language <span class="required">required</span>
+Section under development. Check out the [Language Config.](/advanced/language-configuration.html).
 
 ### language.default <span class="required">required</span>
+Section under development.
 
 ### language.autoDetect
 
+Automatically detect and set language — if defined in the config — otherwise use `default`.
+
+- Type: `string`
+- Values: `'document'`, `'browser'`
+
+
+Language detection strategies:
+- `'document'`: set language based on the current page's `lang` attribute
+- `'browser'`: detect client's browser's language using `navigator.language`
+
 ### language.translations <span class="required">required</span>
+Section under development.

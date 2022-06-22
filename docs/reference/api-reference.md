@@ -11,7 +11,7 @@ Configures the plugin with the provided config. object.
 - **Type**
 
     ```javascript
-    function(config: object): void
+    function(config: object): Promise<void>
     ```
 - **Details**
 
@@ -43,16 +43,15 @@ Shows the consent modal.
 - **Type**
 
     ```javascript
-    function(delay?: number, createModal?: boolean): void
+    function(createModal?: boolean): void
     ```
 - **Details**
 
-    Both arguments are optional. You can show the modal after a specific `delay` (measured in milliseconds). If consent was previously expressed, the consent modal will not be generated; you'll have to pass `true` to the second argument to generate it on the fly.
+   If consent was previously expressed, the consent modal will not be generated; you'll have to pass the argument `true` to generate it on the fly.
 
 - **Example**
     ```javascript
-    // show modal after 300ms
-    cc.show(300);
+    cc.show();
 
     // show modal (if it doesn't exist, create it)
     cc.show(0, true);
@@ -80,18 +79,11 @@ Shows the preferences modal.
 - **Type**
 
     ```javascript
-    function(delay?: number): void
+    function(): void
     ```
-- **Details**
-
-    The delay argument is optional.
 
 - **Example**
     ```javascript
-    // show modal after 300ms
-    cc.showPreferences(300);
-
-    // show modal (without delay)
     cc.showPreferences();
     ```
 
@@ -157,20 +149,13 @@ Returns `true` if the specified category was accepted, otherwise `false`.
 
 - **Examples**
     ```javascript
-    /**
-     * if the user accepted the 'analytics' category
-     * print "hooray!"
-     */
+
     if(cc.acceptedCategory('analytics')){
-        console.log("hooray!");
+        // great
     }
 
-    /**
-     * if the user didn't accept the 'ads' category
-     * print "oh no ..."
-     */
     if(!cc.acceptedCategory('ads')){
-        console.log("oh no ...");
+        // not so great
     }
     ```
 
@@ -202,6 +187,28 @@ Accepts or rejects services.
     cc.acceptService(['service1', 'service2'], 'analytics');   // accept only these 2 services (reject all the others)
     ```
 
+## acceptedService
+
+Returns `true` if the service inside the category is accepted, otherwise `false`.
+
+- **Type**
+
+    ```javascript
+    function(
+        serviceName: string,
+        categoryName: string
+    ): boolean
+    ```
+
+- **Examples**
+    ```javascript
+    if(cc.acceptedService('Google Analytics', 'analytics')){
+        // great
+    }else{
+        // not so great
+    }
+    ```
+
 ## validConsent
 Returns `true` if consent is valid.
 
@@ -209,9 +216,6 @@ Returns `true` if consent is valid.
     ```javascript
     function(): boolean
     ```
-
-- **Details** <br>
-    Invalid consent is explained at the very top of the [Configuration Reference](/reference/configuration-reference.html) page.
 
 - **Example**
     ```javascript
@@ -257,8 +261,8 @@ Removes one or multiple cookies.
     function(
         cookies: string | RegExp | (string | RegExp)[],
         path?: string,
-        domains?: string[]
-    ): boolean
+        domain?: string
+    ): void
     ```
 
 - **Examples** <br>
@@ -269,9 +273,9 @@ Removes one or multiple cookies.
     cc.eraseCookies('cc_cookie');
     ```
 
-    Delete the `_gid` and  all cookies starting with `_ga` cookies:
+    Delete the `_gid` and all cookies starting with `_ga`:
     ```javascript
-    cc.eraseCookies(['_gid', /^_ga/], '/', [location.hostname]);
+    cc.eraseCookies(['_gid', /^_ga/], '/', location.hostname);
     ```
 
 
@@ -285,10 +289,8 @@ Loads script files (`.js`).
     ```javascript
     function(
         path: string,
-        callback?: function(): void,
-        attributes?: [
-            { name: string, value: string }
-        ]
+        callback?: function(success: boolean): void,
+        attributes?: { name: string, value: string }[]
     ): void
     ```
 
@@ -297,8 +299,11 @@ Loads script files (`.js`).
     Load a script:
 
     ```javascript
-    cc.loadScript('path-to-script.js', function(){
-        // Script loaded, do something
+    cc.loadScript('path-to-script.js', function(success){
+        // Check if script was loaded successfully
+        if(success){
+            console.log("script loaded successfully")
+        }
     });
     ```
 
@@ -306,7 +311,7 @@ Loads script files (`.js`).
     ```javascript
     cc.loadScript('path-to-script1.js', function(){
         cc.loadScript('path-to-script2.js', function(){
-            // script1 and script2 loaded, do something
+
         });
     });
     ```
@@ -324,7 +329,7 @@ Loads script files (`.js`).
 
 ## getCookie
 
-Returns the content of the plugin's cookie.
+Returns the plugin's own cookie, or just one of the fields.
 
 - **Type**
     ```javascript
@@ -338,6 +343,7 @@ Returns the content of the plugin's cookie.
         consentId: string
         consentTimestamp: string,
         lastConsentTimestamp: string,
+        services: {[key: string]: string[]}
     }
     ```
 
@@ -352,9 +358,25 @@ Returns the content of the plugin's cookie.
 
 ## getConfig
 
+Returns the configuration object or one of its fields.
+
+- **Type**
+    ```javascript
+    function(field?: string): any
+    ```
+
+- **Example**
+    ```javascript
+    // Get the entire config
+    const config = cc.getConfig();
+
+    // Get only the language' prop.
+    const language = cc.getConfig('language');
+    ```
+
 ## getUserPreferences
 
-Returns user's preferences, such as accepted and rejected categories.
+Returns user's preferences, such as accepted/rejected categories and services.
 
 - **Type**
 
@@ -362,12 +384,17 @@ Returns user's preferences, such as accepted and rejected categories.
     function(): {
         acceptType: string,
         acceptedCategories: string[],
-        rejectedCategories: string[]
+        rejectedCategories: string[],
+        acceptedServices: {[key: string]: string[]}
+        rejectedServices: {[key: string]: string[]}
     }
     ```
 - **Details**
 
-    Possible `acceptType` values: `'all'`, `'custom'` or `'necessary'`.
+    Possible `acceptType` values:
+    - `'all'`,
+    - `'custom'`
+    - `'necessary'`
 
 - **Example** <br>
 
@@ -385,28 +412,29 @@ Returns user's preferences, such as accepted and rejected categories.
 
 
 ## setLanguage
-Changes the modal's language. Returns `true` if the language was changed.
+Changes the modal's language. Returns a `Promise<boolean>` equal to `true` if the language was changed successfully.
 
 - **Type**
     ```javascript
     function(
         language: string,
         force?: boolean
-    ): boolean
+    ): Promise<boolean>
     ```
 
 - **Examples** <br>
 
-    Assuming that the current language is set to `'en'`:
-
     ```javascript
-    cc.setLanguage('it');        // true
-    cc.setLanguage('en');        // false, en is already the current language
+    // Simple usage
+    cc.setLanguage('it');
+
+    // Get return value
+    const success = await cc.setLanguage('en');
     ```
 
     Forcefully refresh modals (re-generates the html content):
     ```javascript
-    cc.setLanguage('en', true);  // true
+    cc.setLanguage('en', true);
     ```
 
 ## setCookieData
@@ -417,17 +445,17 @@ Save custom data into the cookie. Returns `true` if the data was set successfull
     ```javascript
     function({
         value: any,
-        mode: string
+        mode?: string
     }): boolean
     ```
 
 - **Details** <br>
-    You may use this field to store any kind of data (as long as the entire cookie doesn't exceed the 4096 bytes size threshold). There are 2 modes:
+    modes:
     - `'update'`: sets the new value only if its different from the previous value, and both are of the same type.
     - `'overwrite'` (default): always sets the new value (overwrites any existing value).
 
     ::: info Note
-    This API method is safe to use, as it does not alter the cookies' current expiration time.
+    The `setCookieData` method does not alter the cookies' current expiration time.
     :::
 
 

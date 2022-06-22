@@ -133,9 +133,7 @@ The most basic configuration requires the definition of the following 2 fields:
 - `categories`
 - `language`
 
-* **Example** <br>
-
-    In this example we have have defined 2 categories ("necessary", "analytics") — and the `en` language.
+* **Basic example config.** <br>
 
     ```javascript
     {
