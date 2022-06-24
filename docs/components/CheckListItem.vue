@@ -7,12 +7,12 @@ export default {
         return {
             colors: {
                 i: {
-                    text: '#E4D29B',
-                    icon: '#E4C66B',
+                    text: '#E6C888',
+                    icon: '#FCD86D',
                 },
                 x: {
-                    text: '#E19F9F',
-                    icon: '#E16969',
+                    text: '#F57F7F',
+                    icon: '#FA7070',
                 },
                 v: {
                     text: '#96E0B1',

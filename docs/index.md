@@ -38,30 +38,33 @@ features:
   -webkit-text-fill-color: transparent;
 }
 /*
-
-
 #app .VPFeature .details {
   font-size: .92em;
-
 }
-
+*/
 #app .VPFooter p {
   font-size: .85em;
 }
-*/
-
-#app .VPFeature{
-  border-color: var(--vp-button-alt-border)
-}
 
 .VPButton.medium.brand{
-  color: #000!important;
-  border-color: var(--vp-c-green);
-  background: var(--vp-c-green);
   font-weight: 600;
+  color: #fff!important;
+  border-color: #000000;
+  background: #000000;
 }
 
-#app .VPButton.medium.brand:hover{
+.VPButton.medium.brand:hover{
+  border-color:  #444444;
+  background: #444444;
+}
+
+.dark .VPButton.medium.brand{
+  background: var(--vp-c-green);
+  border-color: var(--vp-c-green);
+  color: #000!important;
+}
+
+.dark #app .VPButton.medium.brand:hover{
   background: #f18767;
   border-color: #f18767
 }

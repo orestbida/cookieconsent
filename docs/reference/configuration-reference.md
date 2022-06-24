@@ -1,16 +1,6 @@
 # Configuration Reference
 Overview of all the available configuration options.
 
-**Before diving in:**
-
-::: info What is Invalid Consent
-Consent is not valid when at least one of following situations occurs:
-- consent is missing (e.g. user has not yet made a choice)
-- revision numbers don't match
-- the plugin's cookie does not exist/has expired
-- the plugin's cookie is structurally not valid (e.g. empty)
-:::
-
 ::: info About the examples
 All the examples in this section are partial code snippets. They do not represent full/valid configurations.
 :::

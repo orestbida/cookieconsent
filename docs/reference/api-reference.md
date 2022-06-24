@@ -216,6 +216,15 @@ Returns `true` if consent is valid.
     ```javascript
     function(): boolean
     ```
+- **Details**
+
+
+    Consent is not valid when at least one of following situations occurs:
+    - consent is missing (e.g. user has not yet made a choice)
+    - revision numbers don't match
+    - the plugin's cookie does not exist/has expired
+    - the plugin's cookie is structurally not valid (e.g. empty)
+
 
 - **Example**
     ```javascript
