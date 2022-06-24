@@ -1,9 +1,8 @@
 # CookieConsent
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
-![Size](https://img.shields.io/github/size/orestbida/cookieconsent/dist/cookieconsent.js)
-[![Stable version](https://img.shields.io/github/v/release/orestbida/cookieconsent)](https://github.com/orestbida/cookieconsent/releases)
-
+[![Latest version](https://badgen.net/github/release/orestbida/cookieconsent)](https://github.com/orestbida/cookieconsent/releases)
+[![CircleCI](https://dl.circleci.com/status-badge/img/gh/orestbida/cookieconsent/tree/v3%2E0-beta.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/orestbida/cookieconsent/tree/v3%2E0-beta)
 
 A __lightweight__ & __gdpr compliant__ cookie consent plugin written in plain javascript.
 
