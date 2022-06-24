@@ -26,7 +26,14 @@ You can download/import the plugin using one of the following methods:
 ## Usage
 Here are some of the most common setups to help you get up and running.
 
-### Vanilla JS
+- [HTML](#html)
+- [React](#react)
+- [Vue](#vue)
+- [Angular](#angular)
+
+<br>
+
+### HTML
 Import `cookieconsent.css` and `cookieconsent.js` files respectively in the head and body section. Create a new file — `cookieconsent-init.js` — and import it in the body section.
 ```html{9,13-14}
 <html>
@@ -62,17 +69,13 @@ cc.run({
 ```
 
 ### React
-Assuming that you have installed the plugin via NPM, you can import it as follows:
+Import the plugin in your root/APP component, and [configure](#configuration) it inside the `useEffect` hook:
 ```javascript{3-4}
 import { useEffect } from "react";
 
 import "vanilla-cookieconsent/dist/cookieconsent.css";
 import CookieConsent from "vanilla-cookieconsent";
-```
 
-[Configure](#configuration) the plugin inside the `useEffect` hook:
-
-```javascript
 export default function App() {
 
     useEffect(() => {
@@ -89,12 +92,10 @@ export default function App() {
 
 ### Vue
 
-The simplest way to integrate CookieConsent in a VUE App is by importing the `ESM` module located in the `/dist/esm/` directory.
-
 Create a new [VUE Plugin](https://vuejs.org/essential/reusability/plugins.html), `CookieConsentVue.js`:
 ```javascript
 import "vanilla-cookieconsent/dist/cookieconsent.css";
-import CookieConsent from "vanilla-cookieconsent/dist/esm/cookieconsent.js"
+import CookieConsent from "vanilla-cookieconsent"
 
 export default {
     install: (app, pluginConfig) => {
@@ -123,6 +124,57 @@ createApp(App)
     })
     .mount('#app');
 ```
+
+### Angular
+
+Add `compilerOptions.allowSyntheticDefaultImports` in the `tsconfig.json` file:
+```json
+{
+  "compilerOptions": {
+    "allowSyntheticDefaultImports": true
+  }
+}
+```
+
+Declare the `cookieconsent.css` style in the `angular.json` file:
+```json
+{
+    ...
+        "build": {
+            "options": {
+                "styles": [
+                    "node_modules/vanilla-cookieconsent/dist/cookieconsent.css"
+                ]
+            }
+        }
+    ...
+}
+```
+
+Import the module in your angular component (generally `app.component.ts`):
+
+```javascript{2,14-17}
+import { Component, AfterViewInit } from '@angular/core';
+import CookieConsent from 'vanilla-cookieconsent';
+
+@Component({
+    selector: 'app-root',
+    templateUrl: './app.component.html',
+    styleUrls: ['./app.component.css']
+})
+
+export class AppComponent implements AfterViewInit{
+    title = 'angular-javascript-demo';
+
+    ngAfterViewInit(): void{
+        const cc = CookieConsent.init();
+        cc.run({
+            // your config. goes here (required)
+        });
+    }
+}
+```
+
 Finally, [Configure](#configuration) the plugin.
 
 <br>

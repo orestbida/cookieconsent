@@ -49,10 +49,6 @@
     margin-bottom: 1rem;
 }
 
-.dark #app .custom-block a{
-    text-decoration: none;
-}
-
 /** TIP BLOCK **/
 .dark #app .tip.custom-block a,
 .dark #app .tip .custom-block-title{

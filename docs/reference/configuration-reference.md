@@ -18,13 +18,12 @@ All the examples in this section are partial code snippets. They do not represen
 
 ## root
 
+- **Type**: `HTMLElement`
+- **Default**: `document.body`
+
 Root (parent) element where the modal will be appended as a last child.
 
-- Type: `HTMLElement`
-- default: `document.body`
-
-* **Example** <br>
-
+- **Example** <br>
     ```javascript
     cc.run({
         // set a different root element
@@ -36,25 +35,18 @@ Root (parent) element where the modal will be appended as a last child.
 
 Changes the scripts' activation logic when consent is not valid
 
-- Type: `string`
-- Values: `'opt-in'`, `'opt-out'`
-- Default: `'opt-in'`
+- **Type**: `string`
+- **Values**: `'opt-in'`, `'opt-out'`
+- **Default**: `'opt-in'` <br>
 
-* **Details**
+`opt-in`: scripts — configured under a specific category — will run only if the user accepts that category (GDPR compliant). <br>
 
-    - `opt-in`: scripts — configured under a specific category — will run only if the user accepts that category (GDPR compliant).
-    - `opt-out`: scripts — configured under a specific category which has `enabled: true` — will run automatically (it is generally not GDPR compliant).
+`opt-out`: scripts — configured under a specific category which has `enabled: true` — will run automatically (it is generally not GDPR compliant).
+Once the user has provided consent, this option is ignored.
 
-    Once the user has provided consent, this option is ignored.
-
-    ::: tip
-    If you are able to determine the country of the current user, you can set the mode to `opt-out` — assuming that the user's country is not under the GDPR law.
-    :::
-
-* **Example** <br>
+* **Example**
 
     Setting the mode on a per-country basis (concept):
-
     ```javascript
     const euCountries = ['DE', 'FR', 'IT',  ...];
     const userCountry = "IT";
@@ -68,69 +60,65 @@ Changes the scripts' activation logic when consent is not valid
 
 ## autoShow
 
-Automatically show the consent modal if consent is not valid.
+- **Type**: `boolean`
+- **Default**: `true`
 
-- Type: `boolean`
-- default: `true`
-
-* **Details**
-
-    Based on your use case, you may turn this option off and use the `.show()` method instead to programmatically show the modal.
+Automatically show the consent modal if consent is not valid. Based on your use case, you may turn this option off and use the `.show()` method instead, to programmatically show the modal.
 
 * **Example** <br>
 
-    Disable autoShow:
+    Disable `autoShow` and show modal after 3 seconds:
 
     ```javascript
     cc.run({
         autoShow: false
     })
+
+    setTimeout(cc.show, 3000)
     ```
 
 ## revision
 
-Manages consent revisions.
+- **Type**: `number`
+- **Default**: `0`
 
-- Type: `number`
-- default: `0`
+Manages consent revisions — which is useful in case you've modified your scripts or your cookie/privacy policy.
 
-* **Details**
-
-    The default value `0` means that revision management is disabled. You can set any number different from 0 in order to enable it. Check out the dedicated [revision management](/advanced/revision-management.html) section.
+The default value `0` means that revision management is disabled. You can set any number different from 0 in order to enable it. Check out the dedicated [revision management](/advanced/revision-management.html) section.
 
 
 ## manageScriptTags
 
-- Type: `boolean`
-- default: `true`
+- **Type**: `boolean`
+- **Default**: `true`
 
 Intercepts all `<script>` tags with a `data-category` attribute, and enables them based on the accepted categories. Check out the [scripts management](/advanced/manage-scripts.html#using-script-tags) section for details and examples.
 
 ## autoClearCookies
 
-- Type: `boolean`
-- default: `true`
+- **Type**: `boolean`
+- **Default**: `true`
 
 Clears all cookies listed inside a specific category, when the user rejects that category. It requires a valid `autoClear` array. Check out the [categories.autoClear](/reference/configuration-reference.html#categories-autoclear) section.
 
 ## hideFromBots
 
-- Type: `boolean`
-- default: `true`
+- **Type**: `boolean`
+- **Default**: `true`
 
 Stops the plugin's execution if a bot/crawler is detected, to prevent them from indexing the modal's content (for SEO purposes).
 
 
 ## disablePageInteraction
 
-- Type: `boolean`
-- default: `false`
+- **Type**: `boolean`
+- **Default**: `false`
 
 Creates a dark overlay and blocks the page scroll until consent is expressed.
 
 ## cookie
 
-- Type:
+- **Type**:
     ```javascript
     {
         name: string,
@@ -140,7 +128,7 @@ Creates a dark overlay and blocks the page scroll until consent is expressed.
         sameSite: string
     }
     ```
-- default:
+- **Default**:
     ```javascript
     {
         name: 'cc_cookie',
@@ -151,36 +139,36 @@ Creates a dark overlay and blocks the page scroll until consent is expressed.
     }
     ```
 
-The cookie is automatically set with the `secure` flag if `https` is enabled.
+The cookie is automatically set with the `secure` flag if `https` is detected.
 
 ### cookie<span></span>.name
 
-- Type: `string`
-- default: `'cc_cookie'`
+- **Type**: `string`
+- **Default**: `'cc_cookie'`
 
 Name of the plugin's cookie.
 
 ### cookie.domain
 
-- Type: `string`
-- default: `window.location.hostname`
+- **Type**: `string`
+- **Default**: `window.location.hostname`
 
 Current domain/subdomain's name, retrieved automatically.
 
 ### cookie.path
 
-- Type: `string`
-- default: `'/'`
+- **Type**: `string`
+- **Default**: `'/'`
 
 By default the cookie will be set on the root path of your domain/subdomain.
 
 ### cookie.expiresAfterDays
 
-- Type:
+- **Type**:
     ```javascript
-    number | function(acceptType: string): number
+    number | function(accept**Type**: string): number
     ```
-- default: `182`
+- **Default**: `182`
 
 Number of days before the cookie expires. Some countries require a minimum of 182 days before the consent modal is shown again.
 
@@ -211,8 +199,8 @@ The `acceptType` parameter is a `string` with one of the following values:
 
 ### cookie.sameSite
 
-- Type: `string`
-- default: `'Lax'`
+- **Type**: `string`
+- **Default**: `'Lax'`
 
 By default the cookie is restricted to same-site context only request. Check the official [MDN Docs.](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie/SameSite) for more insight.
 
@@ -220,7 +208,7 @@ By default the cookie is restricted to same-site context only request. Check the
 
 Callback function executed once, on the user's first consent action.
 
-- Type:
+- **Type**:
   ```javascript
   function({
       cookie: {} // same value as cc.getCookie()
@@ -240,7 +228,7 @@ Callback function executed once, on the user's first consent action.
 
 Callback function executed on the user's first consent action and after each page load.
 
-- Type:
+- **Type**:
   ```javascript
   function({
       cookie: {} // same value as cc.getCookie()
@@ -260,7 +248,7 @@ Callback function executed on the user's first consent action and after each pag
 
 Callback function executed when the user's preferences — such as accepted categories and/or services — change.
 
-- Type:
+- **Type**:
   ```javascript
   function({
       cookie: {},   // same value as cc.getCookie()
@@ -282,7 +270,7 @@ Callback function executed when the user's preferences — such as accepted cate
 
 Tweak main UI aspects such as Layout and Buttons.
 
-- Type:
+- **Type**:
   ```javascript
   {
       consentModal?: {}
@@ -292,7 +280,7 @@ Tweak main UI aspects such as Layout and Buttons.
 
 ### guiOptions.consentModal
 
-- Type:
+- **Type**:
 
     ```javascript
     {
@@ -303,7 +291,7 @@ Tweak main UI aspects such as Layout and Buttons.
     }
     ```
 
-- Default:
+- **Default**:
 
     ```javascript
     {
@@ -342,7 +330,7 @@ Tweak main UI aspects such as Layout and Buttons.
 
 ### guiOptions.preferencesModal
 
-- Type:
+- **Type**:
 
     ```javascript
     {
@@ -353,7 +341,7 @@ Tweak main UI aspects such as Layout and Buttons.
     }
     ```
 
-- Default:
+- **Default**:
 
     ```javascript
     {
@@ -393,8 +381,7 @@ Tweak main UI aspects such as Layout and Buttons.
 
 ## categories <span class="required">required</span>
 
-- Type: `object`
-- default: `undefined`
+- **Type**: `object`
 
 Example on how to create the `analytics` category:
 ```javascript
@@ -406,34 +393,35 @@ cc.run({
 ```
 
 ### categories.enabled
-- Type: `boolean`
+- **Type**: `boolean`
+- **Default**: `false`
 
 Mark the category as enabled by default.
 
 
 ### categories.readOnly
-- Type: `boolean`
+- **Type**: `boolean`
+- **Default**: `false`
 
-Treat the category as read-only/necessary. The user won't be able to toggle the category off when this option is enabled. Enable only on categories which are essential for the proper functioning of your website.
+Treat the category as read-only/necessary (always enabled). Enable only on categories which are essential for the proper functioning of your website.
 
-e.g. set the `necessary` category as read-only:
-```javascript
-cc.run({
-    categories: {
-        necessary: {
-            enabled: true,
-            readOnly: true
+- Example
+
+    set the `necessary` category as read-only:
+    ```javascript
+    cc.run({
+        categories: {
+            necessary: {
+                enabled: true,
+                readOnly: true
+            },
+            analytics: {}
         }
-        analytics: {
-            enabled: false,
-            readOnly: false
-        }
-    }
-})
-```
+    })
+    ```
 
 ### categories.autoClear
-- Type:
+- **Type**:
     ```javascript
     {
         cookies: []
@@ -473,7 +461,7 @@ Clear cookies when user rejects the cookie category. Available options for the a
 ### categories.services
 
 
-- Type:
+- **Type**:
     ```javascript
     {
         [key: string]: {
@@ -530,8 +518,8 @@ Section under development.
 
 Automatically detect and set language — if defined in the config — otherwise use `default`.
 
-- Type: `string`
-- Values: `'document'`, `'browser'`
+- **Type**: `string`
+- **Values**: `'document'`, `'browser'`
 
 
 Language detection strategies:

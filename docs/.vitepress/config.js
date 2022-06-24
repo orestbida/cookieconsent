@@ -73,10 +73,10 @@ function getGuideSidebar() {
             collapsible: true,
             items: [
                 { text: 'Language Config', link: '/advanced/language-configuration' },
+                { text: 'Scripts Management', link: '/advanced/manage-scripts' },
                 { text: 'UI Customization', link: '/advanced/ui-customization' },
                 { text: 'Callbacks and Events', link: '/advanced/callbacks-events' },
                 { text: 'Custom Attribute', link: '/advanced/custom-attribute' },
-                { text: 'Scripts Management', link: '/advanced/manage-scripts' },
                 { text: 'Revision Management', link: '/advanced/revision-management'}
             ]
         },

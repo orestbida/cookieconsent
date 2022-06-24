@@ -80,10 +80,3 @@ This event is triggered when the user modifies their preferences and only if con
         // do something
     });
     ```
-
-<br>
-
-
-::: warning Note
-If you're using custom events, make sure to subscribe to the specific event prior to the plugin's execution.
-:::

@@ -236,7 +236,8 @@ Returns `true` if the specified cookie is valid (it exists and its content is no
     function(cookieName: string): boolean
     ```
 
-- **Details**
+- **Details** <br>
+
     This method cannot detect if the cookie has expired as such information cannot be retrieved with javascript.
 
 - **Example** <br>
@@ -392,7 +393,7 @@ Returns user's preferences, such as accepted/rejected categories and services.
 - **Details**
 
     Possible `acceptType` values:
-    - `'all'`,
+    - `'all'`
     - `'custom'`
     - `'necessary'`
 
@@ -412,7 +413,7 @@ Returns user's preferences, such as accepted/rejected categories and services.
 
 
 ## setLanguage
-Changes the modal's language. Returns a `Promise<boolean>` equal to `true` if the language was changed successfully.
+Changes the modal's language. Returns a `Promise<boolean>` which evaluates to `true` if the language was changed successfully.
 
 - **Type**
     ```javascript
@@ -449,12 +450,13 @@ Save custom data into the cookie. Returns `true` if the data was set successfull
     }): boolean
     ```
 
-- **Details** <br>
-    modes:
-    - `'update'`: sets the new value only if its different from the previous value, and both are of the same type.
+- **Details**
+
+    Valid `mode` values:
+    - `'update'` sets the new value only if its different from the previous value, and both are of the same type.
     - `'overwrite'` (default): always sets the new value (overwrites any existing value).
 
-    ::: info Note
+    ::: info
     The `setCookieData` method does not alter the cookies' current expiration time.
     :::
 

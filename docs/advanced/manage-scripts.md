@@ -5,66 +5,98 @@ There are two ways to manage your scripts:
 - via [callbacks/events](/advanced/callbacks-events)
 
 ## Using &lt;script&gt; tags
-Given any script element, all you need to do  is to add the following attributes to the script tag itself:
+To configure a script tag, you must add the following 2 attributes:
 
 - `type="text/plain"`
-- `data-category="category-name"`
+- `data-category="your-category-name"`
 
 Before:
 ```html
 <!-- E.g. enable this script only if analytics category is accepted -->
 <script>
-    console.log("User accepted the analytics category!");
-<script>
+    // Script enabled
+</script>
 ```
 
 After:
 ```html
 <script type="text/plain" data-category="analytics">
-    console.log("User accepted the analytics category!");
-<script>
+    // Analytics category enabled
+</script>
 ```
 
+You can also run **scripts when a category is disabled** (if it was previously enabled) by pre-pending `!` to the category name:
 
-::: info
-The `type="text/plain"` attribute prevents the script from executing. `data-category` is used by the plugin to enable the script when the specified category is accepted by the user.
+```html
+<script type="text/plain" data-category="!analytics">
+    // Analytics category disabled
+</script>
+```
+
+### Services
+::: info What is a service
+A service represents a script — or a group of scripts — associated to a name, that appears inside the Preferences Modal with its own toggle. You can also [configure a service internally](/reference/configuration-reference.html#categories-services) via the configuration object.
 :::
 
-Although using script tags is very easy, they are also very limited and might not be suitable for specific use cases. That's where callbacks/custom events might come in handy.
+You can define a service by adding the following attribute:
+- `data-service="your-service-name"`
 
+```html
+<script type="text/plain" data-category="analytics" data-service="Google Analytics">
+    // Google Analytics enabled
+</script>
+```
+
+You can pre-pend the `!` character to the service name to run some clean-up logic when the service is disabled:
+```html
+<script type="text/plain" data-category="analytics" data-service="!Google Analytics">
+    // Google Analytics disabled
+</script>
+```
 <br>
 
 ## Using callbacks/events
-Check out all the available [callbacks and events](/advanced/callbacks-events).
-
-You can adapt the above script tag example for use inside the `onConsent` callback. You'd also need to make use of the `.acceptedCategory()` method, described in the [API Reference](/reference/api-reference) section.
-
-`onConsent` callback example:
+You can adapt the above examples for use inside the `onConsent` callback:
 ```javascript
 cc.run({
     onConsent: function(){
         if(cc.acceptedCategory('analytics')){
-            console.log("User accepted the analytics category!");
+            // Analytics category enabled
+        }
+
+        if(cc.acceptedService('Google Analytics', 'analytics')){
+            // Google Analytics enabled
         }
     }
 });
 ```
-<br>
 
-Another handy callback is the `onChange` callback.
-
-If the user has already consented and later one changes their preference, you can use the `onChange` callback to enable or disable specific services — based on their new preference — with an immediate effect:
+Another handy callback is the `onChange` callback, which is fired when the state of the categories or services is changed (assuming that consent was already expressed).
 
 ```javascript
 cc.run({
-    onChange: function(changedCategories){
+    onChange: function({changedCategories, changedServices}){
         if(changedCategories.includes('analytics')){
+
             if(cc.acceptedCategory('analytics')){
-                console.log("User just accepted the analytics category!");
+                // Analytics category was just enabled
             }else{
-                console.log("User just rejected the analytics category!");
+                // Analytics category was just disabled
+            }
+
+            if(changedServices['analytics'].includes('Google Analytics')){
+                if(cc.acceptedService('Google Analytics', 'analytics')){
+                    // Google Analytics was just enabled
+                }else{
+                    // Google Analytics was just disabled
+                }
             }
         }
     }
 })
 ```
+
+
+::: info
+A `<script>` tag can be enabled and disabled at most once, unlike the `onChange` callback — or its equivalent event listener — which can be executed multiple times.
+:::
