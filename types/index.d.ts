@@ -252,7 +252,7 @@ interface ConsentModalOptions {
 
     /**
      * Set a revision message, visible when the revision number changes.
-     * Check out the [docs](https://cookieconsent.orestbida.com/advanced/revision-management.html#revision-management) for more.
+     * Check out the [docs](https://cookieconsent.orestbida.com/advanced/revision-management.html) for more.
      */
     revisionMessage?: string
 
@@ -326,7 +326,7 @@ interface ConfigOptions {
      *
      * @default document.body
      */
-    root?: HTMLElement
+    root?: Element | null
 
     /**
      * Check out the [docs](https://cookieconsent.orestbida.com/reference/configuration-reference.html#mode) for details.
@@ -565,7 +565,7 @@ interface CookieConsentAPI {
      * Change modal's language. Language must already be declared in the config.
      * @param languageCode desired language
      * @param forceSet forcefully set language and reload modals
-     * @returns boolean: true if language is set successfully
+     * @returns Promise<boolean>: true if language is set successfully
      */
     setLanguage(languageCode: string, forceSet?: boolean): Promise<boolean>
 }
