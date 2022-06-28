@@ -2,8 +2,8 @@ import CookieConsent from "../src/index"
 import testConfig from "./config/full-config";
 import { _elContains, _getKeys, _isObject } from "../src/utils/general";
 import { _setCookie } from "../src/utils/cookies";
-import { dom, state } from "../src/core/global";
-import { defineCryptoRandom, htmlHasClass, mockLanguageFetch, resetConsentModal } from "./config/mocks-utils";
+import { globalObj } from "../src/core/global";
+import { defineCryptoRandom, htmlHasClass } from "./config/mocks-utils";
 
 let api;
 const consentModalClassToggle = 'show--consent';
@@ -30,12 +30,16 @@ describe("API tests", () =>{
         `;
 
         api = CookieConsent.init();
-        await api.run(testConfig);
     })
 
-    afterEach(() => {
-        fetch.mockClear();
+    beforeEach(async ()=>{
+        await api.run(testConfig);
     });
+
+    afterEach( async ()=>{
+        api.reset(true);
+        fetch.mockClear();
+    })
 
     it('User preferences should be empty if consent is not valid', () => {
         const userPreferences = api.getUserPreferences();
@@ -48,7 +52,10 @@ describe("API tests", () =>{
         })
     })
 
-    it('Consent modal should be hidden when autoShow=false', () => {
+    it('Consent modal should be hidden when autoShow=false', async () => {
+        api.reset(true);
+        testConfig.autoShow = false;
+        await api.run(testConfig)
         expect(htmlHasClass(consentModalClassToggle)).toBe(false);
     })
 
@@ -70,15 +77,15 @@ describe("API tests", () =>{
         expect(api.validConsent()).toBe(false);
     })
 
+    it('Should return valid consent', () => {
+        api.acceptCategory();
+        expect(api.validConsent()).toBe(true);
+    })
+
     it('Should accept only the necessary categories', () => {
         api.acceptCategory([]);
         expect(api.acceptedCategory('necessary')).toBe(true)
         expect(api.acceptedCategory('analytics')).toBe(false)
-    })
-
-    it('Should return valid consent', () => {
-        api.acceptCategory();
-        expect(api.validConsent()).toBe(true);
     })
 
     it('Should accept all categories', () => {
@@ -96,7 +103,6 @@ describe("API tests", () =>{
     })
 
     it('Should accept a specific category', () => {
-        api.acceptCategory(['analytics']);
         api.acceptCategory('analytics');
         expect(api.acceptedCategory('necessary')).toBe(true)
         expect(api.acceptedCategory('analytics')).toBe(true)
@@ -109,6 +115,7 @@ describe("API tests", () =>{
     })
 
     it("Should return the plugin's cookie", () => {
+        api.acceptCategory();
         const cookie = api.getCookie();
         expect(cookie).toHaveProperty('categories');
         expect(cookie).toHaveProperty('revision');
@@ -129,6 +136,7 @@ describe("API tests", () =>{
     })
 
     it('Should return true when cookie exists', () => {
+        api.acceptCategory();
         expect(api.validCookie('cc_cookie')).toBe(true);
     })
 
@@ -171,16 +179,22 @@ describe("API tests", () =>{
         expect(api.validCookie('test_cookie5')).toBe(false);
     });
 
-    it('Should show the consent modal', () => {
+    it('Should show the consent modal', async () => {
+        api.reset(true);
+        testConfig.autoShow = false;
+        await api.run(testConfig)
         api.show();
         expect(htmlHasClass(consentModalClassToggle)).toBe(true);
-        expect(dom._consentModal.getAttribute('aria-hidden')).toBe('false');
+        expect(globalObj._dom._consentModal.getAttribute('aria-hidden')).toBe('false');
     })
 
-    it('Should hide the consent modal', () => {
+    it('Should hide the consent modal', async () => {
+        api.reset(true);
+        testConfig.autoShow = true;
+        await api.run(testConfig)
         api.hide();
         expect(htmlHasClass(consentModalClassToggle)).toBe(false);
-        expect(dom._consentModal.getAttribute('aria-hidden')).toBe('true');
+        expect(globalObj._dom._consentModal.getAttribute('aria-hidden')).toBe('true');
     })
 
     it('Should create the consent modal if it does not exist', async () => {
@@ -188,13 +202,12 @@ describe("API tests", () =>{
         /**
          * Remove consent modal (simulate page reload)
          */
-        resetConsentModal();
+        api.acceptCategory();
 
-        let modal = document.querySelector('#cc-main .cm');
-        expect(modal).toBeFalsy();
+        api.reset();
         await api.run(testConfig);
 
-        modal = document.querySelector('#cc-main .cm')
+        let modal = document.querySelector('#cc-main .cm')
         expect(modal).toBeNull();
 
         /**
@@ -219,49 +232,49 @@ describe("API tests", () =>{
 
     it('Should accept all services', () => {
         api.acceptService('all', 'analytics');
-        expect(state._enabledServices['analytics'].length).toBe(_getKeys(state._allDefinedServices['analytics']).length)
+        expect(globalObj._state._enabledServices['analytics'].length).toBe(_getKeys(globalObj._state._allDefinedServices['analytics']).length)
     })
 
     it('Should reject all services', () => {
         api.acceptService([], 'analytics');
-        expect(state._enabledServices['analytics'].length).toBe(0);
+        expect(globalObj._state._enabledServices['analytics'].length).toBe(0);
     })
 
     it('Should accept a specific service', () => {
         api.acceptService('service1', 'analytics');
-        expect(state._enabledServices['analytics'].length).toBe(1);
+        expect(globalObj._state._enabledServices['analytics'].length).toBe(1);
     })
 
-    it('Accepting a non existing service should reject all services', () => {
+    it('Accepting a non existing service should reject all services', async () => {
         api.acceptService('does_not_exist', 'analytics');
-        expect(state._enabledServices['analytics'].length).toBe(0);
+        expect(globalObj._state._enabledServices['analytics'].length).toBe(0);
     })
 
-    it('Should return true when service is enabled', () => {
+    it('Should return true when service is enabled', async () => {
         api.acceptService('service1', 'analytics');
         expect(api.acceptedService('service1', 'analytics')).toBe(true);
     })
 
-    it('Accepting a service in a non existing category should not do anything', () => {
+    it('Accepting a service in a non existing category should not do anything', async () => {
         expect(api.acceptService('service1', 'category_does_not_exist')).toBe(false);
     })
 
-    it('Should return false when service is disabled', () => {
+    it('Should return false when service is disabled', async () => {
         expect(api.acceptedService('service2', 'analytics')).toBe(false);
     })
 
     it('Should set the language to "it"', async () => {
-        expect(state._currentLanguageCode).toBe('en');
+        expect(globalObj._state._currentLanguageCode).toBe('en');
         const set = await api.setLanguage('it');
         expect(set).toBe(true);
-        expect(state._currentLanguageCode).toBe('it');
+        expect(globalObj._state._currentLanguageCode).toBe('it');
     })
 
     it('Should fail when language does not exists the language to "it"', async () => {
         fetch.mockReturnValueOnce(false);
         const set = await api.setLanguage('en-IT', true);
         expect(set).toBe(false);
-        expect(state._currentLanguageCode).not.toBe('en-IT');
+        expect(globalObj._state._currentLanguageCode).not.toBe('en-IT');
     })
 
     it('Should fail when fetch fails', async () => {
@@ -270,7 +283,7 @@ describe("API tests", () =>{
         await api.setLanguage('en');
         const set = await api.setLanguage('it');
         expect(set).toBe(false);
-        expect(state._currentLanguageCode).not.toBe('it');
+        expect(globalObj._state._currentLanguageCode).not.toBe('it');
     })
 
     it('Should fail when trying to set a language already in use', async () => {
@@ -288,6 +301,9 @@ describe("API tests", () =>{
 
     it('Should add new prop. to cookie data', () => {
         api.setCookieData({
+            value: {id: 21}
+        });
+        api.setCookieData({
             value: {new_prop: 'new_value'},
             mode: 'update'
         });
@@ -297,7 +313,6 @@ describe("API tests", () =>{
     })
 
     it('Should load script', (next) => {
-        api.acceptCategory('all');
         api.loadScript('./config/testScriptLoad.js', (loaded) => {
             expect(loaded).toBe(true);
             next();

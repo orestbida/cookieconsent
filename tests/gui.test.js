@@ -1,4 +1,4 @@
-import { dom } from "../src/core/global";
+import { globalObj } from "../src/core/global";
 import CookieConsent from "../src/index"
 import testConfig from "./config/full-config";
 import { defineCryptoRandom, resetCookieConsent } from "./config/mocks-utils";
@@ -13,8 +13,7 @@ describe("Test UI options", () =>{
     })
 
     afterEach(()=>{
-        resetCookieConsent()
-        api.eraseCookies('cc_cookie');
+        api.reset(true);
     });
 
     it('Should set the "box" layout', async () => {
@@ -29,7 +28,7 @@ describe("Test UI options", () =>{
         testConfig.guiOptions.consentModal.layout = 'box wide';
         testConfig.language.translations.en.consentModal.closeIconLabel = 'Reject all';
         await api.run(testConfig);
-        expect(dom._cmCloseIconBtn).toBeInstanceOf(HTMLElement);
+        expect(globalObj._dom._cmCloseIconBtn).toBeInstanceOf(HTMLElement);
     })
 
     it('Should set the "bar" layout', async () => {

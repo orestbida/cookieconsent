@@ -16,7 +16,7 @@ import {
 import CookieConsent from "../src/index"
 import testConfig from "./config/basic-config"
 import { defineCryptoRandom, htmlHasClass } from './config/mocks-utils';
-import { state } from '../src/core/global';
+import { globalObj } from '../src/core/global';
 
 describe("Test add/remove/toggle classes", () => {
 
@@ -63,9 +63,9 @@ describe("Test add/remove/toggle classes", () => {
 
     it("Should hide the preferences modal when esc key is pressed", () => {
         api.showPreferences();
-        expect(state._preferencesModalVisible).toBe(true);
+        expect(globalObj._state._preferencesModalVisible).toBe(true);
         document.documentElement.dispatchEvent(new KeyboardEvent("keydown", {keyCode: 27}));
-        expect(state._preferencesModalVisible).toBe(false);
+        expect(globalObj._state._preferencesModalVisible).toBe(false);
         expect(htmlHasClass('show--preferences')).toBe(false);
     })
 })

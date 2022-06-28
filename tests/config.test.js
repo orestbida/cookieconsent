@@ -1,4 +1,4 @@
-import { state } from "../src/core/global";
+import { globalObj } from "../src/core/global";
 import CookieConsent from "../src/index"
 import testConfig from "./config/full-config";
 import { defineCryptoRandom, resetCookieConsent, htmlHasClass, setUserAgent } from "./config/mocks-utils";
@@ -15,13 +15,13 @@ describe("Check modals' html generation under different settings", () =>{
     })
 
     beforeEach(()=>{
-        resetCookieConsent();
+        api.reset();
     })
 
     it('Consent Modal should not appear if consent is valid', async () => {
         await api.run(testConfig);
         api.acceptCategory();
-        resetCookieConsent();
+        api.reset();
         await api.run(testConfig);
         expect(api.validConsent()).toBe(true);
         expect(htmlHasClass('show--consent')).toBe(false)
@@ -45,7 +45,7 @@ describe("Check modals' html generation under different settings", () =>{
         setUserAgent(botUserAgent);
         testConfig.hideFromBots = true;
         await api.run(testConfig);
-        expect(state._botAgentDetected).toBe(true);
+        expect(globalObj._state._botAgentDetected).toBe(true);
         expect(document.querySelector('#cc-main')).toBeNull();
     })
 
@@ -53,7 +53,7 @@ describe("Check modals' html generation under different settings", () =>{
         setUserAgent(botUserAgent);
         testConfig.hideFromBots = false;
         await api.run(testConfig);
-        expect(state._botAgentDetected).toBe(false);
+        expect(globalObj._state._botAgentDetected).toBe(false);
         expect(document.querySelector('#cc-main')).toBeInstanceOf(HTMLElement);
     })
 
@@ -62,7 +62,7 @@ describe("Check modals' html generation under different settings", () =>{
         testConfig.manageScriptTags = false;
         await api.run(testConfig);
         api.acceptCategory('all');
-        expect(state._allScriptTags.length).toBe(0);
+        expect(globalObj._state._allScriptTags.length).toBe(0);
         expect(document.body.querySelectorAll('script[data-category]').length).toBe(1);
     })
 

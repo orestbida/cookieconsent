@@ -1,4 +1,4 @@
-import { dom } from "../src/core/global";
+import { globalObj } from "../src/core/global";
 import CookieConsent from "../src/index"
 import { _getKeys } from "../src/utils/general";
 import testConfig from "./config/full-config";
@@ -14,8 +14,7 @@ describe("Consent Modal buttons test", () =>{
     })
 
     afterEach(()=>{
-        resetCookieConsent();
-        api.eraseCookies('cc_cookie');
+        api.reset(true);
     })
 
     it('Modals should exist', async () => {
@@ -28,7 +27,7 @@ describe("Consent Modal buttons test", () =>{
 
     it('Modal accept necessary btn onClick', async () => {
         await api.run(testConfig);
-        fireClickEvent(dom._consentAcceptNecessaryBtn);
+        fireClickEvent(globalObj._dom._consentAcceptNecessaryBtn);
         const userPreferences = api.getUserPreferences();
         expect(userPreferences.acceptType).toBe('necessary');
         expect(userPreferences.acceptedCategories.length).toBe(1);
@@ -36,7 +35,7 @@ describe("Consent Modal buttons test", () =>{
 
     it('Modal accept all btn onClick', async () => {
         await api.run(testConfig);
-        fireClickEvent(dom._consentAcceptAllBtn);
+        fireClickEvent(globalObj._dom._consentAcceptAllBtn);
         const userPreferences = api.getUserPreferences();
         expect(userPreferences.acceptType).toBe('all');
         expect(userPreferences.rejectedCategories.length).toBe(0);
@@ -46,7 +45,7 @@ describe("Consent Modal buttons test", () =>{
         testConfig.guiOptions.consentModal.layout = 'box';
         testConfig.language.translations.en.consentModal.closeIconLabel = 'Reject all';
         await api.run(testConfig);
-        fireClickEvent(dom._cmCloseIconBtn);
+        fireClickEvent(globalObj._dom._cmCloseIconBtn);
         const userPreferences = api.getUserPreferences();
         expect(userPreferences.acceptType).toBe('necessary');
     })
@@ -64,19 +63,18 @@ describe('Preferences Modal buttons test', () =>{
     })
 
     afterEach(()=>{
-        resetCookieConsent();
-        api.eraseCookies('cc_cookie');
+        api.reset(true);
     })
 
     it('Should accept necessary only on acceptNecessaryBtn click', () => {
-        fireClickEvent(dom._pmAcceptNecessaryBtn);
+        fireClickEvent(globalObj._dom._pmAcceptNecessaryBtn);
         const userPreferences = api.getUserPreferences();
         expect(userPreferences.acceptType).toBe('necessary');
         expect(userPreferences.acceptedCategories.length).toBe(1);
     })
 
     it('Should accept all categories on acceptAllBtn click', () => {
-        fireClickEvent(dom._pmAcceptAllBtn);
+        fireClickEvent(globalObj._dom._pmAcceptAllBtn);
         const userPreferences = api.getUserPreferences();
         expect(userPreferences.acceptType).toBe('all');
         expect(userPreferences.rejectedCategories.length).toBe(0);
@@ -85,7 +83,7 @@ describe('Preferences Modal buttons test', () =>{
     it('Should accept selected only categories on savePreferencesBtn click', () => {
         api.acceptCategory('all');
         document.querySelector('.section__toggle[value="analytics"]').checked = false;
-        fireClickEvent(dom._pmSavePreferencesBtn);
+        fireClickEvent(globalObj._dom._pmSavePreferencesBtn);
         const userPreferences = api.getUserPreferences();
         expect(userPreferences.acceptType).toBe('custom');
         expect(userPreferences.rejectedCategories).toContain('analytics');
@@ -94,7 +92,7 @@ describe('Preferences Modal buttons test', () =>{
     it('Should close the preferences modal when (x) icon is pressed', () => {
         api.showPreferences();
         expect(htmlHasClass('show--preferences')).toBe(true)
-        fireClickEvent(dom._pmCloseBtn);
+        fireClickEvent(globalObj._dom._pmCloseBtn);
         expect(htmlHasClass('show--preferences')).toBe(false)
     })
 })
@@ -120,8 +118,7 @@ describe("Test data-cc attributes", () =>{
     })
 
     afterEach(()=>{
-        resetCookieConsent();
-        api.eraseCookies('cc_cookie');
+        api.reset(true);
     })
 
     it('Should show the preferences modal onClick', () => {

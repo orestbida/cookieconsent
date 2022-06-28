@@ -1,4 +1,4 @@
-import { state } from '../src/core/global';
+import { globalObj } from '../src/core/global';
 import {
     _getBrowserLanguageCode,
     _resolveCurrentLanguageCode,
@@ -17,26 +17,26 @@ describe('Test language utils', () => {
     });
 
     it("Should use the browser's language", () => {
-        state._allTranslations = {
+        globalObj._state._allTranslations = {
             it: {},
             en: {}
         }
-        state._userConfig = {};
-        state._userConfig.language = {};
-        state._userConfig.language.default = 'en';
-        state._userConfig.language.autoDetect = 'browser';
+        globalObj._state._userConfig = {};
+        globalObj._state._userConfig.language = {};
+        globalObj._state._userConfig.language.default = 'en';
+        globalObj._state._userConfig.language.autoDetect = 'browser';
         expect(_resolveCurrentLanguageCode()).toBe('it');
     })
 
     it('Should return the first valid language', () => {
-        state._allTranslations = {
+        globalObj._state._allTranslations = {
             it: {}
         }
-        state._userConfig = {};
-        state._userConfig.language = {};
-        state._userConfig.language.autoDetect = 'browser';
-        state._currentLanguageCode = 'en';
-        state._userConfig.language.default = 'en';
+        globalObj._state._userConfig = {};
+        globalObj._state._userConfig.language = {};
+        globalObj._state._userConfig.language.autoDetect = 'browser';
+        globalObj._state._currentLanguageCode = 'en';
+        globalObj._state._userConfig.language.default = 'en';
         const currentLanguage = _getValidLanguageCode('en');
         expect(currentLanguage).toBe('it');
     })
