@@ -62,7 +62,15 @@ cc.run({
                 secondary_btn: {
                     text: 'Reject all',
                     role: 'accept_necessary'        // 'settings' or 'accept_necessary'
-                }
+                },
+                imprint_link: {
+					text: 'imprint',
+					url: '/impressum',
+				},
+				privacy_policy_link: {
+					text: 'privacy policy',
+					url: '/datenschutz',
+				},
             },
             settings_modal: {
                 title: logo,
