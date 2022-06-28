@@ -591,19 +591,35 @@
         consent_modal.appendChild(consent_modal_inner);
       }
 
-      // add links to privacy and imprint
+      // add links to privacy policy and imprint to modal
       const consent_links = _createNode("div");
       consent_links.id = "c-link";
 
-      const consent_links_imprint = _createNode("div");
-      consent_links_imprint.classList.add("cc-link");
-      consent_links_imprint.innerHTML = `<a href="/imprint">Imprint</a>`;
-      consent_links.appendChild(consent_links_imprint);
+      const imprint_link =
+        user_config.languages[lang]["consent_modal"]["imprint_link"];
+      if (imprint_link) {
+        const i_link = imprint_link["url"];
+        const i_text = imprint_link["text"];
 
-      const consent_links_privacy = _createNode("div");
-      consent_links_privacy.classList.add("cc-link");
-      consent_links_privacy.innerHTML = `<a href="/privacy">Privacy</a>`;
-      consent_links.appendChild(consent_links_privacy);
+        const consent_links_imprint = _createNode("a");
+        consent_links_imprint.classList.add("cc-link");
+        consent_links_imprint.textContent = i_text;
+        consent_links_imprint.setAttribute("href", i_link);
+        consent_links.appendChild(consent_links_imprint);
+      }
+
+      const privacy_policy_link =
+        user_config.languages[lang]["consent_modal"]["privacy_policy_link"];
+      if (privacy_policy_link) {
+        const p_link = privacy_policy_link["url"];
+        const p_text = privacy_policy_link["text"];
+
+        const consent_links_privacy = _createNode("a");
+        consent_links_privacy.classList.add("cc-link");
+        consent_links_privacy.textContent = p_text;
+        consent_links_privacy.setAttribute("href", p_link);
+        consent_links.appendChild(consent_links_privacy);
+      }
 
       consent_modal_inner.appendChild(consent_links);
 

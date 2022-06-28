@@ -65,6 +65,16 @@ cc.run({
           text: "Reject all",
           role: "accept_necessary", // 'settings' or 'accept_necessary'
         },
+        imprint_link: {
+          // 'optional to display imprint link on the modal or remove it'
+          text: "imprint",
+          url: "/imprint.html",
+        },
+        privacy_policy_link: {
+          // 'optional to display privacy policy link on the modal or remove it'
+          text: "privacy policy",
+          url: "/privacy.html",
+        },
       },
       settings_modal: {
         title: logo,

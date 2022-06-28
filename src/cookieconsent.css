@@ -279,7 +279,15 @@
 }
 
 #c-link .cc-link {
+  font-weight: 400;
   font-size: 0.9em;
+  width: 100%;
+  border-bottom: none;
+  text-decoration: underline;
+}
+
+#c-link .cc-link:first-child {
+  text-align: right;
 }
 
 #c-link .cc-link + .cc-link {
@@ -1012,6 +1020,7 @@ html.force--consent.show--consent body {
 }
 
 .cloud #c-link .cc-link {
+  font-size: 0.85em;
   vertical-align: bottom;
 }
 
