@@ -1,5 +1,5 @@
-import { state, dom, cookieConfig, scriptTagSelector, config } from '../core/global';
-
+import { globalObj } from '../core/global';
+import { SCRIPT_TAG_SELECTOR, BUTTON_TAG } from './constants';
 /**
  * Helper function which prints info (console.log())
  * @param {Object} printMsg
@@ -34,14 +34,14 @@ export const _isObject = (el) => {
  */
 export const _retrieveScriptElements = () => {
 
-    if(!config.manageScriptTags) return;
+    if(!globalObj._config.manageScriptTags) return;
 
-    state._allScriptTags = dom._document.querySelectorAll('script[' + scriptTagSelector +']');
+    globalObj._state._allScriptTags = globalObj._dom._document.querySelectorAll('script[' + SCRIPT_TAG_SELECTOR +']');
 
-    state._allScriptTagsInfo = [];
-    state._allScriptTags.forEach(scriptTag => {
+    globalObj._state._allScriptTagsInfo = [];
+    globalObj._state._allScriptTags.forEach(scriptTag => {
 
-        let scriptCategoryName = scriptTag.getAttribute(scriptTagSelector) || '';
+        let scriptCategoryName = scriptTag.getAttribute(SCRIPT_TAG_SELECTOR) || '';
         let scriptServiceName = scriptTag.dataset.service || '';
         let runOnDisable = false;
 
@@ -58,9 +58,9 @@ export const _retrieveScriptElements = () => {
             runOnDisable = true;
         }
 
-        if(_elContains(state._allCategoryNames, scriptCategoryName)){
+        if(_elContains(globalObj._state._allCategoryNames, scriptCategoryName)){
 
-            state._allScriptTagsInfo.push({
+            globalObj._state._allScriptTagsInfo.push({
                 _executed: false,
                 _runOnDisable: runOnDisable,
                 _categoryName: scriptCategoryName,
@@ -68,7 +68,7 @@ export const _retrieveScriptElements = () => {
             });
 
             if(scriptServiceName){
-                const categoryServices = state._allDefinedServices[scriptCategoryName];
+                const categoryServices = globalObj._state._allDefinedServices[scriptCategoryName];
                 if(!categoryServices[scriptServiceName]){
                     categoryServices[scriptServiceName] = {
                         enabled: false
@@ -86,10 +86,10 @@ export const _retrieveScriptElements = () => {
 export const _retrieveRejectedServices = () => {
     var rejectedServices = {};
 
-    state._allCategoryNames.forEach(categoryName => {
+    globalObj._state._allCategoryNames.forEach(categoryName => {
         rejectedServices[categoryName] = _arrayDiff(
-            state._enabledServices[categoryName] || [],
-            _getKeys(state._allDefinedServices[categoryName]) || []
+            globalObj._state._enabledServices[categoryName] || [],
+            _getKeys(globalObj._state._allDefinedServices[categoryName]) || []
         );
     });
 
@@ -113,7 +113,7 @@ export const _elContains = (el, value) => {
  */
 export const _createNode = (type) => {
     var el = document.createElement(type);
-    if(type === 'button'){
+    if(type === BUTTON_TAG){
         _setAttribute(el, 'type', type);
     }
     return el;
@@ -207,7 +207,7 @@ export const _hasClass = (el, className) => {
  * @returns {number}
  */
 export const _getRemainingExpirationTimeMS = () => {
-    var elapsedTimeMilliseconds = state._lastConsentTimestamp ? new Date() - state._lastConsentTimestamp : 0;
+    var elapsedTimeMilliseconds = globalObj._state._lastConsentTimestamp ? new Date() - globalObj._state._lastConsentTimestamp : 0;
     return _getExpiresAfterDaysValue()*86400000 - elapsedTimeMilliseconds;
 };
 
@@ -230,8 +230,8 @@ export const _fetchJson = async (url) => {
  * @returns {number}
  */
 export const _getExpiresAfterDaysValue = () => {
-    var expiresAfterDays = cookieConfig.expiresAfterDays;
-    return typeof expiresAfterDays === 'function' ? expiresAfterDays(state._acceptType) : expiresAfterDays;
+    var expiresAfterDays = globalObj._config.cookie.expiresAfterDays;
+    return typeof expiresAfterDays === 'function' ? expiresAfterDays(globalObj._state._acceptType) : expiresAfterDays;
 };
 
 /**
@@ -255,9 +255,9 @@ export const _getAcceptType = (currentCategoriesState) => {
     var type = 'custom';
 
     // calculate accept type based on accepted/rejected categories
-    if(currentCategoriesState.accepted.length === state._allCategoryNames.length)
+    if(currentCategoriesState.accepted.length === globalObj._state._allCategoryNames.length)
         type = 'all';
-    else if(currentCategoriesState.accepted.length === state._readOnlyCategories.length)
+    else if(currentCategoriesState.accepted.length === globalObj._state._readOnlyCategories.length)
         type = 'necessary';
 
     return type;
@@ -268,7 +268,7 @@ export const _getAcceptType = (currentCategoriesState) => {
  * Note: getUserPreferences() depends on "acceptType"
  */
 export const _updateAcceptType = () => {
-    state._acceptType = _getAcceptType(_getCurrentCategoriesState());
+    globalObj._state._acceptType = _getAcceptType(_getCurrentCategoriesState());
 };
 
 /**
@@ -349,12 +349,12 @@ export const _addDataButtonListeners = (elem, api) => {
 export const _getCurrentCategoriesState = () => {
 
     // calculate rejected categories (_allCategoryNames - _acceptedCategories)
-    var rejectedCategories = state._allCategoryNames.filter((category) => {
-        return !_elContains(state._acceptedCategories, category);
+    var rejectedCategories = globalObj._state._allCategoryNames.filter((category) => {
+        return !_elContains(globalObj._state._acceptedCategories, category);
     });
 
     return {
-        accepted: state._acceptedCategories,
+        accepted: globalObj._state._acceptedCategories,
         rejected: rejectedCategories
     };
 };
@@ -368,47 +368,47 @@ export const _handleFocusTrap = (api) => {
     var tabbedOutsideDiv = false;
     var tabbedInsideModal = false;
 
-    _addEvent(dom._htmlDom, 'keydown', (e) => {
+    _addEvent(globalObj._dom._htmlDom, 'keydown', (e) => {
 
         // If is tab key => ok
         if(e.key !== 'Tab') return;
 
         // If there is any modal to focus
-        if(state._currentModalFocusableElements){
+        if(globalObj._state._currentModalFocusableElements){
             // If reached natural end of the tab sequence => restart
             if(e.shiftKey){
-                if (dom._document.activeElement === state._currentModalFocusableElements[0]) {
-                    state._currentModalFocusableElements[1].focus();
+                if (globalObj._dom._document.activeElement === globalObj._state._currentModalFocusableElements[0]) {
+                    globalObj._state._currentModalFocusableElements[1].focus();
                     e.preventDefault();
                 }
             }else{
-                if (dom._document.activeElement === state._currentModalFocusableElements[1]) {
-                    state._currentModalFocusableElements[0].focus();
+                if (globalObj._dom._document.activeElement === globalObj._state._currentModalFocusableElements[1]) {
+                    globalObj._state._currentModalFocusableElements[0].focus();
                     e.preventDefault();
                 }
             }
 
             // If have not yet used tab (or shift+tab) and modal is open ...
             // Focus the first focusable element
-            if(!tabbedInsideModal && !state._clickedInsideModal){
+            if(!tabbedInsideModal && !globalObj._state._clickedInsideModal){
                 tabbedInsideModal = true;
                 !tabbedOutsideDiv && e.preventDefault();
 
                 if(e.shiftKey){
-                    if(state._currentModalFocusableElements[3]){
-                        if(!state._currentModalFocusableElements[2]){
-                            state._currentModalFocusableElements[0].focus();
+                    if(globalObj._state._currentModalFocusableElements[3]){
+                        if(!globalObj._state._currentModalFocusableElements[2]){
+                            globalObj._state._currentModalFocusableElements[0].focus();
                         }else{
-                            state._currentModalFocusableElements[2].focus();
+                            globalObj._state._currentModalFocusableElements[2].focus();
                         }
                     }else{
-                        state._currentModalFocusableElements[1].focus();
+                        globalObj._state._currentModalFocusableElements[1].focus();
                     }
                 }else{
-                    if(state._currentModalFocusableElements[3]){
-                        state._currentModalFocusableElements[3].focus();
+                    if(globalObj._state._currentModalFocusableElements[3]){
+                        globalObj._state._currentModalFocusableElements[3].focus();
                     }else{
-                        state._currentModalFocusableElements[0].focus();
+                        globalObj._state._currentModalFocusableElements[0].focus();
                     }
                 }
             }
@@ -417,21 +417,21 @@ export const _handleFocusTrap = (api) => {
         !tabbedInsideModal && (tabbedOutsideDiv = true);
     });
 
-    _addEvent(dom._ccMain, 'click', (e) => {
+    _addEvent(globalObj._dom._ccMain, 'click', (e) => {
         /**
          * If click is on the foreground overlay (and not inside preferencesModal),
          * hide preferences modal
          */
-        if(state._preferencesModalVisibleDelayed){
-            if(!dom._pm.contains(e.target)){
+        if(globalObj._state._preferencesModalVisibleDelayed){
+            if(!globalObj._dom._pm.contains(e.target)){
                 api.hidePreferences(0);
-                state._clickedInsideModal = false;
+                globalObj._state._clickedInsideModal = false;
             }else{
-                state._clickedInsideModal = true;
+                globalObj._state._clickedInsideModal = true;
             }
-        }else if(state._consentModalVisible){
-            if(dom._consentModal.contains(e.target)){
-                state._clickedInsideModal = true;
+        }else if(globalObj._state._consentModalVisible){
+            if(globalObj._dom._consentModal.contains(e.target)){
+                globalObj._state._clickedInsideModal = true;
             }
         }
 
@@ -449,7 +449,7 @@ export const _getModalFocusableData = () => {
      * Note: any of the below focusable elements, which has the attribute tabindex="-1" AND is either
      * the first or last element of the modal, won't receive focus during "open/close" modal
      */
-    var allowed_focusable_types = ['[href]', 'button', 'input', 'details', '[tabindex="0"]'];
+    var allowed_focusable_types = ['[href]', BUTTON_TAG, 'input', 'details', '[tabindex="0"]'];
 
     /**
      * Saves all focusable elements inside modal, into the array
@@ -497,12 +497,12 @@ export const _getModalFocusableData = () => {
      * Get preferences modal's all focusable elements
      * Save first and last elements (used to lock/trap focus inside modal)
      */
-    _saveAllFocusableElements(dom._pm, state._allPreferencesModalFocusableElements);
+    _saveAllFocusableElements(globalObj._dom._pm, globalObj._state._allPreferencesModalFocusableElements);
 
     /**
      * If consent modal exists, do the same
      */
-    if(state._consentModalExists){
-        _saveAllFocusableElements(dom._consentModal, state._allConsentModalFocusableElements);
+    if(globalObj._state._consentModalExists){
+        _saveAllFocusableElements(globalObj._dom._consentModal, globalObj._state._allConsentModalFocusableElements);
     }
 };

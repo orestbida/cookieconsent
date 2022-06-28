@@ -1,6 +1,6 @@
-import { state, config, scriptTagSelector} from '../core/global';
+import { globalObj} from '../core/global';
 import { _createNode, _setAttribute, _elContains } from './general';
-
+import { SCRIPT_TAG_SELECTOR } from './constants';
 /**
  * This function handles the loading/activation logic of the already
  * existing scripts based on the current accepted cookie categories
@@ -9,11 +9,11 @@ import { _createNode, _setAttribute, _elContains } from './general';
  */
 export const _manageExistingScripts = (mustEnableCategories) => {
 
-    if(!config.manageScriptTags) return;
+    if(!globalObj._config.manageScriptTags) return;
 
-    var scripts = state._allScriptTags;
-    var _acceptedCategories = mustEnableCategories || state._savedCookieContent.categories || [];
-    var _acceptedServices = state._enabledServices;
+    var scripts = globalObj._state._allScriptTags;
+    var _acceptedCategories = mustEnableCategories || globalObj._state._savedCookieContent.categories || [];
+    var _acceptedServices = globalObj._state._enabledServices;
 
     /**
      * Load scripts (sequentially), using a recursive function
@@ -26,7 +26,7 @@ export const _manageExistingScripts = (mustEnableCategories) => {
 
             var currScript = scripts[index];
 
-            var currScriptInfo = state._allScriptTagsInfo[index];
+            var currScriptInfo = globalObj._state._allScriptTagsInfo[index];
             var currScriptCategory = currScriptInfo._categoryName;
             var currScriptService = currScriptInfo._serviceName;
             var categoryAccepted = _elContains(_acceptedCategories, currScriptCategory);
@@ -39,8 +39,8 @@ export const _manageExistingScripts = (mustEnableCategories) => {
 
                 var categoryWasJustEnabled = !currScriptInfo._runOnDisable && categoryAccepted;
                 var serviceWasJustEnabled = !currScriptInfo._runOnDisable && serviceAccepted;
-                var categoryWasJustDisabled = currScriptInfo._runOnDisable && !categoryAccepted && _elContains(state._lastChangedCategoryNames, currScriptCategory);
-                var serviceWasJustDisabled = currScriptInfo._runOnDisable && !serviceAccepted && _elContains(state._lastChangedServices[currScriptCategory] || [], currScriptService);
+                var categoryWasJustDisabled = currScriptInfo._runOnDisable && !categoryAccepted && _elContains(globalObj._state._lastChangedCategoryNames, currScriptCategory);
+                var serviceWasJustDisabled = currScriptInfo._runOnDisable && !serviceAccepted && _elContains(globalObj._state._lastChangedServices[currScriptCategory] || [], currScriptService);
 
                 if(
                     categoryWasJustEnabled
@@ -52,7 +52,7 @@ export const _manageExistingScripts = (mustEnableCategories) => {
                     currScriptInfo._executed = true;
 
                     currScript.removeAttribute('type');
-                    currScript.removeAttribute(scriptTagSelector);
+                    currScript.removeAttribute(SCRIPT_TAG_SELECTOR);
 
                     // Get current script data-src (if there is one)
                     var src = currScript.getAttribute('data-src');
@@ -107,22 +107,22 @@ export const _manageExistingScripts = (mustEnableCategories) => {
     /**
      * Automatically Enable/Disable internal services
      */
-    state._allCategoryNames.forEach(categoryName => {
-        const lastChangedServices = state._lastChangedServices[categoryName] || state._enabledServices[categoryName] || [];
+    globalObj._state._allCategoryNames.forEach(categoryName => {
+        const lastChangedServices = globalObj._state._lastChangedServices[categoryName] || globalObj._state._enabledServices[categoryName] || [];
 
         lastChangedServices.forEach(serviceName => {
-            const service = state._allDefinedServices[categoryName][serviceName];
+            const service = globalObj._state._allDefinedServices[categoryName][serviceName];
 
             if(
                 !service.enabled
-                && _elContains(state._enabledServices[categoryName], serviceName)
+                && _elContains(globalObj._state._enabledServices[categoryName], serviceName)
                 && typeof service.onAccept === 'function'
             ){
                 service.enabled = true;
                 service.onAccept();
             }else if(
                 service.enabled
-                && !_elContains(state._enabledServices[categoryName], serviceName)
+                && !_elContains(globalObj._state._enabledServices[categoryName], serviceName)
                 && typeof service.onAccept === 'function'
             ){
                 service.enabled = false;
@@ -135,19 +135,19 @@ export const _manageExistingScripts = (mustEnableCategories) => {
 };
 
 /**
- * Keep track of categories enabled by default (useful when mode=='opt-out')
+ * Keep track of categories enabled by default (useful when mode==OPT_OUT_MODE)
  */
 export const _retrieveEnabledCategoriesAndServices = () => {
-    state._allCategoryNames.forEach(categoryName => {
-        const category = state._allDefinedCategories[categoryName];
+    globalObj._state._allCategoryNames.forEach(categoryName => {
+        const category = globalObj._state._allDefinedCategories[categoryName];
 
         if(category.enabled){
-            state._defaultEnabledCategories.push(categoryName);
+            globalObj._state._defaultEnabledCategories.push(categoryName);
 
-            const services = state._allDefinedServices[categoryName] || {};
+            const services = globalObj._state._allDefinedServices[categoryName] || {};
 
             for(var serviceName in services){
-                state._enabledServices[categoryName].push(serviceName);
+                globalObj._state._enabledServices[categoryName].push(serviceName);
             }
         }
     });

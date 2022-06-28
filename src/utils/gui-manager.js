@@ -1,4 +1,4 @@
-import { state, dom } from '../core/global';
+import { globalObj } from '../core/global';
 import { _addClass, _elContains, _removeClass } from './general';
 
 /**
@@ -23,7 +23,7 @@ export const _guiManager = (applyToModal) => {
     /**
      * @type {import("../core/global").GuiOptions}
      */
-    var guiOptions = state._userConfig.guiOptions;
+    var guiOptions = globalObj._state._userConfig.guiOptions;
 
     var consentModalOptions = guiOptions && guiOptions.consentModal;
     var preferencesModalOptions = guiOptions && guiOptions.preferencesModal;
@@ -83,21 +83,21 @@ export const _guiManager = (applyToModal) => {
          * Add classes to buttons
          */
         if(modalClassName === 'cm'){
-            dom._consentAcceptNecessaryBtn && _removeClass(dom._consentAcceptNecessaryBtn, classPrefix + secondaryBtnClass);
-            dom._cmCloseIconBtn && _removeClass(dom._cmCloseIconBtn, classPrefix + secondaryBtnClass);
+            globalObj._dom._consentAcceptNecessaryBtn && _removeClass(globalObj._dom._consentAcceptNecessaryBtn, classPrefix + secondaryBtnClass);
+            globalObj._dom._cmCloseIconBtn && _removeClass(globalObj._dom._cmCloseIconBtn, classPrefix + secondaryBtnClass);
             if(notSameWeightButtons){
-                dom._consentAcceptNecessaryBtn && _addClass(dom._consentAcceptNecessaryBtn, classPrefix + secondaryBtnClass);
-                dom._cmCloseIconBtn && _addClass(dom._cmCloseIconBtn, classPrefix + secondaryBtnClass);
+                globalObj._dom._consentAcceptNecessaryBtn && _addClass(globalObj._dom._consentAcceptNecessaryBtn, classPrefix + secondaryBtnClass);
+                globalObj._dom._cmCloseIconBtn && _addClass(globalObj._dom._cmCloseIconBtn, classPrefix + secondaryBtnClass);
             }
         }else{
-            dom._pmAcceptNecessaryBtn &&  _removeClass(dom._pmAcceptNecessaryBtn, classPrefix + secondaryBtnClass);
+            globalObj._dom._pmAcceptNecessaryBtn &&  _removeClass(globalObj._dom._pmAcceptNecessaryBtn, classPrefix + secondaryBtnClass);
             if(notSameWeightButtons){
-                dom._pmAcceptNecessaryBtn &&  _addClass(dom._pmAcceptNecessaryBtn, classPrefix + secondaryBtnClass);
+                globalObj._dom._pmAcceptNecessaryBtn &&  _addClass(globalObj._dom._pmAcceptNecessaryBtn, classPrefix + secondaryBtnClass);
             }
         }
     }
 
-    if(applyToModal === 0 && state._consentModalExists){
+    if(applyToModal === 0 && globalObj._state._consentModalExists){
 
         var alignV = ['middle', 'top', 'bottom'];
         var alignH = ['left', 'center', 'right'];
@@ -126,7 +126,7 @@ export const _guiManager = (applyToModal) => {
             }
         };
 
-        _setLayout(dom._consentModal, cmLayouts, consentModalOptions, 'cm--', 'box', 'cm');
+        _setLayout(globalObj._dom._consentModal, cmLayouts, consentModalOptions, 'cm--', 'box', 'cm');
     }
 
     if(applyToModal === 1){
@@ -147,6 +147,6 @@ export const _guiManager = (applyToModal) => {
             }
         };
 
-        _setLayout(dom._pm, pmLayouts, preferencesModalOptions, 'pm--', 'box', 'pm');
+        _setLayout(globalObj._dom._pm, pmLayouts, preferencesModalOptions, 'pm--', 'box', 'pm');
     }
 };

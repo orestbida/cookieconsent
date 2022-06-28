@@ -1,7 +1,8 @@
 /* eslint-disable no-unreachable */
-import { state, dom, scriptTagSelector } from '../../global';
+import { globalObj } from '../../global';
 import { _createNode, _addClass, _setAttribute, _removeClass, _addEvent, _appendChild,  _getKeys, _hasClass, _elContains } from '../../../utils/general';
 import { _guiManager } from '../../../utils/gui-manager';
+import { SCRIPT_TAG_SELECTOR, DIV_TAG, BUTTON_TAG } from '../../../utils/constants';
 
 /**
  * Generates the preferences modal's html and appends it to "cc-main" el.
@@ -13,7 +14,7 @@ export const _createPreferencesModal = (api) => {
     /**
      * @type {import("../../global").PreferencesModal}
      */
-    var modalData = state._currentTranslation && state._currentTranslation.preferencesModal;
+    var modalData = globalObj._state._currentTranslation && globalObj._state._currentTranslation.preferencesModal;
 
     if(!modalData) return;
 
@@ -24,78 +25,78 @@ export const _createPreferencesModal = (api) => {
         savePreferencesBtnData = modalData.savePreferencesBtn,
         sectionsData = modalData.sections;
 
-    if(!dom._pmContainer){
+    if(!globalObj._dom._pmContainer){
 
         // modal container
-        dom._pmContainer = _createNode('div');
-        _addClass(dom._pmContainer, 'pm-wrapper');
+        globalObj._dom._pmContainer = _createNode(DIV_TAG);
+        _addClass(globalObj._dom._pmContainer, 'pm-wrapper');
 
         // preferences modal
-        dom._pm = _createNode('div');
-        dom._pm.style.visibility = 'hidden';
+        globalObj._dom._pm = _createNode(DIV_TAG);
+        globalObj._dom._pm.style.visibility = 'hidden';
 
-        _addClass(dom._pm, 'pm');
-        _setAttribute(dom._pm, 'role', 'dialog');
-        _setAttribute(dom._pm, 'aria-hidden', true);
-        _setAttribute(dom._pm, 'aria-modal', true);
+        _addClass(globalObj._dom._pm, 'pm');
+        _setAttribute(globalObj._dom._pm, 'role', 'dialog');
+        _setAttribute(globalObj._dom._pm, 'aria-hidden', true);
+        _setAttribute(globalObj._dom._pm, 'aria-modal', true);
 
         // If 'esc' key is pressed inside _preferencesContainer div => hide preferences
-        _addEvent(dom._htmlDom, 'keydown', (event) => {
+        _addEvent(globalObj._dom._htmlDom, 'keydown', (event) => {
             if (event.keyCode === 27) {
                 api.hidePreferences();
             }
         }, true);
 
         // modal header
-        dom._pmHeader = _createNode('div');
-        _addClass(dom._pmHeader, 'pm__header');
+        globalObj._dom._pmHeader = _createNode(DIV_TAG);
+        _addClass(globalObj._dom._pmHeader, 'pm__header');
 
         // modal title
-        dom._pmTitle = _createNode('div');
-        _addClass(dom._pmTitle, 'pm__title');
-        _setAttribute(dom._pmTitle, 'role', 'heading');
+        globalObj._dom._pmTitle = _createNode(DIV_TAG);
+        _addClass(globalObj._dom._pmTitle, 'pm__title');
+        _setAttribute(globalObj._dom._pmTitle, 'role', 'heading');
 
-        dom._pmCloseBtn = _createNode('button');
-        _addClass(dom._pmCloseBtn, 'pm__close-btn');
-        _setAttribute(dom._pmCloseBtn, 'aria-label', modalData.closeIconLabel || '');
-        _addEvent(dom._pmCloseBtn, 'click', ()=>{api.hidePreferences();});
+        globalObj._dom._pmCloseBtn = _createNode(BUTTON_TAG);
+        _addClass(globalObj._dom._pmCloseBtn, 'pm__close-btn');
+        _setAttribute(globalObj._dom._pmCloseBtn, 'aria-label', modalData.closeIconLabel || '');
+        _addEvent(globalObj._dom._pmCloseBtn, 'click', ()=>{api.hidePreferences();});
 
         // modal body
-        dom._pmBody = _createNode('div');
-        _addClass(dom._pmBody, 'pm__body');
+        globalObj._dom._pmBody = _createNode(DIV_TAG);
+        _addClass(globalObj._dom._pmBody, 'pm__body');
 
         // modal footer
-        dom._pmFooter = _createNode('div');
-        _addClass(dom._pmFooter, 'pm__footer');
+        globalObj._dom._pmFooter = _createNode(DIV_TAG);
+        _addClass(globalObj._dom._pmFooter, 'pm__footer');
 
-        var _pmBtnContainer = _createNode('div');
+        var _pmBtnContainer = _createNode(DIV_TAG);
         _addClass(_pmBtnContainer, 'pm__btns');
 
-        var _pmBtnGroup1 = _createNode('div');
-        var _pmBtnGroup2 = _createNode('div');
+        var _pmBtnGroup1 = _createNode(DIV_TAG);
+        var _pmBtnGroup2 = _createNode(DIV_TAG);
         _addClass(_pmBtnGroup1, 'pm__btn-group');
         _addClass(_pmBtnGroup2, 'pm__btn-group');
 
-        _appendChild(dom._pmFooter, _pmBtnGroup2);
-        _appendChild(dom._pmFooter, _pmBtnGroup1);
+        _appendChild(globalObj._dom._pmFooter, _pmBtnGroup2);
+        _appendChild(globalObj._dom._pmFooter, _pmBtnGroup1);
 
-        _appendChild(dom._pmHeader, dom._pmTitle);
-        _appendChild(dom._pmHeader, dom._pmCloseBtn);
+        _appendChild(globalObj._dom._pmHeader, globalObj._dom._pmTitle);
+        _appendChild(globalObj._dom._pmHeader, globalObj._dom._pmCloseBtn);
 
-        _appendChild(dom._pm, dom._pmHeader);
-        _appendChild(dom._pm, dom._pmBody);
-        _appendChild(dom._pm, dom._pmFooter);
+        _appendChild(globalObj._dom._pm, globalObj._dom._pmHeader);
+        _appendChild(globalObj._dom._pm, globalObj._dom._pmBody);
+        _appendChild(globalObj._dom._pm, globalObj._dom._pmFooter);
 
-        _appendChild(dom._pmContainer, dom._pm);
-        _appendChild(dom._ccMain, dom._pmContainer);
+        _appendChild(globalObj._dom._pmContainer, globalObj._dom._pm);
+        _appendChild(globalObj._dom._ccMain, globalObj._dom._pmContainer);
     }else{
-        dom._pmNewBody = _createNode('div');
-        _addClass(dom._pmNewBody, 'pm__body');
+        globalObj._dom._pmNewBody = _createNode(DIV_TAG);
+        _addClass(globalObj._dom._pmNewBody, 'pm__body');
     }
 
     if(titleData){
-        dom._pmTitle.innerHTML = titleData;
-        closeIconLabelData && _setAttribute(dom._pmCloseBtn, 'aria-label', closeIconLabelData);
+        globalObj._dom._pmTitle.innerHTML = titleData;
+        closeIconLabelData && _setAttribute(globalObj._dom._pmCloseBtn, 'aria-label', closeIconLabelData);
     }
 
     sectionsData && sectionsData.forEach(section => {
@@ -103,22 +104,22 @@ export const _createPreferencesModal = (api) => {
         var sTitleData = section.title,
             sDescriptionData = section.description,
             sLinkedCategory = section.linkedCategory,
-            sCurrentCategoryObject = sLinkedCategory && state._allDefinedCategories[sLinkedCategory],
+            sCurrentCategoryObject = sLinkedCategory && globalObj._state._allDefinedCategories[sLinkedCategory],
             sCookieTableData = section.cookieTable,
             sCookieTableBody = sCookieTableData && sCookieTableData.body,
             sCreateCookieTable = sCookieTableBody && sCookieTableBody.length > 0,
             hasToggle = !!sCurrentCategoryObject,
-            sServices = hasToggle && state._allDefinedServices[sLinkedCategory] || false,
+            sServices = hasToggle && globalObj._state._allDefinedServices[sLinkedCategory] || false,
             sServiceNames = sServices && _getKeys(sServices) || [],
             sIsExpandableToggle = hasToggle && (!!sDescriptionData || !!sCreateCookieTable || _getKeys(sServices).length>0);
 
 
         // section
-        var s = _createNode('div');
+        var s = _createNode(DIV_TAG);
         _addClass(s, 'pm__section');
 
         if(sIsExpandableToggle || sDescriptionData){
-            var sDescContainer = _createNode('div');
+            var sDescContainer = _createNode(DIV_TAG);
             _addClass(sDescContainer, 'pm__section-desc-wrapper');
         }
 
@@ -126,7 +127,7 @@ export const _createPreferencesModal = (api) => {
 
             if(sServiceNames.length > 0){
 
-                var servicesContainer = _createNode('div');
+                var servicesContainer = _createNode(DIV_TAG);
                 _addClass(servicesContainer, 'pm__section-services');
 
                 sServiceNames.forEach(name => {
@@ -134,11 +135,11 @@ export const _createPreferencesModal = (api) => {
                     const service = sServices[name];
 
                     var serviceName = service.label || name;
-                    var serviceDiv = _createNode('div');
-                    var serviceHeader = _createNode('div');
-                    var serviceIconContainer = _createNode('div');
+                    var serviceDiv = _createNode(DIV_TAG);
+                    var serviceHeader = _createNode(DIV_TAG);
+                    var serviceIconContainer = _createNode(DIV_TAG);
                     var serviceIcon = _createNode('span');
-                    var serviceTitle = _createNode('div');
+                    var serviceTitle = _createNode(DIV_TAG);
 
                     _addClass(serviceDiv, 'pm__service');
                     _addClass(serviceTitle, 'pm__service-title');
@@ -164,8 +165,8 @@ export const _createPreferencesModal = (api) => {
 
         if(sTitleData){
 
-            var sTitleContainer = _createNode('div');
-            var sTitle = hasToggle ? _createNode('button') : _createNode('div');
+            var sTitleContainer = _createNode(DIV_TAG);
+            var sTitle = hasToggle ? _createNode(BUTTON_TAG) : _createNode(DIV_TAG);
 
             _addClass(sTitleContainer, 'pm__section-title-wrapper');
             _addClass(sTitle, 'pm__section-title');
@@ -210,7 +211,7 @@ export const _createPreferencesModal = (api) => {
         }
 
         if(sDescriptionData){
-            var sDesc = _createNode('div');
+            var sDesc = _createNode(DIV_TAG);
             _addClass(sDesc, 'pm__section-desc');
 
             sDesc.innerHTML = sDescriptionData;
@@ -255,7 +256,7 @@ export const _createPreferencesModal = (api) => {
                 /**
                  * Create table headers
                  */
-                var trHeadFragment = dom._document.createDocumentFragment();
+                var trHeadFragment = globalObj._dom._document.createDocumentFragment();
                 var trHead = _createNode('tr');
                 _setAttribute(trHead, 'role', 'row');
 
@@ -279,7 +280,7 @@ export const _createPreferencesModal = (api) => {
                 /**
                  * Create table body
                  */
-                var bodyFragment = dom._document.createDocumentFragment();
+                var bodyFragment = globalObj._dom._document.createDocumentFragment();
 
                 for(i=0; i<sCookieTableBody.length; i++){
                     var currentCookieData = sCookieTableBody[i];
@@ -294,7 +295,7 @@ export const _createPreferencesModal = (api) => {
                         var tdValue = currentCookieData[tdKey];
 
                         var td = _createNode('td');
-                        var tdInner = _createNode('div');
+                        var tdInner = _createNode(DIV_TAG);
                         _addClass(td, 'pm__table-td');
                         _setAttribute(td, 'data-column', tdHeaderName);
                         _setAttribute(td, 'headers', 'cc__row-' + tdHeaderName);
@@ -320,55 +321,55 @@ export const _createPreferencesModal = (api) => {
             _appendChild(s, sDescContainer);
         }
 
-        _appendChild(dom._pmBody, s);
+        _appendChild(globalObj._dom._pmBody, s);
 
-        if(dom._pmNewBody)
-            _appendChild(dom._pmNewBody, s);
+        if(globalObj._dom._pmNewBody)
+            _appendChild(globalObj._dom._pmNewBody, s);
         else
-            _appendChild(dom._pmBody, s);
+            _appendChild(globalObj._dom._pmBody, s);
     });
 
     if(acceptAllBtnData || acceptNecessaryBtnData){
 
         if(acceptNecessaryBtnData){
-            if(!dom._pmAcceptNecessaryBtn){
-                dom._pmAcceptNecessaryBtn = _createNode('button');
-                _addClass(dom._pmAcceptNecessaryBtn, 'pm__btn');
-                _appendChild(_pmBtnGroup1, dom._pmAcceptNecessaryBtn);
-                _addEvent(dom._pmAcceptNecessaryBtn, 'click', () => {
+            if(!globalObj._dom._pmAcceptNecessaryBtn){
+                globalObj._dom._pmAcceptNecessaryBtn = _createNode(BUTTON_TAG);
+                _addClass(globalObj._dom._pmAcceptNecessaryBtn, 'pm__btn');
+                _appendChild(_pmBtnGroup1, globalObj._dom._pmAcceptNecessaryBtn);
+                _addEvent(globalObj._dom._pmAcceptNecessaryBtn, 'click', () => {
                     acceptHelper([]);
                 });
             }
 
-            dom._pmAcceptNecessaryBtn.innerHTML = acceptNecessaryBtnData;
+            globalObj._dom._pmAcceptNecessaryBtn.innerHTML = acceptNecessaryBtnData;
         }
 
         if(acceptAllBtnData){
-            if(!dom._pmAcceptAllBtn){
-                dom._pmAcceptAllBtn = _createNode('button');
-                _addClass(dom._pmAcceptAllBtn, 'pm__btn');
-                _appendChild(_pmBtnGroup1, dom._pmAcceptAllBtn);
-                _addEvent(dom._pmAcceptAllBtn, 'click', () => {
+            if(!globalObj._dom._pmAcceptAllBtn){
+                globalObj._dom._pmAcceptAllBtn = _createNode(BUTTON_TAG);
+                _addClass(globalObj._dom._pmAcceptAllBtn, 'pm__btn');
+                _appendChild(_pmBtnGroup1, globalObj._dom._pmAcceptAllBtn);
+                _addEvent(globalObj._dom._pmAcceptAllBtn, 'click', () => {
                     acceptHelper('all');
                 });
             }
 
-            dom._pmAcceptAllBtn.innerHTML = acceptAllBtnData;
+            globalObj._dom._pmAcceptAllBtn.innerHTML = acceptAllBtnData;
         }
     }
 
     if(savePreferencesBtnData){
-        if(!dom._pmSavePreferencesBtn){
-            dom._pmSavePreferencesBtn = _createNode('button');
-            dom._pmSavePreferencesBtn.className = 'pm__btn pm__btn--secondary';
-            _appendChild(_pmBtnGroup2, dom._pmSavePreferencesBtn);
+        if(!globalObj._dom._pmSavePreferencesBtn){
+            globalObj._dom._pmSavePreferencesBtn = _createNode(BUTTON_TAG);
+            globalObj._dom._pmSavePreferencesBtn.className = 'pm__btn pm__btn--secondary';
+            _appendChild(_pmBtnGroup2, globalObj._dom._pmSavePreferencesBtn);
 
-            _addEvent(dom._pmSavePreferencesBtn, 'click', () => {
+            _addEvent(globalObj._dom._pmSavePreferencesBtn, 'click', () => {
                 acceptHelper();
             });
         }
 
-        dom._pmSavePreferencesBtn.innerHTML = savePreferencesBtnData;
+        globalObj._dom._pmSavePreferencesBtn.innerHTML = savePreferencesBtnData;
     }
 
     function acceptHelper(acceptType){
@@ -377,9 +378,9 @@ export const _createPreferencesModal = (api) => {
         api.hide();
     }
 
-    if(dom._pmNewBody) {
-        dom._pm.replaceChild(dom._pmNewBody, dom._pmBody);
-        dom._pmBody = dom._pmNewBody;
+    if(globalObj._dom._pmNewBody) {
+        globalObj._dom._pm.replaceChild(globalObj._dom._pmNewBody, globalObj._dom._pmBody);
+        globalObj._dom._pmBody = globalObj._dom._pmNewBody;
     }
 
     _guiManager(1);
@@ -422,20 +423,20 @@ function _createToggleLabel(label, value, sCurrentCategoryObject, servicesContai
     if(isService){
         _addClass(toggleLabel, 'toggle-service');
         _addClass(toggle, 'toggle-service');
-        _setAttribute(toggle, scriptTagSelector, categoryName);
+        _setAttribute(toggle, SCRIPT_TAG_SELECTOR, categoryName);
 
         // Save reference to toggles to avoid using document.querySelector later on
-        dom._serviceCheckboxInputs[categoryName][value] = toggle;
+        globalObj._dom._serviceCheckboxInputs[categoryName][value] = toggle;
     }else{
-        dom._categoryCheckboxInputs[value] = toggle;
+        globalObj._dom._categoryCheckboxInputs[value] = toggle;
     }
 
     if(!isService){
         ((value)=>{
             _addEvent(toggle, 'click', ()=>{
-                var categoryServicesToggles = dom._serviceCheckboxInputs[value];
+                var categoryServicesToggles = globalObj._dom._serviceCheckboxInputs[value];
 
-                state._customServicesSelection[value] = [];
+                globalObj._state._customServicesSelection[value] = [];
 
                 if(toggle.checked){
                     for(var serviceName in categoryServicesToggles){
@@ -453,19 +454,19 @@ function _createToggleLabel(label, value, sCurrentCategoryObject, servicesContai
         ((categoryName)=>{
             _addEvent(toggle, 'change', ()=>{
 
-                var categoryServicesToggles = dom._serviceCheckboxInputs[categoryName];
-                var categoryToggle = dom._categoryCheckboxInputs[categoryName];
+                var categoryServicesToggles = globalObj._dom._serviceCheckboxInputs[categoryName];
+                var categoryToggle = globalObj._dom._categoryCheckboxInputs[categoryName];
 
-                state._customServicesSelection[categoryName] = [];
+                globalObj._state._customServicesSelection[categoryName] = [];
 
                 for(var serviceName in categoryServicesToggles){
                     const serviceInput = categoryServicesToggles[serviceName];
                     if(serviceInput.checked){
-                        state._customServicesSelection[categoryName].push(serviceInput.value);
+                        globalObj._state._customServicesSelection[categoryName].push(serviceInput.value);
                     }
                 }
 
-                if(state._customServicesSelection[categoryName].length > 0){
+                if(globalObj._state._customServicesSelection[categoryName].length > 0){
                     categoryToggle.checked = true;
                 }else{
                     categoryToggle.checked = false;
@@ -486,15 +487,15 @@ function _createToggleLabel(label, value, sCurrentCategoryObject, servicesContai
      * If consent is valid => retrieve category states from cookie
      * Otherwise use states defined in the userConfig. object
      */
-    if(!state._invalidConsent){
+    if(!globalObj._state._invalidConsent){
         if(isService){
-            var enabledServices = state._enabledServices[categoryName];
+            var enabledServices = globalObj._state._enabledServices[categoryName];
 
             if(enabledServices && _elContains(enabledServices, value)){
                 toggle.checked = true;
             }
 
-        }else if(_elContains(state._savedCookieContent.categories, value)){
+        }else if(_elContains(globalObj._state._savedCookieContent.categories, value)){
             toggle.checked = true;
         }
     }else if(sCurrentCategoryObject.enabled || sCurrentCategoryObject.readOnly){
