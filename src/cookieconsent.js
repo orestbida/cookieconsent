@@ -184,7 +184,12 @@
             /** @type {HTMLElement} */ settings_buttons,
             /** @type {HTMLElement} */ settings_save_btn,
             /** @type {HTMLElement} */ settings_accept_all_btn,
-            /** @type {HTMLElement} */ settings_reject_all_btn;
+            /** @type {HTMLElement} */ settings_reject_all_btn,
+            /** @type {HTMLElement} */ consent_links_imprint,
+			/** @type {HTMLElement} */ consent_links_privacy,
+			/** @type {HTMLElement} */ consent_links,
+			/** @type {HTMLElement} */ privacy_policy_link,
+			/** @type {HTMLElement} */ imprint_link;
 
         /**
          * Update config settings
@@ -566,6 +571,30 @@
                 consent_modal.appendChild(consent_modal_inner);
             }
 
+            			// add links to privacy policy and imprint to modal
+			consent_links = _createNode('div');
+			consent_links.id = 'c-link';
+
+			imprint_link = user_config.languages[lang]['consent_modal']['imprint_link'];
+			if (imprint_link) {
+				consent_links_imprint = _createNode('a');
+				consent_links_imprint.classList.add('cc-link');
+				consent_links_imprint.textContent = imprint_link['text'];
+				consent_links_imprint.setAttribute('href', imprint_link['url']);
+				consent_links.appendChild(consent_links_imprint);
+			}
+
+			privacy_policy_link = user_config.languages[lang]['consent_modal']['privacy_policy_link'];
+			if (privacy_policy_link) {
+				consent_links_privacy = _createNode('a');
+				consent_links_privacy.classList.add('cc-link');
+				consent_links_privacy.textContent = privacy_policy_link['text'];
+				consent_links_privacy.setAttribute('href', privacy_policy_link['url']);
+				consent_links.appendChild(consent_links_privacy);
+			}
+
+			consent_modal_inner.appendChild(consent_links);
+            
             consent_modal_exists = true;
         }
 

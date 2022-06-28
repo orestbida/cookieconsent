@@ -1108,6 +1108,41 @@ html.force--consent.show--consent body{
 }
 /* End bar layout */
 
+/* Privacy and Imprint Links */
+#c-link {
+	display: flex;
+	justify-content: center;
+	padding-top: 10px;
+}
+
+#c-link .cc-link {
+	font-weight: 400;
+	font-size: 0.9em;
+	width: 100%;
+	border-bottom: none;
+	text-decoration: underline;
+}
+
+#c-link .cc-link:first-child {
+	text-align: right;
+}
+
+#c-link .cc-link + .cc-link {
+	margin-left: 15px;
+}
+
+.cloud #c-link {
+	min-width: 170px;
+	line-height: 30px;
+	display: table-row;
+}
+
+.cloud #c-link .cc-link {
+	font-size: 0.85em;
+	vertical-align: bottom;
+}
+/* end Privacy and Imprint Links */
+
 /* Positions */
 #cm.top {
     bottom: auto;
@@ -1339,6 +1374,19 @@ html.force--consent.show--consent body{
     .cc_div .cloud #c-bns{
         margin-top: 1.625em;
     }
+
+    .box #c-link,
+	.bar #c-link {
+		min-width: 170px;
+		line-height: 30px;
+		display: table-row;
+	}
+
+	.box #c-link .cc-link,
+	.bar #c-link .cc-link {
+		font-size: 0.9em;
+		vertical-align: bottom;
+	}
 }
 
 /* Begin IE fixes */
