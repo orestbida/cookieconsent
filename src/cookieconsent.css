@@ -1372,6 +1372,19 @@ html.force--consent.show--consent body {
   .cc_div .cloud #c-bns {
     margin-top: 1.625em;
   }
+
+  .box #c-link,
+  .bar #c-link {
+    min-width: 170px;
+    line-height: 30px;
+    display: table-row;
+  }
+
+  .box #c-link .cc-link,
+  .bar #c-link .cc-link {
+    font-size: 0.9em;
+    vertical-align: bottom;
+  }
 }
 
 /* Begin IE fixes */
