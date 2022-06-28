@@ -19,12 +19,9 @@ import {
 import { _manageExistingScripts, _retrieveEnabledCategoriesAndServices } from '../utils/scripts';
 
 import {
-    config,
-    state,
-    dom,
-    cookieConfig,
-    customEvents,
-    _fireEvent
+    _fireEvent,
+    globalObj,
+    _resetGlobal
 } from './global';
 
 import {
@@ -45,6 +42,13 @@ import {
 } from '../utils/cookies';
 
 import { _setConfig } from './config-init';
+
+import {
+    TOGGLE_CONSENT_MODAL_CLASS,
+    TOGGLE_DISABLE_INTERACTION_CLASS,
+    TOGGLE_PREFERENCES_MODAL_CLASS,
+    OPT_OUT_MODE
+} from '../utils/constants';
 
 export const api = {
 
@@ -68,7 +72,7 @@ export const api = {
          * @returns {string[]}
          */
         var _getCurrentPreferences = () => {
-            var toggles = dom._categoryCheckboxInputs;
+            var toggles = globalObj._dom._categoryCheckboxInputs;
             var states = [];
 
             for(var toggleName in toggles){
@@ -88,14 +92,14 @@ export const api = {
                 typeof categories.length === 'number'
             ){
                 for(var i=0; i<categories.length; i++){
-                    if(_elContains(state._allCategoryNames, categories[i]))
+                    if(_elContains(globalObj._state._allCategoryNames, categories[i]))
                         categoriesToAccept.push(categories[i]);
                 }
             }else if(typeof categories === 'string'){
                 if(categories === 'all')
-                    categoriesToAccept = state._allCategoryNames.slice();
+                    categoriesToAccept = globalObj._state._allCategoryNames.slice();
                 else{
-                    if(_elContains(state._allCategoryNames, categories))
+                    if(_elContains(globalObj._state._allCategoryNames, categories))
                         categoriesToAccept.push(categories);
                 }
             }
@@ -111,72 +115,72 @@ export const api = {
         }
 
         // Add back all the categories set as "readonly/required"
-        for(i=0; i<state._readOnlyCategories.length; i++){
-            if(!_elContains(categoriesToAccept, state._readOnlyCategories[i]))
-                categoriesToAccept.push(state._readOnlyCategories[i]);
+        for(i=0; i<globalObj._state._readOnlyCategories.length; i++){
+            if(!_elContains(categoriesToAccept, globalObj._state._readOnlyCategories[i]))
+                categoriesToAccept.push(globalObj._state._readOnlyCategories[i]);
         }
 
         /**
-         * Keep state._acceptedCategories array updated
+         * Keep globalObj._state._acceptedCategories array updated
          */
-        state._acceptedCategories = categoriesToAccept;
+        globalObj._state._acceptedCategories = categoriesToAccept;
 
         _updateAcceptType();
 
-        if(!customAcceptType) state._customServicesSelection = {};
+        if(!customAcceptType) globalObj._state._customServicesSelection = {};
 
         /**
          * Save previously enabled services to calculate later on which of them was changed
          */
-        state._lastEnabledServices = JSON.parse(JSON.stringify(state._enabledServices));
+        globalObj._state._lastEnabledServices = JSON.parse(JSON.stringify(globalObj._state._enabledServices));
 
 
-        state._allCategoryNames.forEach(categoryName => {
+        globalObj._state._allCategoryNames.forEach(categoryName => {
 
-            var categoryServices = dom._serviceCheckboxInputs[categoryName];
+            var categoryServices = globalObj._dom._serviceCheckboxInputs[categoryName];
 
             /**
              * Stop here if there are no services
              */
             if(_getKeys(categoryServices).length === 0) return;
 
-            const services = state._allDefinedServices[categoryName];
+            const services = globalObj._state._allDefinedServices[categoryName];
             const serviceNames = _getKeys(services);
 
-            state._enabledServices[categoryName] = [];
+            globalObj._state._enabledServices[categoryName] = [];
 
             // If category is marked as readOnly => enable all its services
-            if(_elContains(state._readOnlyCategories, categoryName)){
+            if(_elContains(globalObj._state._readOnlyCategories, categoryName)){
                 serviceNames.forEach(serviceName => {
-                    state._enabledServices[categoryName].push(serviceName);
+                    globalObj._state._enabledServices[categoryName].push(serviceName);
                 });
             }else{
-                if(state._acceptType === 'all'){
+                if(globalObj._state._acceptType === 'all'){
                     if(
                         customAcceptType
-                        && !!state._customServicesSelection[categoryName]
-                        && state._customServicesSelection[categoryName].length > 0
+                        && !!globalObj._state._customServicesSelection[categoryName]
+                        && globalObj._state._customServicesSelection[categoryName].length > 0
                     ){
-                        state._customServicesSelection[categoryName].forEach(serviceName => {
-                            state._enabledServices[categoryName].push(serviceName);
+                        globalObj._state._customServicesSelection[categoryName].forEach(serviceName => {
+                            globalObj._state._enabledServices[categoryName].push(serviceName);
                         });
                     }else{
                         serviceNames.forEach(serviceName => {
-                            state._enabledServices[categoryName].push(serviceName);
+                            globalObj._state._enabledServices[categoryName].push(serviceName);
                         });
                     }
-                }else if(state._acceptType === 'necessary'){
-                    state._enabledServices[categoryName] = [];
+                }else if(globalObj._state._acceptType === 'necessary'){
+                    globalObj._state._enabledServices[categoryName] = [];
                 }else {
-                    if(customAcceptType && !!state._customServicesSelection[categoryName] && state._customServicesSelection[categoryName].length > 0){
-                        state._customServicesSelection[categoryName].forEach(serviceName => {
-                            state._enabledServices[categoryName].push(serviceName);
+                    if(customAcceptType && !!globalObj._state._customServicesSelection[categoryName] && globalObj._state._customServicesSelection[categoryName].length > 0){
+                        globalObj._state._customServicesSelection[categoryName].forEach(serviceName => {
+                            globalObj._state._enabledServices[categoryName].push(serviceName);
                         });
                     }else{
                         for(let serviceName in categoryServices){
                             const serviceToggle = categoryServices[serviceName];
                             if(serviceToggle.checked){
-                                state._enabledServices[categoryName].push(serviceToggle.value);
+                                globalObj._state._enabledServices[categoryName].push(serviceToggle.value);
                             }
                         }
                     }
@@ -198,11 +202,11 @@ export const api = {
             !service
             || !category
             || typeof category !== 'string'
-            || !_elContains(state._allCategoryNames, category)) return false;
+            || !_elContains(globalObj._state._allCategoryNames, category)) return false;
 
-        const servicesInputs = dom._serviceCheckboxInputs[category] || {};
+        const servicesInputs = globalObj._dom._serviceCheckboxInputs[category] || {};
 
-        state._customServicesSelection[category] = [];
+        globalObj._state._customServicesSelection[category] = [];
 
         if(typeof service === 'string'){
             if(service === 'all'){
@@ -258,7 +262,7 @@ export const api = {
     eraseCookies: (cookies, path, domain) => {
         var allCookies = [];
 
-        var configDomain = cookieConfig.domain;
+        var configDomain = globalObj._config.cookie.domain;
 
         var domains = domain
             ? [domain, '.'+domain]
@@ -306,17 +310,17 @@ export const api = {
         /**
          * Set language only if it differs from current
          */
-        if(validatedLanguageCode !== state._currentLanguageCode || forceUpdate === true){
+        if(validatedLanguageCode !== globalObj._state._currentLanguageCode || forceUpdate === true){
 
             const translationLoaded = await _loadTranslationData(validatedLanguageCode);
 
             if(!translationLoaded) return false;
 
-            state._currentLanguageCode = validatedLanguageCode;
+            globalObj._state._currentLanguageCode = validatedLanguageCode;
 
-            if(state._consentModalExists){
+            if(globalObj._state._consentModalExists){
                 _createConsentModal(api);
-                _addDataButtonListeners(dom._consentModalInner, api);
+                _addDataButtonListeners(globalObj._dom._consentModalInner, api);
             }
 
             _createPreferencesModal(api);
@@ -333,14 +337,14 @@ export const api = {
      * @returns {import("./global").UserPreferences}
      */
     getUserPreferences: () => {
-        var currentCategoriesState = !state._invalidConsent && _getCurrentCategoriesState();
+        var currentCategoriesState = !globalObj._state._invalidConsent && _getCurrentCategoriesState();
 
         return {
-            acceptType: state._acceptType,
-            acceptedCategories: !state._invalidConsent ? currentCategoriesState.accepted : [],
-            rejectedCategories: !state._invalidConsent ? currentCategoriesState.rejected : [],
-            acceptedServices: !state._invalidConsent ? state._enabledServices : {},
-            rejectedServices: !state._invalidConsent ? _retrieveRejectedServices() : {}
+            acceptType: globalObj._state._acceptType,
+            acceptedCategories: !globalObj._state._invalidConsent ? currentCategoriesState.accepted : [],
+            rejectedCategories: !globalObj._state._invalidConsent ? currentCategoriesState.rejected : [],
+            acceptedServices: !globalObj._state._invalidConsent ? globalObj._state._enabledServices : {},
+            rejectedServices: !globalObj._state._invalidConsent ? _retrieveRejectedServices() : {}
         };
     },
 
@@ -360,7 +364,7 @@ export const api = {
         var callbackExists = typeof callback === 'function';
 
         // Load script only if not already loaded
-        if(!dom._document.querySelector('script[src="' + src + '"]')){
+        if(!document.querySelector('script[src="' + src + '"]')){
 
             var script = _createNode('script');
 
@@ -382,7 +386,7 @@ export const api = {
             /**
              * Append script to head
              */
-            _appendChild(dom._document.head, script);
+            _appendChild(document.head, script);
         }else{
             callbackExists && callback(true);
         }
@@ -407,30 +411,30 @@ export const api = {
          * add/update only the specified props.
          */
         if(mode === 'update'){
-            state._cookieData = api.getCookie('data');
-            var sameType = typeof state._cookieData === typeof newData;
+            globalObj._state._cookieData = api.getCookie('data');
+            var sameType = typeof globalObj._state._cookieData === typeof newData;
 
-            if(sameType && typeof state._cookieData === 'object'){
-                !state._cookieData && (state._cookieData = {});
+            if(sameType && typeof globalObj._state._cookieData === 'object'){
+                !globalObj._state._cookieData && (globalObj._state._cookieData = {});
 
                 for(var prop in newData){
-                    if(state._cookieData[prop] !== newData[prop]){
-                        state._cookieData[prop] = newData[prop];
+                    if(globalObj._state._cookieData[prop] !== newData[prop]){
+                        globalObj._state._cookieData[prop] = newData[prop];
                         set = true;
                     }
                 }
-            }else if((sameType || !state._cookieData) && state._cookieData !== newData){
-                state._cookieData = newData;
+            }else if((sameType || !globalObj._state._cookieData) && globalObj._state._cookieData !== newData){
+                globalObj._state._cookieData = newData;
                 set = true;
             }
         }else{
-            state._cookieData = newData;
+            globalObj._state._cookieData = newData;
             set = true;
         }
 
         if(set){
-            state._savedCookieContent.data = state._cookieData;
-            _setCookie(cookieConfig.name, JSON.stringify(state._savedCookieContent), true);
+            globalObj._state._savedCookieContent.data = globalObj._state._cookieData;
+            _setCookie(globalObj._config.cookie.name, JSON.stringify(globalObj._state._savedCookieContent), true);
         }
 
         return set;
@@ -443,7 +447,7 @@ export const api = {
      * @returns {any}
      */
     getCookie: (field, cookieName) => {
-        var cookie = _parseCookie(_getSingleCookie(cookieName || cookieConfig.name, true));
+        var cookie = _parseCookie(_getSingleCookie(cookieName || globalObj._config.cookie.name, true));
         return field ? cookie[field] : cookie;
     },
 
@@ -454,8 +458,8 @@ export const api = {
      */
     getConfig: (field) => {
         return field
-            ? config[field] || state._userConfig[field]
-            : {...config, ...state._userConfig, cookie:{...config.cookie}};
+            ? globalObj._config[field] || globalObj._state._userConfig[field]
+            : {...globalObj._config, ...globalObj._state._userConfig, cookie:{...globalObj._config.cookie}};
     },
 
     /**
@@ -464,23 +468,27 @@ export const api = {
      */
     show: (createModal) => {
 
-        if(createModal === true){
+        if(!globalObj._init) return;
+
+        if(createModal && !globalObj._state._consentModalExists){
             _createConsentModal(api);
+            _getModalFocusableData();
+            _addDataButtonListeners(globalObj._dom._consentModal, api);
         }
 
-        if(state._consentModalExists){
+        if(globalObj._state._consentModalExists){
 
-            _addClass(dom._htmlDom, 'show--consent');
+            _addClass(globalObj._dom._htmlDom, TOGGLE_CONSENT_MODAL_CLASS);
 
             /**
              * Update attributes/internal statuses
              */
-            _setAttribute(dom._consentModal, 'aria-hidden', 'false');
-            state._consentModalVisible = true;
+            _setAttribute(globalObj._dom._consentModal, 'aria-hidden', 'false');
+            globalObj._state._consentModalVisible = true;
 
             setTimeout(() => {
-                state._lastFocusedElemBeforeModal = dom._document.activeElement;
-                state._currentModalFocusableElements = state._allConsentModalFocusableElements;
+                globalObj._state._lastFocusedElemBeforeModal = globalObj._dom._document.activeElement;
+                globalObj._state._currentModalFocusableElements = globalObj._state._allConsentModalFocusableElements;
             }, 200);
 
             _log('CookieConsent [TOGGLE]: show consentModal');
@@ -491,15 +499,15 @@ export const api = {
      * Hide consent modal
      */
     hide: () => {
-        if(state._consentModalExists){
-            _removeClass(dom._htmlDom, 'show--consent');
-            _setAttribute(dom._consentModal, 'aria-hidden', 'true');
-            state._consentModalVisible = false;
+        if(globalObj._state._consentModalExists){
+            _removeClass(globalObj._dom._htmlDom, TOGGLE_CONSENT_MODAL_CLASS);
+            _setAttribute(globalObj._dom._consentModal, 'aria-hidden', 'true');
+            globalObj._state._consentModalVisible = false;
 
             setTimeout(() => {
                 //restore focus to the last page element which had focus before modal opening
-                state._lastFocusedElemBeforeModal.focus();
-                state._currentModalFocusableElements = null;
+                globalObj._state._lastFocusedElemBeforeModal.focus();
+                globalObj._state._currentModalFocusableElements = null;
             }, 200);
 
             _log('CookieConsent [TOGGLE]: hide consentModal');
@@ -510,29 +518,32 @@ export const api = {
      * Hide preferences modal
      */
     hidePreferences: () => {
-        _removeClass(dom._htmlDom, 'show--preferences');
-        state._preferencesModalVisible = false;
-        _setAttribute(dom._pm, 'aria-hidden', 'true');
+
+        if(!globalObj._init) return;
+
+        _removeClass(globalObj._dom._htmlDom, TOGGLE_PREFERENCES_MODAL_CLASS);
+        globalObj._state._preferencesModalVisible = false;
+        _setAttribute(globalObj._dom._pm, 'aria-hidden', 'true');
 
         setTimeout(()=>{
-            state._preferencesModalVisibleDelayed = false;
+            globalObj._state._preferencesModalVisibleDelayed = false;
         }, 1);
 
         /**
          * If consent modal is visible, focus him (instead of page document)
          */
-        if(state._consentModalVisible){
-            state._lastFocusedModalElement && state._lastFocusedModalElement.focus();
-            state._currentModalFocusableElements = state._allConsentModalFocusableElements;
+        if(globalObj._state._consentModalVisible){
+            globalObj._state._lastFocusedModalElement && globalObj._state._lastFocusedModalElement.focus();
+            globalObj._state._currentModalFocusableElements = globalObj._state._allConsentModalFocusableElements;
         }else{
             /**
              * Restore focus to last page element which had focus before modal opening
              */
-            state._lastFocusedElemBeforeModal && state._lastFocusedElemBeforeModal.focus();
-            state._currentModalFocusableElements = null;
+            globalObj._state._lastFocusedElemBeforeModal && globalObj._state._lastFocusedElemBeforeModal.focus();
+            globalObj._state._currentModalFocusableElements = null;
         }
 
-        state._clickedInsideModal = false;
+        globalObj._state._clickedInsideModal = false;
 
         _log('CookieConsent [TOGGLE]: hide preferencesModal');
     },
@@ -545,10 +556,10 @@ export const api = {
     acceptedCategory: (category) => {
         var categories;
 
-        if(!state._invalidConsent || config.mode === 'opt-in')
+        if(!globalObj._state._invalidConsent || globalObj._config.mode === 'opt-in')
             categories = _getCurrentCategoriesState().accepted || [];
-        else  // mode is 'opt-out'
-            categories = state._defaultEnabledCategories;
+        else  // mode is OPT_OUT_MODE
+            categories = globalObj._state._defaultEnabledCategories;
 
         return _elContains(categories, category);
     },
@@ -561,20 +572,21 @@ export const api = {
      * @returns {boolean}
      */
     acceptedService: (service, category) => {
-        return _elContains(state._enabledServices[category] || [], service);
+        return _elContains(globalObj._state._enabledServices[category] || [], service);
     },
 
     /**
      * Show preferences modal
      */
     showPreferences: () => {
+        if(!globalObj._init) return;
 
-        _addClass(dom._htmlDom, 'show--preferences');
-        _setAttribute(dom._pm, 'aria-hidden', 'false');
-        state._preferencesModalVisible = true;
+        _addClass(globalObj._dom._htmlDom, TOGGLE_PREFERENCES_MODAL_CLASS);
+        _setAttribute(globalObj._dom._pm, 'aria-hidden', 'false');
+        globalObj._state._preferencesModalVisible = true;
 
         setTimeout(()=>{
-            state._preferencesModalVisibleDelayed = true;
+            globalObj._state._preferencesModalVisibleDelayed = true;
         }, 1);
 
         /**
@@ -582,20 +594,20 @@ export const api = {
          */
         setTimeout(() => {
             // If there is no consent-modal, keep track of the last focused elem.
-            if(!state._consentModalVisible){
-                state._lastFocusedElemBeforeModal = dom._document.activeElement;
+            if(!globalObj._state._consentModalVisible){
+                globalObj._state._lastFocusedElemBeforeModal = globalObj._dom._document.activeElement;
             }else{
-                state._lastFocusedModalElement = dom._document.activeElement;
+                globalObj._state._lastFocusedModalElement = globalObj._dom._document.activeElement;
             }
 
-            if (state._allPreferencesModalFocusableElements.length === 0) return;
+            if (globalObj._state._allPreferencesModalFocusableElements.length === 0) return;
 
-            if(state._allPreferencesModalFocusableElements[3]){
-                state._allPreferencesModalFocusableElements[3].focus();
+            if(globalObj._state._allPreferencesModalFocusableElements[3]){
+                globalObj._state._allPreferencesModalFocusableElements[3].focus();
             }else{
-                state._allPreferencesModalFocusableElements[0].focus();
+                globalObj._state._allPreferencesModalFocusableElements[0].focus();
             }
-            state._currentModalFocusableElements = state._allPreferencesModalFocusableElements;
+            globalObj._state._currentModalFocusableElements = globalObj._state._allPreferencesModalFocusableElements;
         }, 200);
 
         _log('CookieConsent [TOGGLE]: show preferencesModal');
@@ -606,7 +618,7 @@ export const api = {
      * @returns {boolean}
      */
     validConsent: () => {
-        return !state._invalidConsent;
+        return !globalObj._state._invalidConsent;
     },
 
     /**
@@ -614,55 +626,54 @@ export const api = {
      * @param {import("./global").UserConfig} conf
      */
     run: async (conf) => {
-
-        if(!dom._document.getElementById('cc-main')){
+        if(!globalObj._dom._ccMain){
 
             // configure all parameters
             _setConfig(conf);
 
             // Don't run plugin if bot is detected
-            if(state._botAgentDetected) return;
+            if(globalObj._state._botAgentDetected) return;
 
             // Retrieve cookie value (if set)
-            state._savedCookieContent = _parseCookie(_getSingleCookie(cookieConfig.name, true));
+            globalObj._state._savedCookieContent = _parseCookie(_getSingleCookie(globalObj._config.cookie.name, true));
 
             // Retrieve "_consentId"
-            state._consentId = state._savedCookieContent.consentId;
+            globalObj._state._consentId = globalObj._state._savedCookieContent.consentId;
 
             // If "_consentId" is present => assume that consent was previously given
-            var cookieConsentAccepted = state._consentId !== undefined;
+            var cookieConsentAccepted = globalObj._state._consentId !== undefined;
 
             // Retrieve "_consentTimestamp"
-            state._consentTimestamp = state._savedCookieContent.consentTimestamp;
-            state._consentTimestamp && (state._consentTimestamp = new Date(state._consentTimestamp));
+            globalObj._state._consentTimestamp = globalObj._state._savedCookieContent.consentTimestamp;
+            globalObj._state._consentTimestamp && (globalObj._state._consentTimestamp = new Date(globalObj._state._consentTimestamp));
 
             // Retrieve "_lastConsentTimestamp"
-            state._lastConsentTimestamp = state._savedCookieContent.lastConsentTimestamp;
-            state._lastConsentTimestamp && (state._lastConsentTimestamp = new Date(state._lastConsentTimestamp));
+            globalObj._state._lastConsentTimestamp = globalObj._state._savedCookieContent.lastConsentTimestamp;
+            globalObj._state._lastConsentTimestamp && (globalObj._state._lastConsentTimestamp = new Date(globalObj._state._lastConsentTimestamp));
 
             // Retrieve "data"
-            var dataTemp = state._savedCookieContent.data;
-            state._cookieData = typeof dataTemp !== 'undefined' ? dataTemp : null;
+            var dataTemp = globalObj._state._savedCookieContent.data;
+            globalObj._state._cookieData = typeof dataTemp !== 'undefined' ? dataTemp : null;
 
             // If revision is enabled and current value !== saved value inside the cookie => revision is not valid
-            if(state._revisionEnabled && cookieConsentAccepted && state._savedCookieContent.revision !== config.revision)
-                state._validRevision = false;
+            if(globalObj._state._revisionEnabled && cookieConsentAccepted && globalObj._state._savedCookieContent.revision !== globalObj._config.revision)
+                globalObj._state._validRevision = false;
 
             // If consent is not valid => create consent modal
-            state._consentModalExists = state._invalidConsent = (!cookieConsentAccepted || !state._validRevision || !state._consentTimestamp || !state._lastConsentTimestamp || !state._consentId);
+            globalObj._state._consentModalExists = globalObj._state._invalidConsent = (!cookieConsentAccepted || !globalObj._state._validRevision || !globalObj._state._consentTimestamp || !globalObj._state._lastConsentTimestamp || !globalObj._state._consentId);
 
-            _log('CookieConsent [STATUS] valid consent:', !state._invalidConsent);
+            _log('CookieConsent [STATUS] valid consent:', !globalObj._state._invalidConsent);
 
             /**
              * Retrieve last accepted categories from cookie
              * and calculate acceptType
              */
-            if(!state._invalidConsent){
-                state._acceptedCategories = state._savedCookieContent.categories,
-                state._acceptType = _getAcceptType(_getCurrentCategoriesState());
-                state._enabledServices = state._savedCookieContent.services || {};
+            if(!globalObj._state._invalidConsent){
+                globalObj._state._acceptedCategories = globalObj._state._savedCookieContent.categories,
+                globalObj._state._acceptType = _getAcceptType(_getCurrentCategoriesState());
+                globalObj._state._enabledServices = globalObj._state._savedCookieContent.services || {};
             }else{
-                if(config.mode === 'opt-out'){
+                if(globalObj._config.mode === OPT_OUT_MODE){
                     _retrieveEnabledCategoriesAndServices();
                 }
             }
@@ -679,25 +690,54 @@ export const api = {
             _getModalFocusableData();
             _addDataButtonListeners(null, api);
 
-            if(config.autoShow && state._consentModalExists)
+            if(globalObj._config.autoShow && globalObj._state._consentModalExists)
                 api.show();
 
             // Add class to enable animations/transitions
-            setTimeout(() => {_addClass(dom._ccMain, 'c--anim');}, 100);
+            setTimeout(() => {_addClass(globalObj._dom._ccMain, 'c--anim');}, 100);
 
             // Accessibility :=> if tab pressed => trap focus inside modal
             _handleFocusTrap(api);
 
             // If consent is valid
-            if(!state._invalidConsent){
+            if(!globalObj._state._invalidConsent){
                 _manageExistingScripts();
-                _fireEvent(customEvents._onConsent);
+                _fireEvent(globalObj._customEvents._onConsent);
             }else{
-                if(config.mode === 'opt-out'){
-                    _log('CookieConsent [CONFIG] mode=\'' + config.mode + '\', default enabled categories:', state._defaultEnabledCategories);
-                    _manageExistingScripts(state._defaultEnabledCategories);
+                if(globalObj._config.mode === OPT_OUT_MODE){
+                    _log('CookieConsent [CONFIG] mode=\'' + globalObj._config.mode + '\', default enabled categories:', globalObj._state._defaultEnabledCategories);
+                    _manageExistingScripts(globalObj._state._defaultEnabledCategories);
                 }
             }
         }
+    },
+
+    /**
+     * Reset cookieconsent.
+     * @param {boolean} eraseCookie Delete plugin's cookie
+     * @returns void
+     */
+    reset: (eraseCookie) => {
+
+        if(!globalObj._init) return;
+
+        globalObj._init = false;
+
+        if(eraseCookie === true){
+            api.eraseCookies(globalObj._config.cookie.name, globalObj._config.cookie.path, globalObj._config.cookie.domain);
+        }
+
+        globalObj._dom._ccMain && globalObj._dom._ccMain.remove();
+        _removeClass(globalObj._dom._htmlDom, TOGGLE_DISABLE_INTERACTION_CLASS);
+        _removeClass(globalObj._dom._htmlDom, TOGGLE_PREFERENCES_MODAL_CLASS);
+        _removeClass(globalObj._dom._htmlDom, TOGGLE_CONSENT_MODAL_CLASS);
+
+        const resetGlobal = _resetGlobal();
+
+        globalObj._state = resetGlobal._state;
+        globalObj._dom = resetGlobal._dom;
+        globalObj._config = resetGlobal._config;
+        globalObj._callbacks = resetGlobal._callbacks;
+        globalObj._customEvents = resetGlobal._customEvents;
     }
 };
