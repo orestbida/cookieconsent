@@ -191,6 +191,7 @@ $sections-padding: 1em 1.3em;
             padding: 0!important;
             min-width: auto!important;
             font-size: 1em;
+            overflow: hidden;
 
             &::after,
             &::before {
@@ -281,7 +282,7 @@ $sections-padding: 1em 1.3em;
             }
 
             &--close{
-                display: block!important;
+                display: block;
             }
         }
 
