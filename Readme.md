@@ -12,7 +12,7 @@ changes. Thanks and credits to [Orest Bida](https://github.com/orestbida/cookiec
 </div>
 <div align="center" style="text-align: center; max-width: 770px; margin: 0 auto;">
 
-A __lightweight__ & __gdpr compliant__ cookie consent plugin written in plain javascript. An "all-in-one" solution which also allows you to write your cookie policy inside it without the need of having a dedicated page.
+A __lightweight__ & __gdpr compliant__ cookie consent plugin written in plain javascript.
 
 </div>
 <div style="padding-top: .6em;">
@@ -22,17 +22,20 @@ A __lightweight__ & __gdpr compliant__ cookie consent plugin written in plain ja
 </div>
 
 ## Table of contents
-1. [Key features](#key-features)
-2. [Installation & Usage](#installation--usage)
-4. [Layout options & customization](#layout-options--customization)
-5. [API methods](#api-methods)
-6. [Available callbacks](#available-callbacks)
-7. [All configuration options](#all-configuration-options)
-8. [How to block/manage scripts](#how-to-blockmanage-scripts)
-9. [Configuration examples](#full-example-configurations)
-10. [How to enable/manage revisions](#how-to-enablemanage-revisions)
-11. [FAQ](#faq)
-12. [License](#license)
+- [Table of contents](#table-of-contents)
+- [Key features](#key-features)
+- [Installation & Usage](#installation--usage)
+- [Layout options & customization](#layout-options--customization)
+- [How to block/manage scripts](#how-to-blockmanage-scripts)
+- [API methods](#api-methods)
+- [Available `data-cc` actions](#available-data-cc-actions)
+- [Available callbacks](#available-callbacks)
+  - [All configuration options](#all-configuration-options)
+- [Full example configurations](#full-example-configurations)
+  - [How to configure languages & cookie settings](#how-to-configure-languages--cookie-settings)
+- [How to enable/manage revisions](#how-to-enablemanage-revisions)
+- [FAQ](#faq)
+- [License](#license)
 
 ## Key features
 - __Lightweight__
@@ -49,8 +52,8 @@ A __lightweight__ & __gdpr compliant__ cookie consent plugin written in plain ja
 
     ```bash
     # CDN links
-    https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@v2.8.0/dist/cookieconsent.js
-    https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@v2.8.0/dist/cookieconsent.css
+    https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@v2.8.1/dist/cookieconsent.js
+    https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@v2.8.1/dist/cookieconsent.css
     ```
 
     Thanks to [Till Sanders](https://github.com/tillsanders) for bringing the plugin on npm.
@@ -63,14 +66,18 @@ A __lightweight__ & __gdpr compliant__ cookie consent plugin written in plain ja
 1. Import the plugin: add a `script` tag pointing to `cookieconsent.js`
     ```html
     <html>
-        <head> <!-- head content --> </head>
+        <head>
+            <!-- head content -->
+            <!-- Deferred CSS loading (recommended) -->
+            <link rel="stylesheet" href="<path-to-cookieconsent.css>" media="print" onload="this.media='all'">
+        </head>
         <body>
             <!-- body content -->
             <script defer src="<path-to-cookieconsent.js>"></script>
         </body>
     </html>
     ```
-    <span>Note: replace `<path-to-cookieconsent.js>` with a valid path!</span>
+    <span>Note: replace `<path-to-cookieconsent.js>` and `<path-to-cookieconsent.css>` with valid paths!</span>
     <br>
 
 3. Configure and run

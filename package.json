@@ -1,8 +1,14 @@
 {
   "name": "vanilla-cookieconsent",
-  "version": "3.0.0-beta.1",
+  "version": "v2.8.1",
   "description": "🍪 Simple cross-browser cookie-consent plugin written in vanilla js.",
   "main": "dist/cookieconsent.js",
+  "files": [
+    "src",
+    "dist",
+    "types"
+  ],
+  "types": "types/types.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
