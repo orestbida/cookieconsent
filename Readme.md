@@ -1,8 +1,3 @@
-[Forked](https://github.com/orestbida/cookieconsent) to publish in the NPM registry. No further
-changes. Thanks and credits to [Orest Bida](https://github.com/orestbida/cookieconsent).
-
----
-
 <h1 align="center" style="text-align: center;">Cookie Consent</h1>
 <div align="center" style="text-align: center;">
 
