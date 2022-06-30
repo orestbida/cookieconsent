@@ -585,6 +585,7 @@ CookieConsent settings modal
     margin: 0;
     font-weight: initial;
     position: relative;
+    overflow: hidden;
 }
 
 #s-c-bnc{
@@ -624,7 +625,7 @@ CookieConsent settings modal
         background: transparent;
         border-radius: 0 0.250em 0.250em 0;
     }
-    
+
     #s-bl::-webkit-scrollbar-thumb{
         border: 0.25em solid var(--cc-bg);
         background: #cfd5db;
@@ -657,7 +658,7 @@ CookieConsent settings modal
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
-    user-select: none;  
+    user-select: none;
     vertical-align: middle;
 }
 
@@ -741,7 +742,7 @@ CookieConsent settings modal
     background: var(--cc-cookie-category-block-bg-hover);
 }
 
-#s-bl table { 
+#s-bl table {
     text-align: left;
     border-collapse: collapse;
     width: 100%;
@@ -750,8 +751,8 @@ CookieConsent settings modal
     overflow: hidden;
 }
 
-#s-bl td, 
-#s-bl th { 
+#s-bl td,
+#s-bl th {
     padding: 0.8em 0.625em;
     text-align: left;
     vertical-align: top;
@@ -759,7 +760,7 @@ CookieConsent settings modal
     padding-left: 1.2em;
 }
 
-#s-bl th { 
+#s-bl th {
 	font-family: inherit;
     padding: 1.2em 1.2em;
 }
@@ -1066,18 +1067,18 @@ html.force--consent.show--consent body{
 }
 
 /* Force table to not be like tables anymore */
-.cc_div .bar #s-bl table, 
-.cc_div .bar #s-bl thead, 
-.cc_div .bar #s-bl tbody, 
-.cc_div .bar #s-bl th, 
-.cc_div .bar #s-bl td, 
+.cc_div .bar #s-bl table,
+.cc_div .bar #s-bl thead,
+.cc_div .bar #s-bl tbody,
+.cc_div .bar #s-bl th,
+.cc_div .bar #s-bl td,
 .cc_div .bar #s-bl tr,
-.cc_div .bar #s-cnt{ 
-    display: block; 
+.cc_div .bar #s-cnt{
+    display: block;
 }
 
 /* Hide table headers (but not display: none;, for accessibility) */
-.cc_div .bar #s-bl thead tr{ 
+.cc_div .bar #s-bl thead tr{
     position: absolute;
     top: -9999px;
     left: -9999px;
@@ -1088,14 +1089,14 @@ html.force--consent.show--consent body{
     border-color: var(--cc-cookie-table-border);
 }
 
-.cc_div .bar #s-bl td { 
+.cc_div .bar #s-bl td {
     /* Behave  like a "row" */
     border: none;
     position: relative;
-    padding-left: 35%; 
+    padding-left: 35%;
 }
 
-.cc_div .bar #s-bl td:before { 
+.cc_div .bar #s-bl td:before {
     position: absolute;
     left: 1em;
     padding-right: 0.625em;
@@ -1220,15 +1221,15 @@ html.force--consent.show--consent body{
     .cc_div .bar #s-bl{
 		padding: 1.3em;
     }
-    
+
 	#s-hdr,
     .cc_div .bar #s-hdr{
         padding: 0 1.3em;
     }
 
     /** dynamic table layout **/
-    #s-bl table { 
-        width: 100%; 
+    #s-bl table {
+        width: 100%;
     }
 
     #s-inr.bns-t{
@@ -1250,18 +1251,18 @@ html.force--consent.show--consent body{
     }
 
     /* Force table to not be like tables anymore */
-    #s-bl table, 
-    #s-bl thead, 
-    #s-bl tbody, 
-    #s-bl th, 
-    #s-bl td, 
+    #s-bl table,
+    #s-bl thead,
+    #s-bl tbody,
+    #s-bl th,
+    #s-bl td,
     #s-bl tr,
-    #s-cnt{ 
-        display: block; 
+    #s-cnt{
+        display: block;
     }
 
     /* Hide table headers (but not display: none;, for accessibility) */
-    #s-bl thead tr{ 
+    #s-bl thead tr{
         position: absolute;
         top: -9999px;
         left: -9999px;
@@ -1272,14 +1273,14 @@ html.force--consent.show--consent body{
         border-color: var(--cc-cookie-table-border);
     }
 
-    #s-bl td { 
+    #s-bl td {
         /* Behave  like a "row" */
         border: none;
         position: relative;
-        padding-left: 35%; 
+        padding-left: 35%;
     }
 
-    #s-bl td:before { 
+    #s-bl td:before {
         position: absolute;
         left: 1em;
         padding-right: 0.625em;

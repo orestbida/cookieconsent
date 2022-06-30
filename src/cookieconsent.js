@@ -243,7 +243,11 @@
             if(user_config['use_rfc_cookie'] === true)
                 _config.use_rfc_cookie = true;
 
-            if(user_config['hide_from_bots'] === true){
+            if(typeof user_config['hide_from_bots'] === "boolean"){
+                _config.hide_from_bots = user_config['hide_from_bots'];
+            }
+
+            if(_config.hide_from_bots){
                 is_bot = navigator &&
                     ((navigator.userAgent && /bot|crawl|spider|slurp|teoma/i.test(navigator.userAgent)) || navigator.webdriver);
             }
@@ -260,22 +264,6 @@
 
             _config.current_lang = _resolveCurrentLang(user_config.languages, user_config['current_lang']);
         }
-
-        // /**
-        //  * Print consent date
-        //  */
-        // var _printConsentDateHTML = function(){
-        //     if(!consent_date) return;
-
-        //     var consent_date_elements = document.querySelectorAll('[data-cc="consent-date"]');
-        //     var last_consent_update_elements = document.querySelectorAll('[data-cc="last-consent-update"]');
-
-        //     for(var i=0; i<consent_date_elements.length; i++)
-        //         consent_date_elements[i].textContent = consent_date.toLocaleString();
-
-        //     for(var i=0; i<last_consent_update_elements.length; i++)
-        //         last_consent_update_elements[i].textContent = last_consent_update.toLocaleString();
-        // }
 
         /**
          * Add an onClick listeners to all html elements with data-cc attribute
@@ -335,8 +323,6 @@
                 _cookieconsent.hideSettings();
                 _cookieconsent.hide();
             }
-
-            //_printConsentDateHTML();
         }
 
         /**
@@ -1188,8 +1174,6 @@
 
                 _setCookie(_config.cookie_name, JSON.stringify(saved_cookie_content));
                 _manageExistingScripts();
-
-                //_printConsentDateHTML();
             }
 
             if(invalid_consent){
@@ -1264,7 +1248,11 @@
          */
         var _uuidv4 = function(){
             return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, function(c){
-                return (c ^ (window.crypto || window.msCrypto).getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+                try{
+                    return (c ^ (window.crypto || window.msCrypto).getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+                }catch(e){
+                    return '';
+                }
             });
         }
 
@@ -2089,7 +2077,6 @@
 
             document.cookie = cookieStr;
 
-            _log("CookieConsent [SET_COOKIE]: cookie '" + name + "'=", JSON.parse(value));
             _log("CookieConsent [SET_COOKIE]: '" + name + "' expires after " + cookie_expiration + " day(s)");
         }
 
