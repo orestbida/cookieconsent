@@ -871,7 +871,6 @@ Below a table which sums up all of the available options (must be passed to the 
 
     </p>
     </details>
-- More to be added ...
 
 ### How to configure languages & cookie settings
 Languages is an object which basically holds all of the text/html of your cookie modals in different languages. In here you can define `cookie categories`, `cookie tables`, `opt-in/out toggle` for each category and more. For each language, a `consent_modal` object and a `settings_modal` object must be configured.
