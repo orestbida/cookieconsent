@@ -16,7 +16,6 @@ jobs:
         token: ${{ secrets.NPM_TOKEN }}
         access: public
         tag: latest
-        dry-run: true
 
   push-to-npm-registry-as-next:
     if: "github.event.release.prerelease"
@@ -29,4 +28,3 @@ jobs:
         token: ${{ secrets.NPM_TOKEN }}
         access: public
         tag: next
-        dry-run: true
