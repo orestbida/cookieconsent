@@ -73,7 +73,7 @@ declare global {
         description: string
         toggle?: ToggleSetting
         cookie_table_headers?: Record<string, string>[]
-        cookie_table?: Record<string, string>[]
+        cookie_table?: Record<string, string | boolean>[]
     }
 
     interface SettingsModalLanguageSetting {
@@ -81,6 +81,8 @@ declare global {
         save_settings_btn?: string
         accept_all_btn?: string
         reject_all_btn?: string
+        close_btn_label?: string
+        cookie_table_headers: Record<string, string>[]
         blocks?: BlockSetting[]
     }
 
