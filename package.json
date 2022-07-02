@@ -1,6 +1,6 @@
 {
   "name": "vanilla-cookieconsent",
-  "version": "v2.8.1",
+  "version": "v2.8.2",
   "description": "🍪 Simple cross-browser cookie-consent plugin written in vanilla js.",
   "main": "dist/cookieconsent.js",
   "files": [
@@ -14,7 +14,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://tillsanders@github.com/tillsanders/cookieconsent.git"
+    "url": "git+https://github.com/orestbida/cookieconsent.git"
   },
   "keywords": [
     "cookie",
@@ -28,5 +28,5 @@
   "bugs": {
     "url": "https://github.com/orestbida/cookieconsent/issues"
   },
-  "homepage": "https://github.com/orestbida/cookieconsent"
+  "homepage": "https://github.com/orestbida/cookieconsent/tree/v2.8"
 }
