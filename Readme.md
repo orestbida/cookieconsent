@@ -34,7 +34,7 @@ A __lightweight__ & __gdpr compliant__ cookie consent plugin written in plain ja
 
 ## Key features
 - __Lightweight__
-- __Cross-browser__ support (IE8+)
+- __Cross-browser__ support (IE10+)
 - __Standalone__ (no external dependencies needed)
 - __GDPR compliant__
 - __Support for multi language__
