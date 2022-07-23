@@ -116,6 +116,7 @@
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
+    overflow: hidden;
 }
 
 .cc_div a{
@@ -210,7 +211,7 @@
 
 #cm{
     font-family: inherit;
-    padding: 1.1em 1.8em 1.4em 1.8em;
+    padding: 1.1em 1.5em 1.4em 1.5em;
     position: fixed;
     z-index: 1;
     background: #fff;
@@ -482,7 +483,7 @@ CookieConsent settings modal
     overflow-y: overlay;
     overflow-x: hidden;
     height: 100%;
-    padding: 1.3em 2.1em;
+    padding: 1.3em 1.8em;
     display: block;
     width: 100%;
 }
@@ -492,7 +493,7 @@ CookieConsent settings modal
     bottom: 0;
     left: 0;
     right: 0;
-    padding: 1em 2.1em;
+    padding: 1em 1.8em;
     border-top: 1px solid #f1f3f5;
     border-color: var(--cc-section-border);
     height: 4.75em;
@@ -563,7 +564,7 @@ CookieConsent settings modal
     top: 0;
     width: 100%;
     display: table;
-    padding: 0 2.1em;
+    padding: 0 1.8em;
     height: 4.75em;
     vertical-align: middle;
     z-index: 2;

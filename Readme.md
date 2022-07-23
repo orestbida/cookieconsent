@@ -47,8 +47,8 @@ A __lightweight__ & __gdpr compliant__ cookie consent plugin written in plain ja
 
     ```bash
     # CDN links
-    https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@v2.8.2/dist/cookieconsent.js
-    https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@v2.8.2/dist/cookieconsent.css
+    https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@v2.8.3/dist/cookieconsent.js
+    https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@v2.8.3/dist/cookieconsent.css
     ```
 
     Thanks to [Till Sanders](https://github.com/tillsanders) for bringing the plugin on npm.
@@ -871,7 +871,6 @@ Below a table which sums up all of the available options (must be passed to the 
 
     </p>
     </details>
-- More to be added ...
 
 ### How to configure languages & cookie settings
 Languages is an object which basically holds all of the text/html of your cookie modals in different languages. In here you can define `cookie categories`, `cookie tables`, `opt-in/out toggle` for each category and more. For each language, a `consent_modal` object and a `settings_modal` object must be configured.
