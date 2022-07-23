@@ -3,3 +3,4 @@ dev_tools/
 *.py
 *.env
 *.jar
+node_modules
