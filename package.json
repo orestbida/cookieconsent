@@ -12,7 +12,7 @@
   "scripts": {
     "build:css": "postcss ./src/cookieconsent.css -o ./dist/cookieconsent.css",
     "build:js": "terser --config-file terser.config.json ./src/cookieconsent.js -o ./dist/cookieconsent.js",
-    "build": "build:js && build.css"
+    "build": "npm run build:js && npm run build:css"
   },
   "repository": {
     "type": "git",
