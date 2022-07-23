@@ -1,0 +1,21 @@
+{
+    "toplevel": true,
+    "format": {
+        "quote_style": 1,
+        "comments": "/^!/"
+    },
+    "mangle": {
+        "properties": {
+            "regex": "/^_/",
+            "keep_quoted": true
+        }
+    },
+    "compress": {
+        "drop_console": true,
+        "passes": 3,
+        "pure_funcs": [
+            "_log"
+        ],
+        "ecma": 5
+    }
+}
