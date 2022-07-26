@@ -312,11 +312,9 @@ describe("API tests", () =>{
         expect(cookieData).toHaveProperty('new_prop');
     })
 
-    it('Should load script', (next) => {
-        api.loadScript('./config/testScriptLoad.js', (loaded) => {
-            expect(loaded).toBe(true);
-            next();
-        })
+    it('Should load script', async () => {
+        const loaded = await api.loadScript('./config/testScriptLoad.js').catch(reason => reason);
+        expect(loaded).toBe(true);
     })
 
     it('Should autoClearCookies when category is rejected', () => {
