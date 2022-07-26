@@ -15,7 +15,7 @@
         "docs:dev": "vitepress dev docs",
         "docs:build": "node ./docs/generate-sitemap.js && vitepress build docs ",
         "docs:serve": "vitepress serve docs",
-        "test": "jest --env=jsdom ---coverage --verbose --silent ./tests"
+        "test": "jest --env=jsdom --verbose --runInBand --coverage --silent ./tests"
     },
     "repository": {
         "type": "git",
@@ -35,10 +35,10 @@
     "author": "Orest Bida",
     "license": "MIT",
     "devDependencies": {
-        "@babel/core": "^7.18.5",
-        "@babel/preset-env": "^7.18.2",
+        "@babel/core": "^7.18.9",
+        "@babel/preset-env": "^7.18.9",
         "@rollup/plugin-eslint": "^8.0.2",
-        "@types/jest": "^28.1.2",
+        "@types/jest": "^28.1.6",
         "autoprefixer": "^10.4.7",
         "babel-jest": "^28.1.1",
         "cssnano": "^5.1.12",
@@ -46,11 +46,11 @@
         "jest": "^28.1.1",
         "jest-environment-jsdom": "^28.1.1",
         "postcss-combine-duplicated-selectors": "^10.0.3",
-        "postcss-preset-env": "^7.7.1",
-        "rollup": "^2.75.7",
+        "postcss-preset-env": "^7.7.2",
+        "rollup": "^2.77.1",
         "rollup-plugin-postcss": "^4.0.2",
         "rollup-plugin-terser": "^7.0.2",
-        "sass": "^1.52.3",
+        "sass": "^1.54.0",
         "sitemap": "^7.1.1",
         "vitepress": "^1.0.0-alpha.2"
     },
