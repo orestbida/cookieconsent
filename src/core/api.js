@@ -349,37 +349,29 @@ export const api = {
     },
 
     /**
-     * Function which will run after script load
-     * @callback scriptLoaded
-     */
-
-    /**
      * Dynamically load script (append to head)
      * @param {string} src
-     * @param {scriptLoaded} [callback]
      * @param {object[]} [attrs] Custom attributes
+     * @returns {Promise<boolean>} promise
      */
-    loadScript: (src, callback, attrs) => {
+    loadScript: (src, attrs) => {
 
-        var callbackExists = typeof callback === 'function';
+        return new Promise((resolve, reject) => {
 
-        // Load script only if not already loaded
-        if(!document.querySelector('script[src="' + src + '"]')){
+            if(document.querySelector('script[src="' + src + '"]'))
+                return resolve(true);
 
-            var script = _createNode('script');
+            const script = _createNode('script');
 
-            // if an array is provided => add custom attributes
-            if(attrs && attrs.length > 0){
-                for(var i=0; i<attrs.length; ++i){
-                    attrs[i] && _setAttribute(script, attrs[i]['name'], attrs[i]['value']);
-                }
-            }
+            /**
+             * Add custom attributes (if provided)
+             */
+            Array.isArray(attrs) && attrs.forEach(attr => {
+                _setAttribute(script, attr.name, attr.value);
+            });
 
-            // if callback function defined => run callback onload
-            if(callbackExists){
-                script.onload = ()=>{callback(true);};
-                script.onerror = ()=>{callback(false);};
-            }
+            script.onload = () => resolve(true);
+            script.onerror = () => reject(false);
 
             script.src = src;
 
@@ -387,9 +379,7 @@ export const api = {
              * Append script to head
              */
             _appendChild(document.head, script);
-        }else{
-            callbackExists && callback(true);
-        }
+        });
     },
 
     /**
