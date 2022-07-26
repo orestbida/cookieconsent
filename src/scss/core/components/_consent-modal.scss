@@ -493,6 +493,7 @@ $sections-padding: 1em 1.3em;
             min-width: 120px;
             padding-right: 2em;
             padding-left: 2em;
+            flex: 1;
 
             &:nth-child(2){
                 margin: 0 0 0 $btn-margin;
