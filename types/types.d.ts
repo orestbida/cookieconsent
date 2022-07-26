@@ -82,7 +82,7 @@ declare global {
         accept_all_btn?: string
         reject_all_btn?: string
         close_btn_label?: string
-        cookie_table_headers: Record<string, string>[]
+        cookie_table_headers?: Record<string, string>[]
         blocks?: BlockSetting[]
     }
 
@@ -100,6 +100,7 @@ declare global {
         cookie_path?: string
         cookie_domain?: string
         cookie_same_site?: string
+        cookie_name?: string
         use_rfc_cookie?: boolean
         force_consent?: boolean
         revision?: number
