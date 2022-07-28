@@ -54,7 +54,7 @@ Shows the consent modal.
     cc.show();
 
     // show modal (if it doesn't exist, create it)
-    cc.show(0, true);
+    cc.show(true);
     ```
 
 ## hide
@@ -149,7 +149,6 @@ Returns `true` if the specified category was accepted, otherwise `false`.
 
 - **Examples**
     ```javascript
-
     if(cc.acceptedCategory('analytics')){
         // great
     }
@@ -299,31 +298,36 @@ Loads script files (`.js`).
     ```javascript
     function(
         path: string,
-        callback?: function(success: boolean): void,
         attributes?: { name: string, value: string }[]
-    ): void
+    ): Promise<boolean>
     ```
 
 - **Examples** <br>
 
-    Load a script:
-
     ```javascript
-    cc.loadScript('path-to-script.js', function(success){
-        // Check if script was loaded successfully
-        if(success){
-            console.log("script loaded successfully")
-        }
-    });
+    // basic way
+    cc.loadScript('path-to-script.js');
+
+    // recommended way (catch exceptions)
+    cc.loadScript('path-to-script.js')
+        .catch(() => console.log('Script failed to load!'));
+
+    // check if a script is loaded successfully
+    cc.loadScript('path-to-script.js')
+        .then((success) => {
+            if(success) {
+                // script loaded successfully
+            }
+        })
+        .catch(() => console.log('Script failed to load!'));
     ```
 
-    You may also nest multiple `.loadScript` methods:
+    You may also concatenate multiple `.loadScript` methods:
     ```javascript
-    cc.loadScript('path-to-script1.js', function(){
-        cc.loadScript('path-to-script2.js', function(){
-
-        });
-    });
+    cc.loadScript('path-to-script1.js')
+        .then(() => cc.loadScript('path-to-script2.js'))
+        .then(() => cc.loadScript('path-to-script3.js'))
+        .catch(() => console.log('Loading failed'))
     ```
 
     Load script with attributes:
