@@ -355,13 +355,14 @@ export const api = {
      * @returns {Promise<boolean>} promise
      */
     loadScript: (src, attrs) => {
+        let script = document.querySelector('script[src="' + src + '"]');
 
         return new Promise((resolve, reject) => {
 
-            if(document.querySelector('script[src="' + src + '"]'))
+            if(script)
                 return resolve(true);
 
-            const script = _createNode('script');
+            script = _createNode('script');
 
             /**
              * Add custom attributes (if provided)
@@ -371,7 +372,13 @@ export const api = {
             });
 
             script.onload = () => resolve(true);
-            script.onerror = () => reject(false);
+            script.onerror = () => {
+                /**
+                 * Remove script from dom if error is thrown
+                 */
+                script.remove();
+                reject(false);
+            };
 
             script.src = src;
 
