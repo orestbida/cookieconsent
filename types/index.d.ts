@@ -518,11 +518,11 @@ declare namespace CookieConsent {
 
         /**
          * Load '.js' files.
-         * @param path Path pointing to the js file
-         * @param callback Callback function executed after script load
+         * @param src Path pointing to the js file
          * @param attributes Attributes added to the script
+         * @returns Promise<boolean>: true if script is loaded successfully
          */
-        loadScript(path: string, callback?: (loaded: boolean) => void, attributes?: {[key: string]: string}[]): void
+        loadScript(src: string, attributes?: {[key: string]: string}[]): Promise<boolean>
 
         /**
          * Store custom data inside plugin's own cookie.
@@ -559,7 +559,7 @@ declare namespace CookieConsent {
 
         /**
          * Retrieve the user's preferences. Useful for logging purposes.
-         * @returns object
+         * @returns object with the user's preferences
          */
         getUserPreferences(): UserPreferences
 
