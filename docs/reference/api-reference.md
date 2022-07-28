@@ -332,9 +332,7 @@ Loads script files (`.js`).
 
     Load script with attributes:
     ```javascript
-    cookieconsent.loadScript('path-to-script.js', function(){
-        // Script loaded, do something
-    }, [
+    cc.loadScript('path-to-script.js', [
         {name: 'id', value: 'ga_script'},
         {name: 'another-attribute', value: 'value'}
     ]);
