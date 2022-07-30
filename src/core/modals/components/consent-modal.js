@@ -152,9 +152,7 @@ export const _createConsentModal = (api) => {
             globalObj._dom._consentShowPreferencesBtn = _createNode(BUTTON_TAG);
             globalObj._dom._consentShowPreferencesBtn.className = 'cm__btn cm__btn--secondary';
 
-            _addEvent(globalObj._dom._consentShowPreferencesBtn, 'click', () => {
-                api.showPreferences();
-            });
+            _addEvent(globalObj._dom._consentShowPreferencesBtn, 'click', api.showPreferences);
         }
 
         globalObj._dom._consentShowPreferencesBtn.innerHTML = showPreferencesBtnData;

@@ -501,7 +501,7 @@ export const api = {
      * Hide consent modal
      */
     hide: () => {
-        if(globalObj._state._consentModalExists){
+        if(globalObj._state._consentModalExists && globalObj._state._consentModalVisible){
             _removeClass(globalObj._dom._htmlDom, TOGGLE_CONSENT_MODAL_CLASS);
             _setAttribute(globalObj._dom._consentModal, 'aria-hidden', 'true');
             globalObj._state._consentModalVisible = false;

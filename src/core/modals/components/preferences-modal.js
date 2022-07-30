@@ -59,7 +59,7 @@ export const _createPreferencesModal = (api) => {
         globalObj._dom._pmCloseBtn = _createNode(BUTTON_TAG);
         _addClass(globalObj._dom._pmCloseBtn, 'pm__close-btn');
         _setAttribute(globalObj._dom._pmCloseBtn, 'aria-label', modalData.closeIconLabel || '');
-        _addEvent(globalObj._dom._pmCloseBtn, 'click', ()=>{api.hidePreferences();});
+        _addEvent(globalObj._dom._pmCloseBtn, 'click', api.hidePreferences);
 
         // modal body
         globalObj._dom._pmBody = _createNode(DIV_TAG);
@@ -433,7 +433,7 @@ function _createToggleLabel(label, value, sCurrentCategoryObject, servicesContai
 
     if(!isService){
         ((value)=>{
-            _addEvent(toggle, 'click', ()=>{
+            _addEvent(toggle, 'click', () => {
                 var categoryServicesToggles = globalObj._dom._serviceCheckboxInputs[value];
 
                 globalObj._state._customServicesSelection[value] = [];
@@ -452,7 +452,7 @@ function _createToggleLabel(label, value, sCurrentCategoryObject, servicesContai
     }else{
 
         ((categoryName)=>{
-            _addEvent(toggle, 'change', ()=>{
+            _addEvent(toggle, 'change', () => {
 
                 var categoryServicesToggles = globalObj._dom._serviceCheckboxInputs[categoryName];
                 var categoryToggle = globalObj._dom._categoryCheckboxInputs[categoryName];
