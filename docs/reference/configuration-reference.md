@@ -252,14 +252,16 @@ Callback function executed when the user's preferences — such as accepted cate
 Callback function executed when one of the modals is visible.
 
 - **Type**:
-  ```javascript
-  function(modalName: string): void
-  ```
+    ```javascript
+    function({
+        modalName: string
+    }): void
+    ```
 
 * **Example** <br>
     ```javascript
     cc.run({
-        onModalShow: function(modalName) {
+        onModalShow: function({modalName}) {
             // do something
         }
     })
@@ -267,7 +269,7 @@ Callback function executed when one of the modals is visible.
 
 - **Details**:
 
-    The parameter `modalName` equals to one of the following values:
+    `modalName` equals to one of the following values:
     * `'consentModal'`
     * `'preferencesModal'`
 
@@ -277,14 +279,16 @@ Callback function executed when one of the modals is visible.
 Callback function executed when one of the modals is hidden.
 
 - **Type**:
-  ```javascript
-  function(modalName: string): void
-  ```
+    ```javascript
+    function({
+        modalName: string
+    }): void
+    ```
 
 * **Example** <br>
     ```javascript
     cc.run({
-        onModalHide: function(modalName) {
+        onModalHide: function({modalName}) {
             // do something
         }
     })
@@ -302,12 +306,12 @@ Callback function executed when one of the modals is hidden.
 Tweak main UI aspects such as Layout and Buttons.
 
 - **Type**:
-  ```javascript
-  {
-      consentModal?: {}
-      preferencesModal?: {}
-  }
-  ```
+    ```javascript
+    {
+        consentModal?: {}
+        preferencesModal?: {}
+    }
+    ```
 
 ### guiOptions.consentModal
 

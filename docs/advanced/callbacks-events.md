@@ -92,7 +92,7 @@ This event is triggered when one of the modals is visible.
 
     ```javascript
     cc.run({
-        onModalShow: function(modalName){
+        onModalShow: function({modalName}){
             // do something
         }
     });
@@ -116,7 +116,7 @@ This event is triggered when one of the modals is hidden.
 
     ```javascript
     cc.run({
-        onModalHide: function(modalName){
+        onModalHide: function({modalName}){
             // do something
         }
     });
