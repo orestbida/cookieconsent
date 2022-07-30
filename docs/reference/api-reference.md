@@ -312,12 +312,10 @@ Loads script files (`.js`).
     cc.loadScript('path-to-script.js')
         .catch(() => console.log('Script failed to load!'));
 
-    // check if a script is loaded successfully
+    // do something when the script is loaded successfully
     cc.loadScript('path-to-script.js')
-        .then((success) => {
-            if(success) {
-                // script loaded successfully
-            }
+        .then(() => {
+            // script loaded successfully
         })
         .catch(() => console.log('Script failed to load!'));
     ```
