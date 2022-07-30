@@ -47,6 +47,8 @@ export const _setConfig = (_userConfig) => {
     globalObj._callbacks._onFirstConsent = _userConfig.onFirstConsent;
     globalObj._callbacks._onConsent = _userConfig.onConsent;
     globalObj._callbacks._onChange = _userConfig.onChange;
+    globalObj._callbacks._onModalHide = _userConfig.onModalHide;
+    globalObj._callbacks._onModalShow = _userConfig.onModalShow;
 
     var mode = _userConfig.mode;
     var revision = _userConfig.revision;

@@ -21,7 +21,7 @@ import { _manageExistingScripts, _retrieveEnabledCategoriesAndServices } from '.
 import {
     _fireEvent,
     globalObj,
-    _resetGlobal
+    Global
 } from './global';
 
 import {
@@ -48,7 +48,9 @@ import {
     TOGGLE_DISABLE_INTERACTION_CLASS,
     TOGGLE_PREFERENCES_MODAL_CLASS,
     OPT_OUT_MODE,
-    OPT_IN_MODE
+    OPT_IN_MODE,
+    CONSENT_MODAL_NAME,
+    PREFERENCES_MODAL_NAME
 } from '../utils/constants';
 
 export const api = {
@@ -490,6 +492,8 @@ export const api = {
             }, 200);
 
             _log('CookieConsent [TOGGLE]: show consentModal');
+
+            _fireEvent(globalObj._customEvents._onModalShow, CONSENT_MODAL_NAME);
         }
     },
 
@@ -509,67 +513,9 @@ export const api = {
             }, 200);
 
             _log('CookieConsent [TOGGLE]: hide consentModal');
+
+            _fireEvent(globalObj._customEvents._onModalHide, CONSENT_MODAL_NAME);
         }
-    },
-
-    /**
-     * Hide preferences modal
-     */
-    hidePreferences: () => {
-
-        if(!globalObj._init) return;
-
-        _removeClass(globalObj._dom._htmlDom, TOGGLE_PREFERENCES_MODAL_CLASS);
-        globalObj._state._preferencesModalVisible = false;
-        _setAttribute(globalObj._dom._pm, 'aria-hidden', 'true');
-
-        setTimeout(()=>{
-            globalObj._state._preferencesModalVisibleDelayed = false;
-        }, 1);
-
-        /**
-         * If consent modal is visible, focus him (instead of page document)
-         */
-        if(globalObj._state._consentModalVisible){
-            globalObj._state._lastFocusedModalElement && globalObj._state._lastFocusedModalElement.focus();
-            globalObj._state._currentModalFocusableElements = globalObj._state._allConsentModalFocusableElements;
-        }else{
-            /**
-             * Restore focus to last page element which had focus before modal opening
-             */
-            globalObj._state._lastFocusedElemBeforeModal && globalObj._state._lastFocusedElemBeforeModal.focus();
-            globalObj._state._currentModalFocusableElements = null;
-        }
-
-        globalObj._state._clickedInsideModal = false;
-
-        _log('CookieConsent [TOGGLE]: hide preferencesModal');
-    },
-
-    /**
-     * Returns true if cookie category is accepted
-     * @param {string} category
-     * @returns {boolean}
-     */
-    acceptedCategory: (category) => {
-        var categories;
-
-        if(!globalObj._state._invalidConsent || globalObj._config.mode === OPT_IN_MODE)
-            categories = _getCurrentCategoriesState().accepted || [];
-        else  // mode is OPT_OUT_MODE
-            categories = globalObj._state._defaultEnabledCategories;
-        return _elContains(categories, category);
-    },
-
-    /**
-     * Returns true if the service in the specified
-     * category is accepted/enabled
-     * @param {string} service
-     * @param {string} category
-     * @returns {boolean}
-     */
-    acceptedService: (service, category) => {
-        return _elContains(globalObj._state._enabledServices[category] || [], service);
     },
 
     /**
@@ -608,6 +554,70 @@ export const api = {
         }, 200);
 
         _log('CookieConsent [TOGGLE]: show preferencesModal');
+
+        _fireEvent(globalObj._customEvents._onModalShow, PREFERENCES_MODAL_NAME);
+    },
+
+    /**
+     * Hide preferences modal
+     */
+    hidePreferences: () => {
+
+        if(!globalObj._init) return;
+
+        _removeClass(globalObj._dom._htmlDom, TOGGLE_PREFERENCES_MODAL_CLASS);
+        globalObj._state._preferencesModalVisible = false;
+        _setAttribute(globalObj._dom._pm, 'aria-hidden', 'true');
+
+        setTimeout(()=>{
+            globalObj._state._preferencesModalVisibleDelayed = false;
+        }, 1);
+
+        /**
+         * If consent modal is visible, focus him (instead of page document)
+         */
+        if(globalObj._state._consentModalVisible){
+            globalObj._state._lastFocusedModalElement && globalObj._state._lastFocusedModalElement.focus();
+            globalObj._state._currentModalFocusableElements = globalObj._state._allConsentModalFocusableElements;
+        }else{
+            /**
+             * Restore focus to last page element which had focus before modal opening
+             */
+            globalObj._state._lastFocusedElemBeforeModal && globalObj._state._lastFocusedElemBeforeModal.focus();
+            globalObj._state._currentModalFocusableElements = null;
+        }
+
+        globalObj._state._clickedInsideModal = false;
+
+        _log('CookieConsent [TOGGLE]: hide preferencesModal');
+
+        _fireEvent(globalObj._customEvents._onModalHide, PREFERENCES_MODAL_NAME);
+    },
+
+    /**
+     * Returns true if cookie category is accepted
+     * @param {string} category
+     * @returns {boolean}
+     */
+    acceptedCategory: (category) => {
+        var categories;
+
+        if(!globalObj._state._invalidConsent || globalObj._config.mode === OPT_IN_MODE)
+            categories = _getCurrentCategoriesState().accepted || [];
+        else  // mode is OPT_OUT_MODE
+            categories = globalObj._state._defaultEnabledCategories;
+        return _elContains(categories, category);
+    },
+
+    /**
+     * Returns true if the service in the specified
+     * category is accepted/enabled
+     * @param {string} service
+     * @param {string} category
+     * @returns {boolean}
+     */
+    acceptedService: (service, category) => {
+        return _elContains(globalObj._state._enabledServices[category] || [], service);
     },
 
     /**
@@ -729,12 +739,12 @@ export const api = {
         _removeClass(globalObj._dom._htmlDom, TOGGLE_PREFERENCES_MODAL_CLASS);
         _removeClass(globalObj._dom._htmlDom, TOGGLE_CONSENT_MODAL_CLASS);
 
-        const resetGlobal = _resetGlobal();
+        const newGlobal = new Global();
 
-        globalObj._state = resetGlobal._state;
-        globalObj._dom = resetGlobal._dom;
-        globalObj._config = resetGlobal._config;
-        globalObj._callbacks = resetGlobal._callbacks;
-        globalObj._customEvents = resetGlobal._customEvents;
+        globalObj._state = newGlobal._state;
+        globalObj._dom = newGlobal._dom;
+        globalObj._config = newGlobal._config;
+        globalObj._callbacks = newGlobal._callbacks;
+        globalObj._customEvents = newGlobal._customEvents;
     }
 };
