@@ -199,12 +199,17 @@ export const _fireEvent = (eventName, modalName) => {
      * If it's a show/hide modal callback
      */
     if(modalName){
-        if(eventName === globalObj._customEvents._onModalShow)
-            isFunction(globalObj._callbacks._onModalShow) && globalObj._callbacks._onModalShow(modalName);
-        else
-            isFunction(globalObj._callbacks._onModalHide) && globalObj._callbacks._onModalHide(modalName);
 
-        return dispatchEvent(eventName, modalName);
+        const modalParams = {
+            modalName: modalName
+        };
+
+        if(eventName === globalObj._customEvents._onModalShow)
+            isFunction(globalObj._callbacks._onModalShow) && globalObj._callbacks._onModalShow(modalParams);
+        else
+            isFunction(globalObj._callbacks._onModalHide) && globalObj._callbacks._onModalHide(modalParams);
+
+        return dispatchEvent(eventName, modalParams);
     }
 
     if(eventName === globalObj._customEvents._onFirstConsent){
