@@ -156,7 +156,7 @@ By default the cookie will be set on the root path of your domain/subdomain.
 
 - **Type**:
     ```javascript
-    number | function(accept**Type**: string): number
+    number | function(acceptType: string): number
     ```
 - **Default**: `182`
 
@@ -247,14 +247,55 @@ Callback function executed when the user's preferences — such as accepted cate
   }): void
   ```
 
+## onModalShow
+
+Callback function executed when one of the modals is visible.
+
+- **Type**:
+  ```javascript
+  function(modalName: string): void
+  ```
+
 * **Example** <br>
     ```javascript
     cc.run({
-        onChange: function({cookie, changedPreferences, changedCategories}) {
+        onModalShow: function(modalName) {
             // do something
         }
     })
     ```
+
+- **Details**:
+
+    The parameter `modalName` equals to one of the following values:
+    * `'consentModal'`
+    * `'preferencesModal'`
+
+
+## onModalHide
+
+Callback function executed when one of the modals is hidden.
+
+- **Type**:
+  ```javascript
+  function(modalName: string): void
+  ```
+
+* **Example** <br>
+    ```javascript
+    cc.run({
+        onModalHide: function(modalName) {
+            // do something
+        }
+    })
+    ```
+
+- **Details**:
+
+    The parameter `modalName` equals to one of the following values:
+    * `'consentModal'`
+    * `'preferencesModal'`
+
 
 ## guiOptions
 

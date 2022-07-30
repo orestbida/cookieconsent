@@ -6,12 +6,16 @@ Available callbacks:
 - `onFirstConsent`
 - `onConsent`
 - `onChange`
+- `onModalShow`
+- `onModalHide`
 
 Available events:
 
 - `cc:onFirstConsent`
 - `cc:onConsent`
 - `cc:onChange`
+- `cc:onModalShow`
+- `cc:onModalHide`
 
 ## onFirstConsent
 This event is triggered only the very first time that the user expresses their choice of consent (accept/reject).
@@ -75,6 +79,54 @@ This event is triggered when the user modifies their preferences and only if con
          * event.detail.cookie
          * event.detail.changedCategories
          * event.detail.changedServices
+         */
+
+        // do something
+    });
+    ```
+
+## onModalShow
+This event is triggered when one of the modals is visible.
+
+- **Example** <br>
+
+    ```javascript
+    cc.run({
+        onModalShow: function(modalName){
+            // do something
+        }
+    });
+    ```
+
+    using event listener:
+    ```javascript
+    window.addEventListener('cc:onModalShow', function(event){
+        /**
+         * event.detail.modalName
+         */
+
+        // do something
+    });
+    ```
+
+## onModalHide
+This event is triggered when one of the modals is hidden.
+
+- **Example** <br>
+
+    ```javascript
+    cc.run({
+        onModalHide: function(modalName){
+            // do something
+        }
+    });
+    ```
+
+    using event listener:
+    ```javascript
+    window.addEventListener('cc:onModalHide', function(event){
+        /**
+         * event.detail.modalName
          */
 
         // do something
