@@ -1,4 +1,5 @@
 import { _fireEvent, globalObj } from '../core/global';
+import { OPT_OUT_MODE } from './constants';
 import { _log, _indexOf, _uuidv4, _updateAcceptType, _getRemainingExpirationTimeMS, _getExpiresAfterDaysValue, _elContains, _arrayDiff } from './general';
 import { _manageExistingScripts } from './scripts';
 
@@ -120,7 +121,12 @@ export const _saveCookiePreferences = () => {
     /**
      * Determine if categories were changed from last state (saved in the cookie)
      */
-    globalObj._state._lastChangedCategoryNames = _arrayDiff(globalObj._state._acceptedCategories, globalObj._state._savedCookieContent.categories || []);
+    if(globalObj._config.mode === OPT_OUT_MODE && globalObj._state._invalidConsent){
+        globalObj._state._lastChangedCategoryNames = _arrayDiff(globalObj._state._defaultEnabledCategories, globalObj._state._acceptedCategories);
+    }else{
+        globalObj._state._lastChangedCategoryNames = _arrayDiff(globalObj._state._acceptedCategories, globalObj._state._savedCookieContent.categories || []);
+    }
+
 
     var categoriesWereChanged = globalObj._state._lastChangedCategoryNames.length > 0,
         servicesWereChanged = false;

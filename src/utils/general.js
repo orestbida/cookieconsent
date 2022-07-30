@@ -30,7 +30,7 @@ export const _isObject = (el) => {
 
 /**
  * Retrieves all script elements with 'data-category' attribute
- * + saves their info: category-name and service-name
+ * and save the following attributes: category-name and service
  */
 export const _retrieveScriptElements = () => {
 

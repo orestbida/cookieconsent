@@ -47,7 +47,8 @@ import {
     TOGGLE_CONSENT_MODAL_CLASS,
     TOGGLE_DISABLE_INTERACTION_CLASS,
     TOGGLE_PREFERENCES_MODAL_CLASS,
-    OPT_OUT_MODE
+    OPT_OUT_MODE,
+    OPT_IN_MODE
 } from '../utils/constants';
 
 export const api = {
@@ -553,11 +554,10 @@ export const api = {
     acceptedCategory: (category) => {
         var categories;
 
-        if(!globalObj._state._invalidConsent || globalObj._config.mode === 'opt-in')
+        if(!globalObj._state._invalidConsent || globalObj._config.mode === OPT_IN_MODE)
             categories = _getCurrentCategoriesState().accepted || [];
         else  // mode is OPT_OUT_MODE
             categories = globalObj._state._defaultEnabledCategories;
-
         return _elContains(categories, category);
     },
 
