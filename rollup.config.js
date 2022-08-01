@@ -69,12 +69,7 @@ export default defineConfig(
             plugins: postcss({
                 extract: true,
                 plugins: [
-                    require('postcss-preset-env')({
-                        browsers: [
-                            'last 1 version',
-                            '> 1%'
-                        ]
-                    }),
+                    require('postcss-preset-env')(),
                     require('postcss-combine-duplicated-selectors'),
                     require('autoprefixer'),
                     productionMode && require('cssnano')({
