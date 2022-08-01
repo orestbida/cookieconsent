@@ -65,7 +65,7 @@ export const _manageExistingScripts = (mustEnableCategories) => {
              */
             if(!currScriptInfo._executed){
 
-                var categoryWasJustEnabled = !currScriptService && categoryAccepted;
+                var categoryWasJustEnabled = !currScriptService && !currScriptInfo._runOnDisable && categoryAccepted;
                 var serviceWasJustEnabled = currScriptService && !currScriptInfo._runOnDisable && serviceAccepted;
                 var categoryWasJustDisabled = !currScriptService && currScriptInfo._runOnDisable && !categoryAccepted && _elContains(globalObj._state._lastChangedCategoryNames, currScriptCategory);
                 var serviceWasJustDisabled = currScriptService && currScriptInfo._runOnDisable && !serviceAccepted && _elContains(globalObj._state._lastChangedServices[currScriptCategory] || [], currScriptService);
