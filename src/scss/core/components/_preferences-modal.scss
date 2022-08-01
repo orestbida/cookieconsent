@@ -49,6 +49,8 @@ $toggle-knob-icon-width: 2px;
     }
 
     .pm__title{
+        display: flex;
+        align-items: center;
         flex: 1;
         font-weight: $font-weight-bold;
         padding-right: 2em;
