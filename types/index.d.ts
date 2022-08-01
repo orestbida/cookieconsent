@@ -414,6 +414,20 @@ declare namespace CookieConsent {
         }) => void
 
         /**
+         * Callback fired when one of the modals is visible.
+         */
+        onModalShow?: (param: {
+            modalName: string
+        }) => void
+
+        /**
+         * Callback fired when one of the modals is hidden.
+         */
+        onModalHide?: (param: {
+            modalName: string
+        }) => void
+
+        /**
          * Configure cookie categories.
          */
         categories: {[key: string]: Category}
