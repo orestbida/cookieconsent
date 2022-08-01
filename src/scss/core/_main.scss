@@ -9,8 +9,8 @@ $font-weight-bold: 600;
 
 :root{
     --cc-font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
-    --cc-modal-border-radius: .4em;
-    --cc-btn-border-radius: 4px;
+    --cc-modal-border-radius: .5em;
+    --cc-btn-border-radius: .4em;
 }
 
 #cc-main {
@@ -23,6 +23,8 @@ $font-weight-bold: 600;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
     position: relative;
+    line-height: 1.15;
+    -webkit-text-size-adjust: 100%;
 
     b,
     em,
@@ -62,9 +64,15 @@ $font-weight-bold: 600;
     a,
     button,
     input{
+        font-family: inherit;
+        font-size: 100%;
+        line-height: 1.15;
+        margin: 0;
         outline: revert;
-        outline-offset: .3em;
+        outline-offset: 3.5px;
         cursor: pointer;
+        overflow: hidden;
+        -webkit-appearance: none;
     }
 
     /* Show webkit's "cool" scrollbar only on non mobile screens */

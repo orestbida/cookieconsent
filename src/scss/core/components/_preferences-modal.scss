@@ -1,5 +1,5 @@
 $padding-y: 1em;
-$padding-x: 1.3em;
+$padding-x: 1.4em;
 
 $btn-margin: 6px;
 $btn-height: 41px;
@@ -62,7 +62,6 @@ $toggle-knob-icon-width: 2px;
         border-radius: var(--cc-btn-border-radius);
         border: 1px solid var(--cc-btn-secondary-border-color);
         transition: all .15s ease;
-        overflow: hidden;
 
         &::after,
         &::before{
