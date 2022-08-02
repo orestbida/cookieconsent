@@ -12,7 +12,7 @@ Root (parent) element where the modal will be appended as a last child.
 
 - **Type**: `HTMLElement`
 - **Default**: `document.body`
-- **Example** <br>
+- **Example**: <br>
     ```javascript
     cc.run({
         // set a different root element
@@ -27,14 +27,14 @@ Changes the scripts' activation logic when consent is not valid.
 * **Type**: `string`
 * **Values**: `'opt-in'`, `'opt-out'`
 * **Default**: `'opt-in'`
-* **Details**
+* **Details**:
 
     `opt-in`: scripts — configured under a specific category — will run only if the user accepts that category (GDPR compliant).
 
     `opt-out`: scripts — configured under a specific category which has `enabled: true` — will run automatically (it is generally not GDPR compliant).
     Once the user has provided consent, this option is ignored.
 
-* **Example**
+* **Example**:
 
     Setting the mode on a per-country basis (concept):
     ```javascript
@@ -54,7 +54,7 @@ Automatically show the consent modal if consent is not valid.
 
 - **Type**: `boolean`
 - **Default**: `true`
-- **Example**
+- **Example**:
 
     Disable `autoShow` and show modal after 3 seconds:
 
@@ -79,34 +79,39 @@ Manages consent revisions; useful if you'd like to ask your users again for cons
 
 ## manageScriptTags
 
+Intercepts all `<script>` tags with a `data-category` attribute, and enables them based on the accepted categories.  Check out the [scripts management](/advanced/manage-scripts.html#using-script-tags) section for details and examples.
+
 - **Type**: `boolean`
 - **Default**: `true`
 
-Intercepts all `<script>` tags with a `data-category` attribute, and enables them based on the accepted categories. Check out the [scripts management](/advanced/manage-scripts.html#using-script-tags) section for details and examples.
 
 ## autoClearCookies
 
+Clears cookies when user rejects a specific category. It requires a valid [`autoClear`](/reference/configuration-reference.html#category-autoclear) array.
+
 - **Type**: `boolean`
 - **Default**: `true`
 
-Clears all cookies listed inside a specific category, when the user rejects that category. It requires a valid `autoClear` array. Check out the [categories.autoClear](/reference/configuration-reference.html#categories-autoclear) section.
 
 ## hideFromBots
 
+Stops the plugin's execution when a bot/crawler is detected, to prevent them from indexing the modal's content.
+
 - **Type**: `boolean`
 - **Default**: `true`
-
-Stops the plugin's execution if a bot/crawler is detected, to prevent them from indexing the modal's content (for SEO purposes).
 
 
 ## disablePageInteraction
 
+Creates a dark overlay and blocks the page scroll until consent is expressed.
+
 - **Type**: `boolean`
 - **Default**: `false`
 
-Creates a dark overlay and blocks the page scroll until consent is expressed.
 
 ## cookie
+
+Customize the plugin's cookie.
 
 - **Type**:
     ```javascript
@@ -114,7 +119,7 @@ Creates a dark overlay and blocks the page scroll until consent is expressed.
         name: string,
         domain: string,
         path: string,
-        expiresAfterDays: number | function(acceptType): number,
+        expiresAfterDays: number | (acceptType: string) => number,
         sameSite: string
     }
     ```
@@ -128,49 +133,41 @@ Creates a dark overlay and blocks the page scroll until consent is expressed.
         sameSite: 'Lax'
     }
     ```
-
+::: info
 The cookie is automatically set with the `secure` flag if `https` is detected.
+:::
 
 ### cookie<span></span>.name
 
 - **Type**: `string`
 - **Default**: `'cc_cookie'`
 
-Name of the plugin's cookie.
-
 ### cookie.domain
+
+Current domain/subdomain's name, retrieved automatically.
 
 - **Type**: `string`
 - **Default**: `window.location.hostname`
-
-Current domain/subdomain's name, retrieved automatically.
 
 ### cookie.path
 
 - **Type**: `string`
 - **Default**: `'/'`
 
-By default the cookie will be set on the root path of your domain/subdomain.
-
 ### cookie.expiresAfterDays
+
+Number of days before the cookie expires.
 
 - **Type**:
     ```javascript
-    number | function(acceptType: string): number
+    number | (acceptType: string) => number
     ```
 - **Default**: `182`
+- **Details**:
 
-Number of days before the cookie expires. Some countries require a minimum of 182 days before the consent modal is shown again.
+    This field also accepts a `function` that must return a number.
+    The `acceptType` parameter is equal to [`getUserPreferences().acceptType`](/reference/api-reference.html#getuserpreferences).
 
-This field also accepts a `function` that must return a number!
-
-::: tip acceptType
-
-The `acceptType` parameter is a `string` with one of the following values:
-- `'all'`: user accepted all the categories
-- `'custom'`: user accepted a custom selection
-- `'necessary'`: user accepted only the necessary categories (or rejected all)
-:::
 
 - **Example**: <br>
 
@@ -179,8 +176,10 @@ The `acceptType` parameter is a `string` with one of the following values:
     ```javascript
     cc.run({
         cookie: {
-            expiresAfterDays: function(acceptType){
-                if(acceptType === 'all') return 365.25;
+            expiresAfterDays: (acceptType) => {
+                if(acceptType === 'all')
+                    return 365.25;
+
                 return 182;
             }
         }
@@ -190,9 +189,9 @@ The `acceptType` parameter is a `string` with one of the following values:
 ### cookie.sameSite
 
 - **Type**: `string`
+- **Values**: `'Lax'`, `'Strict'`, `'None'`
 - **Default**: `'Lax'`
 
-By default the cookie is restricted to same-site context only request. Check the official [MDN Docs.](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie/SameSite) for more insight.
 
 ## onFirstConsent
 
@@ -201,18 +200,21 @@ Callback function executed once, on the user's first consent action.
 - **Type**:
   ```javascript
   function({
-      cookie: {} // same value as cc.getCookie()
+      cookie: {} // same as cc.getCookie()
   }): void
   ```
 
-* **Example** <br>
+* **Example**: <br>
     ```javascript
     cc.run({
-        onFirstConsent: function({cookie}) {
+        onFirstConsent: ({cookie}) => {
             // do something
         }
     })
     ```
+::: info
+This callback function is also executed on revision change.
+:::
 
 ## onConsent
 
@@ -225,27 +227,54 @@ Callback function executed on the user's first consent action and after each pag
   }): void
   ```
 
-* **Example** <br>
+* **Example**: <br>
     ```javascript
     cc.run({
-        onConsent: function({cookie}) {
+        onConsent: ({cookie}) => {
             // do something
         }
     })
     ```
+::: info
+This callback function is also executed on revision change.
+:::
+
 
 ## onChange
 
-Callback function executed when the user's preferences — such as accepted categories and/or services — change.
+Callback function executed when the user's preferences — such as accepted categories and services — change.
 
 - **Type**:
   ```javascript
   function({
-      cookie: {},   // same value as cc.getCookie()
+      cookie: {},   // same as cc.getCookie()
       changedCategories: string[],
-      changedPreferences: {[key: string]: string[]}
+      changedPreferences: {[category: string]: string[]}
   }): void
   ```
+- **Example**: <br>
+    ```javascript
+    cc.run({
+        onChange: ({cookie, changedCategories, changedPreferences}) => {
+            if(changedCategories.includes('analytics')){
+
+                if(cc.acceptedCategory('analytics')){
+                    // the analytics category was just enabled
+                }else{
+                    // the analytics category was just disabled
+                }
+
+                if(changedServices['analytics'].includes('Google Analytics')){
+                    if(cc.acceptedService('Google Analytics', 'analytics')){
+                        // Google Analytics was just enabled
+                    }else{
+                        // Google Analytics was just disabled
+                    }
+                }
+            }
+        }
+    })
+    ```
 
 ## onModalShow
 
@@ -258,10 +287,10 @@ Callback function executed when one of the modals is visible.
     }): void
     ```
 
-* **Example** <br>
+* **Example**: <br>
     ```javascript
     cc.run({
-        onModalShow: function({modalName}) {
+        onModalShow: ({modalName}) => {
             // do something
         }
     })
@@ -285,10 +314,10 @@ Callback function executed when one of the modals is hidden.
     }): void
     ```
 
-* **Example** <br>
+* **Example**: <br>
     ```javascript
     cc.run({
-        onModalHide: function({modalName}) {
+        onModalHide: ({modalName}) => {
             // do something
         }
     })
@@ -296,20 +325,20 @@ Callback function executed when one of the modals is hidden.
 
 - **Details**:
 
-    The parameter `modalName` equals to one of the following values:
+    `modalName` equals to one of the following values:
     * `'consentModal'`
     * `'preferencesModal'`
 
 
 ## guiOptions
 
-Tweak main UI aspects such as Layout and Buttons.
+Tweak main UI settings.
 
 - **Type**:
     ```javascript
     {
-        consentModal?: {}
-        preferencesModal?: {}
+        consentModal?: ConsentModalOptions
+        preferencesModal?: PreferencesModalOptions
     }
     ```
 
@@ -337,7 +366,7 @@ Tweak main UI aspects such as Layout and Buttons.
     }
     ```
 
-- Details:
+- **Details**:
 
     All available `layout` and `position` options.
 
@@ -352,7 +381,7 @@ Tweak main UI aspects such as Layout and Buttons.
     Valid `position` syntax: `<positionY> <positionX>`.
     :::
 
-- Example:
+- **Example**:
 
     ```javascript
     guiOptions: {
@@ -387,7 +416,7 @@ Tweak main UI aspects such as Layout and Buttons.
     }
     ```
 
-- Details:
+- **Details**:
 
     All available `layout` and `position` options.
 
@@ -401,7 +430,7 @@ Tweak main UI aspects such as Layout and Buttons.
     Valid `position` syntax: `<positionX>` (if any available).
     :::
 
-- Example:
+- **Example**:
 
     ```javascript
     guiOptions: {
@@ -416,59 +445,92 @@ Tweak main UI aspects such as Layout and Buttons.
 
 ## categories <span class="required">required</span>
 
-- **Type**: `object`
+Use to define your cookie categories.
 
-Example on how to create the `analytics` category:
-```javascript
-cc.run({
-    categories: {
-        analytics: {}
-    }
-})
-```
+- **Type**:
+    ```javascript
+    {[category: string]: {
+        enabled?: boolean,
+        readOnly?: boolean,
+        autoClear?: AutoClear
+    }}
+    ```
 
-### categories.enabled
-- **Type**: `boolean`
-- **Default**: `false`
+- **Example**:
 
-Mark the category as enabled by default.
-
-
-### categories.readOnly
-- **Type**: `boolean`
-- **Default**: `false`
-
-Treat the category as read-only/necessary (always enabled). Enable only on categories which are essential for the proper functioning of your website.
-
-- Example
-
-    set the `necessary` category as read-only:
+    How to define the `analytics` category:
     ```javascript
     cc.run({
         categories: {
-            necessary: {
-                enabled: true,
-                readOnly: true
-            },
             analytics: {}
         }
     })
     ```
 
-### categories.autoClear
+### <span style="opacity: .6">[category]</span>.enabled
+
+Mark the category as enabled by default.
+
+- **Type**: `boolean`
+- **Default**: `false`
+- **Example**: <br>
+    ```javascript
+    cc.run({
+        categories: {
+            necessary: {
+                enabled: true
+            },
+            analytics: {
+                enabled: false
+            }
+        }
+    })
+    ```
+
+
+### <span style="opacity: .6">[category]</span>.readOnly
+
+Treat the category as read-only/necessary (always enabled).
+
+- **Type**: `boolean`
+- **Default**: `false`
+- **Example**:
+    ```javascript
+    cc.run({
+        categories: {
+            necessary: {
+                readOnly: true
+            },
+            analytics: {
+                readOnly: false
+            }
+        }
+    })
+    ```
+
+### <span style="opacity: .6">[category]</span>.autoClear
+
+Clear cookies when the user rejects the cookie category.
+
 - **Type**:
     ```javascript
     {
-        cookies: []
+        cookies: Cookie[]
         reloadPage: false
     }
     ```
+- **Details**:
+    - `autoClear.cookies`: `Cookie[]` array of `Cookie` objects
+    - `autoClear.reloadPage`: `boolean` reload page on clear
 
-Clear cookies when user rejects the cookie category. Available options for the autoClear object:
-
-- `autoClear.cookies`: `[{cookie}]` array of cookie objects
-- `autoClear.reloadPage`: `boolean` reload page on clear
-
+    `Cookie` type:
+    ```javascript
+    {
+        name: string | RegExp,
+        path?: string,
+        domain?: string
+    }
+    ```
 
 * **Example**: <br>
 
@@ -478,7 +540,6 @@ Clear cookies when user rejects the cookie category. Available options for the a
     cc.run({
         categories: {
             analytics: {
-                enabled: false,
                 readOnly: false,
                 autoClear: [
                     {
@@ -493,7 +554,11 @@ Clear cookies when user rejects the cookie category. Available options for the a
     })
     ```
 
-### categories.services
+::: warning
+If you've installed CookieConsent in a subdomain, and the cookie you're trying to erase is in the main domain, you'll have to specify your main domain in the `domain` field.
+:::
+
+### <span style="opacity: .6">[category]</span>.services
 
 
 - **Type**:
@@ -501,19 +566,21 @@ Clear cookies when user rejects the cookie category. Available options for the a
     {
         [service: string]: {
             label?: string,
-            onAccept: () => void,
-            onReject: () => void
+            onAccept?: () => void,
+            onReject?: () => void
         }
     }
     ```
 
 - **Details**:
 
-    `service`: service name (unique) <br>
-    `label`: overwrites the visible name in the preferencesModal (can be html)
+    - `label`: overwrites the visible name in the preferencesModal (can be html)
+    - `onAccept`: callback function executed when the service is accepted
+    - `onReject`: callback function executed when the service is rejected (assuming that it was previously accepted)
 
+* **Example**:
 
-* **Example**: <br>
+    Defining 2 services: `ga` and `new_service`:
     ```javascript
     cc.run({
         categories: {
@@ -521,19 +588,19 @@ Clear cookies when user rejects the cookie category. Available options for the a
                 services: {
                     ga: {
                         label: 'Google Analytics',
-                        onAccept: function() {
+                        onAccept: () => {
                             // enable ga
                         },
-                        onReject: function() {
+                        onReject: () => {
                             // disable ga
                         }
                     },
                     new_service: {
                         label: 'Another Service',
-                        onAccept: function() {
+                        onAccept: () => {
                             // enable new_service
                         },
-                        onReject: function() {
+                        onReject: () => {
                             // disable new_service
                         }
                     }
@@ -543,14 +610,20 @@ Clear cookies when user rejects the cookie category. Available options for the a
     })
     ```
 
+::: info
+The entire category will be treated as enabled/accepted if at least one service is enabled.
+:::
+
 ## language <span class="required">required</span>
 
-- **Type**
+Define your language settings and the translation(s) content.
+
+- **Type**:
     ```javascript
     {
         default: string
         autoDetect?: string
-        translations: {}
+        translations: Translations
     }
     ```
 
@@ -558,20 +631,85 @@ Check out the [Language Config.](/advanced/language-configuration.html).
 
 ### language.default <span class="required">required</span>
 
-- **Type**: `string`
+The desired default language.
 
+- **Type**: `string`
+- **Example**:
+    ```javascript
+    cc.run({
+        language: {
+            default: 'en'
+        }
+    })
+    ```
 
 ### language.autoDetect
 
-Automatically detect and set language — if defined in the config — otherwise use `default`.
+Set the current language dynamically.
 
 - **Type**: `string`
 - **Values**: `'document'`, `'browser'`
+- **Details**: <br>
+    - `'document'`: retrieve language from the `lang` attribute (e.g. `<html lang="en-US">`)
+    - `'browser'`: retrieve the user's browser language via `navigator.language`
 
+    ::: info
+    The detected language will be used only if a valid translation is defined, otherwise the plugin will fallback to the `default` language.
+    :::
 
-Language detection strategies:
-- `'document'`: set language based on the current page's `lang` attribute
-- `'browser'`: detect client's browser's language using `navigator.language`
 
 ### language.translations <span class="required">required</span>
-Section under development.
+
+Define the translation(s) content.
+
+- **Type**:
+    ```javascript
+    {
+        [language: string]: string | {
+            consentModal: ConsentModal,
+            preferencesModal: PreferencesModal
+        }
+    }
+    ```
+- **Details**:
+
+    You can define an `inline` translation object, or specify the path to an `external .json` translation file.
+
+- **Examples**:
+
+    External translation file:
+    ```javascript
+    cc.run({
+        language: {
+            default: 'en',
+            translations: {
+                en: '/assets/translations/en.json'
+            }
+        }
+    })
+    ```
+
+    Inline translation object:
+    ```javascript
+    cc.run({
+        language: {
+            default: 'en',
+            translations: {
+                en: {
+                    consentModal: {
+                        // ...
+                    },
+                    preferencesModal: {
+                        // ...
+                    }
+                }
+            }
+        }
+    })
+    ```
+
+### <span style="opacity: .6">[translation]</span>.consentModal<span class="required">required</span>
+WIP
+
+### <span style="opacity: .6">[translation]</span>.preferencesModal<span class="required">required</span>
+WIP

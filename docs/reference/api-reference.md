@@ -217,13 +217,12 @@ Returns `true` if consent is valid.
     ```
 - **Details**
 
-
     Consent is not valid when at least one of following situations occurs:
     - consent is missing (e.g. user has not yet made a choice)
     - revision numbers don't match
     - the plugin's cookie does not exist/has expired
     - the plugin's cookie is structurally not valid (e.g. empty)
-
+    <br><br>
 
 - **Example**
     ```javascript
@@ -500,4 +499,28 @@ Save custom data into the cookie. Returns `true` if the data was set successfull
     cc.setData({
         value: 'overwriteEverything'
     }); // 'overwriteEverything'
+    ```
+
+## reset
+
+Reset CookieConsent.
+
+- **Type**:
+    ```javascript
+    function(eraseCookie?: boolean): void
+    ```
+
+- **Details**:
+
+    Resets all internal pointers and config settings. You need to call again the `.run()` method with a valid config. object.
+
+    You can also pass the argument `true` to also delete the plugin's cookie. The user will be prompted once again to express their consent.
+
+    ::: warning
+    Once this method is called, the plugin won't be able to detect already executed `script` tags with a `data-category` attribute.
+    :::
+
+- **Example**:
+    ```javascript
+    cc.reset(true);
     ```

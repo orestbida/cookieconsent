@@ -9,13 +9,11 @@ Available callbacks:
 - `onModalShow`
 - `onModalHide`
 
-Available events:
+<br>
 
-- `cc:onFirstConsent`
-- `cc:onConsent`
-- `cc:onChange`
-- `cc:onModalShow`
-- `cc:onModalHide`
+::: info
+To use an event listener, simply prepend `cc:` to the callback name.
+:::
 
 ## onFirstConsent
 This event is triggered only the very first time that the user expresses their choice of consent (accept/reject).
