@@ -17,4 +17,4 @@ Some services — such as GA4 — might re create the deleted cookie and require
 ## Some cookies are not deleted on subdomains
 Some services set their cookies in the main domain even if you are on a sub-domain. The plugin is unaware of this and just searches for cookies in the current sub-domain.
 
-You have to manually specify the `domain` field within each cookie declared in the `autoClear` object. See the [categories.autoClear](/reference/configuration-reference.html#categories-autoclear) section.
+You have to manually specify the `domain` field within each cookie declared in the `autoClear` object. See the [categories.autoClear](/reference/configuration-reference.html#category-autoclear) section.

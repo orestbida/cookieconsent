@@ -516,7 +516,7 @@ Clear cookies when the user rejects the cookie category.
     ```javascript
     {
         cookies: Cookie[]
-        reloadPage: false
+        reloadPage: boolean
     }
     ```
 - **Details**:
