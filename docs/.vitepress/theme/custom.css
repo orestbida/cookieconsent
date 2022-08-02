@@ -365,3 +365,7 @@ nav ul li a[href*="required"]::after{
     height: 1.5em;
     line-height: 1.7em;
 }
+
+.vp-doc li > p:first-child{
+    margin: 0;
+}

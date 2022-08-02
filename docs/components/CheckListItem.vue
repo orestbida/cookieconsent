@@ -7,16 +7,34 @@ export default {
         return {
             colors: {
                 i: {
-                    text: '#E6C888',
-                    icon: '#FCD86D',
+                    light: {
+                        text: '#ce9f28',
+                        icon: '#ce9f28'
+                    },
+                    dark: {
+                        text: '#E6C888',
+                        icon: '#FCD86D'
+                    }
                 },
                 x: {
-                    text: '#F57F7F',
-                    icon: '#FA7070',
+                    light: {
+                        text: '#d76666',
+                        icon: '#d76666'
+                    },
+                    dark: {
+                        text: '#F57F7F',
+                        icon: '#FA7070'
+                    }
                 },
                 v: {
-                    text: '#96E0B1',
-                    icon: '#4ade80',
+                    light: {
+                        text: '#96E0B1',
+                        icon: '#4ade80'
+                    },
+                    dark: {
+                        text: '#96E0B1',
+                        icon: '#4ade80'
+                    }
                 }
             },
             XIcon,
@@ -52,10 +70,18 @@ export default {
 }
 
 .c-checklist__text{
-    color: v-bind(colors[type].text);
+    color: v-bind(colors[type].light.text);
 }
 
 .c-checklist__icon svg{
-    fill: v-bind(colors[type].icon);
+    fill: v-bind(colors[type].light.icon);
+}
+
+.dark .c-checklist__text{
+    color: v-bind(colors[type].dark.text);
+}
+
+.dark .c-checklist__icon svg{
+    fill: v-bind(colors[type].dark.icon);
 }
 </style>

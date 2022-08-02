@@ -8,11 +8,10 @@ All the examples in this section are partial code snippets. They do not represen
 
 ## root
 
-- **Type**: `HTMLElement`
-- **Default**: `document.body`
-
 Root (parent) element where the modal will be appended as a last child.
 
+- **Type**: `HTMLElement`
+- **Default**: `document.body`
 - **Example** <br>
     ```javascript
     cc.run({
@@ -23,16 +22,17 @@ Root (parent) element where the modal will be appended as a last child.
 
 ## mode
 
-Changes the scripts' activation logic when consent is not valid
+Changes the scripts' activation logic when consent is not valid.
 
-- **Type**: `string`
-- **Values**: `'opt-in'`, `'opt-out'`
-- **Default**: `'opt-in'` <br>
+* **Type**: `string`
+* **Values**: `'opt-in'`, `'opt-out'`
+* **Default**: `'opt-in'`
+* **Details**
 
-`opt-in`: scripts — configured under a specific category — will run only if the user accepts that category (GDPR compliant). <br>
+    `opt-in`: scripts — configured under a specific category — will run only if the user accepts that category (GDPR compliant).
 
-`opt-out`: scripts — configured under a specific category which has `enabled: true` — will run automatically (it is generally not GDPR compliant).
-Once the user has provided consent, this option is ignored.
+    `opt-out`: scripts — configured under a specific category which has `enabled: true` — will run automatically (it is generally not GDPR compliant).
+    Once the user has provided consent, this option is ignored.
 
 * **Example**
 
@@ -50,12 +50,11 @@ Once the user has provided consent, this option is ignored.
 
 ## autoShow
 
+Automatically show the consent modal if consent is not valid.
+
 - **Type**: `boolean`
 - **Default**: `true`
-
-Automatically show the consent modal if consent is not valid. Based on your use case, you may turn this option off and use the `.show()` method instead, to programmatically show the modal.
-
-* **Example** <br>
+- **Example**
 
     Disable `autoShow` and show modal after 3 seconds:
 
@@ -69,12 +68,13 @@ Automatically show the consent modal if consent is not valid. Based on your use 
 
 ## revision
 
+Manages consent revisions; useful if you'd like to ask your users again for consent after a change in your cookie/privacy policy.
+
 - **Type**: `number`
 - **Default**: `0`
+- **Details**
 
-Manages consent revisions — which is useful in case you've modified your scripts or your cookie/privacy policy.
-
-The default value `0` means that revision management is disabled. You can set any number different from 0 in order to enable it. Check out the dedicated [revision management](/advanced/revision-management.html) section.
+    The default value `0` means that revision management is disabled. You can set any number different from 0 in order to enable it. Check out the dedicated [revision management](/advanced/revision-management.html) section.
 
 
 ## manageScriptTags
@@ -499,7 +499,7 @@ Clear cookies when user rejects the cookie category. Available options for the a
 - **Type**:
     ```javascript
     {
-        [key: string]: {
+        [service: string]: {
             label?: string,
             onAccept: () => void,
             onReject: () => void
@@ -509,7 +509,7 @@ Clear cookies when user rejects the cookie category. Available options for the a
 
 - **Details**:
 
-    `key`: service name (unique) <br>
+    `service`: service name (unique) <br>
     `label`: overwrites the visible name in the preferencesModal (can be html)
 
 
@@ -544,10 +544,22 @@ Clear cookies when user rejects the cookie category. Available options for the a
     ```
 
 ## language <span class="required">required</span>
-Section under development. Check out the [Language Config.](/advanced/language-configuration.html).
+
+- **Type**
+    ```javascript
+    {
+        default: string
+        autoDetect?: string
+        translations: {}
+    }
+    ```
+
+Check out the [Language Config.](/advanced/language-configuration.html).
 
 ### language.default <span class="required">required</span>
-Section under development.
+
+- **Type**: `string`
+
 
 ### language.autoDetect
 
