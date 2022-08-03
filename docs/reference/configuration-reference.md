@@ -72,7 +72,7 @@ Manages consent revisions; useful if you'd like to ask your users again for cons
 
 - **Type**: `number`
 - **Default**: `0`
-- **Details**
+- **Details**:
 
     The default value `0` means that revision management is disabled. You can set any number different from 0 in order to enable it. Check out the dedicated [revision management](/advanced/revision-management.html) section.
 
@@ -348,10 +348,10 @@ Tweak main UI settings.
 
     ```javascript
     {
-        layout?: string,
-        position?: string,
-        equalWeightButtons?: boolean,
+        layout?: string
+        position?: string
         flipButtons?: boolean
+        equalWeightButtons?: boolean
     }
     ```
 
@@ -398,9 +398,9 @@ Tweak main UI settings.
 
     ```javascript
     {
-        layout?: string,
-        position?: string,
-        flipButtons?: boolean,
+        layout?: string
+        position?: string
+        flipButtons?: boolean
         equalWeightButtons?: boolean
     }
     ```
@@ -410,7 +410,7 @@ Tweak main UI settings.
     ```javascript
     {
         layout: 'box',
-        // position: 'right',
+        position: 'right',
         flipButtons: false,
         equalWeightButtons: true
     }
@@ -435,7 +435,7 @@ Tweak main UI settings.
     ```javascript
     guiOptions: {
         preferencesModal: {
-            layout: 'bar',
+            layout: 'bar wide',
             position: 'left',
             equalWeightButtons: false,
             flipButtons: true
@@ -526,8 +526,8 @@ Clear cookies when the user rejects the cookie category.
     `Cookie` type:
     ```javascript
     {
-        name: string | RegExp,
-        path?: string,
+        name: string | RegExp
+        path?: string
         domain?: string
     }
     ```
@@ -555,11 +555,12 @@ Clear cookies when the user rejects the cookie category.
     ```
 
 ::: warning
-If you've installed CookieConsent in a subdomain, and the cookie you're trying to erase is in the main domain, you'll have to specify your main domain in the `domain` field.
+If you've installed CookieConsent in a subdomain, and the cookie you're trying to erase is in the main domain, you'll have to specify your main domain in the `domain` field of the `Cookie` object.
 :::
 
 ### <span style="opacity: .6">[category]</span>.services
 
+Define individually togglable services.
 
 - **Type**:
     ```javascript
@@ -611,7 +612,7 @@ If you've installed CookieConsent in a subdomain, and the cookie you're trying t
     ```
 
 ::: info
-The entire category will be treated as enabled/accepted if at least one service is enabled.
+If one or more services are enabled, then the entire category will be treated as enabled/accepted.
 :::
 
 ## language <span class="required">required</span>
@@ -626,8 +627,6 @@ Define your language settings and the translation(s) content.
         translations: Translations
     }
     ```
-
-Check out the [Language Config.](/advanced/language-configuration.html).
 
 ### language.default <span class="required">required</span>
 
@@ -709,7 +708,103 @@ Define the translation(s) content.
     ```
 
 ### <span style="opacity: .6">[translation]</span>.consentModal<span class="required">required</span>
-WIP
+
+- **Type**:
+    ```javascript
+    {
+        title?: string
+        description?: string
+        acceptAllBtn?: string
+        acceptNecessaryBtn?: string
+        showPreferencesBtn?: string
+        closeIconLabel?: string
+        revisionMessage?: string
+        footer?: string
+    }
+    ```
+- **Details**:
+
+    - `closeIconLabel`: if specified, a big `X` button will be generated (visible only in the `box` layout). It acts the same as `acceptNecessaryBtn`.
+    - `revisionMessage`: check out the dedicated [revision section](/advanced/revision-management.html#revision-message).
+    - `footer`: a small area where you can place your links (impressum, privacy policy ...)
+
+    <br>
+
+    ::: info
+    All the options/fields also allow html markup.
+    :::
+
+- **Example**:
+
+    ```javascript
+    translations: {
+        'en': {
+            consentModal: {
+                title: 'We use cookies!',
+                description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua',
+                acceptAllBtn: 'Accept all',
+                acceptNecessaryBtn: 'Accept necessary',
+                showPreferencesBtn: 'Manage individual preferences',
+                footer: `
+                    <a href="#path-to-impressum.html" target="_blank">Impressum</a>
+                    <a href="#path-to-privacy-policy.html" target="_blank">Privacy Policy</a>
+                `
+            },
+            preferencesModal: {
+                // ...
+            }
+        }
+    }
+    ```
 
 ### <span style="opacity: .6">[translation]</span>.preferencesModal<span class="required">required</span>
-WIP
+
+- **Type**:
+    ```javascript
+    {
+        title?: string
+        acceptAllBtn?: string
+        acceptNecessaryBtn?: string
+        savePreferencesBtn?: string
+        closeIconLabel?: string
+        serviceCounterLabel?: string
+        sections: Section[]
+    }
+    ```
+- **Details**:
+
+    - `serviceCounterLabel`: if you're using services, you can specify a label such as `'Service(s)'` to clarify what the counter means.
+
+- **Example**:
+
+    WIP
+
+
+### <span style="opacity: .6">[translation]</span>.preferencesModal.sections<span class="required">required</span>
+
+- **Type**:
+    ```javascript
+    {
+        title?: string
+        description?: string
+        linkedCategory?: string
+        cookieTable?: CookieTable
+    }
+    ```
+
+- **Details**:
+
+    - `linkedCategory`: by specifying the name of a defined categories (e.g. 'analytics'), a toggle will be generated
+    - `cookieTable`: html table where you can list and clarify the cookies under this category
+
+    `CookieTable` type:
+    ```javascript
+    {
+        headers: {[key: string]: string}
+        body: {[key: string]: string}[]
+    }
+    ```
+
+- **Example**:
+
+    WIP
