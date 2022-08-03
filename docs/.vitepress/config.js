@@ -1,17 +1,11 @@
 import { defineConfig } from "vitepress"
+import pkg from '../../package.json'
 
 export default defineConfig({
     lang: 'en-US',
     title: 'CookieConsent',
     description: 'Simple cross-browser cookie-consent plugin written in vanilla js',
     lastUpdated: false,
-
-    // head: [
-    //     ['link', {rel: 'preconnect', href: 'https://fonts.googleapis.com'}],
-    //     ['link', {rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: true}],
-    //     ['link', {rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap'}],
-    //     ['link', {rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap'}]
-    // ],
 
     themeConfig: {
 
@@ -20,11 +14,11 @@ export default defineConfig({
             copyright: 'Copyright © 2020-present Orest Bida'
         },
         socialLinks: [
-            { icon: 'github', link: 'https://github.com/orestbida/cookieconsent' }
+            { icon: 'github', link: pkg.repository.url }
         ],
 
         editLink: {
-            pattern: 'https://github.com/orestbida/cookieconsent/edit/v3.0-beta/docs/:path',
+            pattern: `${pkg.repository.url}/edit/v3.0-beta/docs/:path`,
             text: 'Suggest changes to this page'
         },
         algolia: {
@@ -45,7 +39,16 @@ export default defineConfig({
             {
                 text: 'Config',
                 link: '/reference/configuration-reference.html'
-            }
+            },
+            {
+                text: `v${pkg.version}`,
+                items: [
+                    {
+                        text: 'Changelog',
+                        link: pkg.repository.url + '/releases/'
+                    }
+                ]
+            },
         ],
 
         sidebar: {
@@ -77,7 +80,8 @@ function getGuideSidebar() {
                 { text: 'UI Customization', link: '/advanced/ui-customization' },
                 { text: 'Callbacks and Events', link: '/advanced/callbacks-events' },
                 { text: 'Custom Attribute', link: '/advanced/custom-attribute' },
-                { text: 'Revision Management', link: '/advanced/revision-management'}
+                { text: 'Revision Management', link: '/advanced/revision-management'},
+                { text: 'Consent Logging', link: '/advanced/consent-logging'}
             ]
         },
         {

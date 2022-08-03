@@ -10,6 +10,21 @@ Overview of the main cons/drawbacks you should be aware of: <br><br>
 <CheckListItem title="CookieConsent does not store Consent Records" type="x"/>
 <CheckListItem title='CookieConsent does not implement the IAB Framework - TCF' type="x"/>
 
+## CookieConsent v2 or v3?
+Both versions are very similar but there a few key differences:
+
+### v2
+<CheckListItem title="Supports older browsers such as IE10" type="v"/>
+<CheckListItem title="Is in maintenance mode (only bugfix updates)" type="x"/>
+
+### v3
+<CheckListItem title="Simpler/Clearer API and config. parameters" type="v"/>
+<CheckListItem title="Wider variety of layouts and button arrangements" type="v"/>
+<CheckListItem title="More flexible script management options" type="v"/>
+<CheckListItem title="Supports individually togglable Services" type="v"/>
+<CheckListItem title="UMD and ESM variants" type="v"/>
+<CheckListItem title="Supports modern browsers only" type="i"/>
+
 ## More questions?
 Check the [FAQ](/additional/faq.html) section.
 

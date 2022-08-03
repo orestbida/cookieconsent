@@ -1,6 +1,6 @@
 # Custom Attribute
 
-The `data-cc` attribute allows you to bind any button — or link  — to a few and select [API methods](/reference/api-reference.html) in order to run core functions, without the need to use javascript code.
+The `data-cc` attribute allows you to bind any button — or link  — to a few API methods in order to run core functions, without the need to use javascript code.
 
 Valid values:
 - `show-preferencesModal`
@@ -19,7 +19,7 @@ Use this value to show the `preferencesModal`.
 ```
 
 ## show-consentModal
-Use this value to show the `consentModal`. If the consent modal does not exist, it will be recreated on the fly.
+Use this value to show the `consentModal`. If the consent modal does not exist, it will be generated on the fly.
 
 **Example** <br>
 ```html

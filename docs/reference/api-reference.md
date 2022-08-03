@@ -15,7 +15,7 @@ Configures the plugin with the provided config. object.
     ```
 - **Details**
 
-    The `config` argument is required and must contain — at least — the `categories` and `language` properties (both properly configured). Check out how to set up [categories](/reference/configuration-reference.html#categories) and [translations](/reference/configuration-reference.html#languages-and-translations).
+    The `config` argument is required and must contain — at least — the [`categories`](/reference/configuration-reference.html#categories-required) and [`language`](/reference/configuration-reference.html#language-required) properties.
 
 - **Example**
     ```javascript
@@ -394,8 +394,8 @@ Returns user's preferences, such as accepted/rejected categories and services.
         acceptType: string,
         acceptedCategories: string[],
         rejectedCategories: string[],
-        acceptedServices: {[key: string]: string[]}
-        rejectedServices: {[key: string]: string[]}
+        acceptedServices: {[category: string]: string[]}
+        rejectedServices: {[category: string]: string[]}
     }
     ```
 - **Details**
@@ -512,9 +512,9 @@ Reset CookieConsent.
 
 - **Details**:
 
-    Resets all internal pointers and config settings. You need to call again the `.run()` method with a valid config. object.
+    Resets all internal pointers and config. settings. You need to call again the `.run()` method with a valid config. object.
 
-    You can also pass the argument `true` to also delete the plugin's cookie. The user will be prompted once again to express their consent.
+    You can pass the argument `true` to delete the plugin's cookie. The user will be prompted once again to express their consent.
 
     ::: warning
     Once this method is called, the plugin won't be able to detect already executed `script` tags with a `data-category` attribute.

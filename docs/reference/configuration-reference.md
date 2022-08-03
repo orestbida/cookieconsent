@@ -749,9 +749,6 @@ Define the translation(s) content.
                     <a href="#path-to-impressum.html" target="_blank">Impressum</a>
                     <a href="#path-to-privacy-policy.html" target="_blank">Privacy Policy</a>
                 `
-            },
-            preferencesModal: {
-                // ...
             }
         }
     }
@@ -777,7 +774,20 @@ Define the translation(s) content.
 
 - **Example**:
 
-    WIP
+    ```javascript
+    translations: {
+        'en': {
+            preferencesModal: {
+                title: 'Cookie Preferences Center',
+                acceptAllBtn: 'Accept all',
+                acceptNecessaryBtn: 'Accept necessary only',
+                savePreferencesBtn: 'Accept current selection',
+                closeIconLabel: 'Close modal',
+                sections: []
+            }
+        }
+    }
+    ```
 
 
 ### <span style="opacity: .6">[translation]</span>.preferencesModal.sections<span class="required">required</span>
@@ -794,7 +804,7 @@ Define the translation(s) content.
 
 - **Details**:
 
-    - `linkedCategory`: by specifying the name of a defined categories (e.g. 'analytics'), a toggle will be generated
+    - `linkedCategory`: by specifying the name of a defined category (e.g. 'analytics'), a toggle will be generated
     - `cookieTable`: html table where you can list and clarify the cookies under this category
 
     `CookieTable` type:
@@ -807,4 +817,44 @@ Define the translation(s) content.
 
 - **Example**:
 
-    WIP
+    ```javascript
+    sections: [
+        {
+            name: 'Section name',
+            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua'
+        },
+        {
+            name: 'Section name',
+            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua',
+            linkedCategory: 'necessary'
+        },
+        {
+            name: 'Analytics Cookies',
+            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua',
+            linkedCategory: 'analytics',
+            cookieTable: {
+                headers: {
+                    name: 'Name',
+                    description: 'Description',
+                    duration: 'Duration'
+                },
+                body: [
+                    {
+                        name: 'cookie-name',
+                        description: 'cookie-description',
+                        duration: 'cookie-duration'
+                    },
+                    {
+                        name: 'cookie-name-2',
+                        description: 'cookie-description-2',
+                        duration: 'cookie-duration-2'
+                    }
+                ]
+            }
+        }
+    ]
+    ```
+
+    ::: tip
+    You can define any table, with the headers you deem more fit.
+    :::

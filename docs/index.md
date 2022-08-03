@@ -5,7 +5,7 @@ title: CookieConsent
 titleTemplate: Consent management Tool
 
 hero:
-  name: CookieConsent
+  name: CookieConsent v3
   text: ''
   tagline: A lightweight, GDPR and CCPA compliant Consent Management Tool written in vanilla JS.
   actions:

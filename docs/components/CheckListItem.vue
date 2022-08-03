@@ -28,8 +28,8 @@ export default {
                 },
                 v: {
                     light: {
-                        text: '#96E0B1',
-                        icon: '#4ade80'
+                        text: '#1eb14d',
+                        icon: '#1eb14d'
                     },
                     dark: {
                         text: '#96E0B1',

@@ -35,7 +35,7 @@ You can also run **scripts when a category is disabled** (if it was previously e
 
 ### Services
 ::: info What is a service
-A service represents a script — or a group of scripts — associated to a name, that appears inside the Preferences Modal with its own toggle. You can also [configure a service internally](/reference/configuration-reference.html#categories-services) via the configuration object.
+A service represents a script — or a group of scripts — associated to a name, that appears inside the Preferences Modal with its own toggle. You can also [configure a service internally](/reference/configuration-reference.html#category-services) via the configuration object.
 :::
 
 You can define a service by adding the following attribute:
