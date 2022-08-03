@@ -50,9 +50,9 @@
         "rollup": "^2.77.2",
         "rollup-plugin-postcss": "^4.0.2",
         "rollup-plugin-terser": "^7.0.2",
-        "sass": "^1.54.0",
+        "sass": "^1.54.1",
         "sitemap": "^7.1.1",
-        "vitepress": "^1.0.0-alpha.2"
+        "vitepress": "^1.0.0-alpha.4"
     },
     "jest": {
         "transform": {
