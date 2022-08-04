@@ -826,16 +826,16 @@ Define the translation(s) content.
     ```javascript
     sections: [
         {
-            name: 'Section name',
+            title: 'Section name',
             description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua'
         },
         {
-            name: 'Section name',
+            title: 'Section name',
             description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua',
             linkedCategory: 'necessary'
         },
         {
-            name: 'Analytics Cookies',
+            title: 'Analytics Cookies',
             description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua',
             linkedCategory: 'analytics',
             cookieTable: {
