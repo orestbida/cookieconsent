@@ -50,10 +50,16 @@ export const _createConsentModal = (api) => {
          */
         globalObj._dom._consentModal.style.visibility = 'hidden';
 
+        const boxLayout = 'box',
+            guiOptions = globalObj._state._userConfig.guiOptions,
+            consentModalOptions = guiOptions && guiOptions.consentModal,
+            consentModalLayout = consentModalOptions.layout || boxLayout,
+            isBoxLayout = consentModalLayout.split(' ')[0] === boxLayout;
+
         /**
          * Close icon-button (visible only in the 'box' layout)
          */
-        if(closeIconLabelData){
+        if(closeIconLabelData && isBoxLayout){
             if(!globalObj._dom._cmCloseIconBtn){
                 globalObj._dom._cmCloseIconBtn = _createNode(BUTTON_TAG);
                 globalObj._dom._cmCloseIconBtn.className = 'cm__btn cm__btn--close';

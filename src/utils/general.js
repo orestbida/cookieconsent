@@ -449,7 +449,7 @@ export const _getModalFocusableData = () => {
      * Note: any of the below focusable elements, which has the attribute tabindex="-1" AND is either
      * the first or last element of the modal, won't receive focus during "open/close" modal
      */
-    var allowed_focusable_types = ['[href]', BUTTON_TAG, 'input', 'details', '[tabindex="0"]'];
+    var allowed_focusable_types = ['[href]', BUTTON_TAG, 'input', 'details', '[tabindex="0"]'].map(tag => tag + ':not([tabindex="-1"])');
 
     /**
      * Saves all focusable elements inside modal, into the array
