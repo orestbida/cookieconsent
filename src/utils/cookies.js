@@ -173,9 +173,6 @@ export const _saveCookiePreferences = () => {
     });
 
 
-    if(!globalObj._state._invalidConsent && globalObj._config.autoClearCookies && categoriesWereChanged)
-        _autoclearCookies();
-
     if(!globalObj._state._consentTimestamp) globalObj._state._consentTimestamp = new Date();
     if(!globalObj._state._consentId) globalObj._state._consentId = _uuidv4();
 
@@ -212,16 +209,19 @@ export const _saveCookiePreferences = () => {
         globalObj._state._savedCookieContent.lastConsentTimestamp = globalObj._state._lastConsentTimestamp.toISOString();
 
         _setCookie(globalObj._config.cookie.name, JSON.stringify(globalObj._state._savedCookieContent));
+
+        /**
+         * Clear cookies:
+         * - on first consent
+         * - on category change (consent must be valid)
+         */
+        if(globalObj._config.autoClearCookies && (firstUserConsent || (!globalObj._state._invalidConsent && categoriesWereChanged)))
+            _autoclearCookies();
+
         _manageExistingScripts();
     }
 
     if(firstUserConsent){
-        /**
-         * Delete unused/"zombie" cookies if consent
-         * is not valid (not yet expressed or cookie has expired)
-         */
-        if(globalObj._config.autoClearCookies)
-            _autoclearCookies(true);
 
         _fireEvent(globalObj._customEvents._onFirstConsent);
         _fireEvent(globalObj._customEvents._onConsent);
