@@ -53,7 +53,7 @@ export const _createConsentModal = (api) => {
         const boxLayout = 'box',
             guiOptions = globalObj._state._userConfig.guiOptions,
             consentModalOptions = guiOptions && guiOptions.consentModal,
-            consentModalLayout = consentModalOptions.layout || boxLayout,
+            consentModalLayout = consentModalOptions && consentModalOptions.layout || boxLayout,
             isBoxLayout = consentModalLayout.split(' ')[0] === boxLayout;
 
         /**
