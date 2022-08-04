@@ -91,6 +91,12 @@ Clears cookies when user rejects a specific category. It requires a valid [`auto
 
 - **Type**: `boolean`
 - **Default**: `true`
+- **Details**:
+
+    This function is executed on the following 2 events:
+    - when consent is not valid and the `onFirstConsent` callback is executed
+    - when consent is valid and the state of the categories is changed
+
 
 
 ## hideFromBots
