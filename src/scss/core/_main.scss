@@ -58,6 +58,7 @@ $font-weight-bold: 600;
     .cm__desc,
     .pm__body{
         scrollbar-width: thin;
+        overscroll-behavior: none;
     }
 
     /* Restore outline and cursor*/
