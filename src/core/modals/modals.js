@@ -9,8 +9,6 @@ import { DIV_TAG } from '../../utils/constants';
  */
 export const _createCookieConsentHTML = (api) => {
 
-    if(globalObj._dom._ccMain) return;
-
     // Create main container which holds both consent modal & preferences modal
     globalObj._dom._ccMain = _createNode(DIV_TAG);
     globalObj._dom._ccMain.id = 'cc-main';

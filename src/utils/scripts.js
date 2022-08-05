@@ -1,4 +1,4 @@
-import { globalObj} from '../core/global';
+import { globalObj, _isFunction} from '../core/global';
 import { _createNode, _setAttribute, _elContains } from './general';
 import { SCRIPT_TAG_SELECTOR } from './constants';
 /**
@@ -23,14 +23,14 @@ export const _manageExistingScripts = (mustEnableCategories) => {
             if(
                 !service.enabled
                 && _elContains(globalObj._state._enabledServices[categoryName], serviceName)
-                && typeof service.onAccept === 'function'
+                && _isFunction(service.onAccept)
             ){
                 service.enabled = true;
                 service.onAccept();
             }else if(
                 service.enabled
                 && !_elContains(globalObj._state._enabledServices[categoryName], serviceName)
-                && typeof service.onAccept === 'function'
+                && _isFunction(service.onAccept)
             ){
                 service.enabled = false;
                 service.onReject();

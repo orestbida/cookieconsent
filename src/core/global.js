@@ -179,10 +179,31 @@ import { COOKIE_NAME, OPT_IN_MODE } from '../utils/constants';
  * @property {Object.<string, string[]>} services
  */
 
-
 /**
  * @typedef {Object.<string, HTMLElement>} ServiceToggle
  */
+
+/**
+ * Check if el is a function
+ * @param {any} fn
+ * @returns {boolean}
+ */
+export const _isFunction = (fn) => {
+    return typeof fn === 'function';
+};
+
+/**
+ * Returns a copy/clone of the object
+ * @param {any} obj
+ * @returns {any}
+ */
+export const _shallowCopy = (data) => {
+    return JSON.parse(JSON.stringify(data));
+};
+
+const dispatchEvent = (eventName, data) => {
+    window.dispatchEvent(new CustomEvent(eventName, {detail: _shallowCopy(data)}));
+};
 
 /**
  * Fire custom event
@@ -205,48 +226,26 @@ export const _fireEvent = (eventName, modalName) => {
         };
 
         if(eventName === globalObj._customEvents._onModalShow)
-            isFunction(globalObj._callbacks._onModalShow) && globalObj._callbacks._onModalShow(modalParams);
+            _isFunction(globalObj._callbacks._onModalShow) && globalObj._callbacks._onModalShow(modalParams);
         else
-            isFunction(globalObj._callbacks._onModalHide) && globalObj._callbacks._onModalHide(modalParams);
+            _isFunction(globalObj._callbacks._onModalHide) && globalObj._callbacks._onModalHide(modalParams);
 
         return dispatchEvent(eventName, modalParams);
     }
 
     if(eventName === globalObj._customEvents._onFirstConsent){
-        isFunction(globalObj._callbacks._onFirstConsent) && globalObj._callbacks._onFirstConsent(shallowCopy(params));
+        _isFunction(globalObj._callbacks._onFirstConsent) && globalObj._callbacks._onFirstConsent(_shallowCopy(params));
     }
     else if(eventName === globalObj._customEvents._onConsent){
-        isFunction(globalObj._callbacks._onConsent) && globalObj._callbacks._onConsent(shallowCopy(params));
+        _isFunction(globalObj._callbacks._onConsent) && globalObj._callbacks._onConsent(_shallowCopy(params));
     }
     else if(eventName === globalObj._customEvents._onChange){
         params.changedCategories = globalObj._state._lastChangedCategoryNames;
         params.changedServices = globalObj._state._lastChangedServices;
-        isFunction(globalObj._callbacks._onChange) && globalObj._callbacks._onChange(shallowCopy(params));
+        _isFunction(globalObj._callbacks._onChange) && globalObj._callbacks._onChange(_shallowCopy(params));
     }
 
     dispatchEvent(eventName, params);
-
-    function dispatchEvent(eventName, data){
-        window.dispatchEvent(new CustomEvent(eventName, {detail: shallowCopy(data)}));
-    }
-
-    /**
-     * Check if el is a function
-     * @param {any} fn
-     * @returns {boolean}
-     */
-    function isFunction(fn){
-        return typeof fn === 'function';
-    }
-
-    /**
-     * Returns a copy/clone of the object
-     * @param {any} obj
-     * @returns {any}
-     */
-    function shallowCopy(obj){
-        return JSON.parse(JSON.stringify(obj));
-    }
 };
 
 export class Global {
@@ -269,6 +268,9 @@ export class Global {
 
             cookie: {
                 name: COOKIE_NAME,
+                /**
+                 * @type {number|Function}
+                 */
                 expiresAfterDays: 182,
                 domain: '',
                 path: '/',
@@ -285,39 +287,39 @@ export class Global {
             _currentLanguageCode: '',
 
             /**
-                * @type {Object.<string, Translation>}
-                */
+            * @type {Object.<string, Translation>}
+            */
             _allTranslations: {},
 
             /**
-                * @type {Translation}
-                */
+            * @type {Translation}
+            */
             _currentTranslation: null,
 
             /**
-                * Internal state variables
-                * @type {CookieStructure}
-                */
+            * Internal state variables
+            * @type {CookieStructure}
+            */
             _savedCookieContent : null,
 
             /**
-                * @type {any}
-                */
+            * @type {any}
+            */
             _cookieData : null,
 
             /**
-                * @type {Date}
-                */
+            * @type {Date}
+            */
             _consentTimestamp: null,
 
             /**
-                * @type {Date}
-                */
+            * @type {Date}
+            */
             _lastConsentTimestamp: null,
 
             /**
-                * @type {string}
-                */
+            * @type {string}
+            */
             _consentId: '',
 
             _invalidConsent : true,
@@ -331,119 +333,119 @@ export class Global {
             _preferencesModalVisibleDelayed : false,
 
             /**
-                * @type {HTMLElement[]}
-                */
+            * @type {HTMLElement[]}
+            */
             _currentModalFocusableElements: [],
 
             _revisionEnabled : false,
             _validRevision : true,
 
             /**
-                * Array containing the last changed categories (enabled/disabled)
-                * @type {string[]}
-                */
+            * Array containing the last changed categories (enabled/disabled)
+            * @type {string[]}
+            */
             _lastChangedCategoryNames : [],
 
             _reloadPage : false,
 
             /**
-                * Accept type:
-                *  - "all"
-                *  - "necessary"
-                *  - "custom"
-                * @type {string}
-                */
+            * Accept type:
+            *  - "all"
+            *  - "necessary"
+            *  - "custom"
+            * @type {string}
+            */
             _acceptType: '',
 
             /**
-                * Object containing all user's defined categories
-                * @type {Object.<string, Category>}
-                */
+            * Object containing all user's defined categories
+            * @type {Object.<string, Category>}
+            */
             _allDefinedCategories: false,
 
             /**
-                * Stores all available categories
-                * @type {string[]}
-                */
+            * Stores all available categories
+            * @type {string[]}
+            */
             _allCategoryNames: [],
 
             /**
-                * Contains all accepted categories
-                * @type {string[]}
-                */
+            * Contains all accepted categories
+            * @type {string[]}
+            */
             _acceptedCategories : [],
 
             /**
-                * Keep track of readonly toggles
-                * @type {string[]}
-                */
+            * Keep track of readonly toggles
+            * @type {string[]}
+            */
             _readOnlyCategories : [],
 
             /**
-                * Contains all categories enabled by default
-                * @type {string[]}
-                */
+            * Contains all categories enabled by default
+            * @type {string[]}
+            */
             _defaultEnabledCategories : [],
 
             /**
-                * Don't run plugin (to avoid indexing its text content) if bot detected
-                */
+            * Don't run plugin (to avoid indexing its text content) if bot detected
+            */
             _botAgentDetected : false,
 
             /**
-                * Save reference to the last focused element on the page
-                * (used later to restore focus when both modals are closed)
-                */
+            * Save reference to the last focused element on the page
+            * (used later to restore focus when both modals are closed)
+            */
             /** @type {HTMLElement} **/_lastFocusedElemBeforeModal: false,
             /** @type {HTMLElement} **/_lastFocusedModalElement: false,
 
             /**
-                * Both of the arrays below have the same structure:
-                * [0] :> holds reference to the FIRST focusable element inside modal
-                * [1] :> holds reference to the LAST focusable element inside modal
-                */
-            /** @type {HTMLElement[]} **/ _allConsentModalFocusableElements : [],
-            /** @type {HTMLElement[]} **/ _allPreferencesModalFocusableElements : [],
+            * Both of the arrays below have the same structure:
+            * [0] :> holds reference to the FIRST focusable element inside modal
+            * [1] :> holds reference to the LAST focusable element inside modal
+            */
+            /** @type {HTMLElement[]} **/ _cmFocusableElements : [],
+            /** @type {HTMLElement[]} **/ _pmFocusableElements : [],
 
             /**
-                * Keep track of enabled/disabled categories
-                * @type {boolean[]}
-                */
+            * Keep track of enabled/disabled categories
+            * @type {boolean[]}
+            */
             _allToggleStates : [],
 
             /**
-                * @type {Object.<string, Services>}
-                */
+            * @type {Object.<string, Services>}
+            */
             _allDefinedServices: {},
 
             /**
-                * @type {Object.<string, string[]>}
-                */
+            * @type {Object.<string, string[]>}
+            */
             _enabledServices: {},
 
             /**
-                * @type {Object.<string, string[]>}
-                */
+            * @type {Object.<string, string[]>}
+            */
             _customServicesSelection: {},
 
             /**
-                * @type {Object.<string, string[]>}
-                */
+            * @type {Object.<string, string[]>}
+            */
             _lastChangedServices: {},
 
             /**
-                * @type {Object.<string, string[]>}
-                */
+            * @type {Object.<string, string[]>}
+            */
             _lastEnabledServices: {},
 
             /**
-                * @type {NodeListOf<Element>}
-                */
+            * @type {NodeListOf<Element>}
+            */
             _allScriptTags: [],
 
             /**
-                * @type {ScriptInfo[]}
-                */
+            * @type {ScriptInfo[]}
+            */
             _allScriptTagsInfo: []
         };
 

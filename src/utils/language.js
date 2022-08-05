@@ -9,7 +9,7 @@ import { _log, _getKeys, _elContains, _fetchJson } from './general';
  */
 export const _getValidLanguageCode = (languageCode) => {
 
-    var allLanguageCodes = _getKeys(globalObj._state._allTranslations);
+    const allLanguageCodes = _getKeys(globalObj._state._allTranslations);
 
     if(_elContains(allLanguageCodes, languageCode)) return languageCode;
     if(_elContains(allLanguageCodes, globalObj._state._currentLanguageCode)) return globalObj._state._currentLanguageCode;
@@ -22,23 +22,24 @@ export const _getValidLanguageCode = (languageCode) => {
 
 /**
  * Get current client's browser language
- * @returns {string}
+ * returns only the first 2 chars: en-US => en
+ * @returns {string} language
  */
 export const _getBrowserLanguageCode = () => {
-    var browserLanguage = navigator.language || navigator.browserLanguage;
-    browserLanguage.length > 2 && (browserLanguage = browserLanguage[0]+browserLanguage[1]);
-    _log('CookieConsent [LANG]: browser language is \''+ browserLanguage + '\'');
-    return browserLanguage.toLowerCase();
+    const browserLanguage = navigator.language.slice(0, 2).toLowerCase();
+    _log('CookieConsent [LANG]: browser language is "'+ browserLanguage + '"');
+
+    return browserLanguage;
 };
 
 /**
  * Resolve which language should be used.
  */
 export const _resolveCurrentLanguageCode = function () {
-    var autoDetect = globalObj._state._userConfig.language.autoDetect;
+    const autoDetect = globalObj._state._userConfig.language.autoDetect;
 
     if(autoDetect){
-        _log('CookieConsent [LANG]: autoDetect strategy: \'' + autoDetect + '\'');
+        _log('CookieConsent [LANG]: autoDetect strategy: "' + autoDetect + '"');
 
         if (autoDetect === 'browser')
             return _getValidLanguageCode(_getBrowserLanguageCode());
@@ -83,5 +84,6 @@ export const _loadTranslationData = async (desiredLanguageCode) => {
         globalObj._state._currentTranslation = globalObj._state._allTranslations[validatedLanguageCode];
     }
     globalObj._state._currentLanguageCode = validatedLanguageCode;
+
     return true;
 };

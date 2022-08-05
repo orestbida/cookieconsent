@@ -21,7 +21,8 @@ import { _manageExistingScripts, _retrieveEnabledCategoriesAndServices } from '.
 import {
     _fireEvent,
     globalObj,
-    Global
+    Global,
+    _shallowCopy
 } from './global';
 
 import {
@@ -52,6 +53,14 @@ import {
     CONSENT_MODAL_NAME,
     PREFERENCES_MODAL_NAME
 } from '../utils/constants';
+
+/**
+ * Dispatch the 'change' event to the input
+ * @param {HTMLElement} input
+ */
+const _dispatchChangeEvent = (input) => {
+    input.dispatchEvent(new Event('change'));
+};
 
 export const api = {
 
@@ -135,7 +144,7 @@ export const api = {
         /**
          * Save previously enabled services to calculate later on which of them was changed
          */
-        globalObj._state._lastEnabledServices = JSON.parse(JSON.stringify(globalObj._state._enabledServices));
+        globalObj._state._lastEnabledServices = _shallowCopy(globalObj._state._enabledServices);
 
 
         globalObj._state._allCategoryNames.forEach(categoryName => {
@@ -215,7 +224,7 @@ export const api = {
             if(service === 'all'){
                 for(var serviceName in servicesInputs){
                     servicesInputs[serviceName].checked = true;
-                    _dispatchInputEvent(servicesInputs[serviceName]);
+                    _dispatchChangeEvent(servicesInputs[serviceName]);
                 }
             }else{
                 for(serviceName in servicesInputs){
@@ -223,7 +232,7 @@ export const api = {
                         servicesInputs[serviceName].checked = true;
                     else
                         servicesInputs[serviceName].checked = false;
-                    _dispatchInputEvent(servicesInputs[serviceName]);
+                    _dispatchChangeEvent(servicesInputs[serviceName]);
                 }
             }
         }else if(typeof service === 'object' && Array.isArray(service)){
@@ -232,16 +241,8 @@ export const api = {
                     servicesInputs[serviceName].checked = true;
                 else
                     servicesInputs[serviceName].checked = false;
-                _dispatchInputEvent(servicesInputs[serviceName]);
+                _dispatchChangeEvent(servicesInputs[serviceName]);
             }
-        }
-
-        /**
-         * Dispatch the 'change' event to the input
-         * @param {HTMLElement} input
-         */
-        function _dispatchInputEvent(input){
-            input.dispatchEvent(new Event('change'));
         }
 
         api.acceptCategory();
@@ -263,11 +264,23 @@ export const api = {
      * @param {string} [domain]
      */
     eraseCookies: (cookies, path, domain) => {
-        var allCookies = [];
+        let allCookies = [];
+        const configDomain = globalObj._config.cookie.domain;
 
-        var configDomain = globalObj._config.cookie.domain;
+        /**
+         * Add cookie to allCookies array if it exists
+         * @param {string | RegExp} cookieName
+         */
+        const addCookieIfExists = (cookieName) => {
+            if(typeof cookieName === 'string'){
+                let name = _getSingleCookie(cookieName);
+                name !== '' && allCookies.push(name);
+            }else{
+                allCookies = allCookies.concat(_getAllCookies(cookieName));
+            }
+        };
 
-        var domains = domain
+        const domains = domain
             ? [domain, '.'+domain]
             : [configDomain, '.' + configDomain];
 
@@ -277,19 +290,6 @@ export const api = {
             }
         }else{
             addCookieIfExists(cookies);
-        }
-
-        /**
-         * Add cookie to allCookies array if it exists
-         * @param {string | RegExp} cookieName
-         */
-        function addCookieIfExists(cookieName){
-            if(typeof cookieName === 'string'){
-                let name = _getSingleCookie(cookieName);
-                name !== '' && allCookies.push(name);
-            }else{
-                allCookies = allCookies.concat(_getAllCookies(cookieName));
-            }
         }
 
         _eraseCookies(allCookies, path, domains);
@@ -488,7 +488,7 @@ export const api = {
 
             setTimeout(() => {
                 globalObj._state._lastFocusedElemBeforeModal = globalObj._dom._document.activeElement;
-                globalObj._state._currentModalFocusableElements = globalObj._state._allConsentModalFocusableElements;
+                globalObj._state._currentModalFocusableElements = globalObj._state._cmFocusableElements;
             }, 200);
 
             _log('CookieConsent [TOGGLE]: show consentModal');
@@ -543,14 +543,11 @@ export const api = {
                 globalObj._state._lastFocusedModalElement = globalObj._dom._document.activeElement;
             }
 
-            if (globalObj._state._allPreferencesModalFocusableElements.length === 0) return;
+            if (globalObj._state._pmFocusableElements.length === 0) return;
 
-            if(globalObj._state._allPreferencesModalFocusableElements[3]){
-                globalObj._state._allPreferencesModalFocusableElements[3].focus();
-            }else{
-                globalObj._state._allPreferencesModalFocusableElements[0].focus();
-            }
-            globalObj._state._currentModalFocusableElements = globalObj._state._allPreferencesModalFocusableElements;
+            globalObj._state._pmFocusableElements[0].focus();
+
+            globalObj._state._currentModalFocusableElements = globalObj._state._pmFocusableElements;
         }, 200);
 
         _log('CookieConsent [TOGGLE]: show preferencesModal');
@@ -578,7 +575,7 @@ export const api = {
          */
         if(globalObj._state._consentModalVisible){
             globalObj._state._lastFocusedModalElement && globalObj._state._lastFocusedModalElement.focus();
-            globalObj._state._currentModalFocusableElements = globalObj._state._allConsentModalFocusableElements;
+            globalObj._state._currentModalFocusableElements = globalObj._state._cmFocusableElements;
         }else{
             /**
              * Restore focus to last page element which had focus before modal opening

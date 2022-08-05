@@ -23,10 +23,9 @@ export const _guiManager = (applyToModal) => {
     /**
      * @type {import("../core/global").GuiOptions}
      */
-    var guiOptions = globalObj._state._userConfig.guiOptions;
-
-    var consentModalOptions = guiOptions && guiOptions.consentModal;
-    var preferencesModalOptions = guiOptions && guiOptions.preferencesModal;
+    const guiOptions = globalObj._state._userConfig.guiOptions,
+        consentModalOptions = guiOptions && guiOptions.consentModal,
+        preferencesModalOptions = guiOptions && guiOptions.preferencesModal;
 
     /**
      * Helper function to set the proper layout classes
@@ -36,7 +35,7 @@ export const _guiManager = (applyToModal) => {
      * @param {string} prefix
      * @param {string} defaultLayoutName
      */
-    function _setLayout(modal, allowedLayoutsObj, userGuiOptions, prefix, defaultLayoutName, modalClassName){
+    const _setLayout = (modal, allowedLayoutsObj, userGuiOptions, prefix, defaultLayoutName, modalClassName) => {
 
         var layout = userGuiOptions && userGuiOptions.layout;
         var position = userGuiOptions && userGuiOptions.position;
@@ -76,8 +75,8 @@ export const _guiManager = (applyToModal) => {
         currentAlignH && _addClass(modal, prefix + currentAlignH);
         flipButtons && _addClass(modal, prefix + 'flip');
 
-        var secondaryBtnClass = 'btn--secondary';
-        var classPrefix = modalClassName + '__';
+        const secondaryBtnClass = 'btn--secondary',
+            classPrefix = modalClassName + '__';
 
         /**
          * Add classes to buttons
@@ -95,14 +94,14 @@ export const _guiManager = (applyToModal) => {
                 globalObj._dom._pmAcceptNecessaryBtn &&  _addClass(globalObj._dom._pmAcceptNecessaryBtn, classPrefix + secondaryBtnClass);
             }
         }
-    }
+    };
 
     if(applyToModal === 0 && globalObj._state._consentModalExists){
 
-        var alignV = ['middle', 'top', 'bottom'];
-        var alignH = ['left', 'center', 'right'];
+        const alignV = ['middle', 'top', 'bottom'];
+        const alignH = ['left', 'center', 'right'];
 
-        var cmLayouts = {
+        const cmLayouts = {
             box: {
                 _variants: ['wide', 'inline'],
                 _alignV: alignV,
@@ -130,7 +129,7 @@ export const _guiManager = (applyToModal) => {
     }
 
     if(applyToModal === 1){
-        var pmLayouts = {
+        const pmLayouts = {
             box: {
                 _variants: [],
                 _alignV: [],

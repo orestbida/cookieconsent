@@ -1,4 +1,4 @@
-import { _fireEvent, globalObj } from '../core/global';
+import { _fireEvent, globalObj, _shallowCopy } from '../core/global';
 import { OPT_OUT_MODE } from './constants';
 import { _log, _indexOf, _uuidv4, _updateAcceptType, _getRemainingExpirationTimeMS, _getExpiresAfterDaysValue, _elContains, _arrayDiff } from './general';
 import { _manageExistingScripts } from './scripts';
@@ -137,7 +137,7 @@ export const _saveCookiePreferences = () => {
     globalObj._state._allCategoryNames.forEach(categoryName => {
 
         globalObj._state._lastChangedServices[categoryName] = _arrayDiff(
-            globalObj._state._enabledServices[categoryName] || [],
+            globalObj._state._enabledServices[categoryName],
             globalObj._state._lastEnabledServices[categoryName] || []
         );
 
@@ -177,12 +177,12 @@ export const _saveCookiePreferences = () => {
     if(!globalObj._state._consentId) globalObj._state._consentId = _uuidv4();
 
     globalObj._state._savedCookieContent = {
-        categories: JSON.parse(JSON.stringify(globalObj._state._acceptedCategories)),
+        categories: _shallowCopy(globalObj._state._acceptedCategories),
         revision: globalObj._config.revision,
         data: globalObj._state._cookieData,
         consentTimestamp: globalObj._state._consentTimestamp.toISOString(),
         consentId: globalObj._state._consentId,
-        services: JSON.parse(JSON.stringify(globalObj._state._enabledServices))
+        services: _shallowCopy(globalObj._state._enabledServices)
     };
 
     var firstUserConsent = false;
@@ -216,7 +216,7 @@ export const _saveCookiePreferences = () => {
          * - on category change (consent must be valid)
          */
         if(globalObj._config.autoClearCookies && (firstUserConsent || (!globalObj._state._invalidConsent && categoriesWereChanged)))
-            _autoclearCookies();
+            _autoclearCookies(firstUserConsent);
 
         _manageExistingScripts();
     }

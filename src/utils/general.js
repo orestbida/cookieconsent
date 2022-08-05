@@ -1,12 +1,13 @@
-import { globalObj } from '../core/global';
+import { globalObj, _isFunction } from '../core/global';
 import { SCRIPT_TAG_SELECTOR, BUTTON_TAG } from './constants';
+
 /**
  * Helper function which prints info (console.log())
  * @param {Object} printMsg
  * @param {Object} [optionalParam]
  */
-export const _log = (printMsg, optionalParam, error) => {
-    !error ? console.log(printMsg, optionalParam !== undefined ? optionalParam : ' ') : console.error(printMsg, optionalParam || '');
+export const _log = (printMsg, optionalParam) => {
+    console.log(printMsg, optionalParam !== undefined ? optionalParam : ' ');
 };
 
 /**
@@ -41,14 +42,14 @@ export const _retrieveScriptElements = () => {
     globalObj._state._allScriptTagsInfo = [];
     globalObj._state._allScriptTags.forEach(scriptTag => {
 
-        let scriptCategoryName = scriptTag.getAttribute(SCRIPT_TAG_SELECTOR) || '';
+        let scriptCategoryName = scriptTag.getAttribute(SCRIPT_TAG_SELECTOR);
         let scriptServiceName = scriptTag.dataset.service || '';
         let runOnDisable = false;
 
         /**
          * Remove the '!' char if it is present
          */
-        if(scriptCategoryName.charAt(0) === '!'){
+        if(scriptCategoryName && scriptCategoryName.charAt(0) === '!'){
             scriptCategoryName = scriptCategoryName.slice(1);
             runOnDisable = true;
         }
@@ -112,7 +113,7 @@ export const _elContains = (el, value) => {
  * @returns {HTMLElement}
  */
 export const _createNode = (type) => {
-    var el = document.createElement(type);
+    const el = document.createElement(type);
     if(type === BUTTON_TAG){
         _setAttribute(el, 'type', type);
     }
@@ -145,7 +146,7 @@ export const _appendChild = (parent, child) => {
  */
 export const _uuidv4 = () => {
     return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, (c) => {
-        return (c ^ (window.crypto || window.msCrypto).getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16);
+        return (c ^ window.crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16);
     });
 };
 
@@ -207,7 +208,7 @@ export const _hasClass = (el, className) => {
  * @returns {number}
  */
 export const _getRemainingExpirationTimeMS = () => {
-    var elapsedTimeMilliseconds = globalObj._state._lastConsentTimestamp ? new Date() - globalObj._state._lastConsentTimestamp : 0;
+    const elapsedTimeMilliseconds = globalObj._state._lastConsentTimestamp ? new Date() - globalObj._state._lastConsentTimestamp : 0;
     return _getExpiresAfterDaysValue()*86400000 - elapsedTimeMilliseconds;
 };
 
@@ -230,8 +231,8 @@ export const _fetchJson = async (url) => {
  * @returns {number}
  */
 export const _getExpiresAfterDaysValue = () => {
-    var expiresAfterDays = globalObj._config.cookie.expiresAfterDays;
-    return typeof expiresAfterDays === 'function' ? expiresAfterDays(globalObj._state._acceptType) : expiresAfterDays;
+    const expiresAfterDays = globalObj._config.cookie.expiresAfterDays;
+    return _isFunction(expiresAfterDays) ? expiresAfterDays(globalObj._state._acceptType) : expiresAfterDays;
 };
 
 /**
@@ -278,13 +279,13 @@ export const _updateAcceptType = () => {
  */
 export const _addDataButtonListeners = (elem, api) => {
 
-    var _a = 'accept-';
+    const _a = 'accept-';
 
-    var showPreferencesModalElements = _getElements('show-preferencesModal');
-    var showConsentModalElements = _getElements('show-consentModal');
-    var acceptAllElements = _getElements(_a + 'all');
-    var acceptNecessaryElements = _getElements(_a + 'necessary');
-    var acceptCustomElements = _getElements(_a + 'custom');
+    const showPreferencesModalElements = _getElements('show-preferencesModal'),
+        showConsentModalElements = _getElements('show-consentModal'),
+        acceptAllElements = _getElements(_a + 'all'),
+        acceptNecessaryElements = _getElements(_a + 'necessary'),
+        acceptCustomElements = _getElements(_a + 'custom');
 
     for(var i=0; i<showPreferencesModalElements.length; i++){
         _setAttribute(showPreferencesModalElements[i], 'aria-haspopup', 'dialog');
@@ -349,7 +350,7 @@ export const _addDataButtonListeners = (elem, api) => {
 export const _getCurrentCategoriesState = () => {
 
     // calculate rejected categories (_allCategoryNames - _acceptedCategories)
-    var rejectedCategories = globalObj._state._allCategoryNames.filter((category) => {
+    const rejectedCategories = globalObj._state._allCategoryNames.filter((category) => {
         return !_elContains(globalObj._state._acceptedCategories, category);
     });
 
@@ -375,14 +376,17 @@ export const _handleFocusTrap = (api) => {
 
         // If there is any modal to focus
         if(globalObj._state._currentModalFocusableElements){
+
+            const currentActiveElement = globalObj._dom._document.activeElement;
+
             // If reached natural end of the tab sequence => restart
             if(e.shiftKey){
-                if (globalObj._dom._document.activeElement === globalObj._state._currentModalFocusableElements[0]) {
+                if (currentActiveElement === globalObj._state._currentModalFocusableElements[0]) {
                     globalObj._state._currentModalFocusableElements[1].focus();
                     e.preventDefault();
                 }
             }else{
-                if (globalObj._dom._document.activeElement === globalObj._state._currentModalFocusableElements[1]) {
+                if (currentActiveElement === globalObj._state._currentModalFocusableElements[1]) {
                     globalObj._state._currentModalFocusableElements[0].focus();
                     e.preventDefault();
                 }
@@ -395,21 +399,9 @@ export const _handleFocusTrap = (api) => {
                 !tabbedOutsideDiv && e.preventDefault();
 
                 if(e.shiftKey){
-                    if(globalObj._state._currentModalFocusableElements[3]){
-                        if(!globalObj._state._currentModalFocusableElements[2]){
-                            globalObj._state._currentModalFocusableElements[0].focus();
-                        }else{
-                            globalObj._state._currentModalFocusableElements[2].focus();
-                        }
-                    }else{
-                        globalObj._state._currentModalFocusableElements[1].focus();
-                    }
+                    globalObj._state._currentModalFocusableElements[1].focus();
                 }else{
-                    if(globalObj._state._currentModalFocusableElements[3]){
-                        globalObj._state._currentModalFocusableElements[3].focus();
-                    }else{
-                        globalObj._state._currentModalFocusableElements[0].focus();
-                    }
+                    globalObj._state._currentModalFocusableElements[0].focus();
                 }
             }
         }
@@ -449,60 +441,27 @@ export const _getModalFocusableData = () => {
      * Note: any of the below focusable elements, which has the attribute tabindex="-1" AND is either
      * the first or last element of the modal, won't receive focus during "open/close" modal
      */
-    var allowed_focusable_types = ['[href]', BUTTON_TAG, 'input', 'details', '[tabindex="0"]'].map(tag => tag + ':not([tabindex="-1"])');
+    const focusableTypesSelector = ['[href]', BUTTON_TAG, 'input', 'details', '[tabindex="0"]']
+        .join(':not([tabindex="-1"]), ');
 
     /**
      * Saves all focusable elements inside modal, into the array
      * @param {HTMLElement} modal
      * @param {Element[]} _array
      */
-    function _saveAllFocusableElements(modal, _array){
-        var focusLater=false, focusFirst=false;
+    const _saveAllFocusableElements = (modal, _array) => {
 
-        try{
-            var focusableElements = modal && modal.querySelectorAll(allowed_focusable_types.join(':not([tabindex="-1"]), '));
-            var attr, len=focusableElements.length, i=0;
-
-            while(i < len){
-
-                attr = focusableElements[i].getAttribute('data-focus');
-
-                if(!focusFirst && attr === '1'){
-                    focusFirst = focusableElements[i];
-
-                }else if(attr === '0'){
-                    focusLater = focusableElements[i];
-                    if(!focusFirst && focusableElements[i+1].getAttribute('data-focus') !== '0'){
-                        focusFirst = focusableElements[i+1];
-                    }
-                }
-
-                i++;
-            }
-
-        }catch(e){
-            return [];
-        }
+        const focusableElements = modal && modal.querySelectorAll(focusableTypesSelector);
 
         /**
          * Save first and last elements (used to lock/trap focus inside modal)
          */
         _array[0] = focusableElements[0];
         _array[1] = focusableElements[focusableElements.length - 1];
-        _array[2] = focusLater;
-        _array[3] = focusFirst;
-    }
+    };
 
-    /**
-     * Get preferences modal's all focusable elements
-     * Save first and last elements (used to lock/trap focus inside modal)
-     */
-    _saveAllFocusableElements(globalObj._dom._pm, globalObj._state._allPreferencesModalFocusableElements);
+    _saveAllFocusableElements(globalObj._dom._pm, globalObj._state._pmFocusableElements);
 
-    /**
-     * If consent modal exists, do the same
-     */
-    if(globalObj._state._consentModalExists){
-        _saveAllFocusableElements(globalObj._dom._consentModal, globalObj._state._allConsentModalFocusableElements);
-    }
+    if(globalObj._state._consentModalExists)
+        _saveAllFocusableElements(globalObj._dom._consentModal, globalObj._state._cmFocusableElements);
 };
