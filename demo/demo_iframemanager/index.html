@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="cc--darkmode">
 <head>
     <meta charset="UTF-8">
     <title>CookieConsent demo</title>
@@ -38,16 +38,29 @@
     <script defer src="../../dist/cookieconsent.umd.js"></script>
     <script defer src="cookieconsent-init.js"></script>
 
+    <script type="text/plain" data-category="analytics">
+        console.log('enabled analytics');
+    </script>
+
+    <script type="text/plain" data-category="!analytics">
+        console.log('disabled analytics');
+    </script>
+
+    <!-- Service example -->
     <script type="text/plain" data-category="analytics" data-service="Inline Service #1">
-        console.log('enabled service #1!');
+        console.log('enabled analytics/service #1');
+    </script>
+
+    <script type="text/plain" data-category="analytics" data-service="!Inline Service #1">
+        console.log('disabled analytics/service #1');
     </script>
 
     <script>
-        function updateFields(){
-            var cookie = cc.getCookie();
-            document.getElementById('consent-id').innerText = cookie.consentId;
-            document.getElementById('consent-timestamp').innerText = new Date(cookie.consentTimestamp).toLocaleString();
-            document.getElementById('last-consent-timestamp').innerText = new Date(cookie.lastConsentTimestamp).toLocaleString();
+        const updateFields = () => {
+            const {consentId, consentTimestamp, lastConsentTimestamp} = cc.getCookie();
+            document.getElementById('consent-id').innerText = consentId;
+            document.getElementById('consent-timestamp').innerText = new Date(consentTimestamp).toLocaleString();
+            document.getElementById('last-consent-timestamp').innerText = new Date(lastConsentTimestamp).toLocaleString();
         }
         window.addEventListener('cc:onChange', updateFields);
         window.addEventListener('cc:onConsent', updateFields);

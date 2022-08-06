@@ -1,25 +1,26 @@
 {
     "consentModal": {
         "title": "Hello traveller, it's cookie time!",
-        "description": "Our website uses essential cookies to ensure its proper operation and tracking cookies to understand how you interact with it. The latter will be set only after consent. <button type=\"button\" data-cc=\"show-preferencesModal\" class=\"cc-link\">Manage preferences</button>",
+        "description": "Our website uses essential cookies to ensure its proper operation and tracking cookies to understand how you interact with it. The latter will be set only after consent. <button type=\"button\" data-cc=\"show-preferencesModal\" class=\"cc__link\">Manage preferences</button>",
         "acceptAllBtn": "Accept all",
         "acceptNecessaryBtn": "Reject all",
         "showPreferencesBtn": "Manage preferences",
-        "footer": "<span>Privacy Policy</span><span>Terms and conditions</span>"
+        "footer": "<a href=\"#link\">Privacy Policy</a><a href=\"#link\">Terms and conditions</a>"
     },
     "preferencesModal": {
-        "title": "Manage cookie preferences",
+        "title": "<img src=\"https://fontmeme.com/permalink/220805/3b90158d204fdd325173a5c7873e7cc1.png\" alt=\"Logo\" loading=\"lazy\" height=\"35px\" style=\"margin-left: -4px; margin-bottom: -5px;\">",
         "acceptAllBtn": "Accept all",
         "acceptNecessaryBtn": "Reject all",
         "savePreferencesBtn": "Save preferences",
         "closeIconLabel": "Close modal",
+        "serviceCounterLabel":"Services",
         "sections": [
             {
                 "title": "Somebody said ... cookies?",
                 "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
             },
             {
-                "title": "Strictly necessary cookies",
+                "title": "Strictly necessary cookies <span class=\"pm__badge\">always enabled</span>",
                 "description": "These cookies are essential for the prop",
                 "linkedCategory": "necessary"
             },
@@ -48,7 +49,7 @@
             },
             {
                 "title": "More information",
-                "description": "For any queries in relation to my policy on cookies and your choices, please <a class=\"cc-link\" href=\"#yourdomain.com\">contact me</a>."
+                "description": "For any queries in relation to my policy on cookies and your choices, please <a class=\"cc__link\" href=\"#yourdomain.com\">contact me</a>."
             }
         ]
     }

@@ -1,8 +1,8 @@
 // obtain iframemanager object
-var manager = iframemanager();
+const manager = iframemanager();
 
 // obtain cookieconsent plugin
-var cc = CookieConsent.init();
+const cc = CookieConsent.init();
 
 // Configure with youtube embed
 manager.run({
@@ -33,14 +33,18 @@ cc.run({
 
     cookie: {
         name: 'cc_cookie_demo3',
-        expiresAfterDays: function(acceptType){
+
+        /**
+         * Dynamic expiresAfterDays value
+         */
+        expiresAfterDays: (acceptType) => {
             if(acceptType === 'all'){
                 console.log('long duration!');
-                return 640;
+                return 365;
             }
 
             console.log("short duration!");
-            return 0;
+            return 90;
         }
     },
 
@@ -48,23 +52,33 @@ cc.run({
         consentModal: {
             layout: 'cloud inline',
             position: 'bottom center',
+            equalWeightButtons: true
         },
         preferencesModal: {
             layout: 'bar',
-            position: 'right'
+            position: 'right',
+            equalWeightButtons: true
         }
     },
 
-    onFirstConsent: function(){
-        console.log('onFirstConsent fired');
+    onFirstConsent: ({cookie}) => {
+        console.log('onFirstConsent fired',cookie);
     },
 
-    onConsent: function(){
-        console.log('onConsent fired!')
+    onConsent: ({cookie}) => {
+        console.log('onConsent fired!', cookie)
     },
 
-    onChange: function () {
-        console.log('onChange fired!');
+    onChange: ({cookie, changedCategories, changedServices}) => {
+        console.log('onChange fired!', changedCategories, changedServices);
+    },
+
+    onModalShow: ({modalName}) => {
+        console.log('visible:', modalName);
+    },
+
+    onModalHide: ({modalName}) => {
+        console.log('hidden:', modalName);
     },
 
     categories: {
@@ -83,9 +97,11 @@ cc.run({
             services: {
                 IframeManager:{
                     onAccept: () => {
+                        console.log("enabled iframemanager")
                         manager.acceptService('all');
                     },
                     onReject: () => {
+                        console.log("disabled iframemanager")
                         manager.rejectService('all');
                     }
                 }

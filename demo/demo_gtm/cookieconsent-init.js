@@ -62,7 +62,7 @@ cc.run({
             en: {
                 consentModal: {
                     title: 'Hello traveller, it\'s cookie time!',
-                    description: 'Our website uses essential cookies to ensure its proper operation and tracking cookies to understand how you interact with it. The latter will be set only after consent. <a href="#privacy-policy" class="cc-link">Privacy policy</a>',
+                    description: 'Our website uses essential cookies to ensure its proper operation and tracking cookies to understand how you interact with it. The latter will be set only after consent. <a href="#privacy-policy" class="cc__link">Privacy policy</a>',
                     acceptAllBtn: 'Accept',
                     acceptNecessaryBtn: 'Reject',
                     showPreferencesBtn: 'Manage preferences'
@@ -74,7 +74,7 @@ cc.run({
                     savePreferencesBtn: 'Save preferences',
                     sections: [
                         {
-                            description: 'I use cookies to ensure the basic functionalities of the website and to enhance your online experience. You can choose for each category to opt-in/out whenever you want. For more details relative to cookies and other sensitive data, please read the full <a href="#" class="cc-link">privacy policy</a>.'
+                            description: 'I use cookies to ensure the basic functionalities of the website and to enhance your online experience. You can choose for each category to opt-in/out whenever you want. For more details relative to cookies and other sensitive data, please read the full <a href="#" class="cc__link">privacy policy</a>.'
                         }, {
                             title: 'Strictly necessary cookies',
                             description: 'These cookies are essential for the proper functioning of my website. Without these cookies, the website would not work properly',
@@ -108,7 +108,7 @@ cc.run({
                             linkedCategory: 'ads'
                         }, {
                             title: 'More information',
-                            description: 'For any queries in relation to my policy on cookies and your choices, please <a class="cc-link" href="#yourdomain.com">contact me</a>.',
+                            description: 'For any queries in relation to my policy on cookies and your choices, please <a class="cc__link" href="#yourdomain.com">contact me</a>.',
                         }
                     ]
                 }

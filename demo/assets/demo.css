@@ -86,7 +86,6 @@ a:active{
 }
 
 #cc-main p{
-    display: flex;
     margin: 0;
     margin-bottom: 1px!important;
 }
