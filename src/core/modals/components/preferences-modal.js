@@ -181,6 +181,7 @@ export const _createPreferencesModal = (api) => {
 
                 if(sServiceNames.length > 0){
                     var serviceCounter = _createNode('span');
+                    _addClass(serviceCounter, 'pm__badge');
                     _addClass(serviceCounter, 'pm__service-counter');
                     _setAttribute(serviceCounter, 'aria-hidden', true);
                     _setAttribute(serviceCounter, 'data-servicecounter', sServiceNames.length);

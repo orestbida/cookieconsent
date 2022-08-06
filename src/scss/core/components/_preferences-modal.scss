@@ -235,26 +235,33 @@ $toggle-knob-icon-width: 2px;
     }
 
     /* TODO: Services counter */
-    .pm__service-counter{
+
+    .pm__badge{
         display: flex;
-        background: var(--cc-btn-primary-bg);
-        color: var(--cc-btn-primary-color);
         margin-left: 1em;
         border-radius: 5em;
         font-weight: $font-weight-bold;
+        font-size: .8em;
+        background: var(--cc-btn-secondary-bg);
+        color: var(--cc-secondary-color);
         position: relative;
-        padding-bottom: 1px;
         height: 23px;
-        width: 23px;
+        width: auto;
         min-width: 23px;
         align-items: center;
         text-align: center;
         justify-content: center;
-        padding-bottom: 1px;
+        padding: 0 0.6em 1px 0.6em;
+    }
+
+    .pm__service-counter{
+        padding: 0;
+        width: 23px;
+        background: var(--cc-btn-primary-bg);
+        color: var(--cc-btn-primary-color);
 
         &::before{
             content: attr(data-servicecounter);
-            font-size: .8em;
             white-space: nowrap;
         }
 
@@ -267,8 +274,6 @@ $toggle-knob-icon-width: 2px;
             }
         }
     }
-
-
 
     /* START: Section Toggle */
     .section__toggle-wrapper,
@@ -844,7 +849,11 @@ $toggle-knob-icon-width: 2px;
         .pm__header,
         .pm__body,
         .pm__footer{
-            padding: 1em 1.15em;
+            padding: 1em 1.15em!important;
+        }
+
+        .pm__badge{
+            display: none;
         }
 
         /* Start: Table -> vertical table */
