@@ -45,7 +45,7 @@ export const _createPreferencesModal = (api) => {
             if (event.keyCode === 27) {
                 api.hidePreferences();
             }
-        }, true);
+        });
 
         // modal header
         globalObj._dom._pmHeader = _createNode(DIV_TAG);
