@@ -468,8 +468,6 @@ export const api = {
      */
     show: (createModal) => {
 
-        if(!globalObj._init) return;
-
         if(createModal && !globalObj._state._consentModalExists){
             _createConsentModal(api);
             _getModalFocusableData();
@@ -522,7 +520,7 @@ export const api = {
      * Show preferences modal
      */
     showPreferences: () => {
-        if(!globalObj._init) return;
+        if(globalObj._state._preferencesModalVisible) return;
 
         _addClass(globalObj._dom._htmlDom, TOGGLE_PREFERENCES_MODAL_CLASS);
         _setAttribute(globalObj._dom._pm, 'aria-hidden', 'false');
@@ -560,7 +558,7 @@ export const api = {
      */
     hidePreferences: () => {
 
-        if(!globalObj._init) return;
+        if(!globalObj._state._preferencesModalVisible) return;
 
         _removeClass(globalObj._dom._htmlDom, TOGGLE_PREFERENCES_MODAL_CLASS);
         globalObj._state._preferencesModalVisible = false;
