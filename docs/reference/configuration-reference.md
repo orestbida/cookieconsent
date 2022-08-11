@@ -547,14 +547,16 @@ Clear cookies when the user rejects the cookie category.
         categories: {
             analytics: {
                 readOnly: false,
-                autoClear: [
-                    {
-                        name: /^(_ga)/      //regex
-                    },
-                    {
-                        name: '_gid'        //string
-                    }
-                ]
+                autoClear: {
+                    cookies: [
+                        {
+                            name: /^(_ga)/      //regex
+                        },
+                        {
+                            name: '_gid'        //string
+                        }
+                    ]
+                }
             }
         }
     })
