@@ -100,5 +100,18 @@ $font-weight-bold: 600;
     }
 }
 
+/** Disable page scroll **/
+html.disable--interaction{
+    &.show--consent{
+        height: auto!important;
+        overflow: hidden!important;
+
+        body{
+            height: auto!important;
+            overflow-y: hidden!important;
+        }
+    }
+}
+
 @import "./components/consent-modal";
 @import "./components/preferences-modal";
