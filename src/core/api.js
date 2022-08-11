@@ -507,7 +507,7 @@ export const api = {
             setTimeout(() => {
                 //restore focus to the last page element which had focus before modal opening
                 globalObj._state._lastFocusedElemBeforeModal.focus();
-                globalObj._state._currentModalFocusableElements = null;
+                globalObj._state._currentModalFocusableElements = [];
             }, 200);
 
             _log('CookieConsent [TOGGLE]: hide consentModal');
@@ -579,7 +579,7 @@ export const api = {
              * Restore focus to last page element which had focus before modal opening
              */
             globalObj._state._lastFocusedElemBeforeModal && globalObj._state._lastFocusedElemBeforeModal.focus();
-            globalObj._state._currentModalFocusableElements = null;
+            globalObj._state._currentModalFocusableElements = [];
         }
 
         globalObj._state._clickedInsideModal = false;

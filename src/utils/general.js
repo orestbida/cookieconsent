@@ -375,7 +375,7 @@ export const _handleFocusTrap = (api) => {
         if(e.key !== 'Tab') return;
 
         // If there is any modal to focus
-        if(globalObj._state._currentModalFocusableElements){
+        if(globalObj._state._currentModalFocusableElements.length >= 1){
 
             const currentActiveElement = globalObj._dom._document.activeElement;
 
