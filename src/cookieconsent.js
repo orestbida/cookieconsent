@@ -2133,7 +2133,7 @@
             for(var i=0; i<cookies.length; i++){
                 for(var j=0; j<domains.length; j++){
                     document.cookie = cookies[i] + '=; path=' + path +
-                    (domains[j].indexOf('.') > -1 ? '; domain=' + domains[j] : "") + '; ' + expires;
+                    (domains[j].indexOf('.') == 0 ? '; domain=' + domains[j] : "") + '; ' + expires;
                 }
                 _log("CookieConsent [AUTOCLEAR]: deleting cookie: '" + cookies[i] + "' path: '" + path + "' domain:", domains);
             }
