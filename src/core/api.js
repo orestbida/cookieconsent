@@ -265,7 +265,6 @@ export const api = {
      */
     eraseCookies: (cookies, path, domain) => {
         let allCookies = [];
-        const configDomain = globalObj._config.cookie.domain;
 
         /**
          * Add cookie to allCookies array if it exists
@@ -280,10 +279,6 @@ export const api = {
             }
         };
 
-        const domains = domain
-            ? [domain, '.'+domain]
-            : [configDomain, '.' + configDomain];
-
         if(Array.isArray(cookies)){
             for(var i=0; i<cookies.length; i++){
                 addCookieIfExists(cookies[i]);
@@ -292,7 +287,7 @@ export const api = {
             addCookieIfExists(cookies);
         }
 
-        _eraseCookies(allCookies, path, domains);
+        _eraseCookies(allCookies, path, domain);
     },
 
     /**

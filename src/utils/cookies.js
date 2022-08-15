@@ -10,25 +10,13 @@ import { _manageExistingScripts } from './scripts';
  */
 export const _autoclearCookies = (clearOnFirstConsent) => {
 
-    /**
-     *  @type {string}
-     */
-    var currentDomain = globalObj._config.cookie.domain;
+    var domain = '';
 
     // reset reload state
     globalObj._state._reloadPage = false;
 
     // Retrieve all cookies
     var allCookiesArray = _getAllCookies();
-
-    // delete cookies on current domain
-    var domains = [currentDomain, '.'+currentDomain];
-
-    // if domain has the "www" prefix, delete cookies also for 'domain.com' and '.domain.com'
-    if(currentDomain.slice(0, 4) === 'www.'){
-        var domainWithoutPrefix = currentDomain.substring(4);  // remove first 4 chars (www.)
-        domains.push(domainWithoutPrefix, '.' + domainWithoutPrefix);
-    }
 
     var categoriesToCheck = clearOnFirstConsent ? globalObj._state._allCategoryNames : globalObj._state._lastChangedCategoryNames;
 
@@ -91,7 +79,7 @@ export const _autoclearCookies = (clearOnFirstConsent) => {
                 var currCookiePath = currentAutoClearCookies[j].path || false;
 
                 // set domain to the specified domain
-                currCookieDomain && ( domains = [currCookieDomain, '.'+currCookieDomain]);
+                currCookieDomain && (domain = currCookieDomain);
 
                 // If regex provided => filter cookie array
                 if(isRegex){
@@ -108,7 +96,7 @@ export const _autoclearCookies = (clearOnFirstConsent) => {
 
                 // Delete cookie(s)
                 if(foundCookies.length > 0){
-                    _eraseCookies(foundCookies, currCookiePath, domains);
+                    _eraseCookies(foundCookies, currCookiePath, domain);
                 }
             }
         }
@@ -299,20 +287,48 @@ export const _parseCookie = (value) => {
  * Delete cookie by name & path
  * @param {string[]} cookies Array of cookie names
  * @param {string} [customPath]
- * @param {string[]} [domains] example: ['domain.com', '.domain.com']
+ * @param {string} [domain]
  */
-export const _eraseCookies = (cookies, customPath, domains) => {
+export const _eraseCookies = (cookies, customPath, customDomain) => {
 
-    var path = customPath ? customPath : globalObj._config.cookie.path;
-    var expires = 'Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+    const
+        domain = customDomain || globalObj._config.cookie.domain,
+        path = customPath || globalObj._config.cookie.path,
+        isWwwSubdomain = domain.slice(0, 4) === 'www.',
+        mainDomain = isWwwSubdomain && domain.substring(4);
 
-    for(var i=0; i<cookies.length; i++){
-        for(var j=0; j<domains.length; j++){
-            document.cookie = cookies[i] + '=; path=' + path +
-            (_elContains(domains[j], '.') ? '; domain=' + domains[j] : '') + '; ' + expires;
-        }
-        _log('CookieConsent [AUTOCLEAR]: deleting cookie: \'' + cookies[i] + '\' path: \'' + path + '\' domain:', domains);
-    }
+    /**
+     * Helper function to erase cookie
+     * @param {string} cookie
+     * @param {string} [domain]
+     */
+    const eraseCookieHelper = (cookie, domain) => {
+        document.cookie = cookie + '='
+            + '; path=' + path
+            + (domain ? '; domain=.' + domain : '')
+            + '; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+    };
+
+    cookies.forEach(cookieName => {
+
+        /**
+         * 2 attempts to erase the cookie:
+         * - without domain
+         * - with domain
+         */
+        eraseCookieHelper(cookieName);
+        eraseCookieHelper(cookieName, domain);
+
+        /**
+         * If domain starts with 'www.',
+         * also erase the cookie for the
+         * main domain (without www)
+         */
+        if(isWwwSubdomain)
+            eraseCookieHelper(cookieName, mainDomain);
+
+        _log('CookieConsent [AUTOCLEAR]: deleting cookie: "' + cookieName + '" path: "' + path + '" domain:', domain);
+    });
 };
 
 /**
