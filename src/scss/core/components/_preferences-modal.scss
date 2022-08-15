@@ -1,5 +1,5 @@
 $padding-y: 1em;
-$padding-x: 1.45em;
+$padding-x: 1.6em;
 
 $btn-margin: 6px;
 $btn-height: 41px;
@@ -155,6 +155,7 @@ $toggle-knob-icon-width: 2px;
                 padding: 1.1em 5.4em 1.1em 2.7em;
                 border: 1px solid var(--cc-cookie-category-block-border);
                 transition: background-color .25s ease, border-color .25s ease;
+                min-height: 58px;
 
                 &:hover{
                     background: var(--cc-cookie-category-block-hover-bg);
@@ -568,10 +569,6 @@ $toggle-knob-icon-width: 2px;
         vertical-align: top;
         padding-left: 1.2em;
     }
-
-    .pm__table-th{
-        font-weight: $font-weight-bold;
-    }
     /* END: Table style */
 
     .pm__footer{
@@ -784,9 +781,9 @@ $toggle-knob-icon-width: 2px;
     &.c--anim{
         .pm,
         .pm-wrapper::before{
-            transition: opacity .3s ease,
-                    visibility .5s ease,
-                    transform .5s $transition-easing;
+            transition: opacity .4s ease,
+                    visibility .4s ease,
+                    transform .4s ease;
         }
     }
 }

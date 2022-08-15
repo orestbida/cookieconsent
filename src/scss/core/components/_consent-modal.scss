@@ -555,9 +555,9 @@ $sections-padding: 1em 1.3em;
     &.c--anim{
         .cm,
         .cm-wrapper::before{
-            transition: opacity .3s ease,
-                    visibility .3s ease,
-                    transform .5s $transition-easing;
+            transition: opacity .4s ease,
+                    visibility .4s ease,
+                    transform .4s ease;
         }
 
         .cm__close,
