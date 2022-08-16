@@ -1,5 +1,5 @@
 import { _fireEvent, globalObj, _shallowCopy } from '../core/global';
-import { OPT_OUT_MODE } from './constants';
+import { OPT_OUT_MODE, OPT_IN_MODE } from './constants';
 import { _log, _indexOf, _uuidv4, _updateAcceptType, _getRemainingExpirationTimeMS, _getExpiresAfterDaysValue, _elContains, _arrayDiff } from './general';
 import { _manageExistingScripts } from './scripts';
 
@@ -214,7 +214,7 @@ export const _saveCookiePreferences = () => {
         _fireEvent(globalObj._customEvents._onFirstConsent);
         _fireEvent(globalObj._customEvents._onConsent);
 
-        if(globalObj._config.mode === 'opt-in') return;
+        if(globalObj._config.mode === OPT_IN_MODE) return;
     }
 
     if(categoriesWereChanged || servicesWereChanged)
