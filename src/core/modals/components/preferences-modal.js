@@ -175,6 +175,14 @@ export const _createPreferencesModal = (api) => {
             _appendChild(sTitleContainer, sTitle);
 
             if(hasToggle){
+
+                /**
+                 * Arrow icon span
+                 */
+                var sTitleIcon = _createNode('span');
+                _addClass(sTitleIcon, 'pm__section-arrow');
+                _appendChild(sTitleContainer, sTitleIcon);
+
                 s.className += '--toggle';
 
                 var toggleLabel = _createToggleLabel(sTitleData, sLinkedCategory, sCurrentCategoryObject, servicesContainer);

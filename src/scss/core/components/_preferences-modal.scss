@@ -152,10 +152,11 @@ $toggle-knob-icon-width: 2px;
                 align-items: center;
                 background: var(--cc-cookie-category-block-bg);
                 position: relative;
-                padding: 1.1em 5.4em 1.1em 2.7em;
+                padding: 1.1em 5.4em 1.1em 1.2em;
                 border: 1px solid var(--cc-cookie-category-block-border);
                 transition: background-color .25s ease, border-color .25s ease;
                 min-height: 58px;
+                cursor: initial;
 
                 &:hover{
                     background: var(--cc-cookie-category-block-hover-bg);
@@ -184,10 +185,10 @@ $toggle-knob-icon-width: 2px;
                 .pm__section-title{
                     border-bottom-left-radius: 0;
                     border-bottom-right-radius: 0;
+                }
 
-                    &::before{
-                        transform: translateY(-20%) rotate(225deg)
-                    }
+                .pm__section-arrow::before{
+                    transform: translateY(-20%) rotate(225deg)
                 }
 
                 .pm__section-desc-wrapper{
@@ -204,19 +205,37 @@ $toggle-knob-icon-width: 2px;
         }
 
         &--expandable{
-            .pm__section-title::before{
-                content: '';
-                border: solid var(--cc-btn-secondary-color);
-                border-width: 0 2px 2px 0;
-                padding: 0.2em;
-                display: inline-block;
+
+            .pm__section-title{
+                padding-left: 3.4em;
+                cursor: pointer;
+            }
+
+            .pm__section-arrow{
+                width: 20px;
+                height: 20px;
                 position: absolute;
-                margin-right: 15px;
-                transform: translateY(-50%) rotate(45deg);
-                left: 1.2em;
                 top: 50%;
-                z-index: 1;
-                transition: transform .25s ease;
+                transform: translateY(-50%);
+                left: 1.1em;
+                background: var(--cc-toggle-readonly-bg);
+                display: flex;
+                justify-content: center;
+                border-radius: 100%;
+                pointer-events: none;
+
+                &::before{
+                    content: "";
+                    border: solid var(--cc-btn-secondary-color);
+                    border-width: 0 2px 2px 0;
+                    padding: 0.15em;
+                    position: absolute;
+                    transform: translateY(-50%) rotate(45deg);
+                    top: 50%;
+                    margin-top: -1px;
+                    z-index: 1;
+                    transition: transform 0.25s ease;
+                }
             }
         }
     }
@@ -235,8 +254,7 @@ $toggle-knob-icon-width: 2px;
         font-size: .95em;
     }
 
-    /* TODO: Services counter */
-
+    /* START: Services counter badge */
     .pm__badge{
         display: flex;
         margin-left: 1em;
@@ -253,6 +271,8 @@ $toggle-knob-icon-width: 2px;
         text-align: center;
         justify-content: center;
         padding: 0 0.6em 1px 0.6em;
+        white-space: nowrap;
+        overflow: hidden;
     }
 
     .pm__service-counter{
@@ -263,7 +283,6 @@ $toggle-knob-icon-width: 2px;
 
         &::before{
             content: attr(data-servicecounter);
-            white-space: nowrap;
         }
 
         &[data-counterlabel]{
@@ -275,6 +294,7 @@ $toggle-knob-icon-width: 2px;
             }
         }
     }
+    /* END: Services counter badge */
 
     /* START: Section Toggle */
     .section__toggle-wrapper,
@@ -304,7 +324,7 @@ $toggle-knob-icon-width: 2px;
             transform: scale(.85);
             transform-origin: right;
             margin: 0;
-            right: 0;
+            right: 4px;
         }
     }
 
@@ -846,7 +866,7 @@ $toggle-knob-icon-width: 2px;
         .pm__header,
         .pm__body,
         .pm__footer{
-            padding: 1em 1.15em!important;
+            padding: 1em!important;
         }
 
         .pm__badge{

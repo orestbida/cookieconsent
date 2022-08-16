@@ -384,6 +384,10 @@ $sections-padding: 1em 1.3em;
             flex: 1;
         }
 
+        .cm__desc{
+            max-height: 9.4em
+        }
+
         .cm__btns{
             border-top: none;
             border-left: 1px solid var(--cc-separator-border-color);
