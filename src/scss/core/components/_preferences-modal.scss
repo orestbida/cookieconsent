@@ -1,5 +1,5 @@
 $padding-y: 1em;
-$padding-x: 1.6em;
+$padding-x: 1.5em;
 
 $btn-margin: 6px;
 $btn-height: 41px;
@@ -74,7 +74,7 @@ $toggle-knob-icon-width: 2px;
             right: 0;
             margin: auto;
             height: 0.9em;
-            width: 2px;
+            width: 1.5px;
             background: var(--cc-btn-secondary-color);
             transform: translateY(-50%) rotate(45deg);
             transition: all .15s ease;
@@ -620,8 +620,8 @@ $toggle-knob-icon-width: 2px;
     /* START: Box layout */
 
     .pm--box{
-        left: 1em;
-        right: 1em;
+        left: var(--cc-modal-margin);
+        right: var(--cc-modal-margin);
         margin: 0 auto;
         top: 50%;
         max-width: 43em;
@@ -781,16 +781,16 @@ $toggle-knob-icon-width: 2px;
     &.c--anim{
         .pm,
         .pm-wrapper::before{
-            transition: opacity .4s ease,
-                    visibility .4s ease,
-                    transform .4s ease;
+            transition: opacity var(--cc-modal-transition-duration) ease,
+                    visibility var(--cc-modal-transition-duration) ease,
+                    transform var(--cc-modal-transition-duration) ease;
         }
     }
 }
 
 #cc-main{
     .pm--box{
-        transform: translateY(calc(-50% + $translate-y)) scale(.98);
+        transform: translateY(calc(-50% + $translate-y));
     }
 
     .pm--bar{
