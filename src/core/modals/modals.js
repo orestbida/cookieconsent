@@ -5,7 +5,7 @@ import { _createPreferencesModal } from './components/preferences-modal';
 import { DIV_TAG } from '../../utils/constants';
 /**
  * Generate cookie consent html markup
- * @param {import("../global").Api} api
+ * @param {import('../../../types').CookieConsentAPI} api
  */
 export const _createCookieConsentHTML = (api) => {
 

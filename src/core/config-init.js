@@ -9,7 +9,7 @@ import { OPT_OUT_MODE } from '../utils/constants';
  */
 export const _setConfig = (_userConfig) => {
 
-    setWindowData();
+    //setWindowData();
     globalObj._init = true;
 
     /**
@@ -134,19 +134,19 @@ export const _setConfig = (_userConfig) => {
     _retrieveScriptElements();
 };
 
-/**
- * This function needs to be called right after .init()
- */
-export const setWindowData = () => {
-    /**
-     * Fix "window is not defined" error
-     */
-    globalObj._config.cookie.domain = window.location.hostname;
+// /**
+//  * This function needs to be called right after .init()
+//  */
+// export const setWindowData = () => {
+//     /**
+//      * Fix "window is not defined" error
+//      */
+//     globalObj._config.cookie.domain = window.location.hostname;
 
-    /**
-     * Define document properties after globalObj._config.
-     * to avoid errors like "document is not defined"
-     */
-    globalObj._dom._document = document;
-    globalObj._dom._htmlDom = globalObj._dom._document.documentElement;
-};
+//     /**
+//      * Define document properties after globalObj._config.
+//      * to avoid errors like "document is not defined"
+//      */
+//     globalObj._dom._document = document;
+//     globalObj._dom._htmlDom = globalObj._dom._document.documentElement;
+// };

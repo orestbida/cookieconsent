@@ -1,9 +1,13 @@
-import { api } from './core/api';
-import { setWindowData } from './core/config-init';
+//import * as API from './core/api';
 
-export default {
-    init: () => {
-        setWindowData();
-        return api;
-    }
-};
+// /**
+//  * Returns object with all the available API methods
+//  * @returns {import('../types/index').CookieConsentAPI}
+//  */
+// const init = () => API;
+
+// export {
+//     init
+// };
+
+export * from './core/api';
