@@ -1,8 +1,5 @@
-// obtain cookieconsent plugin
-var cc = CookieConsent.init();
-
 // run plugin with config object
-cc.run({
+CookieConsent.run({
     disablePageInteraction: true,
 
     cookie: {

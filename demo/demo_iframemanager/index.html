@@ -57,7 +57,7 @@
 
     <script>
         const updateFields = () => {
-            const {consentId, consentTimestamp, lastConsentTimestamp} = cc.getCookie();
+            const {consentId, consentTimestamp, lastConsentTimestamp} = CookieConsent.getCookie();
             document.getElementById('consent-id').innerText = consentId;
             document.getElementById('consent-timestamp').innerText = new Date(consentTimestamp).toLocaleString();
             document.getElementById('last-consent-timestamp').innerText = new Date(lastConsentTimestamp).toLocaleString();

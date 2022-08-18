@@ -20,7 +20,7 @@ resetCookiesBtn.innerText = 'Reset cookieconsent';
 cookieSettingsBtn.parentNode.insertBefore(resetCookiesBtn, cookieSettingsBtn.nextSibling);
 
 resetCookiesBtn.addEventListener('click', function(){
-    cc.acceptCategory([]);
-    cc.eraseCookies([/^(cc_)/, cc.getConfig('cookie').name]);
+    CookieConsent.acceptCategory([]);
+    CookieConsent.eraseCookies([/^(cc_)/, CookieConsent.getConfig('cookie').name]);
     window.location.reload();
 });

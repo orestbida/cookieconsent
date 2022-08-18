@@ -1,9 +1,6 @@
 // obtain iframemanager object
 const manager = iframemanager();
 
-// obtain cookieconsent plugin
-const cc = CookieConsent.init();
-
 // Configure with youtube embed
 manager.run({
     currLang: 'en',
@@ -28,7 +25,7 @@ manager.run({
     }
 });
 
-cc.run({
+CookieConsent.run({
     disablePageInteraction: true,
 
     cookie: {
