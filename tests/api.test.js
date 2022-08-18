@@ -1,4 +1,4 @@
-import CookieConsent from "../src/index"
+import * as CookieConsent from "../src/index"
 import testConfig from "./config/full-config";
 import { _elContains, _getKeys, _isObject } from "../src/utils/general";
 import { _setCookie } from "../src/utils/cookies";
@@ -29,7 +29,7 @@ describe("API tests", () =>{
             <script type="text/plain" data-category="analytics" data-src="./config/testScriptLoad.js"></script>
         `;
 
-        api = CookieConsent.init();
+        api = CookieConsent;
     })
 
     beforeEach(async ()=>{

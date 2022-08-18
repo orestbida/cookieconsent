@@ -13,7 +13,7 @@ import {
     _uuidv4
 } from '../src/utils/general';
 
-import CookieConsent from "../src/index"
+import * as CookieConsent from "../src/index"
 import testConfig from "./config/basic-config"
 import { defineCryptoRandom, htmlHasClass } from './config/mocks-utils';
 import { globalObj } from '../src/core/global';
@@ -25,7 +25,7 @@ describe("Test add/remove/toggle classes", () => {
 
     beforeAll(async ()=>{
         defineCryptoRandom();
-        api = CookieConsent.init();
+        api = CookieConsent;
         await api.run(testConfig);
         api.acceptCategory();
     })

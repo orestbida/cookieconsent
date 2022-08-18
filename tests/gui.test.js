@@ -1,5 +1,5 @@
 import { globalObj } from "../src/core/global";
-import CookieConsent from "../src/index"
+import * as CookieConsent from "../src/index"
 import testConfig from "./config/full-config";
 import { defineCryptoRandom, resetCookieConsent } from "./config/mocks-utils";
 
@@ -9,7 +9,7 @@ describe("Test UI options", () =>{
 
     beforeAll(()=>{
         defineCryptoRandom();
-        api = CookieConsent.init();
+        api = CookieConsent;
     })
 
     afterEach(()=>{

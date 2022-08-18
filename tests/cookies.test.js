@@ -1,4 +1,4 @@
-import CookieConsent from "../src/index"
+import * as CookieConsent from "../src/index"
 import testConfig from "./config/full-config";
 
 import {
@@ -15,7 +15,7 @@ let api;
 describe("Cookie should be created successfully", () =>{
     beforeAll(async ()=>{
         defineCryptoRandom();
-        api = CookieConsent.init();
+        api = CookieConsent;
         await api.run(testConfig);
         api.acceptCategory('all');
     })

@@ -1,5 +1,5 @@
 import { globalObj } from "../src/core/global";
-import CookieConsent from "../src/index"
+import * as CookieConsent from "../src/index"
 import { _getKeys } from "../src/utils/general";
 import testConfig from "./config/full-config";
 import { defineCryptoRandom, resetCookieConsent, fireClickEvent, htmlHasClass } from "./config/mocks-utils";
@@ -10,7 +10,7 @@ describe("Consent Modal buttons test", () =>{
 
     beforeAll(()=>{
         defineCryptoRandom();
-        api = CookieConsent.init();
+        api = CookieConsent;
     })
 
     afterEach(()=>{
@@ -55,7 +55,7 @@ describe('Preferences Modal buttons test', () =>{
 
     beforeAll(()=>{
         defineCryptoRandom();
-        api = CookieConsent.init();
+        api = CookieConsent;
     })
 
     beforeEach(async ()=>{
@@ -110,7 +110,7 @@ describe("Test data-cc attributes", () =>{
             <button type="button" data-cc="accept-custom">Accept current selection</button>
         `;
 
-        api = CookieConsent.init();
+        api = CookieConsent;
     })
 
     beforeEach(async ()=>{
