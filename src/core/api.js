@@ -202,6 +202,21 @@ export const acceptCategory = (_categories, _exclusions) => {
 };
 
 /**
+ * Returns true if cookie category is accepted
+ * @param {string} category
+ * @returns {boolean}
+ */
+export const acceptedCategory = (category) => {
+    var categories;
+
+    if(!globalObj._state._invalidConsent || globalObj._config.mode === OPT_IN_MODE)
+        categories = _getCurrentCategoriesState().accepted || [];
+    else  // mode is OPT_OUT_MODE
+        categories = globalObj._state._defaultEnabledCategories;
+    return _elContains(categories, category);
+};
+
+/**
  * Accept one or multiple services under a specific category
  * @param {string|string[]} service
  * @param {string} category
@@ -247,6 +262,18 @@ export const acceptService = (service, category) => {
 };
 
 /**
+ * Returns true if the service in the specified
+ * category is accepted/enabled
+ * @param {string} service
+ * @param {string} category
+ * @returns {boolean}
+ */
+export const acceptedService = (service, category) => {
+    return _elContains(globalObj._state._enabledServices[category] || [], service);
+};
+
+
+/**
  * Returns true if cookie was found and has valid value (not an empty string)
  * @param {string} cookieName
  * @returns {boolean}
@@ -289,6 +316,141 @@ export const eraseCookies = (cookies, path, domain) => {
 };
 
 /**
+ * Show cookie consent modal
+ * @param {boolean} [createModal] create modal if it doesn't exist
+ */
+export const show = (createModal) => {
+
+    if(createModal && !globalObj._state._consentModalExists){
+        _createConsentModal(miniAPI);
+        _getModalFocusableData();
+        _addDataButtonListeners(globalObj._dom._consentModal, miniAPI);
+    }
+
+    if(globalObj._state._consentModalExists){
+
+        _addClass(globalObj._dom._htmlDom, TOGGLE_CONSENT_MODAL_CLASS);
+
+        /**
+         * Update attributes/internal statuses
+         */
+        _setAttribute(globalObj._dom._consentModal, 'aria-hidden', 'false');
+        globalObj._state._consentModalVisible = true;
+
+        setTimeout(() => {
+            globalObj._state._lastFocusedElemBeforeModal = globalObj._dom._document.activeElement;
+            globalObj._state._currentModalFocusableElements = globalObj._state._cmFocusableElements;
+        }, 200);
+
+        _log('CookieConsent [TOGGLE]: show consentModal');
+
+        _fireEvent(globalObj._customEvents._onModalShow, CONSENT_MODAL_NAME);
+    }
+};
+
+/**
+ * Hide consent modal
+ */
+export const hide = () => {
+    if(globalObj._state._consentModalExists && globalObj._state._consentModalVisible){
+        _removeClass(globalObj._dom._htmlDom, TOGGLE_CONSENT_MODAL_CLASS);
+        _setAttribute(globalObj._dom._consentModal, 'aria-hidden', 'true');
+        globalObj._state._consentModalVisible = false;
+
+        setTimeout(() => {
+            //restore focus to the last page element which had focus before modal opening
+            globalObj._state._lastFocusedElemBeforeModal.focus();
+            globalObj._state._currentModalFocusableElements = [];
+        }, 200);
+
+        _log('CookieConsent [TOGGLE]: hide consentModal');
+
+        _fireEvent(globalObj._customEvents._onModalHide, CONSENT_MODAL_NAME);
+    }
+};
+
+/**
+ * Show preferences modal
+ */
+export const showPreferences = () => {
+    if(globalObj._state._preferencesModalVisible) return;
+
+    _addClass(globalObj._dom._htmlDom, TOGGLE_PREFERENCES_MODAL_CLASS);
+    _setAttribute(globalObj._dom._pm, 'aria-hidden', 'false');
+    globalObj._state._preferencesModalVisible = true;
+
+    setTimeout(()=>{
+        globalObj._state._preferencesModalVisibleDelayed = true;
+    }, 1);
+
+    /**
+     * Set focus to the first focusable element inside preferences modal
+     */
+    setTimeout(() => {
+        // If there is no consent-modal, keep track of the last focused elem.
+        if(!globalObj._state._consentModalVisible){
+            globalObj._state._lastFocusedElemBeforeModal = globalObj._dom._document.activeElement;
+        }else{
+            globalObj._state._lastFocusedModalElement = globalObj._dom._document.activeElement;
+        }
+
+        if (globalObj._state._pmFocusableElements.length === 0) return;
+
+        globalObj._state._pmFocusableElements[0].focus();
+
+        globalObj._state._currentModalFocusableElements = globalObj._state._pmFocusableElements;
+    }, 200);
+
+    _log('CookieConsent [TOGGLE]: show preferencesModal');
+
+    _fireEvent(globalObj._customEvents._onModalShow, PREFERENCES_MODAL_NAME);
+};
+
+/**
+ * Hide preferences modal
+ */
+export const hidePreferences = () => {
+
+    if(!globalObj._state._preferencesModalVisible) return;
+
+    _removeClass(globalObj._dom._htmlDom, TOGGLE_PREFERENCES_MODAL_CLASS);
+    globalObj._state._preferencesModalVisible = false;
+    _setAttribute(globalObj._dom._pm, 'aria-hidden', 'true');
+
+    setTimeout(()=>{
+        globalObj._state._preferencesModalVisibleDelayed = false;
+    }, 1);
+
+    /**
+     * If consent modal is visible, focus him (instead of page document)
+     */
+    if(globalObj._state._consentModalVisible){
+        globalObj._state._lastFocusedModalElement && globalObj._state._lastFocusedModalElement.focus();
+        globalObj._state._currentModalFocusableElements = globalObj._state._cmFocusableElements;
+    }else{
+        /**
+         * Restore focus to last page element which had focus before modal opening
+         */
+        globalObj._state._lastFocusedElemBeforeModal && globalObj._state._lastFocusedElemBeforeModal.focus();
+        globalObj._state._currentModalFocusableElements = [];
+    }
+
+    globalObj._state._clickedInsideModal = false;
+
+    _log('CookieConsent [TOGGLE]: hide preferencesModal');
+
+    _fireEvent(globalObj._customEvents._onModalHide, PREFERENCES_MODAL_NAME);
+};
+
+const miniAPI = {
+    show,
+    hide,
+    showPreferences,
+    hidePreferences,
+    acceptCategory
+};
+
+/**
  * Update/change modal's language
  * @param {string} lang new language
  * @param {boolean} [forceUpdate] update language fields forcefully
@@ -315,25 +477,11 @@ export const setLanguage = async (newLanguage, forceUpdate) => {
         globalObj._state._currentLanguageCode = validatedLanguageCode;
 
         if(globalObj._state._consentModalExists){
-            _createConsentModal({
-                hide,
-                acceptCategory,
-                showPreferences
-            });
-            _addDataButtonListeners(globalObj._dom._consentModalInner, {
-                show,
-                hide,
-                showPreferences,
-                hidePreferences,
-                acceptCategory
-            });
+            _createConsentModal(miniAPI);
+            _addDataButtonListeners(globalObj._dom._consentModalBody, miniAPI);
         }
 
-        _createPreferencesModal({
-            hide,
-            hidePreferences,
-            acceptCategory
-        });
+        _createPreferencesModal(miniAPI);
         _log('CookieConsent [LANG]: current language: \'' + validatedLanguageCode + '\'');
 
         return true;
@@ -470,169 +618,6 @@ export const getConfig = (field) => {
 };
 
 /**
- * Show cookie consent modal
- * @param {boolean} [createModal] create modal if it doesn't exist
- */
-export const show = (createModal) => {
-
-    if(createModal && !globalObj._state._consentModalExists){
-        _createConsentModal({
-            hide,
-            acceptCategory,
-            showPreferences
-        });
-        _getModalFocusableData();
-        _addDataButtonListeners(globalObj._dom._consentModal, {
-            show,
-            hide,
-            showPreferences,
-            hidePreferences,
-            acceptCategory
-        });
-    }
-
-    if(globalObj._state._consentModalExists){
-
-        _addClass(globalObj._dom._htmlDom, TOGGLE_CONSENT_MODAL_CLASS);
-
-        /**
-         * Update attributes/internal statuses
-         */
-        _setAttribute(globalObj._dom._consentModal, 'aria-hidden', 'false');
-        globalObj._state._consentModalVisible = true;
-
-        setTimeout(() => {
-            globalObj._state._lastFocusedElemBeforeModal = globalObj._dom._document.activeElement;
-            globalObj._state._currentModalFocusableElements = globalObj._state._cmFocusableElements;
-        }, 200);
-
-        _log('CookieConsent [TOGGLE]: show consentModal');
-
-        _fireEvent(globalObj._customEvents._onModalShow, CONSENT_MODAL_NAME);
-    }
-};
-
-/**
- * Hide consent modal
- */
-export const hide = () => {
-    if(globalObj._state._consentModalExists && globalObj._state._consentModalVisible){
-        _removeClass(globalObj._dom._htmlDom, TOGGLE_CONSENT_MODAL_CLASS);
-        _setAttribute(globalObj._dom._consentModal, 'aria-hidden', 'true');
-        globalObj._state._consentModalVisible = false;
-
-        setTimeout(() => {
-            //restore focus to the last page element which had focus before modal opening
-            globalObj._state._lastFocusedElemBeforeModal.focus();
-            globalObj._state._currentModalFocusableElements = [];
-        }, 200);
-
-        _log('CookieConsent [TOGGLE]: hide consentModal');
-
-        _fireEvent(globalObj._customEvents._onModalHide, CONSENT_MODAL_NAME);
-    }
-};
-
-/**
- * Show preferences modal
- */
-export const showPreferences = () => {
-    if(globalObj._state._preferencesModalVisible) return;
-
-    _addClass(globalObj._dom._htmlDom, TOGGLE_PREFERENCES_MODAL_CLASS);
-    _setAttribute(globalObj._dom._pm, 'aria-hidden', 'false');
-    globalObj._state._preferencesModalVisible = true;
-
-    setTimeout(()=>{
-        globalObj._state._preferencesModalVisibleDelayed = true;
-    }, 1);
-
-    /**
-     * Set focus to the first focusable element inside preferences modal
-     */
-    setTimeout(() => {
-        // If there is no consent-modal, keep track of the last focused elem.
-        if(!globalObj._state._consentModalVisible){
-            globalObj._state._lastFocusedElemBeforeModal = globalObj._dom._document.activeElement;
-        }else{
-            globalObj._state._lastFocusedModalElement = globalObj._dom._document.activeElement;
-        }
-
-        if (globalObj._state._pmFocusableElements.length === 0) return;
-
-        globalObj._state._pmFocusableElements[0].focus();
-
-        globalObj._state._currentModalFocusableElements = globalObj._state._pmFocusableElements;
-    }, 200);
-
-    _log('CookieConsent [TOGGLE]: show preferencesModal');
-
-    _fireEvent(globalObj._customEvents._onModalShow, PREFERENCES_MODAL_NAME);
-};
-
-/**
- * Hide preferences modal
- */
-export const hidePreferences = () => {
-
-    if(!globalObj._state._preferencesModalVisible) return;
-
-    _removeClass(globalObj._dom._htmlDom, TOGGLE_PREFERENCES_MODAL_CLASS);
-    globalObj._state._preferencesModalVisible = false;
-    _setAttribute(globalObj._dom._pm, 'aria-hidden', 'true');
-
-    setTimeout(()=>{
-        globalObj._state._preferencesModalVisibleDelayed = false;
-    }, 1);
-
-    /**
-     * If consent modal is visible, focus him (instead of page document)
-     */
-    if(globalObj._state._consentModalVisible){
-        globalObj._state._lastFocusedModalElement && globalObj._state._lastFocusedModalElement.focus();
-        globalObj._state._currentModalFocusableElements = globalObj._state._cmFocusableElements;
-    }else{
-        /**
-         * Restore focus to last page element which had focus before modal opening
-         */
-        globalObj._state._lastFocusedElemBeforeModal && globalObj._state._lastFocusedElemBeforeModal.focus();
-        globalObj._state._currentModalFocusableElements = [];
-    }
-
-    globalObj._state._clickedInsideModal = false;
-
-    _log('CookieConsent [TOGGLE]: hide preferencesModal');
-
-    _fireEvent(globalObj._customEvents._onModalHide, PREFERENCES_MODAL_NAME);
-};
-
-/**
- * Returns true if cookie category is accepted
- * @param {string} category
- * @returns {boolean}
- */
-export const acceptedCategory = (category) => {
-    var categories;
-
-    if(!globalObj._state._invalidConsent || globalObj._config.mode === OPT_IN_MODE)
-        categories = _getCurrentCategoriesState().accepted || [];
-    else  // mode is OPT_OUT_MODE
-        categories = globalObj._state._defaultEnabledCategories;
-    return _elContains(categories, category);
-};
-
-/**
- * Returns true if the service in the specified
- * category is accepted/enabled
- * @param {string} service
- * @param {string} category
- * @returns {boolean}
- */
-export const acceptedService = (service, category) => {
-    return _elContains(globalObj._state._enabledServices[category] || [], service);
-};
-
-/**
  * Returns true if consent is valid
  * @returns {boolean}
  */
@@ -704,22 +689,11 @@ export const run = async (conf) => {
         if(!translationLoaded) return;
 
         // Generate cookie-preferences dom (& consent modal)
-        _createCookieConsentHTML({
-            hide,
-            hidePreferences,
-            acceptCategory,
-            showPreferences
-        });
+        _createCookieConsentHTML(miniAPI);
 
         _getModalFocusableData();
 
-        _addDataButtonListeners(null, {
-            show,
-            hide,
-            showPreferences,
-            hidePreferences,
-            acceptCategory
-        });
+        _addDataButtonListeners(null, miniAPI);
 
         if(globalObj._config.autoShow && globalObj._state._consentModalExists)
             show();

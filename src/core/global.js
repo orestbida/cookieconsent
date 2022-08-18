@@ -272,7 +272,7 @@ export class Global {
                  * @type {number|Function}
                  */
                 expiresAfterDays: 182,
-                domain: window.location.hostname,
+                domain: '',
                 path: '/',
                 sameSite: 'Lax'
             }
@@ -454,8 +454,8 @@ export class Global {
          * (avoid retrieving them later using globalObj._dom._document.getElementById)
          */
         this._dom = {
-            /** @type {number|Document} */ _document: document,
-            /** @type {number|HTMLElement} */ _htmlDom: document.documentElement,
+            /** @type {number|Document} */ _document: 0,
+            /** @type {number|HTMLElement} */ _htmlDom: 0,
 
             /** @type {number|HTMLElement} */ _ccMain: 0,
             /** @type {number|HTMLElement} */ _cmContainer: 0,
