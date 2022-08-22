@@ -65,30 +65,39 @@ export const _resolveCurrentLanguageCode = function () {
  * @param {string | null} desiredLanguageCode
  */
 export const _loadTranslationData = async (desiredLanguageCode) => {
+    const state = globalObj._state;
 
-    let validatedLanguageCode = globalObj._state._currentLanguageCode;
+    let currentLanguageCode = state._currentLanguageCode || _resolveCurrentLanguageCode();
 
     /**
      * Make sure languageCode is valid before retrieving the translation object
      */
-    desiredLanguageCode && (validatedLanguageCode = _getValidLanguageCode(desiredLanguageCode));
-    globalObj._state._currentTranslation = globalObj._state._allTranslations[validatedLanguageCode];
+    if(desiredLanguageCode)
+        currentLanguageCode = _getValidLanguageCode(desiredLanguageCode);
 
-    if(!globalObj._state._currentTranslation) return false;
+    let currentTranslation = state._allTranslations[currentLanguageCode];
+
+    if(!currentTranslation)
+        return false;
 
     /**
      * If translation is a string, fetch the external json file and replace
      * the string (path to json file) with parsed language object
      */
-    if(typeof globalObj._state._currentTranslation === 'string'){
-        const translationData = await _fetchJson(globalObj._state._currentTranslation);
-        if(!translationData) return false;
-        globalObj._state._currentTranslation = translationData;
-        globalObj._state._allTranslations[validatedLanguageCode] = translationData;
-    }else{
-        globalObj._state._currentTranslation = globalObj._state._allTranslations[validatedLanguageCode];
+    if(typeof currentTranslation === 'string'){
+
+        const fetchedTranslation = await _fetchJson(currentTranslation);
+
+        if(!fetchedTranslation)
+            return false;
+
+        currentTranslation = fetchedTranslation;
     }
-    globalObj._state._currentLanguageCode = validatedLanguageCode;
+
+    state._currentTranslation = currentTranslation;
+    state._currentLanguageCode = currentLanguageCode;
+
+    _log('CookieConsent [LANG]: current language: "' + currentLanguageCode + '"');
 
     return true;
 };

@@ -1,6 +1,5 @@
 import { globalObj } from './global';
 import { _log, _getKeys, _isObject, _retrieveScriptElements } from '../utils/general';
-import { _resolveCurrentLanguageCode } from '../utils/language';
 import { OPT_OUT_MODE } from '../utils/constants';
 
 /**
@@ -18,7 +17,7 @@ export const _setConfig = (userConfig) => {
         callbacks = globalObj._callbacks,
         userCookieConfig = userConfig.cookie,
         userCategories = userConfig.categories,
-        allCategoryNames = _getKeys(userCategories),
+        allCategoryNames = _getKeys(userCategories) || [],
         nav = navigator;
 
     /**
@@ -38,17 +37,20 @@ export const _setConfig = (userConfig) => {
     callbacks._onModalHide = userConfig.onModalHide;
     callbacks._onModalShow = userConfig.onModalShow;
 
-    var mode = userConfig.mode;
-    var revision = userConfig.revision;
-    var autoClearCookies = userConfig.autoClearCookies;
-    var manageScriptTags = userConfig.manageScriptTags;
-    var hideFromBots = userConfig.hideFromBots;
+    const {
+        mode,
+        autoShow,
+        autoClearCookies,
+        revision,
+        manageScriptTags,
+        hideFromBots
+    } = userConfig;
 
     if(mode === OPT_OUT_MODE)
         config.mode = mode;
 
-    if(typeof userConfig.autoShow === 'boolean')
-        config.autoShow = userConfig.autoShow;
+    if(typeof autoShow === 'boolean')
+        config.autoShow = autoShow;
 
     if(typeof autoClearCookies === 'boolean')
         config.autoClearCookies = autoClearCookies;
@@ -56,43 +58,38 @@ export const _setConfig = (userConfig) => {
     if(typeof manageScriptTags === 'boolean')
         config.manageScriptTags = manageScriptTags;
 
-    if(hideFromBots === false)
-        config.hideFromBots = false;
-
     if(typeof revision === 'number' && revision >= 0){
         config.revision = revision;
         state._revisionEnabled = true;
     }
 
+    if(hideFromBots === false)
+        config.hideFromBots = false;
+
     if(config.hideFromBots === true && nav)
         state._botAgentDetected = ((nav.userAgent && /bot|crawl|spider|slurp|teoma/i.test(nav.userAgent)) || nav.webdriver);
 
-    if(!!userCookieConfig && typeof userCookieConfig === 'object'){
+    if(typeof userCookieConfig === 'object'){
 
-        const name = userCookieConfig.name,
-            domain = userCookieConfig.domain,
-            path = userCookieConfig.path,
-            sameSite = userCookieConfig.sameSite,
-            expiresAfterDays = userCookieConfig.expiresAfterDays;
 
-        name && (cookie.name = name);
-        domain && (cookie.domain = domain);
-        path && (cookie.path = path);
-        sameSite && (cookie.sameSite = sameSite);
-        expiresAfterDays && (cookie.expiresAfterDays = expiresAfterDays);
+        config.cookie = {...cookie, ...userCookieConfig};
     }
-
-    /**
-     * Determine current language code
-     */
-    state._currentLanguageCode = _resolveCurrentLanguageCode();
-    state._currentTranslation = state._allTranslations[state._currentLanguageCode];
 
     _log('CookieConsent [CONFIG]: configuration:', userConfig);
     _log('CookieConsent [CONFIG]: autoClearCookies:', config.autoClearCookies);
     _log('CookieConsent [CONFIG]: revision enabled:', state._revisionEnabled);
     _log('CookieConsent [CONFIG]: manageScriptTags:', config.manageScriptTags);
-    _log('CookieConsent [LANG]: current language: "' + state._currentLanguageCode + '"');
+
+    _fetchCategoriesAndServices(allCategoryNames);
+    _retrieveScriptElements();
+};
+
+/**
+ * Store categories and services' config. details
+ * @param {string[]} allCategoryNames
+ */
+function _fetchCategoriesAndServices(allCategoryNames) {
+    const state = globalObj._state;
 
     allCategoryNames.forEach(categoryName => {
 
@@ -101,14 +98,13 @@ export const _setConfig = (userConfig) => {
         const serviceNames = services && _isObject(services) && _getKeys(services) || [];
 
         /**
-         * Keep track of redOnly categories
+         * Keep track of readOnly categories
          */
         if(currCategory.readOnly)
             state._readOnlyCategories.push(categoryName);
 
         state._allDefinedServices[categoryName] = {};
         state._enabledServices[categoryName] = [];
-
         globalObj._dom._serviceCheckboxInputs[categoryName] = {};
 
         serviceNames.forEach(serviceName => {
@@ -117,18 +113,11 @@ export const _setConfig = (userConfig) => {
             state._allDefinedServices[categoryName][serviceName] = service;
         });
     });
-
-
-    //_fetchCategoriesAndServices();
-    _retrieveScriptElements();
-
-    globalObj._init = true;
-};
+}
 
 /**
  * Access the 'window' and 'document' objects
  * during execution, rather than on import
- * to avoid 'window is not defined' (react issue)
  */
 function setWindowData() {
 

@@ -627,57 +627,66 @@ export const validConsent = () => {
 
 /**
  * Will run once and only if modals do not exist.
- * @param {import("./global").UserConfig} conf
+ * @param {import("./global").UserConfig} userConfig
  */
-export const run = async (conf) => {
-    if(!globalObj._dom._ccMain){
+export const run = async (userConfig) => {
 
-        // configure all parameters
-        _setConfig(conf);
+    const state = globalObj._state;
+    const config = globalObj._config;
+    const dom = globalObj._dom;
 
-        // Don't run plugin if bot is detected
-        if(globalObj._state._botAgentDetected) return;
+    if(!dom._ccMain){
 
-        // Retrieve cookie value (if set)
-        globalObj._state._savedCookieContent = _parseCookie(_getSingleCookie(globalObj._config.cookie.name, true));
+        _setConfig(userConfig);
 
-        // Retrieve "_consentId"
-        globalObj._state._consentId = globalObj._state._savedCookieContent.consentId;
+        // Stop if bot is detected
+        if(state._botAgentDetected)
+            return;
+
+        /**
+         * @type {import('../../types').CookieValue}
+         */
+        const cookieValue = _parseCookie(_getSingleCookie(config.cookie.name, true));
+        const categories = cookieValue.categories;
+        const validCategories = Array.isArray(categories) && categories.length > 0;
+
+        state._savedCookieContent = cookieValue;
+        state._consentId = cookieValue.consentId;
 
         // If "_consentId" is present => assume that consent was previously given
-        var cookieConsentAccepted = globalObj._state._consentId !== undefined;
+        const validConsentId = !!state._consentId && typeof state._consentId === 'string';
 
         // Retrieve "_consentTimestamp"
-        globalObj._state._consentTimestamp = globalObj._state._savedCookieContent.consentTimestamp;
-        globalObj._state._consentTimestamp && (globalObj._state._consentTimestamp = new Date(globalObj._state._consentTimestamp));
+        state._consentTimestamp = cookieValue.consentTimestamp;
+        state._consentTimestamp && (state._consentTimestamp = new Date(state._consentTimestamp));
 
         // Retrieve "_lastConsentTimestamp"
-        globalObj._state._lastConsentTimestamp = globalObj._state._savedCookieContent.lastConsentTimestamp;
-        globalObj._state._lastConsentTimestamp && (globalObj._state._lastConsentTimestamp = new Date(globalObj._state._lastConsentTimestamp));
+        state._lastConsentTimestamp = cookieValue.lastConsentTimestamp;
+        state._lastConsentTimestamp && (state._lastConsentTimestamp = new Date(state._lastConsentTimestamp));
 
         // Retrieve "data"
-        var dataTemp = globalObj._state._savedCookieContent.data;
-        globalObj._state._cookieData = typeof dataTemp !== 'undefined' ? dataTemp : null;
+        const dataTemp = cookieValue.data;
+        state._cookieData = typeof dataTemp !== 'undefined' ? dataTemp : null;
 
         // If revision is enabled and current value !== saved value inside the cookie => revision is not valid
-        if(globalObj._state._revisionEnabled && cookieConsentAccepted && globalObj._state._savedCookieContent.revision !== globalObj._config.revision)
-            globalObj._state._validRevision = false;
+        if(state._revisionEnabled && validConsentId && cookieValue.revision !== config.revision)
+            state._validRevision = false;
 
         // If consent is not valid => create consent modal
-        globalObj._state._consentModalExists = globalObj._state._invalidConsent = (!cookieConsentAccepted || !globalObj._state._validRevision || !globalObj._state._consentTimestamp || !globalObj._state._lastConsentTimestamp || !globalObj._state._consentId);
+        state._consentModalExists = state._invalidConsent = (!validConsentId || !state._validRevision || !state._consentTimestamp || !state._lastConsentTimestamp || !validCategories);
 
-        _log('CookieConsent [STATUS] valid consent:', !globalObj._state._invalidConsent);
+        _log('CookieConsent [STATUS] valid consent:', !state._invalidConsent);
 
         /**
          * Retrieve last accepted categories from cookie
          * and calculate acceptType
          */
-        if(!globalObj._state._invalidConsent){
-            globalObj._state._acceptedCategories = globalObj._state._savedCookieContent.categories,
-            globalObj._state._acceptType = _getAcceptType(_getCurrentCategoriesState());
-            globalObj._state._enabledServices = globalObj._state._savedCookieContent.services || {};
+        if(!state._invalidConsent){
+            state._acceptedCategories = cookieValue.categories,
+            state._acceptType = _getAcceptType(_getCurrentCategoriesState());
+            state._enabledServices = cookieValue.services || {};
         }else{
-            if(globalObj._config.mode === OPT_OUT_MODE){
+            if(config.mode === OPT_OUT_MODE){
                 _retrieveEnabledCategoriesAndServices();
             }
         }
@@ -686,32 +695,31 @@ export const run = async (conf) => {
          * Load translation before generating modals
          */
         const translationLoaded = await _loadTranslationData(null);
-        if(!translationLoaded) return;
 
-        // Generate cookie-preferences dom (& consent modal)
+        if(!translationLoaded)
+            return;
+
         _createCookieConsentHTML(miniAPI);
-
         _getModalFocusableData();
-
         _addDataButtonListeners(null, miniAPI);
 
-        if(globalObj._config.autoShow && globalObj._state._consentModalExists)
+        if(config.autoShow && state._consentModalExists)
             show();
 
         // Add class to enable animations/transitions
-        setTimeout(() => {_addClass(globalObj._dom._ccMain, 'c--anim');}, 100);
+        setTimeout(() => {_addClass(dom._ccMain, 'c--anim');}, 100);
 
         // Accessibility :=> if tab pressed => trap focus inside modal
         _handleFocusTrap({hidePreferences});
 
         // If consent is valid
-        if(!globalObj._state._invalidConsent){
+        if(!state._invalidConsent){
             _manageExistingScripts();
             _fireEvent(globalObj._customEvents._onConsent);
         }else{
-            if(globalObj._config.mode === OPT_OUT_MODE){
-                _log('CookieConsent [CONFIG] mode=\'' + globalObj._config.mode + '\', default enabled categories:', globalObj._state._defaultEnabledCategories);
-                _manageExistingScripts(globalObj._state._defaultEnabledCategories);
+            if(config.mode === OPT_OUT_MODE){
+                _log('CookieConsent [CONFIG] mode=\'' + config.mode + '\', default enabled categories:', state._defaultEnabledCategories);
+                _manageExistingScripts(state._defaultEnabledCategories);
             }
         }
     }
@@ -724,18 +732,29 @@ export const run = async (conf) => {
  */
 export const reset = (eraseCookie) => {
 
-    if(!globalObj._init) return;
+    const dom = globalObj._dom;
+    const cookie = globalObj._config.cookie;
 
-    globalObj._init = false;
+    if(eraseCookie === true)
+        eraseCookies(cookie.name, cookie.path, cookie.domain);
 
-    if(eraseCookie === true){
-        eraseCookies(globalObj._config.cookie.name, globalObj._config.cookie.path, globalObj._config.cookie.domain);
+    /**
+     * Remove html from DOM
+     */
+    dom._ccMain && dom._ccMain.remove();
+
+    /**
+     * Remove any remaining classes
+     */
+    if(dom._htmlDom){
+        _removeClass(dom._htmlDom, TOGGLE_DISABLE_INTERACTION_CLASS);
+        _removeClass(dom._htmlDom, TOGGLE_PREFERENCES_MODAL_CLASS);
+        _removeClass(dom._htmlDom, TOGGLE_CONSENT_MODAL_CLASS);
     }
 
-    globalObj._dom._ccMain && globalObj._dom._ccMain.remove();
-    _removeClass(globalObj._dom._htmlDom, TOGGLE_DISABLE_INTERACTION_CLASS);
-    _removeClass(globalObj._dom._htmlDom, TOGGLE_PREFERENCES_MODAL_CLASS);
-    _removeClass(globalObj._dom._htmlDom, TOGGLE_CONSENT_MODAL_CLASS);
+    /**
+     * TODO: remove event listeners (buttons/links with data-cc attrs.)
+     */
 
     const newGlobal = new Global();
 

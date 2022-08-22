@@ -250,7 +250,6 @@ export const _fireEvent = (eventName, modalName) => {
 
 export class Global {
     constructor() {
-        this._init = false;
 
         /**
          * Default config. options
