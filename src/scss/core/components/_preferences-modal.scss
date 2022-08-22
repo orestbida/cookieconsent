@@ -217,7 +217,7 @@ $toggle-knob-icon-width: 2px;
                 position: absolute;
                 top: 50%;
                 transform: translateY(-50%);
-                left: 1.1em;
+                left: 1.12em;
                 background: var(--cc-toggle-readonly-bg);
                 display: flex;
                 justify-content: center;
@@ -858,7 +858,7 @@ $toggle-knob-icon-width: 2px;
             bottom: 0;
             max-height: 100%;
             height: auto;
-            transform: translateY($translate-y) scale(0.98);
+            transform: translateY($translate-y);
             border-radius: 0;
             max-width: none;
         }
