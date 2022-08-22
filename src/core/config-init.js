@@ -4,150 +4,137 @@ import { _resolveCurrentLanguageCode } from '../utils/language';
 import { OPT_OUT_MODE } from '../utils/constants';
 
 /**
- * Update config preferences
- * @param {import("./global").UserConfig} _userConfig
+ * Configure CookieConsent
+ * @param {import("../../types").CookieConsentConfig} userConfig
  */
-export const _setConfig = (_userConfig) => {
+export const _setConfig = (userConfig) => {
 
     setWindowData();
-    globalObj._init = true;
+
+    const
+        state = globalObj._state,
+        config = globalObj._config,
+        cookie = config.cookie,
+        callbacks = globalObj._callbacks,
+        userCookieConfig = userConfig.cookie,
+        userCategories = userConfig.categories,
+        allCategoryNames = _getKeys(userCategories),
+        nav = navigator;
 
     /**
      * Make user configuration globally available
      */
-    globalObj._state._userConfig = _userConfig;
-    globalObj._state._allTranslations = _userConfig.language.translations;
-    globalObj._state._allDefinedCategories = globalObj._state._userConfig.categories;
-
-    _log('CookieConsent [CONFIG]: configuration:', _userConfig);
-
-    if(typeof _userConfig.autoShow === 'boolean')
-        globalObj._config.autoShow = _userConfig.autoShow;
-
-    var newCookieConfig = _userConfig.cookie;
-
-    if(!!newCookieConfig && typeof newCookieConfig === 'object'){
-
-        var name = newCookieConfig.name,
-            domain = newCookieConfig.domain,
-            path = newCookieConfig.path,
-            sameSite = newCookieConfig.sameSite,
-            expiresAfterDays = newCookieConfig.expiresAfterDays;
-
-        name && (globalObj._config.cookie.name = name);
-        domain && (globalObj._config.cookie.domain = domain);
-        path && (globalObj._config.cookie.path = path);
-        sameSite && (globalObj._config.cookie.sameSite = sameSite);
-        expiresAfterDays && (globalObj._config.cookie.expiresAfterDays = expiresAfterDays);
-    }
+    state._userConfig = userConfig;
+    state._allTranslations = userConfig.language.translations;
+    state._allDefinedCategories = userCategories;
+    state._allCategoryNames = allCategoryNames;
 
     /**
      * Save references to callback functions
      */
-    globalObj._callbacks._onFirstConsent = _userConfig.onFirstConsent;
-    globalObj._callbacks._onConsent = _userConfig.onConsent;
-    globalObj._callbacks._onChange = _userConfig.onChange;
-    globalObj._callbacks._onModalHide = _userConfig.onModalHide;
-    globalObj._callbacks._onModalShow = _userConfig.onModalShow;
+    callbacks._onFirstConsent = userConfig.onFirstConsent;
+    callbacks._onConsent = userConfig.onConsent;
+    callbacks._onChange = userConfig.onChange;
+    callbacks._onModalHide = userConfig.onModalHide;
+    callbacks._onModalShow = userConfig.onModalShow;
 
-    var mode = _userConfig.mode;
-    var revision = _userConfig.revision;
-    var autoClearCookies = _userConfig.autoClearCookies;
-    var manageScriptTags = _userConfig.manageScriptTags;
-    var hideFromBots = _userConfig.hideFromBots;
+    var mode = userConfig.mode;
+    var revision = userConfig.revision;
+    var autoClearCookies = userConfig.autoClearCookies;
+    var manageScriptTags = userConfig.manageScriptTags;
+    var hideFromBots = userConfig.hideFromBots;
 
-    if(mode === OPT_OUT_MODE){
-        globalObj._config.mode = mode;
+    if(mode === OPT_OUT_MODE)
+        config.mode = mode;
+
+    if(typeof userConfig.autoShow === 'boolean')
+        config.autoShow = userConfig.autoShow;
+
+    if(typeof autoClearCookies === 'boolean')
+        config.autoClearCookies = autoClearCookies;
+
+    if(typeof manageScriptTags === 'boolean')
+        config.manageScriptTags = manageScriptTags;
+
+    if(hideFromBots === false)
+        config.hideFromBots = false;
+
+    if(typeof revision === 'number' && revision >= 0){
+        config.revision = revision;
+        state._revisionEnabled = true;
     }
 
-    if(typeof revision === 'number'){
-        revision > -1 && (globalObj._config.revision = revision);
-        globalObj._state._revisionEnabled = true;
-    }
+    if(config.hideFromBots === true && nav)
+        state._botAgentDetected = ((nav.userAgent && /bot|crawl|spider|slurp|teoma/i.test(nav.userAgent)) || nav.webdriver);
 
-    if(typeof autoClearCookies === 'boolean'){
-        globalObj._config.autoClearCookies = autoClearCookies;
-    }
+    if(!!userCookieConfig && typeof userCookieConfig === 'object'){
 
-    if(typeof manageScriptTags === 'boolean'){
-        globalObj._config.manageScriptTags = manageScriptTags;
-    }
+        const name = userCookieConfig.name,
+            domain = userCookieConfig.domain,
+            path = userCookieConfig.path,
+            sameSite = userCookieConfig.sameSite,
+            expiresAfterDays = userCookieConfig.expiresAfterDays;
 
-    if(hideFromBots === false) globalObj._config.hideFromBots = false;
-
-    if(globalObj._config.hideFromBots === true){
-        globalObj._state._botAgentDetected = navigator &&
-            ((navigator.userAgent && /bot|crawl|spider|slurp|teoma/i.test(navigator.userAgent)) || navigator.webdriver);
-    }
-
-    _log('CookieConsent [CONFIG]: autoClearCookies:', globalObj._config.autoClearCookies);
-    _log('CookieConsent [CONFIG]: revision enabled:', globalObj._state._revisionEnabled);
-    _log('CookieConsent [CONFIG]: manageScriptTags:', globalObj._config.manageScriptTags);
-
-
-    var defaultLanguageCode = globalObj._state._userConfig.language.default;
-
-    // Set default language as currentLanguage
-    if(defaultLanguageCode){
-        globalObj._state._currentLanguageCode = defaultLanguageCode;
+        name && (cookie.name = name);
+        domain && (cookie.domain = domain);
+        path && (cookie.path = path);
+        sameSite && (cookie.sameSite = sameSite);
+        expiresAfterDays && (cookie.expiresAfterDays = expiresAfterDays);
     }
 
     /**
      * Determine current language code
      */
-    globalObj._state._currentLanguageCode = _resolveCurrentLanguageCode();
+    state._currentLanguageCode = _resolveCurrentLanguageCode();
+    state._currentTranslation = state._allTranslations[state._currentLanguageCode];
 
-    /**
-     * Get translation relative to the current language code
-     */
-    globalObj._state._currentTranslation = globalObj._state._allTranslations[globalObj._state._currentLanguageCode];
+    _log('CookieConsent [CONFIG]: configuration:', userConfig);
+    _log('CookieConsent [CONFIG]: autoClearCookies:', config.autoClearCookies);
+    _log('CookieConsent [CONFIG]: revision enabled:', state._revisionEnabled);
+    _log('CookieConsent [CONFIG]: manageScriptTags:', config.manageScriptTags);
+    _log('CookieConsent [LANG]: current language: "' + state._currentLanguageCode + '"');
 
-    _log('CookieConsent [LANG]: current language: \'' + globalObj._state._currentLanguageCode + '\'');
+    allCategoryNames.forEach(categoryName => {
 
-    globalObj._state._allCategoryNames = _getKeys(globalObj._state._allDefinedCategories);
-
-    globalObj._state._allCategoryNames.forEach(categoryName => {
-        const services = globalObj._state._allDefinedCategories[categoryName].services || {};
+        const currCategory = state._allDefinedCategories[categoryName];
+        const services = currCategory.services || {};
         const serviceNames = services && _isObject(services) && _getKeys(services) || [];
-        globalObj._state._allDefinedServices[categoryName] = {};
-        globalObj._state._enabledServices[categoryName] = [];
-        globalObj._dom._serviceCheckboxInputs[categoryName] = {};
 
-        if(serviceNames.length === 0)
-            return;
+        /**
+         * Keep track of redOnly categories
+         */
+        if(currCategory.readOnly)
+            state._readOnlyCategories.push(categoryName);
+
+        state._allDefinedServices[categoryName] = {};
+        state._enabledServices[categoryName] = [];
+
+        globalObj._dom._serviceCheckboxInputs[categoryName] = {};
 
         serviceNames.forEach(serviceName => {
             const service = services[serviceName];
             service.enabled = false;
-            globalObj._state._allDefinedServices[categoryName][serviceName] = service;
+            state._allDefinedServices[categoryName][serviceName] = service;
         });
     });
 
-    /**
-     * Save names of categories marked as readonly
-     */
-    for(var i=0; i<globalObj._state._allCategoryNames.length; i++){
-        if(globalObj._state._allDefinedCategories[globalObj._state._allCategoryNames[i]].readOnly === true)
-            globalObj._state._readOnlyCategories.push(globalObj._state._allCategoryNames[i]);
-    }
 
+    //_fetchCategoriesAndServices();
     _retrieveScriptElements();
+
+    globalObj._init = true;
 };
 
 /**
- * This function needs to be called right after .init()
+ * Access the 'window' and 'document' objects
+ * during execution, rather than on import
+ * to avoid 'window is not defined' (react issue)
  */
-export const setWindowData = () => {
-    /**
-     * Fix "window is not defined" error
-     */
-    globalObj._config.cookie.domain = window.location.hostname;
+function setWindowData() {
 
-    /**
-     * Define document properties after globalObj._config.
-     * to avoid errors like "document is not defined"
-     */
     const doc = document;
+
     globalObj._dom._document = doc;
     globalObj._dom._htmlDom = doc.documentElement;
-};
+    globalObj._config.cookie.domain = window.location.hostname;
+}

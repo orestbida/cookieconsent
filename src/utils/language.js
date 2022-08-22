@@ -9,10 +9,14 @@ import { _log, _getKeys, _elContains, _fetchJson } from './general';
  */
 export const _getValidLanguageCode = (languageCode) => {
 
-    const allLanguageCodes = _getKeys(globalObj._state._allTranslations);
+    const state = globalObj._state;
+    const allLanguageCodes = _getKeys(state._allTranslations);
 
-    if(_elContains(allLanguageCodes, languageCode)) return languageCode;
-    if(_elContains(allLanguageCodes, globalObj._state._currentLanguageCode)) return globalObj._state._currentLanguageCode;
+    if(_elContains(allLanguageCodes, languageCode))
+        return languageCode;
+
+    if(_elContains(allLanguageCodes, state._currentLanguageCode))
+        return state._currentLanguageCode;
 
     /**
      * If we got here, return the very first language code (hopefully there is one)
@@ -36,7 +40,9 @@ export const _getBrowserLanguageCode = () => {
  * Resolve which language should be used.
  */
 export const _resolveCurrentLanguageCode = function () {
-    const autoDetect = globalObj._state._userConfig.language.autoDetect;
+
+    const languageConfig = globalObj._state._userConfig.language;
+    const autoDetect = languageConfig.autoDetect;
 
     if(autoDetect){
         _log('CookieConsent [LANG]: autoDetect strategy: "' + autoDetect + '"');
@@ -49,10 +55,9 @@ export const _resolveCurrentLanguageCode = function () {
     }
 
     /**
-     * If we got here, autoDetect value is not valid,
-     * use default language
+     * Use default language
      */
-    return _getValidLanguageCode(globalObj._state._userConfig.language.default);
+    return _getValidLanguageCode(languageConfig.default);
 };
 
 /**
