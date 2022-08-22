@@ -591,10 +591,10 @@ declare namespace CookieConsent {
          */
         reset(eraseCookie?: boolean): void
     }
+}
 
-    /**
-     * Init CookieConsent.
-     * @returns object: CookieConsent API
-     */
-    function init(): CookieConsentAPI
+declare global {
+    interface Window {
+        CookieConsent: CookieConsent.CookieConsentAPI
+    }
 }
