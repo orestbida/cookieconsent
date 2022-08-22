@@ -69,9 +69,7 @@ We can easily achieve this by using the following 2 [callbacks/events](/advanced
 
 Example:
 ```javascript
-const cc = CookieConsent.init();
-
-cc.run({
+CookieConsent.run({
     // ...
 
     onFirstConsent: () => {

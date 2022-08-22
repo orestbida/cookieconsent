@@ -61,9 +61,7 @@ Replace `path-to-cookieconsent.js`, `path-to-cookieconsent.css` and `path-to-coo
 
 [Configure](#configuration) the plugin inside `cookieconsent-init.js`:
 ```javascript
-const cc = CookieConsent.init();
-
-cc.run({
+CookieConsent.run({
     // your config. goes here (required)
 });
 ```
@@ -74,14 +72,12 @@ Import the plugin in your root/APP component, and [configure](#configuration) it
 import { useEffect } from "react";
 
 import "vanilla-cookieconsent/dist/cookieconsent.css";
-import CookieConsent from "vanilla-cookieconsent";
+import * as CookieConsent from "vanilla-cookieconsent";
 
 export default function App() {
 
     useEffect(() => {
-        const cc = CookieConsent.init();
-
-        cc.run({
+        CookieConsent.run({
             // your config. goes here (required)
         });
     }, []);
@@ -95,11 +91,11 @@ export default function App() {
 Create a new [VUE Plugin](https://vuejs.org/essential/reusability/plugins.html), `CookieConsentVue.js`:
 ```javascript
 import "vanilla-cookieconsent/dist/cookieconsent.css";
-import CookieConsent from "vanilla-cookieconsent"
+import * as CookieConsent from "vanilla-cookieconsent"
 
 export default {
     install: (app, pluginConfig) => {
-        app.config.globalProperties.$cc = CookieConsent.init();
+        app.config.globalProperties.$cc = CookieConsent;
         app.config.globalProperties.$cc.run(pluginConfig);
     }
 }
@@ -155,7 +151,7 @@ Import the module in your angular component (generally `app.component.ts`):
 
 ```javascript{2,14-17}
 import { Component, AfterViewInit } from '@angular/core';
-import CookieConsent from 'vanilla-cookieconsent';
+import * as CookieConsent from 'vanilla-cookieconsent';
 
 @Component({
     selector: 'app-root',
@@ -167,7 +163,6 @@ export class AppComponent implements AfterViewInit{
     title = 'angular-javascript-demo';
 
     ngAfterViewInit(): void{
-        const cc = CookieConsent.init();
         cc.run({
             // your config. goes here (required)
         });
