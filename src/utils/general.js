@@ -185,6 +185,14 @@ export const _addClass = (elem, className) => {
     elem.classList.add(className);
 };
 
+export const _addClassCm = (elem, className) => {
+    _addClass(elem, 'cm__' + className);
+};
+
+export const _addClassPm = (elem, className) => {
+    _addClass(elem, 'pm__' + className);
+};
+
 /**
  * Remove specified class from dom element
  * @param {HTMLElement} elem

@@ -2,7 +2,7 @@
  * Global styles/variables
  */
 
-$translate-y: 30px;
+$translate-y: 1.6em;
 $modal-box-shadow: 0 0.625em 1.875em rgba(0, 0, 2, .3);
 $font-weight-bold: 600;
 
@@ -102,14 +102,11 @@ $font-weight-bold: 600;
 
 /** Disable page scroll **/
 html.disable--interaction{
-    &.show--consent{
+
+    &.show--consent,
+    &.show--consent body{
         height: auto!important;
         overflow: hidden!important;
-
-        body{
-            height: auto!important;
-            overflow-y: hidden!important;
-        }
     }
 }
 
