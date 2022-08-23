@@ -82,17 +82,23 @@ export const _guiManager = (applyToModal) => {
          * Add classes to buttons
          */
         if(modalClassName === 'cm'){
-            globalObj._dom._consentAcceptNecessaryBtn && _removeClass(globalObj._dom._consentAcceptNecessaryBtn, classPrefix + secondaryBtnClass);
-            globalObj._dom._cmCloseIconBtn && _removeClass(globalObj._dom._cmCloseIconBtn, classPrefix + secondaryBtnClass);
+
+            const {_consentAcceptNecessaryBtn, _cmCloseIconBtn} = globalObj._dom;
+
+            _consentAcceptNecessaryBtn && _removeClass(_consentAcceptNecessaryBtn, classPrefix + secondaryBtnClass);
+            _cmCloseIconBtn && _removeClass(_cmCloseIconBtn, classPrefix + secondaryBtnClass);
+
             if(notSameWeightButtons){
-                globalObj._dom._consentAcceptNecessaryBtn && _addClass(globalObj._dom._consentAcceptNecessaryBtn, classPrefix + secondaryBtnClass);
-                globalObj._dom._cmCloseIconBtn && _addClass(globalObj._dom._cmCloseIconBtn, classPrefix + secondaryBtnClass);
+                _consentAcceptNecessaryBtn && _addClass(_consentAcceptNecessaryBtn, classPrefix + secondaryBtnClass);
+                _cmCloseIconBtn && _addClass(_cmCloseIconBtn, classPrefix + secondaryBtnClass);
             }
         }else{
-            globalObj._dom._pmAcceptNecessaryBtn &&  _removeClass(globalObj._dom._pmAcceptNecessaryBtn, classPrefix + secondaryBtnClass);
-            if(notSameWeightButtons){
-                globalObj._dom._pmAcceptNecessaryBtn &&  _addClass(globalObj._dom._pmAcceptNecessaryBtn, classPrefix + secondaryBtnClass);
-            }
+            const { _pmAcceptNecessaryBtn } =  globalObj._dom;
+
+            _pmAcceptNecessaryBtn && _removeClass(_pmAcceptNecessaryBtn, classPrefix + secondaryBtnClass);
+
+            if(notSameWeightButtons)
+                _pmAcceptNecessaryBtn && _addClass(_pmAcceptNecessaryBtn, classPrefix + secondaryBtnClass);
         }
     };
 

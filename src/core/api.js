@@ -31,7 +31,7 @@ import {
     _createCookieConsentHTML
 } from './modals/modals';
 
-import { _getValidLanguageCode, _loadTranslationData } from '../utils/language';
+import { _getCurrentLanguageCode, _loadTranslationData, _setCurrentLanguageCode, _validLanguageCode } from '../utils/language';
 
 import {
     _setCookie,
@@ -373,14 +373,17 @@ export const hide = () => {
  * Show preferences modal
  */
 export const showPreferences = () => {
-    if(globalObj._state._preferencesModalVisible) return;
+    const state = globalObj._state;
+
+    if(state._preferencesModalVisible)
+        return;
 
     _addClass(globalObj._dom._htmlDom, TOGGLE_PREFERENCES_MODAL_CLASS);
     _setAttribute(globalObj._dom._pm, 'aria-hidden', 'false');
-    globalObj._state._preferencesModalVisible = true;
+    state._preferencesModalVisible = true;
 
     setTimeout(()=>{
-        globalObj._state._preferencesModalVisibleDelayed = true;
+        state._preferencesModalVisibleDelayed = true;
     }, 1);
 
     /**
@@ -388,17 +391,17 @@ export const showPreferences = () => {
      */
     setTimeout(() => {
         // If there is no consent-modal, keep track of the last focused elem.
-        if(!globalObj._state._consentModalVisible){
-            globalObj._state._lastFocusedElemBeforeModal = globalObj._dom._document.activeElement;
+        if(!state._consentModalVisible){
+            state._lastFocusedElemBeforeModal = globalObj._dom._document.activeElement;
         }else{
-            globalObj._state._lastFocusedModalElement = globalObj._dom._document.activeElement;
+            state._lastFocusedModalElement = globalObj._dom._document.activeElement;
         }
 
-        if (globalObj._state._pmFocusableElements.length === 0) return;
+        if (state._pmFocusableElements.length === 0) return;
 
-        globalObj._state._pmFocusableElements[0].focus();
+        state._pmFocusableElements[0].focus();
 
-        globalObj._state._currentModalFocusableElements = globalObj._state._pmFocusableElements;
+        state._currentModalFocusableElements = state._pmFocusableElements;
     }, 200);
 
     _log('CookieConsent [TOGGLE]: show preferencesModal');
@@ -411,31 +414,35 @@ export const showPreferences = () => {
  */
 export const hidePreferences = () => {
 
-    if(!globalObj._state._preferencesModalVisible) return;
+    const state = globalObj._state;
+
+    if(!state._preferencesModalVisible)
+        return;
 
     _removeClass(globalObj._dom._htmlDom, TOGGLE_PREFERENCES_MODAL_CLASS);
-    globalObj._state._preferencesModalVisible = false;
     _setAttribute(globalObj._dom._pm, 'aria-hidden', 'true');
 
+    state._preferencesModalVisible = false;
+
     setTimeout(()=>{
-        globalObj._state._preferencesModalVisibleDelayed = false;
+        state._preferencesModalVisibleDelayed = false;
     }, 1);
 
     /**
      * If consent modal is visible, focus him (instead of page document)
      */
-    if(globalObj._state._consentModalVisible){
-        globalObj._state._lastFocusedModalElement && globalObj._state._lastFocusedModalElement.focus();
-        globalObj._state._currentModalFocusableElements = globalObj._state._cmFocusableElements;
+    if(state._consentModalVisible){
+        state._lastFocusedModalElement && state._lastFocusedModalElement.focus();
+        state._currentModalFocusableElements = state._cmFocusableElements;
     }else{
         /**
          * Restore focus to last page element which had focus before modal opening
          */
-        globalObj._state._lastFocusedElemBeforeModal && globalObj._state._lastFocusedElemBeforeModal.focus();
-        globalObj._state._currentModalFocusableElements = [];
+        state._lastFocusedElemBeforeModal && state._lastFocusedElemBeforeModal.focus();
+        state._currentModalFocusableElements = [];
     }
 
-    globalObj._state._clickedInsideModal = false;
+    state._clickedInsideModal = false;
 
     _log('CookieConsent [TOGGLE]: hide preferencesModal');
 
@@ -456,25 +463,22 @@ const miniAPI = {
  * @param {boolean} [forceUpdate] update language fields forcefully
  * @returns {Promise<boolean>}
  */
-export const setLanguage = async (newLanguage, forceUpdate) => {
+export const setLanguage = async (newLanguageCode, forceUpdate) => {
 
-    /**
-     * Validate language to avoid errors
-     */
-    var validatedLanguageCode = _getValidLanguageCode(newLanguage);
-
-    if(newLanguage !== validatedLanguageCode) return false;
+    if(!_validLanguageCode(newLanguageCode))
+        return false;
 
     /**
      * Set language only if it differs from current
      */
-    if(validatedLanguageCode !== globalObj._state._currentLanguageCode || forceUpdate === true){
+    if(newLanguageCode !== _getCurrentLanguageCode() || forceUpdate === true){
 
-        const translationLoaded = await _loadTranslationData(validatedLanguageCode);
+        const loaded = await _loadTranslationData(newLanguageCode);
 
-        if(!translationLoaded) return false;
+        if(!loaded)
+            return false;
 
-        globalObj._state._currentLanguageCode = validatedLanguageCode;
+        _setCurrentLanguageCode(newLanguageCode);
 
         if(globalObj._state._consentModalExists){
             _createConsentModal(miniAPI);
@@ -482,7 +486,7 @@ export const setLanguage = async (newLanguage, forceUpdate) => {
         }
 
         _createPreferencesModal(miniAPI);
-        _log('CookieConsent [LANG]: current language: \'' + validatedLanguageCode + '\'');
+        _log('CookieConsent [LANG]: current language: "' + newLanguageCode + '"');
 
         return true;
     }
@@ -495,14 +499,16 @@ export const setLanguage = async (newLanguage, forceUpdate) => {
  * @returns {import("./global").UserPreferences}
  */
 export const getUserPreferences = () => {
-    var currentCategoriesState = !globalObj._state._invalidConsent && _getCurrentCategoriesState();
+    const validConsent = !globalObj._state._invalidConsent;
+
+    var currentCategoriesState = validConsent && _getCurrentCategoriesState();
 
     return {
         acceptType: globalObj._state._acceptType,
-        acceptedCategories: !globalObj._state._invalidConsent ? currentCategoriesState.accepted : [],
-        rejectedCategories: !globalObj._state._invalidConsent ? currentCategoriesState.rejected : [],
-        acceptedServices: !globalObj._state._invalidConsent ? globalObj._state._enabledServices : {},
-        rejectedServices: !globalObj._state._invalidConsent ? _retrieveRejectedServices() : {}
+        acceptedCategories: validConsent ? currentCategoriesState.accepted : [],
+        rejectedCategories: validConsent ? currentCategoriesState.rejected : [],
+        acceptedServices: validConsent ? globalObj._state._enabledServices : {},
+        rejectedServices: validConsent ? _retrieveRejectedServices() : {}
     };
 };
 
@@ -557,39 +563,44 @@ export const loadScript = (src, attrs) => {
  */
 export const setCookieData = (props) => {
 
-    var newData = props.value,
+    let newData = props.value,
         mode = props.mode,
-        set = false;
+        set = false,
+        cookieData;
+
+    const state = globalObj._state;
 
     /**
      * If mode is 'update':
      * add/update only the specified props.
      */
     if(mode === 'update'){
-        globalObj._state._cookieData = getCookie('data');
-        var sameType = typeof globalObj._state._cookieData === typeof newData;
+        state._cookieData = getCookie('data');
+        cookieData = getCookie('data');
+        const sameType = typeof cookieData === typeof newData;
 
-        if(sameType && typeof globalObj._state._cookieData === 'object'){
-            !globalObj._state._cookieData && (globalObj._state._cookieData = {});
+        if(sameType && typeof cookieData === 'object'){
+            !cookieData && (cookieData = {});
 
             for(var prop in newData){
-                if(globalObj._state._cookieData[prop] !== newData[prop]){
-                    globalObj._state._cookieData[prop] = newData[prop];
+                if(cookieData[prop] !== newData[prop]){
+                    cookieData[prop] = newData[prop];
                     set = true;
                 }
             }
-        }else if((sameType || !globalObj._state._cookieData) && globalObj._state._cookieData !== newData){
-            globalObj._state._cookieData = newData;
+        }else if((sameType || !cookieData) && cookieData !== newData){
+            cookieData = newData;
             set = true;
         }
     }else{
-        globalObj._state._cookieData = newData;
+        cookieData = newData;
         set = true;
     }
 
     if(set){
-        globalObj._state._savedCookieContent.data = globalObj._state._cookieData;
-        _setCookie(globalObj._config.cookie.name, JSON.stringify(globalObj._state._savedCookieContent), true);
+        state._cookieData = cookieData;
+        state._savedCookieContent.data = cookieData;
+        _setCookie(globalObj._config.cookie.name, JSON.stringify(state._savedCookieContent), true);
     }
 
     return set;
@@ -602,7 +613,7 @@ export const setCookieData = (props) => {
  * @returns {any}
  */
 export const getCookie = (field, cookieName) => {
-    var cookie = _parseCookie(_getSingleCookie(cookieName || globalObj._config.cookie.name, true));
+    const cookie = _parseCookie(_getSingleCookie(cookieName || globalObj._config.cookie.name, true));
     return field ? cookie[field] : cookie;
 };
 
@@ -612,9 +623,13 @@ export const getCookie = (field, cookieName) => {
  * @returns {any}
  */
 export const getConfig = (field) => {
+
+    const config = globalObj._config;
+    const userConfig = globalObj._state._userConfig;
+
     return field
-        ? globalObj._config[field] || globalObj._state._userConfig[field]
-        : {...globalObj._config, ...globalObj._state._userConfig, cookie:{...globalObj._config.cookie}};
+        ? config[field] || userConfig[field]
+        : {...config, ...userConfig, cookie:{...config.cookie}};
 };
 
 /**
@@ -694,7 +709,7 @@ export const run = async (userConfig) => {
         /**
          * Load translation before generating modals
          */
-        const translationLoaded = await _loadTranslationData(null);
+        const translationLoaded = await _loadTranslationData();
 
         if(!translationLoaded)
             return;

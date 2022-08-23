@@ -274,6 +274,7 @@ export const _setCookie = (name, value, useRemainingExpirationTime) => {
  */
 export const _parseCookie = (value) => {
     let parsedValue;
+
     try{
         parsedValue = JSON.parse(decodeURIComponent(value));
     }catch(e){
@@ -338,10 +339,11 @@ export const _eraseCookies = (cookies, customPath, customDomain) => {
  * @returns {string}
  */
 export const _getSingleCookie = (name, getValue) => {
-    let found = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
-    found = found ? (getValue ? found.pop() : name) : '';
+    const found = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
 
-    return found;
+    return found
+        ? (getValue ? found.pop() : name)
+        : '';
 };
 
 /**
@@ -357,7 +359,7 @@ export const _getAllCookies = (regex) => {
     /**
      * @type {string[]}
      */
-    let cookieNames = [];
+    const cookieNames = [];
 
     /**
      * Save only the cookie names

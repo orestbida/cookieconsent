@@ -2,26 +2,25 @@ import { globalObj } from '../core/global';
 import { _log, _getKeys, _elContains, _fetchJson } from './general';
 
 /**
- * Get a valid language code
- * (assumes that there is at least one translation defined)
- * @param {string} languageCode desired language
- * @returns {string} validated language
+ * Check if language is valid/defined
+ * @param {string} languageCode
+ * @returns {boolean} True if language is defined
  */
-export const _getValidLanguageCode = (languageCode) => {
+export const _validLanguageCode = (languageCode) => {
+    return !!languageCode && _elContains(_getKeys(globalObj._state._allTranslations), languageCode);
+};
 
+/**
+ * Returns the current language code
+ * @returns {string}
+ */
+export const _getCurrentLanguageCode = () => {
     const state = globalObj._state;
-    const allLanguageCodes = _getKeys(state._allTranslations);
+    return state._currentLanguageCode || state._userConfig.language.default;
+};
 
-    if(_elContains(allLanguageCodes, languageCode))
-        return languageCode;
-
-    if(_elContains(allLanguageCodes, state._currentLanguageCode))
-        return state._currentLanguageCode;
-
-    /**
-     * If we got here, return the very first language code (hopefully there is one)
-     */
-    return allLanguageCodes[0];
+export const _setCurrentLanguageCode = (newLanguageCode) => {
+    newLanguageCode && (globalObj._state._currentLanguageCode = newLanguageCode);
 };
 
 /**
@@ -36,28 +35,37 @@ export const _getBrowserLanguageCode = () => {
     return browserLanguage;
 };
 
+export const _getDocumentLanguageCode = () => {
+    return document.documentElement.lang;
+};
+
 /**
  * Resolve which language should be used.
  */
-export const _resolveCurrentLanguageCode = function () {
+export const _resolveCurrentLanguageCode = () =>  {
 
-    const languageConfig = globalObj._state._userConfig.language;
-    const autoDetect = languageConfig.autoDetect;
+    const autoDetect = globalObj._state._userConfig.language.autoDetect;
 
     if(autoDetect){
+
         _log('CookieConsent [LANG]: autoDetect strategy: "' + autoDetect + '"');
 
-        if (autoDetect === 'browser')
-            return _getValidLanguageCode(_getBrowserLanguageCode());
+        let newLanguageCode;
 
-        if(autoDetect === 'document')
-            return _getValidLanguageCode(globalObj._dom._document.documentElement.lang);
+        if (autoDetect === 'browser')
+            newLanguageCode = _getBrowserLanguageCode();
+
+        else if(autoDetect === 'document')
+            newLanguageCode = _getDocumentLanguageCode();
+
+        if(_validLanguageCode(newLanguageCode))
+            return newLanguageCode;
     }
 
     /**
-     * Use default language
+     * Use current language
      */
-    return _getValidLanguageCode(languageConfig.default);
+    return _getCurrentLanguageCode();
 };
 
 /**
@@ -67,13 +75,15 @@ export const _resolveCurrentLanguageCode = function () {
 export const _loadTranslationData = async (desiredLanguageCode) => {
     const state = globalObj._state;
 
-    let currentLanguageCode = state._currentLanguageCode || _resolveCurrentLanguageCode();
+    let currentLanguageCode;
 
     /**
      * Make sure languageCode is valid before retrieving the translation object
      */
-    if(desiredLanguageCode)
-        currentLanguageCode = _getValidLanguageCode(desiredLanguageCode);
+    if(desiredLanguageCode && _validLanguageCode(desiredLanguageCode))
+        currentLanguageCode = desiredLanguageCode;
+    else
+        currentLanguageCode = _getCurrentLanguageCode();
 
     let currentTranslation = state._allTranslations[currentLanguageCode];
 
@@ -95,7 +105,7 @@ export const _loadTranslationData = async (desiredLanguageCode) => {
     }
 
     state._currentTranslation = currentTranslation;
-    state._currentLanguageCode = currentLanguageCode;
+    _setCurrentLanguageCode(currentLanguageCode);
 
     _log('CookieConsent [LANG]: current language: "' + currentLanguageCode + '"');
 

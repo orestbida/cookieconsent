@@ -35,12 +35,15 @@ export const _isObject = (el) => {
  */
 export const _retrieveScriptElements = () => {
 
-    if(!globalObj._config.manageScriptTags) return;
+    if(!globalObj._config.manageScriptTags)
+        return;
 
-    globalObj._state._allScriptTags = globalObj._dom._document.querySelectorAll('script[' + SCRIPT_TAG_SELECTOR +']');
+    const state = globalObj._state;
 
-    globalObj._state._allScriptTagsInfo = [];
-    globalObj._state._allScriptTags.forEach(scriptTag => {
+    state._allScriptTags = globalObj._dom._document.querySelectorAll('script[' + SCRIPT_TAG_SELECTOR +']');
+
+    state._allScriptTagsInfo = [];
+    state._allScriptTags.forEach(scriptTag => {
 
         let scriptCategoryName = scriptTag.getAttribute(SCRIPT_TAG_SELECTOR);
         let scriptServiceName = scriptTag.dataset.service || '';
@@ -59,9 +62,9 @@ export const _retrieveScriptElements = () => {
             runOnDisable = true;
         }
 
-        if(_elContains(globalObj._state._allCategoryNames, scriptCategoryName)){
+        if(_elContains(state._allCategoryNames, scriptCategoryName)){
 
-            globalObj._state._allScriptTagsInfo.push({
+            state._allScriptTagsInfo.push({
                 _executed: false,
                 _runOnDisable: runOnDisable,
                 _categoryName: scriptCategoryName,
@@ -69,7 +72,7 @@ export const _retrieveScriptElements = () => {
             });
 
             if(scriptServiceName){
-                const categoryServices = globalObj._state._allDefinedServices[scriptCategoryName];
+                const categoryServices = state._allDefinedServices[scriptCategoryName];
                 if(!categoryServices[scriptServiceName]){
                     categoryServices[scriptServiceName] = {
                         enabled: false
@@ -216,7 +219,12 @@ export const _hasClass = (el, className) => {
  * @returns {number}
  */
 export const _getRemainingExpirationTimeMS = () => {
-    const elapsedTimeMilliseconds = globalObj._state._lastConsentTimestamp ? new Date() - globalObj._state._lastConsentTimestamp : 0;
+    const lastTimestamp = globalObj._state._lastConsentTimestamp;
+
+    const elapsedTimeMilliseconds = lastTimestamp
+        ? new Date() - lastTimestamp
+        : 0;
+
     return _getExpiresAfterDaysValue()*86400000 - elapsedTimeMilliseconds;
 };
 
@@ -240,7 +248,10 @@ export const _fetchJson = async (url) => {
  */
 export const _getExpiresAfterDaysValue = () => {
     const expiresAfterDays = globalObj._config.cookie.expiresAfterDays;
-    return _isFunction(expiresAfterDays) ? expiresAfterDays(globalObj._state._acceptType) : expiresAfterDays;
+
+    return _isFunction(expiresAfterDays)
+        ? expiresAfterDays(globalObj._state._acceptType)
+        : expiresAfterDays;
 };
 
 /**
@@ -379,23 +390,25 @@ export const _handleFocusTrap = (api) => {
 
     _addEvent(globalObj._dom._htmlDom, 'keydown', (e) => {
 
-        // If is tab key => ok
-        if(e.key !== 'Tab') return;
+        if(e.key !== 'Tab')
+            return;
+
+        const focusableElements = globalObj._state._currentModalFocusableElements;
 
         // If there is any modal to focus
-        if(globalObj._state._currentModalFocusableElements.length >= 1){
+        if(focusableElements.length > 0){
 
             const currentActiveElement = globalObj._dom._document.activeElement;
 
             // If reached natural end of the tab sequence => restart
             if(e.shiftKey){
-                if (currentActiveElement === globalObj._state._currentModalFocusableElements[0]) {
-                    globalObj._state._currentModalFocusableElements[1].focus();
+                if (currentActiveElement === focusableElements[0]) {
+                    focusableElements[1].focus();
                     e.preventDefault();
                 }
             }else{
-                if (currentActiveElement === globalObj._state._currentModalFocusableElements[1]) {
-                    globalObj._state._currentModalFocusableElements[0].focus();
+                if (currentActiveElement === focusableElements[1]) {
+                    focusableElements[0].focus();
                     e.preventDefault();
                 }
             }
@@ -407,9 +420,9 @@ export const _handleFocusTrap = (api) => {
                 !tabbedOutsideDiv && e.preventDefault();
 
                 if(e.shiftKey){
-                    globalObj._state._currentModalFocusableElements[1].focus();
+                    focusableElements[1].focus();
                 }else{
-                    globalObj._state._currentModalFocusableElements[0].focus();
+                    focusableElements[0].focus();
                 }
             }
         }
@@ -418,24 +431,26 @@ export const _handleFocusTrap = (api) => {
     });
 
     _addEvent(globalObj._dom._ccMain, 'click', (e) => {
+        const state = globalObj._state;
+
         /**
          * If click is on the foreground overlay (and not inside preferencesModal),
          * hide preferences modal
          */
-        if(globalObj._state._preferencesModalVisibleDelayed){
+        if(state._preferencesModalVisibleDelayed){
             if(!globalObj._dom._pm.contains(e.target)){
                 api.hidePreferences(0);
-                globalObj._state._clickedInsideModal = false;
+                state._clickedInsideModal = false;
             }else{
-                globalObj._state._clickedInsideModal = true;
+                state._clickedInsideModal = true;
             }
-        }else if(globalObj._state._consentModalVisible){
+        }else if(state._consentModalVisible){
             if(globalObj._dom._consentModal.contains(e.target)){
-                globalObj._state._clickedInsideModal = true;
+                state._clickedInsideModal = true;
             }
         }
 
-    }, true);
+    });
 
 };
 

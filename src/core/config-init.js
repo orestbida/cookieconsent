@@ -1,6 +1,7 @@
 import { globalObj } from './global';
 import { _log, _getKeys, _isObject, _retrieveScriptElements } from '../utils/general';
 import { OPT_OUT_MODE } from '../utils/constants';
+import { _resolveCurrentLanguageCode, _setCurrentLanguageCode } from '../utils/language';
 
 /**
  * Configure CookieConsent
@@ -69,11 +70,8 @@ export const _setConfig = (userConfig) => {
     if(config.hideFromBots === true && nav)
         state._botAgentDetected = ((nav.userAgent && /bot|crawl|spider|slurp|teoma/i.test(nav.userAgent)) || nav.webdriver);
 
-    if(typeof userCookieConfig === 'object'){
-
-
+    if(_isObject(userCookieConfig))
         config.cookie = {...cookie, ...userCookieConfig};
-    }
 
     _log('CookieConsent [CONFIG]: configuration:', userConfig);
     _log('CookieConsent [CONFIG]: autoClearCookies:', config.autoClearCookies);
@@ -82,6 +80,7 @@ export const _setConfig = (userConfig) => {
 
     _fetchCategoriesAndServices(allCategoryNames);
     _retrieveScriptElements();
+    _setCurrentLanguageCode(_resolveCurrentLanguageCode());
 };
 
 /**
