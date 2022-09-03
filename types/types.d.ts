@@ -17,6 +17,7 @@ declare global {
 
     interface SavedCookieContent {
         categories: string[]
+        level: string[]
         revision: number
         data?: null | Record<string, Record<string, any> | string>
         rfc_cookie: boolean
