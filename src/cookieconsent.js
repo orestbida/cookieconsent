@@ -1,5 +1,5 @@
 /*!
- * CookieConsent v2.8.5
+ * CookieConsent v2.8.6
  * https://www.github.com/orestbida/cookieconsent
  * Author Orest Bida
  * Released under the MIT License
@@ -1146,6 +1146,7 @@
 
             saved_cookie_content = {
                 "categories": accepted_categories,
+                "level": accepted_categories, // Copy of the `categories` property for compatibility purposes with version v2.8.0 and below.
                 "revision": _config.revision,
                 "data": cookie_data,
                 "rfc_cookie": _config.use_rfc_cookie,
