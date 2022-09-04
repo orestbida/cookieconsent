@@ -33,7 +33,7 @@ export const _manageExistingScripts = (mustEnableCategories) => {
             else if(
                 service.enabled
                 && !_elContains(state._enabledServices[categoryName], serviceName)
-                && _isFunction(service.onAccept)
+                && _isFunction(service.onReject)
             ){
                 service.enabled = false;
                 service.onReject();
