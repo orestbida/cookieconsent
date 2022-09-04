@@ -9,13 +9,13 @@ const childProcess = require("child_process")
 const SUCCESS_CODE = 1;
 const FAILURE_CODE = 0;
 
+const exitScript = (code) => process.exit(code)
+
 /**
  * Check if "docs" folder exists
  */
 if (!fs.existsSync('docs'))
     exitScript(FAILURE_CODE)
-
-const exitScript = (code) => process.exit(code)
 
 /**
  * List of all changed files
