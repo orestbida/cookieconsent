@@ -1,0 +1,19 @@
+version: 2.1
+
+orbs:
+  node: circleci/node@5.0.2
+
+jobs:
+  skip-build:
+    docker:
+      - image: cimg/node:lts
+    steps:
+      - checkout
+      - run:
+          name: Skip
+          command: circleci-agent step halt
+
+workflows:
+  my-workflow:
+    jobs:
+      - skip-build
