@@ -25,7 +25,7 @@ After:
 </script>
 ```
 
-You can also run **scripts when a category is disabled** (if it was previously enabled) by pre-pending `!` to the category name:
+You can also run **scripts when a category is disabled** (if it was previously enabled) by prepending the `'!'` character to the category name:
 
 ```html
 <script type="text/plain" data-category="!analytics">
@@ -47,7 +47,7 @@ You can define a service by adding the following attribute:
 </script>
 ```
 
-You can pre-pend the `!` character to the service name to run some clean-up logic when the service is disabled:
+You can add the `'!'` before the service name to run some clean-up logic when the service is disabled:
 ```html
 <script type="text/plain" data-category="analytics" data-service="!Google Analytics">
     // Google Analytics disabled
@@ -71,7 +71,7 @@ cc.run({
 });
 ```
 
-Another handy callback is the `onChange` callback, which is fired when the state of the categories or services is changed (assuming that consent was already expressed).
+Another handy callback is the `onChange` callback, fired when the state of the categories or services is changed (assuming that consent was already expressed).
 
 ```javascript
 cc.run({
