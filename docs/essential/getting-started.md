@@ -123,15 +123,6 @@ createApp(App)
 
 ### Angular
 
-Add `compilerOptions.allowSyntheticDefaultImports` in the `tsconfig.json` file:
-```json
-{
-  "compilerOptions": {
-    "allowSyntheticDefaultImports": true
-  }
-}
-```
-
 Declare the `cookieconsent.css` style in the `angular.json` file:
 ```json
 {
@@ -163,7 +154,7 @@ export class AppComponent implements AfterViewInit{
     title = 'angular-javascript-demo';
 
     ngAfterViewInit(): void{
-        cc.run({
+        CookieConsent.run({
             // your config. goes here (required)
         });
     }
