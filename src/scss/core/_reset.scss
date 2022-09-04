@@ -12,6 +12,21 @@
         box-sizing: border-box;
     }
 
+    /* Restore outline and cursor*/
+    a,
+    button,
+    input{
+        font-family: inherit;
+        font-size: 100%;
+        line-height: normal;
+        margin: 0;
+        outline: revert;
+        outline-offset: 2px;
+        cursor: pointer;
+        overflow: hidden;
+        -webkit-appearance: none;
+    }
+
     table,
     thead,
     tbody,

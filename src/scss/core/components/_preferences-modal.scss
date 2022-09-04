@@ -257,6 +257,7 @@ $toggle-knob-icon-width: 2px;
     /* START: Services counter badge */
     .pm__badge{
         display: flex;
+        flex: none;
         margin-left: 1em;
         border-radius: 5em;
         font-weight: $font-weight-bold;
@@ -318,10 +319,11 @@ $toggle-knob-icon-width: 2px;
         user-select: none;
         vertical-align: middle;
         z-index: 1;
+        transform: translateZ(0);
 
         &.toggle-service{
             position: relative;
-            transform: scale(.85);
+            transform: scale(.85) translateZ(0);
             transform-origin: right;
             margin: 0;
             right: 4px;
@@ -380,6 +382,7 @@ $toggle-knob-icon-width: 2px;
         justify-content: center;
         align-items: center;
         text-align: center;
+        transform: translateZ(0);
         transition: opacity .15s ease;
     }
 

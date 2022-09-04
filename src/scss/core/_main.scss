@@ -61,21 +61,6 @@ $font-weight-bold: 600;
         overscroll-behavior: none;
     }
 
-    /* Restore outline and cursor*/
-    a,
-    button,
-    input{
-        font-family: inherit;
-        font-size: 100%;
-        line-height: normal;
-        margin: 0;
-        outline: revert;
-        outline-offset: 2px;
-        cursor: pointer;
-        overflow: hidden;
-        -webkit-appearance: none;
-    }
-
     /* Show webkit's "cool" scrollbar only on non mobile screens */
     @media screen and (min-width: 640px){
         .cm__desc,
