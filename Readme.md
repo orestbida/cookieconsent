@@ -463,7 +463,7 @@ Additional methods for an easier management of your scripts and cookie settings 
     Example:
     ```javascript
     // Check if user accepts cookie consent with analytics category enabled
-    if (!cookieconsent.allowedCategory('analytics')) {
+    if (cookieconsent.allowedCategory('analytics')) {
         // yoo, you might want to load analytics.js ...
     };
     ```
