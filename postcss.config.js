@@ -1,6 +1,9 @@
 module.exports = {
     map: false,
     plugins: {
-        'cssnano': {}
+        'cssnano': {},
+        'postcss-custom-properties': {
+            preserve: true
+        }
     }
 }

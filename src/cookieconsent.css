@@ -85,7 +85,6 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
-    color: #2d4156;
     color: var(--cc-text);
 }
 
@@ -214,7 +213,6 @@
     padding: 1.1em 1.5em 1.4em 1.5em;
     position: fixed;
     z-index: 1;
-    background: #fff;
     background: var(--cc-bg);
     max-width: 24.2em;
     width: 100%;
@@ -254,9 +252,7 @@
 }
 
 .cc_div .c-bn{
-    color: #40505a;
     color: var(--cc-btn-secondary-text);
-    background: #e5ebef;
     background: var(--cc-btn-secondary-bg);
     padding: 1em 1.7em;
     display: inline-block;
@@ -289,7 +285,6 @@
 #s-cnt button + button:active,
 #s-c-bn:active,
 #s-c-bn:hover{
-    background: #d8e0e6;
     background: var(--cc-btn-secondary-hover-bg);
 }
 
@@ -350,7 +345,6 @@ CookieConsent settings modal
 
 #s-cnt .b-bn .b-tl:active,
 #s-cnt .b-bn .b-tl:hover{
-    background: #e9eff4;
     background: var(--cc-cookie-category-block-bg-hover);
 }
 
@@ -361,13 +355,11 @@ CookieConsent settings modal
 #s-bl .c-bl{
     padding: 1em;
     margin-bottom: .5em;
-    border: 1px solid #f1f3f5;
-    border-color: var(--cc-section-border);
+    border: 1px solid var(--cc-section-border);
     transition: background-color .25s ease;
 }
 
 #s-bl .c-bl:hover{
-    background: #f0f4f7;
     background: var(--cc-cookie-category-block-bg);
 }
 
@@ -391,7 +383,6 @@ CookieConsent settings modal
 #s-bl .c-bl.b-ex{
     padding: 0;
     border: none;
-    background: #f0f4f7;
     background: var(--cc-cookie-category-block-bg);
     transition: none;
 }
@@ -430,7 +421,6 @@ CookieConsent settings modal
     font-size: 0.9em;
     line-height: 1.5em;
     margin-top: .85em;
-    color: #2d4156;
     color: var(--cc-block-text);
 }
 
@@ -474,7 +464,6 @@ CookieConsent settings modal
 #s-inr,
 #s-hdr,
 #s-bns{
-    background: #fff;
     background: var(--cc-bg);
 }
 
@@ -494,16 +483,13 @@ CookieConsent settings modal
     left: 0;
     right: 0;
     padding: 1em 1.8em;
-    border-top: 1px solid #f1f3f5;
-    border-color: var(--cc-section-border);
+    border-top: 1px solid var(--cc-section-border);
     height: 4.75em;
 }
 
 .cc_div .cc-link{
-    color: #253b48;
     color: var(--cc-btn-primary-bg);
-    border-bottom: 1px solid #253b48;
-    border-color: var(--cc-btn-primary-bg);
+    border-bottom: 1px solid var(--cc-btn-primary-bg);
     display: inline;
     padding-bottom: 0;
     text-decoration: none;
@@ -518,28 +504,21 @@ CookieConsent settings modal
 
 #c-bns button:first-child,
 #s-bns button:first-child{
-    color: #fff;
     color: var(--cc-btn-primary-text);
-    background: #253b48;
     background: var(--cc-btn-primary-bg);
 }
 
 #c-bns.swap button:first-child{
-    color: #40505a;
     color: var(--cc-btn-secondary-text);
-    background: #e5ebef;
     background: var(--cc-btn-secondary-bg);
 }
 
 #c-bns.swap button:last-child{
-    color: #fff;
     color: var(--cc-btn-primary-text);
-    background: #253b48;
     background: var(--cc-btn-primary-bg);
 }
 
 .cc_div .b-tg .c-tgl:checked ~ .c-tg{
-    background: #253b48;
     background: var(--cc-toggle-bg-on);
 }
 
@@ -549,13 +528,11 @@ CookieConsent settings modal
 #s-bns button:first-child:hover,
 #c-bns.swap button:last-child:active,
 #c-bns.swap button:last-child:hover{
-    background: #1d2e38;
     background: var(--cc-btn-primary-hover-bg);
 }
 
 #c-bns.swap button:first-child:active,
 #c-bns.swap button:first-child:hover{
-    background: #d8e0e6;
     background: var(--cc-btn-secondary-hover-bg);
 }
 
@@ -568,8 +545,7 @@ CookieConsent settings modal
     height: 4.75em;
     vertical-align: middle;
     z-index: 2;
-    border-bottom: 1px solid #f1f3f5;
-    border-color: var(--cc-section-border);
+    border-bottom: 1px solid var(--cc-section-border);
 }
 
 #s-ttl{
@@ -629,13 +605,11 @@ CookieConsent settings modal
 
     #s-bl::-webkit-scrollbar-thumb{
         border: 0.25em solid var(--cc-bg);
-        background: #cfd5db;
         background: var(--cc-webkit-scrollbar-bg);
         border-radius: 100em;
     }
 
     #s-bl::-webkit-scrollbar-thumb:hover{
-        background: #9199a0;
         background: var(--cc-webkit-scrollbar-bg-hover);
     }
 
@@ -677,7 +651,6 @@ CookieConsent settings modal
 /* Create a custom checkbox */
 .cc_div .b-tg .c-tg {
     position: absolute;
-    background: #919ea6;
     background: var(--cc-toggle-bg-off);
     transition: background-color .25s ease, box-shadow .25s ease;
     pointer-events: none;
@@ -697,7 +670,6 @@ CookieConsent settings modal
 }
 
 .cc_div .b-tg .c-tgl ~ .c-tg.c-ro{
-    background: #d5dee2;
     background: var(--cc-toggle-bg-readonly);
 }
 
@@ -716,7 +688,6 @@ CookieConsent settings modal
     height: 1.25em;
     border: none;
     box-sizing: content-box;
-    background: #fff;
     background: var(--cc-toggle-knob-bg);
     box-shadow: 0 1px 2px rgba(24, 32, 35, .36);
     transition: transform .25s ease;
@@ -739,7 +710,6 @@ CookieConsent settings modal
 }
 
 #s-bl tbody tr:hover{
-    background: #e9eff4;
     background: var(--cc-cookie-category-block-bg-hover);
 }
 
@@ -767,8 +737,7 @@ CookieConsent settings modal
 }
 
 #s-bl thead tr:first-child{
-    border-bottom: 1px solid #e9edf2;
-    border-color: var(--cc-cookie-table-border);
+    border-bottom: 1px solid var(--cc-cookie-table-border);
 }
 
 .force--consent #s-cnt,
@@ -786,7 +755,6 @@ CookieConsent settings modal
     visibility: hidden;
     opacity: 0;
     background: #070707;
-    background: rgba(4, 6, 8, .85);
     background: var(--cc-overlay-bg);
     display: none;
     transition: none;
@@ -842,8 +810,7 @@ html.force--consent.show--consent body{
 /** BEGIN ICONS **/
 .cc_div .b-bn .exp::before,
 .cc_div .act .b-bn .exp::before{
-    border: solid #2d4156;
-    border-color: var(--cc-btn-secondary-text);
+    border: solid var(--cc-btn-secondary-text);
     border-width: 0 2px 2px 0;
     padding: .2em;
     display: inline-block;
@@ -861,8 +828,7 @@ html.force--consent.show--consent body{
 }
 
 .cc_div .on-i::before{
-    border: solid #fff;
-    border-color: var(--cc-toggle-knob-icon-color);
+    border: solid var(--cc-toggle-knob-icon-color);
     border-width: 0 2px 2px 0;
     padding: .1em;
     display: inline-block;
@@ -883,7 +849,6 @@ html.force--consent.show--consent body{
     top: .58em;
     height: .6em;
     width: 1.5px;
-    background: #444d53;
     background: var(--cc-btn-secondary-text);
     transform: rotate(45deg);
     border-radius: 1em;
@@ -918,7 +883,6 @@ html.force--consent.show--consent body{
     height: .7em;
     width: .09375em;
     display: block;
-    background: #cdd6dc;
     background: var(--cc-toggle-knob-icon-color);
     margin: 0 auto;
     position: absolute;
@@ -1086,8 +1050,7 @@ html.force--consent.show--consent body{
 }
 
 .cc_div .bar #s-bl tr{
-    border-top: 1px solid #e3e7ed;
-    border-color: var(--cc-cookie-table-border);
+    border-top: 1px solid var(--cc-cookie-table-border);
 }
 
 .cc_div .bar #s-bl td {
@@ -1103,7 +1066,6 @@ html.force--consent.show--consent body{
     padding-right: 0.625em;
     white-space: nowrap;
     content: attr(data-column);
-    color: #000;
     color: var(--cc-text);
     overflow: hidden;
     text-overflow: ellipsis;
@@ -1270,8 +1232,7 @@ html.force--consent.show--consent body{
     }
 
     #s-bl tr{
-        border-top: 1px solid #e3e7ed;
-        border-color: var(--cc-cookie-table-border);
+        border-top: 1px solid var(--cc-cookie-table-border);
     }
 
     #s-bl td {
@@ -1287,7 +1248,6 @@ html.force--consent.show--consent body{
         padding-right: 0.625em;
         white-space: nowrap;
         content: attr(data-column);
-        color: #000;
         color: var(--cc-text);
         overflow: hidden;
         text-overflow: ellipsis;

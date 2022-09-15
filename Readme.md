@@ -34,7 +34,7 @@ A __lightweight__ & __gdpr compliant__ cookie consent plugin written in plain ja
 
 ## Key features
 - __Lightweight__
-- __Cross-browser__ support (IE10+)
+- __Cross-browser__ support (IE10+ [*](#note-css-variables-are-not-supported-on-ie))
 - __Standalone__ (no external dependencies needed)
 - __GDPR compliant__
 - __Support for multi language__
@@ -368,6 +368,21 @@ cookieconsent.run({
 });
 ```
 <i>Default layout is `box` and default transition is `zoom`.</i>
+
+You can alter the color scheme by overriding the available css variables which you can find [here](src/cookieconsent.css).
+
+### Note: css variables are not supported on IE
+
+How to build an ad-hoc stylesheet with your color scheme:
+
+0. make sure you have [nodejs](https://nodejs.org/en/download/) installed
+1. download/clone this repo.
+2. run `npm install`
+3. modify `src/cookieconsent.css` (css variables that will apply to IE are under the `:root` css selector)
+4. run `npm run build`
+5. use the newly generated `dist/cookieconsent.css` stylesheet
+
+Alternatively, you could load a css variables polyfill.
 
 <br>
 

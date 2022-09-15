@@ -35,6 +35,7 @@
     "cssnano": "^5.1.13",
     "postcss": "^8.4.16",
     "postcss-cli": "^10.0.0",
+    "postcss-custom-properties": "^12.1.9",
     "terser": "^5.15.0"
   }
 }
