@@ -11,7 +11,7 @@ jobs:
       - checkout
       - run:
           name: Check changed files or skip
-          command: git show -m HEAD --name-only --pretty="" | egrep -q "^(src|tests|.circleci).*(.js|ts|yml)|(package.json|rollup.config.js)$" || circleci-agent step halt
+          command: git show -m HEAD --name-only --pretty="" | egrep -q "^(src|tests|\.circleci).*\.(js|ts|yml)$|^(package\.json|rollup\.config\.js)$" || circleci-agent step halt
       - node/install-packages:
           pkg-manager: npm
       - run:
