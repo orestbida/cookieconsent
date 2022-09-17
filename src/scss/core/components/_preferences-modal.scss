@@ -1,8 +1,7 @@
 $padding-y: 1em;
 $padding-x: 1.5em;
 
-$btn-margin: 6px;
-$btn-height: 41px;
+$btn-height: 42px;
 
 $toggle-knob-height: 23px;
 $toggle-knob-width: 50px;
@@ -57,8 +56,8 @@ $toggle-knob-icon-width: 2px;
     }
 
     .pm__close-btn{
-        width: $btn-height;
-        height: $btn-height;
+        width: calc(#{$btn-height} - 2px);
+        height: calc(#{$btn-height} - 2px);
         position: relative;
         background: var(--cc-btn-secondary-bg);
         border-radius: var(--cc-btn-border-radius);
@@ -143,7 +142,7 @@ $toggle-knob-icon-width: 2px;
         &--toggle{
             background: var(--cc-cookie-category-block-bg);
             border-top: none;
-            margin-bottom: $btn-margin;
+            margin-bottom: var(--cc-btn-gap);
 
             .pm__section-title{
                 width: 100%;
@@ -188,7 +187,8 @@ $toggle-knob-icon-width: 2px;
                 }
 
                 .pm__section-arrow::before{
-                    transform: translateY(-20%) rotate(225deg)
+                    transform: translateY(-20%) rotate(225deg);
+                    margin-top: 0;
                 }
 
                 .pm__section-desc-wrapper{
@@ -228,13 +228,12 @@ $toggle-knob-icon-width: 2px;
                     content: "";
                     border: solid var(--cc-btn-secondary-color);
                     border-width: 0 2px 2px 0;
-                    padding: 0.15em;
+                    padding: 2px;
                     position: absolute;
                     transform: translateY(-50%) rotate(45deg);
                     top: 50%;
                     margin-top: -1px;
                     z-index: 1;
-                    transition: transform 0.25s ease;
                 }
             }
         }
@@ -577,6 +576,8 @@ $toggle-knob-icon-width: 2px;
     }
 
     .pm__table-head > tr{
+        font-weight: 600;
+        color: var(--cc-primary-color);
         border-bottom: 1px dashed var(--cc-separator-border-color);
     }
 
@@ -601,10 +602,12 @@ $toggle-knob-icon-width: 2px;
         display: flex;
         justify-content: space-between;
         border-top: 1px solid var(--cc-separator-border-color);
+        gap: var(--cc-btn-gap);
     }
 
     .pm__btn-group{
         display: flex;
+        gap: var(--cc-btn-gap);
     }
 
     .pm__btn{
@@ -654,20 +657,10 @@ $toggle-knob-icon-width: 2px;
         max-height: 37.5em;
         height: calc(100% - 2em);
 
-        .pm__btn-group:nth-child(2),
-        .pm__btn:nth-child(2){
-            margin: 0 0 0 $btn-margin;
-        }
-
         &.pm--flip{
             .pm__footer,
             .pm__btn-group{
                 flex-direction: row-reverse;
-            }
-
-            .pm__btn-group:nth-child(2),
-            .pm__btn:nth-child(2){
-                margin: 0 $btn-margin 0 0;
             }
         }
     }
@@ -735,21 +728,16 @@ $toggle-knob-icon-width: 2px;
                 flex-direction: column;
             }
 
-            .pm__btn-group:nth-child(2),
-            .pm__btn:nth-child(2){
-                margin: $btn-margin 0 0 0;
-            }
-
             &.pm--flip{
                 .pm__footer,
                 .pm__btn-group{
                     flex-direction: column-reverse;
                 }
+            }
 
-                .pm__btn-group:nth-child(2),
-                .pm__btn:nth-child(2){
-                    margin: 0 0 $btn-margin 0;
-                }
+            .pm__badge{
+                /* Hide Service status/counter badge if not wide layout */
+                display: none;
             }
         }
 
@@ -770,20 +758,10 @@ $toggle-knob-icon-width: 2px;
                 padding: 1em 1.65em;
             }
 
-            .pm__btn-group:nth-child(2),
-            .pm__btn:nth-child(2){
-                margin: 0 0 0 $btn-margin;
-            }
-
             &.pm--flip{
                 .pm__footer,
                 .pm__btn-group{
                     flex-direction: row-reverse;
-                }
-
-                .pm__btn-group:nth-child(2),
-                .pm__btn:nth-child(2){
-                    margin: 0 $btn-margin 0 0;
                 }
             }
         }
@@ -927,20 +905,10 @@ $toggle-knob-icon-width: 2px;
             flex-direction: column!important;
         }
 
-        .pm__btn-group:nth-child(2),
-        .pm__btn:nth-child(2){
-            margin: $btn-margin 0 0 0!important;
-        }
-
         .pm--flip{
             .pm__footer,
             .pm__btn-group{
                 flex-direction: column-reverse!important;
-            }
-
-            .pm__btn-group:nth-child(2),
-            .pm__btn:nth-child(2){
-                margin: 0 0 $btn-margin 0!important;
             }
         }
     }
