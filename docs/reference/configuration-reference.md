@@ -115,6 +115,14 @@ Creates a dark overlay and blocks the page scroll until consent is expressed.
 - **Default**: `false`
 
 
+## lazyHtmlGeneration
+
+Delays the generation of the modal's markup until they're about to become visible, to improve the TTI score.
+You can detect when a modal is ready/created via the [`onModalReady`](/advanced/callbacks-events.html#onmodalready) callback.
+
+- **Type**: `boolean`
+- **Default**: `true`
+
 ## cookie
 
 Customize the plugin's cookie.

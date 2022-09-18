@@ -132,8 +132,8 @@ This event is triggered when one of the modals is hidden.
     });
     ```
 
-## onModalRady
-This event is triggered when one of the modals' is created and appended to the DOM.
+## onModalReady
+This event is triggered when a modal is created and appended to the DOM.
 
 - **Example** <br>
 
