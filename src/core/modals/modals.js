@@ -16,7 +16,7 @@ export const _createCookieConsentHTML = (api) => {
     dom._ccMain.id = 'cc-main';
 
     dom._ccMain.style.position = 'fixed';
-    dom._ccMain.style.zIndex = '1000000';
+    dom._ccMain.style.zIndex = '2147483647';
 
     // Create consent modal
     if(state._invalidConsent)
