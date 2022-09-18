@@ -1,7 +1,7 @@
 import { globalObj } from "../src/core/global";
 import * as CookieConsent from "../src/index"
 import testConfig from "./config/full-config";
-import { defineCryptoRandom, resetCookieConsent } from "./config/mocks-utils";
+import { defineCryptoRandom } from "./config/mocks-utils";
 
 let api;
 

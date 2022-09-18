@@ -1,3 +1,6 @@
+/**
+ * @type {import('../../types').CookieConsentConfig}
+ */
 const config = {
 
     mode: 'opt-out',
@@ -5,6 +8,8 @@ const config = {
     cookie: {
         expiresAfterDays: () => 200
     },
+
+    lazyHtmlGeneration: false,
 
     categories: {
         necessary: {

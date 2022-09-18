@@ -1,3 +1,6 @@
+/**
+ * @type {import('../../types').CookieConsentConfig}
+ */
 const config = {
     root: document.body,
     mode: 'opt-in',
@@ -7,6 +10,7 @@ const config = {
     manageScriptTags: true,
     hideFromBots: true,
     disablePageInteraction: true,
+    lazyHtmlGeneration: false,
 
     onFirstConsent: () => {},
     onConsent: () => {},

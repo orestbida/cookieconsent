@@ -1,5 +1,4 @@
 import crypto from 'crypto';
-import { globalObj } from '../../src/core/global';
 
 export const defineCryptoRandom = () => {
     if(!global.crypto){
