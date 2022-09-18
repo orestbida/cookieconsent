@@ -162,10 +162,18 @@ export const _uuidv4 = () => {
  * @param {Element} elem
  * @param {string} event
  * @param {eventFired} fn
- * @param {boolean} [isPassive]
+ * @param {boolean} [saveListener]
  */
-export const _addEvent = (elem, event, fn, isPassive) => {
-    elem.addEventListener(event, fn , isPassive === true ? { passive: true } : false);
+export const _addEvent = (elem, event, fn, saveListener) => {
+    elem.addEventListener(event, fn);
+
+    if(saveListener){
+        globalObj._state._dataEventListeners.push({
+            _element: elem,
+            _event: event,
+            _listener: fn
+        });
+    }
 };
 
 /**
@@ -313,7 +321,7 @@ export const _addDataButtonListeners = (elem, api, createPreferencesModal) => {
         _addEvent(showPreferencesModalElements[i], 'click', (event) => {
             event.preventDefault();
             api.showPreferences();
-        });
+        }, true);
 
         if(createPreferencesModalOnHover){
             _addEvent(showPreferencesModalElements[i], 'mouseover', (event ) => {
@@ -321,7 +329,7 @@ export const _addDataButtonListeners = (elem, api, createPreferencesModal) => {
 
                 if(!globalObj._state._preferencesModalExists)
                     createPreferencesModal(api);
-            });
+            }, true);
         }
     }
 
@@ -330,25 +338,25 @@ export const _addDataButtonListeners = (elem, api, createPreferencesModal) => {
         _addEvent(showConsentModalElements[i], 'click', (event) => {
             event.preventDefault();
             api.show(true);
-        });
+        }, true);
     }
 
     for(i=0; i<acceptAllElements.length; i++){
         _addEvent(acceptAllElements[i], 'click', (event) => {
             _acceptAction(event, 'all');
-        });
+        }, true);
     }
 
     for(i=0; i<acceptCustomElements.length; i++){
         _addEvent(acceptCustomElements[i], 'click', (event) => {
             _acceptAction(event);
-        });
+        }, true);
     }
 
     for(i=0; i<acceptNecessaryElements.length; i++){
         _addEvent(acceptNecessaryElements[i], 'click', (event) => {
             _acceptAction(event, []);
-        });
+        }, true);
     }
 
     /**
@@ -442,7 +450,7 @@ export const _handleFocusTrap = (api) => {
         }
 
         !tabbedInsideModal && (tabbedOutsideDiv = true);
-    });
+    }, true);
 
     _addEvent(dom._ccMain, 'click', (e) => {
         const state = globalObj._state;

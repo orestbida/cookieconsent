@@ -1,4 +1,3 @@
-/* eslint-disable no-unreachable */
 import { globalObj, _fireEvent } from '../../global';
 import {
     _createNode,
@@ -67,7 +66,7 @@ export const _createPreferencesModal = (api) => {
             if (event.keyCode === 27) {
                 api.hidePreferences();
             }
-        });
+        }, true);
 
         // modal header
         dom._pmHeader = _createNode(DIV_TAG);
@@ -267,7 +266,7 @@ export const _createPreferencesModal = (api) => {
                         _setAttribute(btn, 'aria-expanded', 'false');
                         _setAttribute(accordion, 'aria-hidden', 'true');
                     }
-                }, false);
+                });
             })(sDescContainer, s, sTitle);
 
 

@@ -763,6 +763,13 @@ export const reset = (eraseCookie) => {
         eraseCookies(cookie.name, cookie.path, cookie.domain);
 
     /**
+     * Remove data-cc event listeners
+     */
+    globalObj._state._dataEventListeners.forEach(item => {
+        item._element.removeEventListener(item._event, item._listener);
+    });
+
+    /**
      * Remove html from DOM
      */
     dom._ccMain && dom._ccMain.remove();
@@ -776,10 +783,6 @@ export const reset = (eraseCookie) => {
         _removeClass(dom._htmlDom, TOGGLE_CONSENT_MODAL_CLASS);
     }
 
-    /**
-     * TODO: remove event listeners (buttons/links with data-cc attrs.)
-     */
-
     const newGlobal = new Global();
 
     globalObj._state = newGlobal._state;
@@ -787,4 +790,6 @@ export const reset = (eraseCookie) => {
     globalObj._config = newGlobal._config;
     globalObj._callbacks = newGlobal._callbacks;
     globalObj._customEvents = newGlobal._customEvents;
+
+    console.log('eventListeners', globalObj._state._dataEventListeners);
 };

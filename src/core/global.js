@@ -309,6 +309,18 @@ export class Global {
             _savedCookieContent : null,
 
             /**
+             * Store all event data-cc event listeners
+             * (so that they can be removed on .reset())
+             *
+             * @type {{
+             *  _element: HTMLElement,
+             *  _event: string,
+             *  _listener: Function
+             * }[]}
+             */
+            _dataEventListeners: [],
+
+            /**
             * @type {any}
             */
             _cookieData : null,
