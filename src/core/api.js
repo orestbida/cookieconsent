@@ -790,6 +790,4 @@ export const reset = (eraseCookie) => {
     globalObj._config = newGlobal._config;
     globalObj._callbacks = newGlobal._callbacks;
     globalObj._customEvents = newGlobal._customEvents;
-
-    console.log('eventListeners', globalObj._state._dataEventListeners);
 };
