@@ -62,8 +62,14 @@
             document.getElementById('consent-timestamp').innerText = new Date(consentTimestamp).toLocaleString();
             document.getElementById('last-consent-timestamp').innerText = new Date(lastConsentTimestamp).toLocaleString();
         }
-        window.addEventListener('cc:onChange', updateFields);
-        window.addEventListener('cc:onConsent', updateFields);
+
+        window.addEventListener('cc:onModalReady', ({detail}) => {
+            if(detail.modalName === 'preferencesModal'){
+                CookieConsent.validConsent() && updateFields();
+                window.addEventListener('cc:onChange', updateFields);
+                window.addEventListener('cc:onConsent', updateFields);
+            }
+        })
     </script>
 </body>
 </html>

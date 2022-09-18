@@ -70,6 +70,10 @@ CookieConsent.run({
         console.log('onChange fired!', changedCategories, changedServices);
     },
 
+    onModalReady: ({modalName}) => {
+        console.log('ready:', modalName);
+    },
+
     onModalShow: ({modalName}) => {
         console.log('visible:', modalName);
     },
