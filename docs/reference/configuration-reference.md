@@ -335,6 +335,32 @@ Callback function executed when one of the modals is hidden.
     * `'consentModal'`
     * `'preferencesModal'`
 
+## onModalReady
+
+Callback function executed when one of the modals is created and appended to the DOM.
+
+- **Type**:
+    ```javascript
+    function({
+        modalName: string
+    }): void
+    ```
+
+* **Example**: <br>
+    ```javascript
+    cc.run({
+        onModalReady: ({modalName}) => {
+            // do something
+        }
+    })
+    ```
+
+- **Details**:
+
+    `modalName` equals to one of the following values:
+    * `'consentModal'`
+    * `'preferencesModal'`
+
 
 ## guiOptions
 

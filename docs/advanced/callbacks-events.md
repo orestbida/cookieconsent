@@ -8,6 +8,7 @@ Available callbacks:
 - `onChange`
 - `onModalShow`
 - `onModalHide`
+- `onModalReady`
 
 <br>
 
@@ -123,6 +124,30 @@ This event is triggered when one of the modals is hidden.
     using event listener:
     ```javascript
     window.addEventListener('cc:onModalHide', function(event){
+        /**
+         * event.detail.modalName
+         */
+
+        // do something
+    });
+    ```
+
+## onModalRady
+This event is triggered when one of the modals' is created and appended to the DOM.
+
+- **Example** <br>
+
+    ```javascript
+    cc.run({
+        onModalReady: function({modalName}){
+            // do something
+        }
+    });
+    ```
+
+    using event listener:
+    ```javascript
+    window.addEventListener('cc:onModalReady', function(event){
         /**
          * event.detail.modalName
          */
