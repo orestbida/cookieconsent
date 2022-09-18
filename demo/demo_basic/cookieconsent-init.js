@@ -1,5 +1,8 @@
-// run plugin with config object
-CookieConsent.run({
+/**
+ * Config. object
+ * @type {import('../../types').CookieConsentConfig}
+ */
+const config = {
     disablePageInteraction: true,
 
     cookie: {
@@ -10,7 +13,6 @@ CookieConsent.run({
         consentModal: {
             layout: 'box wide',
             position: 'bottom right',
-            equalWeightButtons: false,
             flipButtons: false
         },
         preferencesModal: {
@@ -61,7 +63,10 @@ CookieConsent.run({
                     acceptNecessaryBtn: 'Reject all',
                     showPreferencesBtn: 'Manage preferences',
                     closeIconLabel: 'Close',
-                    footer: '<a href="#link">Privacy Policy</a><a href="#link">Impressum</a>'
+                    footer: `
+                        <a href="#link">Privacy Policy</a>
+                        <a href="#link">Impressum</a>
+                    `
                 },
                 preferencesModal: {
                     title: 'Cookie preferences',
@@ -110,4 +115,6 @@ CookieConsent.run({
             }
         }
     }
-});
+};
+
+CookieConsent.run(config);

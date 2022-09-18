@@ -59,10 +59,14 @@ CookieConsent.run({
             en: {
                 consentModal: {
                     title: 'Hello traveller, it\'s cookie time!',
-                    description: 'Our website uses essential cookies to ensure its proper operation and tracking cookies to understand how you interact with it. The latter will be set only after consent. <a href="#privacy-policy" class="cc__link">Privacy policy</a>',
+                    description: 'Our website uses essential cookies to ensure its proper operation and tracking cookies to understand how you interact with it. The latter will be set only after consent.',
                     acceptAllBtn: 'Accept',
                     acceptNecessaryBtn: 'Reject',
-                    showPreferencesBtn: 'Manage preferences'
+                    showPreferencesBtn: 'Manage preferences',
+                    footer: `
+                        <a href="#link">Privacy Policy</a>
+                        <a href="#link">Impressum</a>
+                    `
                 },
                 preferencesModal: {
                     title: 'Cookie preferences',
