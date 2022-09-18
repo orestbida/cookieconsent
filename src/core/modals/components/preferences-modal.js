@@ -1,8 +1,27 @@
 /* eslint-disable no-unreachable */
-import { globalObj } from '../../global';
-import { _createNode, _addClass, _addClassPm, _setAttribute, _removeClass, _addEvent, _appendChild,  _getKeys, _hasClass, _elContains } from '../../../utils/general';
+import { globalObj, _fireEvent } from '../../global';
+import {
+    _createNode,
+    _addClass,
+    _addClassPm,
+    _setAttribute,
+    _removeClass,
+    _addEvent,
+    _appendChild,
+    _getKeys,
+    _hasClass,
+    _elContains,
+    _getModalFocusableData,
+    _log
+} from '../../../utils/general';
+
 import { _guiManager } from '../../../utils/gui-manager';
-import { SCRIPT_TAG_SELECTOR, DIV_TAG, BUTTON_TAG } from '../../../utils/constants';
+import {
+    PREFERENCES_MODAL_NAME,
+    SCRIPT_TAG_SELECTOR,
+    DIV_TAG,
+    BUTTON_TAG
+} from '../../../utils/constants';
 
 /**
  * Generates the preferences modal's html and appends it to "cc-main" el.
@@ -91,7 +110,6 @@ export const _createPreferencesModal = (api) => {
         _appendChild(dom._pm, dom._pmFooter);
 
         _appendChild(dom._pmContainer, dom._pm);
-        _appendChild(dom._ccMain, dom._pmContainer);
     }else{
         dom._pmNewBody = _createNode(DIV_TAG);
         _addClassPm(dom._pmNewBody, 'body');
@@ -397,6 +415,18 @@ export const _createPreferencesModal = (api) => {
     }
 
     _guiManager(1);
+
+    if(!state._preferencesModalExists){
+        state._preferencesModalExists = true;
+        _appendChild(dom._ccMain, dom._pmContainer);
+        _getModalFocusableData();
+
+        _log('CookieConsent [HTML] created', PREFERENCES_MODAL_NAME);
+        _fireEvent(globalObj._customEvents._onModalReady, PREFERENCES_MODAL_NAME);
+
+        // Add class to enable animations/transitions
+        setTimeout(() => _addClass(dom._pmContainer, 'c--anim'), 100);
+    }
 };
 
 /**

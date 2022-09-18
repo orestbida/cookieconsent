@@ -1,5 +1,5 @@
 import { globalObj } from '../global';
-import { _createNode, _appendChild } from '../../utils/general';
+import { _createNode, _appendChild, _addDataButtonListeners } from '../../utils/general';
 import { _createConsentModal } from './components/consent-modal';
 import { _createPreferencesModal } from './components/preferences-modal';
 import { DIV_TAG } from '../../utils/constants';
@@ -8,23 +8,28 @@ import { DIV_TAG } from '../../utils/constants';
  * @param {import('../../../types').CookieConsentAPI} api
  */
 export const _createCookieConsentHTML = (api) => {
+    const dom = globalObj._dom;
+    const state = globalObj._state;
 
     // Create main container which holds both consent modal & preferences modal
-    globalObj._dom._ccMain = _createNode(DIV_TAG);
-    globalObj._dom._ccMain.id = 'cc-main';
+    dom._ccMain = _createNode(DIV_TAG);
+    dom._ccMain.id = 'cc-main';
 
-    globalObj._dom._ccMain.style.position = 'fixed';
-    globalObj._dom._ccMain.style.zIndex = '1000000';
+    dom._ccMain.style.position = 'fixed';
+    dom._ccMain.style.zIndex = '1000000';
 
     // Create consent modal
-    if(globalObj._state._consentModalExists)
+    if(state._invalidConsent)
         _createConsentModal(api);
 
-    // Always create preferences modal
-    _createPreferencesModal(api);
+    // Create preferences modal
+    if(!globalObj._config.lazyHtmlGeneration)
+        _createPreferencesModal(api);
+
+    _addDataButtonListeners(null, api, _createPreferencesModal);
 
     // Finally append everything (_ccMain holds both modals)
-    _appendChild((globalObj._state._userConfig.root || globalObj._dom._document.body), globalObj._dom._ccMain);
+    _appendChild((state._userConfig.root || dom._document.body), dom._ccMain);
 };
 
 export {

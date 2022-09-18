@@ -1,6 +1,5 @@
 import { globalObj, _isFunction } from '../core/global';
 import { SCRIPT_TAG_SELECTOR, BUTTON_TAG } from './constants';
-
 /**
  * Helper function which prints info (console.log())
  * @param {Object} printMsg
@@ -295,8 +294,9 @@ export const _updateAcceptType = () => {
  * Add an onClick listeners to all html elements with data-cc attribute
  * @param {HTMLElement} [elem]
  * @param {import("../core/global").Api} api
+ * @param {Function} [createPreferencesModal]
  */
-export const _addDataButtonListeners = (elem, api) => {
+export const _addDataButtonListeners = (elem, api, createPreferencesModal) => {
 
     const _a = 'accept-';
 
@@ -304,14 +304,25 @@ export const _addDataButtonListeners = (elem, api) => {
         showConsentModalElements = _getElements('show-consentModal'),
         acceptAllElements = _getElements(_a + 'all'),
         acceptNecessaryElements = _getElements(_a + 'necessary'),
-        acceptCustomElements = _getElements(_a + 'custom');
+        acceptCustomElements = _getElements(_a + 'custom'),
+        createPreferencesModalOnHover = globalObj._config.lazyHtmlGeneration === true;
 
     for(var i=0; i<showPreferencesModalElements.length; i++){
         _setAttribute(showPreferencesModalElements[i], 'aria-haspopup', 'dialog');
+
         _addEvent(showPreferencesModalElements[i], 'click', (event) => {
             event.preventDefault();
             api.showPreferences();
         });
+
+        if(createPreferencesModalOnHover){
+            _addEvent(showPreferencesModalElements[i], 'mouseover', (event ) => {
+                event.preventDefault();
+
+                if(!globalObj._state._preferencesModalExists)
+                    createPreferencesModal(api);
+            });
+        }
     }
 
     for(i=0; i<showConsentModalElements.length; i++){
@@ -385,10 +396,13 @@ export const _getCurrentCategoriesState = () => {
  * @param {import("../core/global").Api} api
  */
 export const _handleFocusTrap = (api) => {
+
+    const dom = globalObj._dom;
+
     var tabbedOutsideDiv = false;
     var tabbedInsideModal = false;
 
-    _addEvent(globalObj._dom._htmlDom, 'keydown', (e) => {
+    _addEvent(dom._htmlDom, 'keydown', (e) => {
 
         if(e.key !== 'Tab')
             return;
@@ -398,7 +412,7 @@ export const _handleFocusTrap = (api) => {
         // If there is any modal to focus
         if(focusableElements.length > 0){
 
-            const currentActiveElement = globalObj._dom._document.activeElement;
+            const currentActiveElement = dom._document.activeElement;
 
             // If reached natural end of the tab sequence => restart
             if(e.shiftKey){
@@ -430,7 +444,7 @@ export const _handleFocusTrap = (api) => {
         !tabbedInsideModal && (tabbedOutsideDiv = true);
     });
 
-    _addEvent(globalObj._dom._ccMain, 'click', (e) => {
+    _addEvent(dom._ccMain, 'click', (e) => {
         const state = globalObj._state;
 
         /**
@@ -438,14 +452,14 @@ export const _handleFocusTrap = (api) => {
          * hide preferences modal
          */
         if(state._preferencesModalVisibleDelayed){
-            if(!globalObj._dom._pm.contains(e.target)){
+            if(!dom._pm.contains(e.target)){
                 api.hidePreferences(0);
                 state._clickedInsideModal = false;
             }else{
                 state._clickedInsideModal = true;
             }
         }else if(state._consentModalVisible){
-            if(globalObj._dom._consentModal.contains(e.target)){
+            if(dom._consentModal.contains(e.target)){
                 state._clickedInsideModal = true;
             }
         }
@@ -459,6 +473,8 @@ export const _handleFocusTrap = (api) => {
  * to prevent losing focus while navigating with TAB
  */
 export const _getModalFocusableData = () => {
+
+    const state = globalObj._state;
 
     /**
      * Note: any of the below focusable elements, which has the attribute tabindex="-1" AND is either
@@ -483,8 +499,9 @@ export const _getModalFocusableData = () => {
         _array[1] = focusableElements[focusableElements.length - 1];
     };
 
-    _saveAllFocusableElements(globalObj._dom._pm, globalObj._state._pmFocusableElements);
+    if(state._consentModalExists)
+        _saveAllFocusableElements(globalObj._dom._consentModal, state._cmFocusableElements);
 
-    if(globalObj._state._consentModalExists)
-        _saveAllFocusableElements(globalObj._dom._consentModal, globalObj._state._cmFocusableElements);
+    if(state._preferencesModalExists)
+        _saveAllFocusableElements(globalObj._dom._pm, state._pmFocusableElements);
 };

@@ -107,7 +107,7 @@ export const _loadTranslationData = async (desiredLanguageCode) => {
     state._currentTranslation = currentTranslation;
     _setCurrentLanguageCode(currentLanguageCode);
 
-    _log('CookieConsent [LANG]: current language: "' + currentLanguageCode + '"');
+    _log('CookieConsent [LANG]: set language: "' + currentLanguageCode + '"');
 
     return true;
 };

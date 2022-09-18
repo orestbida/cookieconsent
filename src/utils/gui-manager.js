@@ -102,7 +102,7 @@ export const _guiManager = (applyToModal) => {
         }
     };
 
-    if(applyToModal === 0 && globalObj._state._consentModalExists){
+    if(applyToModal === 0){
 
         const alignV = ['middle', 'top', 'bottom'];
         const alignH = ['left', 'center', 'right'];

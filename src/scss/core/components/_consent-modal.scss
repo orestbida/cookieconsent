@@ -477,9 +477,9 @@ $sections-padding: 1em 1.3em;
     }
     /* END: Bar layout */
 
-    &.c--anim{
+    .c--anim{
         .cm,
-        .cm-wrapper::before{
+        &.cm-wrapper::before{
             transition: opacity var(--cc-modal-transition-duration) ease,
                     visibility var(--cc-modal-transition-duration) ease,
                     transform var(--cc-modal-transition-duration) ease;
@@ -531,7 +531,7 @@ $sections-padding: 1em 1.3em;
 
 .show--consent{
     #cc-main {
-        &.c--anim{
+        .c--anim{
             .cm{
                 opacity: 1;
                 visibility: visible!important;
@@ -546,7 +546,7 @@ $sections-padding: 1em 1.3em;
                 }
             }
 
-            .cm-wrapper::before{
+            &.cm-wrapper::before{
                 opacity: 1;
                 visibility: visible;
             }

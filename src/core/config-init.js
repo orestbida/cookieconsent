@@ -12,8 +12,11 @@ export const _setConfig = (userConfig) => {
     setWindowData();
 
     const
-        state = globalObj._state,
+        /**
+         * @type {import("../../types").CookieConsentConfig}
+         */
         config = globalObj._config,
+        state = globalObj._state,
         cookie = config.cookie,
         callbacks = globalObj._callbacks,
         userCookieConfig = userConfig.cookie,
@@ -37,6 +40,7 @@ export const _setConfig = (userConfig) => {
     callbacks._onChange = userConfig.onChange;
     callbacks._onModalHide = userConfig.onModalHide;
     callbacks._onModalShow = userConfig.onModalShow;
+    callbacks._onModalReady = userConfig.onModalReady;
 
     const {
         mode,
@@ -44,7 +48,8 @@ export const _setConfig = (userConfig) => {
         autoClearCookies,
         revision,
         manageScriptTags,
-        hideFromBots
+        hideFromBots,
+        lazyHtmlGeneration
     } = userConfig;
 
     if(mode === OPT_OUT_MODE)
@@ -63,6 +68,9 @@ export const _setConfig = (userConfig) => {
         config.revision = revision;
         state._revisionEnabled = true;
     }
+
+    if(typeof lazyHtmlGeneration === 'boolean')
+        config.lazyHtmlGeneration = lazyHtmlGeneration;
 
     if(hideFromBots === false)
         config.hideFromBots = false;

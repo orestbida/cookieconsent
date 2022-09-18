@@ -1,7 +1,24 @@
-import { globalObj } from '../../global';
-import { _log, _createNode, _addClass, _addClassCm, _setAttribute, _appendChild, _addEvent } from '../../../utils/general';
+import { globalObj, _fireEvent } from '../../global';
+import {
+    _log,
+    _createNode,
+    _addClass,
+    _addClassCm,
+    _setAttribute,
+    _appendChild,
+    _addEvent,
+    _getModalFocusableData,
+    _addDataButtonListeners
+} from '../../../utils/general';
 import { _guiManager } from '../../../utils/gui-manager';
-import { TOGGLE_DISABLE_INTERACTION_CLASS, DIV_TAG, BUTTON_TAG } from '../../../utils/constants';
+
+import {
+    CONSENT_MODAL_NAME,
+    TOGGLE_DISABLE_INTERACTION_CLASS,
+    DIV_TAG,
+    BUTTON_TAG
+} from '../../../utils/constants';
+import { _createPreferencesModal } from './preferences-modal';
 
 /**
  * Create consent modal and append it to "cc-main" el.
@@ -17,7 +34,8 @@ export const _createConsentModal = (api) => {
      */
     const consentModalData = state._currentTranslation && state._currentTranslation.consentModal;
 
-    if(!consentModalData) return;
+    if(!consentModalData)
+        return;
 
     if(state._userConfig.disablePageInteraction === true)
         _addClass(dom._htmlDom, TOGGLE_DISABLE_INTERACTION_CLASS);
@@ -87,7 +105,6 @@ export const _createConsentModal = (api) => {
 
         _appendChild(dom._consentModal, dom._consentModalBody);
         _appendChild(dom._cmContainer, dom._consentModal);
-        _appendChild(dom._ccMain, dom._cmContainer);
     }
 
     var consentModalTitle_value = consentModalData.title;
@@ -164,6 +181,9 @@ export const _createConsentModal = (api) => {
             _addClassCm(dom._consentShowPreferencesBtn, 'btn');
             _addClassCm(dom._consentShowPreferencesBtn, 'btn--secondary');
 
+            _addEvent(dom._consentShowPreferencesBtn, 'mouseover', () => {
+                _createPreferencesModal(api);
+            });
             _addEvent(dom._consentShowPreferencesBtn, 'click', api.showPreferences);
         }
 
@@ -205,7 +225,19 @@ export const _createConsentModal = (api) => {
         dom._consentModalFooterLinksGroup.innerHTML = footerData;
     }
 
-    state._consentModalExists = true;
-
     _guiManager(0);
+
+    if(!state._consentModalExists){
+        state._consentModalExists = true;
+        _appendChild(dom._ccMain, dom._cmContainer);
+        _getModalFocusableData();
+
+        _log('CookieConsent [HTML] created', CONSENT_MODAL_NAME);
+        _fireEvent(globalObj._customEvents._onModalReady, CONSENT_MODAL_NAME);
+
+        // Add class to enable animations/transitions
+        setTimeout(() => _addClass(dom._cmContainer, 'c--anim'), 100);
+    }
+
+    _addDataButtonListeners(dom._consentModalBody, api, _createPreferencesModal);
 };

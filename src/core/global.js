@@ -212,6 +212,9 @@ const dispatchEvent = (eventName, data) => {
  */
 export const _fireEvent = (eventName, modalName) => {
 
+    const callbacks = globalObj._callbacks;
+    const events = globalObj._customEvents;
+
     const params = {
         cookie: globalObj._state._savedCookieContent
     };
@@ -225,24 +228,26 @@ export const _fireEvent = (eventName, modalName) => {
             modalName: modalName
         };
 
-        if(eventName === globalObj._customEvents._onModalShow)
-            _isFunction(globalObj._callbacks._onModalShow) && globalObj._callbacks._onModalShow(modalParams);
+        if(eventName === events._onModalShow)
+            _isFunction(callbacks._onModalShow) && callbacks._onModalShow(modalParams);
+        else if(eventName === events._onModalHide)
+            _isFunction(callbacks._onModalHide) && callbacks._onModalHide(modalParams);
         else
-            _isFunction(globalObj._callbacks._onModalHide) && globalObj._callbacks._onModalHide(modalParams);
+            _isFunction(callbacks._onModalReady) && callbacks._onModalReady(modalParams);
 
         return dispatchEvent(eventName, modalParams);
     }
 
-    if(eventName === globalObj._customEvents._onFirstConsent){
-        _isFunction(globalObj._callbacks._onFirstConsent) && globalObj._callbacks._onFirstConsent(_shallowCopy(params));
+    if(eventName === events._onFirstConsent){
+        _isFunction(callbacks._onFirstConsent) && callbacks._onFirstConsent(_shallowCopy(params));
     }
-    else if(eventName === globalObj._customEvents._onConsent){
-        _isFunction(globalObj._callbacks._onConsent) && globalObj._callbacks._onConsent(_shallowCopy(params));
+    else if(eventName === events._onConsent){
+        _isFunction(callbacks._onConsent) && callbacks._onConsent(_shallowCopy(params));
     }
-    else if(eventName === globalObj._customEvents._onChange){
+    else if(eventName === events._onChange){
         params.changedCategories = globalObj._state._lastChangedCategoryNames;
         params.changedServices = globalObj._state._lastChangedServices;
-        _isFunction(globalObj._callbacks._onChange) && globalObj._callbacks._onChange(_shallowCopy(params));
+        _isFunction(callbacks._onChange) && callbacks._onChange(_shallowCopy(params));
     }
 
     dispatchEvent(eventName, params);
@@ -253,6 +258,7 @@ export class Global {
 
         /**
          * Default config. options
+         * @type {import('../../types').CookieConsentConfig}
          */
         this._config = {
             /**
@@ -264,6 +270,7 @@ export class Global {
             autoClearCookies: true,
             manageScriptTags: true,
             hideFromBots: true,
+            lazyHtmlGeneration: true,
 
             cookie: {
                 name: COOKIE_NAME,
@@ -327,6 +334,8 @@ export class Global {
             _consentModalVisible : false,
 
             _preferencesModalVisible : false,
+            _preferencesModalExists: false,
+
             _clickedInsideModal : false,
 
             _preferencesModalVisibleDelayed : false,
@@ -499,7 +508,8 @@ export class Global {
             /** @type {number|Function} **/ _onConsent: 0,
             /** @type {number|Function} **/ _onChange: 0,
             /** @type {number|Function} **/ _onModalShow: 0,
-            /** @type {number|Function} **/ _onModalHide: 0
+            /** @type {number|Function} **/ _onModalHide: 0,
+            /** @type {number|Function} **/ _onModalReady: 0
         };
 
         this._customEvents = {
@@ -507,7 +517,8 @@ export class Global {
             _onConsent: 'cc:onConsent',
             _onChange: 'cc:onChange',
             _onModalShow: 'cc:onModalShow',
-            _onModalHide: 'cc:onModalHide'
+            _onModalHide: 'cc:onModalHide',
+            _onModalReady: 'cc:onModalReady'
         };
     }
 }

@@ -386,6 +386,14 @@ declare namespace CookieConsent {
         guiOptions?: GuiOptions
 
         /**
+         * Generates the modals on the fly 
+         * and only if needed
+         *
+         * @default true
+         */
+        lazyHtmlGeneration?: boolean
+
+        /**
          * Change plugin's default cookie options.
          */
         cookie?: CookieOptions
@@ -424,6 +432,13 @@ declare namespace CookieConsent {
          * Callback fired when one of the modals is hidden.
          */
         onModalHide?: (param: {
+            modalName: string
+        }) => void
+
+        /**
+         * Callback fired when one of the modals is appended to the dom.
+         */
+        onModalReady?: (param: {
             modalName: string
         }) => void
 

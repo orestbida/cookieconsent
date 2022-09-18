@@ -782,9 +782,9 @@ $toggle-knob-icon-width: 2px;
         visibility: hidden;
     }
 
-    &.c--anim{
+    .c--anim{
         .pm,
-        .pm-wrapper::before{
+        &.pm-wrapper::before{
             transition: opacity var(--cc-modal-transition-duration) ease,
                     visibility var(--cc-modal-transition-duration) ease,
                     transform var(--cc-modal-transition-duration) ease;
@@ -810,7 +810,7 @@ $toggle-knob-icon-width: 2px;
 
 .show--preferences{
     #cc-main {
-        &.c--anim{
+        .c--anim{
             .pm{
                 opacity: 1;
                 visibility: visible!important;
@@ -824,7 +824,7 @@ $toggle-knob-icon-width: 2px;
                 transform: translateX(0);
             }
 
-            .pm-wrapper::before{
+            &.pm-wrapper::before{
                 opacity: 1;
                 visibility: visible;
             }
@@ -913,7 +913,7 @@ $toggle-knob-icon-width: 2px;
         }
     }
 
-    .show--preferences #cc-main.c--anim .pm{
+    .show--preferences #cc-main .c--anim .pm{
         transform: translateY(0)!important;
     }
 }
