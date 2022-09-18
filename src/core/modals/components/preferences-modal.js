@@ -423,7 +423,9 @@ export const _createPreferencesModal = (api) => {
         _log('CookieConsent [HTML] created', PREFERENCES_MODAL_NAME);
         _fireEvent(globalObj._customEvents._onModalReady, PREFERENCES_MODAL_NAME);
 
-        // Add class to enable animations/transitions
+        /**
+         * Enable transition
+         */
         setTimeout(() => _addClass(dom._pmContainer, 'c--anim'), 100);
     }
 };

@@ -235,7 +235,9 @@ export const _createConsentModal = (api) => {
         _log('CookieConsent [HTML] created', CONSENT_MODAL_NAME);
         _fireEvent(globalObj._customEvents._onModalReady, CONSENT_MODAL_NAME);
 
-        // Add class to enable animations/transitions
+        /**
+         * Enable transition
+         */
         setTimeout(() => _addClass(dom._cmContainer, 'c--anim'), 100);
     }
 

@@ -1,7 +1,8 @@
 import { globalObj, _isFunction } from '../core/global';
 import { SCRIPT_TAG_SELECTOR, BUTTON_TAG } from './constants';
+
 /**
- * Helper function which prints info (console.log())
+ * Helper console.log function
  * @param {Object} printMsg
  * @param {Object} [optionalParam]
  */
