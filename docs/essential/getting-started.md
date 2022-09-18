@@ -17,8 +17,8 @@ You can download/import the plugin using one of the following methods:
 
 2. Use the CDN hosted version.
     ```
-    https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@v3.0.0-rc.4/dist/cookieconsent.umd.js
-    https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@v3.0.0-rc.4/dist/cookieconsent.css
+    https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@v3.0.0-rc.5/dist/cookieconsent.umd.js
+    https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@v3.0.0-rc.5/dist/cookieconsent.css
     ```
 3. Download the [latest release](https://github.com/orestbida/cookieconsent/releases/latest) from github and use the optimized files located in the `dist` folder.
 
