@@ -215,9 +215,7 @@ $toggle-knob-icon-width: 2px;
                 width: 20px;
                 height: 20px;
                 position: absolute;
-                top: 50%;
-                transform: translateY(-50%);
-                left: 1.12em;
+                left: 18px;
                 background: var(--cc-toggle-readonly-bg);
                 display: flex;
                 justify-content: center;
@@ -241,6 +239,8 @@ $toggle-knob-icon-width: 2px;
 
     .pm__section-title-wrapper{
         position: relative;
+        display: flex;
+        align-items: center;
 
         & + .pm__section-desc-wrapper{
             margin-top: 0.85em;
@@ -313,7 +313,7 @@ $toggle-knob-icon-width: 2px;
         bottom: 0;
         display: inline-block;
         margin: auto;
-        right: 1.2em;
+        right: 18px;
         cursor: pointer;
         user-select: none;
         vertical-align: middle;
