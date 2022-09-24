@@ -1,5 +1,3 @@
-var LOREM_IPSUM = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.';
-
 CookieConsent.run({
     cookie: {
         name: 'cc_cookie_demo2',
