@@ -386,7 +386,7 @@ declare namespace CookieConsent {
         guiOptions?: GuiOptions
 
         /**
-         * Generates the modals on the fly 
+         * Generates the modals on the fly
          * and only if needed
          *
          * @default true
@@ -467,149 +467,148 @@ declare namespace CookieConsent {
         }
     }
 
-    interface CookieConsentAPI {
-        /**
-         * Configure and run the plugin.
-         */
-        run(configOptions: CookieConsentConfig): Promise<void>
 
-        /**
-         * Show the consentModal.
-         *
-         * Pass the argument 'true' (boolean) to generate the modal if it doesn't exist.
-         */
-        show(createModal?: boolean): void
+    /**
+     * Configure and run the plugin.
+     */
+    function run(configOptions: CookieConsentConfig): Promise<void>
 
-        /**
-         * Hide the consentModal.
-         */
-        hide(): void
+    /**
+     * Show the consentModal.
+     *
+     * Pass the argument 'true' (boolean) to generate the modal if it doesn't exist.
+     */
+    function show(createModal?: boolean): void
 
-        /**
-         * Show the preferencesModal.
-         */
-        showPreferences(): void
+    /**
+     * Hide the consentModal.
+     */
+    function hide(): void
 
-        /**
-         * Hide the preferencesModal.
-         */
-        hidePreferences(): void
+    /**
+     * Show the preferencesModal.
+     */
+    function showPreferences(): void
 
-        /**
-         * Accept/Reject categories.
-         * @param categories Categories to accept
-         * @param excludedCategories Categories to exclude
-         */
-        acceptCategory(categories: string | string[], excludedCategories?: string[]): void
+    /**
+     * Hide the preferencesModal.
+     */
+    function hidePreferences(): void
 
-        /**
-         * Accept/Reject services.
-         * @param services Services to accept
-         * @param category Category where the service is defined
-         */
-        acceptService(services: string | string[], category: string): void
+    /**
+     * Accept/Reject categories.
+     * @param categories Categories to accept
+     * @param excludedCategories Categories to exclude
+     */
+    function acceptCategory(categories: string | string[], excludedCategories?: string[]): void
 
-        /**
-         * Returns true if category is accepted, otherwise false.
-         * @param categoryName Name of the category
-         * @returns boolean: true if category is accepted
-         */
-        acceptedCategory(categoryName: string): boolean
+    /**
+     * Accept/Reject services.
+     * @param services Services to accept
+     * @param category Category where the service is defined
+     */
+    function acceptService(services: string | string[], category: string): void
 
-        /**
-         * Check if the service in the specified category is accepted.
-         * @param serviceName Name of the service
-         * @param categoryName Name of the category
-         * @returns boolean: true if service is accepted
-         */
-        acceptedService(serviceName: string, categoryName: string): boolean
+    /**
+     * Returns true if category is accepted, otherwise false.
+     * @param categoryName Name of the category
+     * @returns boolean: true if category is accepted
+     */
+    function acceptedCategory(categoryName: string): boolean
 
-        /**
-         * Returns true if consent is valid, otherwise false.
-         * @returns boolean: true if category is accepted
-         */
-        validConsent(): boolean
+    /**
+     * Check if the service in the specified category is accepted.
+     * @param serviceName Name of the service
+     * @param categoryName Name of the category
+     * @returns boolean: true if service is accepted
+     */
+    function acceptedService(serviceName: string, categoryName: string): boolean
 
-        /**
-         * Check if cookie is valid (exists and has a non empty value).
-         * @param cookieName Name of the cookie
-         * @returns boolean: true if cookie is valid
-         */
-        validCookie(cookieName: string): boolean
+    /**
+     * Returns true if consent is valid, otherwise false.
+     * @returns boolean: true if category is accepted
+     */
+    function validConsent(): boolean
 
-        /**
-         * Erase one or multiple cookies.
-         * @param cookies Names of the cookies to erase
-         * @param path Expected path
-         * @param domain Expected domain
-         */
-        eraseCookies(cookies: string | RegExp | (string|RegExp)[], path?: string, domain?: string): void
+    /**
+     * Check if cookie is valid (exists and has a non empty value).
+     * @param cookieName Name of the cookie
+     * @returns boolean: true if cookie is valid
+     */
+    function validCookie(cookieName: string): boolean
 
-        /**
-         * Load '.js' files.
-         * @param src Path pointing to the js file
-         * @param attributes Attributes added to the script
-         * @returns Promise<boolean>: true if script is loaded successfully
-         */
-        loadScript(src: string, attributes?: {[key: string]: string}[]): Promise<boolean>
+    /**
+     * Erase one or multiple cookies.
+     * @param cookies Names of the cookies to erase
+     * @param path Expected path
+     * @param domain Expected domain
+     */
+    function eraseCookies(cookies: string | RegExp | (string|RegExp)[], path?: string, domain?: string): void
 
-        /**
-         * Store custom data inside plugin's own cookie.
-         * @param data Object containing the value to save, and the write method
-         * @returns boolean: true on success
-         */
-        setCookieData(data: {value: any, mode?: 'overwrite' | 'update'}): boolean
+    /**
+     * Load '.js' files.
+     * @param src Path pointing to the js file
+     * @param attributes Attributes added to the script
+     * @returns Promise<boolean>: true if script is loaded successfully
+     */
+    function loadScript(src: string, attributes?: {[key: string]: string}[]): Promise<boolean>
 
-        /**
-         * Get the entire cookie object.
-         * @returns object with all the cookie fields
-         */
-        getCookie<Field>(): CookieValue
+    /**
+     * Store custom data inside plugin's own cookie.
+     * @param data Object containing the value to save, and the write method
+     * @returns boolean: true on success
+     */
+    function setCookieData(data: {value: any, mode?: 'overwrite' | 'update'}): boolean
 
-        /**
-         * Get a specific field from the cookie.
-         * @param field Cookie field (string)
-         * @returns value of the specified field
-         */
-        getCookie<Field extends keyof CookieValue>(field: Field): CookieValue[Field]
+    /**
+     * Get the entire cookie object.
+     * @returns object with all the cookie fields
+     */
+    function getCookie<Field>(): CookieValue
 
-        /**
-         * Get the full config. object.
-         * @returns config. object
-         */
-        getConfig<Field>(): CookieConsentConfig
+    /**
+     * Get a specific field from the cookie.
+     * @param field Cookie field (string)
+     * @returns value of the specified field
+     */
+    function getCookie<Field extends keyof CookieValue>(field: Field): CookieValue[Field]
 
-        /**
-         * Get one of the configuration options.
-         * @param field Configuration option
-         * @returns value of the specified field
-         */
-        getConfig<Field extends keyof CookieConsentConfig>(field: Field): CookieConsentConfig[Field]
+    /**
+     * Get the full config. object.
+     * @returns config. object
+     */
+    function getConfig<Field>(): CookieConsentConfig
 
-        /**
-         * Retrieve the user's preferences. Useful for logging purposes.
-         * @returns object with the user's preferences
-         */
-        getUserPreferences(): UserPreferences
+    /**
+     * Get one of the configuration options.
+     * @param field Configuration option
+     * @returns value of the specified field
+     */
+    function getConfig<Field extends keyof CookieConsentConfig>(field: Field): CookieConsentConfig[Field]
 
-        /**
-         * Change modal's language. Language must already be declared in the config.
-         * @param languageCode desired language
-         * @param forceSet forcefully set language and reload modals
-         * @returns Promise<boolean>: true if language is set successfully
-         */
-        setLanguage(languageCode: string, forceSet?: boolean): Promise<boolean>
+    /**
+     * Retrieve the user's preferences. Useful for logging purposes.
+     * @returns object with the user's preferences
+     */
+    function getUserPreferences(): UserPreferences
 
-        /**
-         * Reset cookieconsent.
-         * @param eraseCookie delete plugin's cookie
-         */
-        reset(eraseCookie?: boolean): void
-    }
+    /**
+     * Change modal's language. Language must already be declared in the config.
+     * @param languageCode desired language
+     * @param forceSet forcefully set language and reload modals
+     * @returns Promise<boolean>: true if language is set successfully
+     */
+    function setLanguage(languageCode: string, forceSet?: boolean): Promise<boolean>
+
+    /**
+     * Reset cookieconsent.
+     * @param eraseCookie delete plugin's cookie
+     */
+    function reset(eraseCookie?: boolean): void
 }
 
 declare global {
     interface Window {
-        CookieConsent: CookieConsent.CookieConsentAPI
+        CookieConsent: typeof CookieConsent
     }
 }
