@@ -140,7 +140,7 @@ Declare the `cookieconsent.css` style in the `angular.json` file:
 
 Import the module in your angular component (generally `app.component.ts`):
 
-```javascript{2,14-17}
+```javascript{2,13-17}
 import { Component, AfterViewInit } from '@angular/core';
 import * as CookieConsent from 'vanilla-cookieconsent';
 
