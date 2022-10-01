@@ -1,6 +1,6 @@
 {
     "name": "vanilla-cookieconsent",
-    "version": "3.0.0-rc.5",
+    "version": "3.0.0-rc.6",
     "description": "🍪 Simple cross-browser cookie-consent plugin written in vanilla js.",
     "main": "dist/cookieconsent.umd.js",
     "module": "dist/cookieconsent.esm.js",
