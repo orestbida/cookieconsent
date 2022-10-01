@@ -662,10 +662,11 @@ export const run = async (userConfig) => {
 
     const state = globalObj._state;
     const config = globalObj._config;
-    const dom = globalObj._dom;
+    const win = window;
 
-    if(!dom._ccMain){
-
+    if(!win._ccRun){
+        win._ccRun = true;
+        
         _setConfig(userConfig);
 
         // Stop if bot is detected
@@ -790,4 +791,6 @@ export const reset = (eraseCookie) => {
     globalObj._config = newGlobal._config;
     globalObj._callbacks = newGlobal._callbacks;
     globalObj._customEvents = newGlobal._customEvents;
+
+    window._ccRun = false;
 };
