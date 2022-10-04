@@ -18,9 +18,14 @@ import testConfig from "./config/basic-config"
 import { defineCryptoRandom, htmlHasClass } from './config/mocks-utils';
 import { globalObj } from '../src/core/global';
 
+/**
+ * @type {import("../src/core/global").Api}
+ */
+let api;
+
 describe("Test add/remove/toggle classes", () => {
 
-    let el, api;
+    let el;
     const className = 'test_class';
 
     beforeAll(async ()=>{

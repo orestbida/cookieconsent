@@ -3,6 +3,9 @@ import * as CookieConsent from "../src/index"
 import testConfig from "./config/full-config";
 import { defineCryptoRandom } from "./config/mocks-utils";
 
+/**
+ * @type {import("../src/core/global").Api}
+ */
 let api;
 
 describe("Test UI options", () =>{

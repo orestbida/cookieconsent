@@ -35,12 +35,15 @@ export const _getBrowserLanguageCode = () => {
     return browserLanguage;
 };
 
-export const _getDocumentLanguageCode = () => {
-    return document.documentElement.lang;
-};
+/**
+ * Get the lang attribute
+ * @returns lang attribute
+ */
+export const _getDocumentLanguageCode = () => document.documentElement.lang;
 
 /**
- * Resolve which language should be used.
+ * Resolve the language to use.
+ * @returns {string} language code
  */
 export const _resolveCurrentLanguageCode = () =>  {
 
@@ -50,6 +53,9 @@ export const _resolveCurrentLanguageCode = () =>  {
 
         _log('CookieConsent [LANG]: autoDetect strategy: "' + autoDetect + '"');
 
+        /**
+         * @type {string}
+         */
         let newLanguageCode;
 
         if (autoDetect === 'browser')
@@ -69,12 +75,15 @@ export const _resolveCurrentLanguageCode = () =>  {
 };
 
 /**
- * Load translation (asynchronously using xhr if needed)
+ * Load translation
  * @param {string | null} desiredLanguageCode
  */
 export const _loadTranslationData = async (desiredLanguageCode) => {
     const state = globalObj._state;
 
+    /**
+     * @type {string}
+     */
     let currentLanguageCode;
 
     /**

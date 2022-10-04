@@ -42,11 +42,8 @@ export const _autoclearCookies = (clearOnFirstConsent) => {
     // For each category that is not readOnly
     for(var i=0; i<categoriesToCheck.length; i++){
 
-        var currentCategoryName = categoriesToCheck[i],
-
-            /**
-             * @type {import("../core/global").Category}
-             */
+        var
+            currentCategoryName = categoriesToCheck[i],
             currentCategoryObject = globalObj._state._allDefinedCategories[currentCategoryName],
             currentCategoryAutoClear = currentCategoryObject.autoClear,
             currentAutoClearCookies = currentCategoryAutoClear && currentCategoryAutoClear.cookies || [],
@@ -135,9 +132,8 @@ export const _saveCookiePreferences = () => {
     var categoryToggles = globalObj._dom._categoryCheckboxInputs;
 
     /**
-     * For each checkbox, if its value is inside
-     * the "globalObj._state._acceptedCategories" array => enable checkbox
-     * otherwise disable it
+     * If the category is accepted check checkbox,
+     * otherwise uncheck it
      */
     for(var categoryName in categoryToggles){
         if(_elContains(globalObj._state._acceptedCategories, categoryName))
@@ -176,6 +172,7 @@ export const _saveCookiePreferences = () => {
     var firstUserConsent = false;
 
     if(globalObj._state._invalidConsent || categoriesWereChanged || servicesWereChanged){
+
         /**
          * Set consent as valid
          */
@@ -186,9 +183,6 @@ export const _saveCookiePreferences = () => {
 
         _updateAcceptType();
 
-        /**
-         * Update "_lastConsentTimestamp"
-         */
         if(!globalObj._state._lastConsentTimestamp)
             globalObj._state._lastConsentTimestamp = globalObj._state._consentTimestamp;
         else
@@ -236,7 +230,7 @@ export const _saveCookiePreferences = () => {
 export const _setCookie = (name, value, useRemainingExpirationTime) => {
 
     /**
-     * Encode cookie's value so that it is rfcCompliant
+     * Encode value (RFC compliant)
      */
     var cookieValue = encodeURIComponent(value);
     var expiresAfterMs = useRemainingExpirationTime ? _getRemainingExpirationTimeMS() : _getExpiresAfterDaysValue()*86400000;
@@ -253,7 +247,11 @@ export const _setCookie = (name, value, useRemainingExpirationTime) => {
     var cookieStr = name + '=' + (cookieValue || '') + expires + '; Path=' + globalObj._config.cookie.path + ';';
     cookieStr += ' SameSite=' + globalObj._config.cookie.sameSite + ';';
 
-    // assures cookie works with localhost (=> don't specify domain if on localhost)
+
+    /**
+     * Specify "domain" only if hostname contains a dot (e.g domain.com)
+     * to ensure that cookie works with 'localhost'
+     */
     if(_elContains(window.location.hostname, '.')){
         cookieStr += ' Domain=' + globalObj._config.cookie.domain + ';';
     }
@@ -270,7 +268,6 @@ export const _setCookie = (name, value, useRemainingExpirationTime) => {
 /**
  * Parse cookie value using JSON.parse
  * @param {string} value
- * @returns {any}
  */
 export const _parseCookie = (value) => {
     let parsedValue;
@@ -278,7 +275,7 @@ export const _parseCookie = (value) => {
     try{
         parsedValue = JSON.parse(decodeURIComponent(value));
     }catch(e){
-        parsedValue = {}; // If I got here => cookie value is not valid
+        parsedValue = {}; // Cookie value is not valid
     }
 
     return parsedValue;
@@ -288,7 +285,7 @@ export const _parseCookie = (value) => {
  * Delete cookie by name & path
  * @param {string[]} cookies Array of cookie names
  * @param {string} [customPath]
- * @param {string} [domain]
+ * @param {string} [customDomain]
  */
 export const _eraseCookies = (cookies, customPath, customDomain) => {
 
@@ -352,7 +349,6 @@ export const _getSingleCookie = (name, getValue) => {
  * @returns {string[]}
  */
 export const _getAllCookies = (regex) => {
-    // Get all existing cookies (<cookie_name>=<cookie_value>)
 
     const allCookies = document.cookie.split(/;\s*/);
 

@@ -23,7 +23,6 @@ export const _indexOf = (el, value) => {
 /**
  * Returns true if el is an object
  * @param {any} el
- * @returns {boolean}
  */
 export const _isObject = (el) => {
     return !!el && typeof el === 'object' && !Array.isArray(el);
@@ -102,9 +101,8 @@ export const _retrieveRejectedServices = () => {
 
 /**
  * Returns true if el. (array or string) contains the specified value
- * @param {Array|String} el
- * @param {*} value
- * @returns {boolean}
+ * @param {any[]|string} el
+ * @param {any} value
  */
 export const _elContains = (el, value) => {
     return el.indexOf(value) !== -1;
@@ -113,7 +111,6 @@ export const _elContains = (el, value) => {
 /**
  * Helper function which creates an HTMLElement object based on 'type' and returns it.
  * @param {string} type
- * @returns {HTMLElement}
  */
 export const _createNode = (type) => {
     const el = document.createElement(type);
@@ -127,7 +124,7 @@ export const _createNode = (type) => {
  * Helper function to set attribute
  * @param {HTMLElement} el
  * @param {string} attribute
- * @param {string|number|boolean} value
+ * @param {string} value
  */
 export const _setAttribute = (el, attribute, value) => {
     el.setAttribute(attribute, value);
@@ -145,7 +142,7 @@ export const _appendChild = (parent, child) => {
 /**
  * Generate RFC4122-compliant UUIDs.
  * https://stackoverflow.com/questions/105034/how-to-create-a-guid-uuid?page=1&tab=votes#tab-top
- * @returns {string}
+ * @returns {string} unique uuid string
  */
 export const _uuidv4 = () => {
     return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, (c) => {
@@ -168,6 +165,10 @@ export const _uuidv4 = () => {
 export const _addEvent = (elem, event, fn, saveListener) => {
     elem.addEventListener(event, fn);
 
+    /**
+     * Keep track of specific event listeners
+     * that must be removed on `.reset()`
+     */
     if(saveListener){
         globalObj._state._dataEventListeners.push({
             _element: elem,
@@ -178,13 +179,11 @@ export const _addEvent = (elem, event, fn, saveListener) => {
 };
 
 /**
- * Get all prop. keys defined inside object
+ * Get all keys defined inside object
  * @param {Object} obj
  */
 export const _getKeys = obj => {
-    if(typeof obj === 'object'){
-        return Object.keys(obj);
-    }
+    return Object.keys(obj);
 };
 
 /**
@@ -263,7 +262,7 @@ export const _getExpiresAfterDaysValue = () => {
 };
 
 /**
- * Symmetric difference between 2 arrays (detect changed preferences)
+ * Symmetric difference between 2 arrays
  * @param {any[]} arr1
  * @param {any[]} arr2
  */
@@ -274,9 +273,9 @@ export const _arrayDiff = (arr1, arr2) => {
 };
 
 /**
- * Calculate "accept type" given current categories state
+ * Calculate "accept type"
  * @param {{accepted: string[], rejected: string[]}} currentCategoriesState
- * @returns {string}
+ * @returns {string} accept type
  */
 export const _getAcceptType = (currentCategoriesState) => {
 
@@ -300,10 +299,17 @@ export const _updateAcceptType = () => {
 };
 
 /**
+ * This callback type is called `requestCallback` and is displayed as a global symbol.
+ *
+ * @callback createModal
+ * @param {import('../core/global').Api} api
+ */
+
+/**
  * Add an onClick listeners to all html elements with data-cc attribute
  * @param {HTMLElement} [elem]
- * @param {import("../core/global").Api} api
- * @param {Function} [createPreferencesModal]
+ * @param {import(''../core/global').Api} api
+ * @param {createModal} [createPreferencesModal]
  */
 export const _addDataButtonListeners = (elem, api, createPreferencesModal) => {
 
@@ -402,7 +408,7 @@ export const _getCurrentCategoriesState = () => {
 /**
  * Trap focus inside modal and focus the first
  * focusable element of current active modal
- * @param {import("../core/global").Api} api
+ * @param {import(''../core/global').Api} api
  */
 export const _handleFocusTrap = (api) => {
 

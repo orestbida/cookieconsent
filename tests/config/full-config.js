@@ -1,5 +1,5 @@
 /**
- * @type {import('../../types').CookieConsentConfig}
+ * @type {import('../../src/core/global').UserConfig}
  */
 const config = {
     root: document.body,

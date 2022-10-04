@@ -5,7 +5,11 @@ import { _setCookie } from "../src/utils/cookies";
 import { globalObj } from "../src/core/global";
 import { defineCryptoRandom, htmlHasClass } from "./config/mocks-utils";
 
+/**
+ * @type {import("../src/core/global").Api}
+ */
 let api;
+
 const consentModalClassToggle = 'show--consent';
 const preferencesModalClassToggle = 'show--preferences'
 

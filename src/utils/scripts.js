@@ -1,6 +1,7 @@
 import { globalObj, _isFunction} from '../core/global';
 import { _createNode, _setAttribute, _elContains } from './general';
 import { SCRIPT_TAG_SELECTOR } from './constants';
+
 /**
  * This function handles the loading/activation logic of the already
  * existing scripts based on the current accepted cookie categories

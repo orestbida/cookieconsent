@@ -2,8 +2,11 @@ import { globalObj } from "../src/core/global";
 import * as CookieConsent from "../src/index"
 import { _getKeys } from "../src/utils/general";
 import testConfig from "./config/full-config";
-import { defineCryptoRandom, resetCookieConsent, fireClickEvent, htmlHasClass } from "./config/mocks-utils";
+import { defineCryptoRandom, fireClickEvent, htmlHasClass } from "./config/mocks-utils";
 
+/**
+ * @type {import("../src/core/global").Api}
+ */
 let api;
 
 describe("Consent Modal buttons test", () =>{

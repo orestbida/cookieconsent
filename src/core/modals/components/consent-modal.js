@@ -1,4 +1,5 @@
 import { globalObj, _fireEvent } from '../../global';
+
 import {
     _log,
     _createNode,
@@ -10,7 +11,6 @@ import {
     _getModalFocusableData,
     _addDataButtonListeners
 } from '../../../utils/general';
-import { _guiManager } from '../../../utils/gui-manager';
 
 import {
     CONSENT_MODAL_NAME,
@@ -18,11 +18,13 @@ import {
     DIV_TAG,
     BUTTON_TAG
 } from '../../../utils/constants';
+
+import { _guiManager } from '../../../utils/gui-manager';
 import { _createPreferencesModal } from './preferences-modal';
 
 /**
  * Create consent modal and append it to "cc-main" el.
- * @param {import("../../../../types").CookieConsentAPI} api
+ * @param {import("../../global").Api} api
  */
 export const _createConsentModal = (api) => {
 
@@ -30,7 +32,7 @@ export const _createConsentModal = (api) => {
     const dom = globalObj._dom;
 
     /**
-     * @type {import("../../global").ConsentModal}
+     * @type {import("../../global").ConsentModalOptions}
      */
     const consentModalData = state._currentTranslation && state._currentTranslation.consentModal;
 

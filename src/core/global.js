@@ -1,16 +1,28 @@
 import { COOKIE_NAME, OPT_IN_MODE } from '../utils/constants';
 
 /**
- * Service's object structure
- * @typedef {Object} Service
- * @property {string} [label]
- * @property {boolean} [enabled]
- * @property {Function} [onAccept]
- * @property {Function} [onReject]
+ * @typedef {import('../../types')} CookieConsent
+ *
+ * @typedef {CookieConsent} Api
+ * @typedef {CookieConsent.CookieConsentConfig} UserConfig
+ * @typedef {CookieConsent.Category} Category
+ * @typedef {CookieConsent.Service} Service
+ * @typedef {Object.<string, Service>} Services
+ * @typedef {CookieConsent.AutoClear} AutoClear
+ * @typedef {CookieConsent.GuiOptions} GuiOptions
+ * @typedef {GuiOptions['consentModal']} GuiModalOption
+ * @typedef {CookieConsent.CookieConsentConfig['language']} Language
+ * @typedef {CookieConsent.Translation} Translation
+ * @typedef {CookieConsent.ConsentModalOptions} ConsentModalOptions
+ * @typedef {CookieConsent.PreferencesModalOptions} PreferencesModalOptions
+ * @typedef {CookieConsent.CookieTable} CookieTable
+ * @typedef {CookieConsent.Section} Section
+ * @typedef {CookieConsent.CookieValue} CookieValue
+ * @typedef {CookieConsent.UserPreferences} UserPreferences
  */
 
 /**
- * Script tag info
+ * Internal state for each script tag
  * @typedef {Object} ScriptInfo
  * @property {string} _categoryName
  * @property {string} [_serviceName]
@@ -19,167 +31,7 @@ import { COOKIE_NAME, OPT_IN_MODE } from '../utils/constants';
  */
 
 /**
- * @typedef {Object.<string, Service>} Services
- */
-
-/**
- * Cookie's structure inside autoClear object
- * @typedef {Object} Cookie
- * @property {string | RegExp} name
- * @property {string} [domain]
- * @property {string} [path]
- */
-
-/**
- * autoClear's object structure
- * @typedef {Object} AutoClear
- * @property {Cookie[]} cookies
- * @property {boolean} [reloadPage]
- */
-
-/**
- * Structure of each category
- * @typedef {Object} Category
- * @property {AutoClear} [autoClear]
- * @property {boolean} [enabled]
- * @property {boolean} [readOnly]
- * @property {Services} [services]
- */
-
-/**
- * @typedef {object} CookieConfig
- * @property {string} [name]
- * @property {string | Function} [expiresAfterDays]
- * @property {string} [domain]
- * @property {string} [path]
- * @property {string} [sameSite]
- */
-
-
-/**
- * @typedef {object} ConsentModal
- * @property {string} [title]
- * @property {string} [description]
- * @property {string} [acceptAllBtn]
- * @property {string} [acceptNecessaryBtn]
- * @property {string} [showPreferencesBtn]
- * @property {string} [closeIconLabel]
- * @property {string} [revisionMessage]
- * @property {string} [footer] html string
- */
-
-/**
- * @typedef {object} CookieTable
- * @property {Object.<string, string>} headers
- * @property {Object.<string, string>[]} body
- */
-
-/**
- * @typedef {object} Section
- * @property {string} [title]
- * @property {string} [description]
- * @property {string} [linkedCategory]
- * @property {CookieTable} [cookieTable]
- */
-
-/**
- * @typedef {object} PreferencesModal
- * @property {string} [title]
- * @property {string} [acceptAllBtn]
- * @property {string} [acceptNecessaryBtn]
- * @property {string} [savePreferencesBtn]
- * @property {string} [closeIconLabel]
- * @property {string} [serviceCounterLabel]
- * @property {Section[]} [sections]
- */
-
-/**
- * @typedef {object} Translation
- * @property {ConsentModal} consentModal Default language
- * @property {PreferencesModal} preferencesModal Language detection strategy
- */
-
-/**
- * @typedef {object} Language
- * @property {string} default Default language
- * @property {string} [autoDetect] Language detection strategy
- * @property {Object.<string, Translation | string>} translations
- */
-
-/**
- * @typedef {object} GuiModalOption
- * @property {string} [layout]
- * @property {string} [position]
- * @property {boolean} [flipButtons]
- * @property {boolean} [equalWeightButtons]
- */
-
-/**
- * @typedef {object} GuiOptions
- * @property {GuiModalOption} [consentModal]
- * @property {GuiModalOption} [preferencesModal]
- */
-
-/**
- * @typedef {object} UserConfig
- * @property {HTMLElement} [root]
- * @property {string} [mode]
- * @property {number} [revision]
- * @property {boolean} [autoShow]
- * @property {boolean} [autoClearCookies]
- * @property {boolean} [manageScriptTags]
- * @property {boolean} [disablePageInteraction]
- * @property {Function} [onFirstConsent]
- * @property {Function} [onConsent]
- * @property {Function} [onChange]
- * @property {Function} [onModalShow]
- * @property {Function} [onModalHide]
- * @property {CookieConfig} [cookie]
- * @property {Object.<string, Category>} [categories]
- * @property {boolean} [hideFromBots]
- * @property {GuiOptions} [guiOptions]
- * @property {Language} language
- */
-
-/**
- * @typedef {object} UserPreferences
- * @property {string} acceptType
- * @property {string[]} acceptedCategories
- * @property {string[]} rejectedCategories
- */
-
-/**
- * @typedef {object} Api
- * @property {Function} run
- * @property {Function} show
- * @property {Function} hide
- * @property {Function} showPreferences
- * @property {Function} hidePreferences
- * @property {Function} acceptCategory
- * @property {Function} acceptedCategory
- * @property {Function} validCookie
- * @property {Function} eraseCookies
- * @property {Function} setLanguage
- * @property {Function} validConsent
- * @property {Function} loadScript
- * @property {Function} getConfig
- * @property {Function} getCookie
- * @property {Function} getUserPreferences
- * @property {Function} setCookieData
- */
-
-/**
- * @typedef {object} CookieStructure
- * @property {string[]} categories Array of accepted categories
- * @property {number} revision Current revision number
- * @property {string} consentId Unique id
- * @property {any} data Unique id
- * @property {string} consentTimestamp First consent timestamp
- * @property {string} lastConsentTimestamp Last update timestamp
- * @property {Object.<string, string[]>} services
- */
-
-/**
+ * Pointers to all services toggles relative to a category
  * @typedef {Object.<string, HTMLElement>} ServiceToggle
  */
 
@@ -258,12 +110,9 @@ export class Global {
 
         /**
          * Default config. options
-         * @type {import('../../types').CookieConsentConfig}
+         * @type {CookieConsent.CookieConsentConfig}
          */
         this._config = {
-            /**
-             * Valid modes: 'opt-in' or OPT_OUT_MODE
-             */
             mode: OPT_IN_MODE,
             revision: 0,
             autoShow: true,
@@ -274,9 +123,6 @@ export class Global {
 
             cookie: {
                 name: COOKIE_NAME,
-                /**
-                 * @type {number|Function}
-                 */
                 expiresAfterDays: 182,
                 domain: '',
                 path: '/',
@@ -304,7 +150,7 @@ export class Global {
 
             /**
             * Internal state variables
-            * @type {CookieStructure}
+            * @type {CookieValue}
             */
             _savedCookieContent : null,
 
@@ -369,11 +215,7 @@ export class Global {
             _reloadPage : false,
 
             /**
-            * Accept type:
-            *  - "all"
-            *  - "necessary"
-            *  - "custom"
-            * @type {string}
+            * @type {CookieConsent.AcceptType}
             */
             _acceptType: '',
 
@@ -408,7 +250,8 @@ export class Global {
             _defaultEnabledCategories : [],
 
             /**
-            * Don't run plugin (to avoid indexing its text content) if bot detected
+            * Don't run plugin if bot detected
+            * (to avoid indexing its text content)
             */
             _botAgentDetected : false,
 
@@ -416,14 +259,16 @@ export class Global {
             * Save reference to the last focused element on the page
             * (used later to restore focus when both modals are closed)
             */
+
             /** @type {HTMLElement} **/_lastFocusedElemBeforeModal: false,
             /** @type {HTMLElement} **/_lastFocusedModalElement: false,
 
             /**
             * Both of the arrays below have the same structure:
-            * [0] :> holds reference to the FIRST focusable element inside modal
-            * [1] :> holds reference to the LAST focusable element inside modal
+            * [0]: holds reference to the FIRST focusable element inside modal
+            * [1]: holds reference to the LAST focusable element inside modal
             */
+
             /** @type {HTMLElement[]} **/ _cmFocusableElements : [],
             /** @type {HTMLElement[]} **/ _pmFocusableElements : [],
 
@@ -471,7 +316,6 @@ export class Global {
 
         /**
          * Pointers to main dom elements
-         * (avoid retrieving them later using globalObj._dom._document.getElementById)
          */
         this._dom = {
             /** @type {number|Document} */ _document: 0,
@@ -512,8 +356,7 @@ export class Global {
         };
 
         /**
-         * Pointers to callback functions,
-         * avoid calling userConfig['<callback_name>']
+         * Pointers to callback functions
          */
         this._callbacks = {
             /** @type {number|Function} **/ _onFirstConsent: 0,

@@ -666,7 +666,7 @@ export const run = async (userConfig) => {
 
     if(!win._ccRun){
         win._ccRun = true;
-        
+
         _setConfig(userConfig);
 
         // Stop if bot is detected
@@ -674,7 +674,7 @@ export const run = async (userConfig) => {
             return;
 
         /**
-         * @type {import('../../types').CookieValue}
+         * @type {import('./global').CookieValue}
          */
         const cookieValue = _parseCookie(_getSingleCookie(config.cookie.name, true));
         const categories = cookieValue.categories;
@@ -753,7 +753,6 @@ export const run = async (userConfig) => {
 /**
  * Reset cookieconsent.
  * @param {boolean} eraseCookie Delete plugin's cookie
- * @returns void
  */
 export const reset = (eraseCookie) => {
 

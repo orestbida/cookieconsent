@@ -5,16 +5,13 @@ import { _resolveCurrentLanguageCode, _setCurrentLanguageCode } from '../utils/l
 
 /**
  * Configure CookieConsent
- * @param {import("../../types").CookieConsentConfig} userConfig
+ * @param {import("./global").UserConfig} userConfig
  */
 export const _setConfig = (userConfig) => {
 
     setWindowData();
 
     const
-        /**
-         * @type {import("../../types").CookieConsentConfig}
-         */
         config = globalObj._config,
         state = globalObj._state,
         cookie = config.cookie,

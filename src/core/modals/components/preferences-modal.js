@@ -23,9 +23,8 @@ import {
 } from '../../../utils/constants';
 
 /**
- * Generates the preferences modal's html and appends it to "cc-main" el.
- * @param {import("../../../../types").CookieConsentAPI} api
- * @returns {void}
+ * Generates preferences modal and appends it to "cc-main" el.
+ * @param {import("../../global").Api} api
  */
 export const _createPreferencesModal = (api) => {
 
@@ -33,7 +32,7 @@ export const _createPreferencesModal = (api) => {
     const dom = globalObj._dom;
 
     /**
-     * @type {import("../../global").PreferencesModal}
+     * @type {import("../../global").PreferencesModalOptions}
      */
     const modalData = state._currentTranslation && state._currentTranslation.preferencesModal;
 
@@ -167,7 +166,7 @@ export const _createPreferencesModal = (api) => {
                     _addClassPm(serviceHeader, 'service-header');
                     _addClassPm(serviceIconContainer, 'service-icon');
 
-                    var toggleLabel = _createToggleLabel(serviceName, name, sCurrentCategoryObject, null, true, sLinkedCategory);
+                    var toggleLabel = _createToggleLabel(serviceName, name, sCurrentCategoryObject, true, sLinkedCategory);
 
                     serviceTitle.innerHTML = serviceName;
 
@@ -205,7 +204,7 @@ export const _createPreferencesModal = (api) => {
 
                 s.className += '--toggle';
 
-                var toggleLabel = _createToggleLabel(sTitleData, sLinkedCategory, sCurrentCategoryObject, servicesContainer);
+                var toggleLabel = _createToggleLabel(sTitleData, sLinkedCategory, sCurrentCategoryObject);
 
                 if(sServiceNames.length > 0){
                     var serviceCounter = _createNode('span');
@@ -437,9 +436,8 @@ export const _createPreferencesModal = (api) => {
  * @param {import('../../global').Category} sCurrentCategoryObject
  * @param {boolean} [isService]
  * @param {string} [categoryName]
- * @param {HTMLElement} [servicesContainer]
  */
-function _createToggleLabel(label, value, sCurrentCategoryObject, servicesContainer, isService, categoryName){
+function _createToggleLabel(label, value, sCurrentCategoryObject, isService, categoryName){
 
     const state = globalObj._state;
     const dom = globalObj._dom;

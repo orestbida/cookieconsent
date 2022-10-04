@@ -10,6 +10,9 @@ import {
 }from '../src/utils/cookies';
 import { defineCryptoRandom } from "./config/mocks-utils";
 
+/**
+ * @type {import("../src/core/global").Api}
+ */
 let api;
 
 describe("Cookie should be created successfully", () =>{
@@ -22,7 +25,7 @@ describe("Cookie should be created successfully", () =>{
 
     it('Should retrieve the cookie with all the fields', () => {
         /**
-         * @type {import("../src/core/global").CookieStructure}
+         * @type {import("../src/core/global").CookieValue}
          */
         const ccCookie = _parseCookie(_getSingleCookie('cc_cookie', true));
 
