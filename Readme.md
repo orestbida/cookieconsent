@@ -1204,16 +1204,18 @@ Note:
         ```javascript
         import { useEffect } from "react";
 
-        import "./<path-to-cookieconsent.css>";
-        import "./<path-to-cookieconsent.js>";
+        import 'vanilla-cookieconsent';
+        import 'vanilla-cookieconsent/dist/cookieconsent.css';
 
         export default function CookieConsent() {
             useEffect(() => {
-                const cc = window.initCookieConsent();
 
-                cc.run({
-                    // your config
-                });
+                if (!document.getElementById('cc--main')) {
+                    window.CookieConsentApi = window.initCookieConsent();
+                    window.CookieConsentApi.run({
+                        // your config
+                    });
+                }
 
             }, []);
 
