@@ -357,7 +357,7 @@ Callback function executed when one of the modals is created and appended to the
 * **Example**: <br>
     ```javascript
     cc.run({
-        onModalReady: ({modalName}) => {
+        onModalReady: ({modalName, modal}) => {
             // do something
         }
     })
@@ -368,7 +368,6 @@ Callback function executed when one of the modals is created and appended to the
     `modalName` equals to one of the following values:
     * `'consentModal'`
     * `'preferencesModal'`
-
 
 ## guiOptions
 

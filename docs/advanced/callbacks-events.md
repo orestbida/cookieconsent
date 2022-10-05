@@ -139,7 +139,7 @@ This event is triggered when a modal is created and appended to the DOM.
 
     ```javascript
     cc.run({
-        onModalReady: function({modalName}){
+        onModalReady: function({modalName, modal}){
             // do something
         }
     });
@@ -150,6 +150,7 @@ This event is triggered when a modal is created and appended to the DOM.
     window.addEventListener('cc:onModalReady', function(event){
         /**
          * event.detail.modalName
+         * event.detail.modal
          */
 
         // do something
