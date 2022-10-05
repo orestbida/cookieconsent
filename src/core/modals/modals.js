@@ -28,8 +28,13 @@ export const createCookieConsentHTML = (api) => {
 
     addDataButtonListeners(null, api, createPreferencesModal);
 
-    // Finally append everything (_ccMain holds both modals)
-    appendChild((state._userConfig.root || dom._document.body), dom._ccMain);
+    let root = state._userConfig.root;
+
+    if(root && typeof root === 'string')
+        root = document.querySelector(root);
+
+    // Append main container to dom
+    appendChild((root || dom._document.body), dom._ccMain);
 };
 
 export {
