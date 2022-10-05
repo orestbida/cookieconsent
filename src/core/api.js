@@ -97,6 +97,13 @@ export const acceptCategory = (_categories, _exclusions) => {
                 enabledCategories = state._savedCookieContent.categories;
         }
 
+        for(let categoryName in state._customServicesSelection) {
+            if(state._customServicesSelection[categoryName].length > 0){
+                if(!elContains(enabledCategories, categoryName))
+                    enabledCategories.push(categoryName);
+            }
+        }
+
         return enabledCategories;
     };
 
@@ -154,22 +161,24 @@ export const acceptCategory = (_categories, _exclusions) => {
 
     state._allCategoryNames.forEach(categoryName => {
 
-        var categoryServices = globalObj._dom._serviceCheckboxInputs[categoryName];
-
+        /**
+         * BUG: this object is empty until the preferences modal is created
+         */
+        const services = state._allDefinedServices[categoryName];
+        const serviceNames = getKeys(services);
+        const enabledServices = state._enabledServices;
         /**
          * Stop here if there are no services
          */
-        if(getKeys(categoryServices).length === 0) return;
+        if(serviceNames.length === 0)
+            return;
 
-        const services = state._allDefinedServices[categoryName];
-        const serviceNames = getKeys(services);
-
-        state._enabledServices[categoryName] = [];
+        enabledServices[categoryName] = [];
 
         // If category is marked as readOnly => enable all its services
         if(elContains(state._readOnlyCategories, categoryName)){
             serviceNames.forEach(serviceName => {
-                state._enabledServices[categoryName].push(serviceName);
+                enabledServices[categoryName].push(serviceName);
             });
         }else{
             if(state._acceptType === 'all'){
@@ -178,16 +187,17 @@ export const acceptCategory = (_categories, _exclusions) => {
                     && !!state._customServicesSelection[categoryName]
                     && state._customServicesSelection[categoryName].length > 0
                 ){
+
                     state._customServicesSelection[categoryName].forEach(serviceName => {
-                        state._enabledServices[categoryName].push(serviceName);
+                        enabledServices[categoryName].push(serviceName);
                     });
                 }else{
                     serviceNames.forEach(serviceName => {
-                        state._enabledServices[categoryName].push(serviceName);
+                        enabledServices[categoryName].push(serviceName);
                     });
                 }
             }else if(state._acceptType === 'necessary'){
-                state._enabledServices[categoryName] = [];
+                enabledServices[categoryName] = [];
             }else {
                 if(
                     customServicesSelection
@@ -195,18 +205,38 @@ export const acceptCategory = (_categories, _exclusions) => {
                     && state._customServicesSelection[categoryName].length > 0
                 ){
                     state._customServicesSelection[categoryName].forEach(serviceName => {
-                        state._enabledServices[categoryName].push(serviceName);
+                        enabledServices[categoryName].push(serviceName);
                     });
                 }else{
-                    for(let serviceName in categoryServices){
-                        const serviceToggle = categoryServices[serviceName];
+                    if(elContains(state._acceptedCategories, categoryName)){
+                        const definedServices = getKeys(state._allDefinedServices[categoryName]);
 
-                        if(serviceToggle.checked)
-                            state._enabledServices[categoryName].push(serviceToggle.value);
+                        definedServices.forEach(service => enabledServices[categoryName].push(service));
+
+                        // state._customServicesSelection[categoryName].forEach(serviceName => {
+                        //     state._enabledServices[categoryName].push(serviceName);
+                        // });
+
+                        // if(state._preferencesModalExists){
+                        //     var categoryServices = globalObj._dom._serviceCheckboxInputs[categoryName];
+
+                        //     for(let serviceName in categoryServices){
+                        //         const serviceToggle = categoryServices[serviceName];
+
+                        //         if(serviceToggle.checked)
+                        //             state._enabledServices[categoryName].push(serviceToggle.value);
+                        //     }
+                        // }
                     }
+
                 }
             }
         }
+
+        /**
+         * Make sure there are no duplicates inside array
+         */
+        enabledServices[categoryName] = [... new Set(enabledServices[categoryName])];
     });
 
     saveCookiePreferences();
@@ -244,6 +274,7 @@ export const acceptService = (service, category) => {
         return false;
     }
     const servicesInputs = globalObj._dom._serviceCheckboxInputs[category] || {};
+    const allServiceNames = getKeys(globalObj._state._allDefinedServices[category]);
 
     globalObj._state._customServicesSelection[category] = [];
 
@@ -254,6 +285,8 @@ export const acceptService = (service, category) => {
                 servicesInputs[serviceName].checked = true;
                 dispatchChangeEvent(servicesInputs[serviceName]);
             }
+
+            allServiceNames.forEach(serviceName => globalObj._state._customServicesSelection[category].push(serviceName));
         }else{
 
             for(let serviceName in servicesInputs){
@@ -264,6 +297,10 @@ export const acceptService = (service, category) => {
 
                 dispatchChangeEvent(servicesInputs[serviceName]);
             }
+
+            if(elContains(allServiceNames, service))
+                globalObj._state._customServicesSelection[category].push(service);
+
         }
     }else if(typeof service === 'object' && Array.isArray(service)){
 
@@ -275,6 +312,12 @@ export const acceptService = (service, category) => {
 
             dispatchChangeEvent(servicesInputs[serviceName]);
         }
+
+        allServiceNames.forEach(serviceName => {
+            if(elContains(service, serviceName))
+                globalObj._state._customServicesSelection[category].push(serviceName);
+        });
+
     }
 
     acceptCategory();
