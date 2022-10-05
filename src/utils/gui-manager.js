@@ -1,5 +1,5 @@
 import { globalObj } from '../core/global';
-import { _addClass, _elContains, _removeClass } from './general';
+import { addClass, elContains, removeClass } from './general';
 
 /**
  * @typedef {Object} Layout
@@ -18,7 +18,7 @@ import { _addClass, _elContains, _removeClass } from './general';
  * Manage each modal's layout
  * @param {number} applyToModal 0: consentModal, 1: preferencesModal
  */
-export const _guiManager = (applyToModal) => {
+export const guiManager = (applyToModal) => {
 
     /**
      * @type {import("../core/global").GuiOptions}
@@ -35,7 +35,7 @@ export const _guiManager = (applyToModal) => {
      * @param {string} prefix
      * @param {string} defaultLayoutName
      */
-    const _setLayout = (modal, allowedLayoutsObj, userGuiOptions, prefix, defaultLayoutName, modalClassName) => {
+    const setLayout = (modal, allowedLayoutsObj, userGuiOptions, prefix, defaultLayoutName, modalClassName) => {
 
         var layout = userGuiOptions && userGuiOptions.layout;
         var position = userGuiOptions && userGuiOptions.position;
@@ -57,9 +57,9 @@ export const _guiManager = (applyToModal) => {
             currentLayoutName = defaultLayoutName;
         }
 
-        var currentLayoutVariant = _elContains(currentLayout._variants, userLayoutVariant) && userLayoutVariant;
-        var currentAlignV = _elContains(currentLayout._alignV, userAlignV) ? userAlignV : currentLayout._defaultAlignV;
-        var currentAlignH = _elContains(currentLayout._alignH, userAlignH) ? userAlignH : currentLayout._defaultAlignH;
+        var currentLayoutVariant = elContains(currentLayout._variants, userLayoutVariant) && userLayoutVariant;
+        var currentAlignV = elContains(currentLayout._alignV, userAlignV) ? userAlignV : currentLayout._defaultAlignV;
+        var currentAlignH = elContains(currentLayout._alignH, userAlignH) ? userAlignH : currentLayout._defaultAlignH;
 
         /**
          * Reset modal classes to default
@@ -69,11 +69,11 @@ export const _guiManager = (applyToModal) => {
         /**
          * Add layout + position classes
          */
-        _addClass(modal, prefix + currentLayoutName);
-        currentLayoutVariant && _addClass(modal, prefix + currentLayoutVariant);
-        currentAlignV && _addClass(modal, prefix + currentAlignV);
-        currentAlignH && _addClass(modal, prefix + currentAlignH);
-        flipButtons && _addClass(modal, prefix + 'flip');
+        addClass(modal, prefix + currentLayoutName);
+        currentLayoutVariant && addClass(modal, prefix + currentLayoutVariant);
+        currentAlignV && addClass(modal, prefix + currentAlignV);
+        currentAlignH && addClass(modal, prefix + currentAlignH);
+        flipButtons && addClass(modal, prefix + 'flip');
 
         const secondaryBtnClass = 'btn--secondary',
             classPrefix = modalClassName + '__';
@@ -85,20 +85,20 @@ export const _guiManager = (applyToModal) => {
 
             const {_consentAcceptNecessaryBtn, _cmCloseIconBtn} = globalObj._dom;
 
-            _consentAcceptNecessaryBtn && _removeClass(_consentAcceptNecessaryBtn, classPrefix + secondaryBtnClass);
-            _cmCloseIconBtn && _removeClass(_cmCloseIconBtn, classPrefix + secondaryBtnClass);
+            _consentAcceptNecessaryBtn && removeClass(_consentAcceptNecessaryBtn, classPrefix + secondaryBtnClass);
+            _cmCloseIconBtn && removeClass(_cmCloseIconBtn, classPrefix + secondaryBtnClass);
 
             if(notSameWeightButtons){
-                _consentAcceptNecessaryBtn && _addClass(_consentAcceptNecessaryBtn, classPrefix + secondaryBtnClass);
-                _cmCloseIconBtn && _addClass(_cmCloseIconBtn, classPrefix + secondaryBtnClass);
+                _consentAcceptNecessaryBtn && addClass(_consentAcceptNecessaryBtn, classPrefix + secondaryBtnClass);
+                _cmCloseIconBtn && addClass(_cmCloseIconBtn, classPrefix + secondaryBtnClass);
             }
         }else{
             const { _pmAcceptNecessaryBtn } =  globalObj._dom;
 
-            _pmAcceptNecessaryBtn && _removeClass(_pmAcceptNecessaryBtn, classPrefix + secondaryBtnClass);
+            _pmAcceptNecessaryBtn && removeClass(_pmAcceptNecessaryBtn, classPrefix + secondaryBtnClass);
 
             if(notSameWeightButtons)
-                _pmAcceptNecessaryBtn && _addClass(_pmAcceptNecessaryBtn, classPrefix + secondaryBtnClass);
+                _pmAcceptNecessaryBtn && addClass(_pmAcceptNecessaryBtn, classPrefix + secondaryBtnClass);
         }
     };
 
@@ -131,7 +131,7 @@ export const _guiManager = (applyToModal) => {
             }
         };
 
-        _setLayout(globalObj._dom._consentModal, cmLayouts, consentModalOptions, 'cm--', 'box', 'cm');
+        setLayout(globalObj._dom._consentModal, cmLayouts, consentModalOptions, 'cm--', 'box', 'cm');
     }
 
     if(applyToModal === 1){
@@ -152,6 +152,6 @@ export const _guiManager = (applyToModal) => {
             }
         };
 
-        _setLayout(globalObj._dom._pm, pmLayouts, preferencesModalOptions, 'pm--', 'box', 'pm');
+        setLayout(globalObj._dom._pm, pmLayouts, preferencesModalOptions, 'pm--', 'box', 'pm');
     }
 };

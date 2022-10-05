@@ -1,5 +1,5 @@
-import { globalObj, _isFunction} from '../core/global';
-import { _createNode, _setAttribute, _elContains } from './general';
+import { globalObj, isFunction} from '../core/global';
+import { createNode, setAttribute, elContains } from './general';
 import { SCRIPT_TAG_SELECTOR } from './constants';
 
 /**
@@ -8,7 +8,7 @@ import { SCRIPT_TAG_SELECTOR } from './constants';
  *
  * @param {string[]} [mustEnableCategories]
  */
-export const _manageExistingScripts = (mustEnableCategories) => {
+export const manageExistingScripts = (mustEnableCategories) => {
 
     const state = globalObj._state;
     const enabledServices = state._enabledServices;
@@ -24,8 +24,8 @@ export const _manageExistingScripts = (mustEnableCategories) => {
 
             if(
                 !service.enabled
-                && _elContains(state._enabledServices[categoryName], serviceName)
-                && _isFunction(service.onAccept)
+                && elContains(state._enabledServices[categoryName], serviceName)
+                && isFunction(service.onAccept)
             ){
                 service.enabled = true;
                 service.onAccept();
@@ -33,8 +33,8 @@ export const _manageExistingScripts = (mustEnableCategories) => {
 
             else if(
                 service.enabled
-                && !_elContains(state._enabledServices[categoryName], serviceName)
-                && _isFunction(service.onReject)
+                && !elContains(state._enabledServices[categoryName], serviceName)
+                && isFunction(service.onReject)
             ){
                 service.enabled = false;
                 service.onReject();
@@ -54,7 +54,7 @@ export const _manageExistingScripts = (mustEnableCategories) => {
      * @param {Element[]} scripts scripts to load
      * @param {number} index current script to load
      */
-    var _loadScripts = (scripts, index) => {
+    var loadScriptsHelper = (scripts, index) => {
         if(index < scripts.length){
 
             var currScript = scripts[index];
@@ -62,8 +62,8 @@ export const _manageExistingScripts = (mustEnableCategories) => {
             var currScriptInfo = state._allScriptTagsInfo[index];
             var currScriptCategory = currScriptInfo._categoryName;
             var currScriptService = currScriptInfo._serviceName;
-            var categoryAccepted = _elContains(acceptedCategories, currScriptCategory);
-            var serviceAccepted = currScriptService ? _elContains(enabledServices[currScriptCategory], currScriptService) : false;
+            var categoryAccepted = elContains(acceptedCategories, currScriptCategory);
+            var serviceAccepted = currScriptService ? elContains(enabledServices[currScriptCategory], currScriptService) : false;
 
             /**
              * Skip script if it was already executed
@@ -72,8 +72,8 @@ export const _manageExistingScripts = (mustEnableCategories) => {
 
                 var categoryWasJustEnabled = !currScriptService && !currScriptInfo._runOnDisable && categoryAccepted;
                 var serviceWasJustEnabled = currScriptService && !currScriptInfo._runOnDisable && serviceAccepted;
-                var categoryWasJustDisabled = !currScriptService && currScriptInfo._runOnDisable && !categoryAccepted && _elContains(state._lastChangedCategoryNames, currScriptCategory);
-                var serviceWasJustDisabled = currScriptService && currScriptInfo._runOnDisable && !serviceAccepted && _elContains(state._lastChangedServices[currScriptCategory] || [], currScriptService);
+                var categoryWasJustDisabled = !currScriptService && currScriptInfo._runOnDisable && !categoryAccepted && elContains(state._lastChangedCategoryNames, currScriptCategory);
+                var serviceWasJustDisabled = currScriptService && currScriptInfo._runOnDisable && !serviceAccepted && elContains(state._lastChangedServices[currScriptCategory] || [], currScriptService);
 
                 if(
                     categoryWasJustEnabled
@@ -94,7 +94,7 @@ export const _manageExistingScripts = (mustEnableCategories) => {
                     src && currScript.removeAttribute('data-src');
 
                     // Create a "fresh" script (with the same code)
-                    var freshScript = _createNode('script');
+                    var freshScript = createNode('script');
                     freshScript.textContent = currScript.innerHTML;
 
                     // Copy attributes over to the new "revived" script
@@ -103,7 +103,7 @@ export const _manageExistingScripts = (mustEnableCategories) => {
                         var len = attributes.length;
                         for(var i=0; i<len; i++){
                             var attrName = attributes[i].nodeName;
-                            _setAttribute(destination, attrName , source[attrName] || source.getAttribute(attrName));
+                            setAttribute(destination, attrName , source[attrName] || source.getAttribute(attrName));
                         }
                     })(freshScript, currScript);
 
@@ -116,7 +116,7 @@ export const _manageExistingScripts = (mustEnableCategories) => {
                         // load script sequentially => the next script will not be loaded
                         // until the current's script onload event triggers
                         freshScript.onload = freshScript.onerror = () => {
-                            _loadScripts(scripts, ++index);
+                            loadScriptsHelper(scripts, ++index);
                         };
                     }
 
@@ -132,17 +132,17 @@ export const _manageExistingScripts = (mustEnableCategories) => {
             }
 
             // Go to next script right away
-            _loadScripts(scripts, ++index);
+            loadScriptsHelper(scripts, ++index);
         }
     };
 
-    _loadScripts(scripts, 0);
+    loadScriptsHelper(scripts, 0);
 };
 
 /**
  * Keep track of categories enabled by default (useful when mode==OPT_OUT_MODE)
  */
-export const _retrieveEnabledCategoriesAndServices = () => {
+export const retrieveEnabledCategoriesAndServices = () => {
     const state = globalObj._state;
 
     state._allCategoryNames.forEach(categoryName => {

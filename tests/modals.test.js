@@ -1,6 +1,6 @@
 import { globalObj } from "../src/core/global";
 import * as CookieConsent from "../src/index"
-import { _getKeys } from "../src/utils/general";
+import { getKeys } from "../src/utils/general";
 import testConfig from "./config/full-config";
 import { defineCryptoRandom, fireClickEvent, htmlHasClass } from "./config/mocks-utils";
 
@@ -141,7 +141,7 @@ describe("Test data-cc attributes", () =>{
         fireClickEvent(acceptAllBtn)
         const userPreferences = api.getUserPreferences();
         expect(userPreferences.acceptType).toBe('all');
-        expect(userPreferences.acceptedCategories.length).toBe(_getKeys(testConfig.categories).length);
+        expect(userPreferences.acceptedCategories.length).toBe(getKeys(testConfig.categories).length);
     })
 
     it('Should accept necessary categories onClick', () => {

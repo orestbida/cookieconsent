@@ -1,10 +1,10 @@
 import { globalObj } from '../src/core/global';
 import {
-    _getBrowserLanguageCode,
-    _resolveCurrentLanguageCode,
-    _getCurrentLanguageCode,
-    _getDocumentLanguageCode,
-    _validLanguageCode
+    getBrowserLanguageCode,
+    resolveCurrentLanguageCode,
+    getCurrentLanguageCode,
+    getDocumentLanguageCode,
+    validLanguageCode
 } from '../src/utils/language'
 
 describe('Test language utils', () => {
@@ -17,29 +17,29 @@ describe('Test language utils', () => {
         globalObj._state._allTranslations = {
             en: {}
         }
-        expect(_validLanguageCode('en')).toBe(true);
+        expect(validLanguageCode('en')).toBe(true);
     });
 
     it("Should return false when translation is not defined", () => {
         globalObj._state._allTranslations = {
             en: {}
         }
-        expect(_validLanguageCode('it')).toBe(false);
+        expect(validLanguageCode('it')).toBe(false);
     });
 
     it("Should return current language", () => {
         globalObj._state._currentLanguageCode = 'de';
-        expect(_getCurrentLanguageCode()).toBe('de');
+        expect(getCurrentLanguageCode()).toBe('de');
     });
 
     it("Should return the browser's language code", () => {
-        const language = _getBrowserLanguageCode();
+        const language = getBrowserLanguageCode();
         expect(language).toBe('it');
     });
 
     it("Should return the document's 'lang' attribute", () => {
         document.documentElement.lang = 'es';
-        const language = _getDocumentLanguageCode();
+        const language = getDocumentLanguageCode();
         expect(language).toBe('es');
     });
 
@@ -53,7 +53,7 @@ describe('Test language utils', () => {
         globalObj._state._userConfig.language = {};
         globalObj._state._userConfig.language.default = 'en';
         globalObj._state._userConfig.language.autoDetect = 'document';
-        const language = _resolveCurrentLanguageCode();
+        const language = resolveCurrentLanguageCode();
         expect(language).toBe('en');
     });
 
@@ -67,6 +67,6 @@ describe('Test language utils', () => {
         globalObj._state._userConfig.language = {};
         globalObj._state._userConfig.language.default = 'en';
         globalObj._state._userConfig.language.autoDetect = 'browser';
-        expect(_resolveCurrentLanguageCode()).toBe('it');
+        expect(resolveCurrentLanguageCode()).toBe('it');
     })
 });

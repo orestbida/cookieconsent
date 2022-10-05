@@ -40,21 +40,20 @@ import { COOKIE_NAME, OPT_IN_MODE } from '../utils/constants';
  * @param {any} fn
  * @returns {boolean}
  */
-export const _isFunction = (fn) => {
+export const isFunction = (fn) => {
     return typeof fn === 'function';
 };
 
 /**
  * Returns a copy/clone of the object
  * @param {any} obj
- * @returns {any}
  */
-export const _shallowCopy = (data) => {
+export const shallowCopy = (data) => {
     return JSON.parse(JSON.stringify(data));
 };
 
 const dispatchEvent = (eventName, data) => {
-    window.dispatchEvent(new CustomEvent(eventName, {detail: _shallowCopy(data)}));
+    window.dispatchEvent(new CustomEvent(eventName, {detail: data}));
 };
 
 /**
@@ -62,7 +61,7 @@ const dispatchEvent = (eventName, data) => {
  * @param {string} eventName
  * @param {string} [modalName]
  */
-export const _fireEvent = (eventName, modalName) => {
+export const fireEvent = (eventName, modalName) => {
 
     const callbacks = globalObj._callbacks;
     const events = globalObj._customEvents;
@@ -81,25 +80,25 @@ export const _fireEvent = (eventName, modalName) => {
         };
 
         if(eventName === events._onModalShow)
-            _isFunction(callbacks._onModalShow) && callbacks._onModalShow(modalParams);
+            isFunction(callbacks._onModalShow) && callbacks._onModalShow(modalParams);
         else if(eventName === events._onModalHide)
-            _isFunction(callbacks._onModalHide) && callbacks._onModalHide(modalParams);
+            isFunction(callbacks._onModalHide) && callbacks._onModalHide(modalParams);
         else
-            _isFunction(callbacks._onModalReady) && callbacks._onModalReady(modalParams);
+            isFunction(callbacks._onModalReady) && callbacks._onModalReady(modalParams);
 
         return dispatchEvent(eventName, modalParams);
     }
 
     if(eventName === events._onFirstConsent){
-        _isFunction(callbacks._onFirstConsent) && callbacks._onFirstConsent(_shallowCopy(params));
+        isFunction(callbacks._onFirstConsent) && callbacks._onFirstConsent(shallowCopy(params));
     }
     else if(eventName === events._onConsent){
-        _isFunction(callbacks._onConsent) && callbacks._onConsent(_shallowCopy(params));
+        isFunction(callbacks._onConsent) && callbacks._onConsent(shallowCopy(params));
     }
     else if(eventName === events._onChange){
         params.changedCategories = globalObj._state._lastChangedCategoryNames;
         params.changedServices = globalObj._state._lastChangedServices;
-        _isFunction(callbacks._onChange) && callbacks._onChange(_shallowCopy(params));
+        isFunction(callbacks._onChange) && callbacks._onChange(shallowCopy(params));
     }
 
     dispatchEvent(eventName, params);

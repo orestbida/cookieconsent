@@ -1,14 +1,14 @@
 import * as CookieConsent from "../src/index"
 import testConfig from "./config/full-config";
+import { defineCryptoRandom } from "./config/mocks-utils";
 
 import {
-    _eraseCookies,
-    _getAllCookies,
-    _getSingleCookie,
-    _parseCookie,
-    _setCookie
+    eraseCookiesHelper,
+    getAllCookies,
+    getSingleCookie,
+    parseCookie,
+    setCookie
 }from '../src/utils/cookies';
-import { defineCryptoRandom } from "./config/mocks-utils";
 
 /**
  * @type {import("../src/core/global").Api}
@@ -27,7 +27,7 @@ describe("Cookie should be created successfully", () =>{
         /**
          * @type {import("../src/core/global").CookieValue}
          */
-        const ccCookie = _parseCookie(_getSingleCookie('cc_cookie', true));
+        const ccCookie = parseCookie(getSingleCookie('cc_cookie', true));
 
         expect(ccCookie).toBeDefined();
         expect(ccCookie.data).toBeDefined();
@@ -43,26 +43,26 @@ describe("Cookie should be created successfully", () =>{
     });
 
     it('Should erase "cc_cookie"', () => {
-        _setCookie('test_cookie', '{"ciao": 21}');
-        _eraseCookies(['test_cookie'], '/', [location.host]);
-        const ccCookie = _getSingleCookie('test_cookie');
+        setCookie('test_cookie', '{"ciao": 21}');
+        eraseCookiesHelper(['test_cookie'], '/', [location.host]);
+        const ccCookie = getSingleCookie('test_cookie');
         expect(ccCookie).toBeFalsy();
     });
 
     it('Should set the cookie', () => {
-        _setCookie('test_cookie', '{"ciao": 21}');
-        const cookieValue = _parseCookie(_getSingleCookie('test_cookie', true));
+        setCookie('test_cookie', '{"ciao": 21}');
+        const cookieValue = parseCookie(getSingleCookie('test_cookie', true));
         expect(cookieValue.ciao).toBe(21);
     })
 
     it('Should return all cookies', () => {
-        _setCookie('test_cookie_2', '{"ciao": 22}');
-        const allCookies = _getAllCookies();
+        setCookie('test_cookie_2', '{"ciao": 22}');
+        const allCookies = getAllCookies();
         expect(allCookies.length).toBe(3);
     })
 
     it('Should return only the cookies that match the regex', () => {
-        const allCookies = _getAllCookies(/^test_/);
+        const allCookies = getAllCookies(/^test_/);
         expect(allCookies.length).toBe(2);
     })
 })

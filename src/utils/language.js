@@ -1,25 +1,25 @@
 import { globalObj } from '../core/global';
-import { _log, _getKeys, _elContains, _fetchJson } from './general';
+import { _log, getKeys, elContains, fetchJson } from './general';
 
 /**
  * Check if language is valid/defined
  * @param {string} languageCode
  * @returns {boolean} True if language is defined
  */
-export const _validLanguageCode = (languageCode) => {
-    return !!languageCode && _elContains(_getKeys(globalObj._state._allTranslations), languageCode);
+export const validLanguageCode = (languageCode) => {
+    return !!languageCode && elContains(getKeys(globalObj._state._allTranslations), languageCode);
 };
 
 /**
  * Returns the current language code
  * @returns {string}
  */
-export const _getCurrentLanguageCode = () => {
+export const getCurrentLanguageCode = () => {
     const state = globalObj._state;
     return state._currentLanguageCode || state._userConfig.language.default;
 };
 
-export const _setCurrentLanguageCode = (newLanguageCode) => {
+export const setCurrentLanguageCode = (newLanguageCode) => {
     newLanguageCode && (globalObj._state._currentLanguageCode = newLanguageCode);
 };
 
@@ -28,7 +28,7 @@ export const _setCurrentLanguageCode = (newLanguageCode) => {
  * returns only the first 2 chars: en-US => en
  * @returns {string} language
  */
-export const _getBrowserLanguageCode = () => {
+export const getBrowserLanguageCode = () => {
     const browserLanguage = navigator.language.slice(0, 2).toLowerCase();
     _log('CookieConsent [LANG]: browser language is "'+ browserLanguage + '"');
 
@@ -39,13 +39,13 @@ export const _getBrowserLanguageCode = () => {
  * Get the lang attribute
  * @returns lang attribute
  */
-export const _getDocumentLanguageCode = () => document.documentElement.lang;
+export const getDocumentLanguageCode = () => document.documentElement.lang;
 
 /**
  * Resolve the language to use.
  * @returns {string} language code
  */
-export const _resolveCurrentLanguageCode = () =>  {
+export const resolveCurrentLanguageCode = () =>  {
 
     const autoDetect = globalObj._state._userConfig.language.autoDetect;
 
@@ -59,26 +59,26 @@ export const _resolveCurrentLanguageCode = () =>  {
         let newLanguageCode;
 
         if (autoDetect === 'browser')
-            newLanguageCode = _getBrowserLanguageCode();
+            newLanguageCode = getBrowserLanguageCode();
 
         else if(autoDetect === 'document')
-            newLanguageCode = _getDocumentLanguageCode();
+            newLanguageCode = getDocumentLanguageCode();
 
-        if(_validLanguageCode(newLanguageCode))
+        if(validLanguageCode(newLanguageCode))
             return newLanguageCode;
     }
 
     /**
      * Use current language
      */
-    return _getCurrentLanguageCode();
+    return getCurrentLanguageCode();
 };
 
 /**
  * Load translation
  * @param {string | null} desiredLanguageCode
  */
-export const _loadTranslationData = async (desiredLanguageCode) => {
+export const loadTranslationData = async (desiredLanguageCode) => {
     const state = globalObj._state;
 
     /**
@@ -89,10 +89,10 @@ export const _loadTranslationData = async (desiredLanguageCode) => {
     /**
      * Make sure languageCode is valid before retrieving the translation object
      */
-    if(desiredLanguageCode && _validLanguageCode(desiredLanguageCode))
+    if(desiredLanguageCode && validLanguageCode(desiredLanguageCode))
         currentLanguageCode = desiredLanguageCode;
     else
-        currentLanguageCode = _getCurrentLanguageCode();
+        currentLanguageCode = getCurrentLanguageCode();
 
     let currentTranslation = state._allTranslations[currentLanguageCode];
 
@@ -105,7 +105,7 @@ export const _loadTranslationData = async (desiredLanguageCode) => {
      */
     if(typeof currentTranslation === 'string'){
 
-        const fetchedTranslation = await _fetchJson(currentTranslation);
+        const fetchedTranslation = await fetchJson(currentTranslation);
 
         if(!fetchedTranslation)
             return false;
@@ -114,7 +114,7 @@ export const _loadTranslationData = async (desiredLanguageCode) => {
     }
 
     state._currentTranslation = currentTranslation;
-    _setCurrentLanguageCode(currentLanguageCode);
+    setCurrentLanguageCode(currentLanguageCode);
 
     _log('CookieConsent [LANG]: set language: "' + currentLanguageCode + '"');
 

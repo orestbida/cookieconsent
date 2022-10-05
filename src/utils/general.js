@@ -1,4 +1,4 @@
-import { globalObj, _isFunction } from '../core/global';
+import { globalObj, isFunction } from '../core/global';
 import { SCRIPT_TAG_SELECTOR, BUTTON_TAG } from './constants';
 
 /**
@@ -14,9 +14,8 @@ export const _log = (printMsg, optionalParam) => {
  * Helper indexOf
  * @param {Array|String} el
  * @param {Object} value
- * @returns {number}
  */
-export const _indexOf = (el, value) => {
+export const indexOf = (el, value) => {
     return el.indexOf(value);
 };
 
@@ -24,7 +23,7 @@ export const _indexOf = (el, value) => {
  * Returns true if el is an object
  * @param {any} el
  */
-export const _isObject = (el) => {
+export const isObject = (el) => {
     return !!el && typeof el === 'object' && !Array.isArray(el);
 };
 
@@ -32,7 +31,7 @@ export const _isObject = (el) => {
  * Retrieves all script elements with 'data-category' attribute
  * and save the following attributes: category-name and service
  */
-export const _retrieveScriptElements = () => {
+export const retrieveScriptElements = () => {
 
     if(!globalObj._config.manageScriptTags)
         return;
@@ -61,7 +60,7 @@ export const _retrieveScriptElements = () => {
             runOnDisable = true;
         }
 
-        if(_elContains(state._allCategoryNames, scriptCategoryName)){
+        if(elContains(state._allCategoryNames, scriptCategoryName)){
 
             state._allScriptTagsInfo.push({
                 _executed: false,
@@ -86,13 +85,13 @@ export const _retrieveScriptElements = () => {
  * Calculate rejected services (all services - enabled services)
  * @returns {Object.<string, string[]>}
  */
-export const _retrieveRejectedServices = () => {
+export const retrieveRejectedServices = () => {
     var rejectedServices = {};
 
     globalObj._state._allCategoryNames.forEach(categoryName => {
-        rejectedServices[categoryName] = _arrayDiff(
+        rejectedServices[categoryName] = arrayDiff(
             globalObj._state._enabledServices[categoryName] || [],
-            _getKeys(globalObj._state._allDefinedServices[categoryName]) || []
+            getKeys(globalObj._state._allDefinedServices[categoryName]) || []
         );
     });
 
@@ -104,7 +103,7 @@ export const _retrieveRejectedServices = () => {
  * @param {any[]|string} el
  * @param {any} value
  */
-export const _elContains = (el, value) => {
+export const elContains = (el, value) => {
     return el.indexOf(value) !== -1;
 };
 
@@ -112,10 +111,10 @@ export const _elContains = (el, value) => {
  * Helper function which creates an HTMLElement object based on 'type' and returns it.
  * @param {string} type
  */
-export const _createNode = (type) => {
+export const createNode = (type) => {
     const el = document.createElement(type);
     if(type === BUTTON_TAG){
-        _setAttribute(el, 'type', type);
+        setAttribute(el, 'type', type);
     }
     return el;
 };
@@ -126,7 +125,7 @@ export const _createNode = (type) => {
  * @param {string} attribute
  * @param {string} value
  */
-export const _setAttribute = (el, attribute, value) => {
+export const setAttribute = (el, attribute, value) => {
     el.setAttribute(attribute, value);
 };
 
@@ -135,7 +134,7 @@ export const _setAttribute = (el, attribute, value) => {
  * @param {Node} parent
  * @param {Node} child
  */
-export const _appendChild = (parent, child) => {
+export const appendChild = (parent, child) => {
     parent.appendChild(child);
 };
 
@@ -144,7 +143,7 @@ export const _appendChild = (parent, child) => {
  * https://stackoverflow.com/questions/105034/how-to-create-a-guid-uuid?page=1&tab=votes#tab-top
  * @returns {string} unique uuid string
  */
-export const _uuidv4 = () => {
+export const uuidv4 = () => {
     return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, (c) => {
         return (c ^ window.crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16);
     });
@@ -162,7 +161,7 @@ export const _uuidv4 = () => {
  * @param {eventFired} fn
  * @param {boolean} [saveListener]
  */
-export const _addEvent = (elem, event, fn, saveListener) => {
+export const addEvent = (elem, event, fn, saveListener) => {
     elem.addEventListener(event, fn);
 
     /**
@@ -182,7 +181,7 @@ export const _addEvent = (elem, event, fn, saveListener) => {
  * Get all keys defined inside object
  * @param {Object} obj
  */
-export const _getKeys = obj => {
+export const getKeys = obj => {
     return Object.keys(obj);
 };
 
@@ -191,16 +190,16 @@ export const _getKeys = obj => {
  * @param {HTMLElement} elem
  * @param {string} className
  */
-export const _addClass = (elem, className) => {
+export const addClass = (elem, className) => {
     elem.classList.add(className);
 };
 
-export const _addClassCm = (elem, className) => {
-    _addClass(elem, 'cm__' + className);
+export const addClassCm = (elem, className) => {
+    addClass(elem, 'cm__' + className);
 };
 
-export const _addClassPm = (elem, className) => {
-    _addClass(elem, 'pm__' + className);
+export const addClassPm = (elem, className) => {
+    addClass(elem, 'pm__' + className);
 };
 
 /**
@@ -208,7 +207,7 @@ export const _addClassPm = (elem, className) => {
  * @param {HTMLElement} elem
  * @param {string} className
  */
-export const _removeClass = (el, className) => {
+export const removeClass = (el, className) => {
     el.classList.remove(className);
 };
 
@@ -217,7 +216,7 @@ export const _removeClass = (el, className) => {
  * @param {HTMLElement} el
  * @param {string} className
  */
-export const _hasClass = (el, className) => {
+export const hasClass = (el, className) => {
     return el.classList.contains(className);
 };
 
@@ -225,14 +224,14 @@ export const _hasClass = (el, className) => {
  * Calculate the existing cookie's remaining time until expiration (in milliseconds)
  * @returns {number}
  */
-export const _getRemainingExpirationTimeMS = () => {
+export const getRemainingExpirationTimeMS = () => {
     const lastTimestamp = globalObj._state._lastConsentTimestamp;
 
     const elapsedTimeMilliseconds = lastTimestamp
         ? new Date() - lastTimestamp
         : 0;
 
-    return _getExpiresAfterDaysValue()*86400000 - elapsedTimeMilliseconds;
+    return getExpiresAfterDaysValue()*86400000 - elapsedTimeMilliseconds;
 };
 
 /**
@@ -240,7 +239,7 @@ export const _getRemainingExpirationTimeMS = () => {
  * @param {string} url
  * @returns {Promise<import('../core/global').Translation | boolean>}
  */
-export const _fetchJson = async (url) => {
+export const fetchJson = async (url) => {
     try{
         const response = await fetch(url, {method: 'GET'});
         return response.ok ? await response.json() : false;
@@ -253,10 +252,10 @@ export const _fetchJson = async (url) => {
  * Helper function to retrieve cookie duration
  * @returns {number}
  */
-export const _getExpiresAfterDaysValue = () => {
+export const getExpiresAfterDaysValue = () => {
     const expiresAfterDays = globalObj._config.cookie.expiresAfterDays;
 
-    return _isFunction(expiresAfterDays)
+    return isFunction(expiresAfterDays)
         ? expiresAfterDays(globalObj._state._acceptType)
         : expiresAfterDays;
 };
@@ -266,10 +265,10 @@ export const _getExpiresAfterDaysValue = () => {
  * @param {any[]} arr1
  * @param {any[]} arr2
  */
-export const _arrayDiff = (arr1, arr2) => {
+export const arrayDiff = (arr1, arr2) => {
     return arr1
-        .filter(x => !_elContains(arr2, x))
-        .concat(arr2.filter(x => !_elContains(arr1, x)));
+        .filter(x => !elContains(arr2, x))
+        .concat(arr2.filter(x => !elContains(arr1, x)));
 };
 
 /**
@@ -277,7 +276,7 @@ export const _arrayDiff = (arr1, arr2) => {
  * @param {{accepted: string[], rejected: string[]}} currentCategoriesState
  * @returns {string} accept type
  */
-export const _getAcceptType = (currentCategoriesState) => {
+export const getAcceptType = (currentCategoriesState) => {
 
     var type = 'custom';
 
@@ -294,8 +293,8 @@ export const _getAcceptType = (currentCategoriesState) => {
  * Update global "acceptType" variable
  * Note: getUserPreferences() depends on "acceptType"
  */
-export const _updateAcceptType = () => {
-    globalObj._state._acceptType = _getAcceptType(_getCurrentCategoriesState());
+export const updateAcceptType = () => {
+    globalObj._state._acceptType = getAcceptType(getCurrentCategoriesState());
 };
 
 /**
@@ -311,27 +310,27 @@ export const _updateAcceptType = () => {
  * @param {import(''../core/global').Api} api
  * @param {createModal} [createPreferencesModal]
  */
-export const _addDataButtonListeners = (elem, api, createPreferencesModal) => {
+export const addDataButtonListeners = (elem, api, createPreferencesModal) => {
 
     const _a = 'accept-';
 
-    const showPreferencesModalElements = _getElements('show-preferencesModal'),
-        showConsentModalElements = _getElements('show-consentModal'),
-        acceptAllElements = _getElements(_a + 'all'),
-        acceptNecessaryElements = _getElements(_a + 'necessary'),
-        acceptCustomElements = _getElements(_a + 'custom'),
+    const showPreferencesModalElements = getElements('show-preferencesModal'),
+        showConsentModalElements = getElements('show-consentModal'),
+        acceptAllElements = getElements(_a + 'all'),
+        acceptNecessaryElements = getElements(_a + 'necessary'),
+        acceptCustomElements = getElements(_a + 'custom'),
         createPreferencesModalOnHover = globalObj._config.lazyHtmlGeneration === true;
 
     for(var i=0; i<showPreferencesModalElements.length; i++){
-        _setAttribute(showPreferencesModalElements[i], 'aria-haspopup', 'dialog');
+        setAttribute(showPreferencesModalElements[i], 'aria-haspopup', 'dialog');
 
-        _addEvent(showPreferencesModalElements[i], 'click', (event) => {
+        addEvent(showPreferencesModalElements[i], 'click', (event) => {
             event.preventDefault();
             api.showPreferences();
         }, true);
 
         if(createPreferencesModalOnHover){
-            _addEvent(showPreferencesModalElements[i], 'mouseover', (event ) => {
+            addEvent(showPreferencesModalElements[i], 'mouseover', (event ) => {
                 event.preventDefault();
 
                 if(!globalObj._state._preferencesModalExists)
@@ -341,28 +340,28 @@ export const _addDataButtonListeners = (elem, api, createPreferencesModal) => {
     }
 
     for(i=0; i<showConsentModalElements.length; i++){
-        _setAttribute(showConsentModalElements[i], 'aria-haspopup', 'dialog');
-        _addEvent(showConsentModalElements[i], 'click', (event) => {
+        setAttribute(showConsentModalElements[i], 'aria-haspopup', 'dialog');
+        addEvent(showConsentModalElements[i], 'click', (event) => {
             event.preventDefault();
             api.show(true);
         }, true);
     }
 
     for(i=0; i<acceptAllElements.length; i++){
-        _addEvent(acceptAllElements[i], 'click', (event) => {
-            _acceptAction(event, 'all');
+        addEvent(acceptAllElements[i], 'click', (event) => {
+            acceptAction(event, 'all');
         }, true);
     }
 
     for(i=0; i<acceptCustomElements.length; i++){
-        _addEvent(acceptCustomElements[i], 'click', (event) => {
-            _acceptAction(event);
+        addEvent(acceptCustomElements[i], 'click', (event) => {
+            acceptAction(event);
         }, true);
     }
 
     for(i=0; i<acceptNecessaryElements.length; i++){
-        _addEvent(acceptNecessaryElements[i], 'click', (event) => {
-            _acceptAction(event, []);
+        addEvent(acceptNecessaryElements[i], 'click', (event) => {
+            acceptAction(event, []);
         }, true);
     }
 
@@ -371,7 +370,7 @@ export const _addDataButtonListeners = (elem, api, createPreferencesModal) => {
      * @param {string} dataRole
      * @returns {NodeListOf<Element>}
      */
-    function _getElements(dataRole){
+    function getElements(dataRole){
         return (elem || document).querySelectorAll('[data-cc="' + dataRole + '"]');
     }
 
@@ -380,7 +379,7 @@ export const _addDataButtonListeners = (elem, api, createPreferencesModal) => {
      * @param {PointerEvent} e source event
      * @param {string} [acceptType]
      */
-    function _acceptAction(e, acceptType){
+    function acceptAction(e, acceptType){
         e.preventDefault();
         api.acceptCategory(acceptType);
         api.hidePreferences();
@@ -392,11 +391,11 @@ export const _addDataButtonListeners = (elem, api, createPreferencesModal) => {
  * Obtain accepted and rejected categories
  * @returns {{accepted: string[], rejected: string[]}}
  */
-export const _getCurrentCategoriesState = () => {
+export const getCurrentCategoriesState = () => {
 
     // calculate rejected categories (_allCategoryNames - _acceptedCategories)
     const rejectedCategories = globalObj._state._allCategoryNames.filter((category) => {
-        return !_elContains(globalObj._state._acceptedCategories, category);
+        return !elContains(globalObj._state._acceptedCategories, category);
     });
 
     return {
@@ -410,14 +409,14 @@ export const _getCurrentCategoriesState = () => {
  * focusable element of current active modal
  * @param {import(''../core/global').Api} api
  */
-export const _handleFocusTrap = (api) => {
+export const handleFocusTrap = (api) => {
 
     const dom = globalObj._dom;
 
     var tabbedOutsideDiv = false;
     var tabbedInsideModal = false;
 
-    _addEvent(dom._htmlDom, 'keydown', (e) => {
+    addEvent(dom._htmlDom, 'keydown', (e) => {
 
         if(e.key !== 'Tab')
             return;
@@ -459,7 +458,7 @@ export const _handleFocusTrap = (api) => {
         !tabbedInsideModal && (tabbedOutsideDiv = true);
     }, true);
 
-    _addEvent(dom._ccMain, 'click', (e) => {
+    addEvent(dom._ccMain, 'click', (e) => {
         const state = globalObj._state;
 
         /**
@@ -487,7 +486,7 @@ export const _handleFocusTrap = (api) => {
  * Save reference to first and last focusable elements inside each modal
  * to prevent losing focus while navigating with TAB
  */
-export const _getModalFocusableData = () => {
+export const getModalFocusableData = () => {
 
     const state = globalObj._state;
 
@@ -503,7 +502,7 @@ export const _getModalFocusableData = () => {
      * @param {HTMLElement} modal
      * @param {Element[]} _array
      */
-    const _saveAllFocusableElements = (modal, _array) => {
+    const saveAllFocusableElements = (modal, _array) => {
 
         const focusableElements = modal && modal.querySelectorAll(focusableTypesSelector);
 
@@ -515,8 +514,8 @@ export const _getModalFocusableData = () => {
     };
 
     if(state._consentModalExists)
-        _saveAllFocusableElements(globalObj._dom._consentModal, state._cmFocusableElements);
+        saveAllFocusableElements(globalObj._dom._consentModal, state._cmFocusableElements);
 
     if(state._preferencesModalExists)
-        _saveAllFocusableElements(globalObj._dom._pm, state._pmFocusableElements);
+        saveAllFocusableElements(globalObj._dom._pm, state._pmFocusableElements);
 };

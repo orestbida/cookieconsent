@@ -1,20 +1,20 @@
-import { globalObj, _fireEvent } from '../../global';
+import { globalObj, fireEvent } from '../../global';
 import {
-    _createNode,
-    _addClass,
-    _addClassPm,
-    _setAttribute,
-    _removeClass,
-    _addEvent,
-    _appendChild,
-    _getKeys,
-    _hasClass,
-    _elContains,
-    _getModalFocusableData,
+    createNode,
+    addClass,
+    addClassPm,
+    setAttribute,
+    removeClass,
+    addEvent,
+    appendChild,
+    getKeys,
+    hasClass,
+    elContains,
+    getModalFocusableData,
     _log
 } from '../../../utils/general';
 
-import { _guiManager } from '../../../utils/gui-manager';
+import { guiManager } from '../../../utils/gui-manager';
 import {
     PREFERENCES_MODAL_NAME,
     SCRIPT_TAG_SELECTOR,
@@ -26,7 +26,7 @@ import {
  * Generates preferences modal and appends it to "cc-main" el.
  * @param {import("../../global").Api} api
  */
-export const _createPreferencesModal = (api) => {
+export const createPreferencesModal = (api) => {
 
     const state = globalObj._state;
     const dom = globalObj._dom;
@@ -48,74 +48,74 @@ export const _createPreferencesModal = (api) => {
     if(!dom._pmContainer){
 
         // modal container
-        dom._pmContainer = _createNode(DIV_TAG);
-        _addClass(dom._pmContainer, 'pm-wrapper');
+        dom._pmContainer = createNode(DIV_TAG);
+        addClass(dom._pmContainer, 'pm-wrapper');
 
         // preferences modal
-        dom._pm = _createNode(DIV_TAG);
+        dom._pm = createNode(DIV_TAG);
         dom._pm.style.visibility = 'hidden';
 
-        _addClass(dom._pm, 'pm');
-        _setAttribute(dom._pm, 'role', 'dialog');
-        _setAttribute(dom._pm, 'aria-hidden', true);
-        _setAttribute(dom._pm, 'aria-modal', true);
+        addClass(dom._pm, 'pm');
+        setAttribute(dom._pm, 'role', 'dialog');
+        setAttribute(dom._pm, 'aria-hidden', true);
+        setAttribute(dom._pm, 'aria-modal', true);
 
         // If 'esc' key is pressed inside _preferencesContainer div => hide preferences
-        _addEvent(dom._htmlDom, 'keydown', (event) => {
+        addEvent(dom._htmlDom, 'keydown', (event) => {
             if (event.keyCode === 27) {
                 api.hidePreferences();
             }
         }, true);
 
         // modal header
-        dom._pmHeader = _createNode(DIV_TAG);
-        _addClassPm(dom._pmHeader, 'header');
+        dom._pmHeader = createNode(DIV_TAG);
+        addClassPm(dom._pmHeader, 'header');
 
         // modal title
-        dom._pmTitle = _createNode(DIV_TAG);
-        _addClassPm(dom._pmTitle, 'title');
-        _setAttribute(dom._pmTitle, 'role', 'heading');
+        dom._pmTitle = createNode(DIV_TAG);
+        addClassPm(dom._pmTitle, 'title');
+        setAttribute(dom._pmTitle, 'role', 'heading');
 
-        dom._pmCloseBtn = _createNode(BUTTON_TAG);
-        _addClassPm(dom._pmCloseBtn, 'close-btn');
-        _setAttribute(dom._pmCloseBtn, 'aria-label', modalData.closeIconLabel || '');
-        _addEvent(dom._pmCloseBtn, 'click', api.hidePreferences);
+        dom._pmCloseBtn = createNode(BUTTON_TAG);
+        addClassPm(dom._pmCloseBtn, 'close-btn');
+        setAttribute(dom._pmCloseBtn, 'aria-label', modalData.closeIconLabel || '');
+        addEvent(dom._pmCloseBtn, 'click', api.hidePreferences);
 
         // modal body
-        dom._pmBody = _createNode(DIV_TAG);
-        _addClassPm(dom._pmBody, 'body');
+        dom._pmBody = createNode(DIV_TAG);
+        addClassPm(dom._pmBody, 'body');
 
         // modal footer
-        dom._pmFooter = _createNode(DIV_TAG);
-        _addClassPm(dom._pmFooter, 'footer');
+        dom._pmFooter = createNode(DIV_TAG);
+        addClassPm(dom._pmFooter, 'footer');
 
-        var _pmBtnContainer = _createNode(DIV_TAG);
-        _addClass(_pmBtnContainer, 'btns');
+        var _pmBtnContainer = createNode(DIV_TAG);
+        addClass(_pmBtnContainer, 'btns');
 
-        var _pmBtnGroup1 = _createNode(DIV_TAG);
-        var _pmBtnGroup2 = _createNode(DIV_TAG);
-        _addClassPm(_pmBtnGroup1, 'btn-group');
-        _addClassPm(_pmBtnGroup2, 'btn-group');
+        var _pmBtnGroup1 = createNode(DIV_TAG);
+        var _pmBtnGroup2 = createNode(DIV_TAG);
+        addClassPm(_pmBtnGroup1, 'btn-group');
+        addClassPm(_pmBtnGroup2, 'btn-group');
 
-        _appendChild(dom._pmFooter, _pmBtnGroup2);
-        _appendChild(dom._pmFooter, _pmBtnGroup1);
+        appendChild(dom._pmFooter, _pmBtnGroup2);
+        appendChild(dom._pmFooter, _pmBtnGroup1);
 
-        _appendChild(dom._pmHeader, dom._pmTitle);
-        _appendChild(dom._pmHeader, dom._pmCloseBtn);
+        appendChild(dom._pmHeader, dom._pmTitle);
+        appendChild(dom._pmHeader, dom._pmCloseBtn);
 
-        _appendChild(dom._pm, dom._pmHeader);
-        _appendChild(dom._pm, dom._pmBody);
-        _appendChild(dom._pm, dom._pmFooter);
+        appendChild(dom._pm, dom._pmHeader);
+        appendChild(dom._pm, dom._pmBody);
+        appendChild(dom._pm, dom._pmFooter);
 
-        _appendChild(dom._pmContainer, dom._pm);
+        appendChild(dom._pmContainer, dom._pm);
     }else{
-        dom._pmNewBody = _createNode(DIV_TAG);
-        _addClassPm(dom._pmNewBody, 'body');
+        dom._pmNewBody = createNode(DIV_TAG);
+        addClassPm(dom._pmNewBody, 'body');
     }
 
     if(titleData){
         dom._pmTitle.innerHTML = titleData;
-        closeIconLabelData && _setAttribute(dom._pmCloseBtn, 'aria-label', closeIconLabelData);
+        closeIconLabelData && setAttribute(dom._pmCloseBtn, 'aria-label', closeIconLabelData);
     }
 
     sectionsData && sectionsData.forEach(section => {
@@ -129,181 +129,181 @@ export const _createPreferencesModal = (api) => {
             sCreateCookieTable = sCookieTableBody && sCookieTableBody.length > 0,
             hasToggle = !!sCurrentCategoryObject,
             sServices = hasToggle && state._allDefinedServices[sLinkedCategory] || false,
-            sServiceNames = sServices && _getKeys(sServices) || [],
-            sIsExpandableToggle = hasToggle && (!!sDescriptionData || !!sCreateCookieTable || _getKeys(sServices).length>0);
+            sServiceNames = sServices && getKeys(sServices) || [],
+            sIsExpandableToggle = hasToggle && (!!sDescriptionData || !!sCreateCookieTable || getKeys(sServices).length>0);
 
 
         // section
-        var s = _createNode(DIV_TAG);
-        _addClassPm(s, 'section');
+        var s = createNode(DIV_TAG);
+        addClassPm(s, 'section');
 
         if(sIsExpandableToggle || sDescriptionData){
-            var sDescContainer = _createNode(DIV_TAG);
-            _addClassPm(sDescContainer, 'section-desc-wrapper');
+            var sDescContainer = createNode(DIV_TAG);
+            addClassPm(sDescContainer, 'section-desc-wrapper');
         }
 
         if(sIsExpandableToggle){
 
             if(sServiceNames.length > 0){
 
-                var servicesContainer = _createNode(DIV_TAG);
-                _addClassPm(servicesContainer, 'section-services');
+                var servicesContainer = createNode(DIV_TAG);
+                addClassPm(servicesContainer, 'section-services');
 
                 sServiceNames.forEach(name => {
 
                     const service = sServices[name];
 
                     var serviceName = service.label || name;
-                    var serviceDiv = _createNode(DIV_TAG);
-                    var serviceHeader = _createNode(DIV_TAG);
-                    var serviceIconContainer = _createNode(DIV_TAG);
-                    var serviceIcon = _createNode('span');
-                    var serviceTitle = _createNode(DIV_TAG);
+                    var serviceDiv = createNode(DIV_TAG);
+                    var serviceHeader = createNode(DIV_TAG);
+                    var serviceIconContainer = createNode(DIV_TAG);
+                    var serviceIcon = createNode('span');
+                    var serviceTitle = createNode(DIV_TAG);
 
-                    _addClassPm(serviceDiv, 'service');
-                    _addClassPm(serviceTitle, 'service-title');
-                    _addClassPm(serviceIcon, 'code-icon');
-                    _addClassPm(serviceHeader, 'service-header');
-                    _addClassPm(serviceIconContainer, 'service-icon');
+                    addClassPm(serviceDiv, 'service');
+                    addClassPm(serviceTitle, 'service-title');
+                    addClassPm(serviceIcon, 'code-icon');
+                    addClassPm(serviceHeader, 'service-header');
+                    addClassPm(serviceIconContainer, 'service-icon');
 
-                    var toggleLabel = _createToggleLabel(serviceName, name, sCurrentCategoryObject, true, sLinkedCategory);
+                    var toggleLabel = createToggleLabel(serviceName, name, sCurrentCategoryObject, true, sLinkedCategory);
 
                     serviceTitle.innerHTML = serviceName;
 
-                    _appendChild(serviceIconContainer, serviceIcon);
-                    _appendChild(serviceHeader, serviceIconContainer);
-                    _appendChild(serviceHeader, serviceTitle);
-                    _appendChild(serviceDiv, serviceHeader);
-                    _appendChild(serviceDiv, toggleLabel);
-                    _appendChild(servicesContainer, serviceDiv);
+                    appendChild(serviceIconContainer, serviceIcon);
+                    appendChild(serviceHeader, serviceIconContainer);
+                    appendChild(serviceHeader, serviceTitle);
+                    appendChild(serviceDiv, serviceHeader);
+                    appendChild(serviceDiv, toggleLabel);
+                    appendChild(servicesContainer, serviceDiv);
                 });
 
-                _appendChild(sDescContainer, servicesContainer);
+                appendChild(sDescContainer, servicesContainer);
             }
         }
 
         if(sTitleData){
 
-            var sTitleContainer = _createNode(DIV_TAG);
-            var sTitle = hasToggle ? _createNode(BUTTON_TAG) : _createNode(DIV_TAG);
+            var sTitleContainer = createNode(DIV_TAG);
+            var sTitle = hasToggle ? createNode(BUTTON_TAG) : createNode(DIV_TAG);
 
-            _addClassPm(sTitleContainer, 'section-title-wrapper');
-            _addClassPm(sTitle, 'section-title');
+            addClassPm(sTitleContainer, 'section-title-wrapper');
+            addClassPm(sTitle, 'section-title');
 
             sTitle.innerHTML = sTitleData;
-            _appendChild(sTitleContainer, sTitle);
+            appendChild(sTitleContainer, sTitle);
 
             if(hasToggle){
 
                 /**
                  * Arrow icon span
                  */
-                var sTitleIcon = _createNode('span');
-                _addClassPm(sTitleIcon, 'section-arrow');
-                _appendChild(sTitleContainer, sTitleIcon);
+                var sTitleIcon = createNode('span');
+                addClassPm(sTitleIcon, 'section-arrow');
+                appendChild(sTitleContainer, sTitleIcon);
 
                 s.className += '--toggle';
 
-                var toggleLabel = _createToggleLabel(sTitleData, sLinkedCategory, sCurrentCategoryObject);
+                var toggleLabel = createToggleLabel(sTitleData, sLinkedCategory, sCurrentCategoryObject);
 
                 if(sServiceNames.length > 0){
-                    var serviceCounter = _createNode('span');
-                    _addClassPm(serviceCounter, 'badge');
-                    _addClassPm(serviceCounter, 'service-counter');
-                    _setAttribute(serviceCounter, 'aria-hidden', true);
-                    _setAttribute(serviceCounter, 'data-servicecounter', sServiceNames.length);
+                    var serviceCounter = createNode('span');
+                    addClassPm(serviceCounter, 'badge');
+                    addClassPm(serviceCounter, 'service-counter');
+                    setAttribute(serviceCounter, 'aria-hidden', true);
+                    setAttribute(serviceCounter, 'data-servicecounter', sServiceNames.length);
 
                     var serviceCounterLabel = modalData.serviceCounterLabel;
 
                     if(serviceCounterLabel && typeof serviceCounterLabel === 'string')
-                        _setAttribute(serviceCounter, 'data-counterlabel', serviceCounterLabel);
+                        setAttribute(serviceCounter, 'data-counterlabel', serviceCounterLabel);
 
-                    _appendChild(sTitle, serviceCounter);
+                    appendChild(sTitle, serviceCounter);
                 }
 
                 if(sIsExpandableToggle){
-                    _addClassPm(s, 'section--expandable');
+                    addClassPm(s, 'section--expandable');
                     var expandableDivId = sLinkedCategory + '-desc';
-                    _setAttribute(sTitle, 'aria-expanded', false);
-                    _setAttribute(sTitle, 'aria-controls', expandableDivId);
+                    setAttribute(sTitle, 'aria-expanded', false);
+                    setAttribute(sTitle, 'aria-controls', expandableDivId);
                 }
 
-                _appendChild(sTitleContainer, toggleLabel);
+                appendChild(sTitleContainer, toggleLabel);
 
             }else{
-                _setAttribute(sTitle, 'role', 'heading');
-                _setAttribute(sTitle, 'aria-level', '3');
+                setAttribute(sTitle, 'role', 'heading');
+                setAttribute(sTitle, 'aria-level', '3');
             }
 
-            _appendChild(s, sTitleContainer);
+            appendChild(s, sTitleContainer);
         }
 
         if(sDescriptionData){
-            var sDesc = _createNode(DIV_TAG);
-            _addClassPm(sDesc, 'section-desc');
+            var sDesc = createNode(DIV_TAG);
+            addClassPm(sDesc, 'section-desc');
 
             sDesc.innerHTML = sDescriptionData;
 
-            _appendChild(sDescContainer, sDesc);
+            appendChild(sDescContainer, sDesc);
         }
 
         if(sIsExpandableToggle){
-            _setAttribute(sDescContainer, 'aria-hidden', 'true');
+            setAttribute(sDescContainer, 'aria-hidden', 'true');
             sDescContainer.id = expandableDivId;
 
             /**
              * On button click handle the following :=> aria-expanded, aria-hidden and act class for current section
              */
             ((accordion, section, btn) => {
-                _addEvent(sTitle, 'click', () => {
-                    if(!_hasClass(section, 'is-expanded')){
-                        _addClass(section, 'is-expanded');
-                        _setAttribute(btn, 'aria-expanded', 'true');
-                        _setAttribute(accordion, 'aria-hidden', 'false');
+                addEvent(sTitle, 'click', () => {
+                    if(!hasClass(section, 'is-expanded')){
+                        addClass(section, 'is-expanded');
+                        setAttribute(btn, 'aria-expanded', 'true');
+                        setAttribute(accordion, 'aria-hidden', 'false');
                     }else{
-                        _removeClass(section, 'is-expanded');
-                        _setAttribute(btn, 'aria-expanded', 'false');
-                        _setAttribute(accordion, 'aria-hidden', 'true');
+                        removeClass(section, 'is-expanded');
+                        setAttribute(btn, 'aria-expanded', 'false');
+                        setAttribute(accordion, 'aria-hidden', 'true');
                     }
                 });
             })(sDescContainer, s, sTitle);
 
 
             if(sCreateCookieTable){
-                var table = _createNode('table');
-                var thead = _createNode('thead');
-                var tbody = _createNode('tbody');
+                var table = createNode('table');
+                var thead = createNode('thead');
+                var tbody = createNode('tbody');
 
-                _addClassPm(table, 'section-table');
-                _addClassPm(thead, 'table-head');
-                _addClassPm(tbody, 'table-body');
+                addClassPm(table, 'section-table');
+                addClassPm(thead, 'table-head');
+                addClassPm(tbody, 'table-body');
 
                 var headerData = sCookieTableData.headers;
-                var tableHeadersKeys = _getKeys(headerData);
+                var tableHeadersKeys = getKeys(headerData);
 
                 /**
                  * Create table headers
                  */
                 var trHeadFragment = dom._document.createDocumentFragment();
-                var trHead = _createNode('tr');
-                _setAttribute(trHead, 'role', 'row');
+                var trHead = createNode('tr');
+                setAttribute(trHead, 'role', 'row');
 
                 for(var i=0; i<tableHeadersKeys.length; i++){
                     var headerKey = tableHeadersKeys[i];
                     var headerName = headerData[headerKey];
 
-                    var th = _createNode('th');
+                    var th = createNode('th');
                     th.id = 'cc__row-' + headerName;
-                    _setAttribute(th, 'role', 'columnheader');
-                    _setAttribute(th, 'scope', 'col');
-                    _addClassPm(th, 'table-th');
+                    setAttribute(th, 'role', 'columnheader');
+                    setAttribute(th, 'scope', 'col');
+                    addClassPm(th, 'table-th');
 
                     th.innerHTML = headerName;
-                    _appendChild(trHeadFragment, th);
+                    appendChild(trHeadFragment, th);
                 }
 
-                _appendChild(trHead, trHeadFragment);
-                _appendChild(thead, trHead);
+                appendChild(trHead, trHeadFragment);
+                appendChild(thead, trHead);
 
                 /**
                  * Create table body
@@ -312,9 +312,9 @@ export const _createPreferencesModal = (api) => {
 
                 for(i=0; i<sCookieTableBody.length; i++){
                     var currentCookieData = sCookieTableBody[i];
-                    var tr = _createNode('tr');
-                    _setAttribute(tr, 'role', 'row');
-                    _addClassPm(tr, 'table-tr');
+                    var tr = createNode('tr');
+                    setAttribute(tr, 'role', 'row');
+                    addClassPm(tr, 'table-tr');
 
                     for(var j=0; j<tableHeadersKeys.length; j++){
 
@@ -322,49 +322,49 @@ export const _createPreferencesModal = (api) => {
                         var tdHeaderName = headerData[tdKey];
                         var tdValue = currentCookieData[tdKey];
 
-                        var td = _createNode('td');
-                        var tdInner = _createNode(DIV_TAG);
-                        _addClassPm(td, 'table-td');
-                        _setAttribute(td, 'data-column', tdHeaderName);
-                        _setAttribute(td, 'headers', 'cc__row-' + tdHeaderName);
+                        var td = createNode('td');
+                        var tdInner = createNode(DIV_TAG);
+                        addClassPm(td, 'table-td');
+                        setAttribute(td, 'data-column', tdHeaderName);
+                        setAttribute(td, 'headers', 'cc__row-' + tdHeaderName);
 
                         tdInner.insertAdjacentHTML('beforeend', tdValue);
 
-                        _appendChild(td, tdInner);
-                        _appendChild(tr, td);
+                        appendChild(td, tdInner);
+                        appendChild(tr, td);
                     }
 
-                    _appendChild(bodyFragment, tr);
+                    appendChild(bodyFragment, tr);
                 }
 
-                _appendChild(tbody, bodyFragment);
-                _appendChild(table, thead);
-                _appendChild(table, tbody);
-                _appendChild(sDescContainer, table);
+                appendChild(tbody, bodyFragment);
+                appendChild(table, thead);
+                appendChild(table, tbody);
+                appendChild(sDescContainer, table);
             }
         }
 
 
         if(sIsExpandableToggle || sDescriptionData){
-            _appendChild(s, sDescContainer);
+            appendChild(s, sDescContainer);
         }
 
-        _appendChild(dom._pmBody, s);
+        appendChild(dom._pmBody, s);
 
         if(dom._pmNewBody)
-            _appendChild(dom._pmNewBody, s);
+            appendChild(dom._pmNewBody, s);
         else
-            _appendChild(dom._pmBody, s);
+            appendChild(dom._pmBody, s);
     });
 
     if(acceptAllBtnData || acceptNecessaryBtnData){
 
         if(acceptNecessaryBtnData){
             if(!dom._pmAcceptNecessaryBtn){
-                dom._pmAcceptNecessaryBtn = _createNode(BUTTON_TAG);
-                _addClassPm(dom._pmAcceptNecessaryBtn, 'btn');
-                _appendChild(_pmBtnGroup1, dom._pmAcceptNecessaryBtn);
-                _addEvent(dom._pmAcceptNecessaryBtn, 'click', () => {
+                dom._pmAcceptNecessaryBtn = createNode(BUTTON_TAG);
+                addClassPm(dom._pmAcceptNecessaryBtn, 'btn');
+                appendChild(_pmBtnGroup1, dom._pmAcceptNecessaryBtn);
+                addEvent(dom._pmAcceptNecessaryBtn, 'click', () => {
                     acceptHelper([]);
                 });
             }
@@ -374,10 +374,10 @@ export const _createPreferencesModal = (api) => {
 
         if(acceptAllBtnData){
             if(!dom._pmAcceptAllBtn){
-                dom._pmAcceptAllBtn = _createNode(BUTTON_TAG);
-                _addClassPm(dom._pmAcceptAllBtn, 'btn');
-                _appendChild(_pmBtnGroup1, dom._pmAcceptAllBtn);
-                _addEvent(dom._pmAcceptAllBtn, 'click', () => {
+                dom._pmAcceptAllBtn = createNode(BUTTON_TAG);
+                addClassPm(dom._pmAcceptAllBtn, 'btn');
+                appendChild(_pmBtnGroup1, dom._pmAcceptAllBtn);
+                addEvent(dom._pmAcceptAllBtn, 'click', () => {
                     acceptHelper('all');
                 });
             }
@@ -388,12 +388,12 @@ export const _createPreferencesModal = (api) => {
 
     if(savePreferencesBtnData){
         if(!dom._pmSavePreferencesBtn){
-            dom._pmSavePreferencesBtn = _createNode(BUTTON_TAG);
-            _addClassPm(dom._pmSavePreferencesBtn, 'btn');
-            _addClassPm(dom._pmSavePreferencesBtn, 'btn--secondary');
-            _appendChild(_pmBtnGroup2, dom._pmSavePreferencesBtn);
+            dom._pmSavePreferencesBtn = createNode(BUTTON_TAG);
+            addClassPm(dom._pmSavePreferencesBtn, 'btn');
+            addClassPm(dom._pmSavePreferencesBtn, 'btn--secondary');
+            appendChild(_pmBtnGroup2, dom._pmSavePreferencesBtn);
 
-            _addEvent(dom._pmSavePreferencesBtn, 'click', () => {
+            addEvent(dom._pmSavePreferencesBtn, 'click', () => {
                 acceptHelper();
             });
         }
@@ -412,20 +412,20 @@ export const _createPreferencesModal = (api) => {
         dom._pmBody = dom._pmNewBody;
     }
 
-    _guiManager(1);
+    guiManager(1);
 
     if(!state._preferencesModalExists){
         state._preferencesModalExists = true;
-        _appendChild(dom._ccMain, dom._pmContainer);
-        _getModalFocusableData();
+        appendChild(dom._ccMain, dom._pmContainer);
+        getModalFocusableData();
 
         _log('CookieConsent [HTML] created', PREFERENCES_MODAL_NAME);
-        _fireEvent(globalObj._customEvents._onModalReady, PREFERENCES_MODAL_NAME);
+        fireEvent(globalObj._customEvents._onModalReady, PREFERENCES_MODAL_NAME, dom._pmContainer);
 
         /**
          * Enable transition
          */
-        setTimeout(() => _addClass(dom._pmContainer, 'c--anim'), 100);
+        setTimeout(() => addClass(dom._pmContainer, 'c--anim'), 100);
     }
 };
 
@@ -437,7 +437,7 @@ export const _createPreferencesModal = (api) => {
  * @param {boolean} [isService]
  * @param {string} [categoryName]
  */
-function _createToggleLabel(label, value, sCurrentCategoryObject, isService, categoryName){
+function createToggleLabel(label, value, sCurrentCategoryObject, isService, categoryName){
 
     const state = globalObj._state;
     const dom = globalObj._dom;
@@ -445,30 +445,30 @@ function _createToggleLabel(label, value, sCurrentCategoryObject, isService, cat
     /**
      * Create category toggle
      */
-    var toggleLabel = _createNode('label');
-    var toggle = _createNode('input');
-    var toggleIcon = _createNode('span');
-    var toggleLabelSpan = _createNode('span');
+    var toggleLabel = createNode('label');
+    var toggle = createNode('input');
+    var toggleIcon = createNode('span');
+    var toggleLabelSpan = createNode('span');
 
     // These 2 spans will contain each 2 pseudo-elements to generate 'tick' and 'x' icons
-    var toggleOnIcon = _createNode('span');
-    var toggleOffIcon = _createNode('span');
+    var toggleOnIcon = createNode('span');
+    var toggleOffIcon = createNode('span');
 
     toggle.type = 'checkbox';
 
-    _addClass(toggleLabel, 'section__toggle-wrapper');
-    _addClass(toggle, 'section__toggle');
-    _addClass(toggleOnIcon, 'toggle__icon-on');
-    _addClass(toggleOffIcon, 'toggle__icon-off');
-    _addClass(toggleIcon, 'toggle__icon');
-    _addClass(toggleLabelSpan, 'toggle__label');
+    addClass(toggleLabel, 'section__toggle-wrapper');
+    addClass(toggle, 'section__toggle');
+    addClass(toggleOnIcon, 'toggle__icon-on');
+    addClass(toggleOffIcon, 'toggle__icon-off');
+    addClass(toggleIcon, 'toggle__icon');
+    addClass(toggleLabelSpan, 'toggle__label');
 
-    _setAttribute(toggleIcon, 'aria-hidden', 'true');
+    setAttribute(toggleIcon, 'aria-hidden', 'true');
 
     if(isService){
-        _addClass(toggleLabel, 'toggle-service');
-        _addClass(toggle, 'toggle-service');
-        _setAttribute(toggle, SCRIPT_TAG_SELECTOR, categoryName);
+        addClass(toggleLabel, 'toggle-service');
+        addClass(toggle, 'toggle-service');
+        setAttribute(toggle, SCRIPT_TAG_SELECTOR, categoryName);
 
         // Save reference to toggles to avoid using document.querySelector later on
         dom._serviceCheckboxInputs[categoryName][value] = toggle;
@@ -478,7 +478,7 @@ function _createToggleLabel(label, value, sCurrentCategoryObject, isService, cat
 
     if(!isService){
         ((value)=>{
-            _addEvent(toggle, 'click', () => {
+            addEvent(toggle, 'click', () => {
                 var categoryServicesToggles = dom._serviceCheckboxInputs[value];
 
                 state._customServicesSelection[value] = [];
@@ -497,7 +497,7 @@ function _createToggleLabel(label, value, sCurrentCategoryObject, isService, cat
     }else{
 
         ((categoryName)=>{
-            _addEvent(toggle, 'change', () => {
+            addEvent(toggle, 'change', () => {
 
                 var categoryServicesToggles = dom._serviceCheckboxInputs[categoryName];
                 var categoryToggle = dom._categoryCheckboxInputs[categoryName];
@@ -525,8 +525,8 @@ function _createToggleLabel(label, value, sCurrentCategoryObject, isService, cat
 
     toggleLabelSpan.textContent = label;
 
-    _appendChild(toggleIcon, toggleOffIcon);
-    _appendChild(toggleIcon, toggleOnIcon);
+    appendChild(toggleIcon, toggleOffIcon);
+    appendChild(toggleIcon, toggleOnIcon);
 
     /**
      * If consent is valid => retrieve category states from cookie
@@ -536,11 +536,11 @@ function _createToggleLabel(label, value, sCurrentCategoryObject, isService, cat
         if(isService){
             var enabledServices = state._enabledServices[categoryName];
 
-            if(enabledServices && _elContains(enabledServices, value)){
+            if(enabledServices && elContains(enabledServices, value)){
                 toggle.checked = true;
             }
 
-        }else if(_elContains(state._savedCookieContent.categories, value)){
+        }else if(elContains(state._savedCookieContent.categories, value)){
             toggle.checked = true;
         }
     }else if(sCurrentCategoryObject.enabled || sCurrentCategoryObject.readOnly){
@@ -554,9 +554,9 @@ function _createToggleLabel(label, value, sCurrentCategoryObject, isService, cat
         toggle.disabled = true;
     }
 
-    _appendChild(toggleLabel, toggle);
-    _appendChild(toggleLabel, toggleIcon);
-    _appendChild(toggleLabel, toggleLabelSpan);
+    appendChild(toggleLabel, toggle);
+    appendChild(toggleLabel, toggleIcon);
+    appendChild(toggleLabel, toggleLabelSpan);
 
     return toggleLabel;
 }

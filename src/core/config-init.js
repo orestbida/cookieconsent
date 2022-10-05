@@ -1,13 +1,13 @@
 import { globalObj } from './global';
-import { _log, _getKeys, _isObject, _retrieveScriptElements } from '../utils/general';
+import { _log, getKeys, isObject, retrieveScriptElements } from '../utils/general';
 import { OPT_OUT_MODE } from '../utils/constants';
-import { _resolveCurrentLanguageCode, _setCurrentLanguageCode } from '../utils/language';
+import { resolveCurrentLanguageCode, setCurrentLanguageCode } from '../utils/language';
 
 /**
  * Configure CookieConsent
  * @param {import("./global").UserConfig} userConfig
  */
-export const _setConfig = (userConfig) => {
+export const setConfig = (userConfig) => {
 
     setWindowData();
 
@@ -18,7 +18,7 @@ export const _setConfig = (userConfig) => {
         callbacks = globalObj._callbacks,
         userCookieConfig = userConfig.cookie,
         userCategories = userConfig.categories,
-        allCategoryNames = _getKeys(userCategories) || [],
+        allCategoryNames = getKeys(userCategories) || [],
         nav = navigator;
 
     /**
@@ -75,7 +75,7 @@ export const _setConfig = (userConfig) => {
     if(config.hideFromBots === true && nav)
         state._botAgentDetected = ((nav.userAgent && /bot|crawl|spider|slurp|teoma/i.test(nav.userAgent)) || nav.webdriver);
 
-    if(_isObject(userCookieConfig))
+    if(isObject(userCookieConfig))
         config.cookie = {...cookie, ...userCookieConfig};
 
     _log('CookieConsent [CONFIG]: configuration:', userConfig);
@@ -83,23 +83,23 @@ export const _setConfig = (userConfig) => {
     _log('CookieConsent [CONFIG]: revision enabled:', state._revisionEnabled);
     _log('CookieConsent [CONFIG]: manageScriptTags:', config.manageScriptTags);
 
-    _fetchCategoriesAndServices(allCategoryNames);
-    _retrieveScriptElements();
-    _setCurrentLanguageCode(_resolveCurrentLanguageCode());
+    fetchCategoriesAndServices(allCategoryNames);
+    retrieveScriptElements();
+    setCurrentLanguageCode(resolveCurrentLanguageCode());
 };
 
 /**
  * Store categories and services' config. details
  * @param {string[]} allCategoryNames
  */
-function _fetchCategoriesAndServices(allCategoryNames) {
+function fetchCategoriesAndServices(allCategoryNames) {
     const state = globalObj._state;
 
     allCategoryNames.forEach(categoryName => {
 
         const currCategory = state._allDefinedCategories[categoryName];
         const services = currCategory.services || {};
-        const serviceNames = services && _isObject(services) && _getKeys(services) || [];
+        const serviceNames = services && isObject(services) && getKeys(services) || [];
 
         /**
          * Keep track of readOnly categories

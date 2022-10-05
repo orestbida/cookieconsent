@@ -1,7 +1,7 @@
 import * as CookieConsent from "../src/index"
 import testConfig from "./config/full-config";
-import { _elContains, _getKeys, _isObject } from "../src/utils/general";
-import { _setCookie } from "../src/utils/cookies";
+import { getKeys } from "../src/utils/general";
+import { setCookie } from "../src/utils/cookies";
 import { globalObj } from "../src/core/global";
 import { defineCryptoRandom, htmlHasClass } from "./config/mocks-utils";
 
@@ -236,7 +236,7 @@ describe("API tests", () =>{
 
     it('Should accept all services', () => {
         api.acceptService('all', 'analytics');
-        expect(globalObj._state._enabledServices['analytics'].length).toBe(_getKeys(globalObj._state._allDefinedServices['analytics']).length)
+        expect(globalObj._state._enabledServices['analytics'].length).toBe(getKeys(globalObj._state._allDefinedServices['analytics']).length)
     })
 
     it('Should reject all services', () => {
@@ -323,8 +323,8 @@ describe("API tests", () =>{
 
     it('Should autoClearCookies when category is rejected', () => {
         api.acceptCategory('all');
-        _setCookie('test_cookie_1', JSON.stringify({test_key: 'test_value'}));
-        _setCookie('test_cookie_2', JSON.stringify({test_key: 'test_value'}));
+        setCookie('test_cookie_1', JSON.stringify({test_key: 'test_value'}));
+        setCookie('test_cookie_2', JSON.stringify({test_key: 'test_value'}));
         expect(api.validCookie('test_cookie_1')).toBe(true);
         expect(api.validCookie('test_cookie_2')).toBe(true);
         api.acceptCategory('all', ['analytics']);

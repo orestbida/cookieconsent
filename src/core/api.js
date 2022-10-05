@@ -1,46 +1,46 @@
 import {
-    _createNode,
-    _setAttribute,
-    _appendChild,
-    _addClass,
-    _removeClass,
+    createNode,
+    setAttribute,
+    appendChild,
+    addClass,
+    removeClass,
     _log,
-    _handleFocusTrap,
-    _getCurrentCategoriesState,
-    _getAcceptType,
-    _elContains,
-    _updateAcceptType,
-    _getKeys,
-    _retrieveRejectedServices
+    handleFocusTrap,
+    getCurrentCategoriesState,
+    getAcceptType,
+    elContains,
+    updateAcceptType,
+    getKeys,
+    retrieveRejectedServices
 } from '../utils/general';
 
-import { _manageExistingScripts, _retrieveEnabledCategoriesAndServices } from '../utils/scripts';
+import { manageExistingScripts, retrieveEnabledCategoriesAndServices } from '../utils/scripts';
 
 import {
-    _fireEvent,
+    fireEvent,
     globalObj,
     Global,
-    _shallowCopy
+    shallowCopy
 } from './global';
 
 import {
-    _createConsentModal,
-    _createPreferencesModal,
-    _createCookieConsentHTML
+    createConsentModal,
+    createPreferencesModal,
+    createCookieConsentHTML
 } from './modals/modals';
 
-import { _getCurrentLanguageCode, _loadTranslationData, _setCurrentLanguageCode, _validLanguageCode } from '../utils/language';
+import { getCurrentLanguageCode, loadTranslationData, setCurrentLanguageCode, validLanguageCode } from '../utils/language';
 
 import {
-    _setCookie,
-    _eraseCookies,
-    _saveCookiePreferences,
-    _getSingleCookie,
-    _parseCookie,
-    _getAllCookies
+    setCookie,
+    eraseCookiesHelper,
+    saveCookiePreferences,
+    getSingleCookie,
+    parseCookie,
+    getAllCookies
 } from '../utils/cookies';
 
-import { _setConfig } from './config-init';
+import { setConfig } from './config-init';
 
 import {
     TOGGLE_CONSENT_MODAL_CLASS,
@@ -56,7 +56,7 @@ import {
  * Dispatch the 'change' event to the input
  * @param {HTMLElement} input
  */
-const _dispatchChangeEvent = (input) => {
+const dispatchChangeEvent = (input) => {
     input.dispatchEvent(new Event('change'));
 };
 
@@ -71,7 +71,7 @@ export const acceptCategory = (_categories, _exclusions) => {
 
     var categories = _categories || undefined;
     var exclusions = _exclusions || [];
-    var customAcceptType = false;
+    var customServicesSelection = false;
 
     /**
      * @type {string[]}
@@ -82,7 +82,7 @@ export const acceptCategory = (_categories, _exclusions) => {
      * Get all accepted categories
      * @returns {string[]}
      */
-    var _getCurrentPreferences = () => {
+    const getCurrentPreferences = () => {
         var toggles = globalObj._dom._categoryCheckboxInputs;
         var enabledCategories = [];
 
@@ -101,22 +101,22 @@ export const acceptCategory = (_categories, _exclusions) => {
     };
 
     if(!categories){
-        categoriesToAccept = _getCurrentPreferences();
-        customAcceptType = true;
+        categoriesToAccept = getCurrentPreferences();
+        customServicesSelection = true;
     }else{
         if(
             typeof categories === 'object' &&
             typeof categories.length === 'number'
         ){
             for(var i=0; i<categories.length; i++){
-                if(_elContains(state._allCategoryNames, categories[i]))
+                if(elContains(state._allCategoryNames, categories[i]))
                     categoriesToAccept.push(categories[i]);
             }
         }else if(typeof categories === 'string'){
             if(categories === 'all')
                 categoriesToAccept = state._allCategoryNames.slice();
             else{
-                if(_elContains(state._allCategoryNames, categories))
+                if(elContains(state._allCategoryNames, categories))
                     categoriesToAccept.push(categories);
             }
         }
@@ -133,7 +133,7 @@ export const acceptCategory = (_categories, _exclusions) => {
 
     // Add back all the categories set as "readonly/required"
     for(i=0; i<state._readOnlyCategories.length; i++){
-        if(!_elContains(categoriesToAccept, state._readOnlyCategories[i]))
+        if(!elContains(categoriesToAccept, state._readOnlyCategories[i]))
             categoriesToAccept.push(state._readOnlyCategories[i]);
     }
 
@@ -142,16 +142,15 @@ export const acceptCategory = (_categories, _exclusions) => {
      */
     state._acceptedCategories = categoriesToAccept;
 
-    _updateAcceptType();
+    updateAcceptType();
 
-    if(!customAcceptType)
+    if(!customServicesSelection)
         state._customServicesSelection = {};
 
     /**
      * Save previously enabled services to calculate later on which of them was changed
      */
-    state._lastEnabledServices = _shallowCopy(state._enabledServices);
-
+    state._lastEnabledServices = shallowCopy(state._enabledServices);
 
     state._allCategoryNames.forEach(categoryName => {
 
@@ -160,22 +159,22 @@ export const acceptCategory = (_categories, _exclusions) => {
         /**
          * Stop here if there are no services
          */
-        if(_getKeys(categoryServices).length === 0) return;
+        if(getKeys(categoryServices).length === 0) return;
 
         const services = state._allDefinedServices[categoryName];
-        const serviceNames = _getKeys(services);
+        const serviceNames = getKeys(services);
 
         state._enabledServices[categoryName] = [];
 
         // If category is marked as readOnly => enable all its services
-        if(_elContains(state._readOnlyCategories, categoryName)){
+        if(elContains(state._readOnlyCategories, categoryName)){
             serviceNames.forEach(serviceName => {
                 state._enabledServices[categoryName].push(serviceName);
             });
         }else{
-            if(globalObj._state._acceptType === 'all'){
+            if(state._acceptType === 'all'){
                 if(
-                    customAcceptType
+                    customServicesSelection
                     && !!state._customServicesSelection[categoryName]
                     && state._customServicesSelection[categoryName].length > 0
                 ){
@@ -191,7 +190,7 @@ export const acceptCategory = (_categories, _exclusions) => {
                 state._enabledServices[categoryName] = [];
             }else {
                 if(
-                    customAcceptType
+                    customServicesSelection
                     && !!state._customServicesSelection[categoryName]
                     && state._customServicesSelection[categoryName].length > 0
                 ){
@@ -210,7 +209,7 @@ export const acceptCategory = (_categories, _exclusions) => {
         }
     });
 
-    _saveCookiePreferences();
+    saveCookiePreferences();
 };
 
 /**
@@ -222,10 +221,11 @@ export const acceptedCategory = (category) => {
     var categories;
 
     if(!globalObj._state._invalidConsent || globalObj._config.mode === OPT_IN_MODE)
-        categories = _getCurrentCategoriesState().accepted || [];
+        categories = getCurrentCategoriesState().accepted || [];
     else  // mode is OPT_OUT_MODE
         categories = globalObj._state._defaultEnabledCategories;
-    return _elContains(categories, category);
+
+    return elContains(categories, category);
 };
 
 /**
@@ -239,38 +239,41 @@ export const acceptService = (service, category) => {
         !service
         || !category
         || typeof category !== 'string'
-        || !_elContains(globalObj._state._allCategoryNames, category)
+        || !elContains(globalObj._state._allCategoryNames, category)
     ) {
         return false;
     }
-
     const servicesInputs = globalObj._dom._serviceCheckboxInputs[category] || {};
 
     globalObj._state._customServicesSelection[category] = [];
 
     if(typeof service === 'string'){
         if(service === 'all'){
-            for(var serviceName in servicesInputs){
+
+            for(let serviceName in servicesInputs){
                 servicesInputs[serviceName].checked = true;
-                _dispatchChangeEvent(servicesInputs[serviceName]);
+                dispatchChangeEvent(servicesInputs[serviceName]);
             }
         }else{
-            for(serviceName in servicesInputs){
+
+            for(let serviceName in servicesInputs){
                 if(service === serviceName)
                     servicesInputs[serviceName].checked = true;
                 else
                     servicesInputs[serviceName].checked = false;
 
-                _dispatchChangeEvent(servicesInputs[serviceName]);
+                dispatchChangeEvent(servicesInputs[serviceName]);
             }
         }
     }else if(typeof service === 'object' && Array.isArray(service)){
-        for(serviceName in servicesInputs){
-            if(_elContains(service, serviceName))
+
+        for(let serviceName in servicesInputs){
+            if(elContains(service, serviceName))
                 servicesInputs[serviceName].checked = true;
             else
                 servicesInputs[serviceName].checked = false;
-            _dispatchChangeEvent(servicesInputs[serviceName]);
+
+            dispatchChangeEvent(servicesInputs[serviceName]);
         }
     }
 
@@ -285,7 +288,7 @@ export const acceptService = (service, category) => {
  * @returns {boolean}
  */
 export const acceptedService = (service, category) => {
-    return _elContains(globalObj._state._enabledServices[category] || [], service);
+    return elContains(globalObj._state._enabledServices[category] || [], service);
 };
 
 
@@ -295,7 +298,7 @@ export const acceptedService = (service, category) => {
  * @returns {boolean}
  */
 export const validCookie = (cookieName) => {
-    return _getSingleCookie(cookieName, true) !== '';
+    return getSingleCookie(cookieName, true) !== '';
 };
 
 /**
@@ -313,10 +316,10 @@ export const eraseCookies = (cookies, path, domain) => {
      */
     const addCookieIfExists = (cookieName) => {
         if(typeof cookieName === 'string'){
-            let name = _getSingleCookie(cookieName);
+            let name = getSingleCookie(cookieName);
             name !== '' && allCookies.push(name);
         }else{
-            allCookies = allCookies.concat(_getAllCookies(cookieName));
+            allCookies = allCookies.concat(getAllCookies(cookieName));
         }
     };
 
@@ -328,7 +331,7 @@ export const eraseCookies = (cookies, path, domain) => {
         addCookieIfExists(cookies);
     }
 
-    _eraseCookies(allCookies, path, domain);
+    eraseCookiesHelper(allCookies, path, domain);
 };
 
 /**
@@ -338,16 +341,16 @@ export const eraseCookies = (cookies, path, domain) => {
 export const show = (createModal) => {
 
     if(createModal && !globalObj._state._consentModalExists)
-        _createConsentModal(miniAPI);
+        createConsentModal(miniAPI);
 
     if(globalObj._state._consentModalExists){
 
-        _addClass(globalObj._dom._htmlDom, TOGGLE_CONSENT_MODAL_CLASS);
+        addClass(globalObj._dom._htmlDom, TOGGLE_CONSENT_MODAL_CLASS);
 
         /**
          * Update attributes/internal statuses
          */
-        _setAttribute(globalObj._dom._consentModal, 'aria-hidden', 'false');
+        setAttribute(globalObj._dom._consentModal, 'aria-hidden', 'false');
         globalObj._state._consentModalVisible = true;
 
         setTimeout(() => {
@@ -357,7 +360,7 @@ export const show = (createModal) => {
 
         _log('CookieConsent [TOGGLE]: show consentModal');
 
-        _fireEvent(globalObj._customEvents._onModalShow, CONSENT_MODAL_NAME);
+        fireEvent(globalObj._customEvents._onModalShow, CONSENT_MODAL_NAME);
     }
 };
 
@@ -366,8 +369,8 @@ export const show = (createModal) => {
  */
 export const hide = () => {
     if(globalObj._state._consentModalExists && globalObj._state._consentModalVisible){
-        _removeClass(globalObj._dom._htmlDom, TOGGLE_CONSENT_MODAL_CLASS);
-        _setAttribute(globalObj._dom._consentModal, 'aria-hidden', 'true');
+        removeClass(globalObj._dom._htmlDom, TOGGLE_CONSENT_MODAL_CLASS);
+        setAttribute(globalObj._dom._consentModal, 'aria-hidden', 'true');
         globalObj._state._consentModalVisible = false;
 
         setTimeout(() => {
@@ -378,7 +381,7 @@ export const hide = () => {
 
         _log('CookieConsent [TOGGLE]: hide consentModal');
 
-        _fireEvent(globalObj._customEvents._onModalHide, CONSENT_MODAL_NAME);
+        fireEvent(globalObj._customEvents._onModalHide, CONSENT_MODAL_NAME);
     }
 };
 
@@ -392,10 +395,10 @@ export const showPreferences = () => {
         return;
 
     if(!state._preferencesModalExists)
-        _createPreferencesModal(miniAPI);
+        createPreferencesModal(miniAPI);
 
-    _addClass(globalObj._dom._htmlDom, TOGGLE_PREFERENCES_MODAL_CLASS);
-    _setAttribute(globalObj._dom._pm, 'aria-hidden', 'false');
+    addClass(globalObj._dom._htmlDom, TOGGLE_PREFERENCES_MODAL_CLASS);
+    setAttribute(globalObj._dom._pm, 'aria-hidden', 'false');
     state._preferencesModalVisible = true;
 
     setTimeout(()=>{
@@ -422,7 +425,7 @@ export const showPreferences = () => {
 
     _log('CookieConsent [TOGGLE]: show preferencesModal');
 
-    _fireEvent(globalObj._customEvents._onModalShow, PREFERENCES_MODAL_NAME);
+    fireEvent(globalObj._customEvents._onModalShow, PREFERENCES_MODAL_NAME);
 };
 
 /**
@@ -435,8 +438,8 @@ export const hidePreferences = () => {
     if(!state._preferencesModalVisible)
         return;
 
-    _removeClass(globalObj._dom._htmlDom, TOGGLE_PREFERENCES_MODAL_CLASS);
-    _setAttribute(globalObj._dom._pm, 'aria-hidden', 'true');
+    removeClass(globalObj._dom._htmlDom, TOGGLE_PREFERENCES_MODAL_CLASS);
+    setAttribute(globalObj._dom._pm, 'aria-hidden', 'true');
 
     state._preferencesModalVisible = false;
 
@@ -462,7 +465,7 @@ export const hidePreferences = () => {
 
     _log('CookieConsent [TOGGLE]: hide preferencesModal');
 
-    _fireEvent(globalObj._customEvents._onModalHide, PREFERENCES_MODAL_NAME);
+    fireEvent(globalObj._customEvents._onModalHide, PREFERENCES_MODAL_NAME);
 };
 
 var miniAPI = {
@@ -481,26 +484,26 @@ var miniAPI = {
  */
 export const setLanguage = async (newLanguageCode, forceUpdate) => {
 
-    if(!_validLanguageCode(newLanguageCode))
+    if(!validLanguageCode(newLanguageCode))
         return false;
 
     /**
      * Set language only if it differs from current
      */
-    if(newLanguageCode !== _getCurrentLanguageCode() || forceUpdate === true){
+    if(newLanguageCode !== getCurrentLanguageCode() || forceUpdate === true){
 
-        const loaded = await _loadTranslationData(newLanguageCode);
+        const loaded = await loadTranslationData(newLanguageCode);
 
         if(!loaded)
             return false;
 
-        _setCurrentLanguageCode(newLanguageCode);
+        setCurrentLanguageCode(newLanguageCode);
 
         if(globalObj._state._consentModalExists)
-            _createConsentModal(miniAPI);
+            createConsentModal(miniAPI);
 
         if(globalObj._state._preferencesModalExists)
-            _createPreferencesModal(miniAPI);
+            createPreferencesModal(miniAPI);
 
         return true;
     }
@@ -515,14 +518,14 @@ export const setLanguage = async (newLanguageCode, forceUpdate) => {
 export const getUserPreferences = () => {
     const validConsent = !globalObj._state._invalidConsent;
 
-    var currentCategoriesState = validConsent && _getCurrentCategoriesState();
+    var currentCategoriesState = validConsent && getCurrentCategoriesState();
 
     return {
         acceptType: globalObj._state._acceptType,
         acceptedCategories: validConsent ? currentCategoriesState.accepted : [],
         rejectedCategories: validConsent ? currentCategoriesState.rejected : [],
         acceptedServices: validConsent ? globalObj._state._enabledServices : {},
-        rejectedServices: validConsent ? _retrieveRejectedServices() : {}
+        rejectedServices: validConsent ? retrieveRejectedServices() : {}
     };
 };
 
@@ -540,13 +543,13 @@ export const loadScript = (src, attrs) => {
         if(script)
             return resolve(true);
 
-        script = _createNode('script');
+        script = createNode('script');
 
         /**
          * Add custom attributes (if provided)
          */
         Array.isArray(attrs) && attrs.forEach(attr => {
-            _setAttribute(script, attr.name, attr.value);
+            setAttribute(script, attr.name, attr.value);
         });
 
         script.onload = () => resolve(true);
@@ -563,7 +566,7 @@ export const loadScript = (src, attrs) => {
         /**
          * Append script to head
          */
-        _appendChild(document.head, script);
+        appendChild(document.head, script);
     });
 };
 
@@ -614,7 +617,7 @@ export const setCookieData = (props) => {
     if(set){
         state._cookieData = cookieData;
         state._savedCookieContent.data = cookieData;
-        _setCookie(globalObj._config.cookie.name, JSON.stringify(state._savedCookieContent), true);
+        setCookie(globalObj._config.cookie.name, JSON.stringify(state._savedCookieContent), true);
     }
 
     return set;
@@ -627,7 +630,7 @@ export const setCookieData = (props) => {
  * @returns {any}
  */
 export const getCookie = (field, cookieName) => {
-    const cookie = _parseCookie(_getSingleCookie(cookieName || globalObj._config.cookie.name, true));
+    const cookie = parseCookie(getSingleCookie(cookieName || globalObj._config.cookie.name, true));
     return field ? cookie[field] : cookie;
 };
 
@@ -667,7 +670,7 @@ export const run = async (userConfig) => {
     if(!win._ccRun){
         win._ccRun = true;
 
-        _setConfig(userConfig);
+        setConfig(userConfig);
 
         // Stop if bot is detected
         if(state._botAgentDetected)
@@ -676,7 +679,7 @@ export const run = async (userConfig) => {
         /**
          * @type {import('./global').CookieValue}
          */
-        const cookieValue = _parseCookie(_getSingleCookie(config.cookie.name, true));
+        const cookieValue = parseCookie(getSingleCookie(config.cookie.name, true));
         const categories = cookieValue.categories;
         const validCategories = Array.isArray(categories) && categories.length > 0;
 
@@ -713,38 +716,38 @@ export const run = async (userConfig) => {
          */
         if(!state._invalidConsent){
             state._acceptedCategories = cookieValue.categories,
-            state._acceptType = _getAcceptType(_getCurrentCategoriesState());
+            state._acceptType = getAcceptType(getCurrentCategoriesState());
             state._enabledServices = cookieValue.services || {};
         }else{
             if(config.mode === OPT_OUT_MODE){
-                _retrieveEnabledCategoriesAndServices();
+                retrieveEnabledCategoriesAndServices();
             }
         }
 
         /**
          * Load translation before generating modals
          */
-        const translationLoaded = await _loadTranslationData();
+        const translationLoaded = await loadTranslationData();
 
         if(!translationLoaded)
             return;
 
-        _createCookieConsentHTML(miniAPI);
+        createCookieConsentHTML(miniAPI);
 
         if(config.autoShow && state._invalidConsent)
             show(true);
 
         // Accessibility :=> if tab pressed => trap focus inside modal
-        _handleFocusTrap({hidePreferences});
+        handleFocusTrap({hidePreferences});
 
         // If consent is valid
         if(!state._invalidConsent){
-            _manageExistingScripts();
-            _fireEvent(globalObj._customEvents._onConsent);
+            manageExistingScripts();
+            fireEvent(globalObj._customEvents._onConsent);
         }else{
             if(config.mode === OPT_OUT_MODE){
                 _log('CookieConsent [CONFIG] mode=\'' + config.mode + '\', default enabled categories:', state._defaultEnabledCategories);
-                _manageExistingScripts(state._defaultEnabledCategories);
+                manageExistingScripts(state._defaultEnabledCategories);
             }
         }
     }
@@ -778,9 +781,9 @@ export const reset = (eraseCookie) => {
      * Remove any remaining classes
      */
     if(dom._htmlDom){
-        _removeClass(dom._htmlDom, TOGGLE_DISABLE_INTERACTION_CLASS);
-        _removeClass(dom._htmlDom, TOGGLE_PREFERENCES_MODAL_CLASS);
-        _removeClass(dom._htmlDom, TOGGLE_CONSENT_MODAL_CLASS);
+        removeClass(dom._htmlDom, TOGGLE_DISABLE_INTERACTION_CLASS);
+        removeClass(dom._htmlDom, TOGGLE_PREFERENCES_MODAL_CLASS);
+        removeClass(dom._htmlDom, TOGGLE_CONSENT_MODAL_CLASS);
     }
 
     const newGlobal = new Global();
