@@ -30,7 +30,7 @@ describe("Consent Modal buttons test", () =>{
 
     it('Modal accept necessary btn onClick', async () => {
         await api.run(testConfig);
-        fireClickEvent(globalObj._dom._consentAcceptNecessaryBtn);
+        fireClickEvent(globalObj._dom._cmAcceptNecessaryBtn);
         const userPreferences = api.getUserPreferences();
         expect(userPreferences.acceptType).toBe('necessary');
         expect(userPreferences.acceptedCategories.length).toBe(1);
@@ -38,7 +38,7 @@ describe("Consent Modal buttons test", () =>{
 
     it('Modal accept all btn onClick', async () => {
         await api.run(testConfig);
-        fireClickEvent(globalObj._dom._consentAcceptAllBtn);
+        fireClickEvent(globalObj._dom._cmAcceptAllBtn);
         const userPreferences = api.getUserPreferences();
         expect(userPreferences.acceptType).toBe('all');
         expect(userPreferences.rejectedCategories.length).toBe(0);

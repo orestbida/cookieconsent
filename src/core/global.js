@@ -71,33 +71,29 @@ export const fireEvent = (eventName, modalName, modal) => {
         cookie: globalObj._state._savedCookieContent
     };
 
-    /**
-     * If it's a show/hide modal callback
-     */
     if(modalName){
 
         const modalParams = {
-            modalName: modalName,
-            modal: modal
+            modalName: modalName
         };
 
-        if(eventName === events._onModalShow)
+        if(eventName === events._onModalShow){
             isFunction(callbacks._onModalShow) && callbacks._onModalShow(modalParams);
-        else if(eventName === events._onModalHide)
+        }else if(eventName === events._onModalHide){
             isFunction(callbacks._onModalHide) && callbacks._onModalHide(modalParams);
-        else
+        }else{
+            modalParams.modal = modal;
             isFunction(callbacks._onModalReady) && callbacks._onModalReady(modalParams);
+        }
 
         return dispatchEvent(eventName, modalParams);
     }
 
     if(eventName === events._onFirstConsent){
         isFunction(callbacks._onFirstConsent) && callbacks._onFirstConsent(shallowCopy(params));
-    }
-    else if(eventName === events._onConsent){
+    }else if(eventName === events._onConsent){
         isFunction(callbacks._onConsent) && callbacks._onConsent(shallowCopy(params));
-    }
-    else if(eventName === events._onChange){
+    }else {
         params.changedCategories = globalObj._state._lastChangedCategoryNames;
         params.changedServices = globalObj._state._lastChangedServices;
         isFunction(callbacks._onChange) && callbacks._onChange(shallowCopy(params));
@@ -326,18 +322,18 @@ export class Global {
             /** @type {number|HTMLElement} */ _cmContainer: 0,
             /** @type {number|HTMLElement} */ _pmContainer: 0,
 
-            /** @type {number|HTMLElement} */ _consentModal: 0,
-            /** @type {number|HTMLElement} */ _consentModalBody: 0,
-            /** @type {number|HTMLElement} */ _consentModalTexts: 0,
-            /** @type {number|HTMLElement} */ _consentModalTitle: 0,
-            /** @type {number|HTMLElement} */ _consentModalDescription: 0,
-            /** @type {number|HTMLElement} */ _consentModalBtns: 0,
-            /** @type {number|HTMLElement} */ _consentModalBtnGroup: 0,
-            /** @type {number|HTMLElement} */ _consentModalBtnGroup2: 0,
-            /** @type {number|HTMLElement} */ _consentAcceptAllBtn: 0,
-            /** @type {number|HTMLElement} */ _consentAcceptNecessaryBtn: 0,
-            /** @type {number|HTMLElement} */ _consentShowPreferencesBtn: 0,
-            /** @type {number|HTMLElement} */ _consentModalFooterLinksGroup: 0,
+            /** @type {number|HTMLElement} */ _cm: 0,
+            /** @type {number|HTMLElement} */ _cmBody: 0,
+            /** @type {number|HTMLElement} */ _cmTexts: 0,
+            /** @type {number|HTMLElement} */ _cmTitle: 0,
+            /** @type {number|HTMLElement} */ _cmDescription: 0,
+            /** @type {number|HTMLElement} */ _cmBtns: 0,
+            /** @type {number|HTMLElement} */ _cmBtnGroup: 0,
+            /** @type {number|HTMLElement} */ _cmBtnGroup2: 0,
+            /** @type {number|HTMLElement} */ _cmAcceptAllBtn: 0,
+            /** @type {number|HTMLElement} */ _cmAcceptNecessaryBtn: 0,
+            /** @type {number|HTMLElement} */ _cmShowPreferencesBtn: 0,
+            /** @type {number|HTMLElement} */ _cmFooterLinksGroup: 0,
             /** @type {number|HTMLElement} */ _cmCloseIconBtn: 0,
 
             /** @type {number|HTMLElement} */ _pm: 0,

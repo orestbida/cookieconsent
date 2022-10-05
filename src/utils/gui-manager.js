@@ -34,6 +34,7 @@ export const guiManager = (applyToModal) => {
      * @param {import("../core/global").GuiModalOption} userGuiOptions
      * @param {string} prefix
      * @param {string} defaultLayoutName
+     * @param {string} modalClassName
      */
     const setLayout = (modal, allowedLayoutsObj, userGuiOptions, prefix, defaultLayoutName, modalClassName) => {
 
@@ -83,13 +84,13 @@ export const guiManager = (applyToModal) => {
          */
         if(modalClassName === 'cm'){
 
-            const {_consentAcceptNecessaryBtn, _cmCloseIconBtn} = globalObj._dom;
+            const {_cmAcceptNecessaryBtn, _cmCloseIconBtn} = globalObj._dom;
 
-            _consentAcceptNecessaryBtn && removeClass(_consentAcceptNecessaryBtn, classPrefix + secondaryBtnClass);
+            _cmAcceptNecessaryBtn && removeClass(_cmAcceptNecessaryBtn, classPrefix + secondaryBtnClass);
             _cmCloseIconBtn && removeClass(_cmCloseIconBtn, classPrefix + secondaryBtnClass);
 
             if(notSameWeightButtons){
-                _consentAcceptNecessaryBtn && addClass(_consentAcceptNecessaryBtn, classPrefix + secondaryBtnClass);
+                _cmAcceptNecessaryBtn && addClass(_cmAcceptNecessaryBtn, classPrefix + secondaryBtnClass);
                 _cmCloseIconBtn && addClass(_cmCloseIconBtn, classPrefix + secondaryBtnClass);
             }
         }else{
@@ -131,7 +132,7 @@ export const guiManager = (applyToModal) => {
             }
         };
 
-        setLayout(globalObj._dom._consentModal, cmLayouts, consentModalOptions, 'cm--', 'box', 'cm');
+        setLayout(globalObj._dom._cm, cmLayouts, consentModalOptions, 'cm--', 'box', 'cm');
     }
 
     if(applyToModal === 1){

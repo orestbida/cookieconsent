@@ -43,7 +43,8 @@ export const manageExistingScripts = (mustEnableCategories) => {
         });
     });
 
-    if(!globalObj._config.manageScriptTags) return;
+    if(!globalObj._config.manageScriptTags)
+        return;
 
     var scripts = state._allScriptTags;
     var acceptedCategories = mustEnableCategories || state._savedCookieContent.categories || [];
@@ -54,7 +55,7 @@ export const manageExistingScripts = (mustEnableCategories) => {
      * @param {Element[]} scripts scripts to load
      * @param {number} index current script to load
      */
-    var loadScriptsHelper = (scripts, index) => {
+    const loadScriptsHelper = (scripts, index) => {
         if(index < scripts.length){
 
             var currScript = scripts[index];
@@ -88,13 +89,13 @@ export const manageExistingScripts = (mustEnableCategories) => {
                     currScript.removeAttribute(SCRIPT_TAG_SELECTOR);
 
                     // Get current script data-src (if there is one)
-                    var src = currScript.getAttribute('data-src');
+                    let src = currScript.getAttribute('data-src');
 
                     // Some scripts (like ga) might throw warning if data-src is present
                     src && currScript.removeAttribute('data-src');
 
                     // Create a "fresh" script (with the same code)
-                    var freshScript = createNode('script');
+                    const freshScript = createNode('script');
                     freshScript.textContent = currScript.innerHTML;
 
                     // Copy attributes over to the new "revived" script
@@ -108,7 +109,9 @@ export const manageExistingScripts = (mustEnableCategories) => {
                     })(freshScript, currScript);
 
                     // Set src (if data-src found)
-                    src ? (freshScript.src = src) : (src = currScript.src);
+                    src
+                        ? (freshScript.src = src)
+                        : (src = currScript.src);
 
                     // If script has valid "src" attribute
                     // try loading it sequentially
@@ -127,7 +130,8 @@ export const manageExistingScripts = (mustEnableCategories) => {
                      * If we managed to get here and src is still set, it means that
                      * the script is loading/loaded sequentially so don't go any further
                      */
-                    if(src) return;
+                    if(src)
+                        return;
                 }
             }
 

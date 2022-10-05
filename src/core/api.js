@@ -7,7 +7,6 @@ import {
     _log,
     handleFocusTrap,
     getCurrentCategoriesState,
-    getAcceptType,
     elContains,
     updateAcceptType,
     getKeys,
@@ -29,7 +28,12 @@ import {
     createCookieConsentHTML
 } from './modals/modals';
 
-import { getCurrentLanguageCode, loadTranslationData, setCurrentLanguageCode, validLanguageCode } from '../utils/language';
+import {
+    getCurrentLanguageCode,
+    loadTranslationData,
+    setCurrentLanguageCode,
+    validLanguageCode
+} from '../utils/language';
 
 import {
     setCookie,
@@ -65,13 +69,11 @@ const dispatchChangeEvent = (input) => {
  * @param {string[]|string} _categories - Categories to accept
  * @param {string[]} [_exclusions] - Excluded categories [optional]
  */
-export const acceptCategory = (_categories, _exclusions) => {
+export const acceptCategory = (categories, exclusions = []) => {
 
     const state = globalObj._state;
 
-    var categories = _categories || undefined;
-    var exclusions = _exclusions || [];
-    var customServicesSelection = false;
+    let customServicesSelection = false;
 
     /**
      * @type {string[]}
@@ -83,8 +85,8 @@ export const acceptCategory = (_categories, _exclusions) => {
      * @returns {string[]}
      */
     const getCurrentPreferences = () => {
-        var toggles = globalObj._dom._categoryCheckboxInputs;
-        var enabledCategories = [];
+        let toggles = globalObj._dom._categoryCheckboxInputs;
+        let enabledCategories = [];
 
         if(toggles){
             for(var toggleName in toggles){
@@ -120,6 +122,7 @@ export const acceptCategory = (_categories, _exclusions) => {
                     categoriesToAccept.push(categories[i]);
             }
         }else if(typeof categories === 'string'){
+
             if(categories === 'all')
                 categoriesToAccept = state._allCategoryNames.slice();
             else{
@@ -161,12 +164,10 @@ export const acceptCategory = (_categories, _exclusions) => {
 
     state._allCategoryNames.forEach(categoryName => {
 
-        /**
-         * BUG: this object is empty until the preferences modal is created
-         */
         const services = state._allDefinedServices[categoryName];
         const serviceNames = getKeys(services);
         const enabledServices = state._enabledServices;
+
         /**
          * Stop here if there are no services
          */
@@ -209,26 +210,9 @@ export const acceptCategory = (_categories, _exclusions) => {
                     });
                 }else{
                     if(elContains(state._acceptedCategories, categoryName)){
-                        const definedServices = getKeys(state._allDefinedServices[categoryName]);
-
+                        const definedServices = getKeys(services);
                         definedServices.forEach(service => enabledServices[categoryName].push(service));
-
-                        // state._customServicesSelection[categoryName].forEach(serviceName => {
-                        //     state._enabledServices[categoryName].push(serviceName);
-                        // });
-
-                        // if(state._preferencesModalExists){
-                        //     var categoryServices = globalObj._dom._serviceCheckboxInputs[categoryName];
-
-                        //     for(let serviceName in categoryServices){
-                        //         const serviceToggle = categoryServices[serviceName];
-
-                        //         if(serviceToggle.checked)
-                        //             state._enabledServices[categoryName].push(serviceToggle.value);
-                        //     }
-                        // }
                     }
-
                 }
             }
         }
@@ -245,10 +229,9 @@ export const acceptCategory = (_categories, _exclusions) => {
 /**
  * Returns true if cookie category is accepted
  * @param {string} category
- * @returns {boolean}
  */
 export const acceptedCategory = (category) => {
-    var categories;
+    let categories;
 
     if(!globalObj._state._invalidConsent || globalObj._config.mode === OPT_IN_MODE)
         categories = getCurrentCategoriesState().accepted || [];
@@ -265,18 +248,21 @@ export const acceptedCategory = (category) => {
  */
 export const acceptService = (service, category) => {
 
+    const state = globalObj._state;
+
     if(
         !service
         || !category
         || typeof category !== 'string'
-        || !elContains(globalObj._state._allCategoryNames, category)
+        || !elContains(state._allCategoryNames, category)
     ) {
         return false;
     }
-    const servicesInputs = globalObj._dom._serviceCheckboxInputs[category] || {};
-    const allServiceNames = getKeys(globalObj._state._allDefinedServices[category]);
 
-    globalObj._state._customServicesSelection[category] = [];
+    const servicesInputs = globalObj._dom._serviceCheckboxInputs[category] || {};
+    const allServiceNames = getKeys(state._allDefinedServices[category]);
+
+    state._customServicesSelection[category] = [];
 
     if(typeof service === 'string'){
         if(service === 'all'){
@@ -286,7 +272,7 @@ export const acceptService = (service, category) => {
                 dispatchChangeEvent(servicesInputs[serviceName]);
             }
 
-            allServiceNames.forEach(serviceName => globalObj._state._customServicesSelection[category].push(serviceName));
+            state._customServicesSelection[category] = [...allServiceNames];
         }else{
 
             for(let serviceName in servicesInputs){
@@ -299,7 +285,7 @@ export const acceptService = (service, category) => {
             }
 
             if(elContains(allServiceNames, service))
-                globalObj._state._customServicesSelection[category].push(service);
+                state._customServicesSelection[category].push(service);
 
         }
     }else if(typeof service === 'object' && Array.isArray(service)){
@@ -315,7 +301,7 @@ export const acceptService = (service, category) => {
 
         allServiceNames.forEach(serviceName => {
             if(elContains(service, serviceName))
-                globalObj._state._customServicesSelection[category].push(serviceName);
+                state._customServicesSelection[category].push(serviceName);
         });
 
     }
@@ -393,7 +379,7 @@ export const show = (createModal) => {
         /**
          * Update attributes/internal statuses
          */
-        setAttribute(globalObj._dom._consentModal, 'aria-hidden', 'false');
+        setAttribute(globalObj._dom._cm, 'aria-hidden', 'false');
         globalObj._state._consentModalVisible = true;
 
         setTimeout(() => {
@@ -413,7 +399,7 @@ export const show = (createModal) => {
 export const hide = () => {
     if(globalObj._state._consentModalExists && globalObj._state._consentModalVisible){
         removeClass(globalObj._dom._htmlDom, TOGGLE_CONSENT_MODAL_CLASS);
-        setAttribute(globalObj._dom._consentModal, 'aria-hidden', 'true');
+        setAttribute(globalObj._dom._cm, 'aria-hidden', 'true');
         globalObj._state._consentModalVisible = false;
 
         setTimeout(() => {
@@ -660,7 +646,7 @@ export const setCookieData = (props) => {
     if(set){
         state._cookieData = cookieData;
         state._savedCookieContent.data = cookieData;
-        setCookie(globalObj._config.cookie.name, JSON.stringify(state._savedCookieContent), true);
+        setCookie(true);
     }
 
     return set;
@@ -758,13 +744,12 @@ export const run = async (userConfig) => {
          * and calculate acceptType
          */
         if(!state._invalidConsent){
-            state._acceptedCategories = cookieValue.categories,
-            state._acceptType = getAcceptType(getCurrentCategoriesState());
+            state._acceptedCategories = cookieValue.categories;
             state._enabledServices = cookieValue.services || {};
+            updateAcceptType();
         }else{
-            if(config.mode === OPT_OUT_MODE){
+            if(config.mode === OPT_OUT_MODE)
                 retrieveEnabledCategoriesAndServices();
-            }
         }
 
         /**

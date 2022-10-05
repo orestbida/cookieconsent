@@ -276,14 +276,15 @@ export const arrayDiff = (arr1, arr2) => {
  * @param {{accepted: string[], rejected: string[]}} currentCategoriesState
  * @returns {string} accept type
  */
-export const getAcceptType = (currentCategoriesState) => {
+export const getAcceptType = () => {
 
-    var type = 'custom';
+    let type = 'custom';
+    let acceptedCategories = getCurrentCategoriesState().accepted;
 
-    // calculate accept type based on accepted/rejected categories
-    if(currentCategoriesState.accepted.length === globalObj._state._allCategoryNames.length)
+    // Determine accept type based on number of accepted categories
+    if(acceptedCategories.length === globalObj._state._allCategoryNames.length)
         type = 'all';
-    else if(currentCategoriesState.accepted.length === globalObj._state._readOnlyCategories.length)
+    else if(acceptedCategories.length === globalObj._state._readOnlyCategories.length)
         type = 'necessary';
 
     return type;
@@ -294,7 +295,7 @@ export const getAcceptType = (currentCategoriesState) => {
  * Note: getUserPreferences() depends on "acceptType"
  */
 export const updateAcceptType = () => {
-    globalObj._state._acceptType = getAcceptType(getCurrentCategoriesState());
+    globalObj._state._acceptType = getAcceptType();
 };
 
 /**
@@ -473,7 +474,7 @@ export const handleFocusTrap = (api) => {
                 state._clickedInsideModal = true;
             }
         }else if(state._consentModalVisible){
-            if(dom._consentModal.contains(e.target)){
+            if(dom._cm.contains(e.target)){
                 state._clickedInsideModal = true;
             }
         }
@@ -514,7 +515,7 @@ export const getModalFocusableData = () => {
     };
 
     if(state._consentModalExists)
-        saveAllFocusableElements(globalObj._dom._consentModal, state._cmFocusableElements);
+        saveAllFocusableElements(globalObj._dom._cm, state._cmFocusableElements);
 
     if(state._preferencesModalExists)
         saveAllFocusableElements(globalObj._dom._pm, state._pmFocusableElements);

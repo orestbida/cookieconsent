@@ -19,6 +19,10 @@ export const getCurrentLanguageCode = () => {
     return state._currentLanguageCode || state._userConfig.language.default;
 };
 
+/**
+ * Set language code
+ * @param {string} newLanguageCode
+ */
 export const setCurrentLanguageCode = (newLanguageCode) => {
     newLanguageCode && (globalObj._state._currentLanguageCode = newLanguageCode);
 };

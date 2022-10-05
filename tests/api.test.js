@@ -1,9 +1,8 @@
 import * as CookieConsent from "../src/index"
 import testConfig from "./config/full-config";
 import { getKeys } from "../src/utils/general";
-import { setCookie } from "../src/utils/cookies";
 import { globalObj } from "../src/core/global";
-import { defineCryptoRandom, htmlHasClass } from "./config/mocks-utils";
+import { defineCryptoRandom, htmlHasClass, setCookie } from "./config/mocks-utils";
 
 /**
  * @type {import("../src/core/global").Api}
@@ -189,7 +188,7 @@ describe("API tests", () =>{
         await api.run(testConfig)
         api.show();
         expect(htmlHasClass(consentModalClassToggle)).toBe(true);
-        expect(globalObj._dom._consentModal.getAttribute('aria-hidden')).toBe('false');
+        expect(globalObj._dom._cm.getAttribute('aria-hidden')).toBe('false');
     })
 
     it('Should hide the consent modal', async () => {
@@ -198,7 +197,7 @@ describe("API tests", () =>{
         await api.run(testConfig)
         api.hide();
         expect(htmlHasClass(consentModalClassToggle)).toBe(false);
-        expect(globalObj._dom._consentModal.getAttribute('aria-hidden')).toBe('true');
+        expect(globalObj._dom._cm.getAttribute('aria-hidden')).toBe('true');
     })
 
     it('Should create the consent modal if it does not exist', async () => {

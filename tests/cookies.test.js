@@ -1,13 +1,12 @@
 import * as CookieConsent from "../src/index"
 import testConfig from "./config/full-config";
-import { defineCryptoRandom } from "./config/mocks-utils";
+import { defineCryptoRandom, setCookie } from "./config/mocks-utils";
 
 import {
     eraseCookiesHelper,
     getAllCookies,
     getSingleCookie,
-    parseCookie,
-    setCookie
+    parseCookie
 }from '../src/utils/cookies';
 
 /**

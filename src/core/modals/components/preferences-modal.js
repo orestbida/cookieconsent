@@ -416,11 +416,12 @@ export const createPreferencesModal = (api) => {
 
     if(!state._preferencesModalExists){
         state._preferencesModalExists = true;
-        fireEvent(globalObj._customEvents._onModalReady, PREFERENCES_MODAL_NAME, dom._pmContainer);
-        getModalFocusableData();
-        appendChild(dom._ccMain, dom._pmContainer);
 
         _log('CookieConsent [HTML] created', PREFERENCES_MODAL_NAME);
+
+        fireEvent(globalObj._customEvents._onModalReady, PREFERENCES_MODAL_NAME, dom._pm);
+        getModalFocusableData();
+        appendChild(dom._ccMain, dom._pmContainer);
 
         /**
          * Enable transition
@@ -523,7 +524,7 @@ function createToggleLabel(label, value, sCurrentCategoryObject, isService, cate
 
     toggle.value = value;
 
-    toggleLabelSpan.textContent = label;
+    toggleLabelSpan.textContent = label.replace(/<.*>.*<\/.*>/gm, '');
 
     appendChild(toggleIcon, toggleOffIcon);
     appendChild(toggleIcon, toggleOnIcon);
