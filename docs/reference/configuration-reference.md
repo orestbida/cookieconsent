@@ -10,13 +10,12 @@ All the examples in this section are partial code snippets. They do not represen
 
 Root (parent) element where the modal will be appended as a last child.
 
-- **Type**: `HTMLElement`
+- **Type**: `string | HTMLElement`
 - **Default**: `document.body`
 - **Example**: <br>
     ```javascript
     cc.run({
-        // set a different root element
-        root: document.getElementById('app')
+        root: '#app'  // css selector
     })
     ```
 

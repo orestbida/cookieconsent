@@ -34,24 +34,25 @@ guiOptions: {
 The plugin ships with both a `light` (default) and a `dark` theme.
 
 ### Enable dark color scheme
-The dark theme can be enabled by adding the `cc--darkmode` class to the `body` or  `html` element. You could also use javascript to toggle the dark mode on/off:
+The dark theme can be enabled by adding the `cc--darkmode` class to the `html` element. You could also use javascript to toggle the dark mode on/off:
 ```javascript
-document.body.classList.toggle('cc--darkmode');
+document.documentElement.classList.add('cc--darkmode');
 ```
 
 ### Custom color scheme
-If you're feeling adventurous, you can develop your own theme by modifying/overriding the available css variables:
+You can develop your own theme by modifying/overriding the available css variables:
 
 ```css
 :root{
+    /* Default light color scheme */
     --cc-bg: #ffffff;
     --cc-primary-color: #2c2f31;
     --cc-secondary-color: #5e6266;
 
-    --cc-btn-primary-bg: #0066dd;
+    --cc-btn-primary-bg: #30363c;
     --cc-btn-primary-color: #ffffff;
     --cc-btn-primary-border-color: var(--cc-btn-primary-bg);
-    --cc-btn-primary-hover-bg: #0853a8;
+    --cc-btn-primary-hover-bg: #000000;
     --cc-btn-primary-hover-color: #ffffff;
     --cc-btn-primary-hover-border-color: var(--cc-btn-primary-hover-bg);
 
@@ -93,11 +94,16 @@ If you're feeling adventurous, you can develop your own theme by modifying/overr
     --cc-footer-color: var(--cc-secondary-color);
     --cc-footer-border-color: #e4eaed;
 
+    --cc-link-color: var(--cc-btn-primary-bg);
+
     /*A few more */
     --cc-font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
-    --cc-btn-border-radius: 4px;
-    --cc-pm-toggle-border-radius: 4em;
     --cc-modal-margin: 1em;
+    --cc-modal-border-radius: .6em;
+    --cc-modal-transition-duration: .25s;
+    --cc-btn-gap: 5px;
+    --cc-btn-border-radius: .5em;
+    --cc-pm-toggle-border-radius: 4em;
 }
 ```
 
