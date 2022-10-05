@@ -60,8 +60,9 @@ const dispatchEvent = (eventName, data) => {
  * Fire custom event
  * @param {string} eventName
  * @param {string} [modalName]
+ * @param {HTMLElement} [modal]
  */
-export const fireEvent = (eventName, modalName) => {
+export const fireEvent = (eventName, modalName, modal) => {
 
     const callbacks = globalObj._callbacks;
     const events = globalObj._customEvents;
@@ -76,7 +77,8 @@ export const fireEvent = (eventName, modalName) => {
     if(modalName){
 
         const modalParams = {
-            modalName: modalName
+            modalName: modalName,
+            modal: modal
         };
 
         if(eventName === events._onModalShow)
@@ -101,7 +103,7 @@ export const fireEvent = (eventName, modalName) => {
         isFunction(callbacks._onChange) && callbacks._onChange(shallowCopy(params));
     }
 
-    dispatchEvent(eventName, params);
+    dispatchEvent(eventName, shallowCopy(params));
 };
 
 export class Global {

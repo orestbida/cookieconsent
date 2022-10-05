@@ -231,11 +231,11 @@ export const createConsentModal = (api) => {
 
     if(!state._consentModalExists){
         state._consentModalExists = true;
-        appendChild(dom._ccMain, dom._cmContainer);
+        fireEvent(globalObj._customEvents._onModalReady, CONSENT_MODAL_NAME, dom._cmContainer);
         getModalFocusableData();
+        appendChild(dom._ccMain, dom._cmContainer);
 
         _log('CookieConsent [HTML] created', CONSENT_MODAL_NAME);
-        fireEvent(globalObj._customEvents._onModalReady, CONSENT_MODAL_NAME, dom._cmContainer);
 
         /**
          * Enable transition
