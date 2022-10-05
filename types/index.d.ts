@@ -328,7 +328,7 @@ declare namespace CookieConsent {
          *
          * @default document.body
          */
-        root?: Element | null
+        root?: string | Element | null
 
         /**
          * Check out the [docs](https://cookieconsent.orestbida.com/reference/configuration-reference.html#mode) for details.
