@@ -1199,6 +1199,8 @@ Note:
 -   <details><summary>How to use in React</summary>
     <p>
 
+    You can find a [live demo](https://stackblitz.com/edit/nextjs-euxk9k) ( next.js) on stackblitz.
+
     1. Create a new component: `CookieConsent.js`
 
         ```javascript
