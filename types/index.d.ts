@@ -439,7 +439,8 @@ declare namespace CookieConsent {
          * Callback fired when one of the modals is appended to the dom.
          */
         onModalReady?: (param: {
-            modalName: string
+            modalName: string,
+            modal: HTMLElement
         }) => void
 
         /**
