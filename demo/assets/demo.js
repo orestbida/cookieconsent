@@ -24,3 +24,26 @@ resetCookiesBtn.addEventListener('click', function(){
     CookieConsent.eraseCookies([/^(cc_)/, CookieConsent.getConfig('cookie').name]);
     window.location.reload();
 });
+
+/**
+ * @param {HTMLElement} modal
+ */
+const updateFields = (modal) => {
+    const {consentId, consentTimestamp, lastConsentTimestamp} = CookieConsent.getCookie();
+
+    const id = modal.querySelector('#consent-id');
+    const timestamp = modal.querySelector('#consent-timestamp');
+    const lastTimestamp = modal.querySelector('#last-consent-timestamp');
+
+    id && (id.innerText = consentId);
+    timestamp && (timestamp.innerText = new Date(consentTimestamp).toLocaleString());
+    lastTimestamp && (lastTimestamp.innerText = new Date(lastConsentTimestamp).toLocaleString());
+}
+
+window.addEventListener('cc:onModalReady', ({detail}) => {
+    if(detail.modalName === 'preferencesModal'){
+        CookieConsent.validConsent() && updateFields(detail.modal);
+        window.addEventListener('cc:onChange', () => updateFields(detail.modal));
+        window.addEventListener('cc:onConsent', () => updateFields(detail.modal));
+    }
+})

@@ -54,22 +54,5 @@
     <script type="text/plain" data-category="analytics" data-service="!Inline Service #1">
         console.log('disabled analytics/service #1');
     </script>
-
-    <script>
-        const updateFields = () => {
-            const {consentId, consentTimestamp, lastConsentTimestamp} = CookieConsent.getCookie();
-            document.getElementById('consent-id').innerText = consentId;
-            document.getElementById('consent-timestamp').innerText = new Date(consentTimestamp).toLocaleString();
-            document.getElementById('last-consent-timestamp').innerText = new Date(lastConsentTimestamp).toLocaleString();
-        }
-
-        window.addEventListener('cc:onModalReady', ({detail}) => {
-            if(detail.modalName === 'preferencesModal'){
-                CookieConsent.validConsent() && updateFields();
-                window.addEventListener('cc:onChange', updateFields);
-                window.addEventListener('cc:onConsent', updateFields);
-            }
-        })
-    </script>
 </body>
 </html>
