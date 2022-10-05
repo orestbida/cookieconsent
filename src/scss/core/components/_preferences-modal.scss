@@ -677,6 +677,8 @@ $toggle-knob-icon-width: 2px;
         margin: 0;
         opacity: 1;
 
+        --cc-modal-transition-duration: .35s;
+
         /* Start: Table -> vertical table */
         .pm__section-table,
         .pm__table-body,
