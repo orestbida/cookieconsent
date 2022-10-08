@@ -1,0 +1,61 @@
+{
+    "consentModal": {
+        "title": "Hola viajero, es la hora de las galletas!",
+        "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip.",
+        "acceptAllBtn": "Aceptar todo",
+        "acceptNecessaryBtn": "Rechazar todo",
+        "showPreferencesBtn": "Gestionar preferencias",
+        "footer": "<a href=\"#link\">Política de privacidad</a><a href=\"#link\">Términos y condiciones</a>"
+    },
+    "preferencesModal": {
+        "title": "Preferencias de Consentimiento",
+        "acceptAllBtn": "Aceptar todo",
+        "acceptNecessaryBtn": "Rechazar todo",
+        "savePreferencesBtn": "Guardar preferencias",
+        "closeIconLabel": "Cerrar modal",
+        "serviceCounterLabel":"Servicios",
+        "sections": [
+            {
+                "title": "Uso de Cookies",
+                "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+            },
+            {
+                "title": "Cookies Estrictamente Necesarias <span class=\"pm__badge\">siempre habilitado</span>",
+                "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+                "linkedCategory": "necessary"
+            },
+            {
+                "title": "Cookies Analíticas",
+                "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+                "linkedCategory": "analytics",
+                "cookieTable": {
+                    "headers": {
+                        "name": "Nombre",
+                        "description": "Descripción",
+                        "Service": "Proveedor"
+                    },
+                    "body": [
+                        {
+                            "name": "_ga_*, _gid",
+                            "description": "Used to track you ...",
+                            "Service": "Google Analytics"
+                        }
+                    ]
+                }
+            },
+            {
+                "title": "Cookies Publicitarias",
+                "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+                "linkedCategory": "ads"
+            },
+            {
+                "title": "Sus datos de consentimiento",
+                "description": "<p>consent id: <span id=\"consent-id\">-</span></p><p>consent date: <span id=\"consent-timestamp\">-</span></p><p>last update: <span id=\"last-consent-timestamp\">-</span></p>"
+            },
+            {
+                "title": "Más información",
+                "description": "For any query in relation to my policy on cookies and your choices, please <a class=\"cc__link\" href=\"#yourdomain.com\">contact me</a>."
+            }
+        ]
+    }
+}

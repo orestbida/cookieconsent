@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>CookieConsent Playground</title>
+        <meta name="description" content="Demo playground for CookieConsent v3">
+        <style>
+            @import url('./src/main.css');
+        </style>
+    </head>
+    <body>
+        <div id="app">
+            <h1>Playground (WIP)</h1>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+            <br>
+
+
+            <div class="options">
+                <fieldset class="disablePageInteraction">
+                    <legend>Disable Page Interaction</legend>
+
+                    <input type="checkbox" id="disablePageInteraction" name="disablePageInteraction">
+                    <label for="disablePageInteraction">disablePageInteraction</label>
+                </fieldset>
+            </div>
+
+
+            <div class="language-section">
+                <fieldset class="language-codes">
+                    <legend>Configured Languages</legend>
+
+                    <input data-language="en" type="radio" id="language-en" name="language-code" value="en" checked>
+                    <label for="language-en">English</label><br>
+                    <input data-language="it" type="radio" id="language-it" name="language-code" value="it">
+                    <label for="language-it">Italian</label><br>
+                    <input data-language="de" type="radio" id="language-de" name="language-code" value="de">
+                    <label for="language-de">German</label><br>
+                    <input data-language="es" type="radio" id="language-es" name="language-code" value="es">
+                    <label for="language-es">Spanish</label><br>
+                    <input data-language="fr" type="radio" id="language-fr" name="language-code" value="fr">
+                    <label for="language-fr">French</label><br>
+
+                </fieldset>
+
+                <fieldset class="auto-language">
+                    <legend>Auto Language</legend>
+
+                    <input type="checkbox" id="auto-language" name="autoLanguage">
+                    <label for="auto-language">Detect browser language</label>
+
+                    <div class="auto-language__details">
+                        <p>Detected language: <span id="detected-language">-</span></p>
+                        <p>Translation found: <span id="translation-found">-</span></p>
+                    </div>
+                </fieldset>
+            </div>
+
+            <fieldset class="darkmode">
+                <legend>Toggle Dark Mode</legend>
+
+                <input type="checkbox" id="darkmode" name="darkmode">
+                <label for="darkmode">Darkmode</label>
+            </fieldset>
+
+            <br>
+            <button type="button" data-cc="show-preferencesModal">Open Preferences Modal</button>
+            <button type="button" id="revokeConsentBtn">Revoke consent</button>
+            <button type="button" id="resetBtn">Reset demo</button>
+        </div>
+
+        <script type="module" src="src/main.js"></script>
+    </body>
+</html>

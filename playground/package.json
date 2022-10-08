@@ -1,0 +1,18 @@
+{
+  "name": "cookieconsent-playground",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "sass": "^1.55.0",
+    "vanilla-cookieconsent": "github:orestbida/cookieconsent#v3.0-beta",
+    "vite": "^3.1.0",
+    "vite-plugin-minify": "^1.5.2",
+    "vite-plugin-remove-console": "^1.1.0"
+  }
+}
