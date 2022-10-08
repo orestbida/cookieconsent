@@ -12,8 +12,23 @@ jobs:
       - run:
           name: Check changed files or skip
           command: git show -m HEAD --name-only --pretty="" | egrep -q "^(src|tests|\.circleci).*\.(js|ts|yml)$|^(package\.json|rollup\.config\.js)$" || circleci-agent step halt
-      - node/install-packages:
-          pkg-manager: npm
+      - restore_cache:
+          name: Restore pnpm Package Cache
+          keys:
+            - pnpm-packages-{{ checksum "pnpm-lock.yaml" }}
+      - run:
+          name: Install pnpm package manager
+          command: |
+            curl -L https://pnpm.js.org/pnpm.js | node - add --global pnpm@7
+      - run:
+          name: Install Dependencies
+          command: |
+            pnpm install
+      - save_cache:
+          name: Save pnpm Package Cache
+          key: pnpm-packages-{{ checksum "pnpm-lock.yaml" }}
+          paths:
+            - node_modules
       - run:
           name: Run tests
           command: npm test

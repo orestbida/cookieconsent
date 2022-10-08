@@ -10,6 +10,7 @@
     ],
     "types": "types/index.d.ts",
     "scripts": {
+        "preinstall": "npx only-allow pnpm",
         "dev": "rollup --config --watch",
         "build": "rollup --config",
         "docs:dev": "vitepress dev docs",
