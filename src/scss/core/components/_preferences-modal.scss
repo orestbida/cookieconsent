@@ -519,45 +519,17 @@ $toggle-knob-icon-width: 2px;
     }
 
     .pm__service-icon {
-        display: block;
-        margin-left: 10px;
-        margin-right: 30px;
-        margin-top: 2px;
+        width: 8px;
+        height: 8px;
+        border: 2px solid var(--cc-toggle-on-bg);
+        border-radius: 100%;
+        margin-left: 9px;
+        margin-right: 20px;
+        margin-top: 1px;
     }
 
-    .pm__code-icon {
-        display: block;
-        position: relative;
-        box-sizing: border-box;
-        transform: rotate(15deg) scale(.8);
-        width: 2px;
-        height: 16px;
-        background: currentColor;
-
-        &::after,
-        &::before{
-            content: "";
-            display: block;
-            box-sizing: border-box;
-            position: absolute;
-            width: 8px;
-            height: 8px;
-            transform: rotate(-60deg)
-        }
-
-        &::before{
-            border-left: 2px solid;
-            border-top: 2px solid;
-            left: -8px;
-            top: 5px
-        }
-
-        &::after{
-            border-right: 2px solid;
-            border-bottom: 2px solid;
-            right: -8px;
-            top: 3px
-        }
+    .pm__service-title{
+        font-size: .95em;
     }
 
     .pm__section-desc{
