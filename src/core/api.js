@@ -25,7 +25,8 @@ import {
 import {
     createConsentModal,
     createPreferencesModal,
-    createCookieConsentHTML
+    createCookieConsentHTML,
+    createMainContainer
 } from './modals/modals';
 
 import {
@@ -370,7 +371,7 @@ export const eraseCookies = (cookies, path, domain) => {
 export const show = (createModal) => {
 
     if(createModal && !globalObj._state._consentModalExists)
-        createConsentModal(miniAPI);
+        createConsentModal(miniAPI, createMainContainer);
 
     if(globalObj._state._consentModalExists){
 
@@ -424,7 +425,7 @@ export const showPreferences = () => {
         return;
 
     if(!state._preferencesModalExists)
-        createPreferencesModal(miniAPI);
+        createPreferencesModal(miniAPI, createMainContainer);
 
     addClass(globalObj._dom._htmlDom, TOGGLE_PREFERENCES_MODAL_CLASS);
     setAttribute(globalObj._dom._pm, 'aria-hidden', 'false');
@@ -529,10 +530,10 @@ export const setLanguage = async (newLanguageCode, forceUpdate) => {
         setCurrentLanguageCode(newLanguageCode);
 
         if(globalObj._state._consentModalExists)
-            createConsentModal(miniAPI);
+            createConsentModal(miniAPI, createMainContainer);
 
         if(globalObj._state._preferencesModalExists)
-            createPreferencesModal(miniAPI);
+            createPreferencesModal(miniAPI, createMainContainer);
 
         return true;
     }
@@ -765,8 +766,8 @@ export const run = async (userConfig) => {
         if(config.autoShow && state._invalidConsent)
             show(true);
 
-        // Accessibility :=> if tab pressed => trap focus inside modal
-        handleFocusTrap({hidePreferences});
+        // if tab is pressed => trap focus inside modal
+        handleFocusTrap();
 
         // If consent is valid
         if(!state._invalidConsent){

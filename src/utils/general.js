@@ -311,7 +311,7 @@ export const updateAcceptType = () => {
  * @param {import(''../core/global').Api} api
  * @param {createModal} [createPreferencesModal]
  */
-export const addDataButtonListeners = (elem, api, createPreferencesModal) => {
+export const addDataButtonListeners = (elem, api, createPreferencesModal, createMainContainer) => {
 
     const _a = 'accept-';
 
@@ -335,7 +335,7 @@ export const addDataButtonListeners = (elem, api, createPreferencesModal) => {
                 event.preventDefault();
 
                 if(!globalObj._state._preferencesModalExists)
-                    createPreferencesModal(api);
+                    createPreferencesModal(api, createMainContainer);
             }, true);
         }
     }
@@ -408,9 +408,8 @@ export const getCurrentCategoriesState = () => {
 /**
  * Trap focus inside modal and focus the first
  * focusable element of current active modal
- * @param {import(''../core/global').Api} api
  */
-export const handleFocusTrap = (api) => {
+export const handleFocusTrap = () => {
 
     const dom = globalObj._dom;
 
@@ -458,6 +457,15 @@ export const handleFocusTrap = (api) => {
 
         !tabbedInsideModal && (tabbedOutsideDiv = true);
     }, true);
+};
+
+/**
+ * Close preferences modal if click is outside
+ * @param {import('../core/global').Api} api
+ */
+export const closeModalOnOutsideClick = (api) => {
+
+    const dom = globalObj._dom;
 
     addEvent(dom._ccMain, 'click', (e) => {
         const state = globalObj._state;
@@ -480,7 +488,6 @@ export const handleFocusTrap = (api) => {
         }
 
     });
-
 };
 
 /**

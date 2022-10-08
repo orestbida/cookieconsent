@@ -23,10 +23,15 @@ import {
 } from '../../../utils/constants';
 
 /**
+ * @callback CreateMainContainer
+ */
+
+/**
  * Generates preferences modal and appends it to "cc-main" el.
  * @param {import("../../global").Api} api
+ * @param {CreateMainContainer} createMainContainer
  */
-export const createPreferencesModal = (api) => {
+export const createPreferencesModal = (api, createMainContainer) => {
 
     const state = globalObj._state;
     const dom = globalObj._dom;
@@ -157,12 +162,10 @@ export const createPreferencesModal = (api) => {
                     var serviceDiv = createNode(DIV_TAG);
                     var serviceHeader = createNode(DIV_TAG);
                     var serviceIconContainer = createNode(DIV_TAG);
-                    var serviceIcon = createNode('span');
                     var serviceTitle = createNode(DIV_TAG);
 
                     addClassPm(serviceDiv, 'service');
                     addClassPm(serviceTitle, 'service-title');
-                    addClassPm(serviceIcon, 'code-icon');
                     addClassPm(serviceHeader, 'service-header');
                     addClassPm(serviceIconContainer, 'service-icon');
 
@@ -170,7 +173,6 @@ export const createPreferencesModal = (api) => {
 
                     serviceTitle.innerHTML = serviceName;
 
-                    appendChild(serviceIconContainer, serviceIcon);
                     appendChild(serviceHeader, serviceIconContainer);
                     appendChild(serviceHeader, serviceTitle);
                     appendChild(serviceDiv, serviceHeader);
@@ -421,6 +423,7 @@ export const createPreferencesModal = (api) => {
 
         fireEvent(globalObj._customEvents._onModalReady, PREFERENCES_MODAL_NAME, dom._pm);
         getModalFocusableData();
+        createMainContainer(api);
         appendChild(dom._ccMain, dom._pmContainer);
 
         /**

@@ -23,10 +23,15 @@ import { guiManager } from '../../../utils/gui-manager';
 import { createPreferencesModal } from './preferences-modal';
 
 /**
+ * @callback CreateMainContainer
+ */
+
+/**
  * Create consent modal and append it to "cc-main" el.
  * @param {import("../../global").Api} api
+ * @param {CreateMainContainer} createMainContainer
  */
-export const createConsentModal = (api) => {
+export const createConsentModal = (api, createMainContainer) => {
 
     const state = globalObj._state;
     const dom = globalObj._dom;
@@ -184,7 +189,7 @@ export const createConsentModal = (api) => {
             addClassCm(dom._cmShowPreferencesBtn, 'btn--secondary');
 
             addEvent(dom._cmShowPreferencesBtn, 'mouseover', () => {
-                createPreferencesModal(api);
+                createPreferencesModal(api, createMainContainer);
             });
             addEvent(dom._cmShowPreferencesBtn, 'click', api.showPreferences);
         }
@@ -237,6 +242,8 @@ export const createConsentModal = (api) => {
 
         fireEvent(globalObj._customEvents._onModalReady, CONSENT_MODAL_NAME, dom._cm);
         getModalFocusableData();
+
+        createMainContainer(api);
         appendChild(dom._ccMain, dom._cmContainer);
 
         /**
@@ -245,5 +252,5 @@ export const createConsentModal = (api) => {
         setTimeout(() => addClass(dom._cmContainer, 'c--anim'), 100);
     }
 
-    addDataButtonListeners(dom._cmBody, api, createPreferencesModal);
+    addDataButtonListeners(dom._cmBody, api, createPreferencesModal, createMainContainer);
 };
