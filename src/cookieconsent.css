@@ -2,12 +2,14 @@
 :root{
     --cc-bg: #fff;
     --cc-text: #2d4156;
+    --cc-border-radius: .35em;
     --cc-btn-primary-bg: #2d4156;
     --cc-btn-primary-text: var(--cc-bg);
     --cc-btn-primary-hover-bg: #1d2e38;
     --cc-btn-secondary-bg: #eaeff2;
     --cc-btn-secondary-text: var(--cc-text);
     --cc-btn-secondary-hover-bg: #d8e0e6;
+    --cc-btn-border-radius: 4px;
     --cc-toggle-bg-off: #919ea6;
     --cc-toggle-bg-on: var(--cc-btn-primary-bg);
     --cc-toggle-bg-readonly: #d5dee2;
@@ -101,7 +103,7 @@
 .cc_div .c-bl,
 .cc_div .b-tl,
 #s-bl .act .b-acc{
-    border-radius: .35em;
+    border-radius: var(--cc-border-radius);
 }
 
 #s-bl .act .b-acc{
@@ -264,7 +266,7 @@
     -o-user-select: none;
     user-select: none;
     text-align: center;
-    border-radius: 4px;
+    border-radius: var(--cc-btn-border-radius);
     flex: 1;
 }
 
