@@ -125,11 +125,11 @@ export const saveCookiePreferences = () => {
     state._allCategoryNames.forEach(categoryName => {
 
         state._lastChangedServices[categoryName] = arrayDiff(
-            state._enabledServices[categoryName],
+            state._enabledServices[categoryName] || [],
             state._lastEnabledServices[categoryName] || []
         );
 
-        if(state._lastChangedServices[categoryName].length > 0)
+        if(!(categoryName in state._enabledServices) || state._lastChangedServices[categoryName].length > 0)
             servicesWereChanged = true;
     });
 
