@@ -540,11 +540,11 @@ function createToggleLabel(label, value, sCurrentCategoryObject, isService, cate
         if(isService){
             var enabledServices = state._enabledServices[categoryName];
 
-            if(enabledServices && elContains(enabledServices, value)){
+            if(sCurrentCategoryObject.readOnly || elContains(enabledServices, value)){
                 toggle.checked = true;
             }
 
-        }else if(elContains(state._savedCookieContent.categories, value)){
+        }else if(elContains(state._acceptedCategories, value)){
             toggle.checked = true;
         }
     }else if(sCurrentCategoryObject.enabled || sCurrentCategoryObject.readOnly){

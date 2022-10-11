@@ -10,7 +10,8 @@ import {
     elContains,
     updateAcceptType,
     getKeys,
-    retrieveRejectedServices
+    retrieveRejectedServices,
+    isArray
 } from '../utils/general';
 
 import { manageExistingScripts, retrieveEnabledCategoriesAndServices } from '../utils/scripts';
@@ -289,7 +290,7 @@ export const acceptService = (service, category) => {
                 state._customServicesSelection[category].push(service);
 
         }
-    }else if(typeof service === 'object' && Array.isArray(service)){
+    }else if(isArray(service)){
 
         for(let serviceName in servicesInputs){
             if(elContains(service, serviceName))
@@ -353,7 +354,7 @@ export const eraseCookies = (cookies, path, domain) => {
         }
     };
 
-    if(Array.isArray(cookies)){
+    if(isArray(cookies)){
         for(var i=0; i<cookies.length; i++){
             addCookieIfExists(cookies[i]);
         }
@@ -578,7 +579,7 @@ export const loadScript = (src, attrs) => {
         /**
          * Add custom attributes (if provided)
          */
-        Array.isArray(attrs) && attrs.forEach(attr => {
+        isArray(attrs) && attrs.forEach(attr => {
             setAttribute(script, attr.name, attr.value);
         });
 
@@ -711,7 +712,7 @@ export const run = async (userConfig) => {
          */
         const cookieValue = parseCookie(getSingleCookie(config.cookie.name, true));
         const categories = cookieValue.categories;
-        const validCategories = Array.isArray(categories) && categories.length > 0;
+        const validCategories = isArray(categories);
 
         state._savedCookieContent = cookieValue;
         state._consentId = cookieValue.consentId;
@@ -745,8 +746,8 @@ export const run = async (userConfig) => {
          * and calculate acceptType
          */
         if(!state._invalidConsent){
-            state._acceptedCategories = cookieValue.categories;
-            state._enabledServices = cookieValue.services || {};
+            state._acceptedCategories = [...state._readOnlyCategories, ...cookieValue.categories];
+            state._enabledServices = {...state._enabledServices, ...cookieValue.services};
             updateAcceptType();
         }else{
             if(config.mode === OPT_OUT_MODE)

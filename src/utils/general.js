@@ -19,12 +19,20 @@ export const indexOf = (el, value) => {
     return el.indexOf(value);
 };
 
+/*
+* Returns true if el is an array
+* @param {any} el
+*/
+export const isArray = (el) => {
+    return Array.isArray(el);
+};
+
 /**
  * Returns true if el is an object
  * @param {any} el
  */
 export const isObject = (el) => {
-    return !!el && typeof el === 'object' && !Array.isArray(el);
+    return !!el && typeof el === 'object' && !isArray(el);
 };
 
 /**

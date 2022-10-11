@@ -101,14 +101,17 @@ function fetchCategoriesAndServices(allCategoryNames) {
         const services = currCategory.services || {};
         const serviceNames = services && isObject(services) && getKeys(services) || [];
 
+        state._allDefinedServices[categoryName] = {};
+        state._enabledServices[categoryName] = [];
+
         /**
          * Keep track of readOnly categories
          */
-        if(currCategory.readOnly)
+        if(currCategory.readOnly){
             state._readOnlyCategories.push(categoryName);
+            state._enabledServices[categoryName] = getKeys(services);
+        }
 
-        state._allDefinedServices[categoryName] = {};
-        state._enabledServices[categoryName] = [];
         globalObj._dom._serviceCheckboxInputs[categoryName] = {};
 
         serviceNames.forEach(serviceName => {

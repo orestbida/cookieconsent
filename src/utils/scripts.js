@@ -22,6 +22,9 @@ export const manageExistingScripts = (mustEnableCategories) => {
         lastChangedServices.forEach(serviceName => {
             const service = state._allDefinedServices[categoryName][serviceName];
 
+            if(!service)
+                return;
+
             if(
                 !service.enabled
                 && elContains(state._enabledServices[categoryName], serviceName)
