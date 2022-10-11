@@ -746,7 +746,7 @@ export const run = async (userConfig) => {
          * and calculate acceptType
          */
         if(!state._invalidConsent){
-            state._acceptedCategories = [...state._readOnlyCategories, ...cookieValue.categories];
+            state._acceptedCategories = Array.from(new Set(state._readOnlyCategories.concat(cookieValue.categories)));
             state._enabledServices = {...state._enabledServices, ...cookieValue.services};
             updateAcceptType();
         }else{
