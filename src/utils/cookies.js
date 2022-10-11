@@ -1,7 +1,17 @@
-import { fireEvent, globalObj, shallowCopy } from '../core/global';
+import { fireEvent, globalObj, deepCopy } from '../core/global';
 import { OPT_OUT_MODE, OPT_IN_MODE } from './constants';
-import { _log, indexOf, uuidv4, updateAcceptType, getRemainingExpirationTimeMS, getExpiresAfterDaysValue, elContains, arrayDiff } from './general';
 import { manageExistingScripts } from './scripts';
+
+import {
+    _log,
+    indexOf,
+    uuidv4,
+    updateAcceptType,
+    getRemainingExpirationTimeMS,
+    getExpiresAfterDaysValue,
+    elContains,
+    arrayDiff
+} from './general';
 
 /**
  * Delete all cookies which are unused (based on selected preferences)
@@ -168,12 +178,12 @@ export const saveCookiePreferences = () => {
         state._consentId = uuidv4();
 
     state._savedCookieContent = {
-        categories: shallowCopy(state._acceptedCategories),
+        categories: deepCopy(state._acceptedCategories),
         revision: globalObj._config.revision,
         data: state._cookieData,
         consentTimestamp: state._consentTimestamp.toISOString(),
         consentId: state._consentId,
-        services: shallowCopy(state._enabledServices)
+        services: deepCopy(state._enabledServices)
     };
 
     var firstUserConsent = false;

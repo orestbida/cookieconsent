@@ -397,6 +397,14 @@ export const addDataButtonListeners = (elem, api, createPreferencesModal, create
 };
 
 /**
+ * Return array without duplicates
+ * @param {any[]} arr
+ */
+export const unique = (arr) => {
+    return Array.from(new Set(arr));
+};
+
+/**
  * Obtain accepted and rejected categories
  * @returns {{accepted: string[], rejected: string[]}}
  */

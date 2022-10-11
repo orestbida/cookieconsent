@@ -11,7 +11,8 @@ import {
     updateAcceptType,
     getKeys,
     retrieveRejectedServices,
-    isArray
+    isArray,
+    unique
 } from '../utils/general';
 
 import { manageExistingScripts, retrieveEnabledCategoriesAndServices } from '../utils/scripts';
@@ -20,7 +21,7 @@ import {
     fireEvent,
     globalObj,
     Global,
-    shallowCopy
+    deepCopy
 } from './global';
 
 import {
@@ -162,7 +163,7 @@ export const acceptCategory = (categories, exclusions = []) => {
     /**
      * Save previously enabled services to calculate later on which of them was changed
      */
-    state._lastEnabledServices = shallowCopy(state._enabledServices);
+    state._lastEnabledServices = deepCopy(state._enabledServices);
 
     state._allCategoryNames.forEach(categoryName => {
 
@@ -222,7 +223,7 @@ export const acceptCategory = (categories, exclusions = []) => {
         /**
          * Make sure there are no duplicates inside array
          */
-        enabledServices[categoryName] = [... new Set(enabledServices[categoryName])];
+        enabledServices[categoryName] = unique(enabledServices[categoryName]);
     });
 
     saveCookiePreferences();
@@ -746,8 +747,17 @@ export const run = async (userConfig) => {
          * and calculate acceptType
          */
         if(!state._invalidConsent){
-            state._acceptedCategories = Array.from(new Set(state._readOnlyCategories.concat(cookieValue.categories)));
-            state._enabledServices = {...state._enabledServices, ...cookieValue.services};
+
+            state._acceptedCategories = unique([
+                ...state._readOnlyCategories,
+                ...cookieValue.categories
+            ]);
+
+            state._enabledServices = {
+                ...state._enabledServices,
+                ...cookieValue.services
+            };
+
             updateAcceptType();
         }else{
             if(config.mode === OPT_OUT_MODE)

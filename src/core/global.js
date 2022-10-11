@@ -45,11 +45,26 @@ export const isFunction = (fn) => {
 };
 
 /**
- * Returns a copy/clone of the object
- * @param {any} obj
+ * Clone object using recursion
+ * @param {any} el
  */
-export const shallowCopy = (data) => {
-    return JSON.parse(JSON.stringify(data));
+export const deepCopy = (el) => {
+
+    if (typeof el !== 'object' )
+        return el;
+
+    if (el instanceof Date)
+        return new Date(el.getTime());
+
+    let clone = Array.isArray(el) ? [] : {};
+
+    for (let key in el) {
+        let value = el[key];
+
+        clone[key] = deepCopy(value);
+    }
+
+    return clone;
 };
 
 const dispatchEvent = (eventName, data) => {
@@ -90,16 +105,16 @@ export const fireEvent = (eventName, modalName, modal) => {
     }
 
     if(eventName === events._onFirstConsent){
-        isFunction(callbacks._onFirstConsent) && callbacks._onFirstConsent(shallowCopy(params));
+        isFunction(callbacks._onFirstConsent) && callbacks._onFirstConsent(deepCopy(params));
     }else if(eventName === events._onConsent){
-        isFunction(callbacks._onConsent) && callbacks._onConsent(shallowCopy(params));
+        isFunction(callbacks._onConsent) && callbacks._onConsent(deepCopy(params));
     }else {
         params.changedCategories = globalObj._state._lastChangedCategoryNames;
         params.changedServices = globalObj._state._lastChangedServices;
-        isFunction(callbacks._onChange) && callbacks._onChange(shallowCopy(params));
+        isFunction(callbacks._onChange) && callbacks._onChange(deepCopy(params));
     }
 
-    dispatchEvent(eventName, shallowCopy(params));
+    dispatchEvent(eventName, deepCopy(params));
 };
 
 export class Global {
