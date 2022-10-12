@@ -123,6 +123,8 @@ export const createPreferencesModal = (api, createMainContainer) => {
         closeIconLabelData && setAttribute(dom._pmCloseBtn, 'aria-label', closeIconLabelData);
     }
 
+    let sectionToggleContainer;
+
     sectionsData && sectionsData.forEach(section => {
 
         var sTitleData = section.title,
@@ -187,7 +189,10 @@ export const createPreferencesModal = (api, createMainContainer) => {
         if(sTitleData){
 
             var sTitleContainer = createNode(DIV_TAG);
-            var sTitle = hasToggle ? createNode(BUTTON_TAG) : createNode(DIV_TAG);
+
+            var sTitle = hasToggle
+                ? createNode(BUTTON_TAG)
+                : createNode(DIV_TAG);
 
             addClassPm(sTitleContainer, 'section-title-wrapper');
             addClassPm(sTitle, 'section-title');
@@ -346,17 +351,23 @@ export const createPreferencesModal = (api, createMainContainer) => {
             }
         }
 
-
-        if(sIsExpandableToggle || sDescriptionData){
+        if(sIsExpandableToggle || sDescriptionData)
             appendChild(s, sDescContainer);
+
+        const currentBody = dom._pmNewBody || dom._pmBody;
+
+        if(hasToggle){
+            if(!sectionToggleContainer){
+                sectionToggleContainer = createNode(DIV_TAG);
+                addClassPm(sectionToggleContainer, 'section-toggles');
+            }
+            sectionToggleContainer.appendChild(s);
+        }else{
+            sectionToggleContainer = null;
         }
 
-        appendChild(dom._pmBody, s);
+        appendChild(currentBody, sectionToggleContainer || s);
 
-        if(dom._pmNewBody)
-            appendChild(dom._pmNewBody, s);
-        else
-            appendChild(dom._pmBody, s);
     });
 
     if(acceptAllBtnData || acceptNecessaryBtnData){

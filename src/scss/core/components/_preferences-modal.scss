@@ -139,6 +139,16 @@ $toggle-knob-icon-width: 2px;
             }
         }
 
+        &-toggles{
+
+            /* If after this section, there is a normal
+             * "non-expandable" section => add more margin
+             */
+            & + .pm__section{
+                margin-top: 2em;
+            }
+        }
+
         &--toggle{
             background: var(--cc-cookie-category-block-bg);
             border-top: none;
@@ -194,13 +204,6 @@ $toggle-knob-icon-width: 2px;
                 .pm__section-desc-wrapper{
                     display: flex;
                 }
-            }
-
-            /* If after this section, there is a normal
-             * "non-expandable" section => add more margin
-             */
-            & + .pm__section{
-                margin-top: 2em;
             }
         }
 
