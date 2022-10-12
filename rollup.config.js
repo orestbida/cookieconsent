@@ -50,7 +50,7 @@ export default defineConfig(
                     mangle: {
                         properties: {
                             regex: /^_/,
-                            reserved: ['__esModule'],
+                            reserved: ['__esModule', '_ccRun'],
                             keep_quoted: true
                         }
                     },
