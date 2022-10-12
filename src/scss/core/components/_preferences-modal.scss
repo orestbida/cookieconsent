@@ -756,7 +756,7 @@ $toggle-knob-icon-width: 2px;
         visibility: hidden;
     }
 
-    .c--anim{
+    .cc--anim{
         .pm,
         &.pm-wrapper::before{
             transition: opacity var(--cc-modal-transition-duration) ease,
@@ -784,7 +784,7 @@ $toggle-knob-icon-width: 2px;
 
 .show--preferences{
     #cc-main {
-        .c--anim{
+        .cc--anim{
             .pm{
                 opacity: 1;
                 visibility: visible!important;
@@ -887,7 +887,7 @@ $toggle-knob-icon-width: 2px;
         }
     }
 
-    .show--preferences #cc-main .c--anim .pm{
+    .show--preferences #cc-main .cc--anim .pm{
         transform: translateY(0)!important;
     }
 }

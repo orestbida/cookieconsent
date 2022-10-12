@@ -4,6 +4,7 @@
     div,
     span,
     a,
+    p,
     button,
     input,
     :before,
@@ -25,6 +26,7 @@
         cursor: pointer;
         overflow: hidden;
         -webkit-appearance: none;
+        appearance: none;
     }
 
     table,

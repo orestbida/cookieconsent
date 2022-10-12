@@ -259,10 +259,7 @@ $sections-padding: 1em 1.3em;
         display: flex;
         flex-direction: row;
         width: 100%;
-
-        &>*:not(:first-child){
-            margin-left: 1.3em;
-        }
+        gap: 1.3em
     }
 
     /* START: Box layout */
@@ -477,7 +474,7 @@ $sections-padding: 1em 1.3em;
     }
     /* END: Bar layout */
 
-    .c--anim{
+    .cc--anim{
         .cm,
         &.cm-wrapper::before{
             transition: opacity var(--cc-modal-transition-duration) ease,
@@ -531,7 +528,7 @@ $sections-padding: 1em 1.3em;
 
 .show--consent{
     #cc-main {
-        .c--anim{
+        .cc--anim{
             .cm{
                 opacity: 1;
                 visibility: visible!important;
