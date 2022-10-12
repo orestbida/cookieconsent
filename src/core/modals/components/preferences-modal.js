@@ -365,6 +365,7 @@ export const createPreferencesModal = (api, createMainContainer) => {
             if(!dom._pmAcceptNecessaryBtn){
                 dom._pmAcceptNecessaryBtn = createNode(BUTTON_TAG);
                 addClassPm(dom._pmAcceptNecessaryBtn, 'btn');
+                setAttribute(dom._pmAcceptNecessaryBtn, 'data-role', 'necessary');
                 appendChild(_pmBtnGroup1, dom._pmAcceptNecessaryBtn);
                 addEvent(dom._pmAcceptNecessaryBtn, 'click', () => {
                     acceptHelper([]);
@@ -378,6 +379,7 @@ export const createPreferencesModal = (api, createMainContainer) => {
             if(!dom._pmAcceptAllBtn){
                 dom._pmAcceptAllBtn = createNode(BUTTON_TAG);
                 addClassPm(dom._pmAcceptAllBtn, 'btn');
+                setAttribute(dom._pmAcceptAllBtn, 'data-role', 'all');
                 appendChild(_pmBtnGroup1, dom._pmAcceptAllBtn);
                 addEvent(dom._pmAcceptAllBtn, 'click', () => {
                     acceptHelper('all');
@@ -393,6 +395,7 @@ export const createPreferencesModal = (api, createMainContainer) => {
             dom._pmSavePreferencesBtn = createNode(BUTTON_TAG);
             addClassPm(dom._pmSavePreferencesBtn, 'btn');
             addClassPm(dom._pmSavePreferencesBtn, 'btn--secondary');
+            setAttribute(dom._pmSavePreferencesBtn, 'data-role', 'save');
             appendChild(_pmBtnGroup2, dom._pmSavePreferencesBtn);
 
             addEvent(dom._pmSavePreferencesBtn, 'click', () => {
@@ -429,7 +432,7 @@ export const createPreferencesModal = (api, createMainContainer) => {
         /**
          * Enable transition
          */
-        setTimeout(() => addClass(dom._pmContainer, 'c--anim'), 100);
+        setTimeout(() => addClass(dom._pmContainer, 'cc--anim'), 100);
     }
 };
 

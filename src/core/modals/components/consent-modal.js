@@ -155,6 +155,7 @@ export const createConsentModal = (api, createMainContainer) => {
         if(!dom._cmAcceptAllBtn){
             dom._cmAcceptAllBtn = createNode(BUTTON_TAG);
             addClassCm(dom._cmAcceptAllBtn, 'btn');
+            setAttribute(dom._cmAcceptAllBtn, 'data-role', 'all');
 
             addEvent(dom._cmAcceptAllBtn, 'click', () => {
                 _log('CookieConsent [ACCEPT]: all');
@@ -171,6 +172,7 @@ export const createConsentModal = (api, createMainContainer) => {
         if(!dom._cmAcceptNecessaryBtn){
             dom._cmAcceptNecessaryBtn = createNode(BUTTON_TAG);
             addClassCm(dom._cmAcceptNecessaryBtn, 'btn');
+            setAttribute(dom._cmAcceptNecessaryBtn, 'data-role', 'necessary');
 
             addEvent(dom._cmAcceptNecessaryBtn, 'click', () => {
                 _log('CookieConsent [ACCEPT]: necessary');
@@ -187,6 +189,7 @@ export const createConsentModal = (api, createMainContainer) => {
             dom._cmShowPreferencesBtn = createNode(BUTTON_TAG);
             addClassCm(dom._cmShowPreferencesBtn, 'btn');
             addClassCm(dom._cmShowPreferencesBtn, 'btn--secondary');
+            setAttribute(dom._cmShowPreferencesBtn, 'data-role', 'show');
 
             addEvent(dom._cmShowPreferencesBtn, 'mouseover', () => {
                 createPreferencesModal(api, createMainContainer);
@@ -249,7 +252,7 @@ export const createConsentModal = (api, createMainContainer) => {
         /**
          * Enable transition
          */
-        setTimeout(() => addClass(dom._cmContainer, 'c--anim'), 100);
+        setTimeout(() => addClass(dom._cmContainer, 'cc--anim'), 100);
     }
 
     addDataButtonListeners(dom._cmBody, api, createPreferencesModal, createMainContainer);
