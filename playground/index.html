@@ -15,18 +15,7 @@
             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
             <br>
 
-
-            <div class="options">
-                <fieldset class="disablePageInteraction">
-                    <legend>Disable Page Interaction</legend>
-
-                    <input type="checkbox" id="disablePageInteraction" name="disablePageInteraction">
-                    <label for="disablePageInteraction">disablePageInteraction</label>
-                </fieldset>
-            </div>
-
-
-            <div class="language-section">
+            <div class="flex">
                 <fieldset class="language-codes">
                     <legend>Configured Languages</legend>
 
@@ -56,12 +45,33 @@
                 </fieldset>
             </div>
 
-            <fieldset class="darkmode">
-                <legend>Toggle Dark Mode</legend>
+            <div class="flex">
+                <fieldset class="darkmode">
+                    <legend>Toggle Dark Mode</legend>
 
-                <input type="checkbox" id="darkmode" name="darkmode">
-                <label for="darkmode">Darkmode</label>
-            </fieldset>
+                    <input type="checkbox" id="darkmode" name="darkmode">
+                    <label for="darkmode">Darkmode</label>
+                </fieldset>
+
+                <fieldset class="disablePageInteraction">
+                    <legend>Disable Page Interaction</legend>
+
+                    <input type="checkbox" id="disablePageInteraction" name="disablePageInteraction">
+                    <label for="disablePageInteraction">disablePageInteraction</label>
+                </fieldset>
+            </div>
+
+            <div class="flex">
+                <div class="consent-status" id="consent-status">Valid Consent</div>
+                <div class="category-states">
+                    <div class="category-states__title">Category Status</div>
+                    <div class="categories">
+                        <div class="category" id="necessary-category">Necessary</div>
+                        <div class="category" id="analytics-category">Analytics</div>
+                        <div class="category" id="ads-category">Advertisement</div>
+                    </div>
+                </div>
+            </div>
 
             <br>
             <button type="button" data-cc="show-preferencesModal">Open Preferences Modal</button>

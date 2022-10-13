@@ -15,7 +15,6 @@ import fr from '../translations/fr.json';
  * @type {import("vanilla-cookieconsent").CookieConsentConfig}
  */
 const defaultConfig = {
-    disablePageInteraction: true,
 
     cookie: {
         name: 'demoPlayground',

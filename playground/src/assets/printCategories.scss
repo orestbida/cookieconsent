@@ -1,0 +1,14 @@
+.categories{
+    gap: 2px;
+    display: flex;
+    flex-direction: column;
+}
+
+.category {
+    background: rgba(255, 119, 119, 0.204);
+    padding: 5px 16px;
+
+    &--enabled{
+        background-color: rgba(74, 212, 74, 0.163);
+    }
+}

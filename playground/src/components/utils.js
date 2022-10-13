@@ -23,7 +23,9 @@ export const deepCopy = (el) => {
 
 
 export const customEvents = {
-    _RESET: 'cc:reset'
+    _RESET: 'cc:reset',
+    _ON_CONSENT: 'cc:onConsent',
+    _ON_CHANGE: 'cc:onChange'
 };
 
 export const fireEvent = (eventType) => {

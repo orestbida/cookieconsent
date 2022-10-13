@@ -1,0 +1,10 @@
+.consent-status {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(255, 119, 119, 0.204);
+
+    &--valid{
+        background-color: rgba(74, 212, 74, 0.163);
+    }
+}

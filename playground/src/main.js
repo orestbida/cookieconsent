@@ -9,5 +9,7 @@ import './components/languages';
 import './components/darkmode';
 import './components/buttons';
 import './components/consentDetails';
+import './components/printCategories';
+import './components/printValidConsent';
 
 CookieConsent.run(getState().cookieConsentConfig);
