@@ -11,7 +11,7 @@
   "devDependencies": {
     "sass": "^1.55.0",
     "vanilla-cookieconsent": "github:orestbida/cookieconsent#v3.0-beta",
-    "vite": "^3.1.6",
+    "vite": "^3.1.8",
     "vite-plugin-minify": "^1.5.2",
     "vite-plugin-remove-console": "^1.1.0"
   }

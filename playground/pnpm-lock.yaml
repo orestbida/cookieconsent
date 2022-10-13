@@ -3,15 +3,15 @@ lockfileVersion: 5.4
 specifiers:
   sass: ^1.55.0
   vanilla-cookieconsent: github:orestbida/cookieconsent#v3.0-beta
-  vite: ^3.1.6
+  vite: ^3.1.8
   vite-plugin-minify: ^1.5.2
   vite-plugin-remove-console: ^1.1.0
 
 devDependencies:
   sass: 1.55.0
-  vanilla-cookieconsent: github.com/orestbida/cookieconsent/769da787732226652c7fbb76ac5ad0e467bc228a
-  vite: 3.1.6_sass@1.55.0
-  vite-plugin-minify: 1.5.2_vite@3.1.6
+  vanilla-cookieconsent: github.com/orestbida/cookieconsent/b07413677ab6edc0b63922adc083fe520b0beedc
+  vite: 3.1.8_sass@1.55.0
+  vite-plugin-minify: 1.5.2_vite@3.1.8
   vite-plugin-remove-console: 1.1.0
 
 packages:
@@ -585,21 +585,21 @@ packages:
     resolution: {integrity: sha512-d6xOpEDfsi2CZVlPQzGeux8XMwLT9hssAsaPYExaQMuYskwb+x1x7J371tWlbBdWHroy99KnVB6qIkUbs5X3UQ==}
     dev: true
 
-  /vite-plugin-minify/1.5.2_vite@3.1.6:
+  /vite-plugin-minify/1.5.2_vite@3.1.8:
     resolution: {integrity: sha512-clf3THHlet1jD35y8+mbw/xgACbdUQ1Eyc9zZFiqaxVOZLSC3UbrkOYOG+Nf4cleRjWgb8czbXrnQiWZICVh3Q==}
     peerDependencies:
       vite: '*'
     dependencies:
       html-minifier-terser: 6.1.0
-      vite: 3.1.6_sass@1.55.0
+      vite: 3.1.8_sass@1.55.0
     dev: true
 
   /vite-plugin-remove-console/1.1.0:
     resolution: {integrity: sha512-FZ0gLEsRqgHPCl+blHpT3h004+InKrGddmBXTfs7Cj/xWY7FdHpL9Zc9kgjxh8zIzjZ/MblsPDDEqg5BVHIXDA==}
     dev: true
 
-  /vite/3.1.6_sass@1.55.0:
-    resolution: {integrity: sha512-qMXIwnehvvcK5XfJiXQUiTxoYAEMKhM+jqCY6ZSTKFBKu1hJnAKEzP3AOcnTerI0cMZYAaJ4wpW1wiXLMDt4mA==}
+  /vite/3.1.8_sass@1.55.0:
+    resolution: {integrity: sha512-m7jJe3nufUbuOfotkntGFupinL/fmuTNuQmiVE7cH2IZMuf4UbfbGYMUT3jVWgGYuRVLY9j8NnrRqgw5rr5QTg==}
     engines: {node: ^14.18.0 || >=16.0.0}
     hasBin: true
     peerDependencies:
@@ -626,8 +626,8 @@ packages:
       fsevents: 2.3.2
     dev: true
 
-  github.com/orestbida/cookieconsent/769da787732226652c7fbb76ac5ad0e467bc228a:
-    resolution: {tarball: https://codeload.github.com/orestbida/cookieconsent/tar.gz/769da787732226652c7fbb76ac5ad0e467bc228a}
+  github.com/orestbida/cookieconsent/b07413677ab6edc0b63922adc083fe520b0beedc:
+    resolution: {tarball: https://codeload.github.com/orestbida/cookieconsent/tar.gz/b07413677ab6edc0b63922adc083fe520b0beedc}
     name: vanilla-cookieconsent
     version: 3.0.0-rc.6
     requiresBuild: true
