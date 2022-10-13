@@ -6,7 +6,7 @@
  * @param {string} e
  * @param {callbackFn} fn
  */
-const addListener = (e, fn) => window.addEventListener(e, fn)
+const addListener = (e, fn) => window.addEventListener(e, fn);
 
 /**
  * @param {HTMLElement} modal
@@ -16,7 +16,7 @@ const updateFields = (modal) => {
     if(!window.CookieConsent.validConsent() || !modal)
         return;
 
-    const {consentId, consentTimestamp, lastConsentTimestamp} = CookieConsent.getCookie();
+    const {consentId, consentTimestamp, lastConsentTimestamp} = window.CookieConsent.getCookie();
 
     const id = modal.querySelector('#consent-id');
     const timestamp = modal.querySelector('#consent-timestamp');
@@ -25,14 +25,14 @@ const updateFields = (modal) => {
     id && (id.textContent = consentId);
     timestamp && (timestamp.textContent = new Date(consentTimestamp).toLocaleString());
     lastTimestamp && (lastTimestamp.textContent = new Date(lastConsentTimestamp).toLocaleString());
-}
+};
 
 addListener('cc:onChange', () => {
-    updateFields(getPreferencesModal())
+    updateFields(getPreferencesModal());
 });
 
 addListener('cc:onConsent', () => {
-    updateFields(getPreferencesModal())
+    updateFields(getPreferencesModal());
 });
 
 addListener('cc:onModalShow', ({detail}) => {
@@ -41,5 +41,5 @@ addListener('cc:onModalShow', ({detail}) => {
 });
 
 function getPreferencesModal() {
-    return document.querySelector('#cc-main .pm')
+    return document.querySelector('#cc-main .pm');
 }

@@ -1,8 +1,8 @@
-import en from '../translations/en.json'
-import de from '../translations/de.json'
-import it from '../translations/it.json'
-import es from '../translations/es.json'
-import fr from '../translations/fr.json'
+import en from '../translations/en.json';
+import de from '../translations/de.json';
+import it from '../translations/it.json';
+import es from '../translations/es.json';
+import fr from '../translations/fr.json';
 
 /**
  * WARNING: this object is
@@ -61,14 +61,14 @@ const defaultConfig = {
             fr: fr
         }
     }
-}
+};
 
 window.addEventListener('cc:onConsent', ({detail}) => {
-    console.log('onConsent', detail)
-})
+    console.log('onConsent', detail);
+});
 
 window.addEventListener('cc:onChange', ({detail}) => {
-    console.log('onChange', detail)
-})
+    console.log('onChange', detail);
+});
 
-export default defaultConfig
+export default defaultConfig;

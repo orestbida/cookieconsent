@@ -24,12 +24,12 @@ export const deepCopy = (el) => {
 
 export const customEvents = {
     _RESET: 'cc:reset'
-}
+};
 
 export const fireEvent = (eventType) => {
-    window.dispatchEvent(new CustomEvent(eventType))
-}
+    window.dispatchEvent(new CustomEvent(eventType));
+};
 
 export const onEvent = (eventType, fn) => {
     window.addEventListener(eventType, fn);
-}
+};

@@ -1,22 +1,22 @@
-import { saveState, getState, defaultState } from "./stateManager"
-import { customEvents, onEvent } from "./utils"
+import { saveState, getState, defaultState } from './stateManager';
+import { customEvents, onEvent } from './utils';
 
 /**
  * @type {HTMLInputElement}
  */
-const checkbox = document.getElementById('darkmode')
+const checkbox = document.getElementById('darkmode');
 
-toggleDarkmode(getState().darkmode)
+toggleDarkmode(getState().darkmode);
 
 checkbox.addEventListener('click', () => {
-    toggleDarkmode(checkbox.checked)
+    toggleDarkmode(checkbox.checked);
 
-    const state = getState()
-    state.darkmode = checkbox.checked
-    saveState(state)
+    const state = getState();
+    state.darkmode = checkbox.checked;
+    saveState(state);
 
-    window.CookieConsent.show(true)
-})
+    window.CookieConsent.show(true);
+});
 
 /**
  * Toggle darkmode on/off
@@ -24,14 +24,14 @@ checkbox.addEventListener('click', () => {
  */
 function toggleDarkmode(enable) {
     if(enable){
-        checkbox.checked = true
-        document.documentElement.classList.add('cc--darkmode')
+        checkbox.checked = true;
+        document.documentElement.classList.add('cc--darkmode');
     }else {
-        checkbox.checked = false
-        document.documentElement.classList.remove('cc--darkmode')
+        checkbox.checked = false;
+        document.documentElement.classList.remove('cc--darkmode');
     }
 }
 
 onEvent(customEvents._RESET, () => {
-    toggleDarkmode(defaultState.darkmode)
-})
+    toggleDarkmode(defaultState.darkmode);
+});

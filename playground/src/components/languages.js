@@ -1,6 +1,6 @@
-import defaultConfig from "./defaultConfig";
-import { getState, saveState } from "./stateManager"
-import { customEvents, onEvent } from "./utils";
+import defaultConfig from './defaultConfig';
+import { getState, saveState } from './stateManager';
+import { customEvents, onEvent } from './utils';
 
 /**
  * @param {string} selector
@@ -11,74 +11,74 @@ const browserLanguage = getBrowserLanguage();
 /**
  * @type {NodeListOf<HTMLInputElement>}
  */
-const inputs = document.querySelectorAll(`input[data-language]`)
+const inputs = document.querySelectorAll('input[data-language]');
 
-/** @type {HTMLInputElement} **/ const autoDetectCheckbox = getById('auto-language')
-/** @type {HTMLInputElement} **/ const detectedLanguageSpan = getById('detected-language')
-/** @type {HTMLInputElement} **/ const translationFoundSpan = getById('translation-found')
+/** @type {HTMLInputElement} **/ const autoDetectCheckbox = getById('auto-language');
+/** @type {HTMLInputElement} **/ const detectedLanguageSpan = getById('detected-language');
+/** @type {HTMLInputElement} **/ const translationFoundSpan = getById('translation-found');
 
 const state = getState();
-const allLanguages = Object.keys(state.cookieConsentConfig.language.translations)
-const currentLanguage = state.currLanguage || state.cookieConsentConfig.language.default
+const allLanguages = Object.keys(state.cookieConsentConfig.language.translations);
+const currentLanguage = state.currLanguage || state.cookieConsentConfig.language.default;
 
 let autoDetectEnabled = state.cookieConsentConfig.language.autoDetect === 'browser';
 
-setActiveLanguage(currentLanguage)
+setActiveLanguage(currentLanguage);
 
 if(autoDetectEnabled)
-    setAutoDetectLanguage(currentLanguage)
+    setAutoDetectLanguage(currentLanguage);
 
 inputs.forEach(input => {
     input.addEventListener('change', () => {
-        const currLanguage = input.value
+        const currLanguage = input.value;
 
-        const state = getState()
-        state.cookieConsentConfig.language.default = currLanguage
-        state.cookieConsentConfig.language.autoDetect = undefined
-        state.currLanguage = currLanguage
+        const state = getState();
+        state.cookieConsentConfig.language.default = currLanguage;
+        state.cookieConsentConfig.language.autoDetect = undefined;
+        state.currLanguage = currLanguage;
 
-        saveState(state)
-        setAutoDetectLanguage(false)
+        saveState(state);
+        setAutoDetectLanguage(false);
 
-        CookieConsent
+        window.CookieConsent
             .setLanguage(currLanguage)
             .then(() => {
-                CookieConsent.show(true)
-            })
-    })
-})
+                window.CookieConsent.show(true);
+            });
+    });
+});
 
 autoDetectCheckbox.addEventListener('change', () => {
 
-    const state = getState()
-    const language = state.cookieConsentConfig.language
+    const state = getState();
+    const language = state.cookieConsentConfig.language;
 
     if(autoDetectCheckbox.checked){
 
-        language.autoDetect = 'browser'
+        language.autoDetect = 'browser';
 
         if(allLanguages.includes(browserLanguage)){
             state.currLanguage = browserLanguage;
-            setActiveLanguage(browserLanguage)
+            setActiveLanguage(browserLanguage);
         }
 
-        setAutoDetectLanguage(browserLanguage)
+        setAutoDetectLanguage(browserLanguage);
     }else {
-        language.autoDetect = undefined
-        state.currLanguage = language.default
+        language.autoDetect = undefined;
+        state.currLanguage = language.default;
 
-        setAutoDetectLanguage(false)
-        setActiveLanguage(language.default)
+        setAutoDetectLanguage(false);
+        setActiveLanguage(language.default);
     }
 
-    saveState(state)
+    saveState(state);
 
-    CookieConsent
+    window.CookieConsent
         .setLanguage(state.currLanguage)
         .then(()=>{
-            CookieConsent.show(true)
-        })
-})
+            window.CookieConsent.show(true);
+        });
+});
 
 
 function getBrowserLanguage(){
@@ -99,22 +99,22 @@ function setAutoDetectLanguage(languageCode){
 
     if(languageCode && typeof languageCode === 'string'){
 
-        autoDetectEnabled = true
-        autoDetectCheckbox.checked = true
-        detectedLanguageSpan.textContent = languageCode
+        autoDetectEnabled = true;
+        autoDetectCheckbox.checked = true;
+        detectedLanguageSpan.textContent = languageCode;
 
         translationFoundSpan.textContent = allLanguages.includes(languageCode)
             ? 'true'
-            : 'false'
+            : 'false';
 
         return;
     }
 
     if(autoDetectEnabled){
         autoDetectEnabled = false;
-        autoDetectCheckbox.checked = false
-        detectedLanguageSpan.textContent = '-'
-        translationFoundSpan.textContent = '-'
+        autoDetectCheckbox.checked = false;
+        detectedLanguageSpan.textContent = '-';
+        translationFoundSpan.textContent = '-';
     }
 }
 
@@ -124,10 +124,10 @@ onEvent(customEvents._RESET, () => {
 
     const currentLanguage = autoDetectEnabled
         ? browserLanguage
-        : language.default
+        : language.default;
 
-    setActiveLanguage(currentLanguage)
+    setActiveLanguage(currentLanguage);
 
     if(autoDetectEnabled)
-        setAutoDetectLanguage(currentLanguage)
-})
+        setAutoDetectLanguage(currentLanguage);
+});
