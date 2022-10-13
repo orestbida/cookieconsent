@@ -1,5 +1,6 @@
 import defaultConfig from "./defaultConfig";
 import { getState, saveState } from "./stateManager"
+import { customEvents, onEvent } from "./utils";
 
 /**
  * @param {string} selector
@@ -117,10 +118,11 @@ function setAutoDetectLanguage(languageCode){
     }
 }
 
-window.addEventListener('cc:reset', () => {
+onEvent(customEvents._RESET, () => {
     const language = defaultConfig.language;
+    autoDetectEnabled = language.autoDetect === 'browser';
 
-    const currentLanguage = language.autoDetect === 'browser'
+    const currentLanguage = autoDetectEnabled
         ? browserLanguage
         : language.default
 
@@ -128,4 +130,4 @@ window.addEventListener('cc:reset', () => {
 
     if(autoDetectEnabled)
         setAutoDetectLanguage(currentLanguage)
-});
+})

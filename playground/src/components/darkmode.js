@@ -1,4 +1,5 @@
 import { saveState, getState, defaultState } from "./stateManager"
+import { customEvents, onEvent } from "./utils"
 
 /**
  * @type {HTMLInputElement}
@@ -31,6 +32,6 @@ function toggleDarkmode(enable) {
     }
 }
 
-window.addEventListener('cc:reset', () => {
+onEvent(customEvents._RESET, () => {
     toggleDarkmode(defaultState.darkmode)
 })

@@ -1,7 +1,21 @@
+import en from '../translations/en.json'
+import de from '../translations/de.json'
+import it from '../translations/it.json'
+import es from '../translations/es.json'
+import fr from '../translations/fr.json'
+
+/**
+ * WARNING: this object is
+ * will be stored in localStorage;
+ * do not declare functions,
+ * regex ... (only primitive data)
+ */
+
 /**
  * @type {import("vanilla-cookieconsent").CookieConsentConfig}
  */
 const defaultConfig = {
+    disablePageInteraction: true,
 
     cookie: {
         name: 'demoPlayground',
@@ -24,7 +38,7 @@ const defaultConfig = {
                         </a>
                     `
                 },
-                'another': {
+                'clarity': {
                     label: 'Microsoft Clarity'
                 },
                 'another2': {
@@ -40,13 +54,21 @@ const defaultConfig = {
         autoDetect: 'browser',
 
         translations: {
-            en: '/translations/en.json',
-            it: '/translations/it.json',
-            de: '/translations/de.json',
-            es: '/translations/es.json',
-            fr: '/translations/fr.json'
+            en: en,
+            it: it,
+            de: de,
+            es: es,
+            fr: fr
         }
     }
 }
+
+window.addEventListener('cc:onConsent', ({detail}) => {
+    console.log('onConsent', detail)
+})
+
+window.addEventListener('cc:onChange', ({detail}) => {
+    console.log('onChange', detail)
+})
 
 export default defaultConfig

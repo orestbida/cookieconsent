@@ -1,4 +1,5 @@
 import { defaultState, getState, saveState } from "./stateManager"
+import { customEvents, onEvent } from "./utils"
 
 /**
  * @type {HTMLInputElement}
@@ -23,6 +24,6 @@ checkbox.addEventListener('change', () => {
         })
 })
 
-window.addEventListener('cc:reset', () => {
-    checkbox.checked = defaultState.darkmode
+onEvent(customEvents._RESET, () => {
+    checkbox.checked = defaultState.cookieConsentConfig.disablePageInteraction
 })

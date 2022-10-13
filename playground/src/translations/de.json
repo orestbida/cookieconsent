@@ -1,38 +1,38 @@
 {
     "consentModal": {
-        "title": "Bonjour voyageur, c'est l'heure des cookies!",
+        "title": "Hallo Reisende, es ist Kekszeit!",
         "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip.",
-        "acceptAllBtn": "Accepter tout",
-        "acceptNecessaryBtn": "Tout rejeter",
-        "showPreferencesBtn": "Gérer les préférences",
-        "footer": "<a href=\"#link\">Politique de confidentialité</a><a href=\"#link\">Termes et conditions</a>"
+        "acceptAllBtn": "Alle akzeptieren",
+        "acceptNecessaryBtn": "Alle ablehnen",
+        "showPreferencesBtn": "Einstellungen verwalten",
+        "footer": "<a href=\"#link\">Datenschutz</a><a href=\"#link\">Bedingungen und Konditionen</a>"
     },
     "preferencesModal": {
-        "title": "Préférences de cookies",
-        "acceptAllBtn": "Accepter tout",
-        "acceptNecessaryBtn": "Tout rejeter",
-        "savePreferencesBtn": "Sauver les préférences",
-        "closeIconLabel": "Fermer la modale",
-        "serviceCounterLabel":"Services",
+        "title": "Präferenzen für die Zustimmung",
+        "acceptAllBtn": "Alle akzeptieren",
+        "acceptNecessaryBtn": "Alle ablehnen",
+        "savePreferencesBtn": "Einstellungen speichern",
+        "closeIconLabel": "Modal schließen",
+        "serviceCounterLabel":"Dienstleistungen",
         "sections": [
             {
-                "title": "Utilisation de Cookies",
+                "title": "Verwendung von Cookies",
                 "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
             },
             {
-                "title": "Cookies Strictement Nécessaires <span class=\"pm__badge\">toujours activé</span>",
+                "title": "Streng Notwendige Cookies <span class=\"pm__badge\">Immer aktiviert</span>",
                 "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
                 "linkedCategory": "necessary"
             },
             {
-                "title": "Cookies Analytiques",
+                "title": "Analytische Cookies",
                 "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
                 "linkedCategory": "analytics",
                 "cookieTable": {
                     "headers": {
-                        "name": "Nom",
-                        "description": "Description",
-                        "Service": "Service"
+                        "name": "Name",
+                        "description": "Beschreibung",
+                        "Service": "Dienst"
                     },
                     "body": [
                         {
@@ -44,16 +44,16 @@
                 }
             },
             {
-                "title": "Cookies Publicitaires",
+                "title": "Werbung Cookies",
                 "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
                 "linkedCategory": "ads"
             },
             {
-                "title": "Les détails de votre consentement",
+                "title": "Angaben zu Ihrer Zustimmung",
                 "description": "<p>consent id: <span id=\"consent-id\">-</span></p><p>consent date: <span id=\"consent-timestamp\">-</span></p><p>last update: <span id=\"last-consent-timestamp\">-</span></p>"
             },
             {
-                "title": "Plus d'informations",
+                "title": "Weitere Informationen",
                 "description": "For any query in relation to my policy on cookies and your choices, please <a class=\"cc__link\" href=\"#yourdomain.com\">contact me</a>."
             }
         ]

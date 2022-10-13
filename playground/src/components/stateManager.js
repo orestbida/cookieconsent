@@ -1,4 +1,5 @@
 import defaultConfig from './defaultConfig'
+import { deepCopy, fireEvent, customEvents } from './utils'
 
 export const DEMO_ITEM_NAME = 'demoState'
 
@@ -17,7 +18,7 @@ export const getState = () => {
 
     return savedState
         ? JSON.parse(savedState)
-        : JSON.parse(JSON.stringify(defaultState))
+        : deepCopy(defaultState)
 }
 
 /**
@@ -25,8 +26,11 @@ export const getState = () => {
  */
 export const resetCookies = () => {
     const cc = window.CookieConsent
-    cc.acceptCategory([])
-    cc.eraseCookies(defaultConfig.cookie.name)
+
+    if(cc.validConsent())
+        cc.acceptCategory([])
+
+    cc.eraseCookies(cc.getConfig('cookie').name)
 }
 
 /**
@@ -37,13 +41,13 @@ export const resetState = () => {
     resetCookies()
     localStorage.removeItem(DEMO_ITEM_NAME)
 
-    window.CookieConsent.reset(true)
-    window.CookieConsent.run(defaultConfig)
+    CookieConsent.reset(true)
+    CookieConsent.run(defaultConfig)
 
     /**
      * Notify other components
      */
-    window.dispatchEvent(new CustomEvent('cc:reset'))
+    fireEvent(customEvents._RESET)
 }
 
 /**
