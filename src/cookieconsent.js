@@ -1068,6 +1068,7 @@
 
                         // for each row defined in the cookie table
                         for(var j=0; j<clen; j++){
+                            var curr_domains = domains;
 
                             // Get current row of table (corresponds to all cookie params)
                             var curr_row = curr_cookie_table[j], found_cookies = [];
@@ -1077,7 +1078,7 @@
                             var curr_cookie_path = curr_row['path'] || false;
 
                             // set domain to the specified domain
-                            curr_cookie_domain && ( domains = [curr_cookie_domain, '.'+curr_cookie_domain]);
+                            curr_cookie_domain && ( curr_domains = [curr_cookie_domain, '.'+curr_cookie_domain]);
 
                             // If regex provided => filter cookie array
                             if(is_regex){
@@ -1095,7 +1096,7 @@
 
                             // If cookie exists -> delete it
                             if(found_cookies.length > 0){
-                                _eraseCookies(found_cookies, curr_cookie_path, domains);
+                                _eraseCookies(found_cookies, curr_cookie_path, curr_domains);
                                 curr_block['toggle']['reload'] === 'on_clear' && (reload_page = true);
                             }
                         }
