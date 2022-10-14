@@ -62,6 +62,74 @@
             </div>
 
             <div class="flex">
+                <div class="consent-modal">
+                    <div>Consent Modal</div>
+                    <div class="layout">
+                        <label for="cm-layout">Layout</label>
+                        <select name="layout" id="cm-layout">
+                            <option value="box">box</option>
+                            <option value="box wide">box wide</option>
+                            <option value="box inline">box inline</option>
+                            <option value="cloud">cloud</option>
+                            <option value="cloud inline">cloud inline</option>
+                            <option value="bar">bar</option>
+                            <option value="bar inline">bar inline</option>
+                        </select>
+                    </div>
+                    <div class="vertical">
+                        <label for="cm-position">Position</label>
+                        <select name="vertical" id="cm-position">
+                            <option value="top left">top left</option>
+                            <option value="top center">top center</option>
+                            <option value="top right">top right</option>
+                            <option value="middle left">middle left</option>
+                            <option value="middle center">middle center</option>
+                            <option value="middle right">middle right</option>
+                            <option value="bottom left">bottom left</option>
+                            <option value="bottom center">bottom center</option>
+                            <option value="bottom right">bottom right</option>
+                            <option value="top">top</option>
+                            <option value="bottom">bottom</option>
+                        </select>
+                    </div>
+                    <div class="flip">
+                        <input type="checkbox" id="cm-flip" name="flip">
+                        <label for="cm-flip">Flip buttons</label>
+                    </div>
+                    <div class="weight">
+                        <input type="checkbox" id="cm-weight" name="flip">
+                        <label for="cm-weight">Equal weight buttons</label>
+                    </div>
+                </div>
+                <div class="preferences-modal">
+                    <div>Preferences Modal</div>
+                    <div class="layout">
+                        <label for="pm-layout">Layout</label>
+                        <select name="layout" id="pm-layout">
+                            <option value="box">box</option>
+                            <option value="bar">bar</option>
+                            <option value="bar wide">bar wide</option>
+                        </select>
+                    </div>
+                    <div class="vertical">
+                        <label for="pm-position">Position</label>
+                        <select name="position" id="pm-position">
+                            <option data-excludedLayout="box" value="left">left</option>
+                            <option data-excludedLayout="box" value="right">right</option>
+                        </select>
+                    </div>
+                    <div class="flip">
+                        <input type="checkbox" id="pm-flip" name="flip">
+                        <label for="pm-flip">Flip buttons</label>
+                    </div>
+                    <div class="weight">
+                        <input type="checkbox" id="pm-weight" name="flip">
+                        <label for="pm-weight">Equal weight buttons</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex">
                 <div class="consent-status" id="consent-status">Valid Consent</div>
                 <div class="category-states">
                     <div class="category-states__title">Category Status</div>

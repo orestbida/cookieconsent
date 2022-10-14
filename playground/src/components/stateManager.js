@@ -6,8 +6,15 @@ export const DEMO_ITEM_NAME = 'demoState';
 export const defaultState = {
     cookieConsentConfig: defaultConfig,
     darkmode: false,
-    currLanguage: defaultConfig.language.default
+    currLanguage: defaultConfig.language.default,
+
+    /**
+     * Increase on every new playground update
+     */
+    demoRevision: 1
 };
+
+clearInvalidDemoState();
 
 /**
  * Get current state
@@ -16,9 +23,15 @@ export const defaultState = {
 export const getState = () => {
     const savedState = localStorage.getItem(DEMO_ITEM_NAME);
 
-    return savedState
-        ? JSON.parse(savedState)
-        : deepCopy(defaultState);
+    if(savedState){
+        try{
+            return JSON.parse(savedState);
+        }catch(e){
+            //invalid state
+        }
+    }
+
+    return deepCopy(defaultState);
 };
 
 /**
@@ -60,3 +73,32 @@ export const saveState = (newState) => {
         JSON.stringify(newState)
     );
 };
+
+function clearInvalidDemoState() {
+    /**
+     * @type {typeof defaultState}
+     */
+    let savedState = localStorage.getItem(DEMO_ITEM_NAME);
+
+    if(savedState){
+        try{
+            savedState = JSON.parse(savedState);
+
+            for(let key in defaultState){
+                if(typeof savedState[key] !== typeof defaultState[key])
+                    return clearLocalStorageItem();
+            }
+
+            if(savedState.demoRevision !== defaultState.demoRevision)
+                return clearLocalStorageItem();
+
+        }catch(e){
+            return clearLocalStorageItem();
+        }
+    }
+
+    function clearLocalStorageItem(){
+        console.log('Demo state not valid!');
+        localStorage.removeItem(DEMO_ITEM_NAME);
+    }
+}

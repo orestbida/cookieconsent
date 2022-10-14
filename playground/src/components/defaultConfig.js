@@ -20,6 +20,21 @@ const defaultConfig = {
         name: 'demoPlayground',
     },
 
+    guiOptions: {
+        consentModal: {
+            layout: 'box',
+            position: 'bottom right',
+            equalWeightButtons: true,
+            flipButtons: false
+        },
+        preferencesModal: {
+            layout: 'box',
+            position: 'right',
+            equalWeightButtons: true,
+            flipButtons: false
+        }
+    },
+
     categories: {
         necessary: {
             readOnly: true,

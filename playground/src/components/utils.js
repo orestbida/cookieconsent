@@ -1,3 +1,5 @@
+const win = window;
+
 /**
  * Clone object using recursion
  * @param {any} el
@@ -21,17 +23,51 @@ export const deepCopy = (el) => {
     return clone;
 };
 
-
 export const customEvents = {
+    _INIT: 'cc:onInit',
     _RESET: 'cc:reset',
     _ON_CONSENT: 'cc:onConsent',
     _ON_CHANGE: 'cc:onChange'
 };
 
+/**
+ * @param {string} eventType
+ */
 export const fireEvent = (eventType) => {
-    window.dispatchEvent(new CustomEvent(eventType));
+    win.dispatchEvent(new CustomEvent(eventType));
 };
 
+/**
+ * @callback Callback
+ */
+
+/**
+ * @param {string} eventType
+ * @param {Callback} fn
+ */
 export const onEvent = (eventType, fn) => {
-    window.addEventListener(eventType, fn);
+    win.addEventListener(eventType, fn);
+};
+
+/**
+ * @param {HTMLElement|Node} el
+ * @param {string} eventType
+ * @param {Callback} fn
+ */
+export const addEvent = (el, eventType, fn) => {
+    el.addEventListener(eventType, fn);
+};
+
+/**
+ * @param {import("vanilla-cookieconsent").CookieConsentConfig} config
+ * @param {string} [showModal]
+ */
+export const reRunPlugin = (config, showModal) => {
+    const cc = win.CookieConsent;
+
+    cc.reset();
+    cc.run(config);
+
+    showModal === 'consentModal' && cc.show(true);
+    showModal === 'preferencesModal' && cc.showPreferences();
 };

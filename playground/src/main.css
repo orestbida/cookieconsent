@@ -1,6 +1,14 @@
+* {
+    box-sizing: border-box;
+}
+
 html{
     font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Helvetica, Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
     color: var(--cc-secondary-color);
+    -ms-touch-action: manipulation;
+        touch-action: manipulation;
+    width: 100vw;
+    overflow-x: hidden;
 }
 
 html.cc--darkmode{
@@ -17,7 +25,9 @@ html:not(.cc--darkmode){
 }
 
 body{
-    margin: 0
+    margin: 0;
+    width: 100vw;
+    overflow-x: hidden;
 }
 
 h1,
@@ -29,6 +39,8 @@ h2 {
     max-width: 600px;
     margin: 0 auto;
     padding: 12px;
+    width: 100vw;
+    overflow-x: hidden;
 }
 
 p {
