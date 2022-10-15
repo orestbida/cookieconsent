@@ -1,12 +1,4 @@
-/**
- * @callback callbackFn
- */
-
-/**
- * @param {string} e
- * @param {callbackFn} fn
- */
-const addListener = (e, fn) => window.addEventListener(e, fn);
+import { onEvent, customEvents } from './utils'
 
 /**
  * @param {HTMLElement} modal
@@ -16,7 +8,11 @@ const updateFields = (modal) => {
     if(!window.CookieConsent.validConsent() || !modal)
         return;
 
-    const {consentId, consentTimestamp, lastConsentTimestamp} = window.CookieConsent.getCookie();
+    const {
+        consentId,
+        consentTimestamp,
+        lastConsentTimestamp
+    } = window.CookieConsent.getCookie();
 
     const id = modal.querySelector('#consent-id');
     const timestamp = modal.querySelector('#consent-timestamp');
@@ -27,15 +23,15 @@ const updateFields = (modal) => {
     lastTimestamp && (lastTimestamp.textContent = new Date(lastConsentTimestamp).toLocaleString());
 };
 
-addListener('cc:onChange', () => {
+onEvent(customEvents._ON_CHANGE, () => {
     updateFields(getPreferencesModal());
 });
 
-addListener('cc:onConsent', () => {
+onEvent(customEvents._ON_CONSENT, () => {
     updateFields(getPreferencesModal());
 });
 
-addListener('cc:onModalShow', ({detail}) => {
+onEvent(customEvents._ON_MODAL_SHOW, ({detail}) => {
     if(detail.modalName === 'preferencesModal')
         updateFields(getPreferencesModal());
 });

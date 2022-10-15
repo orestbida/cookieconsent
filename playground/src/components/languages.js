@@ -1,11 +1,7 @@
 import defaultConfig from './defaultConfig';
 import { getState, saveState } from './stateManager';
-import { customEvents, onEvent } from './utils';
+import { addEvent, customEvents, getById, onEvent } from './utils';
 
-/**
- * @param {string} selector
- */
-const getById = (selector) => document.getElementById(selector);
 const browserLanguage = getBrowserLanguage();
 
 /**
@@ -29,7 +25,7 @@ if(autoDetectEnabled)
     setAutoDetectLanguage(currentLanguage);
 
 inputs.forEach(input => {
-    input.addEventListener('change', () => {
+    addEvent(input, 'change', () => {
         const currLanguage = input.value;
 
         const state = getState();
@@ -48,7 +44,7 @@ inputs.forEach(input => {
     });
 });
 
-autoDetectCheckbox.addEventListener('change', () => {
+addEvent(autoDetectCheckbox, 'change', () => {
 
     const state = getState();
     const language = state.cookieConsentConfig.language;

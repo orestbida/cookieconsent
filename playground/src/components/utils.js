@@ -27,7 +27,8 @@ export const customEvents = {
     _INIT: 'cc:onInit',
     _RESET: 'cc:reset',
     _ON_CONSENT: 'cc:onConsent',
-    _ON_CHANGE: 'cc:onChange'
+    _ON_CHANGE: 'cc:onChange',
+    _ON_MODAL_SHOW: 'cc:onModalShow'
 };
 
 /**
@@ -71,3 +72,8 @@ export const reRunPlugin = (config, showModal) => {
     showModal === 'consentModal' && cc.show(true);
     showModal === 'preferencesModal' && cc.showPreferences();
 };
+
+/**
+ * @param {string} selector
+ */
+export const getById = (selector) => document.getElementById(selector);

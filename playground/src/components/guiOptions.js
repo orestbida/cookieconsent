@@ -77,7 +77,7 @@ addEvent(htmlElements[PREFERENCES_MODAL_NAME].flipButtons, CHANGE_EVENT, functio
 });
 
 addEvent(htmlElements[PREFERENCES_MODAL_NAME].equalWeightButtons, CHANGE_EVENT, function(){
-    setGuiOptionsField(PREFERENCES_MODAL_NAME,'equalWeightButtons', this.checked);
+    setGuiOptionsField(PREFERENCES_MODAL_NAME, 'equalWeightButtons', this.checked);
 });
 /** END: preferencesModal options */
 

@@ -1,14 +1,14 @@
 import { saveState, getState, defaultState } from './stateManager';
-import { customEvents, onEvent } from './utils';
+import { customEvents, onEvent, addEvent, getById } from './utils';
 
 /**
  * @type {HTMLInputElement}
  */
-const checkbox = document.getElementById('darkmode');
+const checkbox = getById('darkmode');
 
 toggleDarkmode(getState().darkmode);
 
-checkbox.addEventListener('click', () => {
+addEvent(checkbox, 'click', () => {
     toggleDarkmode(checkbox.checked);
 
     const state = getState();
@@ -23,13 +23,13 @@ checkbox.addEventListener('click', () => {
  * @param {boolean} enable
  */
 function toggleDarkmode(enable) {
-    if(enable){
-        checkbox.checked = true;
-        document.documentElement.classList.add('cc--darkmode');
-    }else {
-        checkbox.checked = false;
-        document.documentElement.classList.remove('cc--darkmode');
-    }
+
+    const classListAction = enable
+        ? 'add'
+        : 'remove';
+
+    checkbox.checked = enable;
+    document.documentElement.classList[classListAction]('cc--darkmode');
 }
 
 onEvent(customEvents._RESET, () => {

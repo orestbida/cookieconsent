@@ -1,14 +1,14 @@
 import { defaultState, getState, saveState } from './stateManager';
-import { customEvents, onEvent } from './utils';
+import { addEvent, customEvents, getById, onEvent } from './utils';
 
 /**
  * @type {HTMLInputElement}
  */
-const checkbox = document.getElementById('disablePageInteraction');
+const checkbox = getById('disablePageInteraction');
 
 checkbox.checked = !!getState().cookieConsentConfig.disablePageInteraction;
 
-checkbox.addEventListener('change', () => {
+addEvent(checkbox, 'change', () => {
 
     const state = getState();
     state.cookieConsentConfig.disablePageInteraction = checkbox.checked;

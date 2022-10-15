@@ -3,6 +3,7 @@ import de from '../translations/de.json';
 import it from '../translations/it.json';
 import es from '../translations/es.json';
 import fr from '../translations/fr.json';
+import { customEvents, onEvent } from './utils';
 
 /**
  * WARNING: this object is
@@ -77,11 +78,11 @@ const defaultConfig = {
     }
 };
 
-window.addEventListener('cc:onConsent', ({detail}) => {
+onEvent(customEvents._ON_CONSENT, ({detail}) => {
     console.log('onConsent', detail);
 });
 
-window.addEventListener('cc:onChange', ({detail}) => {
+onEvent(customEvents._ON_CHANGE, ({detail}) => {
     console.log('onChange', detail);
 });
 

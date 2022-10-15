@@ -1,7 +1,9 @@
 import { resetState } from './stateManager';
+import { addEvent, getById } from './utils';
 
-/** @type {HTMLButtonElement} **/ const resetBtn = document.getElementById('resetBtn');
+/**
+ * @type {HTMLButtonElement}
+ */
+const resetBtn = getById('resetBtn');
 
-resetBtn.addEventListener('click', () => {
-    resetState();
-});
+addEvent(resetBtn, 'click', resetState);
