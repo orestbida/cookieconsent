@@ -11,7 +11,7 @@ export const defaultState = {
     /**
      * Increase on every new playground update
      */
-    demoRevision: 2
+    demoRevision: 3
 };
 
 clearInvalidDemoState();
