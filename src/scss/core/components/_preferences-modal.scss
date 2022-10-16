@@ -2,6 +2,7 @@ $padding-y: 1em;
 $padding-x: 1.5em;
 
 $btn-height: 42px;
+$btn-vertical-padding: .5em;
 
 $toggle-knob-height: 23px;
 $toggle-knob-width: 50px;
@@ -45,6 +46,7 @@ $toggle-knob-icon-width: 2px;
         justify-content: space-between;
         align-items: center;
         border-bottom: 1px solid var(--cc-separator-border-color);
+        gap: 2em;
     }
 
     .pm__title{
@@ -52,7 +54,6 @@ $toggle-knob-icon-width: 2px;
         align-items: center;
         flex: 1;
         font-weight: $font-weight-bold;
-        padding-right: 2em;
     }
 
     .pm__close-btn{
@@ -594,7 +595,7 @@ $toggle-knob-icon-width: 2px;
         min-width: 110px;
         font-weight: $font-weight-bold;
         font-size: 0.82em;
-        padding: 0 1.5em;
+        padding: $btn-vertical-padding 1.5em;
         min-height: $btn-height;
         border-radius: var(--cc-btn-border-radius);
         transition: background-color .15s ease,
@@ -827,7 +828,7 @@ $toggle-knob-icon-width: 2px;
         .pm__header,
         .pm__body,
         .pm__footer{
-            padding: 1em!important;
+            padding: .9em!important;
         }
 
         .pm__badge{

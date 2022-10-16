@@ -1,5 +1,6 @@
-$btn-vertical-padding: .3em;
+$btn-vertical-padding: .5em;
 $btn-height: 42px;
+
 $sections-padding: 1em 1.3em;
 
 :root{
@@ -107,7 +108,7 @@ $sections-padding: 1em 1.3em;
         display: flex;
         flex-direction: column;
         justify-content: center;
-        flex: auto;
+        flex: 1;
         padding-bottom: 0;
     }
 
@@ -139,7 +140,8 @@ $sections-padding: 1em 1.3em;
     }
 
     .cm__btn-group{
-        display: flex;
+        display: grid;
+        grid-auto-columns: minmax(0, 1fr);
         gap: var(--cc-btn-gap);
     }
 
@@ -240,6 +242,13 @@ $sections-padding: 1em 1.3em;
         }
     }
 
+    .cm--inline{
+        .cm__btn-group{
+            grid-auto-flow: column;
+        }
+    }
+
+
     .cm__footer{
         color: var(--cc-footer-color);
         background: var(--cc-footer-bg);
@@ -262,34 +271,36 @@ $sections-padding: 1em 1.3em;
         gap: 1.3em
     }
 
+    .cm--flip{
+        .cm__btn:last-child{
+            grid-row: 1;
+        }
+    }
+
+    .cm--inline{
+        .cm__btn-group{
+            grid-auto-flow: column;
+        }
+
+        &.cm--flip{
+            .cm__btn:last-child{
+                grid-column: 1;
+            }
+        }
+    }
+
     /* START: Box layout */
     .cm--box{
 
-        .cm__btn-group{
-            flex-direction: column;
-        }
-
         .cm__btn{
-
             &--close{
                 display: block;
             }
         }
 
-        &.cm--inline{
-            .cm__btn-group{
-                flex-direction: row;
-            }
-
-            .cm__btn{
-                flex: 1;
-            }
-
-            &.cm--flip{
-
-                .cm__btn-group{
-                    flex-direction: row-reverse;
-                }
+        &.cm--flip{
+            .cm__btns{
+                flex-direction: column-reverse;
             }
         }
 
@@ -302,7 +313,7 @@ $sections-padding: 1em 1.3em;
             }
 
             .cm__btn-group{
-                flex-direction: row;
+                grid-auto-flow: column;
             }
 
             .cm__btn{
@@ -313,21 +324,15 @@ $sections-padding: 1em 1.3em;
 
             &.cm--flip{
 
-                .cm__btns,
-                .cm__btn-group{
+                .cm__btns{
                     flex-direction: row-reverse;
+                }
+
+                .cm__btn:last-child{
+                    grid-column: 1;
                 }
             }
         }
-
-        /* START: Flip buttons */
-        &.cm--flip{
-            .cm__btns,
-            .cm__btn-group{
-                flex-direction: column-reverse;
-            }
-        }
-        /* END: Flip buttons */
     }
     /* END: Box layout */
 
@@ -380,11 +385,9 @@ $sections-padding: 1em 1.3em;
 
             .cm__btn{
                 min-width: 10em;
-                flex: 1;
             }
 
             &.cm--flip{
-
                 .cm__btn-group{
                     flex-direction: row-reverse;
                 }
@@ -395,13 +398,16 @@ $sections-padding: 1em 1.3em;
 
     /* START: Bar layout */
     .cm--bar{
-        max-width: 100%;
+        max-width: unset;
+        width: 100vw;
         left: 0;
         right: 0;
         margin: 0;
         transform: translateY(0);
         border-radius: 0;
         opacity: 1;
+
+        --cc-modal-transition-duration: .35s;
 
         &.cm--top{
             top: 0;
@@ -428,20 +434,27 @@ $sections-padding: 1em 1.3em;
             justify-content: space-between;
         }
 
+        .cm__btn-group{
+            grid-auto-flow: column;
+        }
+
         .cm__btn{
             min-width: 120px;
             padding-right: 2em;
             padding-left: 2em;
-            flex: 1;
         }
 
         &.cm--flip{
 
-            .cm__btns,
-            .cm__btn-group{
+            .cm__btns{
                 flex-direction: row-reverse;
             }
+
+            .cm__btn:last-child{
+                grid-column: 1;
+            }
         }
+
 
         &.cm--inline{
 
@@ -455,10 +468,6 @@ $sections-padding: 1em 1.3em;
                 flex-direction: row;
             }
 
-            .cm__texts{
-                flex: auto;
-            }
-
             .cm__btns{
                 flex-direction: column;
                 justify-content: center;
@@ -469,7 +478,6 @@ $sections-padding: 1em 1.3em;
                     flex-direction: column-reverse;
                 }
             }
-
         }
     }
     /* END: Bar layout */
@@ -574,10 +582,6 @@ $sections-padding: 1em 1.3em;
             padding-right: 1.1em!important;
         }
 
-        .cm__texts{
-            flex: auto!important;
-        }
-
         .cm__btns{
             flex-direction: column!important;
             max-width: none!important;
@@ -587,6 +591,7 @@ $sections-padding: 1em 1.3em;
         }
 
         .cm__btn-group{
+            display: flex!important;
             flex-direction: column!important;
             min-width: auto!important;
         }
