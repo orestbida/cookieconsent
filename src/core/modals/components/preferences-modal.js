@@ -149,9 +149,11 @@ export const createPreferencesModal = (api, createMainContainer) => {
             addClassPm(sDescContainer, 'section-desc-wrapper');
         }
 
+        let nServices = sServiceNames.length;
+
         if(sIsExpandableToggle){
 
-            if(sServiceNames.length > 0){
+            if(nServices > 0){
 
                 var servicesContainer = createNode(DIV_TAG);
                 addClassPm(servicesContainer, 'section-services');
@@ -213,17 +215,25 @@ export const createPreferencesModal = (api, createMainContainer) => {
 
                 var toggleLabel = createToggleLabel(sTitleData, sLinkedCategory, sCurrentCategoryObject);
 
-                if(sServiceNames.length > 0){
+                if(nServices > 0){
                     var serviceCounter = createNode('span');
                     addClassPm(serviceCounter, 'badge');
                     addClassPm(serviceCounter, 'service-counter');
                     setAttribute(serviceCounter, 'aria-hidden', true);
-                    setAttribute(serviceCounter, 'data-servicecounter', sServiceNames.length);
+                    setAttribute(serviceCounter, 'data-servicecounter', nServices);
 
                     var serviceCounterLabel = modalData.serviceCounterLabel;
 
-                    if(serviceCounterLabel && typeof serviceCounterLabel === 'string')
+                    if(serviceCounterLabel && typeof serviceCounterLabel === 'string'){
+                        serviceCounterLabel = serviceCounterLabel.split('|');
+
+                        if(serviceCounterLabel.length > 1 && nServices > 1)
+                            serviceCounterLabel = serviceCounterLabel[1];
+                        else
+                            serviceCounterLabel = serviceCounterLabel[0];
+
                         setAttribute(serviceCounter, 'data-counterlabel', serviceCounterLabel);
+                    }
 
                     appendChild(sTitle, serviceCounter);
                 }
