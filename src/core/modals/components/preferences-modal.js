@@ -215,16 +215,17 @@ export const createPreferencesModal = (api, createMainContainer) => {
 
                 var toggleLabel = createToggleLabel(sTitleData, sLinkedCategory, sCurrentCategoryObject);
 
-                if(nServices > 0){
-                    var serviceCounter = createNode('span');
+                let serviceCounterLabel = modalData.serviceCounterLabel;
+
+                if(nServices > 0 && typeof serviceCounterLabel === 'string'){
+                    let serviceCounter = createNode('span');
+
                     addClassPm(serviceCounter, 'badge');
                     addClassPm(serviceCounter, 'service-counter');
                     setAttribute(serviceCounter, 'aria-hidden', true);
                     setAttribute(serviceCounter, 'data-servicecounter', nServices);
 
-                    var serviceCounterLabel = modalData.serviceCounterLabel;
-
-                    if(serviceCounterLabel && typeof serviceCounterLabel === 'string'){
+                    if(serviceCounterLabel){
                         serviceCounterLabel = serviceCounterLabel.split('|');
 
                         if(serviceCounterLabel.length > 1 && nServices > 1)
@@ -234,6 +235,10 @@ export const createPreferencesModal = (api, createMainContainer) => {
 
                         setAttribute(serviceCounter, 'data-counterlabel', serviceCounterLabel);
                     }
+
+                    serviceCounter.innerHTML = nServices + (serviceCounterLabel
+                        ? ' ' + serviceCounterLabel
+                        : '');
 
                     appendChild(sTitle, serviceCounter);
                 }

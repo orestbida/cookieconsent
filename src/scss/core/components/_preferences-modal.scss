@@ -285,17 +285,9 @@ $toggle-knob-icon-width: 2px;
         background: var(--cc-btn-primary-bg);
         color: var(--cc-btn-primary-color);
 
-        &::before{
-            content: attr(data-servicecounter);
-        }
-
         &[data-counterlabel]{
             padding: 0 .6em 1px .6em;
             width: auto;
-
-            &::before{
-                content: attr(data-servicecounter) ' ' attr(data-counterlabel);
-            }
         }
     }
     /* END: Services counter badge */
