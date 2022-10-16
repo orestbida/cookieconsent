@@ -13,7 +13,7 @@
         "acceptNecessaryBtn": "Reject all",
         "savePreferencesBtn": "Save preferences",
         "closeIconLabel": "Close modal",
-        "serviceCounterLabel":"Services",
+        "serviceCounterLabel": "Service|Services",
         "sections": [
             {
                 "title": "Cookie Usage",

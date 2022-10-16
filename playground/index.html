@@ -29,7 +29,6 @@
                     <label for="language-es">Spanish</label><br>
                     <input data-language="fr" type="radio" id="language-fr" name="language-code" value="fr">
                     <label for="language-fr">French</label><br>
-
                 </fieldset>
 
                 <fieldset class="auto-language">
@@ -62,8 +61,8 @@
             </div>
 
             <div class="flex">
-                <div class="consent-modal">
-                    <div>Consent Modal</div>
+                <fieldset class="consent-modal">
+                    <legend>Consent Modal</legend>
                     <div class="layout">
                         <label for="cm-layout">Layout</label>
                         <select name="layout" id="cm-layout">
@@ -90,9 +89,9 @@
                         <input type="checkbox" id="cm-weight" name="flip">
                         <label for="cm-weight">Equal weight buttons</label>
                     </div>
-                </div>
-                <div class="preferences-modal">
-                    <div>Preferences Modal</div>
+                </fieldset>
+                <fieldset class="preferences-modal">
+                    <legend>Preferences Modal</legend>
                     <div class="layout">
                         <label for="pm-layout">Layout</label>
                         <select name="layout" id="pm-layout">
@@ -116,19 +115,21 @@
                         <input type="checkbox" id="pm-weight" name="flip">
                         <label for="pm-weight">Equal weight buttons</label>
                     </div>
-                </div>
+                </fieldset>
             </div>
 
             <div class="flex">
-                <div class="consent-status" id="consent-status">Valid Consent</div>
-                <div class="category-states">
-                    <div class="category-states__title">Category Status</div>
+                <fieldset class="consent-status" id="consent-status">
+                    <legend>Valid Consent</legend>
+                </fieldset>
+                <fieldset class="category-states">
+                    <legend class="category-states__title">Category Status</legend>
                     <div class="categories">
                         <div class="category" id="necessary-category">Necessary</div>
                         <div class="category" id="analytics-category">Analytics</div>
                         <div class="category" id="ads-category">Advertisement</div>
                     </div>
-                </div>
+                </fieldset>
             </div>
 
             <br>

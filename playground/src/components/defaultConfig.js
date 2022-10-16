@@ -16,6 +16,7 @@ import { customEvents, onEvent } from './utils';
  * @type {import("vanilla-cookieconsent").CookieConsentConfig}
  */
 const defaultConfig = {
+    root: '#app',
 
     cookie: {
         name: 'demoPlayground',
@@ -24,7 +25,7 @@ const defaultConfig = {
     guiOptions: {
         consentModal: {
             layout: 'box',
-            position: 'bottom right',
+            position: 'bottom left',
             equalWeightButtons: true,
             flipButtons: false
         },
