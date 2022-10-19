@@ -629,6 +629,6 @@ packages:
   github.com/orestbida/cookieconsent/0b35dd3d60cec6b78826d7ca5248fc6af19e2de9:
     resolution: {tarball: https://codeload.github.com/orestbida/cookieconsent/tar.gz/0b35dd3d60cec6b78826d7ca5248fc6af19e2de9}
     name: vanilla-cookieconsent
-    version: 3.0.0-rc.6
+    version: 3.0.0-rc.7
     requiresBuild: true
     dev: true
