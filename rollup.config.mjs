@@ -1,8 +1,10 @@
 import { defineConfig } from 'rollup';
-import { terser } from "rollup-plugin-terser";
+import { terser } from "@el3um4s/rollup-plugin-terser";
+import postcssCombineDuplicatedSelectors from 'postcss-combine-duplicated-selectors';
+import cssnanoPlugin from 'cssnano';
 import postcss from 'rollup-plugin-postcss';
 import eslint from '@rollup/plugin-eslint';
-import pkg from './package.json';
+import pkg from './package.json' assert { type: "json"};
 
 const srcDir = './src';
 const distDir = './dist';
@@ -70,8 +72,8 @@ export default defineConfig(
             plugins: postcss({
                 extract: true,
                 plugins: [
-                    require('postcss-combine-duplicated-selectors'),
-                    productionMode && require('cssnano')({
+                    postcssCombineDuplicatedSelectors(),
+                    productionMode && cssnanoPlugin({
                         preset: ["default", {
                             discardComments: {
                                 removeAll: true,
