@@ -192,7 +192,8 @@ export const createConsentModal = (api, createMainContainer) => {
             setAttribute(dom._cmShowPreferencesBtn, 'data-role', 'show');
 
             addEvent(dom._cmShowPreferencesBtn, 'mouseover', () => {
-                createPreferencesModal(api, createMainContainer);
+                if(!state._preferencesModalExists)
+                    createPreferencesModal(api, createMainContainer);
             });
             addEvent(dom._cmShowPreferencesBtn, 'click', api.showPreferences);
         }
