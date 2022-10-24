@@ -17,7 +17,10 @@ export const manageExistingScripts = (mustEnableCategories) => {
      * Automatically Enable/Disable internal services
      */
     state._allCategoryNames.forEach(categoryName => {
-        const lastChangedServices = state._lastChangedServices[categoryName] || state._enabledServices[categoryName] || [];
+
+        const lastChangedServices = state._lastChangedServices[categoryName]
+            || state._enabledServices[categoryName]
+            || [];
 
         lastChangedServices.forEach(serviceName => {
             const service = state._allDefinedServices[categoryName][serviceName];
@@ -49,8 +52,11 @@ export const manageExistingScripts = (mustEnableCategories) => {
     if(!globalObj._config.manageScriptTags)
         return;
 
-    var scripts = state._allScriptTags;
-    var acceptedCategories = mustEnableCategories || state._savedCookieContent.categories || [];
+    const scripts = state._allScriptTags;
+
+    let acceptedCategories = mustEnableCategories
+        || state._savedCookieContent.categories
+        || [];
 
     /**
      * Load scripts (sequentially), using a recursive function
@@ -67,17 +73,32 @@ export const manageExistingScripts = (mustEnableCategories) => {
             var currScriptCategory = currScriptInfo._categoryName;
             var currScriptService = currScriptInfo._serviceName;
             var categoryAccepted = elContains(acceptedCategories, currScriptCategory);
-            var serviceAccepted = currScriptService ? elContains(enabledServices[currScriptCategory], currScriptService) : false;
+            var serviceAccepted = currScriptService
+                ? elContains(enabledServices[currScriptCategory], currScriptService)
+                : false;
 
             /**
              * Skip script if it was already executed
              */
             if(!currScriptInfo._executed){
 
-                var categoryWasJustEnabled = !currScriptService && !currScriptInfo._runOnDisable && categoryAccepted;
-                var serviceWasJustEnabled = currScriptService && !currScriptInfo._runOnDisable && serviceAccepted;
-                var categoryWasJustDisabled = !currScriptService && currScriptInfo._runOnDisable && !categoryAccepted && elContains(state._lastChangedCategoryNames, currScriptCategory);
-                var serviceWasJustDisabled = currScriptService && currScriptInfo._runOnDisable && !serviceAccepted && elContains(state._lastChangedServices[currScriptCategory] || [], currScriptService);
+                let categoryWasJustEnabled = !currScriptService
+                    && !currScriptInfo._runOnDisable
+                    && categoryAccepted;
+
+                let serviceWasJustEnabled = currScriptService
+                    && !currScriptInfo._runOnDisable
+                    && serviceAccepted;
+
+                let categoryWasJustDisabled = !currScriptService
+                    && currScriptInfo._runOnDisable
+                    && !categoryAccepted
+                    && elContains(state._lastChangedCategoryNames, currScriptCategory);
+
+                let serviceWasJustDisabled = currScriptService
+                    && currScriptInfo._runOnDisable
+                    && !serviceAccepted
+                    && elContains(state._lastChangedServices[currScriptCategory] || [], currScriptService);
 
                 if(
                     categoryWasJustEnabled
