@@ -13,6 +13,9 @@ export const DIV_TAG = 'div';
 export const BUTTON_TAG = 'button';
 
 export const ARIA_HIDDEN = 'aria-hidden';
+export const BTN_GROUP_CLASS = 'btn-group';
+export const CLICK_EVENT = 'click';
+export const DATA_ROLE = 'data-role';
 
 export const CONSENT_MODAL_NAME = 'consentModal';
 export const PREFERENCES_MODAL_NAME = 'preferencesModal';

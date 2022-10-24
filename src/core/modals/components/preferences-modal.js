@@ -20,7 +20,10 @@ import {
     SCRIPT_TAG_SELECTOR,
     DIV_TAG,
     ARIA_HIDDEN,
-    BUTTON_TAG
+    BUTTON_TAG,
+    BTN_GROUP_CLASS,
+    CLICK_EVENT,
+    DATA_ROLE
 } from '../../../utils/constants';
 
 /**
@@ -85,7 +88,7 @@ export const createPreferencesModal = (api, createMainContainer) => {
         dom._pmCloseBtn = createNode(BUTTON_TAG);
         addClassPm(dom._pmCloseBtn, 'close-btn');
         setAttribute(dom._pmCloseBtn, 'aria-label', modalData.closeIconLabel || '');
-        addEvent(dom._pmCloseBtn, 'click', api.hidePreferences);
+        addEvent(dom._pmCloseBtn, CLICK_EVENT, api.hidePreferences);
 
         // modal body
         dom._pmBody = createNode(DIV_TAG);
@@ -100,8 +103,8 @@ export const createPreferencesModal = (api, createMainContainer) => {
 
         var _pmBtnGroup1 = createNode(DIV_TAG);
         var _pmBtnGroup2 = createNode(DIV_TAG);
-        addClassPm(_pmBtnGroup1, 'btn-group');
-        addClassPm(_pmBtnGroup2, 'btn-group');
+        addClassPm(_pmBtnGroup1, BTN_GROUP_CLASS);
+        addClassPm(_pmBtnGroup2, BTN_GROUP_CLASS);
 
         appendChild(dom._pmFooter, _pmBtnGroup2);
         appendChild(dom._pmFooter, _pmBtnGroup1);
@@ -278,7 +281,7 @@ export const createPreferencesModal = (api, createMainContainer) => {
              * On button click handle the following :=> aria-expanded, aria-hidden and act class for current section
              */
             ((accordion, section, btn) => {
-                addEvent(sTitle, 'click', () => {
+                addEvent(sTitle, CLICK_EVENT, () => {
                     if(!hasClass(section, 'is-expanded')){
                         addClass(section, 'is-expanded');
                         setAttribute(btn, 'aria-expanded', 'true');
@@ -392,9 +395,9 @@ export const createPreferencesModal = (api, createMainContainer) => {
             if(!dom._pmAcceptNecessaryBtn){
                 dom._pmAcceptNecessaryBtn = createNode(BUTTON_TAG);
                 addClassPm(dom._pmAcceptNecessaryBtn, 'btn');
-                setAttribute(dom._pmAcceptNecessaryBtn, 'data-role', 'necessary');
+                setAttribute(dom._pmAcceptNecessaryBtn, DATA_ROLE, 'necessary');
                 appendChild(_pmBtnGroup1, dom._pmAcceptNecessaryBtn);
-                addEvent(dom._pmAcceptNecessaryBtn, 'click', () => {
+                addEvent(dom._pmAcceptNecessaryBtn, CLICK_EVENT, () => {
                     acceptHelper([]);
                 });
             }
@@ -406,9 +409,9 @@ export const createPreferencesModal = (api, createMainContainer) => {
             if(!dom._pmAcceptAllBtn){
                 dom._pmAcceptAllBtn = createNode(BUTTON_TAG);
                 addClassPm(dom._pmAcceptAllBtn, 'btn');
-                setAttribute(dom._pmAcceptAllBtn, 'data-role', 'all');
+                setAttribute(dom._pmAcceptAllBtn, DATA_ROLE, 'all');
                 appendChild(_pmBtnGroup1, dom._pmAcceptAllBtn);
-                addEvent(dom._pmAcceptAllBtn, 'click', () => {
+                addEvent(dom._pmAcceptAllBtn, CLICK_EVENT, () => {
                     acceptHelper('all');
                 });
             }
@@ -422,10 +425,10 @@ export const createPreferencesModal = (api, createMainContainer) => {
             dom._pmSavePreferencesBtn = createNode(BUTTON_TAG);
             addClassPm(dom._pmSavePreferencesBtn, 'btn');
             addClassPm(dom._pmSavePreferencesBtn, 'btn--secondary');
-            setAttribute(dom._pmSavePreferencesBtn, 'data-role', 'save');
+            setAttribute(dom._pmSavePreferencesBtn, DATA_ROLE, 'save');
             appendChild(_pmBtnGroup2, dom._pmSavePreferencesBtn);
 
-            addEvent(dom._pmSavePreferencesBtn, 'click', () => {
+            addEvent(dom._pmSavePreferencesBtn, CLICK_EVENT, () => {
                 acceptHelper();
             });
         }
@@ -512,7 +515,7 @@ function createToggleLabel(label, value, sCurrentCategoryObject, isService, cate
 
     if(!isService){
         ((value)=>{
-            addEvent(toggle, 'click', () => {
+            addEvent(toggle, CLICK_EVENT, () => {
                 var categoryServicesToggles = dom._serviceCheckboxInputs[value];
 
                 state._customServicesSelection[value] = [];

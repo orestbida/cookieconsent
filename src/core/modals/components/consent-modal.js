@@ -16,7 +16,10 @@ import {
     CONSENT_MODAL_NAME,
     DIV_TAG,
     ARIA_HIDDEN,
-    BUTTON_TAG
+    BUTTON_TAG,
+    BTN_GROUP_CLASS,
+    CLICK_EVENT,
+    DATA_ROLE
 } from '../../../utils/constants';
 
 import { guiManager } from '../../../utils/gui-manager';
@@ -90,7 +93,7 @@ export const createConsentModal = (api, createMainContainer) => {
                 dom._cmCloseIconBtn = createNode(BUTTON_TAG);
                 addClassCm(dom._cmCloseIconBtn, 'btn');
                 addClassCm(dom._cmCloseIconBtn, 'btn--close');
-                addEvent(dom._cmCloseIconBtn, 'click', ()=>{
+                addEvent(dom._cmCloseIconBtn, CLICK_EVENT, ()=>{
                     _log('CookieConsent [ACCEPT]: necessary');
                     api.hide();
                     api.acceptCategory([]);
@@ -152,9 +155,9 @@ export const createConsentModal = (api, createMainContainer) => {
         if(!dom._cmAcceptAllBtn){
             dom._cmAcceptAllBtn = createNode(BUTTON_TAG);
             addClassCm(dom._cmAcceptAllBtn, 'btn');
-            setAttribute(dom._cmAcceptAllBtn, 'data-role', 'all');
+            setAttribute(dom._cmAcceptAllBtn, DATA_ROLE, 'all');
 
-            addEvent(dom._cmAcceptAllBtn, 'click', () => {
+            addEvent(dom._cmAcceptAllBtn, CLICK_EVENT, () => {
                 _log('CookieConsent [ACCEPT]: all');
                 api.hide();
                 api.acceptCategory('all');
@@ -169,9 +172,9 @@ export const createConsentModal = (api, createMainContainer) => {
         if(!dom._cmAcceptNecessaryBtn){
             dom._cmAcceptNecessaryBtn = createNode(BUTTON_TAG);
             addClassCm(dom._cmAcceptNecessaryBtn, 'btn');
-            setAttribute(dom._cmAcceptNecessaryBtn, 'data-role', 'necessary');
+            setAttribute(dom._cmAcceptNecessaryBtn, DATA_ROLE, 'necessary');
 
-            addEvent(dom._cmAcceptNecessaryBtn, 'click', () => {
+            addEvent(dom._cmAcceptNecessaryBtn, CLICK_EVENT, () => {
                 _log('CookieConsent [ACCEPT]: necessary');
                 api.hide();
                 api.acceptCategory([]); // accept necessary only
@@ -186,13 +189,13 @@ export const createConsentModal = (api, createMainContainer) => {
             dom._cmShowPreferencesBtn = createNode(BUTTON_TAG);
             addClassCm(dom._cmShowPreferencesBtn, 'btn');
             addClassCm(dom._cmShowPreferencesBtn, 'btn--secondary');
-            setAttribute(dom._cmShowPreferencesBtn, 'data-role', 'show');
+            setAttribute(dom._cmShowPreferencesBtn, DATA_ROLE, 'show');
 
             addEvent(dom._cmShowPreferencesBtn, 'mouseover', () => {
                 if(!state._preferencesModalExists)
                     createPreferencesModal(api, createMainContainer);
             });
-            addEvent(dom._cmShowPreferencesBtn, 'click', api.showPreferences);
+            addEvent(dom._cmShowPreferencesBtn, CLICK_EVENT, api.showPreferences);
         }
 
         dom._cmShowPreferencesBtn.innerHTML = showPreferencesBtnData;
@@ -200,14 +203,14 @@ export const createConsentModal = (api, createMainContainer) => {
 
     if(!dom._cmBtnGroup2 && showPreferencesBtnData){
         dom._cmBtnGroup2 = createNode(DIV_TAG);
-        addClassCm(dom._cmBtnGroup2, 'btn-group');
+        addClassCm(dom._cmBtnGroup2, BTN_GROUP_CLASS);
         appendChild(dom._cmBtnGroup2, dom._cmShowPreferencesBtn);
         appendChild(dom._cmBtns, dom._cmBtnGroup2);
     }
 
     if(!dom._cmBtnGroup){
         dom._cmBtnGroup = createNode(DIV_TAG);
-        addClassCm(dom._cmBtnGroup, 'btn-group');
+        addClassCm(dom._cmBtnGroup, BTN_GROUP_CLASS);
 
         acceptNecessaryBtnData && appendChild(dom._cmBtnGroup, dom._cmAcceptNecessaryBtn);
         acceptAllBtnData && appendChild(dom._cmBtnGroup, dom._cmAcceptAllBtn);

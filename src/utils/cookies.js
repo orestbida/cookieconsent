@@ -349,6 +349,15 @@ export const eraseCookiesHelper = (cookies, customPath, customDomain) => {
 };
 
 /**
+ * Get plugin cookie
+ * @param {string} [customName]
+ * @returns {string} cookie value
+ */
+export const getPluginCookie = (customName) => {
+    return parseCookie(getSingleCookie(customName || globalObj._config.cookie.name, true));
+};
+
+/**
  * Returns the cookie name/value, if it exists
  * @param {string} name
  * @param {boolean} getValue
@@ -379,8 +388,8 @@ export const getAllCookies = (regex) => {
     /**
      * Save only the cookie names
      */
-    for(var i=0; i<allCookies.length; i++){
-        let name = allCookies[i].split('=')[0];
+    allCookies.forEach(cookie => {
+        let name = cookie.split('=')[0];
 
         if(regex){
             try{
@@ -390,7 +399,7 @@ export const getAllCookies = (regex) => {
         }else{
             cookieNames.push(name);
         }
-    }
+    });
 
     return cookieNames;
 };

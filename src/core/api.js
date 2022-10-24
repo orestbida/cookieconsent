@@ -44,7 +44,7 @@ import {
     eraseCookiesHelper,
     saveCookiePreferences,
     getSingleCookie,
-    parseCookie,
+    getPluginCookie,
     getAllCookies
 } from '../utils/cookies';
 
@@ -368,6 +368,23 @@ export const eraseCookies = (cookies, path, domain) => {
     eraseCookiesHelper(allCookies, path, domain);
 };
 
+let disableInteractionTimeout;
+
+/**
+ * @param {boolean} [enable]
+ */
+const toggleDisableInteraction = (enable) => {
+    clearTimeout(disableInteractionTimeout);
+
+    if(enable){
+        addClass(globalObj._dom._htmlDom, TOGGLE_DISABLE_INTERACTION_CLASS);
+    }else {
+        disableInteractionTimeout = setTimeout(() => {
+            removeClass(globalObj._dom._htmlDom, TOGGLE_DISABLE_INTERACTION_CLASS);
+        }, 500);
+    }
+};
+
 /**
  * Show cookie consent modal
  * @param {boolean} [createModal] create modal if it doesn't exist
@@ -385,7 +402,7 @@ export const show = (createModal) => {
         state._consentModalVisible = true;
 
         if(state._disablePageInteraction)
-            addClass(dom._htmlDom, TOGGLE_DISABLE_INTERACTION_CLASS);
+            toggleDisableInteraction(true);
 
         addClass(dom._htmlDom, TOGGLE_CONSENT_MODAL_CLASS);
         setAttribute(dom._cm, ARIA_HIDDEN, 'false');
@@ -414,7 +431,7 @@ export const hide = () => {
         state._consentModalVisible = false;
 
         if(state._disablePageInteraction)
-            removeClass(dom._htmlDom, TOGGLE_DISABLE_INTERACTION_CLASS);
+            toggleDisableInteraction();
 
         removeClass(dom._htmlDom, TOGGLE_CONSENT_MODAL_CLASS);
         setAttribute(dom._cm, ARIA_HIDDEN, 'true');
@@ -585,7 +602,7 @@ export const getUserPreferences = () => {
 export const loadScript = (src, attrs) => {
     let script = document.querySelector('script[src="' + src + '"]');
 
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
 
         if(script)
             return resolve(true);
@@ -605,7 +622,7 @@ export const loadScript = (src, attrs) => {
              * Remove script from dom if error is thrown
              */
             script.remove();
-            reject(false);
+            resolve(false);
         };
 
         script.src = src;
@@ -677,8 +694,11 @@ export const setCookieData = (props) => {
  * @returns {any}
  */
 export const getCookie = (field, cookieName) => {
-    const cookie = parseCookie(getSingleCookie(cookieName || globalObj._config.cookie.name, true));
-    return field ? cookie[field] : cookie;
+    const cookie = getPluginCookie(cookieName);
+
+    return field
+        ? cookie[field]
+        : cookie;
 };
 
 /**
@@ -726,7 +746,7 @@ export const run = async (userConfig) => {
         /**
          * @type {import('./global').CookieValue}
          */
-        const cookieValue = parseCookie(getSingleCookie(config.cookie.name, true));
+        const cookieValue = getPluginCookie();
         const categories = cookieValue.categories;
         const validCategories = isArray(categories);
 

@@ -1,5 +1,5 @@
 import { globalObj, isFunction } from '../core/global';
-import { SCRIPT_TAG_SELECTOR, BUTTON_TAG } from './constants';
+import { SCRIPT_TAG_SELECTOR, BUTTON_TAG, CLICK_EVENT } from './constants';
 
 /**
  * Helper console.log function
@@ -7,25 +7,32 @@ import { SCRIPT_TAG_SELECTOR, BUTTON_TAG } from './constants';
  * @param {Object} [optionalParam]
  */
 export const _log = (printMsg, optionalParam) => {
-    console.log(printMsg, optionalParam !== undefined ? optionalParam : ' ');
+    console.log(printMsg, optionalParam !== undefined
+        ? optionalParam
+        : ' '
+    );
 };
 
 /**
  * Helper indexOf
- * @param {Array|String} el
- * @param {Object} value
+ * @param {any[]|string} el
+ * @param {any} value
  */
-export const indexOf = (el, value) => {
-    return el.indexOf(value);
-};
+export const indexOf = (el, value) => el.indexOf(value);
 
-/*
-* Returns true if el is an array
-* @param {any} el
-*/
-export const isArray = (el) => {
-    return Array.isArray(el);
-};
+/**
+ * Returns true if el. (array or string) contains the specified value
+ * @param {any[]|string} el
+ * @param {any} value
+ */
+export const elContains = (el, value) => indexOf(el, value) !== -1;
+
+
+/**
+ * Check if el is an array
+ * @param {any} el
+ */
+export const isArray = (el) => Array.isArray(el);
 
 /**
  * Returns true if el is an object
@@ -34,6 +41,36 @@ export const isArray = (el) => {
 export const isObject = (el) => {
     return !!el && typeof el === 'object' && !isArray(el);
 };
+
+/**
+ * Get all keys defined inside object
+ * @param {Object} obj
+ */
+export const getKeys = obj => Object.keys(obj);
+
+/**
+ * Return array without duplicates
+ * @param {any[]} arr
+ */
+export const unique = (arr) => Array.from(new Set(arr));
+
+/**
+ * Get current active element
+ */
+export const getActiveElement = () => document.activeElement;
+
+/**
+ * preventDefault helper function
+ * @param {Event} e
+ */
+export const preventDefault = (e) => e.preventDefault();
+
+/**
+ * querySelectorAll helper function
+ * @param {Element} el
+ * @param {string} selector
+ */
+export const querySelectorAll = (el, selector) => el.querySelectorAll(selector);
 
 /**
  * Retrieves all script elements with 'data-category' attribute
@@ -46,7 +83,7 @@ export const retrieveScriptElements = () => {
 
     const state = globalObj._state;
 
-    state._allScriptTags = globalObj._dom._document.querySelectorAll('script[' + SCRIPT_TAG_SELECTOR +']');
+    state._allScriptTags = querySelectorAll(globalObj._dom._document, 'script[' + SCRIPT_TAG_SELECTOR +']');
 
     state._allScriptTagsInfo = [];
     state._allScriptTags.forEach(scriptTag => {
@@ -94,7 +131,7 @@ export const retrieveScriptElements = () => {
  * @returns {Object.<string, string[]>}
  */
 export const retrieveRejectedServices = () => {
-    var rejectedServices = {};
+    let rejectedServices = {};
 
     globalObj._state._allCategoryNames.forEach(categoryName => {
         rejectedServices[categoryName] = arrayDiff(
@@ -104,15 +141,6 @@ export const retrieveRejectedServices = () => {
     });
 
     return rejectedServices;
-};
-
-/**
- * Returns true if el. (array or string) contains the specified value
- * @param {any[]|string} el
- * @param {any} value
- */
-export const elContains = (el, value) => {
-    return el.indexOf(value) !== -1;
 };
 
 /**
@@ -142,9 +170,7 @@ export const setAttribute = (el, attribute, value) => {
  * @param {Node} parent
  * @param {Node} child
  */
-export const appendChild = (parent, child) => {
-    parent.appendChild(child);
-};
+export const appendChild = (parent, child) => parent.appendChild(child);
 
 /**
  * Generate RFC4122-compliant UUIDs.
@@ -160,6 +186,7 @@ export const uuidv4 = () => {
 /**
  * Function to run when event is fired
  * @callback eventFired
+ * @param {Event} event
  */
 
 /**
@@ -183,14 +210,6 @@ export const addEvent = (elem, event, fn, saveListener) => {
             _listener: fn
         });
     }
-};
-
-/**
- * Get all keys defined inside object
- * @param {Object} obj
- */
-export const getKeys = obj => {
-    return Object.keys(obj);
 };
 
 /**
@@ -224,13 +243,10 @@ export const removeClass = (el, className) => {
  * @param {HTMLElement} el
  * @param {string} className
  */
-export const hasClass = (el, className) => {
-    return el.classList.contains(className);
-};
+export const hasClass = (el, className) => el.classList.contains(className);
 
 /**
  * Calculate the existing cookie's remaining time until expiration (in milliseconds)
- * @returns {number}
  */
 export const getRemainingExpirationTimeMS = () => {
     const lastTimestamp = globalObj._state._lastConsentTimestamp;
@@ -249,8 +265,15 @@ export const getRemainingExpirationTimeMS = () => {
  */
 export const fetchJson = async (url) => {
     try{
-        const response = await fetch(url, {method: 'GET'});
-        return response.ok ? await response.json() : false;
+
+        const response = await fetch(url, {
+            method: 'GET'
+        });
+
+        return response.ok
+            ? await response.json()
+            : false;
+
     }catch(e){
         return false;
     }
@@ -282,17 +305,19 @@ export const arrayDiff = (arr1, arr2) => {
 /**
  * Calculate "accept type"
  * @param {{accepted: string[], rejected: string[]}} currentCategoriesState
- * @returns {string} accept type
+ * @returns {'all'|'custom'|'necessary'} accept type
  */
 export const getAcceptType = () => {
 
-    let type = 'custom';
-    let acceptedCategories = getCurrentCategoriesState().accepted;
+    let
+        type = 'custom',
+        acceptedCategories = getCurrentCategoriesState().accepted,
+        totAcceptedCategories = acceptedCategories.length;
 
     // Determine accept type based on number of accepted categories
-    if(acceptedCategories.length === globalObj._state._allCategoryNames.length)
+    if(totAcceptedCategories === globalObj._state._allCategoryNames.length)
         type = 'all';
-    else if(acceptedCategories.length === globalObj._state._readOnlyCategories.length)
+    else if(totAcceptedCategories === globalObj._state._readOnlyCategories.length)
         type = 'necessary';
 
     return type;
@@ -328,80 +353,71 @@ export const addDataButtonListeners = (elem, api, createPreferencesModal, create
         acceptAllElements = getElements(_a + 'all'),
         acceptNecessaryElements = getElements(_a + 'necessary'),
         acceptCustomElements = getElements(_a + 'custom'),
-        createPreferencesModalOnHover = globalObj._config.lazyHtmlGeneration === true;
+        createPreferencesModalOnHover = globalObj._config.lazyHtmlGeneration;
 
-    for(var i=0; i<showPreferencesModalElements.length; i++){
-        setAttribute(showPreferencesModalElements[i], 'aria-haspopup', 'dialog');
+    showPreferencesModalElements.forEach(el => {
+        setAttribute(el, 'aria-haspopup', 'dialog');
 
-        addEvent(showPreferencesModalElements[i], 'click', (event) => {
-            event.preventDefault();
+        addEvent(el, CLICK_EVENT, (event) => {
+            preventDefault(event);
             api.showPreferences();
-        }, true);
+        });
 
         if(createPreferencesModalOnHover){
-            addEvent(showPreferencesModalElements[i], 'mouseover', (event ) => {
-                event.preventDefault();
+            addEvent(el, 'mouseover', (event) => {
+                preventDefault(event);
 
                 if(!globalObj._state._preferencesModalExists)
                     createPreferencesModal(api, createMainContainer);
             }, true);
         }
-    }
+    });
 
-    for(i=0; i<showConsentModalElements.length; i++){
-        setAttribute(showConsentModalElements[i], 'aria-haspopup', 'dialog');
-        addEvent(showConsentModalElements[i], 'click', (event) => {
-            event.preventDefault();
+    showConsentModalElements.forEach(el => {
+        setAttribute(el, 'aria-haspopup', 'dialog');
+        addEvent(el, CLICK_EVENT, (event) => {
+            preventDefault(event);
             api.show(true);
         }, true);
-    }
+    });
 
-    for(i=0; i<acceptAllElements.length; i++){
-        addEvent(acceptAllElements[i], 'click', (event) => {
+    acceptAllElements.forEach(el => {
+        addEvent(el, CLICK_EVENT, (event) => {
             acceptAction(event, 'all');
         }, true);
-    }
+    });
 
-    for(i=0; i<acceptCustomElements.length; i++){
-        addEvent(acceptCustomElements[i], 'click', (event) => {
+    acceptCustomElements.forEach(el => {
+        addEvent(el, CLICK_EVENT, (event) => {
             acceptAction(event);
         }, true);
-    }
+    });
 
-    for(i=0; i<acceptNecessaryElements.length; i++){
-        addEvent(acceptNecessaryElements[i], 'click', (event) => {
+    acceptNecessaryElements.forEach(el => {
+        addEvent(el, CLICK_EVENT, (event) => {
             acceptAction(event, []);
         }, true);
-    }
+    });
 
     /**
      * Return all elements with given data-cc role
      * @param {string} dataRole
-     * @returns {NodeListOf<Element>}
      */
     function getElements(dataRole){
-        return (elem || document).querySelectorAll('[data-cc="' + dataRole + '"]');
+        return querySelectorAll(elem || document, '[data-cc="' + dataRole + '"]');
     }
 
     /**
      * Helper function: accept and then hide modals
-     * @param {PointerEvent} e source event
-     * @param {string} [acceptType]
+     * @param {Event} event source event
+     * @param {string|string[]} [acceptType]
      */
-    function acceptAction(e, acceptType){
-        e.preventDefault();
+    function acceptAction(event, acceptType){
+        preventDefault(event);
         api.acceptCategory(acceptType);
         api.hidePreferences();
         api.hide();
     }
-};
-
-/**
- * Return array without duplicates
- * @param {any[]} arr
- */
-export const unique = (arr) => {
-    return Array.from(new Set(arr));
 };
 
 /**
@@ -410,19 +426,15 @@ export const unique = (arr) => {
  */
 export const getCurrentCategoriesState = () => {
 
-    // calculate rejected categories (_allCategoryNames - _acceptedCategories)
-    const rejectedCategories = globalObj._state._allCategoryNames.filter((category) => {
-        return !elContains(globalObj._state._acceptedCategories, category);
-    });
+    let acceptedCategories = globalObj._state._acceptedCategories;
 
+    // calculate rejected categories: allCategories - acceptedCategories
     return {
-        accepted: globalObj._state._acceptedCategories,
-        rejected: rejectedCategories
+        accepted: acceptedCategories,
+        rejected: globalObj._state._allCategoryNames.filter((category) =>
+            !elContains(acceptedCategories, category)
+        )
     };
-};
-
-export const getActiveElement = () => {
-    return document.activeElement;
 };
 
 /**
@@ -452,12 +464,12 @@ export const handleFocusTrap = () => {
             if(e.shiftKey){
                 if (currentActiveElement === focusableElements[0]) {
                     focusableElements[1].focus();
-                    e.preventDefault();
+                    preventDefault(e);
                 }
             }else{
                 if (currentActiveElement === focusableElements[1]) {
                     focusableElements[0].focus();
-                    e.preventDefault();
+                    preventDefault(e);
                 }
             }
 
@@ -465,7 +477,7 @@ export const handleFocusTrap = () => {
             // Focus the first focusable element
             if(!tabbedInsideModal && !globalObj._state._clickedInsideModal){
                 tabbedInsideModal = true;
-                !tabbedOutsideDiv && e.preventDefault();
+                !tabbedOutsideDiv && preventDefault(e);
 
                 if(e.shiftKey){
                     focusableElements[1].focus();
@@ -487,7 +499,7 @@ export const closeModalOnOutsideClick = (api) => {
 
     const dom = globalObj._dom;
 
-    addEvent(dom._ccMain, 'click', (e) => {
+    addEvent(dom._ccMain, CLICK_EVENT, (e) => {
         const state = globalObj._state;
 
         /**
@@ -517,7 +529,7 @@ export const closeModalOnOutsideClick = (api) => {
 export const getModalFocusableData = () => {
 
     const state = globalObj._state;
-
+    const dom = globalObj._dom;
     /**
      * Note: any of the below focusable elements, which has the attribute tabindex="-1" AND is either
      * the first or last element of the modal, won't receive focus during "open/close" modal
@@ -530,20 +542,20 @@ export const getModalFocusableData = () => {
      * @param {HTMLElement} modal
      * @param {Element[]} _array
      */
-    const saveAllFocusableElements = (modal, _array) => {
+    const saveAllFocusableElements = (modal, array) => {
 
-        const focusableElements = modal && modal.querySelectorAll(focusableTypesSelector);
+        const focusableElements = querySelectorAll(modal, focusableTypesSelector);
 
         /**
-         * Save first and last elements (used to lock/trap focus inside modal)
+         * Save first and last elements (trap focus inside modal)
          */
-        _array[0] = focusableElements[0];
-        _array[1] = focusableElements[focusableElements.length - 1];
+        array[0] = focusableElements[0];
+        array[1] = focusableElements[focusableElements.length - 1];
     };
 
     if(state._consentModalExists)
-        saveAllFocusableElements(globalObj._dom._cm, state._cmFocusableElements);
+        saveAllFocusableElements(dom._cm, state._cmFocusableElements);
 
     if(state._preferencesModalExists)
-        saveAllFocusableElements(globalObj._dom._pm, state._pmFocusableElements);
+        saveAllFocusableElements(dom._pm, state._pmFocusableElements);
 };

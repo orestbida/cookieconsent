@@ -101,15 +101,12 @@ export const manageExistingScripts = (mustEnableCategories) => {
                     const freshScript = createNode('script');
                     freshScript.textContent = currScript.innerHTML;
 
-                    // Copy attributes over to the new "revived" script
-                    ((destination, source) => {
-                        var attributes = source.attributes;
-                        var len = attributes.length;
-                        for(var i=0; i<len; i++){
-                            var attrName = attributes[i].nodeName;
-                            setAttribute(destination, attrName , source[attrName] || source.getAttribute(attrName));
-                        }
-                    })(freshScript, currScript);
+                    //Copy attributes over to the new "revived" script
+                    [...currScript.attributes].forEach(attr => {
+                        let nodeName = attr.nodeName;
+
+                        setAttribute(freshScript, nodeName, currScript[nodeName] || currScript.getAttribute(nodeName));
+                    });
 
                     // Set src (if data-src found)
                     src

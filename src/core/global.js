@@ -31,6 +31,54 @@ import { COOKIE_NAME, OPT_IN_MODE } from '../utils/constants';
  */
 
 /**
+ * Pointers to main dom elements
+ * @typedef {Object} DomElements
+ * @property {Document} _document
+ * @property {HTMLElement} _htmlDom
+ *
+ * @property {HTMLElement} _ccMain
+ * @property {HTMLElement} _cmContainer
+ * @property {HTMLElement} _pmContainer
+ *
+ * @property {HTMLElement} _cm
+ * @property {HTMLElement} _cmBody
+ * @property {HTMLElement} _cmTexts
+ * @property {HTMLElement} _cmTitle
+ * @property {HTMLElement} _cmDescription
+ * @property {HTMLElement} _cmBtns
+ * @property {HTMLElement} _cmBtnGroup
+ * @property {HTMLElement} _cmBtnGroup2
+ * @property {HTMLElement} _cmAcceptAllBtn
+ * @property {HTMLElement} _cmAcceptNecessaryBtn
+ * @property {HTMLElement} _cmShowPreferencesBtn
+ * @property {HTMLElement} _cmFooterLinksGroup
+ * @property {HTMLElement} _cmCloseIconBtn
+ *
+ * @property {HTMLElement} _pm
+ * @property {HTMLElement} _pmHeader
+ * @property {HTMLElement} _pmTitle
+ * @property {HTMLElement} _pmCloseBtn
+ * @property {HTMLElement} _pmBody
+ * @property {HTMLElement} _pmNewBody
+ * @property {HTMLElement} _pmSections
+ * @property {HTMLElement} _pmFooter
+ * @property {HTMLElement} _pmAcceptAllBtn
+ * @property {HTMLElement} _pmAcceptNecessaryBtn
+ * @property {HTMLElement} _pmSavePreferencesBtn
+ */
+
+/**
+ * @typedef {Object} CustomCallbacks
+ * @property {Function} _onFirstConsent
+ * @property {Function} _onConsent
+ * @property {Function} _onChange
+ * @property {Function} _onModalShow
+ * @property {Function} _onModalHide
+ * @property {Function} _onModalReady
+ */
+
+
+/**
  * Pointers to all services toggles relative to a category
  * @typedef {Object.<string, HTMLElement>} ServiceToggle
  */
@@ -67,6 +115,11 @@ export const deepCopy = (el) => {
     return clone;
 };
 
+/**
+ * window.dispatchEvent helper function
+ * @param {string} eventName
+ * @param {any} data
+ */
 const dispatchEvent = (eventName, data) => {
     window.dispatchEvent(new CustomEvent(eventName, {detail: data}));
 };
@@ -328,58 +381,21 @@ export class Global {
             _allScriptTagsInfo: []
         };
 
+
         /**
          * Pointers to main dom elements
+         * @type {DomElements}
          */
         this._dom = {
-            /** @type {number|Document} */ _document: 0,
-            /** @type {number|HTMLElement} */ _htmlDom: 0,
-
-            /** @type {number|HTMLElement} */ _ccMain: 0,
-            /** @type {number|HTMLElement} */ _cmContainer: 0,
-            /** @type {number|HTMLElement} */ _pmContainer: 0,
-
-            /** @type {number|HTMLElement} */ _cm: 0,
-            /** @type {number|HTMLElement} */ _cmBody: 0,
-            /** @type {number|HTMLElement} */ _cmTexts: 0,
-            /** @type {number|HTMLElement} */ _cmTitle: 0,
-            /** @type {number|HTMLElement} */ _cmDescription: 0,
-            /** @type {number|HTMLElement} */ _cmBtns: 0,
-            /** @type {number|HTMLElement} */ _cmBtnGroup: 0,
-            /** @type {number|HTMLElement} */ _cmBtnGroup2: 0,
-            /** @type {number|HTMLElement} */ _cmAcceptAllBtn: 0,
-            /** @type {number|HTMLElement} */ _cmAcceptNecessaryBtn: 0,
-            /** @type {number|HTMLElement} */ _cmShowPreferencesBtn: 0,
-            /** @type {number|HTMLElement} */ _cmFooterLinksGroup: 0,
-            /** @type {number|HTMLElement} */ _cmCloseIconBtn: 0,
-
-            /** @type {number|HTMLElement} */ _pm: 0,
-            /** @type {number|HTMLElement} */ _pmHeader: 0,
-            /** @type {number|HTMLElement} */ _pmTitle: 0,
-            /** @type {number|HTMLElement} */ _pmCloseBtn: 0,
-            /** @type {number|HTMLElement} */ _pmBody: 0,
-            /** @type {number|HTMLElement} */ _pmNewBody: 0,
-            /** @type {number|HTMLElement} */ _pmSections: 0,
-            /** @type {number|HTMLElement} */ _pmFooter: 0,
-            /** @type {number|HTMLElement} */ _pmAcceptAllBtn: 0,
-            /** @type {number|HTMLElement} */ _pmAcceptNecessaryBtn: 0,
-            /** @type {number|HTMLElement} */ _pmSavePreferencesBtn: 0,
-
             /** @type {Object.<string, HTMLElement>} */ _categoryCheckboxInputs: {},
             /** @type {Object.<string, ServiceToggle>} */ _serviceCheckboxInputs: {}
         };
 
         /**
-         * Pointers to callback functions
+         * Callback functions
+         * @type {CustomCallbacks}
          */
-        this._callbacks = {
-            /** @type {number|Function} **/ _onFirstConsent: 0,
-            /** @type {number|Function} **/ _onConsent: 0,
-            /** @type {number|Function} **/ _onChange: 0,
-            /** @type {number|Function} **/ _onModalShow: 0,
-            /** @type {number|Function} **/ _onModalHide: 0,
-            /** @type {number|Function} **/ _onModalReady: 0
-        };
+        this._callbacks = {};
 
         this._customEvents = {
             _onFirstConsent: 'cc:onFirstConsent',
