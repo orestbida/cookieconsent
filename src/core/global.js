@@ -178,6 +178,8 @@ export class Global {
              */
             _dataEventListeners: [],
 
+            _disablePageInteraction: false,
+
             /**
             * @type {any}
             */

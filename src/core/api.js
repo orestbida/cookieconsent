@@ -12,7 +12,8 @@ import {
     getKeys,
     retrieveRejectedServices,
     isArray,
-    unique
+    unique,
+    getActiveElement
 } from '../utils/general';
 
 import { manageExistingScripts, retrieveEnabledCategoriesAndServices } from '../utils/scripts';
@@ -56,6 +57,7 @@ import {
     OPT_OUT_MODE,
     OPT_IN_MODE,
     CONSENT_MODAL_NAME,
+    ARIA_HIDDEN,
     PREFERENCES_MODAL_NAME
 } from '../utils/constants';
 
@@ -372,22 +374,25 @@ export const eraseCookies = (cookies, path, domain) => {
  */
 export const show = (createModal) => {
 
-    if(createModal && !globalObj._state._consentModalExists)
+    const
+        dom = globalObj._dom,
+        state = globalObj._state;
+
+    if(createModal && !state._consentModalExists)
         createConsentModal(miniAPI, createMainContainer);
 
-    if(globalObj._state._consentModalExists){
+    if(state._consentModalExists){
+        state._consentModalVisible = true;
 
-        addClass(globalObj._dom._htmlDom, TOGGLE_CONSENT_MODAL_CLASS);
+        if(state._disablePageInteraction)
+            addClass(dom._htmlDom, TOGGLE_DISABLE_INTERACTION_CLASS);
 
-        /**
-         * Update attributes/internal statuses
-         */
-        setAttribute(globalObj._dom._cm, 'aria-hidden', 'false');
-        globalObj._state._consentModalVisible = true;
+        addClass(dom._htmlDom, TOGGLE_CONSENT_MODAL_CLASS);
+        setAttribute(dom._cm, ARIA_HIDDEN, 'false');
 
         setTimeout(() => {
-            globalObj._state._lastFocusedElemBeforeModal = globalObj._dom._document.activeElement;
-            globalObj._state._currentModalFocusableElements = globalObj._state._cmFocusableElements;
+            state._lastFocusedElemBeforeModal = getActiveElement();
+            state._currentModalFocusableElements = state._cmFocusableElements;
         }, 200);
 
         _log('CookieConsent [TOGGLE]: show consentModal');
@@ -400,15 +405,24 @@ export const show = (createModal) => {
  * Hide consent modal
  */
 export const hide = () => {
-    if(globalObj._state._consentModalExists && globalObj._state._consentModalVisible){
-        removeClass(globalObj._dom._htmlDom, TOGGLE_CONSENT_MODAL_CLASS);
-        setAttribute(globalObj._dom._cm, 'aria-hidden', 'true');
-        globalObj._state._consentModalVisible = false;
+
+    const
+        dom = globalObj._dom,
+        state = globalObj._state;
+
+    if(state._consentModalExists){
+        state._consentModalVisible = false;
+
+        if(state._disablePageInteraction)
+            removeClass(dom._htmlDom, TOGGLE_DISABLE_INTERACTION_CLASS);
+
+        removeClass(dom._htmlDom, TOGGLE_CONSENT_MODAL_CLASS);
+        setAttribute(dom._cm, ARIA_HIDDEN, 'true');
 
         setTimeout(() => {
-            //restore focus to the last page element which had focus before modal opening
-            globalObj._state._lastFocusedElemBeforeModal.focus();
-            globalObj._state._currentModalFocusableElements = [];
+            //restore focus to the last focused element
+            state._lastFocusedElemBeforeModal.focus();
+            state._currentModalFocusableElements = [];
         }, 200);
 
         _log('CookieConsent [TOGGLE]: hide consentModal');
@@ -430,7 +444,7 @@ export const showPreferences = () => {
         createPreferencesModal(miniAPI, createMainContainer);
 
     addClass(globalObj._dom._htmlDom, TOGGLE_PREFERENCES_MODAL_CLASS);
-    setAttribute(globalObj._dom._pm, 'aria-hidden', 'false');
+    setAttribute(globalObj._dom._pm, ARIA_HIDDEN, 'false');
     state._preferencesModalVisible = true;
 
     setTimeout(()=>{
@@ -443,12 +457,13 @@ export const showPreferences = () => {
     setTimeout(() => {
         // If there is no consent-modal, keep track of the last focused elem.
         if(!state._consentModalVisible){
-            state._lastFocusedElemBeforeModal = globalObj._dom._document.activeElement;
+            state._lastFocusedElemBeforeModal = getActiveElement();
         }else{
-            state._lastFocusedModalElement = globalObj._dom._document.activeElement;
+            state._lastFocusedModalElement = getActiveElement();
         }
 
-        if (state._pmFocusableElements.length === 0) return;
+        if (state._pmFocusableElements.length === 0)
+            return;
 
         state._pmFocusableElements[0].focus();
 
@@ -471,7 +486,7 @@ export const hidePreferences = () => {
         return;
 
     removeClass(globalObj._dom._htmlDom, TOGGLE_PREFERENCES_MODAL_CLASS);
-    setAttribute(globalObj._dom._pm, 'aria-hidden', 'true');
+    setAttribute(globalObj._dom._pm, ARIA_HIDDEN, 'true');
 
     state._preferencesModalVisible = false;
 

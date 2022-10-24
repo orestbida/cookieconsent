@@ -28,6 +28,7 @@ export const setConfig = (userConfig) => {
     state._allTranslations = userConfig.language.translations;
     state._allDefinedCategories = userCategories;
     state._allCategoryNames = allCategoryNames;
+    state._disablePageInteraction = !!userConfig.disablePageInteraction;
 
     /**
      * Save references to callback functions

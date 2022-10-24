@@ -421,6 +421,10 @@ export const getCurrentCategoriesState = () => {
     };
 };
 
+export const getActiveElement = () => {
+    return document.activeElement;
+};
+
 /**
  * Trap focus inside modal and focus the first
  * focusable element of current active modal
@@ -442,7 +446,7 @@ export const handleFocusTrap = () => {
         // If there is any modal to focus
         if(focusableElements.length > 0){
 
-            const currentActiveElement = dom._document.activeElement;
+            const currentActiveElement = getActiveElement();
 
             // If reached natural end of the tab sequence => restart
             if(e.shiftKey){

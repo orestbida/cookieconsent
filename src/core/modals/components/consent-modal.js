@@ -14,8 +14,8 @@ import {
 
 import {
     CONSENT_MODAL_NAME,
-    TOGGLE_DISABLE_INTERACTION_CLASS,
     DIV_TAG,
+    ARIA_HIDDEN,
     BUTTON_TAG
 } from '../../../utils/constants';
 
@@ -44,9 +44,6 @@ export const createConsentModal = (api, createMainContainer) => {
     if(!consentModalData)
         return;
 
-    if(state._userConfig.disablePageInteraction === true)
-        addClass(dom._htmlDom, TOGGLE_DISABLE_INTERACTION_CLASS);
-
     var acceptAllBtnData = consentModalData.acceptAllBtn,
         acceptNecessaryBtnData = consentModalData.acceptNecessaryBtn,
         showPreferencesBtnData = consentModalData.showPreferencesBtn,
@@ -70,7 +67,7 @@ export const createConsentModal = (api, createMainContainer) => {
 
         setAttribute(dom._cm, 'role', 'dialog');
         setAttribute(dom._cm, 'aria-modal', 'true');
-        setAttribute(dom._cm, 'aria-hidden', 'false');
+        setAttribute(dom._cm, ARIA_HIDDEN, 'false');
         setAttribute(dom._cm, 'aria-labelledby', 'cm__title');
         setAttribute(dom._cm, 'aria-describedby', 'cm__desc');
 

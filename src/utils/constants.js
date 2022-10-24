@@ -12,5 +12,7 @@ export const SCRIPT_TAG_SELECTOR = 'data-category';
 export const DIV_TAG = 'div';
 export const BUTTON_TAG = 'button';
 
+export const ARIA_HIDDEN = 'aria-hidden';
+
 export const CONSENT_MODAL_NAME = 'consentModal';
 export const PREFERENCES_MODAL_NAME = 'preferencesModal';

@@ -19,6 +19,7 @@ import {
     PREFERENCES_MODAL_NAME,
     SCRIPT_TAG_SELECTOR,
     DIV_TAG,
+    ARIA_HIDDEN,
     BUTTON_TAG
 } from '../../../utils/constants';
 
@@ -62,7 +63,7 @@ export const createPreferencesModal = (api, createMainContainer) => {
 
         addClass(dom._pm, 'pm');
         setAttribute(dom._pm, 'role', 'dialog');
-        setAttribute(dom._pm, 'aria-hidden', true);
+        setAttribute(dom._pm, ARIA_HIDDEN, true);
         setAttribute(dom._pm, 'aria-modal', true);
 
         // If 'esc' key is pressed inside _preferencesContainer div => hide preferences
@@ -222,7 +223,7 @@ export const createPreferencesModal = (api, createMainContainer) => {
 
                     addClassPm(serviceCounter, 'badge');
                     addClassPm(serviceCounter, 'service-counter');
-                    setAttribute(serviceCounter, 'aria-hidden', true);
+                    setAttribute(serviceCounter, ARIA_HIDDEN, true);
                     setAttribute(serviceCounter, 'data-servicecounter', nServices);
 
                     if(serviceCounterLabel){
@@ -270,7 +271,7 @@ export const createPreferencesModal = (api, createMainContainer) => {
         }
 
         if(sIsExpandableToggle){
-            setAttribute(sDescContainer, 'aria-hidden', 'true');
+            setAttribute(sDescContainer, ARIA_HIDDEN, 'true');
             sDescContainer.id = expandableDivId;
 
             /**
@@ -281,11 +282,11 @@ export const createPreferencesModal = (api, createMainContainer) => {
                     if(!hasClass(section, 'is-expanded')){
                         addClass(section, 'is-expanded');
                         setAttribute(btn, 'aria-expanded', 'true');
-                        setAttribute(accordion, 'aria-hidden', 'false');
+                        setAttribute(accordion, ARIA_HIDDEN, 'false');
                     }else{
                         removeClass(section, 'is-expanded');
                         setAttribute(btn, 'aria-expanded', 'false');
-                        setAttribute(accordion, 'aria-hidden', 'true');
+                        setAttribute(accordion, ARIA_HIDDEN, 'true');
                     }
                 });
             })(sDescContainer, s, sTitle);
@@ -496,7 +497,7 @@ function createToggleLabel(label, value, sCurrentCategoryObject, isService, cate
     addClass(toggleIcon, 'toggle__icon');
     addClass(toggleLabelSpan, 'toggle__label');
 
-    setAttribute(toggleIcon, 'aria-hidden', 'true');
+    setAttribute(toggleIcon, ARIA_HIDDEN, 'true');
 
     if(isService){
         addClass(toggleLabel, 'toggle-service');
