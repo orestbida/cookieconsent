@@ -191,7 +191,7 @@ export const createConsentModal = (api, createMainContainer) => {
             addClassCm(dom._cmShowPreferencesBtn, 'btn--secondary');
             setAttribute(dom._cmShowPreferencesBtn, DATA_ROLE, 'show');
 
-            addEvent(dom._cmShowPreferencesBtn, 'mouseover', () => {
+            addEvent(dom._cmShowPreferencesBtn, 'mouseenter', () => {
                 if(!state._preferencesModalExists)
                     createPreferencesModal(api, createMainContainer);
             });

@@ -192,7 +192,7 @@ export const uuidv4 = () => {
 /**
  * Add event listener to dom object (cross browser function)
  * @param {Element} elem
- * @param {string} event
+ * @param {keyof WindowEventMap} event
  * @param {eventFired} fn
  * @param {boolean} [saveListener]
  */
@@ -364,7 +364,7 @@ export const addDataButtonListeners = (elem, api, createPreferencesModal, create
         });
 
         if(createPreferencesModalOnHover){
-            addEvent(el, 'mouseover', (event) => {
+            addEvent(el, 'mouseenter', (event) => {
                 preventDefault(event);
 
                 if(!globalObj._state._preferencesModalExists)
