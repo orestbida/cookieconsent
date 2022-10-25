@@ -31,7 +31,7 @@ import { createPreferencesModal } from './preferencesModal';
 
 /**
  * Create consent modal and append it to "cc-main" el.
- * @param {import("../../global").Api} api
+ * @param {import("../global").Api} api
  * @param {CreateMainContainer} createMainContainer
  */
 export const createConsentModal = (api, createMainContainer) => {
@@ -47,11 +47,19 @@ export const createConsentModal = (api, createMainContainer) => {
     if(!consentModalData)
         return;
 
-    var acceptAllBtnData = consentModalData.acceptAllBtn,
+    const acceptAllBtnData = consentModalData.acceptAllBtn,
         acceptNecessaryBtnData = consentModalData.acceptNecessaryBtn,
         showPreferencesBtnData = consentModalData.showPreferencesBtn,
         closeIconLabelData = consentModalData.closeIconLabel,
         footerData = consentModalData.footer;
+
+    /**
+     * @param {string|string[]} [categories]
+     */
+    const acceptAndHide = (categories) => {
+        api.hide();
+        api.acceptCategory(categories);
+    };
 
     // Create modal if it doesn't exist
     if(!dom._cmContainer){
@@ -93,10 +101,9 @@ export const createConsentModal = (api, createMainContainer) => {
                 dom._cmCloseIconBtn = createNode(BUTTON_TAG);
                 addClassCm(dom._cmCloseIconBtn, 'btn');
                 addClassCm(dom._cmCloseIconBtn, 'btn--close');
-                addEvent(dom._cmCloseIconBtn, CLICK_EVENT, ()=>{
+                addEvent(dom._cmCloseIconBtn, CLICK_EVENT, () => {
                     _log('CookieConsent [ACCEPT]: necessary');
-                    api.hide();
-                    api.acceptCategory([]);
+                    acceptAndHide([]);
                 });
                 appendChild(dom._cmBody, dom._cmCloseIconBtn);
             }
@@ -159,8 +166,7 @@ export const createConsentModal = (api, createMainContainer) => {
 
             addEvent(dom._cmAcceptAllBtn, CLICK_EVENT, () => {
                 _log('CookieConsent [ACCEPT]: all');
-                api.hide();
-                api.acceptCategory('all');
+                acceptAndHide('all');
             });
         }
 
@@ -176,8 +182,7 @@ export const createConsentModal = (api, createMainContainer) => {
 
             addEvent(dom._cmAcceptNecessaryBtn, CLICK_EVENT, () => {
                 _log('CookieConsent [ACCEPT]: necessary');
-                api.hide();
-                api.acceptCategory([]); // accept necessary only
+                acceptAndHide([]);
             });
         }
 
@@ -215,7 +220,7 @@ export const createConsentModal = (api, createMainContainer) => {
         acceptNecessaryBtnData && appendChild(dom._cmBtnGroup, dom._cmAcceptNecessaryBtn);
         acceptAllBtnData && appendChild(dom._cmBtnGroup, dom._cmAcceptAllBtn);
 
-        (acceptAllBtnData || acceptNecessaryBtnData ) && appendChild(dom._cmBody, dom._cmBtnGroup);
+        (acceptAllBtnData || acceptNecessaryBtnData) && appendChild(dom._cmBody, dom._cmBtnGroup);
         appendChild(dom._cmBtns, dom._cmBtnGroup);
     }
 

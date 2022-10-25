@@ -39,13 +39,24 @@ export const createPreferencesModal = (api, createMainContainer) => {
 
     const state = globalObj._state;
     const dom = globalObj._dom;
+    const hidePreferencesModal = api.hidePreferences;
 
     /**
-     * @type {import("../../global").PreferencesModalOptions}
+     * @param {string|string[]} [acceptType]
+     */
+    const acceptHelper = (acceptType) => {
+        api.acceptCategory(acceptType);
+        hidePreferencesModal();
+        api.hide();
+    };
+
+    /**
+     * @type {import("../global").PreferencesModalOptions}
      */
     const modalData = state._currentTranslation && state._currentTranslation.preferencesModal;
 
-    if(!modalData) return;
+    if(!modalData)
+        return;
 
     var titleData = modalData.title,
         closeIconLabelData = modalData.closeIconLabel,
@@ -71,9 +82,8 @@ export const createPreferencesModal = (api, createMainContainer) => {
 
         // If 'esc' key is pressed inside _preferencesContainer div => hide preferences
         addEvent(dom._htmlDom, 'keydown', (event) => {
-            if (event.keyCode === 27) {
-                api.hidePreferences();
-            }
+            if (event.keyCode === 27)
+                hidePreferencesModal();
         }, true);
 
         // modal header
@@ -88,7 +98,7 @@ export const createPreferencesModal = (api, createMainContainer) => {
         dom._pmCloseBtn = createNode(BUTTON_TAG);
         addClassPm(dom._pmCloseBtn, 'close-btn');
         setAttribute(dom._pmCloseBtn, 'aria-label', modalData.closeIconLabel || '');
-        addEvent(dom._pmCloseBtn, CLICK_EVENT, api.hidePreferences);
+        addEvent(dom._pmCloseBtn, CLICK_EVENT, hidePreferencesModal);
 
         // modal body
         dom._pmBody = createNode(DIV_TAG);
@@ -397,9 +407,9 @@ export const createPreferencesModal = (api, createMainContainer) => {
                 addClassPm(dom._pmAcceptNecessaryBtn, 'btn');
                 setAttribute(dom._pmAcceptNecessaryBtn, DATA_ROLE, 'necessary');
                 appendChild(_pmBtnGroup1, dom._pmAcceptNecessaryBtn);
-                addEvent(dom._pmAcceptNecessaryBtn, CLICK_EVENT, () => {
-                    acceptHelper([]);
-                });
+                addEvent(dom._pmAcceptNecessaryBtn, CLICK_EVENT, () =>
+                    acceptHelper([])
+                );
             }
 
             dom._pmAcceptNecessaryBtn.innerHTML = acceptNecessaryBtnData;
@@ -411,9 +421,9 @@ export const createPreferencesModal = (api, createMainContainer) => {
                 addClassPm(dom._pmAcceptAllBtn, 'btn');
                 setAttribute(dom._pmAcceptAllBtn, DATA_ROLE, 'all');
                 appendChild(_pmBtnGroup1, dom._pmAcceptAllBtn);
-                addEvent(dom._pmAcceptAllBtn, CLICK_EVENT, () => {
-                    acceptHelper('all');
-                });
+                addEvent(dom._pmAcceptAllBtn, CLICK_EVENT, () =>
+                    acceptHelper('all')
+                );
             }
 
             dom._pmAcceptAllBtn.innerHTML = acceptAllBtnData;
@@ -428,18 +438,12 @@ export const createPreferencesModal = (api, createMainContainer) => {
             setAttribute(dom._pmSavePreferencesBtn, DATA_ROLE, 'save');
             appendChild(_pmBtnGroup2, dom._pmSavePreferencesBtn);
 
-            addEvent(dom._pmSavePreferencesBtn, CLICK_EVENT, () => {
-                acceptHelper();
-            });
+            addEvent(dom._pmSavePreferencesBtn, CLICK_EVENT, () =>
+                acceptHelper()
+            );
         }
 
         dom._pmSavePreferencesBtn.innerHTML = savePreferencesBtnData;
-    }
-
-    function acceptHelper(acceptType){
-        api.acceptCategory(acceptType);
-        api.hidePreferences();
-        api.hide();
     }
 
     if(dom._pmNewBody) {
@@ -455,9 +459,7 @@ export const createPreferencesModal = (api, createMainContainer) => {
      * has the `data-hideModal` attribute
      */
     dom._pmBody.querySelectorAll('[data-hideModal]').forEach(el => {
-        addEvent(el, CLICK_EVENT, () => {
-            api.hidePreferences();
-        });
+        addEvent(el, CLICK_EVENT, hidePreferencesModal);
     });
 
     if(!state._preferencesModalExists){
