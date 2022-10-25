@@ -1,7 +1,7 @@
 import { globalObj } from '../global';
 import { createNode, appendChild, addDataButtonListeners, closeModalOnOutsideClick } from '../../utils/general';
-import { createConsentModal } from './components/consent-modal';
-import { createPreferencesModal } from './components/preferences-modal';
+import { createConsentModal } from './consentModal';
+import { createPreferencesModal } from './preferencesModal';
 import { DIV_TAG } from '../../utils/constants';
 
 export const createMainContainer = (api) => {
@@ -20,7 +20,7 @@ export const createMainContainer = (api) => {
             root = document.querySelector(root);
 
         // Append main container to dom
-        appendChild((root || dom._document.body), dom._ccMain);
+        appendChild(root || dom._document.body, dom._ccMain);
 
         closeModalOnOutsideClick(api);
     }
@@ -44,7 +44,5 @@ export const createCookieConsentHTML = (api) => {
     addDataButtonListeners(null, api, createPreferencesModal, createMainContainer);
 };
 
-export {
-    createConsentModal,
-    createPreferencesModal
-};
+export * from './consentModal';
+export * from './preferencesModal';

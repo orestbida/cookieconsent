@@ -170,7 +170,7 @@ export const fireEvent = (eventName, modalName, modal) => {
     dispatchEvent(eventName, deepCopy(params));
 };
 
-export class Global {
+export class GlobalState {
     constructor() {
 
         /**
@@ -408,4 +408,4 @@ export class Global {
     }
 }
 
-export const globalObj = new Global();
+export const globalObj = new GlobalState();

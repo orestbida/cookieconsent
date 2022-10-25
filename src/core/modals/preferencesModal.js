@@ -1,4 +1,4 @@
-import { globalObj, fireEvent } from '../../global';
+import { globalObj, fireEvent } from '../global';
 import {
     createNode,
     addClass,
@@ -12,9 +12,9 @@ import {
     elContains,
     getModalFocusableData,
     _log
-} from '../../../utils/general';
+} from '../../utils/general';
 
-import { guiManager } from '../../../utils/gui-manager';
+import { guiManager } from '../../utils/gui-manager';
 import {
     PREFERENCES_MODAL_NAME,
     SCRIPT_TAG_SELECTOR,
@@ -24,7 +24,7 @@ import {
     BTN_GROUP_CLASS,
     CLICK_EVENT,
     DATA_ROLE
-} from '../../../utils/constants';
+} from '../../utils/constants';
 
 /**
  * @callback CreateMainContainer

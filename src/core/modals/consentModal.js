@@ -1,4 +1,4 @@
-import { globalObj, fireEvent } from '../../global';
+import { globalObj, fireEvent } from '../global';
 
 import {
     _log,
@@ -10,7 +10,7 @@ import {
     addEvent,
     getModalFocusableData,
     addDataButtonListeners
-} from '../../../utils/general';
+} from '../../utils/general';
 
 import {
     CONSENT_MODAL_NAME,
@@ -20,10 +20,10 @@ import {
     BTN_GROUP_CLASS,
     CLICK_EVENT,
     DATA_ROLE
-} from '../../../utils/constants';
+} from '../../utils/constants';
 
-import { guiManager } from '../../../utils/gui-manager';
-import { createPreferencesModal } from './preferences-modal';
+import { guiManager } from '../../utils/gui-manager';
+import { createPreferencesModal } from './preferencesModal';
 
 /**
  * @callback CreateMainContainer

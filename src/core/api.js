@@ -21,7 +21,7 @@ import { manageExistingScripts, retrieveEnabledCategoriesAndServices } from '../
 import {
     fireEvent,
     globalObj,
-    Global,
+    GlobalState,
     deepCopy
 } from './global';
 
@@ -30,7 +30,7 @@ import {
     createPreferencesModal,
     createCookieConsentHTML,
     createMainContainer
-} from './modals/modals';
+} from './modals/index';
 
 import {
     getCurrentLanguageCode,
@@ -861,7 +861,7 @@ export const reset = (eraseCookie) => {
         removeClass(dom._htmlDom, TOGGLE_CONSENT_MODAL_CLASS);
     }
 
-    const newGlobal = new Global();
+    const newGlobal = new GlobalState();
 
     globalObj._state = newGlobal._state;
     globalObj._dom = newGlobal._dom;
