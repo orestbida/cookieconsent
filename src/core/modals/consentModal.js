@@ -40,7 +40,7 @@ export const createConsentModal = (api, createMainContainer) => {
     const dom = globalObj._dom;
 
     /**
-     * @type {import("../../global").ConsentModalOptions}
+     * @type {import("../global").ConsentModalOptions}
      */
     const consentModalData = state._currentTranslation && state._currentTranslation.consentModal;
 

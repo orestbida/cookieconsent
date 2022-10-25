@@ -4,6 +4,9 @@ import { createConsentModal } from './consentModal';
 import { createPreferencesModal } from './preferencesModal';
 import { DIV_TAG } from '../../utils/constants';
 
+/**
+ * @param {import('../global').Api} api
+ */
 export const createMainContainer = (api) => {
     const dom = globalObj._dom;
 
