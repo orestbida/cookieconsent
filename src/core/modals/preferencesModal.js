@@ -32,7 +32,7 @@ import {
 
 /**
  * Generates preferences modal and appends it to "cc-main" el.
- * @param {import("../../global").Api} api
+ * @param {import("../global").Api} api
  * @param {CreateMainContainer} createMainContainer
  */
 export const createPreferencesModal = (api, createMainContainer) => {
@@ -448,6 +448,17 @@ export const createPreferencesModal = (api, createMainContainer) => {
     }
 
     guiManager(1);
+
+    /**
+     * for SPA apps:
+     * close modal if clicked element
+     * has the `data-hideModal` attribute
+     */
+    dom._pmBody.querySelectorAll('[data-hideModal]').forEach(el => {
+        addEvent(el, CLICK_EVENT, () => {
+            api.hidePreferences();
+        });
+    });
 
     if(!state._preferencesModalExists){
         state._preferencesModalExists = true;
