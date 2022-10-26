@@ -34,6 +34,7 @@ import {
 
 import {
     getCurrentLanguageCode,
+    handleRtlLanguage,
     loadTranslationData,
     setCurrentLanguageCode,
     validLanguageCode
@@ -568,6 +569,8 @@ export const setLanguage = async (newLanguageCode, forceUpdate) => {
 
         if(globalObj._state._preferencesModalExists)
             createPreferencesModal(miniAPI, createMainContainer);
+
+        handleRtlLanguage();
 
         return true;
     }

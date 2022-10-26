@@ -1,6 +1,6 @@
 import * as CookieConsent from "../src/index"
 import testConfig from "./config/full-config";
-import { defineCryptoRandom, setCookie } from "./config/mocks-utils";
+import { setCookie } from "./config/mocks-utils";
 
 import {
     eraseCookiesHelper,
@@ -15,8 +15,7 @@ import {
 let api;
 
 describe("Cookie should be created successfully", () =>{
-    beforeAll(async ()=>{
-        defineCryptoRandom();
+    beforeAll(async () => {
         api = CookieConsent;
         await api.run(testConfig);
         api.acceptCategory('all');

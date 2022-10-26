@@ -28,6 +28,10 @@ $font-weight-bold: 600;
     line-height: 1.15;
     -webkit-text-size-adjust: 100%;
 
+    &.cc--rtl{
+        direction: rtl;
+    }
+
     b,
     em,
     strong,
