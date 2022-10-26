@@ -1,5 +1,5 @@
 import { globalObj } from '../core/global';
-import { _log, getKeys, elContains, fetchJson } from './general';
+import { _log, getKeys, elContains, fetchJson, addClass, removeClass, isArray} from './general';
 
 /**
  * Check if language is valid/defined
@@ -123,4 +123,24 @@ export const loadTranslationData = async (desiredLanguageCode) => {
     _log('CookieConsent [LANG]: set language: "' + currentLanguageCode + '"');
 
     return true;
+};
+
+/**
+ * Toggle RTL class on/off based on current language
+ */
+export const handleRtlLanguage = () => {
+
+    let rtlLanguages = globalObj._state._userConfig.language.rtl;
+    let ccMain = globalObj._dom._ccMain;
+
+    if(rtlLanguages && ccMain){
+
+        if(!isArray(rtlLanguages))
+            rtlLanguages = [rtlLanguages];
+
+        if(elContains(rtlLanguages, globalObj._state._currentLanguageCode))
+            addClass(ccMain, 'cc--rtl');
+        else
+            removeClass(ccMain, 'cc--rtl');
+    }
 };

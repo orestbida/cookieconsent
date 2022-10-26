@@ -460,6 +460,11 @@ declare namespace CookieConsent {
             default: string,
 
             /**
+             * RTL language(s).
+             */
+            rtl?: string | string[]
+
+            /**
              * Language detection strategy.
              */
             autoDetect?: 'document' | 'browser'

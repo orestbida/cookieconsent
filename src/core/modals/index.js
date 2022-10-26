@@ -3,6 +3,7 @@ import { createNode, appendChild, addDataButtonListeners, closeModalOnOutsideCli
 import { createConsentModal } from './consentModal';
 import { createPreferencesModal } from './preferencesModal';
 import { DIV_TAG } from '../../utils/constants';
+import { handleRtlLanguage } from '../../utils/language';
 
 /**
  * @param {import('../global').Api} api
@@ -16,6 +17,8 @@ export const createMainContainer = (api) => {
 
         dom._ccMain.style.position = 'fixed';
         dom._ccMain.style.zIndex = '2147483647';
+
+        handleRtlLanguage();
 
         let root = globalObj._state._userConfig.root;
 
