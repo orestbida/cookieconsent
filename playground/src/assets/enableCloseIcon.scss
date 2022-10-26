@@ -1,0 +1,27 @@
+#cc-main {
+    .cm__btn{
+        &--close{
+            display: none!important;
+
+            &+.cm__texts .cm__title{
+                padding-right: 0!important;
+            }
+        }
+    }
+}
+
+.cc-showIcon {
+    #cc-main{
+        .cm--box{
+            .cm__btn{
+                &--close{
+                    display: block!important;
+
+                    &+.cm__texts .cm__title{
+                        padding-right: 2em!important;
+                    }
+                }
+            }
+        }
+    }
+}

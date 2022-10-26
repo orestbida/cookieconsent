@@ -13,6 +13,7 @@ import './components/consentDetails';
 import './components/printCategories';
 import './components/printValidConsent';
 import './components/guiOptions';
+import './components/enableCloseIcon';
 
 CookieConsent
     .run(getState().cookieConsentConfig)

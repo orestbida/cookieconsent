@@ -8,6 +8,8 @@ export const defaultState = {
     darkmode: false,
     currLanguage: defaultConfig.language.default,
 
+    enableCloseIcon: false,
+
     /**
      * @type {import('vanilla-cookieconsent').ConsentModalPosition}
      */
@@ -21,7 +23,7 @@ export const defaultState = {
     /**
      * Increase on every new playground update
      */
-    demoRevision: 3
+    demoRevision: 4
 };
 
 clearInvalidDemoState();
