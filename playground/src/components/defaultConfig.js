@@ -6,8 +6,8 @@ import fr from '../translations/fr.json';
 import { customEvents, onEvent } from './utils';
 
 /**
- * WARNING: this object is
- * will be stored in localStorage;
+ * WARNING: this object will be 
+ * stored in localStorage;
  * do not declare functions,
  * regex ... (only primitive data)
  */
