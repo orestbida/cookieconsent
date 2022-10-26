@@ -15,8 +15,8 @@ import {
 
 import * as CookieConsent from "../src/index"
 import testConfig from "./config/basic-config"
-import { defineCryptoRandom, htmlHasClass } from './config/mocks-utils';
-import { globalObj } from '../src/core/global';
+import { htmlHasClass } from './config/mocks-utils';
+import { globalObj, deepCopy } from '../src/core/global';
 
 /**
  * @type {import("../src/core/global").Api}
@@ -28,8 +28,7 @@ describe("Test add/remove/toggle classes", () => {
     let el;
     const className = 'test_class';
 
-    beforeAll(async ()=>{
-        defineCryptoRandom();
+    beforeAll(async () => {
         api = CookieConsent;
         await api.run(testConfig);
         api.acceptCategory();
@@ -80,10 +79,6 @@ describe("Array/Object tests", () =>{
     const arr1 = [1];
     const arr2 = [1, 2]
 
-    beforeAll(()=>{
-        defineCryptoRandom();
-    })
-
     it('It should return symmetric array difference', () => {
         const diff = arrayDiff(arr1, arr2);
         expect(diff).toEqual([2]);
@@ -110,4 +105,31 @@ describe("Array/Object tests", () =>{
     it('Should return a 36 char long string', () => {
         expect(uuidv4().length).toBe(36);
     })
+
+    it('It should deep copy object', () => {
+
+        expect(deepCopy(2)).toBe(2);
+        expect(deepCopy(false)).toBe(false);
+        expect(deepCopy('ciao')).toBe('ciao');
+        expect(deepCopy({})).toEqual({});
+
+        const date = new Date();
+        expect(deepCopy(date)).toEqual(date);
+
+        const original = {
+            id: 21,
+            bool: false,
+            date: new Date(),
+            str: 'test',
+            arr: ['a', 'b', 'c'],
+            obj: {
+                id: 21,
+                date: new Date(),
+                str: 'test',
+                arr: ['a', 'b', 'c'],
+            }
+        }
+
+        expect(deepCopy(original)).toEqual(original);
+    });
 })

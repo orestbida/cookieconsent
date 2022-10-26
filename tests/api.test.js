@@ -2,7 +2,7 @@ import * as CookieConsent from "../src/index"
 import testConfig from "./config/full-config";
 import { getKeys } from "../src/utils/general";
 import { globalObj } from "../src/core/global";
-import { defineCryptoRandom, htmlHasClass, setCookie } from "./config/mocks-utils";
+import { htmlHasClass, setCookie } from "./config/mocks-utils";
 
 /**
  * @type {import("../src/core/global").Api}
@@ -21,25 +21,23 @@ global.fetch = jest.fn(() =>
 
 describe("API tests", () =>{
 
-    beforeAll(async ()=>{
-        defineCryptoRandom();
+    beforeAll(async () => {
 
         document.body.innerHTML = `
             <script type="text/plain" data-category="analytics">console.log("enabled analytics")</script>
             <script type="text/plain" data-category="!analytics">console.log("disabled analytics")</script>
             <script type="text/plain" data-category="analytics" data-service="my-service">console.log("enabled my-service")</script>
             <script type="text/plain" data-category="analytics" data-service="!my-service">console.log("disabled my-service")</script>
-            <script type="text/plain" data-category="analytics" data-src="./config/testScriptLoad.js"></script>
         `;
 
         api = CookieConsent;
     })
 
-    beforeEach(async ()=>{
+    beforeEach(async () => {
         await api.run(testConfig);
     });
 
-    afterEach( async ()=>{
+    afterEach( async () => {
         api.reset(true);
         fetch.mockClear();
     })
@@ -313,11 +311,6 @@ describe("API tests", () =>{
         const cookieData = api.getCookie('data');
         expect(cookieData).toHaveProperty('id');
         expect(cookieData).toHaveProperty('new_prop');
-    })
-
-    it('Should load script', async () => {
-        const loaded = await api.loadScript('./config/testScriptLoad.js').catch(reason => reason);
-        expect(loaded).toBe(true);
     })
 
     it('Should autoClearCookies when category is rejected', () => {

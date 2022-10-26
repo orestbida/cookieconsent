@@ -4,12 +4,13 @@ import {
     resolveCurrentLanguageCode,
     getCurrentLanguageCode,
     getDocumentLanguageCode,
-    validLanguageCode
+    validLanguageCode,
+    loadTranslationData
 } from '../src/utils/language'
 
 describe('Test language utils', () => {
 
-    beforeAll(()=>{
+    beforeAll(() => {
         Object.defineProperty(global.navigator, 'language', {value: 'it-IT', configurable: true});
     })
 
@@ -69,4 +70,37 @@ describe('Test language utils', () => {
         globalObj._state._userConfig.language.autoDetect = 'browser';
         expect(resolveCurrentLanguageCode()).toBe('it');
     })
+
+    it('Should use the language defined in the html tag', () => {
+        document.documentElement.lang = 'en';
+
+        globalObj._state._userConfig = {
+            language : {
+                default: 'it',
+                autoDetect: 'document'
+            }
+        };
+
+        globalObj._state._allTranslations = {
+            it: {},
+            en: {}
+        }
+
+        globalObj._state._currentLanguageCode = '';
+        expect(resolveCurrentLanguageCode()).toBe('en');
+    })
+
+    it('Should return false if translation is not defined', async () => {
+        globalObj._state._allTranslations = {}
+        globalObj._state._currentLanguageCode = '';
+        globalObj._state._userConfig = {
+            language: {
+                default: 'it'
+            }
+        };
+
+        const validTranslationData = await loadTranslationData('it');
+
+        expect(validTranslationData).toBe(false)
+    });
 });

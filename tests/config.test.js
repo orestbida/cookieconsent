@@ -1,7 +1,7 @@
 import { globalObj } from "../src/core/global";
 import * as CookieConsent from "../src/index"
 import testConfig from "./config/full-config";
-import { defineCryptoRandom, htmlHasClass, setUserAgent, botUserAgent } from "./config/mocks-utils";
+import { htmlHasClass, setUserAgent, botUserAgent } from "./config/mocks-utils";
 
 /**
  * @type {import("../src/core/global").Api}
@@ -11,13 +11,12 @@ let api;
 describe("Check modals' html generation under different settings", () =>{
 
 
-    beforeAll(()=>{
-        defineCryptoRandom();
+    beforeAll(() => {
         api = CookieConsent;
         testConfig.autoShow = true;
     })
 
-    beforeEach(()=>{
+    beforeEach(() => {
         api.reset();
     })
 
