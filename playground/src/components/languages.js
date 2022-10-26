@@ -103,6 +103,8 @@ function setAutoDetectLanguage(languageCode){
             ? 'true'
             : 'false';
 
+        setActiveLanguage(languageCode);
+
         return;
     }
 

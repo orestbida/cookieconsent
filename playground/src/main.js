@@ -14,7 +14,6 @@ import './components/printCategories';
 import './components/printValidConsent';
 import './components/guiOptions';
 
-
 CookieConsent
     .run(getState().cookieConsentConfig)
     .then(() => fireEvent(customEvents._INIT));

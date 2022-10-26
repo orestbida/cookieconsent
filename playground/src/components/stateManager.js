@@ -9,6 +9,16 @@ export const defaultState = {
     currLanguage: defaultConfig.language.default,
 
     /**
+     * @type {import('vanilla-cookieconsent').ConsentModalPosition}
+     */
+    lastNonBarPosition: '',
+
+    /**
+     * @type {import('vanilla-cookieconsent').ConsentModalPosition}
+     */
+    lastBarPosition: '',
+
+    /**
      * Increase on every new playground update
      */
     demoRevision: 3

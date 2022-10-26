@@ -1,7 +1,7 @@
 import '../assets/guiOptions.scss';
 import defaultConfig from './defaultConfig';
 import { getState, saveState } from './stateManager';
-import { onEvent, customEvents, reRunPlugin, addEvent } from './utils';
+import { onEvent, customEvents, reRunPlugin, addEvent, getById } from './utils';
 
 const CHANGE_EVENT = 'change';
 const CONSENT_MODAL_NAME = 'consentModal';
@@ -9,16 +9,16 @@ const PREFERENCES_MODAL_NAME = 'preferencesModal';
 
 const htmlElements = {
     consentModal: {
-        /** @type {HTMLSelectElement} **/   layout: document.getElementById('cm-layout'),
-        /** @type {HTMLSelectElement} **/   position: document.getElementById('cm-position'),
-        /** @type {HTMLInputElement} **/    flipButtons: document.getElementById('cm-flip'),
-        /** @type {HTMLInputElement} **/    equalWeightButtons: document.getElementById('cm-weight')
+        /** @type {HTMLSelectElement} **/   layout: getById('cm-layout'),
+        /** @type {HTMLSelectElement} **/   position: getById('cm-position'),
+        /** @type {HTMLInputElement} **/    flipButtons: getById('cm-flip'),
+        /** @type {HTMLInputElement} **/    equalWeightButtons: getById('cm-weight')
     },
     preferencesModal: {
-        /** @type {HTMLSelectElement} **/   layout: document.getElementById('pm-layout'),
-        /** @type {HTMLSelectElement} **/   position: document.getElementById('pm-position'),
-        /** @type {HTMLInputElement} **/    flipButtons: document.getElementById('pm-flip'),
-        /** @type {HTMLInputElement} **/    equalWeightButtons: document.getElementById('pm-weight')
+        /** @type {HTMLSelectElement} **/   layout: getById('pm-layout'),
+        /** @type {HTMLSelectElement} **/   position: getById('pm-position'),
+        /** @type {HTMLInputElement} **/    flipButtons: getById('pm-flip'),
+        /** @type {HTMLInputElement} **/    equalWeightButtons: getById('pm-weight')
     }
 };
 
@@ -39,50 +39,37 @@ const cmLayoutYValues = ['top', 'bottom', 'middle'];
 const cmLayoutXValues = ['left', 'center', 'right'];
 
 /**
- * @type {string}
+ * @type {import('vanilla-cookieconsent').ConsentModalLayout}
  */
-let previousLayout;
+let currentCMLayoutValue = '';
+
+/**
+ * @type {import('vanilla-cookieconsent').PreferencesModalLayout}
+ */
+let currentPMLayoutValue = '';
+
+/**
+ * @param {import('vanilla-cookieconsent').ConsentModalPosition} position 
+ */
+const validBarPositions = (position) => position === 'top' || position === 'bottom';
 
 addEvent(htmlElements[CONSENT_MODAL_NAME].layout, CHANGE_EVENT, function(){
 
-    /**
-     * @type {string}
-     */
-    const layout = this.value;
-    const isBarLayout = layout.startsWith('bar');
+    currentCMLayoutValue = this.value;
 
-    setGuiOptionsField(CONSENT_MODAL_NAME, 'layout', layout);
-
-    if(previousLayout.startsWith('bar') !== isBarLayout){
-        previousLayout = layout;
-        generateCMPositionOptions(!isBarLayout);
-
-        const state = getState();
-        const consentModal = state.cookieConsentConfig.guiOptions.consentModal;
-
-        if(isBarLayout){
-            if(consentModal.position !== 'top' || consentModal.position !== 'bottom'){
-                consentModal.position = htmlElements[CONSENT_MODAL_NAME].position.value = 'bottom';
-            }
-        }else{
-            consentModal.position = htmlElements[CONSENT_MODAL_NAME].position.value = defaultConfig.guiOptions.consentModal.position;
-        }
-
-        saveState(state);
-    }
-
+    updateGuiOptionsState(CONSENT_MODAL_NAME, 'layout', currentCMLayoutValue);
 });
 
 addEvent(htmlElements[CONSENT_MODAL_NAME].position, CHANGE_EVENT, function(){
-    setGuiOptionsField(CONSENT_MODAL_NAME, 'position', this.value);
+    updateGuiOptionsState(CONSENT_MODAL_NAME, 'position', this.value);
 });
 
 addEvent(htmlElements[CONSENT_MODAL_NAME].flipButtons, CHANGE_EVENT, function(){
-    setGuiOptionsField(CONSENT_MODAL_NAME, 'flipButtons', this.checked);
+    updateGuiOptionsState(CONSENT_MODAL_NAME, 'flipButtons', this.checked);
 });
 
 addEvent(htmlElements[CONSENT_MODAL_NAME].equalWeightButtons, CHANGE_EVENT, function(){
-    setGuiOptionsField(CONSENT_MODAL_NAME, 'equalWeightButtons', this.checked);
+    updateGuiOptionsState(CONSENT_MODAL_NAME, 'equalWeightButtons', this.checked);
 });
 /** END: consentModal options */
 
@@ -93,35 +80,81 @@ let pmPositionOptionsDisabled = false;
 
 addEvent(htmlElements[PREFERENCES_MODAL_NAME].layout, CHANGE_EVENT, function(){
 
-    const layout = this.value;
+    currentPMLayoutValue = this.value;
 
-    if(layout === 'box')
-        disablePMPositionOptions(true);
-    else if(pmPositionOptionsDisabled)
-        disablePMPositionOptions(false);
-
-    setGuiOptionsField(PREFERENCES_MODAL_NAME, 'layout', layout);
+    updateGuiOptionsState(PREFERENCES_MODAL_NAME, 'layout', currentPMLayoutValue);
 });
 
 addEvent(htmlElements[PREFERENCES_MODAL_NAME].position, CHANGE_EVENT, function(){
-    setGuiOptionsField(PREFERENCES_MODAL_NAME, 'position', this.value);
+    updateGuiOptionsState(PREFERENCES_MODAL_NAME, 'position', this.value);
 });
 
 addEvent(htmlElements[PREFERENCES_MODAL_NAME].flipButtons, CHANGE_EVENT, function(){
-    setGuiOptionsField(PREFERENCES_MODAL_NAME, 'flipButtons', this.checked);
+    updateGuiOptionsState(PREFERENCES_MODAL_NAME, 'flipButtons', this.checked);
 });
 
 addEvent(htmlElements[PREFERENCES_MODAL_NAME].equalWeightButtons, CHANGE_EVENT, function(){
-    setGuiOptionsField(PREFERENCES_MODAL_NAME, 'equalWeightButtons', this.checked);
+    updateGuiOptionsState(PREFERENCES_MODAL_NAME, 'equalWeightButtons', this.checked);
 });
 /** END: preferencesModal options */
 
 /**
+ * @param {'consentModal' | 'preferencesModal'} modalName
  * @param {string} key
  * @param {any} value
  */
-function setGuiOptionsField(modalName, key, value) {
+function updateGuiOptionsState(modalName, key, value) {
     const state = getState();
+
+    if(modalName === CONSENT_MODAL_NAME){
+        
+        if(key === 'layout'){
+
+            const layout = currentCMLayoutValue;
+            const isBarLayout = layout.startsWith('bar');
+
+            const consentModal = state.cookieConsentConfig.guiOptions.consentModal;
+            const currentPosition = consentModal.position;
+    
+            if(validBarPositions(currentPosition)){
+                state.lastBarPosition = currentPosition
+            }else{
+                state.lastNonBarPosition = currentPosition;
+            }
+    
+            if(!isBarLayout && validBarPositions(currentPosition) || isBarLayout && !validBarPositions(currentPosition)){
+    
+                generateCMPositionOptions(!isBarLayout);
+    
+                if(isBarLayout){
+                    if(!validBarPositions(currentPosition))
+                        consentModal.position = htmlElements[CONSENT_MODAL_NAME].position.value = state.lastBarPosition || 'bottom';
+                }else{
+                    consentModal.position = htmlElements[CONSENT_MODAL_NAME].position.value = state.lastNonBarPosition || defaultConfig.guiOptions.consentModal.position;
+                }
+            }
+        }
+    
+        if(key === 'position'){
+            const currentPosition = state.cookieConsentConfig.guiOptions.consentModal.position;
+    
+            if(validBarPositions(currentPosition)){
+                state.lastBarPosition = currentPosition
+            }else{
+                state.lastNonBarPosition = currentPosition;
+            }
+        }
+    }else {
+
+        if(key === 'layout'){
+            if(currentPMLayoutValue === 'box')
+                disablePMPositionOptions(true);
+            else if(pmPositionOptionsDisabled)
+                disablePMPositionOptions(false);
+        }
+
+    }
+
     state.cookieConsentConfig.guiOptions[modalName][key] = value;
     saveState(state);
     reRunPlugin(state.cookieConsentConfig, modalName);
@@ -145,7 +178,6 @@ function setAllValues(modalName){
  */
 function setLayout(modalName, layout, position){
     htmlElements[modalName].layout.value = layout;
-    previousLayout = layout;
     setPosition(modalName, position, layout);
 }
 
