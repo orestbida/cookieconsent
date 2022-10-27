@@ -145,6 +145,20 @@ $sections-padding: 1em 1.3em;
         gap: var(--cc-btn-gap);
     }
 
+    .cm--wide {
+        .cm__btn-group--uneven{
+            display: flex;
+            flex: 1;
+            justify-content: space-between;
+        }
+
+        &.cm--flip{
+            .cm__btn-group--uneven{
+                flex-direction: row-reverse;
+            }
+        }
+    }
+
     .cm__btn{
         color: var(--cc-btn-primary-color);
         background: var(--cc-btn-primary-bg);
