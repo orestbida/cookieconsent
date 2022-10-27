@@ -19,10 +19,10 @@ const currentLanguage = state.currLanguage || state.cookieConsentConfig.language
 
 let autoDetectEnabled = state.cookieConsentConfig.language.autoDetect === 'browser';
 
-setActiveLanguage(currentLanguage);
-
 if(autoDetectEnabled)
-    setAutoDetectLanguage(currentLanguage);
+    setAutoDetectLanguage(getBrowserLanguage());
+else
+    setActiveLanguage(currentLanguage);
 
 inputs.forEach(input => {
     addEvent(input, 'change', () => {

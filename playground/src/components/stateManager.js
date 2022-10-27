@@ -10,6 +10,9 @@ export const defaultState = {
 
     enableCloseIcon: false,
 
+    removeAcceptNecessaryBtn: false,
+    removeShowPrefrencesBtn: false,
+
     /**
      * @type {import('vanilla-cookieconsent').ConsentModalPosition}
      */

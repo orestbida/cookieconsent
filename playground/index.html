@@ -86,7 +86,7 @@
                         <label for="cm-flip">Flip buttons</label>
                     </div>
                     <div class="weight">
-                        <input type="checkbox" id="cm-weight" name="flip">
+                        <input type="checkbox" id="cm-weight" name="weight">
                         <label for="cm-weight">Equal weight buttons</label>
                     </div>
                 </fieldset>
@@ -112,18 +112,27 @@
                         <label for="pm-flip">Flip buttons</label>
                     </div>
                     <div class="weight">
-                        <input type="checkbox" id="pm-weight" name="flip">
+                        <input type="checkbox" id="pm-weight" name="weight">
                         <label for="pm-weight">Equal weight buttons</label>
                     </div>
                 </fieldset>
             </div>
     
             <fieldset>
-                <legend>Consent Modal Close Icon</legend>
-                <input type="checkbox" id="close-icon" name="flip">
-                <label for="close-icon">Show (visible in the <b>box</b> layout(s) only)</label>
+                <legend>Consent Modal Buttons</legend>
+                
+                <input type="checkbox" id="close-icon" name="closeIcon">
+                <label for="close-icon">Add <b>X icon</b> (visible in the <b>box</b> layouts only) = accept necessary</label>
+                <br>
+
+                <input type="checkbox" id="accept-necessary-btn" name="AcceptNecessary">
+                <label for="accept-necessary-btn">Remove <b>accept necessary</b> button</label>
+                <br>
+
+                <input type="checkbox" id="show-preferences-btn" name="ShowPreferences">
+                <label for="show-preferences-btn">Remove <b>show preferences</b> button</label>
+            
             </fieldset>
-         
             <div class="flex">
                 <fieldset class="consent-status" id="consent-status">
                     <legend>Valid Consent</legend>
