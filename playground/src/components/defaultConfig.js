@@ -79,12 +79,4 @@ const defaultConfig = {
     }
 };
 
-onEvent(customEvents._ON_CONSENT, ({detail}) => {
-    console.log('onConsent', detail);
-});
-
-onEvent(customEvents._ON_CHANGE, ({detail}) => {
-    console.log('onChange', detail);
-});
-
 export default defaultConfig;

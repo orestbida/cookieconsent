@@ -1,9 +1,9 @@
 import { onEvent, customEvents } from './utils'
 
-/**
- * @param {HTMLElement} modal
- */
-const updateFields = (modal) => {
+
+const updateFields = () => {
+
+    const modal = document.querySelector('#cc-main .pm');
 
     if(!window.CookieConsent.validConsent() || !modal)
         return;
@@ -24,18 +24,14 @@ const updateFields = (modal) => {
 };
 
 onEvent(customEvents._ON_CHANGE, () => {
-    updateFields(getPreferencesModal());
+    updateFields();
 });
 
 onEvent(customEvents._ON_CONSENT, () => {
-    updateFields(getPreferencesModal());
+    updateFields();
 });
 
 onEvent(customEvents._ON_MODAL_SHOW, ({detail}) => {
     if(detail.modalName === 'preferencesModal')
-        updateFields(getPreferencesModal());
+        updateFields();
 });
-
-function getPreferencesModal() {
-    return document.querySelector('#cc-main .pm');
-}
