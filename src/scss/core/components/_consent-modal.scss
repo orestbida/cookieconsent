@@ -145,7 +145,11 @@ $sections-padding: 1em 1.3em;
         gap: var(--cc-btn-gap);
     }
 
-    .cm--wide {
+    /** Start: Layout with 2 buttons, one of 
+    which is the show preferences btn **/
+    .cm--wide,
+    .cm--bar:not(.cm--inline) {
+
         .cm__btn-group--uneven{
             display: flex;
             flex: 1;
@@ -158,7 +162,8 @@ $sections-padding: 1em 1.3em;
             }
         }
     }
-
+    /** End **/
+    
     .cm__btn{
         color: var(--cc-btn-primary-color);
         background: var(--cc-btn-primary-bg);
