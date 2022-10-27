@@ -30,18 +30,47 @@
         - data-category="category-name" (replace "category-name" with a valid category)
     -->
 
-    <script type="text/plain" data-category="analytics">
-        console.log('analytics enabled!');
+    <script>
+        // Define dataLayer and the gtag function.
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+
+        gtag('consent', 'default', {
+          'ad_storage': 'denied',
+          'analytics_storage': 'denied'
+        });
     </script>
 
-    <!-- INLINE GTM (replace "GTM-XXXXXXX" with your id)-->
+    <!-- Google Tag Manager (replace GTM-XXXXXX)-->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-XXXXXX');</script>
+    <!-- End Google Tag Manager -->
+
     <script type="text/plain" data-category="analytics">
-        // Google Tag Manager (configured with GA internally)
-        (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-        'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-        })(window,document,'script','dataLayer','GTM-XXXXXXX');
+        gtag('consent', 'update', {
+            'analytics_storage': 'granted'
+        });
+    </script>
+
+    <script type="text/plain" data-category="!analytics">
+        gtag('consent', 'update', {
+            'analytics_storage': 'denied'
+        });
+    </script>
+
+    <script type="text/plain" data-category="ads">
+        gtag('consent', 'update', {
+            'ad_storage': 'granted'
+        });
+    </script>
+
+    <script type="text/plain" data-category="!ads">
+        gtag('consent', 'update', {
+            'ad_storage': 'denied'
+        });
     </script>
 </body>
 </html>

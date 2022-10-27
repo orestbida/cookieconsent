@@ -25,36 +25,28 @@ manager.run({
     }
 });
 
+/**
+ * Enable suggestions
+ * @type {import('../../types')}
+ */
 CookieConsent.run({
     disablePageInteraction: true,
 
     cookie: {
-        name: 'cc_cookie_demo3',
-
-        /**
-         * Dynamic expiresAfterDays value
-         */
-        expiresAfterDays: (acceptType) => {
-            if(acceptType === 'all'){
-                console.log('long duration!');
-                return 365;
-            }
-
-            console.log("short duration!");
-            return 90;
-        }
+        name: 'cc_cookie_demo3'
     },
 
     guiOptions: {
         consentModal: {
             layout: 'cloud inline',
             position: 'bottom center',
-            equalWeightButtons: true
+            equalWeightButtons: true,
+            flipButtons: false
         },
         preferencesModal: {
-            layout: 'bar',
-            position: 'right',
-            equalWeightButtons: true
+            layout: 'box',
+            equalWeightButtons: true,
+            flipButtons: false
         }
     },
 
@@ -66,7 +58,7 @@ CookieConsent.run({
         console.log('onConsent fired!', cookie)
     },
 
-    onChange: ({cookie, changedCategories, changedServices}) => {
+    onChange: ({changedCategories, changedServices}) => {
         console.log('onChange fired!', changedCategories, changedServices);
     },
 
@@ -107,7 +99,8 @@ CookieConsent.run({
                     }
                 }
             }
-        }
+        },
+        ads: {}
     },
 
     language: {

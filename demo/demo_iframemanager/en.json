@@ -8,25 +8,25 @@
         "footer": "<a href=\"#link\">Privacy Policy</a><a href=\"#link\">Terms and conditions</a>"
     },
     "preferencesModal": {
-        "title": "<img src=\"https://fontmeme.com/permalink/220805/3b90158d204fdd325173a5c7873e7cc1.png\" alt=\"Logo\" loading=\"lazy\" height=\"35px\" style=\"margin-left: -4px; margin-bottom: -5px;\">",
+        "title": "Consent preferences center",
         "acceptAllBtn": "Accept all",
         "acceptNecessaryBtn": "Reject all",
         "savePreferencesBtn": "Save preferences",
         "closeIconLabel": "Close modal",
-        "serviceCounterLabel":"Services",
+        "serviceCounterLabel": "Service|Services",
         "sections": [
             {
                 "title": "Somebody said ... cookies?",
                 "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
             },
             {
-                "title": "Strictly necessary cookies <span class=\"pm__badge\">always enabled</span>",
-                "description": "These cookies are essential for the prop",
+                "title": "Strictly necessary cookies <span class=\"pm__badge\">Always enabled</span>",
+                "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
                 "linkedCategory": "necessary"
             },
             {
                 "title": "Analytics cookies",
-                "description": "These cookies track youLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.<br><br>loremIpsum",
+                "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
                 "linkedCategory": "analytics",
                 "cookieTable": {
                     "headers": {
@@ -44,12 +44,17 @@
                 }
             },
             {
+                "title": "Advertisement cookies",
+                "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+                "linkedCategory": "ads"
+            },
+            {
                 "title": "Your consent details",
                 "description": "</p><p>consent id: <span id=\"consent-id\">-</span><p>consent date: <span id=\"consent-timestamp\">-</span></p><p>last update: <span id=\"last-consent-timestamp\">-</span></p>"
             },
             {
                 "title": "More information",
-                "description": "For any queries in relation to my policy on cookies and your choices, please <a class=\"cc__link\" href=\"#yourdomain.com\">contact me</a>."
+                "description": "For any queries in relation to our policy on cookies and your choices, please <a class=\"cc__link\" href=\"#yourdomain.com\">contact me</a>."
             }
         ]
     }
