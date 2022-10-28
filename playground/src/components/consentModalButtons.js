@@ -1,16 +1,20 @@
-import '../assets/enableCloseIcon.scss'
+import '../assets/enableCloseIcon.scss';
+import '../assets/hideFooter.scss';
 import defaultConfig from './defaultConfig';
-import { getState, saveState, defaultState } from "./stateManager";
-import { addEvent, getById, customEvents, reRunPlugin } from "./utils";
+import { getState, saveState, defaultState } from './stateManager';
+import { addEvent, getById, customEvents, reRunPlugin } from './utils';
 
 const state = getState();
-const enableXIconCheckbox = getById('close-icon');
-const removeAcceptNecessaryBtnCheckbox = getById('accept-necessary-btn');
-const removeShowPreferencesBtnCheckbox = getById('show-preferences-btn');
+
+/** @type {HTMLInputElement} **/ const enableXIconCheckbox = getById('close-icon');
+/** @type {HTMLInputElement} **/ const removeAcceptNecessaryBtnCheckbox = getById('accept-necessary-btn');
+/** @type {HTMLInputElement} **/ const removeShowPreferencesBtnCheckbox = getById('show-preferences-btn');
+/** @type {HTMLInputElement} **/ const removeFooterCheckbox = getById('remove-footer');
 
 toggleCloseIcon(state.enableCloseIcon);
 toggleRemoveAcceptNecessaryBtn(state.removeAcceptNecessaryBtn);
 toggleRemoveShowPreferencesBtn(state.removeShowPrefrencesBtn);
+toggleRemoveFooter(state.removeFooter);
 
 addEvent(enableXIconCheckbox, 'change', function(){
 
@@ -28,7 +32,7 @@ addEvent(enableXIconCheckbox, 'change', function(){
     window.CookieConsent.show(true);
 });
 
-addEvent(removeAcceptNecessaryBtnCheckbox, 'change', function(){
+addEvent(removeAcceptNecessaryBtnCheckbox, 'change', function() {
 
     /**
      * @type {boolean}
@@ -42,10 +46,10 @@ addEvent(removeAcceptNecessaryBtnCheckbox, 'change', function(){
 
     toggleBtn(state, 'acceptNecessaryBtn', remove);
     saveState(state);
-    reRunPlugin(state.cookieConsentConfig, 'consentModal')
+    reRunPlugin(state.cookieConsentConfig, 'consentModal');
 });
 
-addEvent(removeShowPreferencesBtnCheckbox, 'change', function(){
+addEvent(removeShowPreferencesBtnCheckbox, 'change', function() {
 
     /**
      * @type {boolean}
@@ -59,13 +63,29 @@ addEvent(removeShowPreferencesBtnCheckbox, 'change', function(){
     
     toggleBtn(state, 'showPreferencesBtn', remove);
     saveState(state);
-    reRunPlugin(state.cookieConsentConfig, 'consentModal')
+    reRunPlugin(state.cookieConsentConfig, 'consentModal');
+});
+
+addEvent(removeFooterCheckbox, 'change', function() {
+
+    /**
+     * @type {boolean}
+     */
+    const remove = this.checked;
+
+    toggleRemoveFooter(remove);
+
+    const state = getState();
+    state.removeFooter = remove;
+    saveState(state);
+    window.CookieConsent.show(true);
 });
 
 addEvent(window, customEvents._RESET, () => {
     toggleCloseIcon(defaultState.enableCloseIcon);
     toggleRemoveAcceptNecessaryBtn(defaultState.removeAcceptNecessaryBtn);
     toggleRemoveShowPreferencesBtn(defaultState.removeShowPrefrencesBtn);
+    toggleRemoveFooter(defaultState.removeFooter);
 });
 
 /**
@@ -81,17 +101,29 @@ function toggleCloseIcon(enable) {
 }
 
 /**
- * @param {boolean} enable 
+ * @param {boolean} remove 
  */
-function toggleRemoveAcceptNecessaryBtn(enable) {
-    removeAcceptNecessaryBtnCheckbox.checked = enable;
+function toggleRemoveAcceptNecessaryBtn(remove) {
+    removeAcceptNecessaryBtnCheckbox.checked = remove;
 }
 
 /**
- * @param {boolean} enable 
+ * @param {boolean} remove 
  */
-function toggleRemoveShowPreferencesBtn(enable) {
-    removeShowPreferencesBtnCheckbox.checked = enable;
+function toggleRemoveShowPreferencesBtn(remove) {
+    removeShowPreferencesBtnCheckbox.checked = remove;
+}
+
+/**
+ * @param {boolean} remove 
+ */
+function toggleRemoveFooter(remove) {
+    removeFooterCheckbox.checked = remove;
+    const classListAction = remove 
+        ? 'add'
+        : 'remove';
+
+    document.body.classList[classListAction]('cc-hideFooter');
 }
 
 /**
@@ -99,7 +131,7 @@ function toggleRemoveShowPreferencesBtn(enable) {
  * @param {'showPreferencesBtn' | 'acceptNecessaryBtn'} btnName 
  * @param {boolean} remove 
  */
- function toggleBtn(state, btnName, remove){
+function toggleBtn(state, btnName, remove){
 
     const translations = state.cookieConsentConfig.language.translations;
     

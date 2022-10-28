@@ -12,6 +12,7 @@ export const defaultState = {
 
     removeAcceptNecessaryBtn: false,
     removeShowPrefrencesBtn: false,
+    removeFooter: false,
 
     /**
      * @type {import('vanilla-cookieconsent').ConsentModalPosition}
@@ -26,7 +27,7 @@ export const defaultState = {
     /**
      * Increase on every new playground update
      */
-    demoRevision: 5
+    demoRevision: 6
 };
 
 clearInvalidDemoState();
