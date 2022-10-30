@@ -3,13 +3,45 @@ export as namespace CookieConsent
 
 declare namespace CookieConsent {
 
-    type AcceptType = 'all' | 'custom' | 'necessary'
-    type ConsentModalLayout = 'box' | 'box wide' | 'box inline' | 'cloud' | 'cloud inline' | 'bar' | 'bar inline'
-    type ConsentModalPosition = 'top' | 'bottom' | 'middle' | 'top left' | 'top center' | 'top right' | 'middle left' | 'middle center' | 'middle right' | 'bottom left' | 'bottom center' | 'bottom right'
-    type PreferencesModalLayout = 'box' | 'bar' | 'bar wide'
+    type AcceptType =
+        'all'
+        | 'custom'
+        | 'necessary'
+
+    type ConsentModalLayout =
+        'box'
+        | 'box wide'
+        | 'box inline'
+        | 'cloud'
+        | 'cloud inline'
+        | 'bar'
+        | 'bar inline'
+
+    type ConsentModalPosition =
+        'top'
+        | 'bottom'
+        | 'middle'
+        | 'top left'
+        | 'top center'
+        | 'top right'
+        | 'middle left'
+        | 'middle center'
+        | 'middle right'
+        | 'bottom left'
+        | 'bottom center'
+        | 'bottom right'
+
+    type PreferencesModalLayout =
+        'box'
+        | 'bar'
+        | 'bar wide'
+
     type PreferencesModalPosition = 'left' | 'right'
 
-    interface CookieItems {
+    /**
+     * Cookie to clear
+     */
+    interface CookieItem {
         /**
          * Cookie name
          */
@@ -31,7 +63,7 @@ declare namespace CookieConsent {
         /**
          * Array of cookies to delete
          */
-        cookies: CookieItems[]
+        cookies: CookieItem[]
 
         /**
          * Reload the page after the autoClear function
@@ -53,7 +85,8 @@ declare namespace CookieConsent {
         onAccept?: () => void
 
         /**
-         * Function executed when the service is rejected (assuming that it was previously enabled)
+         * Function executed when the service is rejected
+         * (assuming that it was previously enabled)
          */
         onReject?: () => void
     }
@@ -359,7 +392,8 @@ declare namespace CookieConsent {
         manageScriptTags?: boolean
 
         /**
-         * Automatically erase cookies when the user opts-out of a category. Check out the [docs](https://cookieconsent.orestbida.com/reference/configuration-reference.html#categories-autoclear).
+         * Automatically erase cookies when the user opts-out of a category.
+         * Check out the [docs](https://cookieconsent.orestbida.com/reference/configuration-reference.html#categories-autoclear).
          *
          * @default true
          */
@@ -406,7 +440,8 @@ declare namespace CookieConsent {
         }) => void
 
         /**
-         * Callback fired on the very first consent action and also after each page load.
+         * Callback fired on the very first consent action
+         * and on each page load.
          */
         onConsent?: (param: {
             cookie: CookieValue
