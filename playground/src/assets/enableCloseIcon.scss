@@ -24,4 +24,17 @@
             }
         }
     }
+
+    #cc-main.cc--rtl {
+        .cm--box{
+            .cm__btn{
+                &--close{
+                    &+.cm__texts .cm__title{
+                        padding-left: 2em!important;
+                        padding-right: unset!important;
+                    }
+                }
+            }
+        }
+    }
 }
