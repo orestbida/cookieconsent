@@ -6,6 +6,7 @@ export default defineConfig({
     title: 'CookieConsent',
     description: 'Simple cross-browser cookie-consent plugin written in vanilla js',
     lastUpdated: false,
+    appearance: 'dark',
 
     themeConfig: {
 
