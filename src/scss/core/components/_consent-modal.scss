@@ -145,7 +145,7 @@ $sections-padding: 1em 1.3em;
         gap: var(--cc-btn-gap);
     }
 
-    /** Start: Layout with 2 buttons, one of 
+    /** Start: Layout with 2 buttons, one of
     which is the show preferences btn **/
     .cm--wide,
     .cm--bar:not(.cm--inline) {
@@ -163,7 +163,7 @@ $sections-padding: 1em 1.3em;
         }
     }
     /** End **/
-    
+
     .cm__btn{
         color: var(--cc-btn-primary-color);
         background: var(--cc-btn-primary-bg);
@@ -578,6 +578,21 @@ $sections-padding: 1em 1.3em;
     }
 }
 
+/* Start: fix RTL layout */
+#cc-main.cc--rtl {
+    .cm__btn--close {
+        right: unset;
+        left: 0;
+        border-bottom-left-radius: unset;
+        border-bottom-right-radius: var(--cc-btn-border-radius);
+
+        & + .cm__texts .cm__title {
+            padding-right: unset;
+            padding-left: 2em;
+        }
+    }
+}
+/* End: Fix RTL alyout */
 
 @media screen and (max-width: 640px){
 	#cc-main   {

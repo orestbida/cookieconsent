@@ -560,7 +560,6 @@ $toggle-knob-icon-width: 2px;
     .pm__table-th,
     .pm__table-td{
         padding: 0.625em;
-        text-align: left;
         vertical-align: top;
         padding-left: 1.2em;
     }
@@ -801,6 +800,74 @@ $toggle-knob-icon-width: 2px;
         }
     }
 }
+
+/* Start: fix RTL layout */
+#cc-main.cc--rtl {
+
+    .pm__section-arrow{
+        left: unset;
+        right: 18px;
+    }
+
+    .section__toggle-wrapper{
+        right: unset;
+        left: 18px;
+        transform-origin: left;
+    }
+
+    .toggle-service{
+        left: 3px;
+    }
+
+    .pm__service-icon{
+        margin-right: 9px;
+        margin-left: 20px;
+    }
+
+    .pm__section--toggle .pm__section-title{
+        padding-left: 5.4em;
+        padding-right: 1.2em;
+    }
+
+    .pm__section--expandable .pm__section-title{
+        padding-right: 3.4em;
+    }
+
+    .toggle__icon::after{
+        transform: translateX(27px);
+    }
+
+    .section__toggle:checked ~ .toggle__icon:after{
+        transform: translateX(0);
+    }
+
+    .toggle__icon-off::after,
+    .toggle__icon-off::before {
+        margin-right: unset;
+        margin-left: 2px;
+    }
+
+    .toggle__icon-on::before {
+        margin-right: unset;
+        margin-left: 2px;
+    }
+
+    .pm__table-th,
+    .pm__table-td{
+        text-align: right;
+    }
+
+    .pm__table-td{
+        padding-left: unset;
+        padding-right: 1.2em;
+
+        &::before{
+            padding-right: unset;
+            padding-left: 2em;
+        }
+    }
+}
+/* End: Fix RTL alyout */
 
 
 @media screen and (max-width: 640px){

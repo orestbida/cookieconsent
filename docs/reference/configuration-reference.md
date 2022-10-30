@@ -657,13 +657,14 @@ If one or more services are enabled, then the entire category will be treated as
 
 ## language <span class="required">required</span>
 
-Define your language settings and the translation(s) content.
+Define your language settings and the translation(s).
 
 - **Type**:
     ```javascript
     {
         default: string
         autoDetect?: string
+        rtl?: string | string[]
         translations: Translations
     }
     ```
@@ -696,6 +697,26 @@ Set the current language dynamically.
     The detected language will be used only if a valid translation is defined, otherwise the plugin will fallback to the `default` language.
     :::
 
+### language.rtl
+
+List of languages that should use the RTL layout.
+
+- **Type**: `string | string[]`
+- **Example**: <br>
+    ```javascript
+    cc.run({
+        language: {
+            default: 'en',
+            rtl: 'ar',  // enable RTL for Arabic
+            autoDetect: 'browser',
+
+            translations: {
+                en: '/assets/translations/en.json',
+                ar: '/assets/translations/ar.json'
+            }
+        }
+    })
+    ```
 
 ### language.translations <span class="required">required</span>
 
