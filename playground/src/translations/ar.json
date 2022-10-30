@@ -1,0 +1,62 @@
+{
+    "consentModal": {
+        "title": "مرحبًا أيها المسافر ، حان وقت ملفات تعريف الارتباط!",
+        "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip.",
+        "acceptAllBtn": "رفض كل شيء",
+        "acceptNecessaryBtn": "قبول الكل",
+        "showPreferencesBtn": "إدارة التفضيلات",
+        "closeIconLabel": "Reject all and close",
+        "footer": "<a href=\"#link\">سياسة الخصوصية</a><a href=\"#link\">الأحكام والشروط</a>"
+    },
+    "preferencesModal": {
+        "title": "مركز تفضيلات الموافقة",
+        "acceptAllBtn": "رفض كل شيء",
+        "acceptNecessaryBtn": "قبول الكل",
+        "savePreferencesBtn": "حفظ التفضيلات",
+        "closeIconLabel": "Close modal",
+        "serviceCounterLabel": "خدمة|خدمات",
+        "sections": [
+            {
+                "title": "استخدام ملفات تعريف الارتباط",
+                "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+            },
+            {
+                "title": "ملفات تعريف الارتباط الضرورية للغاية <span class=\"pm__badge\">ممكّن دائمًا</span>",
+                "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+                "linkedCategory": "necessary"
+            },
+            {
+                "title": "ملفات تعريف الارتباط التحليلية",
+                "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+                "linkedCategory": "analytics",
+                "cookieTable": {
+                    "headers": {
+                        "name": "الخدمة",
+                        "description": "الوصف",
+                        "Service": "الاسم"
+                    },
+                    "body": [
+                        {
+                            "name": "_ga_*, _gid",
+                            "description": "Used to track you ...",
+                            "Service": "Google Analytics"
+                        }
+                    ]
+                }
+            },
+            {
+                "title": "ملفات تعريف الارتباط للإعلان",
+                "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+                "linkedCategory": "ads"
+            },
+            {
+                "title": "تفاصيل موافقتك",
+                "description": "<p>consent id: <span id=\"consent-id\">-</span></p><p>consent date: <span id=\"consent-timestamp\">-</span></p><p>last update: <span id=\"last-consent-timestamp\">-</span></p>"
+            },
+            {
+                "title": "معلومات اكثر",
+                "description": "لأي استفسار يتعلق بسياستي الخاصة بملفات تعريف الارتباط وخياراتك ، يرجى  <a class=\"cc__link\" href=\"#yourdomain.com\">الاتصال بي</a>."
+            }
+        ]
+    }
+}

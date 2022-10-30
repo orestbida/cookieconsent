@@ -3,10 +3,10 @@ import de from '../translations/de.json';
 import it from '../translations/it.json';
 import es from '../translations/es.json';
 import fr from '../translations/fr.json';
-import { customEvents, onEvent } from './utils';
+import ar from '../translations/ar.json';
 
 /**
- * WARNING: this object will be 
+ * WARNING: this object will be
  * stored in localStorage;
  * do not declare functions,
  * regex ... (only primitive data)
@@ -68,13 +68,15 @@ const defaultConfig = {
     language: {
         default: 'en',
         autoDetect: 'browser',
+        rtl: 'ar',
 
         translations: {
             en: en,
             it: it,
             de: de,
             es: es,
-            fr: fr
+            fr: fr,
+            ar: ar
         }
     }
 };

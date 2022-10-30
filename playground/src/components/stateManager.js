@@ -27,7 +27,7 @@ export const defaultState = {
     /**
      * Increase on every new playground update
      */
-    demoRevision: 6
+    demoRevision: 7
 };
 
 clearInvalidDemoState();
@@ -102,19 +102,14 @@ function clearInvalidDemoState() {
 
             for(let key in defaultState){
                 if(typeof savedState[key] !== typeof defaultState[key])
-                    return clearLocalStorageItem();
+                    return resetState();
             }
 
             if(savedState.demoRevision !== defaultState.demoRevision)
-                return clearLocalStorageItem();
+                return resetState();
 
         }catch(e){
-            return clearLocalStorageItem();
+            return resetState();
         }
-    }
-
-    function clearLocalStorageItem(){
-        console.log('Demo state not valid!');
-        localStorage.removeItem(DEMO_ITEM_NAME);
     }
 }
