@@ -833,6 +833,11 @@ $toggle-knob-icon-width: 2px;
         padding-right: 3.4em;
     }
 
+    .pm__badge{
+        margin-left: unset;
+        margin-right: 1em;
+    }
+
     .toggle__icon::after{
         transform: translateX(27px);
     }
