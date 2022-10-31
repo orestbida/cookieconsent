@@ -35,7 +35,7 @@ onEvent(customEvents._RESET, () => {
 
 /** START: consentModal options */
 
-const cmLayoutYValues = ['top', 'bottom', 'middle'];
+const cmLayoutYValues = ['top', 'middle', 'bottom'];
 const cmLayoutXValues = ['left', 'center', 'right'];
 
 /**
@@ -49,7 +49,7 @@ let currentCMLayoutValue = '';
 let currentPMLayoutValue = '';
 
 /**
- * @param {import('vanilla-cookieconsent').ConsentModalPosition} position 
+ * @param {import('vanilla-cookieconsent').ConsentModalPosition} position
  */
 const validBarPositions = (position) => position === 'top' || position === 'bottom';
 
@@ -107,7 +107,7 @@ function updateGuiOptionsState(modalName, key, value) {
     const state = getState();
 
     if(modalName === CONSENT_MODAL_NAME){
-        
+
         if(key === 'layout'){
 
             const layout = currentCMLayoutValue;
@@ -115,17 +115,17 @@ function updateGuiOptionsState(modalName, key, value) {
 
             const consentModal = state.cookieConsentConfig.guiOptions.consentModal;
             const currentPosition = consentModal.position;
-    
+
             if(validBarPositions(currentPosition)){
                 state.lastBarPosition = currentPosition
             }else{
                 state.lastNonBarPosition = currentPosition;
             }
-    
+
             if(!isBarLayout && validBarPositions(currentPosition) || isBarLayout && !validBarPositions(currentPosition)){
-    
+
                 generateCMPositionOptions(!isBarLayout);
-    
+
                 if(isBarLayout){
                     if(!validBarPositions(currentPosition))
                         consentModal.position = htmlElements[CONSENT_MODAL_NAME].position.value = state.lastBarPosition || 'bottom';
@@ -134,10 +134,10 @@ function updateGuiOptionsState(modalName, key, value) {
                 }
             }
         }
-    
+
         if(key === 'position'){
             const currentPosition = state.cookieConsentConfig.guiOptions.consentModal.position;
-    
+
             if(validBarPositions(currentPosition)){
                 state.lastBarPosition = currentPosition
             }else{
@@ -265,7 +265,7 @@ function generateCMPositionOptions(all){
             cmLayoutXValues
         )
     }else{
-        newOptions = generateOptions(cmLayoutYValues.slice(0, 2))
+        newOptions = generateOptions(['top', 'bottom'])
     }
 
     htmlElements[CONSENT_MODAL_NAME].position.replaceChildren(newOptions);

@@ -13,6 +13,7 @@ export const defaultState = {
     removeAcceptNecessaryBtn: false,
     removeShowPrefrencesBtn: false,
     removeFooter: false,
+    removeTitle: false,
 
     /**
      * @type {import('vanilla-cookieconsent').ConsentModalPosition}
@@ -27,7 +28,7 @@ export const defaultState = {
     /**
      * Increase on every new playground update
      */
-    demoRevision: 9
+    demoRevision: 10
 };
 
 addEvent(window, customEvents._INIT, () => clearInvalidDemoState)

@@ -13,7 +13,7 @@ import './components/consentDetails';
 import './components/printCategories';
 import './components/printValidConsent';
 import './components/guiOptions';
-import './components/consentModalButtons';
+import './components/consentModalElements';
 
 CookieConsent
     .run(getState().cookieConsentConfig)
