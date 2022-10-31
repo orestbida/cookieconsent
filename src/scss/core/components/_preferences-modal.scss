@@ -517,7 +517,7 @@ $toggle-knob-icon-width: 2px;
     .pm__service-icon {
         width: 8px;
         height: 8px;
-        border: 2px solid var(--cc-toggle-on-bg);
+        border: 2px solid currentColor;
         border-radius: 100%;
         margin-left: 9px;
         margin-right: 20px;
