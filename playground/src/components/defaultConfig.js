@@ -4,6 +4,7 @@ import it from '../translations/it.json';
 import es from '../translations/es.json';
 import fr from '../translations/fr.json';
 import ar from '../translations/ar.json';
+import { deepCopy } from './utils';
 
 /**
  * WARNING: this object will be
@@ -15,7 +16,7 @@ import ar from '../translations/ar.json';
 /**
  * @type {import("vanilla-cookieconsent").CookieConsentConfig}
  */
-const defaultConfig = {
+const defaultFullConfig = {
     root: '#app',
 
     cookie: {
@@ -81,4 +82,18 @@ const defaultConfig = {
     }
 };
 
-export default defaultConfig;
+
+/**
+ * @type {typeof defaultFullConfig}
+*/
+const defaultConfig = deepCopy(defaultFullConfig);
+
+const translations = defaultConfig.language.translations;
+for(let lang in translations){
+    translations[lang].consentModal.closeIconLabel = undefined;
+}
+
+export {
+    defaultFullConfig,
+    defaultConfig
+}

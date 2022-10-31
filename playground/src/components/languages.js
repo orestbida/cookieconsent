@@ -1,4 +1,4 @@
-import defaultConfig from './defaultConfig';
+import { defaultConfig } from './defaultConfig';
 import { getState, saveState } from './stateManager';
 import { addEvent, customEvents, getById, onEvent } from './utils';
 

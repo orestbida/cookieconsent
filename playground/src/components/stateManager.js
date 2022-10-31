@@ -1,4 +1,4 @@
-import defaultConfig from './defaultConfig';
+import { defaultConfig } from './defaultConfig';
 import { deepCopy, fireEvent, customEvents, addEvent } from './utils';
 
 export const DEMO_ITEM_NAME = 'demoState';
@@ -28,10 +28,10 @@ export const defaultState = {
     /**
      * Increase on every new playground update
      */
-    demoRevision: 10
+    demoRevision: 11
 };
 
-addEvent(window, customEvents._INIT, () => clearInvalidDemoState)
+addEvent(window, customEvents._INIT, clearInvalidDemoState)
 
 /**
  * Get current state

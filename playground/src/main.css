@@ -25,7 +25,11 @@ html:not(.cc--darkmode){
 }
 
 body{
-    margin: 0;
+    width: 100vw;
+    overflow-x: hidden;
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 12px;
     width: 100vw;
     overflow-x: hidden;
 }
@@ -33,14 +37,6 @@ body{
 h1,
 h2 {
     font-weight: 600;
-}
-
-#app {
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 12px;
-    width: 100vw;
-    overflow-x: hidden;
 }
 
 p {

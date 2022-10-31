@@ -1,5 +1,5 @@
 import '../assets/guiOptions.scss';
-import defaultConfig from './defaultConfig';
+import { defaultConfig } from './defaultConfig';
 import { getState, saveState } from './stateManager';
 import { onEvent, customEvents, reRunPlugin, addEvent, getById } from './utils';
 

@@ -1,6 +1,4 @@
-import '../assets/enableCloseIcon.scss';
-
-import defaultConfig from './defaultConfig';
+import { defaultFullConfig } from './defaultConfig';
 import { getState, saveState, defaultState } from './stateManager';
 import { addEvent, getById, customEvents, reRunPlugin } from './utils';
 
@@ -24,13 +22,13 @@ addEvent(enableXIconCheckbox, 'change', function(){
      * @type {boolean}
      */
     const enabled = this.checked;
-    toggleCloseIcon(enabled);
 
     const state = getState();
     state.enableCloseIcon = enabled;
-    saveState(state);
 
-    window.CookieConsent.show(true);
+    toggleConsentModalElement(state, 'closeIconLabel', !enabled);
+    saveState(state);
+    reRunPlugin(state.cookieConsentConfig, 'consentModal');
 });
 
 addEvent(removeAcceptNecessaryBtnCheckbox, 'change', function() {
@@ -110,11 +108,6 @@ addEvent(window, customEvents._RESET, () => {
  * @param {boolean} enable
  */
 function toggleCloseIcon(enable) {
-    const classListAction = enable
-        ? 'add'
-        : 'remove';
-
-    document.body.classList[classListAction]('cc-showIcon');
     enableXIconCheckbox.checked = enable;
 }
 
@@ -165,6 +158,6 @@ function toggleConsentModalElement(state, elementName, remove){
         const translation = translations[lang];
         translation.consentModal[elementName] = remove
             ? undefined
-            : defaultConfig.language.translations[lang].consentModal[elementName];
+            : defaultFullConfig.language.translations[lang].consentModal[elementName];
     }
 }
