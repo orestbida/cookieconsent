@@ -71,39 +71,6 @@ $sections-padding: 1em 1.3em;
         padding: $sections-padding;
     }
 
-    /* START: Close (x) icon */
-    .cm__close{
-        display: none;
-        position: absolute;
-        right: 0;
-        top: 0;
-        width: 2.7em;
-        height: 2.7em;
-        border-bottom-left-radius: 0.5em;
-        border-left: 1px solid var(--cc-btn-secondary-border-color);
-        border-bottom: 1px solid var(--cc-btn-secondary-border-color);
-        background: var(--cc-btn-secondary-bg);
-
-        &-icon{
-            width: auto;
-            height: 38%;
-            display: block;
-            position: absolute;
-            left: 0;
-            right: 0;
-            margin: 0 auto;
-            top: 50%;
-            border-radius: 100%;
-            transform: translateY(-50%);
-        }
-
-        &:hover{
-            background: var(--cc-btn-secondary-hover-bg);
-            border-color: var(--cc-btn-secondary-hover-border-color);
-        }
-    }
-    /* END: Close (x) icon */
-
     .cm__texts{
         display: flex;
         flex-direction: column;
