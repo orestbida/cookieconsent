@@ -520,7 +520,6 @@ function createToggleLabel(label, value, sCurrentCategoryObject, isService, cate
 
     if(isService){
         addClass(toggleLabel, 'toggle-service');
-        addClass(toggle, 'toggle-service');
         setAttribute(toggle, SCRIPT_TAG_SELECTOR, categoryName);
 
         // Save reference to toggles to avoid using document.querySelector later on
