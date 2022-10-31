@@ -773,6 +773,7 @@ Define the translation(s) content.
 - **Type**:
     ```javascript
     {
+        label?: string
         title?: string
         description?: string
         acceptAllBtn?: string
@@ -784,7 +785,6 @@ Define the translation(s) content.
     }
     ```
 - **Details**:
-
     - `closeIconLabel`: if specified, a big `X` button will be generated (visible only in the `box` layout). It acts the same as `acceptNecessaryBtn`.
     - `revisionMessage`: check out the dedicated [revision section](/advanced/revision-management.html#revision-message).
     - `footer`: a small area where you can place your links (impressum, privacy policy ...)
@@ -801,6 +801,7 @@ Define the translation(s) content.
     translations: {
         'en': {
             consentModal: {
+                label: 'Cookie Consent',
                 title: 'We use cookies!',
                 description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua',
                 acceptAllBtn: 'Accept all',

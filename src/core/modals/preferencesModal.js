@@ -79,6 +79,7 @@ export const createPreferencesModal = (api, createMainContainer) => {
         setAttribute(dom._pm, 'role', 'dialog');
         setAttribute(dom._pm, ARIA_HIDDEN, true);
         setAttribute(dom._pm, 'aria-modal', true);
+        setAttribute(dom._pm, 'aria-labelledby', 'pm__title');
 
         // If 'esc' key is pressed inside _preferencesContainer div => hide preferences
         addEvent(dom._htmlDom, 'keydown', (event) => {
@@ -93,7 +94,9 @@ export const createPreferencesModal = (api, createMainContainer) => {
         // modal title
         dom._pmTitle = createNode(DIV_TAG);
         addClassPm(dom._pmTitle, 'title');
+        dom._pmTitle.id = 'pm__title';
         setAttribute(dom._pmTitle, 'role', 'heading');
+        setAttribute(dom._pmTitle, 'aria-level', '2');
 
         dom._pmCloseBtn = createNode(BUTTON_TAG);
         addClassPm(dom._pmCloseBtn, 'close-btn');

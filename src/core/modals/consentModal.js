@@ -52,6 +52,7 @@ export const createConsentModal = (api, createMainContainer) => {
         showPreferencesBtnData = consentModalData.showPreferencesBtn,
         closeIconLabelData = consentModalData.closeIconLabel,
         footerData = consentModalData.footer,
+        consentModalLabelValue = consentModalData.label,
         consentModalTitle_value = consentModalData.title;
 
     /**
@@ -82,7 +83,9 @@ export const createConsentModal = (api, createMainContainer) => {
         setAttribute(dom._cm, ARIA_HIDDEN, 'false');
         setAttribute(dom._cm, 'aria-describedby', 'cm__desc');
 
-        if(consentModalTitle_value)
+        if(consentModalLabelValue)
+            setAttribute(dom._cm, 'aria-label', consentModalLabelValue);
+        else if(consentModalTitle_value)
             setAttribute(dom._cm, 'aria-labelledby', 'cm__title');
 
         /**

@@ -274,6 +274,12 @@ declare namespace CookieConsent {
     }
 
     interface ConsentModalOptions {
+
+        /**
+         * Accessibility label. Particularly useful if not title is provided.
+         */
+        label?: string
+
         title?: string
         description?: string
         acceptAllBtn?: string
