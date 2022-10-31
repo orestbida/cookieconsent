@@ -53,7 +53,7 @@ export const createConsentModal = (api, createMainContainer) => {
         closeIconLabelData = consentModalData.closeIconLabel,
         footerData = consentModalData.footer,
         consentModalLabelValue = consentModalData.label,
-        consentModalTitle_value = consentModalData.title;
+        consentModalTitleValue = consentModalData.title;
 
     /**
      * @param {string|string[]} [categories]
@@ -85,7 +85,7 @@ export const createConsentModal = (api, createMainContainer) => {
 
         if(consentModalLabelValue)
             setAttribute(dom._cm, 'aria-label', consentModalLabelValue);
-        else if(consentModalTitle_value)
+        else if(consentModalTitleValue)
             setAttribute(dom._cm, 'aria-labelledby', 'cm__title');
 
         /**
@@ -102,7 +102,7 @@ export const createConsentModal = (api, createMainContainer) => {
         /**
          * Close icon-button (visible only in the 'box' layout)
          */
-        if(closeIconLabelData && isBoxLayout){
+        if(consentModalTitleValue && closeIconLabelData && isBoxLayout){
             if(!dom._cmCloseIconBtn){
                 dom._cmCloseIconBtn = createNode(BUTTON_TAG);
                 addClassCm(dom._cmCloseIconBtn, 'btn');
@@ -127,7 +127,7 @@ export const createConsentModal = (api, createMainContainer) => {
         appendChild(dom._cmContainer, dom._cm);
     }
 
-    if(consentModalTitle_value){
+    if(consentModalTitleValue){
 
         if(!dom._cmTitle){
             dom._cmTitle = createNode(DIV_TAG);
@@ -137,7 +137,7 @@ export const createConsentModal = (api, createMainContainer) => {
             appendChild(dom._cmTexts, dom._cmTitle);
         }
 
-        dom._cmTitle.innerHTML = consentModalTitle_value;
+        dom._cmTitle.innerHTML = consentModalTitleValue;
     }
 
     var description = consentModalData.description;
