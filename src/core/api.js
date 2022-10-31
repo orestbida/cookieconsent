@@ -13,6 +13,7 @@ import {
     retrieveRejectedServices,
     isArray,
     unique,
+    getModalFocusableData,
     getActiveElement
 } from '../utils/general';
 
@@ -552,6 +553,8 @@ export const setLanguage = async (newLanguageCode, forceUpdate) => {
     if(!validLanguageCode(newLanguageCode))
         return false;
 
+    const state = globalObj._state;
+
     /**
      * Set language only if it differs from current
      */
@@ -564,13 +567,14 @@ export const setLanguage = async (newLanguageCode, forceUpdate) => {
 
         setCurrentLanguageCode(newLanguageCode);
 
-        if(globalObj._state._consentModalExists)
+        if(state._consentModalExists)
             createConsentModal(miniAPI, createMainContainer);
 
-        if(globalObj._state._preferencesModalExists)
+        if(state._preferencesModalExists)
             createPreferencesModal(miniAPI, createMainContainer);
 
         handleRtlLanguage();
+        getModalFocusableData();
 
         return true;
     }

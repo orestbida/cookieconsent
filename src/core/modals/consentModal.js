@@ -261,9 +261,8 @@ export const createConsentModal = (api, createMainContainer) => {
         _log('CookieConsent [HTML] created', CONSENT_MODAL_NAME);
 
         fireEvent(globalObj._customEvents._onModalReady, CONSENT_MODAL_NAME, dom._cm);
-        getModalFocusableData();
-
         createMainContainer(api);
+        setTimeout(getModalFocusableData, 10);
         appendChild(dom._ccMain, dom._cmContainer);
 
         /**

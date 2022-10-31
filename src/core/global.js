@@ -262,6 +262,8 @@ export class GlobalState {
             _preferencesModalExists: false,
 
             _clickedInsideModal : false,
+            _tabbedInsideModal : false,
+            _tabbedOutside : false,
 
             _preferencesModalVisibleDelayed : false,
 

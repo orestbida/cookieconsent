@@ -444,16 +444,14 @@ export const getCurrentCategoriesState = () => {
 export const handleFocusTrap = () => {
 
     const dom = globalObj._dom;
-
-    var tabbedOutsideDiv = false;
-    var tabbedInsideModal = false;
+    const state = globalObj._state;
 
     addEvent(dom._htmlDom, 'keydown', (e) => {
 
         if(e.key !== 'Tab')
             return;
 
-        const focusableElements = globalObj._state._currentModalFocusableElements;
+        const focusableElements = state._currentModalFocusableElements;
 
         // If there is any modal to focus
         if(focusableElements.length > 0){
@@ -475,9 +473,9 @@ export const handleFocusTrap = () => {
 
             // If have not yet used tab (or shift+tab) and modal is open ...
             // Focus the first focusable element
-            if(!tabbedInsideModal && !globalObj._state._clickedInsideModal){
-                tabbedInsideModal = true;
-                !tabbedOutsideDiv && preventDefault(e);
+            if(!state._tabbedInsideModal && !globalObj._state._clickedInsideModal){
+                state._tabbedInsideModal = true;
+                !state._tabbedOutside && preventDefault(e);
 
                 if(e.shiftKey){
                     focusableElements[1].focus();
@@ -487,7 +485,7 @@ export const handleFocusTrap = () => {
             }
         }
 
-        !tabbedInsideModal && (tabbedOutsideDiv = true);
+        !state._tabbedInsideModal && (state._tabbedOutside = true);
     }, true);
 };
 
@@ -558,4 +556,7 @@ export const getModalFocusableData = () => {
 
     if(state._preferencesModalExists)
         saveAllFocusableElements(dom._pm, state._pmFocusableElements);
+
+    state._tabbedOutside = false;
+    state._tabbedInsideModal = false;
 };
