@@ -51,7 +51,8 @@ export const createConsentModal = (api, createMainContainer) => {
         acceptNecessaryBtnData = consentModalData.acceptNecessaryBtn,
         showPreferencesBtnData = consentModalData.showPreferencesBtn,
         closeIconLabelData = consentModalData.closeIconLabel,
-        footerData = consentModalData.footer;
+        footerData = consentModalData.footer,
+        consentModalTitle_value = consentModalData.title;
 
     /**
      * @param {string|string[]} [categories]
@@ -79,8 +80,10 @@ export const createConsentModal = (api, createMainContainer) => {
         setAttribute(dom._cm, 'role', 'dialog');
         setAttribute(dom._cm, 'aria-modal', 'true');
         setAttribute(dom._cm, ARIA_HIDDEN, 'false');
-        setAttribute(dom._cm, 'aria-labelledby', 'cm__title');
         setAttribute(dom._cm, 'aria-describedby', 'cm__desc');
+
+        if(consentModalTitle_value)
+            setAttribute(dom._cm, 'aria-labelledby', 'cm__title');
 
         /**
          * Make modal by default hidden to prevent weird page jumps/flashes (shown only once css is loaded)
@@ -120,8 +123,6 @@ export const createConsentModal = (api, createMainContainer) => {
         appendChild(dom._cm, dom._cmBody);
         appendChild(dom._cmContainer, dom._cm);
     }
-
-    var consentModalTitle_value = consentModalData.title;
 
     if(consentModalTitle_value){
 
