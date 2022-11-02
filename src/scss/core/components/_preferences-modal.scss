@@ -1,8 +1,7 @@
+@import "../global";
+
 $padding-y: 1em;
 $padding-x: 1.5em;
-
-$btn-height: 42px;
-$btn-vertical-padding: .5em;
 
 $toggle-knob-height: 23px;
 $toggle-knob-width: 50px;
@@ -436,7 +435,7 @@ $toggle-knob-icon-width: 2px;
             background: var(--cc-toggle-on-bg);
             box-shadow: 0 0 0 1px var(--cc-toggle-on-bg);
 
-            &:after{
+            &::after{
                 transform: translateX(calc($toggle-knob-width - $toggle-knob-height));
                 background-color: var(--cc-toggle-on-knob-bg);
             }
@@ -667,7 +666,7 @@ $toggle-knob-icon-width: 2px;
             display: flex;
             justify-content: space-between;
 
-            &:before{
+            &::before{
                 content: attr(data-column);
                 padding-right: 2em;
                 font-weight: $font-weight-bold;
@@ -842,7 +841,7 @@ $toggle-knob-icon-width: 2px;
         transform: translateX(27px);
     }
 
-    .section__toggle:checked ~ .toggle__icon:after{
+    .section__toggle:checked ~ .toggle__icon::after{
         transform: translateX(0);
     }
 
@@ -920,7 +919,7 @@ $toggle-knob-icon-width: 2px;
             display: flex;
             justify-content: space-between;
 
-            &:before{
+            &::before{
                 content: attr(data-column);
                 padding-right: 2em;
                 font-weight: $font-weight-bold;

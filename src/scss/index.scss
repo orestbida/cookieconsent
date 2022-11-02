@@ -1,4 +1,5 @@
-@import "./core/reset";
+@import "./core/base";
 @import "./abstracts/light-color-scheme";
 @import "./abstracts/dark-color-scheme";
-@import "./core/main";
+@import "./core/components/consent-modal";
+@import "./core/components/preferences-modal";

@@ -6,8 +6,8 @@
     a,
     button,
     input,
-    :before,
-    :after{
+    ::before,
+    ::after{
         all: unset;
         box-sizing: border-box;
     }
@@ -39,5 +39,9 @@
         font-weight: inherit;
         color: inherit;
         font-size: inherit;
+    }
+
+    &{
+        background: transparent;
     }
 }

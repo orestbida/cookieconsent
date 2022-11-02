@@ -8,6 +8,7 @@ import pkg from './package.json' assert { type: "json"};
 
 const srcDir = './src';
 const distDir = './dist';
+const cssComponentsDir = `${distDir}/css-components`;
 const input = `${srcDir}/index.js`;
 const productionMode = !process.env.ROLLUP_WATCH;
 
@@ -18,6 +19,60 @@ const banner = `/*!
 * Released under the ${pkg.license} License
 */
 `;
+
+const cssComponents = [
+    [
+        'core/_base.scss',
+        'base.css'
+    ],
+    [
+        'core/components/_consent-modal.scss',
+        'consent-modal.css'
+    ],
+    [
+        'core/components/_preferences-modal.scss',
+        'preferences-modal.css'
+    ],
+    [
+        'abstracts/_dark-color-scheme.scss',
+        'dark-scheme.css'
+    ],
+    [
+        'abstracts/_light-color-scheme.scss',
+        'light-scheme.css'
+    ]
+];
+
+const cssComponentsRollup = cssComponents.map(component => {
+
+    const src = `${srcDir}/scss/${component[0]}`;
+    const dst = `${cssComponentsDir}/${component[1]}`
+
+    return {
+        input: src,
+        output: {
+            file: dst,
+        },
+        plugins: postcss({
+            extract: true,
+            plugins: [
+                postcssCombineDuplicatedSelectors(),
+                productionMode && cssnanoPlugin({
+                    preset: ["default", {
+                        discardComments: {
+                            removeAll: true,
+                        }
+                    }]
+                })
+            ]
+        }),
+        onwarn(warning, warn) {
+            if(warning.code === 'FILE_NAME_CONFLICT')
+                return;
+            warn(warning);
+        }
+    }
+})
 
 export default defineConfig(
     [
@@ -86,6 +141,7 @@ export default defineConfig(
                 if(warning.code === 'FILE_NAME_CONFLICT') return;
                 warn(warning);
             }
-        }
+        },
+        ...cssComponentsRollup
     ]
 );
