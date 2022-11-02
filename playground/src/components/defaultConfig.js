@@ -17,7 +17,7 @@ import { deepCopy } from './utils';
  * @type {import("vanilla-cookieconsent").CookieConsentConfig}
  */
 const defaultFullConfig = {
-    root: '#app',
+    root: 'main',
 
     cookie: {
         name: 'demoPlayground',

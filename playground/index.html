@@ -10,11 +10,12 @@
         </style>
     </head>
     <body>
-        <div id="app">
+        <header>
             <h1>Playground (WIP)</h1>
             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
             <br>
-
+        </header>
+        <main>
             <div class="flex">
                 <fieldset class="language-codes">
                     <legend>Configured Languages</legend>
@@ -30,7 +31,7 @@
                     <input data-language="fr" type="radio" id="language-fr" name="language-code" value="fr">
                     <label for="language-fr">French</label><br>
                     <input data-language="ar" type="radio" id="language-ar" name="language-code" value="ar">
-                    <label for="language-ar">Arabic</label><br>
+                    <label for="language-ar">Arabic <span class="badge">rtl</span></label><br>
                 </fieldset>
 
                 <fieldset class="auto-language">
@@ -160,7 +161,7 @@
             <br>
             <button type="button" data-cc="show-preferencesModal">Open Preferences Modal</button>
             <button type="button" id="resetBtn">Reset demo</button>
-        </div>
+        </main>
 
         <script type="module" src="src/main.js"></script>
     </body>
