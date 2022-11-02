@@ -4,8 +4,25 @@ There are two ways to manage your scripts:
 - via `<script>` tags
 - via [callbacks/events](/advanced/callbacks-events)
 
-## Using &lt;script&gt; tags
-To configure a script tag, you must add the following 2 attributes:
+## Available script attributes
+
+* `data-category`: name of the category
+* `data-service` (optional): if specified, a toggle will be generated in the `preferencesModal`
+* `data-type` (optional): custom type (e.g. `"module"`)
+* `data-src` (optional): can be used instead of `src` to avooid validation issues
+
+Example usage:
+```html
+<script
+    type="text/plain"
+    data-category="analytics"
+    data-service="Google Analytics"
+>/*...code*/</script>
+```
+
+## How to block/manage a script tag
+
+You can manage any script tag. by adding the following 2 attributes (both required):
 
 - `type="text/plain"`
 - `data-category="your-category-name"`
@@ -32,6 +49,20 @@ You can also run **scripts when a category is disabled** (if it was previously e
     // Analytics category disabled
 </script>
 ```
+
+::: warning type="module"
+When a script tag is enabled, the `type` attribute is removed by default. To keep the `type="module"` attribute you must specify `data-type="module"`.
+
+```html
+<script
+    type="text/plain"
+    src="my-service-module.js"
+    data-category="analytics"
+    data-service="My service"
+    data-type="module"
+></script>
+```
+:::
 
 ### Services
 ::: info What is a service
