@@ -302,3 +302,10 @@ The simplest way to open the preferences modal is by creating a `button` (or a l
 ```
 
 Check out all the possible [data-cc](/advanced/custom-attribute)  values.
+
+NOTE: In some situations (like using multiple components in an Angular application) the data attribute may not work. Using the function showPreferences() will have the same effect.
+
+```typescript
+import * as CookieConsent from 'vanilla-cookieconsent';
+CookieConsent.showPreferences();
+```
