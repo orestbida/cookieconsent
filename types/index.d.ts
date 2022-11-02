@@ -38,6 +38,8 @@ declare namespace CookieConsent {
 
     type PreferencesModalPosition = 'left' | 'right'
 
+    type ModalName = 'consentModal' | 'preferencesModal'
+
     /**
      * Cookie to clear
      */
@@ -61,12 +63,12 @@ declare namespace CookieConsent {
 
     interface AutoClear {
         /**
-         * Array of cookies to delete
+         * Array of cookies to clear.
          */
         cookies: CookieItem[]
 
         /**
-         * Reload the page after the autoClear function
+         * Reload page after the autoClear function.
          *
          * @default false
          */
@@ -75,18 +77,18 @@ declare namespace CookieConsent {
 
     interface Service {
         /**
-         * Label of the service (can also be html markup)
+         * Custom visible label (can also be html markup).
          */
         label?: string
 
         /**
-         * Function executed when the service is accepted
+         * Callback executed when the service is accepted.
          */
         onAccept?: () => void
 
         /**
-         * Function executed when the service is rejected
-         * (assuming that it was previously enabled)
+         * Callback executed when the service is rejected
+         * (assuming that it was previously enabled).
          */
         onReject?: () => void
     }
@@ -95,18 +97,11 @@ declare namespace CookieConsent {
         /**
          * - all: all categories were accepted
          * - necessary: only the necessary (if any) categories were accepted
-         * - custom: a custom choice of categories was accepted
+         * - custom: a custom selection of categories was accepted
          */
         acceptType: AcceptType
 
-        /**
-         * Array with all the names of the accepted categories
-         */
         acceptedCategories: string[]
-
-        /**
-         * Array with all the names of the rejected categories
-         */
         rejectedCategories: string[]
 
         acceptedServices: {[key: string]: string[]}
@@ -117,8 +112,8 @@ declare namespace CookieConsent {
         /**
          * Mark category as enabled by default.
          *
-         * If mode="opt-out" and consent has not yet been expressed, the category
-         * is automatically enabled (and scripts under this category will be executed)
+         * If mode is set to `'opt-out'` and consent has not yet been expressed, the category
+         * is automatically enabled (and scripts under this category will be executed).
          *
          * @default false
          */
@@ -132,19 +127,19 @@ declare namespace CookieConsent {
         readOnly?: boolean
 
         /**
-         * Use to configure individually togglable services
+         * Configure individually togglable services.
          */
         services?: {[key: string]: Service}
 
         /**
-         * Use to declare the cookies you'd like to erase when the user rejects the category
+         * Declare the cookies to erase when the user rejects the category.
          */
         autoClear?: AutoClear
     }
 
     interface CookieValue {
         /**
-         * Array of accepted categories
+         * All accepted categories.
          */
         categories: string[]
 
@@ -161,7 +156,7 @@ declare namespace CookieConsent {
         data: any
 
         /**
-         * Unique UUIDV4 string used to identify the current user.
+         * Unique UUIDV4 string that identifies the current user.
          */
         consentId: string
 
@@ -276,7 +271,7 @@ declare namespace CookieConsent {
     interface ConsentModalOptions {
 
         /**
-         * Accessibility label. Particularly useful if not title is provided.
+         * Accessibility label. Especially useful if no title is provided.
          */
         label?: string
 
@@ -287,7 +282,7 @@ declare namespace CookieConsent {
         showPreferencesBtn?: string
 
         /**
-         * This option works only with the 'box' layout.
+         * Specify to generate a big "X" (accept necessary) button. Visible in the `box` layout only.
          */
         closeIconLabel?: string
 
@@ -298,7 +293,7 @@ declare namespace CookieConsent {
         revisionMessage?: string
 
         /**
-         * HTML string with links pointing to your privacy policy.
+         * Custom HTML string where you can put links pointing to your privacy policy.
          */
         footer?: string
     }
@@ -332,7 +327,7 @@ declare namespace CookieConsent {
         linkedCategory?: string
 
         /**
-         * Create a custom html table (generally used to clarify cookies)
+         * Create a custom html table (generally used to clarify cookies).
          */
         cookieTable?: CookieTable
     }
@@ -344,7 +339,7 @@ declare namespace CookieConsent {
         savePreferencesBtn?: string
 
         /**
-         * Close Icon label. Specify for better a11y.
+         * Accessibility label.
          */
         closeIconLabel?: string
 
@@ -466,21 +461,21 @@ declare namespace CookieConsent {
          * Callback fired when one of the modals is visible.
          */
         onModalShow?: (param: {
-            modalName: string
+            modalName: ModalName
         }) => void
 
         /**
          * Callback fired when one of the modals is hidden.
          */
         onModalHide?: (param: {
-            modalName: string
+            modalName: ModalName
         }) => void
 
         /**
          * Callback fired when one of the modals is appended to the dom.
          */
         onModalReady?: (param: {
-            modalName: string,
+            modalName: ModalName,
             modal: HTMLElement
         }) => void
 
