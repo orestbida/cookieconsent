@@ -1,5 +1,5 @@
 import { globalObj, isFunction} from '../core/global';
-import { createNode, setAttribute, elContains } from './general';
+import { createNode, setAttribute, elContains, getAttribute, removeAttribute } from './general';
 import { SCRIPT_TAG_SELECTOR } from './constants';
 
 /**
@@ -109,25 +109,40 @@ export const manageExistingScripts = (mustEnableCategories) => {
 
                     currScriptInfo._executed = true;
 
-                    currScript.removeAttribute('type');
-                    currScript.removeAttribute(SCRIPT_TAG_SELECTOR);
+                    const dataType = getAttribute(currScript, 'type', true);
+
+                    removeAttribute(currScript, 'type', !!dataType);
+                    removeAttribute(currScript, SCRIPT_TAG_SELECTOR);
 
                     // Get current script data-src (if there is one)
-                    let src = currScript.getAttribute('data-src');
+                    let src = getAttribute(currScript, 'src', true);
 
                     // Some scripts (like ga) might throw warning if data-src is present
-                    src && currScript.removeAttribute('data-src');
+                    src && removeAttribute(currScript, 'src', true);
 
-                    // Create a "fresh" script (with the same code)
+                    /**
+                     * Fresh script
+                     * @type {HTMLScriptElement}
+                     */
                     const freshScript = createNode('script');
+
                     freshScript.textContent = currScript.innerHTML;
 
                     //Copy attributes over to the new "revived" script
                     [...currScript.attributes].forEach(attr => {
                         let nodeName = attr.nodeName;
 
-                        setAttribute(freshScript, nodeName, currScript[nodeName] || currScript.getAttribute(nodeName));
+                        setAttribute(
+                            freshScript,
+                            nodeName,
+                            currScript[nodeName] || getAttribute(currScript, nodeName)
+                        );
                     });
+
+                    /**
+                     * Set custom type
+                     */
+                    dataType && (freshScript.type = dataType);
 
                     // Set src (if data-src found)
                     src

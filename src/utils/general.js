@@ -166,6 +166,33 @@ export const setAttribute = (el, attribute, value) => {
 };
 
 /**
+ * Helper function to remove attribute
+ * @param {HTMLElement} el
+ * @param {string} attribute
+ * @param {boolean} [prependData]
+ */
+export const removeAttribute = (el, attribute, prependData) => {
+    el.removeAttribute(prependData
+        ? 'data-' + attribute
+        : attribute
+    );
+};
+
+/**
+ * Helper function to get attribute
+ * @param {HTMLElement} el
+ * @param {string} attribute
+ * @param {boolean} [prependData]
+ * @returns {string} attribute value
+ */
+export const getAttribute = (el, attribute, prependData) => {
+    return el.getAttribute(prependData
+        ? 'data-' + attribute
+        : attribute
+    );
+};
+
+/**
  * Helper function to append child to parent
  * @param {Node} parent
  * @param {Node} child
