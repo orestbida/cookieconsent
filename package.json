@@ -50,7 +50,7 @@
         "postcss-combine-duplicated-selectors": "^10.0.3",
         "rollup": "^3.2.5",
         "rollup-plugin-postcss": "^4.0.2",
-        "sass": "^1.55.0",
+        "sass": "^1.56.0",
         "sitemap": "^7.1.1",
         "vitepress": "1.0.0-alpha.26"
     },
