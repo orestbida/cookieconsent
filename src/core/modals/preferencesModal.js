@@ -119,8 +119,8 @@ export const createPreferencesModal = (api, createMainContainer) => {
         addClassPm(_pmBtnGroup1, BTN_GROUP_CLASS);
         addClassPm(_pmBtnGroup2, BTN_GROUP_CLASS);
 
-        appendChild(dom._pmFooter, _pmBtnGroup2);
         appendChild(dom._pmFooter, _pmBtnGroup1);
+        appendChild(dom._pmFooter, _pmBtnGroup2);
 
         appendChild(dom._pmHeader, dom._pmTitle);
         appendChild(dom._pmHeader, dom._pmCloseBtn);
