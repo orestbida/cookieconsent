@@ -8,7 +8,7 @@ specifiers:
 
 devDependencies:
   sass: 1.56.1
-  vanilla-cookieconsent: github.com/orestbida/cookieconsent/abb8dce31c7290da5022bcdd1e16ecc787473296
+  vanilla-cookieconsent: github.com/orestbida/cookieconsent/97452403a2f873247ba986662b0c58e9f2085796
   vite: 3.2.3_sass@1.56.1
   vite-plugin-minify: 1.5.2_vite@3.2.3
 
@@ -491,8 +491,8 @@ packages:
     engines: {node: '>=8.6'}
     dev: true
 
-  /postcss/8.4.18:
-    resolution: {integrity: sha512-Wi8mWhncLJm11GATDaQKobXSNEYGUHeQLiQqDFG1qQ5UTDPTEvKw0Xt5NsTpktGTwLps3ByrWsBrG0rB8YQ9oA==}
+  /postcss/8.4.19:
+    resolution: {integrity: sha512-h+pbPsyhlYj6N2ozBmHhHrs9DzGmbaarbLvWipMRO7RLS+v4onj26MPFXA5OBYFxyqYhUJK456SwDcY9H2/zsA==}
     engines: {node: ^10 || ^12 || >=14}
     dependencies:
       nanoid: 3.3.4
@@ -618,7 +618,7 @@ packages:
         optional: true
     dependencies:
       esbuild: 0.15.13
-      postcss: 8.4.18
+      postcss: 8.4.19
       resolve: 1.22.1
       rollup: 2.79.1
       sass: 1.56.1
@@ -626,8 +626,8 @@ packages:
       fsevents: 2.3.2
     dev: true
 
-  github.com/orestbida/cookieconsent/abb8dce31c7290da5022bcdd1e16ecc787473296:
-    resolution: {tarball: https://codeload.github.com/orestbida/cookieconsent/tar.gz/abb8dce31c7290da5022bcdd1e16ecc787473296}
+  github.com/orestbida/cookieconsent/97452403a2f873247ba986662b0c58e9f2085796:
+    resolution: {tarball: https://codeload.github.com/orestbida/cookieconsent/tar.gz/97452403a2f873247ba986662b0c58e9f2085796}
     name: vanilla-cookieconsent
     version: 3.0.0-rc.8
     requiresBuild: true
