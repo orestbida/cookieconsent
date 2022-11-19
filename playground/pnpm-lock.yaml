@@ -3,14 +3,14 @@ lockfileVersion: 5.4
 specifiers:
   sass: ^1.56.1
   vanilla-cookieconsent: github:orestbida/cookieconsent#v3.0-beta
-  vite: ^3.2.4
+  vite: ^3.2.3
   vite-plugin-minify: ^1.5.2
 
 devDependencies:
   sass: 1.56.1
-  vanilla-cookieconsent: github.com/orestbida/cookieconsent/7945280ffc37f1cfb830d57f90a80b947bd1974d
-  vite: 3.2.4_sass@1.56.1
-  vite-plugin-minify: 1.5.2_vite@3.2.4
+  vanilla-cookieconsent: github.com/orestbida/cookieconsent/97452403a2f873247ba986662b0c58e9f2085796
+  vite: 3.2.3_sass@1.56.1
+  vite-plugin-minify: 1.5.2_vite@3.2.3
 
 packages:
 
@@ -583,17 +583,17 @@ packages:
     resolution: {integrity: sha512-tGyy4dAjRIEwI7BzsB0lynWgOpfqjUdq91XXAlIWD2OwKBH7oCl/GZG/HT4BOHrTlPMOASlMQ7veyTqpmRcrNA==}
     dev: true
 
-  /vite-plugin-minify/1.5.2_vite@3.2.4:
+  /vite-plugin-minify/1.5.2_vite@3.2.3:
     resolution: {integrity: sha512-clf3THHlet1jD35y8+mbw/xgACbdUQ1Eyc9zZFiqaxVOZLSC3UbrkOYOG+Nf4cleRjWgb8czbXrnQiWZICVh3Q==}
     peerDependencies:
       vite: '*'
     dependencies:
       html-minifier-terser: 6.1.0
-      vite: 3.2.4_sass@1.56.1
+      vite: 3.2.3_sass@1.56.1
     dev: true
 
-  /vite/3.2.4_sass@1.56.1:
-    resolution: {integrity: sha512-Z2X6SRAffOUYTa+sLy3NQ7nlHFU100xwanq1WDwqaiFiCe+25zdxP1TfCS5ojPV2oDDcXudHIoPnI1Z/66B7Yw==}
+  /vite/3.2.3_sass@1.56.1:
+    resolution: {integrity: sha512-h8jl1TZ76eGs3o2dIBSsvXDLb1m/Ec1iej8ZMdz+PsaFUsftZeWe2CZOI3qogEsMNaywc17gu0q6cQDzh/weCQ==}
     engines: {node: ^14.18.0 || >=16.0.0}
     hasBin: true
     peerDependencies:
@@ -626,8 +626,8 @@ packages:
       fsevents: 2.3.2
     dev: true
 
-  github.com/orestbida/cookieconsent/7945280ffc37f1cfb830d57f90a80b947bd1974d:
-    resolution: {tarball: https://codeload.github.com/orestbida/cookieconsent/tar.gz/7945280ffc37f1cfb830d57f90a80b947bd1974d}
+  github.com/orestbida/cookieconsent/97452403a2f873247ba986662b0c58e9f2085796:
+    resolution: {tarball: https://codeload.github.com/orestbida/cookieconsent/tar.gz/97452403a2f873247ba986662b0c58e9f2085796}
     name: vanilla-cookieconsent
     version: 3.0.0-rc.9
     requiresBuild: true
