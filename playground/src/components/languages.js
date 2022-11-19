@@ -85,7 +85,8 @@ function getBrowserLanguage(){
  * @param {string} languageCode
  */
 function setActiveLanguage(languageCode){
-    getById(`language-${languageCode}`).checked = true;
+    if(allLanguages.includes(languageCode))
+        getById(`language-${languageCode}`).checked = true;
 }
 
 /**
