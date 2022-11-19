@@ -61,7 +61,7 @@
     .cm__desc,
     .pm__body{
         scrollbar-width: thin;
-        overscroll-behavior: none;
+        overscroll-behavior: auto contain;
     }
 
     /* Show webkit's "cool" scrollbar only on non mobile screens */
