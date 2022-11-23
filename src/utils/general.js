@@ -27,14 +27,10 @@ export const indexOf = (el, value) => el.indexOf(value);
  */
 export const elContains = (el, value) => indexOf(el, value) !== -1;
 
-
 export const isArray = (el) => Array.isArray(el);
 
 export const isString = el => typeof el === 'string';
 
-/**
- * Returns true if el is an object
- */
 export const isObject = (el) => !!el && typeof el === 'object' && !isArray(el);
 
 export const getKeys = obj => Object.keys(obj);
@@ -62,6 +58,42 @@ export const preventDefault = (e) => e.preventDefault();
  * @param {string} selector
  */
 export const querySelectorAll = (el, selector) => el.querySelectorAll(selector);
+
+
+/**
+ * Store categories and services' config. details
+ * @param {string[]} allCategoryNames
+ */
+export const fetchCategoriesAndServices = (allCategoryNames) => {
+
+    const state = globalObj._state;
+
+    for(let categoryName of allCategoryNames){
+
+        const currCategory = state._allDefinedCategories[categoryName];
+        const services = currCategory.services || {};
+        const serviceNames = isObject(services) && getKeys(services) || [];
+
+        state._allDefinedServices[categoryName] = {};
+        state._enabledServices[categoryName] = [];
+
+        /**
+         * Keep track of readOnly categories
+         */
+        if(currCategory.readOnly){
+            state._readOnlyCategories.push(categoryName);
+            state._enabledServices[categoryName] = getKeys(services);
+        }
+
+        globalObj._dom._serviceCheckboxInputs[categoryName] = {};
+
+        for(let serviceName of serviceNames){
+            const service = services[serviceName];
+            service._enabled = false;
+            state._allDefinedServices[categoryName][serviceName] = service;
+        }
+    }
+};
 
 /**
  * Retrieves all script elements with 'data-category' attribute
@@ -109,7 +141,7 @@ export const retrieveScriptElements = () => {
                 const categoryServices = state._allDefinedServices[scriptCategoryName];
                 if(!categoryServices[scriptServiceName]){
                     categoryServices[scriptServiceName] = {
-                        enabled: false
+                        _enabled: false
                     };
                 }
             }
@@ -338,17 +370,16 @@ export const arrayDiff = (arr1, arr2) => {
  * @param {{accepted: string[], rejected: string[]}} currentCategoriesState
  * @returns {'all'|'custom'|'necessary'} accept type
  */
-export const getAcceptType = () => {
+export const resolveAcceptType = () => {
 
-    let
-        type = 'custom',
-        acceptedCategories = getCurrentCategoriesState().accepted,
-        totAcceptedCategories = acceptedCategories.length;
+    let type = 'custom';
 
-    // Determine accept type based on number of accepted categories
-    if(totAcceptedCategories === globalObj._state._allCategoryNames.length)
+    const { _acceptedCategories, _allCategoryNames, _readOnlyCategories } = globalObj._state;
+    const nAcceptedCategories = _acceptedCategories.length;
+
+    if(nAcceptedCategories === _allCategoryNames.length)
         type = 'all';
-    else if(totAcceptedCategories === globalObj._state._readOnlyCategories.length)
+    else if(nAcceptedCategories === _readOnlyCategories.length)
         type = 'necessary';
 
     return type;
@@ -359,8 +390,8 @@ export const getAcceptType = () => {
  * @param {string[]} acceptedCategories
  */
 export const setAcceptedCategories = (acceptedCategories) => {
-    globalObj._state._acceptedCategories = acceptedCategories;
-    globalObj._state._acceptType = getAcceptType();
+    globalObj._state._acceptedCategories = unique(acceptedCategories);
+    globalObj._state._acceptType = resolveAcceptType();
 };
 
 /**
@@ -387,6 +418,21 @@ export const addDataButtonListeners = (elem, api, createPreferencesModal, create
         hidePreferences,
         acceptCategory
     } = api;
+
+    const rootEl = elem || document;
+    const getElements = dataRole => querySelectorAll(rootEl, `[data-cc="${dataRole}"]`);
+
+    /**
+     * Helper function: accept and then hide modals
+     * @param {Event} event source event
+     * @param {string|string[]} [acceptType]
+     */
+    const acceptAction = (event, acceptType) => {
+        preventDefault(event);
+        acceptCategory(acceptType);
+        hidePreferences();
+        hide();
+    };
 
     const
         showPreferencesModalElements = getElements('show-preferencesModal'),
@@ -438,26 +484,6 @@ export const addDataButtonListeners = (elem, api, createPreferencesModal, create
         addEvent(el, CLICK_EVENT, (event) => {
             acceptAction(event, []);
         }, true);
-    }
-
-    /**
-     * Return all elements with given data-cc role
-     * @param {string} dataRole
-     */
-    function getElements(dataRole){
-        return querySelectorAll(elem || document, '[data-cc="' + dataRole + '"]');
-    }
-
-    /**
-     * Helper function: accept and then hide modals
-     * @param {Event} event source event
-     * @param {string|string[]} [acceptType]
-     */
-    function acceptAction(event, acceptType){
-        preventDefault(event);
-        acceptCategory(acceptType);
-        hidePreferences();
-        hide();
     }
 };
 

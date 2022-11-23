@@ -1,5 +1,5 @@
 import { globalObj } from './global';
-import { _log, getKeys, isObject, retrieveScriptElements } from '../utils/general';
+import { _log, getKeys, isObject, retrieveScriptElements, fetchCategoriesAndServices } from '../utils/general';
 import { OPT_OUT_MODE } from '../utils/constants';
 import { resolveCurrentLanguageCode, setCurrentLanguageCode } from '../utils/language';
 
@@ -9,12 +9,20 @@ import { resolveCurrentLanguageCode, setCurrentLanguageCode } from '../utils/lan
  */
 export const setConfig = (userConfig) => {
 
-    setWindowData();
+    /**
+     * Access the 'window' and 'document' objects
+     * during execution, rather than on import
+     * (avoid window/document is not defined error)
+     */
+    const doc = document;
+    globalObj._dom._document = doc;
+    globalObj._dom._htmlDom = doc.documentElement;
+    globalObj._config.cookie.domain = window.location.hostname;
 
     const
         config = globalObj._config,
         state = globalObj._state,
-        cookie = config.cookie,
+        cookie = config,
         callbacks = globalObj._callbacks,
         userCookieConfig = userConfig.cookie,
         userCategories = userConfig.categories,
@@ -74,7 +82,7 @@ export const setConfig = (userConfig) => {
         config.hideFromBots = false;
 
     if(config.hideFromBots === true && nav)
-        state._botAgentDetected = ((nav.userAgent && /bot|crawl|spider|slurp|teoma/i.test(nav.userAgent)) || nav.webdriver);
+        state._botAgentDetected = (nav.userAgent && /bot|crawl|spider|slurp|teoma/i.test(nav.userAgent)) || nav.webdriver;
 
     if(isObject(userCookieConfig))
         config.cookie = {...cookie, ...userCookieConfig};
@@ -88,50 +96,3 @@ export const setConfig = (userConfig) => {
     retrieveScriptElements();
     setCurrentLanguageCode(resolveCurrentLanguageCode());
 };
-
-/**
- * Store categories and services' config. details
- * @param {string[]} allCategoryNames
- */
-function fetchCategoriesAndServices(allCategoryNames) {
-    const state = globalObj._state;
-
-    for(let categoryName of allCategoryNames){
-
-        const currCategory = state._allDefinedCategories[categoryName];
-        const services = currCategory.services || {};
-        const serviceNames = isObject(services) && getKeys(services) || [];
-
-        state._allDefinedServices[categoryName] = {};
-        state._enabledServices[categoryName] = [];
-
-        /**
-         * Keep track of readOnly categories
-         */
-        if(currCategory.readOnly){
-            state._readOnlyCategories.push(categoryName);
-            state._enabledServices[categoryName] = getKeys(services);
-        }
-
-        globalObj._dom._serviceCheckboxInputs[categoryName] = {};
-
-        for(let serviceName of serviceNames){
-            const service = services[serviceName];
-            service._enabled = false;
-            state._allDefinedServices[categoryName][serviceName] = service;
-        }
-    }
-}
-
-/**
- * Access the 'window' and 'document' objects
- * during execution, rather than on import
- */
-function setWindowData() {
-
-    const doc = document;
-
-    globalObj._dom._document = doc;
-    globalObj._dom._htmlDom = doc.documentElement;
-    globalObj._config.cookie.domain = window.location.hostname;
-}

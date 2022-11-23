@@ -100,63 +100,69 @@ const retrieveCurrentlyEnabledCategories = () => {
 };
 
 /**
- * Accept API
  * @param {string[]|string} categories - Categories to accept
  * @param {string[]} [excludedCategories]
  */
-export const acceptCategory = (categories, excludedCategories = []) => {
+const resolveEnabledCategories = (categories, excludedCategories) => {
 
-    const state = globalObj._state;
-    const allCategoryNames = state._allCategoryNames;
-
-    let customServicesSelection = false;
+    const { _allCategoryNames, _readOnlyCategories } = globalObj._state;
 
     /**
      * @type {string[]}
      */
-    let categoriesToAccept = [];
+    let enabledCategories = [];
 
     if(!categories){
-        categoriesToAccept = retrieveCurrentlyEnabledCategories();
-        customServicesSelection = true;
+        enabledCategories = retrieveCurrentlyEnabledCategories();
     }else{
 
         if(isArray(categories)){
-            categoriesToAccept.push(...categories);
-        }
-
-        if(isString(categories)){
+            enabledCategories.push(...categories);
+        }else if(isString(categories)){
             if(categories === 'all')
-                categoriesToAccept.push(...allCategoryNames);
+                enabledCategories = _allCategoryNames;
             else
-                categoriesToAccept.push(categories);
+                enabledCategories.push(categories);
         }
     }
 
     // Remove invalid and excluded categories
-    categoriesToAccept = categoriesToAccept.filter(category =>
-        !elContains(allCategoryNames, category) ||
+    enabledCategories = enabledCategories.filter(category =>
+        !elContains(_allCategoryNames, category) ||
         !elContains(excludedCategories, category)
     );
 
     // Add back all the categories set as "readonly/required"
-    categoriesToAccept.push(...state._readOnlyCategories);
+    enabledCategories.push(..._readOnlyCategories);
 
-    setAcceptedCategories(unique(categoriesToAccept));
+    setAcceptedCategories(enabledCategories);
+};
 
-    if(!customServicesSelection)
-        state._customServicesSelection = {};
+const resolveEnabledServices = () => {
+
+    const state = globalObj._state;
+
+    const {
+        _acceptType,
+        _customServicesSelection,
+        _readOnlyCategories,
+        _acceptedCategories,
+        _enabledServices,
+        _allDefinedServices,
+        _allCategoryNames
+    } = state;
 
     /**
      * Save previously enabled services to calculate later on which of them was changed
      */
-    state._lastEnabledServices = deepCopy(state._enabledServices);
+    state._lastEnabledServices = deepCopy(_enabledServices);
 
-    for(const categoryName of state._allCategoryNames) {
+    for(const categoryName of _allCategoryNames) {
 
-        const services = state._allDefinedServices[categoryName];
+        const services = _allDefinedServices[categoryName];
         const serviceNames = getKeys(services);
-        const enabledServices = state._enabledServices;
+        const customServicesSelection = _customServicesSelection[categoryName]?.length > 0;
+        const readOnlyCategory = elContains(_readOnlyCategories, categoryName);
 
         /**
          * Stop here if there are no services
@@ -164,47 +170,50 @@ export const acceptCategory = (categories, excludedCategories = []) => {
         if(serviceNames.length === 0)
             continue;
 
-        enabledServices[categoryName] = [];
+        // Empty (previously) enabled services
+        _enabledServices[categoryName] = [];
 
-        // If category is marked as readOnly => enable all its services
-        if(elContains(state._readOnlyCategories, categoryName)){
-            enabledServices[categoryName].push(...serviceNames);
+        // If category is marked as readOnly enable all its services
+        if(readOnlyCategory){
+            _enabledServices[categoryName].push(...serviceNames);
         }else{
-            if(state._acceptType === 'all'){
-                if(
-                    customServicesSelection
-                    && !!state._customServicesSelection[categoryName]
-                    && state._customServicesSelection[categoryName].length > 0
-                ){
-                    const selectedServices = state._customServicesSelection[categoryName];
-                    enabledServices[categoryName].push(...selectedServices);
+            if(_acceptType === 'all'){
+                if(customServicesSelection){
+                    const selectedServices = _customServicesSelection[categoryName];
+                    _enabledServices[categoryName].push(...selectedServices);
                 }else{
-                    enabledServices[categoryName].push(...serviceNames);
+                    _enabledServices[categoryName].push(...serviceNames);
                 }
-            }else if(state._acceptType === 'necessary'){
-                enabledServices[categoryName] = [];
+            }else if(_acceptType === 'necessary'){
+                _enabledServices[categoryName] = [];
             }else {
-                if(
-                    customServicesSelection
-                    && !!state._customServicesSelection[categoryName]
-                    && state._customServicesSelection[categoryName].length > 0
-                ){
-                    const selectedServices = state._customServicesSelection[categoryName];
-                    enabledServices[categoryName].push(...selectedServices);
-                }else{
-                    if(elContains(state._acceptedCategories, categoryName)){
-                        enabledServices[categoryName].push(...serviceNames);
-                    }
+                if(customServicesSelection){
+                    const selectedServices = _customServicesSelection[categoryName];
+                    _enabledServices[categoryName].push(...selectedServices);
+                }else if(elContains(_acceptedCategories, categoryName)){
+                    _enabledServices[categoryName].push(...serviceNames);
                 }
             }
+
+            // Reset selection
+            state._customServicesSelection = {};
         }
 
         /**
          * Make sure there are no duplicates inside array
          */
-        enabledServices[categoryName] = unique(enabledServices[categoryName]);
+        _enabledServices[categoryName] = unique(_enabledServices[categoryName]);
     }
+};
 
+/**
+ * Accept API
+ * @param {string[]|string} categories - Categories to accept
+ * @param {string[]} [excludedCategories]
+ */
+export const acceptCategory = (categories, excludedCategories = []) => {
+    resolveEnabledCategories(categories, excludedCategories);
+    resolveEnabledServices();
     saveCookiePreferences();
 };
 
@@ -217,7 +226,7 @@ export const acceptedCategory = (category) => {
 
     if(!globalObj._state._invalidConsent || globalObj._config.mode === OPT_IN_MODE)
         categories = getCurrentCategoriesState().accepted || [];
-    else  // mode is OPT_OUT_MODE
+    else  // mode is 'opt-out'
         categories = globalObj._state._defaultEnabledCategories;
 
     return elContains(categories, category);
@@ -235,7 +244,7 @@ export const acceptService = (service, category) => {
     if(
         !service
         || !category
-        || typeof category !== 'string'
+        || !isString(category)
         || !elContains(state._allCategoryNames, category)
     ) {
         return false;
@@ -244,6 +253,7 @@ export const acceptService = (service, category) => {
     const servicesInputs = globalObj._dom._serviceCheckboxInputs[category] || {};
     const allServiceNames = getKeys(state._allDefinedServices[category]);
 
+    // Reset services
     state._customServicesSelection[category] = [];
 
     if(isString(service)){
@@ -254,15 +264,10 @@ export const acceptService = (service, category) => {
                 dispatchChangeEvent(servicesInputs[serviceName]);
             }
 
-            state._customServicesSelection[category] = [...allServiceNames];
         }else{
 
             for(let serviceName in servicesInputs){
-                if(service === serviceName)
-                    servicesInputs[serviceName].checked = true;
-                else
-                    servicesInputs[serviceName].checked = false;
-
+                servicesInputs[serviceName].checked = service === serviceName;
                 dispatchChangeEvent(servicesInputs[serviceName]);
             }
 
@@ -274,7 +279,6 @@ export const acceptService = (service, category) => {
 
         for(let serviceName in servicesInputs){
             servicesInputs[serviceName].checked = elContains(service, serviceName);
-
             dispatchChangeEvent(servicesInputs[serviceName]);
         }
 
@@ -282,7 +286,6 @@ export const acceptService = (service, category) => {
             if(elContains(service, serviceName))
                 state._customServicesSelection[category].push(serviceName);
         }
-
     }
 
     acceptCategory();
@@ -560,14 +563,14 @@ export const setLanguage = async (newLanguageCode, forceUpdate) => {
  */
 export const getUserPreferences = () => {
 
-    const {_acceptType, _enabledService} = globalObj._state;
-    const {accepted, rejected} = getCurrentCategoriesState();
+    const { _acceptType, _enabledServices } = globalObj._state;
+    const { accepted, rejected } = getCurrentCategoriesState();
 
     return {
         acceptType: _acceptType,
         acceptedCategories: accepted,
         rejectedCategories: rejected,
-        acceptedServices: _enabledService,
+        acceptedServices: _enabledServices,
         rejectedServices: retrieveRejectedServices()
     };
 };
@@ -702,9 +705,7 @@ export const getConfig = (field) => {
  * Returns true if consent is valid
  * @returns {boolean}
  */
-export const validConsent = () => {
-    return !globalObj._state._invalidConsent;
-};
+export const validConsent = () => !globalObj._state._invalidConsent;
 
 const retrieveState = () => {
 
@@ -715,33 +716,48 @@ const retrieveState = () => {
      * @type {import('./global').CookieValue}
      */
     const cookieValue = getPluginCookie();
-    const categories = cookieValue.categories;
+
+    const {
+        categories,
+        services,
+        consentId,
+        consentTimestamp,
+        lastConsentTimestamp,
+        data,
+        revision
+    } = cookieValue;
+
     const validCategories = isArray(categories);
 
     state._savedCookieContent = cookieValue;
-    state._consentId = cookieValue.consentId;
+    state._consentId = consentId;
 
     // If "_consentId" is present => assume that consent was previously given
-    const validConsentId = !!state._consentId && isString(state._consentId);
+    const validConsentId = !!consentId && isString(consentId);
 
     // Retrieve "_consentTimestamp"
-    state._consentTimestamp = cookieValue.consentTimestamp;
-    state._consentTimestamp && (state._consentTimestamp = new Date(state._consentTimestamp));
+    state._consentTimestamp = consentTimestamp;
+    state._consentTimestamp && (state._consentTimestamp = new Date(consentTimestamp));
 
     // Retrieve "_lastConsentTimestamp"
-    state._lastConsentTimestamp = cookieValue.lastConsentTimestamp;
-    state._lastConsentTimestamp && (state._lastConsentTimestamp = new Date(state._lastConsentTimestamp));
+    state._lastConsentTimestamp = lastConsentTimestamp;
+    state._lastConsentTimestamp && (state._lastConsentTimestamp = new Date(lastConsentTimestamp));
 
     // Retrieve "data"
-    const dataTemp = cookieValue.data;
-    state._cookieData = typeof dataTemp !== 'undefined' ? dataTemp : null;
+    state._cookieData = typeof data !== 'undefined'
+        ? data
+        : null;
 
     // If revision is enabled and current value !== saved value inside the cookie => revision is not valid
-    if(state._revisionEnabled && validConsentId && cookieValue.revision !== config.revision)
+    if(state._revisionEnabled && validConsentId && revision !== config.revision)
         state._validRevision = false;
 
     // If consent is not valid => create consent modal
-    state._invalidConsent = (!validConsentId || !state._validRevision || !state._consentTimestamp || !state._lastConsentTimestamp || !validCategories);
+    state._invalidConsent = !validConsentId
+        || !state._validRevision
+        || !state._consentTimestamp
+        || !state._lastConsentTimestamp
+        || !validCategories;
 
     _log('CookieConsent [STATUS] valid consent:', !state._invalidConsent);
 
@@ -753,13 +769,13 @@ const retrieveState = () => {
 
         state._enabledServices = {
             ...state._enabledServices,
-            ...cookieValue.services
+            ...services
         };
 
-        setAcceptedCategories(unique([
+        setAcceptedCategories([
             ...state._readOnlyCategories,
-            ...cookieValue.categories
-        ]));
+            ...categories
+        ]);
     }else{
         if(config.mode === OPT_OUT_MODE)
             retrieveEnabledCategoriesAndServices();
@@ -813,15 +829,15 @@ export const run = async (userConfig) => {
 
 /**
  * Reset cookieconsent.
- * @param {boolean} eraseCookie Delete plugin's cookie
+ * @param {boolean} deleteCookie Delete plugin's cookie
  */
-export const reset = (eraseCookie) => {
+export const reset = (deleteCookie) => {
 
     const dom = globalObj._dom;
-    const cookie = globalObj._config.cookie;
+    const { name, path, domain } = globalObj._config.cookie;
 
-    if(eraseCookie === true)
-        eraseCookies(cookie.name, cookie.path, cookie.domain);
+    if(deleteCookie)
+        eraseCookies(name, path, domain);
 
     /**
      * Remove data-cc event listeners
