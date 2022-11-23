@@ -14,145 +14,191 @@ import { addClass, elContains, removeClass } from './general';
  * @typedef {Object.<string, Layout>} Layouts
  */
 
+const CLASS_CONSTANTS = {
+    _top: 'top',
+    _middle: 'middle',
+    _bottom: 'bottom',
+    _left: 'left',
+    _center: 'center',
+    _right: 'right',
+    _inline: 'inline',
+    _wide: 'wide',
+    _pmPrefix: 'pm--',
+    _cmPrefix: 'cm--',
+    _box: 'box'
+};
+
+const alignV = [
+    CLASS_CONSTANTS._middle,
+    CLASS_CONSTANTS._top,
+    CLASS_CONSTANTS._bottom
+];
+
+const alignH = [
+    CLASS_CONSTANTS._left,
+    CLASS_CONSTANTS._center,
+    CLASS_CONSTANTS._right
+];
+
+const ALL_CM_LAYOUTS = {
+    box: {
+        _variants: [CLASS_CONSTANTS._wide, CLASS_CONSTANTS._inline],
+        _alignV: alignV,
+        _alignH: alignH,
+        _defaultAlignV: CLASS_CONSTANTS._bottom,
+        _defaultAlignH: CLASS_CONSTANTS._right
+    },
+    cloud: {
+        _variants: [CLASS_CONSTANTS._inline],
+        _alignV: alignV,
+        _alignH: alignH,
+        _defaultAlignV: CLASS_CONSTANTS._bottom,
+        _defaultAlignH: CLASS_CONSTANTS._center
+    },
+    bar: {
+        _variants: [CLASS_CONSTANTS._inline],
+        _alignV: alignV.slice(1),   //remove the first "middle" option
+        _alignH: [],
+        _defaultAlignV: CLASS_CONSTANTS._bottom,
+        _defaultAlignH: ''
+    }
+};
+
+const ALL_PM_LAYOUTS = {
+    box: {
+        _variants: [],
+        _alignV: [],
+        _alignH: [],
+        _defaultAlignV: '',
+        _defaultAlignH: ''
+    },
+    bar: {
+        _variants: [CLASS_CONSTANTS._wide],
+        _alignV: [],
+        _alignH: [CLASS_CONSTANTS._left, CLASS_CONSTANTS._right],
+        _defaultAlignV: '',
+        _defaultAlignH: CLASS_CONSTANTS._left
+    }
+};
+
 /**
- * Manage each modal's layout
- * @param {number} applyToModal 0: consentModal, 1: preferencesModal
+ * Add appropriate classes to modals and buttons
+ * @param {0 | 1} applyToModal
  */
 export const guiManager = (applyToModal) => {
 
-    /**
-     * @type {import("../core/global").GuiOptions}
-     */
-    const guiOptions = globalObj._state._userConfig.guiOptions,
-        consentModalOptions = guiOptions && guiOptions.consentModal,
-        preferencesModalOptions = guiOptions && guiOptions.preferencesModal;
-
-    /**
-     * Helper function to set the proper layout classes
-     * @param {HTMLElement} modal
-     * @param {Layouts} allowedLayoutsObj
-     * @param {import("../core/global").GuiModalOption} userGuiOptions
-     * @param {string} prefix
-     * @param {string} defaultLayoutName
-     * @param {string} modalClassName
-     */
-    const setLayout = (modal, allowedLayoutsObj, userGuiOptions, prefix, defaultLayoutName, modalClassName) => {
-
-        var layout = userGuiOptions && userGuiOptions.layout;
-        var position = userGuiOptions && userGuiOptions.position;
-        var flipButtons = userGuiOptions && userGuiOptions.flipButtons === true;
-        var notSameWeightButtons = userGuiOptions && userGuiOptions.equalWeightButtons === false;
-        var userLayoutStr = layout && layout.split(' ') || [];
-        var userPositionStr = position && position.split(' ') || [];
-
-        var userLayoutName = userLayoutStr[0];
-        var userLayoutVariant = userLayoutStr[1];
-        var userAlignV = userPositionStr[0];
-        var userAlignH = prefix === 'pm--' ? userPositionStr[0] : userPositionStr[1];
-
-        var currentLayoutName = userLayoutName,
-            currentLayout = allowedLayoutsObj[userLayoutName];
-
-        if(!currentLayout){
-            currentLayout = allowedLayoutsObj[defaultLayoutName];
-            currentLayoutName = defaultLayoutName;
-        }
-
-        var currentLayoutVariant = elContains(currentLayout._variants, userLayoutVariant) && userLayoutVariant;
-        var currentAlignV = elContains(currentLayout._alignV, userAlignV) ? userAlignV : currentLayout._defaultAlignV;
-        var currentAlignH = elContains(currentLayout._alignH, userAlignH) ? userAlignH : currentLayout._defaultAlignH;
-
-        /**
-         * Reset modal classes to default
-         */
-        modal.className = modalClassName;
-
-        /**
-         * Add layout + position classes
-         */
-        addClass(modal, prefix + currentLayoutName);
-        currentLayoutVariant && addClass(modal, prefix + currentLayoutVariant);
-        currentAlignV && addClass(modal, prefix + currentAlignV);
-        currentAlignH && addClass(modal, prefix + currentAlignH);
-        flipButtons && addClass(modal, prefix + 'flip');
-
-        const secondaryBtnClass = 'btn--secondary',
-            classPrefix = modalClassName + '__';
-
-        /**
-         * Add classes to buttons
-         */
-        if(modalClassName === 'cm'){
-
-            const {_cmAcceptNecessaryBtn, _cmCloseIconBtn} = globalObj._dom;
-
-            _cmAcceptNecessaryBtn && removeClass(_cmAcceptNecessaryBtn, classPrefix + secondaryBtnClass);
-            _cmCloseIconBtn && removeClass(_cmCloseIconBtn, classPrefix + secondaryBtnClass);
-
-            if(notSameWeightButtons){
-                _cmAcceptNecessaryBtn && addClass(_cmAcceptNecessaryBtn, classPrefix + secondaryBtnClass);
-                _cmCloseIconBtn && addClass(_cmCloseIconBtn, classPrefix + secondaryBtnClass);
-            }
-        }else{
-            const { _pmAcceptNecessaryBtn } =  globalObj._dom;
-
-            _pmAcceptNecessaryBtn && removeClass(_pmAcceptNecessaryBtn, classPrefix + secondaryBtnClass);
-
-            if(notSameWeightButtons)
-                _pmAcceptNecessaryBtn && addClass(_pmAcceptNecessaryBtn, classPrefix + secondaryBtnClass);
-        }
-    };
+    const guiOptions = globalObj._state._userConfig.guiOptions;
+    const consentModalOptions = guiOptions?.consentModal;
+    const preferencesModalOptions = guiOptions?.preferencesModal;
 
     if(applyToModal === 0){
-
-        const alignV = ['middle', 'top', 'bottom'];
-        const alignH = ['left', 'center', 'right'];
-
-        const cmLayouts = {
-            box: {
-                _variants: ['wide', 'inline'],
-                _alignV: alignV,
-                _alignH: alignH,
-                _defaultAlignV: 'bottom',
-                _defaultAlignH: 'right'
-            },
-            cloud: {
-                _variants: ['inline'],
-                _alignV: alignV,
-                _alignH: alignH,
-                _defaultAlignV: 'bottom',
-                _defaultAlignH: 'center'
-            },
-            bar: {
-                _variants: ['inline'],
-                _alignV: alignV.slice(1),   //remove the first "middle" option
-                _alignH: [],
-                _defaultAlignV: 'bottom',
-                _defaultAlignH: ''
-            }
-        };
-
-        setLayout(globalObj._dom._cm, cmLayouts, consentModalOptions, 'cm--', 'box', 'cm');
+        setLayout(
+            globalObj._dom._cm,
+            ALL_CM_LAYOUTS,
+            consentModalOptions,
+            CLASS_CONSTANTS._cmPrefix,
+            CLASS_CONSTANTS._box,
+            'cm'
+        );
     }
 
     if(applyToModal === 1){
-        const pmLayouts = {
-            box: {
-                _variants: [],
-                _alignV: [],
-                _alignH: [],
-                _defaultAlignV: '',
-                _defaultAlignH: ''
-            },
-            bar: {
-                _variants: ['wide'],
-                _alignV: [],
-                _alignH: ['left', 'right'],
-                _defaultAlignV: '',
-                _defaultAlignH: 'left'
-            }
-        };
+        setLayout(
+            globalObj._dom._pm,
+            ALL_PM_LAYOUTS,
+            preferencesModalOptions,
+            CLASS_CONSTANTS._pmPrefix,
+            CLASS_CONSTANTS._box,
+            'pm'
+        );
+    }
+};
 
-        setLayout(globalObj._dom._pm, pmLayouts, preferencesModalOptions, 'pm--', 'box', 'pm');
+/**
+ * Helper function to set the proper layout classes
+ * @param {HTMLElement} modal
+ * @param {Layouts} allowedLayoutsObj
+ * @param {import("../core/global").GuiModalOption} userGuiOptions
+ * @param {'cm--' | 'pm--'} modalClassPrefix
+ * @param {string} defaultLayoutName
+ * @param {'cm' | 'pm'} modalClassName
+ */
+const setLayout = (modal, allowedLayoutsObj, userGuiOptions, modalClassPrefix, defaultLayoutName, modalClassName) => {
+
+    if(!userGuiOptions)
+        return;
+
+    /**
+     * Reset modal classes to default
+     */
+    modal.className = modalClassName;
+
+    const {layout, position, equalWeightButtons, flipButtons} = userGuiOptions;
+
+    const notSameWeightButtons = equalWeightButtons === false;
+    const layoutSplit = layout?.split(' ') || [];
+
+    const layoutName = layoutSplit[0];
+    const layoutVariant = layoutSplit[1];
+
+    const currentLayoutName = layoutName in allowedLayoutsObj
+        ? layoutName
+        : defaultLayoutName;
+
+    const currentLayout = allowedLayoutsObj[currentLayoutName];
+    const currentLayoutVariant = elContains(currentLayout._variants, layoutVariant) && layoutVariant;
+
+    const positionSplit = position?.split(' ') || [];
+    const positionV = positionSplit[0];
+
+    const positionH = modalClassPrefix === CLASS_CONSTANTS._pmPrefix
+        ? positionSplit[0]
+        : positionSplit[1];
+
+    const currentPositionV = elContains(currentLayout._alignV, positionV)
+        ? positionV
+        : currentLayout._defaultAlignV;
+
+    const currentPositionH = elContains(currentLayout._alignH, positionH)
+        ? positionH
+        : currentLayout._defaultAlignH;
+
+    const addModalClass = className => addClass(modal, modalClassPrefix + className);
+
+    addModalClass(currentLayoutName);
+    addModalClass(currentLayoutVariant);
+    addModalClass(currentPositionV);
+    addModalClass(currentPositionH);
+    flipButtons && addModalClass('flip');
+
+    const secondaryBtnClass = 'btn--secondary';
+    const btnClassPrefix = modalClassName + '__';
+
+    /**
+     * Add classes to buttons
+     */
+    if(modalClassName === 'cm'){
+
+        const {_cmAcceptNecessaryBtn, _cmCloseIconBtn} = globalObj._dom;
+
+        if(_cmAcceptNecessaryBtn){
+            notSameWeightButtons
+                ? removeClass(_cmAcceptNecessaryBtn, btnClassPrefix + secondaryBtnClass)
+                : addClass(_cmAcceptNecessaryBtn, btnClassPrefix + secondaryBtnClass);
+        }
+
+        if(_cmCloseIconBtn){
+            notSameWeightButtons
+                ? removeClass(_cmCloseIconBtn, btnClassPrefix + secondaryBtnClass)
+                : addClass(_cmCloseIconBtn, btnClassPrefix + secondaryBtnClass);
+        }
+    }else{
+        const { _pmAcceptNecessaryBtn } =  globalObj._dom;
+
+        if(_pmAcceptNecessaryBtn){
+            notSameWeightButtons
+                ? removeClass(_pmAcceptNecessaryBtn, btnClassPrefix + secondaryBtnClass)
+                : addClass(_pmAcceptNecessaryBtn, btnClassPrefix + secondaryBtnClass);
+        }
     }
 };

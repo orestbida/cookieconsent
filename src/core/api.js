@@ -5,10 +5,10 @@ import {
     addClass,
     removeClass,
     _log,
-    handleFocusTrap,
     getCurrentCategoriesState,
     elContains,
-    updateAcceptType,
+    setAcceptedCategories,
+    isString,
     getKeys,
     retrieveRejectedServices,
     isArray,
@@ -29,7 +29,7 @@ import {
 import {
     createConsentModal,
     createPreferencesModal,
-    createCookieConsentHTML,
+    generateHtml,
     createMainContainer
 } from './modals/index';
 
@@ -64,102 +64,85 @@ import {
 } from '../utils/constants';
 
 /**
- * Dispatch the 'change' event to the input
- * @param {HTMLElement} input
+ * @param {HTMLInputElement} input
  */
-const dispatchChangeEvent = (input) => {
-    input.dispatchEvent(new Event('change'));
+const dispatchChangeEvent = (input) => input.dispatchEvent(new Event('change'));
+
+
+
+/**
+ * Get all enabled categories
+ * @returns {string[]}
+ */
+const retrieveCurrentlyEnabledCategories = () => {
+    const state = globalObj._state;
+    const toggles = globalObj._dom._categoryCheckboxInputs;
+
+    let enabledCategories = [];
+
+    if(toggles){
+        for(let categoryName in toggles){
+            if(toggles[categoryName].checked){
+                enabledCategories.push(categoryName);
+            }
+        }
+    }else if(!state._invalidConsent){
+        enabledCategories = state._savedCookieContent.categories;
+    }
+
+    for(let categoryName in state._customServicesSelection) {
+        if(state._customServicesSelection[categoryName].length > 0){
+            enabledCategories.push(categoryName);
+        }
+    }
+
+    return enabledCategories;
 };
 
 /**
  * Accept API
- * @param {string[]|string} _categories - Categories to accept
- * @param {string[]} [_exclusions] - Excluded categories [optional]
+ * @param {string[]|string} categories - Categories to accept
+ * @param {string[]} [excludedCategories]
  */
-export const acceptCategory = (categories, exclusions = []) => {
+export const acceptCategory = (categories, excludedCategories = []) => {
 
     const state = globalObj._state;
+    const allCategoryNames = state._allCategoryNames;
 
     let customServicesSelection = false;
 
     /**
      * @type {string[]}
      */
-    var categoriesToAccept = [];
-
-    /**
-     * Get all accepted categories
-     * @returns {string[]}
-     */
-    const getCurrentPreferences = () => {
-        let toggles = globalObj._dom._categoryCheckboxInputs;
-        let enabledCategories = [];
-
-        if(toggles){
-            for(var toggleName in toggles){
-                if(toggles[toggleName].checked){
-                    enabledCategories.push(toggles[toggleName].value);
-                }
-            }
-        }else{
-            if(!state._invalidConsent)
-                enabledCategories = state._savedCookieContent.categories;
-        }
-
-        for(let categoryName in state._customServicesSelection) {
-            if(state._customServicesSelection[categoryName].length > 0){
-                if(!elContains(enabledCategories, categoryName))
-                    enabledCategories.push(categoryName);
-            }
-        }
-
-        return enabledCategories;
-    };
+    let categoriesToAccept = [];
 
     if(!categories){
-        categoriesToAccept = getCurrentPreferences();
+        categoriesToAccept = retrieveCurrentlyEnabledCategories();
         customServicesSelection = true;
     }else{
-        if(
-            typeof categories === 'object' &&
-            typeof categories.length === 'number'
-        ){
-            for(var i=0; i<categories.length; i++){
-                if(elContains(state._allCategoryNames, categories[i]))
-                    categoriesToAccept.push(categories[i]);
-            }
-        }else if(typeof categories === 'string'){
 
+        if(isArray(categories)){
+            categoriesToAccept.push(...categories);
+        }
+
+        if(isString(categories)){
             if(categories === 'all')
-                categoriesToAccept = state._allCategoryNames.slice();
-            else{
-                if(elContains(state._allCategoryNames, categories))
-                    categoriesToAccept.push(categories);
-            }
+                categoriesToAccept.push(...allCategoryNames);
+            else
+                categoriesToAccept.push(categories);
         }
     }
 
-    // Remove excluded categories
-    if(exclusions.length >= 1){
-        for(i=0; i<exclusions.length; i++){
-            categoriesToAccept = categoriesToAccept.filter((item) => {
-                return item !== exclusions[i];
-            });
-        }
-    }
+    // Remove invalid and excluded categories
+    categoriesToAccept = categoriesToAccept.filter(category =>
+        !elContains(allCategoryNames, category) ||
+        !elContains(excludedCategories, category)
+    );
 
     // Add back all the categories set as "readonly/required"
-    for(i=0; i<state._readOnlyCategories.length; i++){
-        if(!elContains(categoriesToAccept, state._readOnlyCategories[i]))
-            categoriesToAccept.push(state._readOnlyCategories[i]);
-    }
+    categoriesToAccept.push(...state._readOnlyCategories);
 
-    /**
-     * Keep state._acceptedCategories array updated
-     */
-    state._acceptedCategories = categoriesToAccept;
-
-    updateAcceptType();
+    setAcceptedCategories(unique(categoriesToAccept));
 
     if(!customServicesSelection)
         state._customServicesSelection = {};
@@ -169,7 +152,7 @@ export const acceptCategory = (categories, exclusions = []) => {
      */
     state._lastEnabledServices = deepCopy(state._enabledServices);
 
-    state._allCategoryNames.forEach(categoryName => {
+    for(const categoryName of state._allCategoryNames) {
 
         const services = state._allDefinedServices[categoryName];
         const serviceNames = getKeys(services);
@@ -179,15 +162,13 @@ export const acceptCategory = (categories, exclusions = []) => {
          * Stop here if there are no services
          */
         if(serviceNames.length === 0)
-            return;
+            continue;
 
         enabledServices[categoryName] = [];
 
         // If category is marked as readOnly => enable all its services
         if(elContains(state._readOnlyCategories, categoryName)){
-            serviceNames.forEach(serviceName => {
-                enabledServices[categoryName].push(serviceName);
-            });
+            enabledServices[categoryName].push(...serviceNames);
         }else{
             if(state._acceptType === 'all'){
                 if(
@@ -195,14 +176,10 @@ export const acceptCategory = (categories, exclusions = []) => {
                     && !!state._customServicesSelection[categoryName]
                     && state._customServicesSelection[categoryName].length > 0
                 ){
-
-                    state._customServicesSelection[categoryName].forEach(serviceName => {
-                        enabledServices[categoryName].push(serviceName);
-                    });
+                    const selectedServices = state._customServicesSelection[categoryName];
+                    enabledServices[categoryName].push(...selectedServices);
                 }else{
-                    serviceNames.forEach(serviceName => {
-                        enabledServices[categoryName].push(serviceName);
-                    });
+                    enabledServices[categoryName].push(...serviceNames);
                 }
             }else if(state._acceptType === 'necessary'){
                 enabledServices[categoryName] = [];
@@ -212,13 +189,11 @@ export const acceptCategory = (categories, exclusions = []) => {
                     && !!state._customServicesSelection[categoryName]
                     && state._customServicesSelection[categoryName].length > 0
                 ){
-                    state._customServicesSelection[categoryName].forEach(serviceName => {
-                        enabledServices[categoryName].push(serviceName);
-                    });
+                    const selectedServices = state._customServicesSelection[categoryName];
+                    enabledServices[categoryName].push(...selectedServices);
                 }else{
                     if(elContains(state._acceptedCategories, categoryName)){
-                        const definedServices = getKeys(services);
-                        definedServices.forEach(service => enabledServices[categoryName].push(service));
+                        enabledServices[categoryName].push(...serviceNames);
                     }
                 }
             }
@@ -228,7 +203,7 @@ export const acceptCategory = (categories, exclusions = []) => {
          * Make sure there are no duplicates inside array
          */
         enabledServices[categoryName] = unique(enabledServices[categoryName]);
-    });
+    }
 
     saveCookiePreferences();
 };
@@ -271,7 +246,7 @@ export const acceptService = (service, category) => {
 
     state._customServicesSelection[category] = [];
 
-    if(typeof service === 'string'){
+    if(isString(service)){
         if(service === 'all'){
 
             for(let serviceName in servicesInputs){
@@ -298,18 +273,15 @@ export const acceptService = (service, category) => {
     }else if(isArray(service)){
 
         for(let serviceName in servicesInputs){
-            if(elContains(service, serviceName))
-                servicesInputs[serviceName].checked = true;
-            else
-                servicesInputs[serviceName].checked = false;
+            servicesInputs[serviceName].checked = elContains(service, serviceName);
 
             dispatchChangeEvent(servicesInputs[serviceName]);
         }
 
-        allServiceNames.forEach(serviceName => {
+        for(let serviceName in allServiceNames){
             if(elContains(service, serviceName))
                 state._customServicesSelection[category].push(serviceName);
-        });
+        }
 
     }
 
@@ -351,17 +323,17 @@ export const eraseCookies = (cookies, path, domain) => {
      * @param {string | RegExp} cookieName
      */
     const addCookieIfExists = (cookieName) => {
-        if(typeof cookieName === 'string'){
+        if(isString(cookieName)){
             let name = getSingleCookie(cookieName);
             name !== '' && allCookies.push(name);
         }else{
-            allCookies = allCookies.concat(getAllCookies(cookieName));
+            allCookies.push(...getAllCookies(cookieName));
         }
     };
 
     if(isArray(cookies)){
-        for(var i=0; i<cookies.length; i++){
-            addCookieIfExists(cookies[i]);
+        for(let cookie of cookies){
+            addCookieIfExists(cookie);
         }
     }else{
         addCookieIfExists(cookies);
@@ -587,16 +559,16 @@ export const setLanguage = async (newLanguageCode, forceUpdate) => {
  * @returns {import("./global").UserPreferences}
  */
 export const getUserPreferences = () => {
-    const validConsent = !globalObj._state._invalidConsent;
 
-    var currentCategoriesState = validConsent && getCurrentCategoriesState();
+    const {_acceptType, _enabledService} = globalObj._state;
+    const {accepted, rejected} = getCurrentCategoriesState();
 
     return {
-        acceptType: globalObj._state._acceptType,
-        acceptedCategories: validConsent ? currentCategoriesState.accepted : [],
-        rejectedCategories: validConsent ? currentCategoriesState.rejected : [],
-        acceptedServices: validConsent ? globalObj._state._enabledServices : {},
-        rejectedServices: validConsent ? retrieveRejectedServices() : {}
+        acceptType: _acceptType,
+        acceptedCategories: accepted,
+        rejectedCategories: rejected,
+        acceptedServices: _enabledService,
+        rejectedServices: retrieveRejectedServices()
     };
 };
 
@@ -607,6 +579,10 @@ export const getUserPreferences = () => {
  * @returns {Promise<boolean>} promise
  */
 export const loadScript = (src, attrs) => {
+
+    /**
+     * @type {HTMLScriptElement}
+     */
     let script = document.querySelector('script[src="' + src + '"]');
 
     return new Promise((resolve) => {
@@ -663,14 +639,13 @@ export const setCookieData = (props) => {
      * add/update only the specified props.
      */
     if(mode === 'update'){
-        state._cookieData = getCookie('data');
-        cookieData = getCookie('data');
+        state._cookieData = cookieData = getCookie('data');
         const sameType = typeof cookieData === typeof newData;
 
         if(sameType && typeof cookieData === 'object'){
             !cookieData && (cookieData = {});
 
-            for(var prop in newData){
+            for(let prop in newData){
                 if(cookieData[prop] !== newData[prop]){
                     cookieData[prop] = newData[prop];
                     set = true;
@@ -731,14 +706,78 @@ export const validConsent = () => {
     return !globalObj._state._invalidConsent;
 };
 
+const retrieveState = () => {
+
+    const state = globalObj._state;
+    const config = globalObj._config;
+
+    /**
+     * @type {import('./global').CookieValue}
+     */
+    const cookieValue = getPluginCookie();
+    const categories = cookieValue.categories;
+    const validCategories = isArray(categories);
+
+    state._savedCookieContent = cookieValue;
+    state._consentId = cookieValue.consentId;
+
+    // If "_consentId" is present => assume that consent was previously given
+    const validConsentId = !!state._consentId && isString(state._consentId);
+
+    // Retrieve "_consentTimestamp"
+    state._consentTimestamp = cookieValue.consentTimestamp;
+    state._consentTimestamp && (state._consentTimestamp = new Date(state._consentTimestamp));
+
+    // Retrieve "_lastConsentTimestamp"
+    state._lastConsentTimestamp = cookieValue.lastConsentTimestamp;
+    state._lastConsentTimestamp && (state._lastConsentTimestamp = new Date(state._lastConsentTimestamp));
+
+    // Retrieve "data"
+    const dataTemp = cookieValue.data;
+    state._cookieData = typeof dataTemp !== 'undefined' ? dataTemp : null;
+
+    // If revision is enabled and current value !== saved value inside the cookie => revision is not valid
+    if(state._revisionEnabled && validConsentId && cookieValue.revision !== config.revision)
+        state._validRevision = false;
+
+    // If consent is not valid => create consent modal
+    state._invalidConsent = (!validConsentId || !state._validRevision || !state._consentTimestamp || !state._lastConsentTimestamp || !validCategories);
+
+    _log('CookieConsent [STATUS] valid consent:', !state._invalidConsent);
+
+    /**
+     * Retrieve last accepted categories from cookie
+     * and calculate acceptType
+     */
+    if(!state._invalidConsent){
+
+        state._enabledServices = {
+            ...state._enabledServices,
+            ...cookieValue.services
+        };
+
+        setAcceptedCategories(unique([
+            ...state._readOnlyCategories,
+            ...cookieValue.categories
+        ]));
+    }else{
+        if(config.mode === OPT_OUT_MODE)
+            retrieveEnabledCategoriesAndServices();
+    }
+};
+
 /**
  * Will run once and only if modals do not exist.
  * @param {import("./global").UserConfig} userConfig
  */
 export const run = async (userConfig) => {
 
-    const state = globalObj._state;
-    const config = globalObj._config;
+    const {
+        _state,
+        _config,
+        _customEvents
+    } = globalObj;
+
     const win = window;
 
     if(!win._ccRun){
@@ -746,92 +785,29 @@ export const run = async (userConfig) => {
 
         setConfig(userConfig);
 
-        // Stop if bot is detected
-        if(state._botAgentDetected)
+        if(_state._botAgentDetected)
             return;
 
-        /**
-         * @type {import('./global').CookieValue}
-         */
-        const cookieValue = getPluginCookie();
-        const categories = cookieValue.categories;
-        const validCategories = isArray(categories);
+        retrieveState(userConfig);
 
-        state._savedCookieContent = cookieValue;
-        state._consentId = cookieValue.consentId;
-
-        // If "_consentId" is present => assume that consent was previously given
-        const validConsentId = !!state._consentId && typeof state._consentId === 'string';
-
-        // Retrieve "_consentTimestamp"
-        state._consentTimestamp = cookieValue.consentTimestamp;
-        state._consentTimestamp && (state._consentTimestamp = new Date(state._consentTimestamp));
-
-        // Retrieve "_lastConsentTimestamp"
-        state._lastConsentTimestamp = cookieValue.lastConsentTimestamp;
-        state._lastConsentTimestamp && (state._lastConsentTimestamp = new Date(state._lastConsentTimestamp));
-
-        // Retrieve "data"
-        const dataTemp = cookieValue.data;
-        state._cookieData = typeof dataTemp !== 'undefined' ? dataTemp : null;
-
-        // If revision is enabled and current value !== saved value inside the cookie => revision is not valid
-        if(state._revisionEnabled && validConsentId && cookieValue.revision !== config.revision)
-            state._validRevision = false;
-
-        // If consent is not valid => create consent modal
-        state._invalidConsent = (!validConsentId || !state._validRevision || !state._consentTimestamp || !state._lastConsentTimestamp || !validCategories);
-
-        _log('CookieConsent [STATUS] valid consent:', !state._invalidConsent);
-
-        /**
-         * Retrieve last accepted categories from cookie
-         * and calculate acceptType
-         */
-        if(!state._invalidConsent){
-
-            state._acceptedCategories = unique([
-                ...state._readOnlyCategories,
-                ...cookieValue.categories
-            ]);
-
-            state._enabledServices = {
-                ...state._enabledServices,
-                ...cookieValue.services
-            };
-
-            updateAcceptType();
-        }else{
-            if(config.mode === OPT_OUT_MODE)
-                retrieveEnabledCategoriesAndServices();
-        }
-
-        /**
-         * Load translation before generating modals
-         */
+        const consentIsValid = validConsent();
         const translationLoaded = await loadTranslationData();
 
         if(!translationLoaded)
-            return;
+            return false;
 
-        createCookieConsentHTML(miniAPI);
+        await generateHtml(miniAPI);
 
-        if(config.autoShow && state._invalidConsent)
+        if(_config.autoShow && !consentIsValid)
             show(true);
 
-        // if tab is pressed => trap focus inside modal
-        handleFocusTrap();
-
-        // If consent is valid
-        if(!state._invalidConsent){
+        if(consentIsValid){
             manageExistingScripts();
-            fireEvent(globalObj._customEvents._onConsent);
-        }else{
-            if(config.mode === OPT_OUT_MODE){
-                _log('CookieConsent [CONFIG] mode=\'' + config.mode + '\', default enabled categories:', state._defaultEnabledCategories);
-                manageExistingScripts(state._defaultEnabledCategories);
-            }
+            return fireEvent(_customEvents._onConsent);
         }
+
+        if(_config.mode === OPT_OUT_MODE)
+            manageExistingScripts(_state._defaultEnabledCategories);
     }
 };
 
@@ -850,9 +826,9 @@ export const reset = (eraseCookie) => {
     /**
      * Remove data-cc event listeners
      */
-    globalObj._state._dataEventListeners.forEach(item => {
+    for(const item of globalObj._state._dataEventListeners){
         item._element.removeEventListener(item._event, item._listener);
-    });
+    }
 
     /**
      * Remove html from DOM

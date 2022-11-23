@@ -38,6 +38,7 @@ export const createConsentModal = (api, createMainContainer) => {
 
     const state = globalObj._state;
     const dom = globalObj._dom;
+    const {hide, showPreferences, acceptCategory} = api;
 
     /**
      * @type {import("../global").ConsentModalOptions}
@@ -59,8 +60,8 @@ export const createConsentModal = (api, createMainContainer) => {
      * @param {string|string[]} [categories]
      */
     const acceptAndHide = (categories) => {
-        api.hide();
-        api.acceptCategory(categories);
+        hide();
+        acceptCategory(categories);
     };
 
     // Create modal if it doesn't exist
@@ -93,10 +94,11 @@ export const createConsentModal = (api, createMainContainer) => {
          */
         dom._cm.style.visibility = 'hidden';
 
-        const boxLayout = 'box',
+        const
+            boxLayout = 'box',
             guiOptions = state._userConfig.guiOptions,
-            consentModalOptions = guiOptions && guiOptions.consentModal,
-            consentModalLayout = consentModalOptions && consentModalOptions.layout || boxLayout,
+            consentModalOptions = guiOptions?.consentModal,
+            consentModalLayout = consentModalOptions?.layout || boxLayout,
             isBoxLayout = consentModalLayout.split(' ')[0] === boxLayout;
 
         /**
@@ -117,7 +119,6 @@ export const createConsentModal = (api, createMainContainer) => {
             setAttribute(dom._cmCloseIconBtn, 'aria-label', closeIconLabelData);
         }
 
-        // Append consent modal to main container
         appendChild(dom._cmBody, dom._cmTexts);
 
         if(acceptAllBtnData || acceptNecessaryBtnData || showPreferencesBtnData)
@@ -140,7 +141,7 @@ export const createConsentModal = (api, createMainContainer) => {
         dom._cmTitle.innerHTML = consentModalTitleValue;
     }
 
-    var description = consentModalData.description;
+    let description = consentModalData.description;
 
     if(description){
         if(state._revisionEnabled){
@@ -204,7 +205,7 @@ export const createConsentModal = (api, createMainContainer) => {
                 if(!state._preferencesModalExists)
                     createPreferencesModal(api, createMainContainer);
             });
-            addEvent(dom._cmShowPreferencesBtn, CLICK_EVENT, api.showPreferences);
+            addEvent(dom._cmShowPreferencesBtn, CLICK_EVENT, showPreferences);
         }
 
         dom._cmShowPreferencesBtn.innerHTML = showPreferencesBtnData;
@@ -237,8 +238,8 @@ export const createConsentModal = (api, createMainContainer) => {
 
     if(footerData){
         if(!dom._cmFooterLinksGroup){
-            var _consentModalFooter = createNode(DIV_TAG);
-            var _consentModalFooterLinks = createNode(DIV_TAG);
+            let _consentModalFooter = createNode(DIV_TAG);
+            let _consentModalFooterLinks = createNode(DIV_TAG);
             dom._cmFooterLinksGroup = createNode(DIV_TAG);
 
             addClassCm(_consentModalFooter, 'footer');

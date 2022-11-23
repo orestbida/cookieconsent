@@ -11,6 +11,8 @@ import {
     hasClass,
     elContains,
     getModalFocusableData,
+    isString,
+    isObject,
     _log
 } from '../../utils/general';
 
@@ -39,15 +41,15 @@ export const createPreferencesModal = (api, createMainContainer) => {
 
     const state = globalObj._state;
     const dom = globalObj._dom;
-    const hidePreferencesModal = api.hidePreferences;
+    const {hide, hidePreferences, acceptCategory} = api;
 
     /**
      * @param {string|string[]} [acceptType]
      */
     const acceptHelper = (acceptType) => {
-        api.acceptCategory(acceptType);
-        hidePreferencesModal();
-        api.hide();
+        acceptCategory(acceptType);
+        hidePreferences();
+        hide();
     };
 
     /**
@@ -58,7 +60,8 @@ export const createPreferencesModal = (api, createMainContainer) => {
     if(!modalData)
         return;
 
-    var titleData = modalData.title,
+    const
+        titleData = modalData.title,
         closeIconLabelData = modalData.closeIconLabel,
         acceptAllBtnData = modalData.acceptAllBtn,
         acceptNecessaryBtnData = modalData.acceptNecessaryBtn,
@@ -81,17 +84,15 @@ export const createPreferencesModal = (api, createMainContainer) => {
         setAttribute(dom._pm, 'aria-modal', true);
         setAttribute(dom._pm, 'aria-labelledby', 'pm__title');
 
-        // If 'esc' key is pressed inside _preferencesContainer div => hide preferences
+        // Hide preferences on 'esc' key press
         addEvent(dom._htmlDom, 'keydown', (event) => {
             if (event.keyCode === 27)
-                hidePreferencesModal();
+                hidePreferences();
         }, true);
 
-        // modal header
         dom._pmHeader = createNode(DIV_TAG);
         addClassPm(dom._pmHeader, 'header');
 
-        // modal title
         dom._pmTitle = createNode(DIV_TAG);
         addClassPm(dom._pmTitle, 'title');
         dom._pmTitle.id = 'pm__title';
@@ -101,13 +102,11 @@ export const createPreferencesModal = (api, createMainContainer) => {
         dom._pmCloseBtn = createNode(BUTTON_TAG);
         addClassPm(dom._pmCloseBtn, 'close-btn');
         setAttribute(dom._pmCloseBtn, 'aria-label', modalData.closeIconLabel || '');
-        addEvent(dom._pmCloseBtn, CLICK_EVENT, hidePreferencesModal);
+        addEvent(dom._pmCloseBtn, CLICK_EVENT, hidePreferences);
 
-        // modal body
         dom._pmBody = createNode(DIV_TAG);
         addClassPm(dom._pmBody, 'body');
 
-        // modal footer
         dom._pmFooter = createNode(DIV_TAG);
         addClassPm(dom._pmFooter, 'footer');
 
@@ -144,16 +143,21 @@ export const createPreferencesModal = (api, createMainContainer) => {
 
     sectionsData && sectionsData.forEach(section => {
 
-        var sTitleData = section.title,
+        const
+            sTitleData = section.title,
             sDescriptionData = section.description,
             sLinkedCategory = section.linkedCategory,
             sCurrentCategoryObject = sLinkedCategory && state._allDefinedCategories[sLinkedCategory],
             sCookieTableData = section.cookieTable,
-            sCookieTableBody = sCookieTableData && sCookieTableData.body,
-            sCreateCookieTable = sCookieTableBody && sCookieTableBody.length > 0,
+            sCookieTableBody = sCookieTableData?.body,
+            sCreateCookieTable = sCookieTableBody?.length > 0,
             hasToggle = !!sCurrentCategoryObject,
-            sServices = hasToggle && state._allDefinedServices[sLinkedCategory] || false,
-            sServiceNames = sServices && getKeys(sServices) || [],
+
+            /**
+             * @type {Object.<string, import('../global').Service>}
+             */
+            sServices = hasToggle && state._allDefinedServices[sLinkedCategory],
+            sServiceNames = isObject(sServices) && getKeys(sServices) || [],
             sIsExpandableToggle = hasToggle && (!!sDescriptionData || !!sCreateCookieTable || getKeys(sServices).length>0);
 
 
@@ -172,34 +176,33 @@ export const createPreferencesModal = (api, createMainContainer) => {
 
             if(nServices > 0){
 
-                var servicesContainer = createNode(DIV_TAG);
+                const servicesContainer = createNode(DIV_TAG);
                 addClassPm(servicesContainer, 'section-services');
 
-                sServiceNames.forEach(name => {
+                for(const serviceName of sServiceNames){
 
-                    const service = sServices[name];
-
-                    var serviceName = service.label || name;
-                    var serviceDiv = createNode(DIV_TAG);
-                    var serviceHeader = createNode(DIV_TAG);
-                    var serviceIconContainer = createNode(DIV_TAG);
-                    var serviceTitle = createNode(DIV_TAG);
+                    const service = sServices[serviceName];
+                    const serviceLabel = service?.label || serviceName;
+                    const serviceDiv = createNode(DIV_TAG);
+                    const serviceHeader = createNode(DIV_TAG);
+                    const serviceIconContainer = createNode(DIV_TAG);
+                    const serviceTitle = createNode(DIV_TAG);
 
                     addClassPm(serviceDiv, 'service');
                     addClassPm(serviceTitle, 'service-title');
                     addClassPm(serviceHeader, 'service-header');
                     addClassPm(serviceIconContainer, 'service-icon');
 
-                    var toggleLabel = createToggleLabel(serviceName, name, sCurrentCategoryObject, true, sLinkedCategory);
+                    const toggleLabel = createToggleLabel(serviceLabel, serviceName, sCurrentCategoryObject, true, sLinkedCategory);
 
-                    serviceTitle.innerHTML = serviceName;
+                    serviceTitle.innerHTML = serviceLabel;
 
                     appendChild(serviceHeader, serviceIconContainer);
                     appendChild(serviceHeader, serviceTitle);
                     appendChild(serviceDiv, serviceHeader);
                     appendChild(serviceDiv, toggleLabel);
                     appendChild(servicesContainer, serviceDiv);
-                });
+                }
 
                 appendChild(sDescContainer, servicesContainer);
             }
@@ -224,17 +227,17 @@ export const createPreferencesModal = (api, createMainContainer) => {
                 /**
                  * Arrow icon span
                  */
-                var sTitleIcon = createNode('span');
+                const sTitleIcon = createNode('span');
                 addClassPm(sTitleIcon, 'section-arrow');
                 appendChild(sTitleContainer, sTitleIcon);
 
                 s.className += '--toggle';
 
-                var toggleLabel = createToggleLabel(sTitleData, sLinkedCategory, sCurrentCategoryObject);
+                const toggleLabel = createToggleLabel(sTitleData, sLinkedCategory, sCurrentCategoryObject);
 
                 let serviceCounterLabel = modalData.serviceCounterLabel;
 
-                if(nServices > 0 && typeof serviceCounterLabel === 'string'){
+                if(nServices > 0 && isString(serviceCounterLabel)){
                     let serviceCounter = createNode('span');
 
                     addClassPm(serviceCounter, 'badge');
@@ -309,35 +312,34 @@ export const createPreferencesModal = (api, createMainContainer) => {
 
 
             if(sCreateCookieTable){
-                var table = createNode('table');
-                var thead = createNode('thead');
-                var tbody = createNode('tbody');
+                const table = createNode('table');
+                const thead = createNode('thead');
+                const tbody = createNode('tbody');
 
                 addClassPm(table, 'section-table');
                 addClassPm(thead, 'table-head');
                 addClassPm(tbody, 'table-body');
 
-                var headerData = sCookieTableData.headers;
-                var tableHeadersKeys = getKeys(headerData);
+                const headerData = sCookieTableData.headers;
+                const tableHeadersKeys = getKeys(headerData);
 
                 /**
                  * Create table headers
                  */
-                var trHeadFragment = dom._document.createDocumentFragment();
-                var trHead = createNode('tr');
+                const trHeadFragment = dom._document.createDocumentFragment();
+                const trHead = createNode('tr');
                 setAttribute(trHead, 'role', 'row');
 
-                for(var i=0; i<tableHeadersKeys.length; i++){
-                    var headerKey = tableHeadersKeys[i];
-                    var headerName = headerData[headerKey];
+                for(const headerKey of tableHeadersKeys){
+                    const headerValue = headerData[headerKey];
+                    const th = createNode('th');
 
-                    var th = createNode('th');
-                    th.id = 'cc__row-' + headerName;
+                    th.id = 'cc__row-' + headerValue;
                     setAttribute(th, 'role', 'columnheader');
                     setAttribute(th, 'scope', 'col');
                     addClassPm(th, 'table-th');
 
-                    th.innerHTML = headerName;
+                    th.innerHTML = headerValue;
                     appendChild(trHeadFragment, th);
                 }
 
@@ -347,25 +349,25 @@ export const createPreferencesModal = (api, createMainContainer) => {
                 /**
                  * Create table body
                  */
-                var bodyFragment = dom._document.createDocumentFragment();
+                const bodyFragment = dom._document.createDocumentFragment();
 
-                for(i=0; i<sCookieTableBody.length; i++){
-                    var currentCookieData = sCookieTableBody[i];
-                    var tr = createNode('tr');
+                for(const bodyItem of sCookieTableBody){
+
+                    const tr = createNode('tr');
                     setAttribute(tr, 'role', 'row');
                     addClassPm(tr, 'table-tr');
 
-                    for(var j=0; j<tableHeadersKeys.length; j++){
+                    for(const tdKey of tableHeadersKeys){
 
-                        var tdKey = tableHeadersKeys[j];
-                        var tdHeaderName = headerData[tdKey];
-                        var tdValue = currentCookieData[tdKey];
+                        const tdHeader = headerData[tdKey];
+                        const tdValue = bodyItem[tdKey];
 
-                        var td = createNode('td');
-                        var tdInner = createNode(DIV_TAG);
+                        const td = createNode('td');
+                        const tdInner = createNode(DIV_TAG);
+
                         addClassPm(td, 'table-td');
-                        setAttribute(td, 'data-column', tdHeaderName);
-                        setAttribute(td, 'headers', 'cc__row-' + tdHeaderName);
+                        setAttribute(td, 'data-column', tdHeader);
+                        setAttribute(td, 'headers', 'cc__row-' + tdHeader);
 
                         tdInner.insertAdjacentHTML('beforeend', tdValue);
 
@@ -456,15 +458,6 @@ export const createPreferencesModal = (api, createMainContainer) => {
 
     guiManager(1);
 
-    /**
-     * for SPA apps:
-     * close modal if clicked element
-     * has the `data-hideModal` attribute
-     */
-    dom._pmBody.querySelectorAll('[data-hideModal]').forEach(el => {
-        addEvent(el, CLICK_EVENT, hidePreferencesModal);
-    });
-
     if(!state._preferencesModalExists){
         state._preferencesModalExists = true;
 
@@ -486,26 +479,23 @@ export const createPreferencesModal = (api, createMainContainer) => {
  * Generate toggle
  * @param {string} label block title
  * @param {string} value category/service
- * @param {import('../../global').Category} sCurrentCategoryObject
+ * @param {import('../global').Category} sCurrentCategoryObject
  * @param {boolean} [isService]
- * @param {string} [categoryName]
+ * @param {string} categoryName
  */
 function createToggleLabel(label, value, sCurrentCategoryObject, isService, categoryName){
 
     const state = globalObj._state;
     const dom = globalObj._dom;
 
-    /**
-     * Create category toggle
-     */
-    var toggleLabel = createNode('label');
-    var toggle = createNode('input');
-    var toggleIcon = createNode('span');
-    var toggleLabelSpan = createNode('span');
+    /** @type {HTMLLabelElement} */ const toggleLabel = createNode('label');
+    /** @type {HTMLInputElement} */ const toggle = createNode('input');
+    /** @type {HTMLSpanElement} */  const toggleIcon = createNode('span');
+    /** @type {HTMLSpanElement} */  const toggleLabelSpan = createNode('span');
 
-    // These 2 spans will contain each 2 pseudo-elements to generate 'tick' and 'x' icons
-    var toggleOnIcon = createNode('span');
-    var toggleOffIcon = createNode('span');
+    // each will contain 2 pseudo-elements to generate 'tick' and 'x' icons
+    /** @type {HTMLSpanElement} */  const toggleOnIcon = createNode('span');
+    /** @type {HTMLSpanElement} */  const toggleOffIcon = createNode('span');
 
     toggle.type = 'checkbox';
 
@@ -531,50 +521,40 @@ function createToggleLabel(label, value, sCurrentCategoryObject, isService, cate
     if(!isService){
         ((value)=>{
             addEvent(toggle, CLICK_EVENT, () => {
-                var categoryServicesToggles = dom._serviceCheckboxInputs[value];
+                const categoryServicesToggles = dom._serviceCheckboxInputs[value];
 
                 state._customServicesSelection[value] = [];
 
-                if(toggle.checked){
-                    for(var serviceName in categoryServicesToggles){
-                        categoryServicesToggles[serviceName].checked = true;
-                    }
-                }else{
-                    for(serviceName in categoryServicesToggles){
-                        categoryServicesToggles[serviceName].checked = false;
-                    }
+                for(let serviceName in categoryServicesToggles){
+                    categoryServicesToggles[serviceName].checked = toggle.checked;
                 }
             });
         })(value);
     }else{
 
-        ((categoryName)=>{
+        ((categoryName) => {
             addEvent(toggle, 'change', () => {
 
-                var categoryServicesToggles = dom._serviceCheckboxInputs[categoryName];
-                var categoryToggle = dom._categoryCheckboxInputs[categoryName];
+                const categoryServicesToggles = dom._serviceCheckboxInputs[categoryName];
+                const categoryToggle = dom._categoryCheckboxInputs[categoryName];
 
                 state._customServicesSelection[categoryName] = [];
 
-                for(var serviceName in categoryServicesToggles){
+                for(let serviceName in categoryServicesToggles){
                     const serviceInput = categoryServicesToggles[serviceName];
+
                     if(serviceInput.checked){
                         state._customServicesSelection[categoryName].push(serviceInput.value);
                     }
                 }
 
-                if(state._customServicesSelection[categoryName].length > 0){
-                    categoryToggle.checked = true;
-                }else{
-                    categoryToggle.checked = false;
-                }
+                categoryToggle.checked = state._customServicesSelection[categoryName].length > 0;
             });
         })(categoryName);
 
     }
 
     toggle.value = value;
-
     toggleLabelSpan.textContent = label.replace(/<.*>.*<\/.*>/gm, '');
 
     appendChild(toggleIcon, toggleOffIcon);
@@ -586,12 +566,8 @@ function createToggleLabel(label, value, sCurrentCategoryObject, isService, cate
      */
     if(!state._invalidConsent){
         if(isService){
-            var enabledServices = state._enabledServices[categoryName];
-
-            if(sCurrentCategoryObject.readOnly || elContains(enabledServices, value)){
-                toggle.checked = true;
-            }
-
+            const enabledServices = state._enabledServices[categoryName];
+            toggle.checked = sCurrentCategoryObject.readOnly || elContains(enabledServices, value);
         }else if(elContains(state._acceptedCategories, value)){
             toggle.checked = true;
         }

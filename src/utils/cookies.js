@@ -6,7 +6,7 @@ import {
     _log,
     indexOf,
     uuidv4,
-    updateAcceptType,
+    setAcceptedCategories,
     getRemainingExpirationTimeMS,
     getExpiresAfterDaysValue,
     elContains,
@@ -48,12 +48,12 @@ export const autoclearCookiesHelper = (clearOnFirstConsent) => {
         );
     });
 
-    categoriesToCheck.forEach(currentCategoryName => {
+    for(const currentCategoryName of categoriesToCheck){
 
         const
             category = state._allDefinedCategories[currentCategoryName],
             autoClear = category.autoClear,
-            autoClearCookies = autoClear && autoClear.cookies || [],
+            autoClearCookies = autoClear?.cookies || [],
 
             categoryWasJustChanged = elContains(state._lastChangedCategoryNames, currentCategoryName),
             categoryIsDisabled = !elContains(state._acceptedCategories, currentCategoryName),
@@ -68,9 +68,7 @@ export const autoclearCookiesHelper = (clearOnFirstConsent) => {
             if(autoClear.reloadPage === true && categoryWasJustDisabled)
                 state._reloadPage = true;
 
-            // delete each cookie in the cookies array
-
-            autoClearCookies.forEach(cookieItem => {
+            for(const cookieItem of autoClearCookies){
 
                 /**
                  * List of all cookies matching the current cookie name
@@ -85,10 +83,10 @@ export const autoclearCookiesHelper = (clearOnFirstConsent) => {
 
                 // If regex provided => filter array of cookies
                 if(cookieItemName instanceof RegExp){
-                    allCookiesArray.forEach(cookie => {
+                    for(let cookie of allCookiesArray){
                         if(cookieItemName.test(cookie))
                             foundCookies.push(cookie);
-                    });
+                    }
                 }else{
                     let foundCookieIndex = indexOf(allCookiesArray, cookieItemName);
 
@@ -96,14 +94,14 @@ export const autoclearCookiesHelper = (clearOnFirstConsent) => {
                         foundCookies.push(allCookiesArray[foundCookieIndex]);
                 }
 
-                _log('CookieConsent [AUTOCLEAR]: search cookie: \'' + cookieItemName + '\', found:', foundCookies);
+                _log('CookieConsent [AUTOCLEAR]: search cookie: "' + cookieItemName + '", found:', foundCookies);
 
                 // Delete cookie(s)
                 if(foundCookies.length > 0)
                     eraseCookiesHelper(foundCookies, cookieItemPath, cookieItemDomain);
-            });
+            }
         }
-    });
+    }
 };
 
 
@@ -122,7 +120,7 @@ export const saveCookiePreferences = () => {
     }else{
         state._lastChangedCategoryNames = arrayDiff(
             state._acceptedCategories,
-            state._savedCookieContent.categories || []
+            state._savedCookieContent.categories
         );
     }
 
@@ -132,43 +130,37 @@ export const saveCookiePreferences = () => {
     /**
      * Determine if services were changed from last state
      */
-    state._allCategoryNames.forEach(categoryName => {
+    for(const categoryName of state._allCategoryNames){
 
         state._lastChangedServices[categoryName] = arrayDiff(
             state._enabledServices[categoryName],
-            state._lastEnabledServices[categoryName] || []
+            state._lastEnabledServices[categoryName]
         );
 
         if(state._lastChangedServices[categoryName].length > 0)
             servicesWereChanged = true;
-    });
+    }
 
-    var categoryToggles = globalObj._dom._categoryCheckboxInputs;
+    const categoryToggles = globalObj._dom._categoryCheckboxInputs;
 
     /**
      * If the category is accepted check checkbox,
      * otherwise uncheck it
      */
-    for(var categoryName in categoryToggles){
-        if(elContains(state._acceptedCategories, categoryName))
-            categoryToggles[categoryName].checked = true;
-        else
-            categoryToggles[categoryName].checked = false;
+    for(let categoryName in categoryToggles){
+        categoryToggles[categoryName].checked = elContains(state._acceptedCategories, categoryName);
     }
 
-    state._allCategoryNames.forEach(categoryName => {
+    for(const categoryName of state._allCategoryNames){
 
-        var servicesToggles = globalObj._dom._serviceCheckboxInputs[categoryName];
-        var enabledServices = state._enabledServices[categoryName];
+        const servicesToggles = globalObj._dom._serviceCheckboxInputs[categoryName];
+        const enabledServices = state._enabledServices[categoryName];
 
-        for(var serviceName in servicesToggles){
+        for(const serviceName in servicesToggles){
             const serviceInput = servicesToggles[serviceName];
-            if(elContains(enabledServices, serviceName))
-                serviceInput.checked = true;
-            else
-                serviceInput.checked = false;
+            serviceInput.checked = elContains(enabledServices, serviceName);
         }
-    });
+    }
 
 
     if(!state._consentTimestamp)
@@ -186,7 +178,7 @@ export const saveCookiePreferences = () => {
         services: deepCopy(state._enabledServices)
     };
 
-    var firstUserConsent = false;
+    let firstUserConsent = false;
 
     if(state._invalidConsent || categoriesWereChanged || servicesWereChanged){
 
@@ -198,7 +190,7 @@ export const saveCookiePreferences = () => {
             firstUserConsent = true;
         }
 
-        updateAcceptType();
+        setAcceptedCategories(state._acceptedCategories);
 
         if(!state._lastConsentTimestamp)
             state._lastConsentTimestamp = state._consentTimestamp;
@@ -326,7 +318,7 @@ export const eraseCookiesHelper = (cookies, customPath, customDomain) => {
             + '; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
     };
 
-    cookies.forEach(cookieName => {
+    for(const cookieName of cookies){
 
         /**
          * 2 attempts to erase the cookie:
@@ -345,7 +337,7 @@ export const eraseCookiesHelper = (cookies, customPath, customDomain) => {
             erase(cookieName, mainDomain);
 
         _log('CookieConsent [AUTOCLEAR]: deleting cookie: "' + cookieName + '" path: "' + path + '" domain:', domain);
-    });
+    }
 };
 
 /**
@@ -388,7 +380,7 @@ export const getAllCookies = (regex) => {
     /**
      * Save only the cookie names
      */
-    allCookies.forEach(cookie => {
+    for(const cookie of allCookies){
         let name = cookie.split('=')[0];
 
         if(regex){
@@ -399,7 +391,7 @@ export const getAllCookies = (regex) => {
         }else{
             cookieNames.push(name);
         }
-    });
+    }
 
     return cookieNames;
 };

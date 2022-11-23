@@ -65,6 +65,9 @@ import { COOKIE_NAME, OPT_IN_MODE } from '../utils/constants';
  * @property {HTMLElement} _pmAcceptAllBtn
  * @property {HTMLElement} _pmAcceptNecessaryBtn
  * @property {HTMLElement} _pmSavePreferencesBtn
+ *
+ * @property {Object.<string, HTMLInputElement>} _categoryCheckboxInputs
+ * @property {Object.<string, ServiceToggle>} _serviceCheckboxInputs
  */
 
 /**
@@ -77,25 +80,13 @@ import { COOKIE_NAME, OPT_IN_MODE } from '../utils/constants';
  * @property {Function} _onModalReady
  */
 
-
 /**
  * Pointers to all services toggles relative to a category
  * @typedef {Object.<string, HTMLElement>} ServiceToggle
  */
 
-/**
- * Check if el is a function
- * @param {any} fn
- * @returns {boolean}
- */
-export const isFunction = (fn) => {
-    return typeof fn === 'function';
-};
+export const isFunction = (fn) => typeof fn === 'function';
 
-/**
- * Clone object using recursion
- * @param {any} el
- */
 export const deepCopy = (el) => {
 
     if (typeof el !== 'object' )
@@ -116,13 +107,9 @@ export const deepCopy = (el) => {
 };
 
 /**
- * window.dispatchEvent helper function
  * @param {string} eventName
- * @param {any} data
  */
-const dispatchEvent = (eventName, data) => {
-    window.dispatchEvent(new CustomEvent(eventName, {detail: data}));
-};
+const dispatchEvent = (eventName, data) => window.dispatchEvent(new CustomEvent(eventName, {detail: data}));
 
 /**
  * Fire custom event
@@ -389,8 +376,8 @@ export class GlobalState {
          * @type {DomElements}
          */
         this._dom = {
-            /** @type {Object.<string, HTMLElement>} */ _categoryCheckboxInputs: {},
-            /** @type {Object.<string, ServiceToggle>} */ _serviceCheckboxInputs: {}
+            _categoryCheckboxInputs: {},
+            _serviceCheckboxInputs: {}
         };
 
         /**

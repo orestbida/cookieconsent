@@ -28,24 +28,15 @@ export const indexOf = (el, value) => el.indexOf(value);
 export const elContains = (el, value) => indexOf(el, value) !== -1;
 
 
-/**
- * Check if el is an array
- * @param {any} el
- */
 export const isArray = (el) => Array.isArray(el);
+
+export const isString = el => typeof el === 'string';
 
 /**
  * Returns true if el is an object
- * @param {any} el
  */
-export const isObject = (el) => {
-    return !!el && typeof el === 'object' && !isArray(el);
-};
+export const isObject = (el) => !!el && typeof el === 'object' && !isArray(el);
 
-/**
- * Get all keys defined inside object
- * @param {Object} obj
- */
 export const getKeys = obj => Object.keys(obj);
 
 /**
@@ -84,11 +75,11 @@ export const retrieveScriptElements = () => {
     const state = globalObj._state;
 
     state._allScriptTags = querySelectorAll(globalObj._dom._document, 'script[' + SCRIPT_TAG_SELECTOR +']');
-
     state._allScriptTagsInfo = [];
-    state._allScriptTags.forEach(scriptTag => {
 
-        let scriptCategoryName = scriptTag.getAttribute(SCRIPT_TAG_SELECTOR);
+    for(const scriptTag of state._allScriptTags){
+
+        let scriptCategoryName = getAttribute(scriptTag, SCRIPT_TAG_SELECTOR);
         let scriptServiceName = scriptTag.dataset.service || '';
         let runOnDisable = false;
 
@@ -123,7 +114,7 @@ export const retrieveScriptElements = () => {
                 }
             }
         }
-    });
+    }
 };
 
 /**
@@ -131,27 +122,40 @@ export const retrieveScriptElements = () => {
  * @returns {Object.<string, string[]>}
  */
 export const retrieveRejectedServices = () => {
-    let rejectedServices = {};
+    const rejectedServices = {};
 
-    globalObj._state._allCategoryNames.forEach(categoryName => {
+    const {
+        _allCategoryNames,
+        _allDefinedServices,
+        _enabledServices
+    } = globalObj._state;
+
+    for(const categoryName of _allCategoryNames){
         rejectedServices[categoryName] = arrayDiff(
-            globalObj._state._enabledServices[categoryName] || [],
-            getKeys(globalObj._state._allDefinedServices[categoryName]) || []
+            _enabledServices[categoryName],
+            getKeys(_allDefinedServices[categoryName])
         );
-    });
+    }
 
     return rejectedServices;
 };
 
 /**
- * Helper function which creates an HTMLElement object based on 'type' and returns it.
- * @param {string} type
+ * @typedef {keyof HTMLElementTagNameMap} Type
+ */
+
+
+
+/**
+ * @param {keyof HTMLElementTagNameMap} type
  */
 export const createNode = (type) => {
     const el = document.createElement(type);
+
     if(type === BUTTON_TAG){
-        setAttribute(el, 'type', type);
+        el.type = type;
     }
+
     return el;
 };
 
@@ -220,7 +224,7 @@ export const uuidv4 = () => {
  * Add event listener to dom object (cross browser function)
  * @param {Element} elem
  * @param {keyof WindowEventMap} event
- * @param {eventFired} fn
+ * @param {EventListenerOrEventListenerObject} fn
  * @param {boolean} [saveListener]
  */
 export const addEvent = (elem, event, fn, saveListener) => {
@@ -240,30 +244,27 @@ export const addEvent = (elem, event, fn, saveListener) => {
 };
 
 /**
- * Append class to the specified dom element
  * @param {HTMLElement} elem
  * @param {string} className
  */
-export const addClass = (elem, className) => {
-    elem.classList.add(className);
-};
-
-export const addClassCm = (elem, className) => {
-    addClass(elem, 'cm__' + className);
-};
-
-export const addClassPm = (elem, className) => {
-    addClass(elem, 'pm__' + className);
-};
+export const addClass = (elem, className) => elem.classList.add(className);
 
 /**
- * Remove specified class from dom element
  * @param {HTMLElement} elem
  * @param {string} className
  */
-export const removeClass = (el, className) => {
-    el.classList.remove(className);
-};
+export const addClassCm = (elem, className) => addClass(elem, 'cm__' + className);
+/**
+ * @param {HTMLElement} elem
+ * @param {string} className
+ */
+export const addClassPm = (elem, className) => addClass(elem, 'pm__' + className);
+
+/**
+ * @param {HTMLElement} elem
+ * @param {string} className
+ */
+export const removeClass = (el, className) => el.classList.remove(className);
 
 /**
  * Check if html element has class
@@ -324,9 +325,12 @@ export const getExpiresAfterDaysValue = () => {
  * @param {any[]} arr2
  */
 export const arrayDiff = (arr1, arr2) => {
-    return arr1
-        .filter(x => !elContains(arr2, x))
-        .concat(arr2.filter(x => !elContains(arr1, x)));
+    const a = arr1 || [];
+    const b = arr2 || [];
+
+    return a
+        .filter(x => !elContains(b, x))
+        .concat(b.filter(x => !elContains(a, x)));
 };
 
 /**
@@ -351,10 +355,11 @@ export const getAcceptType = () => {
 };
 
 /**
- * Update global "acceptType" variable
  * Note: getUserPreferences() depends on "acceptType"
+ * @param {string[]} acceptedCategories
  */
-export const updateAcceptType = () => {
+export const setAcceptedCategories = (acceptedCategories) => {
+    globalObj._state._acceptedCategories = acceptedCategories;
     globalObj._state._acceptType = getAcceptType();
 };
 
@@ -368,26 +373,35 @@ export const updateAcceptType = () => {
 /**
  * Add an onClick listeners to all html elements with data-cc attribute
  * @param {HTMLElement} [elem]
- * @param {import(''../core/global').Api} api
+ * @param {import('../core/global').Api} api
  * @param {createModal} [createPreferencesModal]
  */
 export const addDataButtonListeners = (elem, api, createPreferencesModal, createMainContainer) => {
 
-    const _a = 'accept-';
+    const ACCEPT_PREFIX = 'accept-';
 
-    const showPreferencesModalElements = getElements('show-preferencesModal'),
+    const {
+        show,
+        showPreferences,
+        hide,
+        hidePreferences,
+        acceptCategory
+    } = api;
+
+    const
+        showPreferencesModalElements = getElements('show-preferencesModal'),
         showConsentModalElements = getElements('show-consentModal'),
-        acceptAllElements = getElements(_a + 'all'),
-        acceptNecessaryElements = getElements(_a + 'necessary'),
-        acceptCustomElements = getElements(_a + 'custom'),
+        acceptAllElements = getElements(ACCEPT_PREFIX + 'all'),
+        acceptNecessaryElements = getElements(ACCEPT_PREFIX + 'necessary'),
+        acceptCustomElements = getElements(ACCEPT_PREFIX + 'custom'),
         createPreferencesModalOnHover = globalObj._config.lazyHtmlGeneration;
 
-    showPreferencesModalElements.forEach(el => {
+    for(const el of showPreferencesModalElements){
         setAttribute(el, 'aria-haspopup', 'dialog');
 
         addEvent(el, CLICK_EVENT, (event) => {
             preventDefault(event);
-            api.showPreferences();
+            showPreferences();
         });
 
         if(createPreferencesModalOnHover){
@@ -398,33 +412,33 @@ export const addDataButtonListeners = (elem, api, createPreferencesModal, create
                     createPreferencesModal(api, createMainContainer);
             }, true);
         }
-    });
+    }
 
-    showConsentModalElements.forEach(el => {
+    for(let el of showConsentModalElements){
         setAttribute(el, 'aria-haspopup', 'dialog');
         addEvent(el, CLICK_EVENT, (event) => {
             preventDefault(event);
-            api.show(true);
+            show(true);
         }, true);
-    });
+    }
 
-    acceptAllElements.forEach(el => {
+    for(let el of acceptAllElements){
         addEvent(el, CLICK_EVENT, (event) => {
             acceptAction(event, 'all');
         }, true);
-    });
+    }
 
-    acceptCustomElements.forEach(el => {
+    for(let el of acceptCustomElements){
         addEvent(el, CLICK_EVENT, (event) => {
             acceptAction(event);
         }, true);
-    });
+    }
 
-    acceptNecessaryElements.forEach(el => {
+    for(let el of acceptNecessaryElements){
         addEvent(el, CLICK_EVENT, (event) => {
             acceptAction(event, []);
         }, true);
-    });
+    }
 
     /**
      * Return all elements with given data-cc role
@@ -441,9 +455,9 @@ export const addDataButtonListeners = (elem, api, createPreferencesModal, create
      */
     function acceptAction(event, acceptType){
         preventDefault(event);
-        api.acceptCategory(acceptType);
-        api.hidePreferences();
-        api.hide();
+        acceptCategory(acceptType);
+        hidePreferences();
+        hide();
     }
 };
 
@@ -453,14 +467,19 @@ export const addDataButtonListeners = (elem, api, createPreferencesModal, create
  */
 export const getCurrentCategoriesState = () => {
 
-    let acceptedCategories = globalObj._state._acceptedCategories;
+    const {
+        _invalidConsent,
+        _acceptedCategories,
+        _allCategoryNames
+    } = globalObj._state;
 
-    // calculate rejected categories: allCategories - acceptedCategories
     return {
-        accepted: acceptedCategories,
-        rejected: globalObj._state._allCategoryNames.filter((category) =>
-            !elContains(acceptedCategories, category)
-        )
+        accepted: _acceptedCategories,
+        rejected: _invalidConsent
+            ? []
+            : _allCategoryNames.filter(category =>
+                !elContains(_acceptedCategories, category)
+            )
     };
 };
 
@@ -520,7 +539,7 @@ export const handleFocusTrap = () => {
  * Close preferences modal if click is outside
  * @param {import('../core/global').Api} api
  */
-export const closeModalOnOutsideClick = (api) => {
+export const closeModalOnOutsideClick = ({hidePreferences}) => {
 
     const dom = globalObj._dom;
 
@@ -533,7 +552,7 @@ export const closeModalOnOutsideClick = (api) => {
          */
         if(state._preferencesModalVisibleDelayed){
             if(!dom._pm.contains(e.target)){
-                api.hidePreferences(0);
+                hidePreferences();
                 state._clickedInsideModal = false;
             }else{
                 state._clickedInsideModal = true;

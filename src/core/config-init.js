@@ -96,11 +96,11 @@ export const setConfig = (userConfig) => {
 function fetchCategoriesAndServices(allCategoryNames) {
     const state = globalObj._state;
 
-    allCategoryNames.forEach(categoryName => {
+    for(let categoryName of allCategoryNames){
 
         const currCategory = state._allDefinedCategories[categoryName];
         const services = currCategory.services || {};
-        const serviceNames = services && isObject(services) && getKeys(services) || [];
+        const serviceNames = isObject(services) && getKeys(services) || [];
 
         state._allDefinedServices[categoryName] = {};
         state._enabledServices[categoryName] = [];
@@ -115,12 +115,12 @@ function fetchCategoriesAndServices(allCategoryNames) {
 
         globalObj._dom._serviceCheckboxInputs[categoryName] = {};
 
-        serviceNames.forEach(serviceName => {
+        for(let serviceName of serviceNames){
             const service = services[serviceName];
-            service.enabled = false;
+            service._enabled = false;
             state._allDefinedServices[categoryName][serviceName] = service;
-        });
-    });
+        }
+    }
 }
 
 /**

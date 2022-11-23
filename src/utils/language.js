@@ -1,5 +1,13 @@
 import { globalObj } from '../core/global';
-import { _log, getKeys, elContains, fetchJson, addClass, removeClass, isArray} from './general';
+import {
+    _log,
+    elContains,
+    fetchJson,
+    addClass,
+    removeClass,
+    isString,
+    isArray
+} from './general';
 
 /**
  * Check if language is valid/defined
@@ -7,7 +15,7 @@ import { _log, getKeys, elContains, fetchJson, addClass, removeClass, isArray} f
  * @returns {boolean} True if language is defined
  */
 export const validLanguageCode = (languageCode) => {
-    return !!languageCode && elContains(getKeys(globalObj._state._allTranslations), languageCode);
+    return isString(languageCode) && languageCode in globalObj._state._allTranslations;
 };
 
 /**
@@ -15,8 +23,7 @@ export const validLanguageCode = (languageCode) => {
  * @returns {string}
  */
 export const getCurrentLanguageCode = () => {
-    const state = globalObj._state;
-    return state._currentLanguageCode || state._userConfig.language.default;
+    return globalObj._state._currentLanguageCode || globalObj._state._userConfig.language.default;
 };
 
 /**
@@ -107,7 +114,7 @@ export const loadTranslationData = async (desiredLanguageCode) => {
      * If translation is a string, fetch the external json file and replace
      * the string (path to json file) with parsed language object
      */
-    if(typeof currentTranslation === 'string'){
+    if(isString(currentTranslation)){
 
         const fetchedTranslation = await fetchJson(currentTranslation);
 
