@@ -1,5 +1,9 @@
-import { globalObj, isFunction } from '../core/global';
-import { SCRIPT_TAG_SELECTOR, BUTTON_TAG, CLICK_EVENT } from './constants';
+import { deepCopy, globalObj, isFunction } from '../core/global';
+import {
+    SCRIPT_TAG_SELECTOR,
+    BUTTON_TAG, CLICK_EVENT,
+    TOGGLE_DISABLE_INTERACTION_CLASS
+} from './constants';
 
 /**
  * Helper console.log function
@@ -23,7 +27,6 @@ export const indexOf = (el, value) => el.indexOf(value);
 /**
  * Returns true if el. (array or string) contains the specified value
  * @param {any[]|string} el
- * @param {any} value
  */
 export const elContains = (el, value) => indexOf(el, value) !== -1;
 
@@ -173,10 +176,199 @@ export const retrieveRejectedServices = () => {
 };
 
 /**
+ * @param {HTMLInputElement} input
+ */
+export const dispatchChangeEvent = (input) => input.dispatchEvent(new Event('change'));
+
+export const retrieveCategoriesFromModal = () => {
+    const state = globalObj._state;
+    const toggles = globalObj._dom._categoryCheckboxInputs;
+
+    if(!toggles)
+        return [];
+
+    let enabledCategories = [];
+
+    for(let categoryName in toggles){
+        if(toggles[categoryName].checked){
+            enabledCategories.push(categoryName);
+        }
+    }
+
+    for(let categoryName in state._customServicesSelection) {
+        if(state._customServicesSelection[categoryName].length > 0){
+            enabledCategories.push(categoryName);
+        }
+    }
+
+    return enabledCategories;
+};
+
+/**
+ * @param {string[]|string} categories - Categories to accept
+ * @param {string[]} [excludedCategories]
+ */
+export const resolveEnabledCategories = (categories, excludedCategories) => {
+
+    const {
+        _allCategoryNames,
+        _readOnlyCategories,
+        _savedCookieContent,
+        _preferencesModalExists
+    } = globalObj._state;
+
+    /**
+     * @type {string[]}
+     */
+    let enabledCategories = [];
+
+    if(!categories){
+        enabledCategories = _preferencesModalExists
+            ? retrieveCategoriesFromModal()
+            : _savedCookieContent.categories;
+    }else{
+        if(isArray(categories)){
+            enabledCategories.push(...categories);
+        }else if(isString(categories)){
+            if(categories === 'all')
+                enabledCategories = _allCategoryNames;
+            else
+                enabledCategories.push(categories);
+        }
+    }
+
+    // Remove invalid and excluded categories
+    enabledCategories = enabledCategories.filter(category =>
+        !elContains(_allCategoryNames, category) ||
+        !elContains(excludedCategories, category)
+    );
+
+    // Add back all the categories set as "readonly/required"
+    enabledCategories.push(..._readOnlyCategories);
+
+    setAcceptedCategories(enabledCategories);
+};
+
+export const resolveEnabledServices = () => {
+
+    const state = globalObj._state;
+
+    const {
+        _acceptType,
+        _customServicesSelection,
+        _readOnlyCategories,
+        _acceptedCategories,
+        _enabledServices,
+        _allDefinedServices,
+        _allCategoryNames
+    } = state;
+
+    /**
+     * Save previously enabled services to calculate later on which of them was changed
+     */
+    state._lastEnabledServices = deepCopy(_enabledServices);
+
+    for(const categoryName of _allCategoryNames) {
+
+        const services = _allDefinedServices[categoryName];
+        const serviceNames = getKeys(services);
+        const customServicesSelection = _customServicesSelection[categoryName]?.length > 0;
+        const readOnlyCategory = elContains(_readOnlyCategories, categoryName);
+
+        /**
+         * Stop here if there are no services
+         */
+        if(serviceNames.length === 0)
+            continue;
+
+        // Empty (previously) enabled services
+        _enabledServices[categoryName] = [];
+
+        // If category is marked as readOnly enable all its services
+        if(readOnlyCategory){
+            _enabledServices[categoryName].push(...serviceNames);
+        }else{
+            if(_acceptType === 'all'){
+                if(customServicesSelection){
+                    const selectedServices = _customServicesSelection[categoryName];
+                    _enabledServices[categoryName].push(...selectedServices);
+                }else{
+                    _enabledServices[categoryName].push(...serviceNames);
+                }
+            }else if(_acceptType === 'necessary'){
+                _enabledServices[categoryName] = [];
+            }else {
+                if(customServicesSelection){
+                    const selectedServices = _customServicesSelection[categoryName];
+                    _enabledServices[categoryName].push(...selectedServices);
+                }else if(elContains(_acceptedCategories, categoryName)){
+                    _enabledServices[categoryName].push(...serviceNames);
+                }
+            }
+
+            // Reset selection
+            state._customServicesSelection = {};
+        }
+
+        /**
+         * Make sure there are no duplicates inside array
+         */
+        _enabledServices[categoryName] = unique(_enabledServices[categoryName]);
+    }
+};
+
+/**
+ * @param {string|string[]} service
+ * @param {string} category
+ */
+export const updateServicesState = (service, category) => {
+
+    const state = globalObj._state;
+
+    const {_allDefinedServices, _customServicesSelection } = state;
+
+    const servicesInputs = globalObj._dom._serviceCheckboxInputs[category] || {};
+    const allServiceNames = getKeys(_allDefinedServices[category]);
+
+    // Clear previously enabled services
+    _customServicesSelection[category] = [];
+
+    if(isString(service)){
+        if(service === 'all'){
+
+            for(let serviceName in servicesInputs){
+                servicesInputs[serviceName].checked = true;
+                dispatchChangeEvent(servicesInputs[serviceName]);
+            }
+
+        }else{
+
+            for(let serviceName in servicesInputs){
+                servicesInputs[serviceName].checked = service === serviceName;
+                dispatchChangeEvent(servicesInputs[serviceName]);
+            }
+
+            if(elContains(allServiceNames, service))
+                _customServicesSelection[category].push(service);
+
+        }
+    }else if(isArray(service)){
+
+        for(let serviceName in servicesInputs){
+            servicesInputs[serviceName].checked = elContains(service, serviceName);
+            dispatchChangeEvent(servicesInputs[serviceName]);
+        }
+
+        for(let serviceName in allServiceNames){
+            if(elContains(service, serviceName))
+                _customServicesSelection[category].push(serviceName);
+        }
+    }
+};
+
+/**
  * @typedef {keyof HTMLElementTagNameMap} Type
  */
-
-
 
 /**
  * @param {keyof HTMLElementTagNameMap} type
@@ -507,6 +699,23 @@ export const getCurrentCategoriesState = () => {
                 !elContains(_acceptedCategories, category)
             )
     };
+};
+
+let disableInteractionTimeout;
+
+/**
+ * @param {boolean} [enable]
+ */
+export const toggleDisableInteraction = (enable) => {
+    clearTimeout(disableInteractionTimeout);
+
+    if(enable){
+        addClass(globalObj._dom._htmlDom, TOGGLE_DISABLE_INTERACTION_CLASS);
+    }else {
+        disableInteractionTimeout = setTimeout(() => {
+            removeClass(globalObj._dom._htmlDom, TOGGLE_DISABLE_INTERACTION_CLASS);
+        }, 500);
+    }
 };
 
 /**

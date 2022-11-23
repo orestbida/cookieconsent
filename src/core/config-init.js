@@ -9,25 +9,27 @@ import { resolveCurrentLanguageCode, setCurrentLanguageCode } from '../utils/lan
  */
 export const setConfig = (userConfig) => {
 
+    const { _dom, _config, _state } = globalObj;
+
+    const
+        config = _config,
+        state = _state,
+        { cookie } = config,
+        callbacks = globalObj._callbacks,
+        userCookieConfig = userConfig.cookie,
+        userCategories = userConfig.categories,
+        allCategoryNames = getKeys(userCategories) || [],
+        nav = navigator,
+        doc = document;
+
     /**
      * Access the 'window' and 'document' objects
      * during execution, rather than on import
      * (avoid window/document is not defined error)
      */
-    const doc = document;
-    globalObj._dom._document = doc;
-    globalObj._dom._htmlDom = doc.documentElement;
-    globalObj._config.cookie.domain = window.location.hostname;
-
-    const
-        config = globalObj._config,
-        state = globalObj._state,
-        cookie = config,
-        callbacks = globalObj._callbacks,
-        userCookieConfig = userConfig.cookie,
-        userCategories = userConfig.categories,
-        allCategoryNames = getKeys(userCategories) || [],
-        nav = navigator;
+    _dom._document = doc;
+    _dom._htmlDom = doc.documentElement;
+    cookie.domain = location.hostname;
 
     /**
      * Make user configuration globally available

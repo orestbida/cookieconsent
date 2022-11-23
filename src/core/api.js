@@ -9,12 +9,14 @@ import {
     elContains,
     setAcceptedCategories,
     isString,
-    getKeys,
     retrieveRejectedServices,
     isArray,
-    unique,
     getModalFocusableData,
-    getActiveElement
+    getActiveElement,
+    resolveEnabledCategories,
+    resolveEnabledServices,
+    updateServicesState,
+    toggleDisableInteraction
 } from '../utils/general';
 
 import { manageExistingScripts, retrieveEnabledCategoriesAndServices } from '../utils/scripts';
@@ -22,8 +24,7 @@ import { manageExistingScripts, retrieveEnabledCategoriesAndServices } from '../
 import {
     fireEvent,
     globalObj,
-    GlobalState,
-    deepCopy
+    GlobalState
 } from './global';
 
 import {
@@ -62,149 +63,6 @@ import {
     ARIA_HIDDEN,
     PREFERENCES_MODAL_NAME
 } from '../utils/constants';
-
-/**
- * @param {HTMLInputElement} input
- */
-const dispatchChangeEvent = (input) => input.dispatchEvent(new Event('change'));
-
-
-
-/**
- * Get all enabled categories
- * @returns {string[]}
- */
-const retrieveCurrentlyEnabledCategories = () => {
-    const state = globalObj._state;
-    const toggles = globalObj._dom._categoryCheckboxInputs;
-
-    let enabledCategories = [];
-
-    if(toggles){
-        for(let categoryName in toggles){
-            if(toggles[categoryName].checked){
-                enabledCategories.push(categoryName);
-            }
-        }
-    }else if(!state._invalidConsent){
-        enabledCategories = state._savedCookieContent.categories;
-    }
-
-    for(let categoryName in state._customServicesSelection) {
-        if(state._customServicesSelection[categoryName].length > 0){
-            enabledCategories.push(categoryName);
-        }
-    }
-
-    return enabledCategories;
-};
-
-/**
- * @param {string[]|string} categories - Categories to accept
- * @param {string[]} [excludedCategories]
- */
-const resolveEnabledCategories = (categories, excludedCategories) => {
-
-    const { _allCategoryNames, _readOnlyCategories } = globalObj._state;
-
-    /**
-     * @type {string[]}
-     */
-    let enabledCategories = [];
-
-    if(!categories){
-        enabledCategories = retrieveCurrentlyEnabledCategories();
-    }else{
-
-        if(isArray(categories)){
-            enabledCategories.push(...categories);
-        }else if(isString(categories)){
-            if(categories === 'all')
-                enabledCategories = _allCategoryNames;
-            else
-                enabledCategories.push(categories);
-        }
-    }
-
-    // Remove invalid and excluded categories
-    enabledCategories = enabledCategories.filter(category =>
-        !elContains(_allCategoryNames, category) ||
-        !elContains(excludedCategories, category)
-    );
-
-    // Add back all the categories set as "readonly/required"
-    enabledCategories.push(..._readOnlyCategories);
-
-    setAcceptedCategories(enabledCategories);
-};
-
-const resolveEnabledServices = () => {
-
-    const state = globalObj._state;
-
-    const {
-        _acceptType,
-        _customServicesSelection,
-        _readOnlyCategories,
-        _acceptedCategories,
-        _enabledServices,
-        _allDefinedServices,
-        _allCategoryNames
-    } = state;
-
-    /**
-     * Save previously enabled services to calculate later on which of them was changed
-     */
-    state._lastEnabledServices = deepCopy(_enabledServices);
-
-    for(const categoryName of _allCategoryNames) {
-
-        const services = _allDefinedServices[categoryName];
-        const serviceNames = getKeys(services);
-        const customServicesSelection = _customServicesSelection[categoryName]?.length > 0;
-        const readOnlyCategory = elContains(_readOnlyCategories, categoryName);
-
-        /**
-         * Stop here if there are no services
-         */
-        if(serviceNames.length === 0)
-            continue;
-
-        // Empty (previously) enabled services
-        _enabledServices[categoryName] = [];
-
-        // If category is marked as readOnly enable all its services
-        if(readOnlyCategory){
-            _enabledServices[categoryName].push(...serviceNames);
-        }else{
-            if(_acceptType === 'all'){
-                if(customServicesSelection){
-                    const selectedServices = _customServicesSelection[categoryName];
-                    _enabledServices[categoryName].push(...selectedServices);
-                }else{
-                    _enabledServices[categoryName].push(...serviceNames);
-                }
-            }else if(_acceptType === 'necessary'){
-                _enabledServices[categoryName] = [];
-            }else {
-                if(customServicesSelection){
-                    const selectedServices = _customServicesSelection[categoryName];
-                    _enabledServices[categoryName].push(...selectedServices);
-                }else if(elContains(_acceptedCategories, categoryName)){
-                    _enabledServices[categoryName].push(...serviceNames);
-                }
-            }
-
-            // Reset selection
-            state._customServicesSelection = {};
-        }
-
-        /**
-         * Make sure there are no duplicates inside array
-         */
-        _enabledServices[categoryName] = unique(_enabledServices[categoryName]);
-    }
-};
 
 /**
  * Accept API
@@ -250,44 +108,7 @@ export const acceptService = (service, category) => {
         return false;
     }
 
-    const servicesInputs = globalObj._dom._serviceCheckboxInputs[category] || {};
-    const allServiceNames = getKeys(state._allDefinedServices[category]);
-
-    // Reset services
-    state._customServicesSelection[category] = [];
-
-    if(isString(service)){
-        if(service === 'all'){
-
-            for(let serviceName in servicesInputs){
-                servicesInputs[serviceName].checked = true;
-                dispatchChangeEvent(servicesInputs[serviceName]);
-            }
-
-        }else{
-
-            for(let serviceName in servicesInputs){
-                servicesInputs[serviceName].checked = service === serviceName;
-                dispatchChangeEvent(servicesInputs[serviceName]);
-            }
-
-            if(elContains(allServiceNames, service))
-                state._customServicesSelection[category].push(service);
-
-        }
-    }else if(isArray(service)){
-
-        for(let serviceName in servicesInputs){
-            servicesInputs[serviceName].checked = elContains(service, serviceName);
-            dispatchChangeEvent(servicesInputs[serviceName]);
-        }
-
-        for(let serviceName in allServiceNames){
-            if(elContains(service, serviceName))
-                state._customServicesSelection[category].push(serviceName);
-        }
-    }
-
+    updateServicesState(service, category);
     acceptCategory();
 };
 
@@ -296,7 +117,6 @@ export const acceptService = (service, category) => {
  * category is accepted/enabled
  * @param {string} service
  * @param {string} category
- * @returns {boolean}
  */
 export const acceptedService = (service, category) => {
     return elContains(globalObj._state._enabledServices[category] || [], service);
@@ -306,11 +126,8 @@ export const acceptedService = (service, category) => {
 /**
  * Returns true if cookie was found and has valid value (not an empty string)
  * @param {string} cookieName
- * @returns {boolean}
  */
-export const validCookie = (cookieName) => {
-    return getSingleCookie(cookieName, true) !== '';
-};
+export const validCookie = (cookieName) => getSingleCookie(cookieName, true) !== '';
 
 /**
  * Erase cookies API
@@ -345,48 +162,29 @@ export const eraseCookies = (cookies, path, domain) => {
     eraseCookiesHelper(allCookies, path, domain);
 };
 
-let disableInteractionTimeout;
-
-/**
- * @param {boolean} [enable]
- */
-const toggleDisableInteraction = (enable) => {
-    clearTimeout(disableInteractionTimeout);
-
-    if(enable){
-        addClass(globalObj._dom._htmlDom, TOGGLE_DISABLE_INTERACTION_CLASS);
-    }else {
-        disableInteractionTimeout = setTimeout(() => {
-            removeClass(globalObj._dom._htmlDom, TOGGLE_DISABLE_INTERACTION_CLASS);
-        }, 500);
-    }
-};
-
 /**
  * Show cookie consent modal
  * @param {boolean} [createModal] create modal if it doesn't exist
  */
 export const show = (createModal) => {
 
-    const
-        dom = globalObj._dom,
-        state = globalObj._state;
+    const { _dom, _state } = globalObj;
 
-    if(createModal && !state._consentModalExists)
+    if(createModal && !_state._consentModalExists)
         createConsentModal(miniAPI, createMainContainer);
 
-    if(state._consentModalExists){
-        state._consentModalVisible = true;
+    if(_state._consentModalExists){
+        _state._consentModalVisible = true;
 
-        if(state._disablePageInteraction)
+        if(_state._disablePageInteraction)
             toggleDisableInteraction(true);
 
-        addClass(dom._htmlDom, TOGGLE_CONSENT_MODAL_CLASS);
-        setAttribute(dom._cm, ARIA_HIDDEN, 'false');
+        addClass(_dom._htmlDom, TOGGLE_CONSENT_MODAL_CLASS);
+        setAttribute(_dom._cm, ARIA_HIDDEN, 'false');
 
         setTimeout(() => {
-            state._lastFocusedElemBeforeModal = getActiveElement();
-            state._currentModalFocusableElements = state._cmFocusableElements;
+            _state._lastFocusedElemBeforeModal = getActiveElement();
+            _state._currentModalFocusableElements = _state._cmFocusableElements;
         }, 200);
 
         _log('CookieConsent [TOGGLE]: show consentModal');
@@ -400,28 +198,26 @@ export const show = (createModal) => {
  */
 export const hide = () => {
 
-    const
-        dom = globalObj._dom,
-        state = globalObj._state;
+    const { _dom, _state, _customEvents } = globalObj;
 
-    if(state._consentModalExists){
-        state._consentModalVisible = false;
+    if(_state._consentModalExists){
+        _state._consentModalVisible = false;
 
-        if(state._disablePageInteraction)
+        if(_state._disablePageInteraction)
             toggleDisableInteraction();
 
-        removeClass(dom._htmlDom, TOGGLE_CONSENT_MODAL_CLASS);
-        setAttribute(dom._cm, ARIA_HIDDEN, 'true');
+        removeClass(_dom._htmlDom, TOGGLE_CONSENT_MODAL_CLASS);
+        setAttribute(_dom._cm, ARIA_HIDDEN, 'true');
 
         setTimeout(() => {
             //restore focus to the last focused element
-            state._lastFocusedElemBeforeModal.focus();
-            state._currentModalFocusableElements = [];
+            _state._lastFocusedElemBeforeModal.focus();
+            _state._currentModalFocusableElements = [];
         }, 200);
 
         _log('CookieConsent [TOGGLE]: hide consentModal');
 
-        fireEvent(globalObj._customEvents._onModalHide, CONSENT_MODAL_NAME);
+        fireEvent(_customEvents._onModalHide, CONSENT_MODAL_NAME);
     }
 };
 
