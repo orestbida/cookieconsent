@@ -173,6 +173,7 @@ const setLayout = (modal, allowedLayoutsObj, userGuiOptions, modalClassPrefix, d
 
     const secondaryBtnClass = 'btn--secondary';
     const btnClassPrefix = modalClassName + '__';
+    const btnClass = btnClassPrefix + secondaryBtnClass;
 
     /**
      * Add classes to buttons
@@ -183,22 +184,22 @@ const setLayout = (modal, allowedLayoutsObj, userGuiOptions, modalClassPrefix, d
 
         if(_cmAcceptNecessaryBtn){
             equalWeightButtons
-                ? removeClass(_cmAcceptNecessaryBtn, btnClassPrefix + secondaryBtnClass)
-                : addClass(_cmAcceptNecessaryBtn, btnClassPrefix + secondaryBtnClass);
+                ? removeClass(_cmAcceptNecessaryBtn, btnClass)
+                : addClass(_cmAcceptNecessaryBtn, btnClass);
         }
 
         if(_cmCloseIconBtn){
             equalWeightButtons
-                ? removeClass(_cmCloseIconBtn, btnClassPrefix + secondaryBtnClass)
-                : addClass(_cmCloseIconBtn, btnClassPrefix + secondaryBtnClass);
+                ? removeClass(_cmCloseIconBtn, btnClass)
+                : addClass(_cmCloseIconBtn, btnClass);
         }
     }else{
         const { _pmAcceptNecessaryBtn } =  globalObj._dom;
 
         if(_pmAcceptNecessaryBtn){
             equalWeightButtons
-                ? removeClass(_pmAcceptNecessaryBtn, btnClassPrefix + secondaryBtnClass)
-                : addClass(_pmAcceptNecessaryBtn, btnClassPrefix + secondaryBtnClass);
+                ? removeClass(_pmAcceptNecessaryBtn, btnClass)
+                : addClass(_pmAcceptNecessaryBtn, btnClass);
         }
     }
 };
