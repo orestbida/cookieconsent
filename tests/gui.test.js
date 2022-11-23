@@ -99,6 +99,20 @@ describe("Test UI options", () =>{
         expect(classList.contains('cm--right')).toBe(true);
     })
 
+    it('Buttons should have different weight', async () => {
+        testConfig.guiOptions.consentModal.equalWeightButtons = false;
+        await api.run(testConfig);
+        const classList = document.querySelector('[data-role="necessary"]').classList;
+        expect(classList.contains('cm__btn--secondary')).toBe(true);
+    })
+
+    it('Buttons should same weight', async () => {
+        testConfig.guiOptions.consentModal.equalWeightButtons = true;
+        await api.run(testConfig);
+        const classList = document.querySelector('[data-role="necessary"]').classList;
+        expect(classList.contains('cm__btn--secondary')).toBe(false);
+    })
+
     it('Should flip buttons', async () => {
         testConfig.guiOptions.consentModal.flipButtons = true;
         testConfig.guiOptions.preferencesModal.flipButtons = true;

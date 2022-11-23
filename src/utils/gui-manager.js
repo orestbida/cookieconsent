@@ -133,9 +133,9 @@ const setLayout = (modal, allowedLayoutsObj, userGuiOptions, modalClassPrefix, d
      */
     modal.className = modalClassName;
 
-    const {layout, position, equalWeightButtons, flipButtons} = userGuiOptions;
+    const {layout, position, flipButtons} = userGuiOptions;
+    const equalWeightButtons = userGuiOptions.equalWeightButtons !== false;
 
-    const notSameWeightButtons = equalWeightButtons === false;
     const layoutSplit = layout?.split(' ') || [];
 
     const layoutName = layoutSplit[0];
@@ -182,13 +182,13 @@ const setLayout = (modal, allowedLayoutsObj, userGuiOptions, modalClassPrefix, d
         const {_cmAcceptNecessaryBtn, _cmCloseIconBtn} = globalObj._dom;
 
         if(_cmAcceptNecessaryBtn){
-            notSameWeightButtons
+            equalWeightButtons
                 ? removeClass(_cmAcceptNecessaryBtn, btnClassPrefix + secondaryBtnClass)
                 : addClass(_cmAcceptNecessaryBtn, btnClassPrefix + secondaryBtnClass);
         }
 
         if(_cmCloseIconBtn){
-            notSameWeightButtons
+            equalWeightButtons
                 ? removeClass(_cmCloseIconBtn, btnClassPrefix + secondaryBtnClass)
                 : addClass(_cmCloseIconBtn, btnClassPrefix + secondaryBtnClass);
         }
@@ -196,7 +196,7 @@ const setLayout = (modal, allowedLayoutsObj, userGuiOptions, modalClassPrefix, d
         const { _pmAcceptNecessaryBtn } =  globalObj._dom;
 
         if(_pmAcceptNecessaryBtn){
-            notSameWeightButtons
+            equalWeightButtons
                 ? removeClass(_pmAcceptNecessaryBtn, btnClassPrefix + secondaryBtnClass)
                 : addClass(_pmAcceptNecessaryBtn, btnClassPrefix + secondaryBtnClass);
         }
