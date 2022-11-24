@@ -230,7 +230,7 @@ export const saveCookiePreferences = () => {
      * Reload page if needed
      */
     if(state._reloadPage)
-        window.location.reload();
+        location.reload();
 };
 
 /**
@@ -239,7 +239,7 @@ export const saveCookiePreferences = () => {
  */
 export const setCookie = (useRemainingExpirationTime) => {
 
-    const {hostname, protocol} = window.location;
+    const {hostname, protocol} = location;
     const {name, path, domain, sameSite} = globalObj._config.cookie;
 
     /**

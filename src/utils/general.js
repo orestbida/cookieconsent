@@ -420,7 +420,7 @@ export const resolveEnabledServices = () => {
 /**
  * @param {string} eventName
  */
-const dispatchPluginEvent = (eventName, data) => window.dispatchEvent(new CustomEvent(eventName, {detail: data}));
+const dispatchPluginEvent = (eventName, data) => dispatchEvent(new CustomEvent(eventName, {detail: data}));
 
 /**
  * Update services state internally and tick/untick checkboxes
@@ -479,7 +479,7 @@ export const updateServicesState = (service, category) => {
  */
 export const uuidv4 = () => {
     return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, (c) => {
-        return (c ^ window.crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16);
+        return (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16);
     });
 };
 
