@@ -16,13 +16,14 @@ import {
     resolveEnabledCategories,
     resolveEnabledServices,
     updateServicesState,
-    toggleDisableInteraction
+    toggleDisableInteraction,
+    fireEvent,
+    deepCopy
 } from '../utils/general';
 
 import { manageExistingScripts, retrieveEnabledCategoriesAndServices } from '../utils/scripts';
 
 import {
-    fireEvent,
     globalObj,
     GlobalState
 } from './global';
@@ -362,13 +363,13 @@ export const getUserPreferences = () => {
     const { _acceptType, _enabledServices } = globalObj._state;
     const { accepted, rejected } = getCurrentCategoriesState();
 
-    return {
+    return deepCopy({
         acceptType: _acceptType,
         acceptedCategories: accepted,
         rejectedCategories: rejected,
         acceptedServices: _enabledServices,
         rejectedServices: retrieveRejectedServices()
-    };
+    });
 };
 
 /**

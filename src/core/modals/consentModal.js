@@ -1,4 +1,4 @@
-import { globalObj, fireEvent } from '../global';
+import { globalObj } from '../global';
 
 import {
     _log,
@@ -9,7 +9,8 @@ import {
     appendChild,
     addEvent,
     getModalFocusableData,
-    addDataButtonListeners
+    addDataButtonListeners,
+    fireEvent
 } from '../../utils/general';
 
 import {

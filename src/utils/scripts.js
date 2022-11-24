@@ -1,5 +1,5 @@
-import { globalObj, isFunction } from '../core/global';
-import { createNode, setAttribute, elContains, getAttribute, removeAttribute } from './general';
+import { globalObj } from '../core/global';
+import { createNode, setAttribute, elContains, getAttribute, removeAttribute, isFunction } from './general';
 import { SCRIPT_TAG_SELECTOR } from './constants';
 
 /**
@@ -10,20 +10,28 @@ import { SCRIPT_TAG_SELECTOR } from './constants';
  */
 export const manageExistingScripts = (mustEnableCategories) => {
 
-    const state = globalObj._state;
-    const enabledServices = state._enabledServices;
+    const {
+        _enabledServices,
+        _lastChangedServices,
+        _allCategoryNames,
+        _allDefinedServices,
+        _allScriptTags,
+        _allScriptTagsInfo,
+        _savedCookieContent,
+        _lastChangedCategoryNames,
+    } = globalObj._state;
 
     /**
      * Automatically Enable/Disable internal services
      */
-    for(const categoryName of state._allCategoryNames){
+    for(const categoryName of _allCategoryNames){
 
-        const lastChangedServices = state._lastChangedServices[categoryName]
-            || state._enabledServices[categoryName]
+        const lastChangedServices = _lastChangedServices[categoryName]
+            || _enabledServices[categoryName]
             || [];
 
         for(const serviceName of lastChangedServices){
-            const service = state._allDefinedServices[categoryName][serviceName];
+            const service = _allDefinedServices[categoryName][serviceName];
             const {onAccept, onReject} = service;
 
             if(!service)
@@ -31,7 +39,7 @@ export const manageExistingScripts = (mustEnableCategories) => {
 
             if(
                 !service._enabled
-                && elContains(state._enabledServices[categoryName], serviceName)
+                && elContains(_enabledServices[categoryName], serviceName)
                 && isFunction(onAccept)
             ){
                 service._enabled = true;
@@ -40,7 +48,7 @@ export const manageExistingScripts = (mustEnableCategories) => {
 
             else if(
                 service._enabled
-                && !elContains(state._enabledServices[categoryName], serviceName)
+                && !elContains(_enabledServices[categoryName], serviceName)
                 && isFunction(onReject)
             ){
                 service._enabled = false;
@@ -53,10 +61,9 @@ export const manageExistingScripts = (mustEnableCategories) => {
     if(!globalObj._config.manageScriptTags)
         return;
 
-    const scripts = state._allScriptTags;
-
-    let acceptedCategories = mustEnableCategories
-        || state._savedCookieContent.categories
+    const scripts = _allScriptTags;
+    const acceptedCategories = mustEnableCategories
+        || _savedCookieContent.categories
         || [];
 
     /**
@@ -69,12 +76,12 @@ export const manageExistingScripts = (mustEnableCategories) => {
         if(index < scripts.length){
 
             const currScript = scripts[index];
-            const currScriptInfo = state._allScriptTagsInfo[index];
+            const currScriptInfo = _allScriptTagsInfo[index];
             const currScriptCategory = currScriptInfo._categoryName;
             const currScriptService = currScriptInfo._serviceName;
             const categoryAccepted = elContains(acceptedCategories, currScriptCategory);
             const serviceAccepted = currScriptService
-                ? elContains(enabledServices[currScriptCategory], currScriptService)
+                ? elContains(_enabledServices[currScriptCategory], currScriptService)
                 : false;
 
             /**
@@ -93,12 +100,12 @@ export const manageExistingScripts = (mustEnableCategories) => {
                 let categoryWasJustDisabled = !currScriptService
                     && currScriptInfo._runOnDisable
                     && !categoryAccepted
-                    && elContains(state._lastChangedCategoryNames, currScriptCategory);
+                    && elContains(_lastChangedCategoryNames, currScriptCategory);
 
                 let serviceWasJustDisabled = currScriptService
                     && currScriptInfo._runOnDisable
                     && !serviceAccepted
-                    && elContains(state._lastChangedServices[currScriptCategory] || [], currScriptService);
+                    && elContains(_lastChangedServices[currScriptCategory] || [], currScriptService);
 
                 if(
                     categoryWasJustEnabled

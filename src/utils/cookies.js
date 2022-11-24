@@ -1,4 +1,4 @@
-import { fireEvent, globalObj, deepCopy } from '../core/global';
+import { globalObj } from '../core/global';
 import { OPT_OUT_MODE, OPT_IN_MODE } from './constants';
 import { manageExistingScripts } from './scripts';
 
@@ -10,6 +10,8 @@ import {
     getRemainingExpirationTimeMS,
     getExpiresAfterDaysValue,
     elContains,
+    deepCopy,
+    fireEvent,
     arrayDiff
 } from './general';
 

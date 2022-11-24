@@ -1,4 +1,4 @@
-import { deepCopy, globalObj, isFunction } from '../core/global';
+import { globalObj } from '../core/global';
 import {
     SCRIPT_TAG_SELECTOR,
     BUTTON_TAG, CLICK_EVENT,
@@ -30,11 +30,13 @@ export const indexOf = (el, value) => el.indexOf(value);
  */
 export const elContains = (el, value) => indexOf(el, value) !== -1;
 
-export const isArray = (el) => Array.isArray(el);
+export const isArray = el => Array.isArray(el);
 
 export const isString = el => typeof el === 'string';
 
-export const isObject = (el) => !!el && typeof el === 'object' && !isArray(el);
+export const isObject = el => !!el && typeof el === 'object' && !isArray(el);
+
+export const isFunction = el => typeof el === 'function';
 
 export const getKeys = obj => Object.keys(obj);
 
@@ -44,24 +46,122 @@ export const getKeys = obj => Object.keys(obj);
  */
 export const unique = (arr) => Array.from(new Set(arr));
 
-/**
- * Get current active element
- */
 export const getActiveElement = () => document.activeElement;
 
 /**
- * preventDefault helper function
  * @param {Event} e
  */
 export const preventDefault = (e) => e.preventDefault();
 
 /**
- * querySelectorAll helper function
  * @param {Element} el
  * @param {string} selector
  */
 export const querySelectorAll = (el, selector) => el.querySelectorAll(selector);
 
+/**
+ * @param {HTMLInputElement} input
+ */
+export const dispatchInputChangeEvent = (input) => input.dispatchEvent(new Event('change'));
+
+/**
+ * @param {keyof HTMLElementTagNameMap} type
+ */
+export const createNode = (type) => {
+    const el = document.createElement(type);
+
+    if(type === BUTTON_TAG){
+        el.type = type;
+    }
+
+    return el;
+};
+
+/**
+ * @param {HTMLElement} el
+ * @param {string} attribute
+ * @param {string} value
+ */
+export const setAttribute = (el, attribute, value) => el.setAttribute(attribute, value);
+
+/**
+ * @param {HTMLElement} el
+ * @param {string} attribute
+ * @param {boolean} [prependData]
+ */
+export const removeAttribute = (el, attribute, prependData) => {
+    el.removeAttribute(prependData
+        ? 'data-' + attribute
+        : attribute
+    );
+};
+
+/**
+ * @param {HTMLElement} el
+ * @param {string} attribute
+ * @param {boolean} [prependData]
+ * @returns {string}
+ */
+export const getAttribute = (el, attribute, prependData) => {
+    return el.getAttribute(prependData
+        ? 'data-' + attribute
+        : attribute
+    );
+};
+
+/**
+ * @param {Node} parent
+ * @param {Node} child
+ */
+export const appendChild = (parent, child) => parent.appendChild(child);
+
+/**
+ * @param {HTMLElement} elem
+ * @param {string} className
+ */
+export const addClass = (elem, className) => elem.classList.add(className);
+
+/**
+ * @param {HTMLElement} elem
+ * @param {string} className
+ */
+export const addClassCm = (elem, className) => addClass(elem, 'cm__' + className);
+/**
+ * @param {HTMLElement} elem
+ * @param {string} className
+ */
+export const addClassPm = (elem, className) => addClass(elem, 'pm__' + className);
+
+/**
+ * @param {HTMLElement} elem
+ * @param {string} className
+ */
+export const removeClass = (el, className) => el.classList.remove(className);
+
+/**
+ * @param {HTMLElement} el
+ * @param {string} className
+ */
+export const hasClass = (el, className) => el.classList.contains(className);
+
+export const deepCopy = (el) => {
+
+    if (typeof el !== 'object' )
+        return el;
+
+    if (el instanceof Date)
+        return new Date(el.getTime());
+
+    let clone = Array.isArray(el) ? [] : {};
+
+    for (let key in el) {
+        let value = el[key];
+
+        clone[key] = deepCopy(value);
+    }
+
+    return clone;
+};
 
 /**
  * Store categories and services' config. details
@@ -69,23 +169,28 @@ export const querySelectorAll = (el, selector) => el.querySelectorAll(selector);
  */
 export const fetchCategoriesAndServices = (allCategoryNames) => {
 
-    const state = globalObj._state;
+    const {
+        _allDefinedCategories,
+        _allDefinedServices,
+        _enabledServices,
+        _readOnlyCategories
+    } = globalObj._state;
 
     for(let categoryName of allCategoryNames){
 
-        const currCategory = state._allDefinedCategories[categoryName];
+        const currCategory = _allDefinedCategories[categoryName];
         const services = currCategory.services || {};
         const serviceNames = isObject(services) && getKeys(services) || [];
 
-        state._allDefinedServices[categoryName] = {};
-        state._enabledServices[categoryName] = [];
+        _allDefinedServices[categoryName] = {};
+        _enabledServices[categoryName] = [];
 
         /**
          * Keep track of readOnly categories
          */
         if(currCategory.readOnly){
-            state._readOnlyCategories.push(categoryName);
-            state._enabledServices[categoryName] = getKeys(services);
+            _readOnlyCategories.push(categoryName);
+            _enabledServices[categoryName] = serviceNames;
         }
 
         globalObj._dom._serviceCheckboxInputs[categoryName] = {};
@@ -93,7 +198,7 @@ export const fetchCategoriesAndServices = (allCategoryNames) => {
         for(let serviceName of serviceNames){
             const service = services[serviceName];
             service._enabled = false;
-            state._allDefinedServices[categoryName][serviceName] = service;
+            _allDefinedServices[categoryName][serviceName] = service;
         }
     }
 };
@@ -175,13 +280,8 @@ export const retrieveRejectedServices = () => {
     return rejectedServices;
 };
 
-/**
- * @param {HTMLInputElement} input
- */
-export const dispatchChangeEvent = (input) => input.dispatchEvent(new Event('change'));
-
 export const retrieveCategoriesFromModal = () => {
-    const state = globalObj._state;
+    const { _customServicesSelection } = globalObj._state;
     const toggles = globalObj._dom._categoryCheckboxInputs;
 
     if(!toggles)
@@ -195,8 +295,8 @@ export const retrieveCategoriesFromModal = () => {
         }
     }
 
-    for(let categoryName in state._customServicesSelection) {
-        if(state._customServicesSelection[categoryName].length > 0){
+    for(let categoryName in _customServicesSelection) {
+        if(_customServicesSelection[categoryName].length > 0){
             enabledCategories.push(categoryName);
         }
     }
@@ -318,6 +418,12 @@ export const resolveEnabledServices = () => {
 };
 
 /**
+ * @param {string} eventName
+ */
+const dispatchPluginEvent = (eventName, data) => window.dispatchEvent(new CustomEvent(eventName, {detail: data}));
+
+/**
+ * Update services state internally and tick/untick checkboxes
  * @param {string|string[]} service
  * @param {string} category
  */
@@ -338,14 +444,14 @@ export const updateServicesState = (service, category) => {
 
             for(let serviceName in servicesInputs){
                 servicesInputs[serviceName].checked = true;
-                dispatchChangeEvent(servicesInputs[serviceName]);
+                dispatchInputChangeEvent(servicesInputs[serviceName]);
             }
 
         }else{
 
             for(let serviceName in servicesInputs){
                 servicesInputs[serviceName].checked = service === serviceName;
-                dispatchChangeEvent(servicesInputs[serviceName]);
+                dispatchInputChangeEvent(servicesInputs[serviceName]);
             }
 
             if(elContains(allServiceNames, service))
@@ -356,7 +462,7 @@ export const updateServicesState = (service, category) => {
 
         for(let serviceName in servicesInputs){
             servicesInputs[serviceName].checked = elContains(service, serviceName);
-            dispatchChangeEvent(servicesInputs[serviceName]);
+            dispatchInputChangeEvent(servicesInputs[serviceName]);
         }
 
         for(let serviceName in allServiceNames){
@@ -365,67 +471,6 @@ export const updateServicesState = (service, category) => {
         }
     }
 };
-
-/**
- * @typedef {keyof HTMLElementTagNameMap} Type
- */
-
-/**
- * @param {keyof HTMLElementTagNameMap} type
- */
-export const createNode = (type) => {
-    const el = document.createElement(type);
-
-    if(type === BUTTON_TAG){
-        el.type = type;
-    }
-
-    return el;
-};
-
-/**
- * Helper function to set attribute
- * @param {HTMLElement} el
- * @param {string} attribute
- * @param {string} value
- */
-export const setAttribute = (el, attribute, value) => {
-    el.setAttribute(attribute, value);
-};
-
-/**
- * Helper function to remove attribute
- * @param {HTMLElement} el
- * @param {string} attribute
- * @param {boolean} [prependData]
- */
-export const removeAttribute = (el, attribute, prependData) => {
-    el.removeAttribute(prependData
-        ? 'data-' + attribute
-        : attribute
-    );
-};
-
-/**
- * Helper function to get attribute
- * @param {HTMLElement} el
- * @param {string} attribute
- * @param {boolean} [prependData]
- * @returns {string} attribute value
- */
-export const getAttribute = (el, attribute, prependData) => {
-    return el.getAttribute(prependData
-        ? 'data-' + attribute
-        : attribute
-    );
-};
-
-/**
- * Helper function to append child to parent
- * @param {Node} parent
- * @param {Node} child
- */
-export const appendChild = (parent, child) => parent.appendChild(child);
 
 /**
  * Generate RFC4122-compliant UUIDs.
@@ -437,12 +482,6 @@ export const uuidv4 = () => {
         return (c ^ window.crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16);
     });
 };
-
-/**
- * Function to run when event is fired
- * @callback eventFired
- * @param {Event} event
- */
 
 /**
  * Add event listener to dom object (cross browser function)
@@ -466,36 +505,6 @@ export const addEvent = (elem, event, fn, saveListener) => {
         });
     }
 };
-
-/**
- * @param {HTMLElement} elem
- * @param {string} className
- */
-export const addClass = (elem, className) => elem.classList.add(className);
-
-/**
- * @param {HTMLElement} elem
- * @param {string} className
- */
-export const addClassCm = (elem, className) => addClass(elem, 'cm__' + className);
-/**
- * @param {HTMLElement} elem
- * @param {string} className
- */
-export const addClassPm = (elem, className) => addClass(elem, 'pm__' + className);
-
-/**
- * @param {HTMLElement} elem
- * @param {string} className
- */
-export const removeClass = (el, className) => el.classList.remove(className);
-
-/**
- * Check if html element has class
- * @param {HTMLElement} el
- * @param {string} className
- */
-export const hasClass = (el, className) => el.classList.contains(className);
 
 /**
  * Calculate the existing cookie's remaining time until expiration (in milliseconds)
@@ -840,4 +849,50 @@ export const getModalFocusableData = () => {
 
     state._tabbedOutside = false;
     state._tabbedInsideModal = false;
+};
+
+/**
+ * Fire custom event
+ * @param {string} eventName
+ * @param {string} [modalName]
+ * @param {HTMLElement} [modal]
+ */
+export const fireEvent = (eventName, modalName, modal) => {
+
+    const callbacks = globalObj._callbacks;
+    const events = globalObj._customEvents;
+
+    const params = {
+        cookie: globalObj._state._savedCookieContent
+    };
+
+    if(modalName){
+
+        const modalParams = {
+            modalName: modalName
+        };
+
+        if(eventName === events._onModalShow){
+            isFunction(callbacks._onModalShow) && callbacks._onModalShow(modalParams);
+        }else if(eventName === events._onModalHide){
+            isFunction(callbacks._onModalHide) && callbacks._onModalHide(modalParams);
+        }else{
+            modalParams.modal = modal;
+            isFunction(callbacks._onModalReady) && callbacks._onModalReady(modalParams);
+        }
+
+        return dispatchPluginEvent(eventName, modalParams);
+    }
+
+    if(eventName === events._onFirstConsent){
+        isFunction(callbacks._onFirstConsent) && callbacks._onFirstConsent(deepCopy(params));
+    }else if(eventName === events._onConsent){
+        isFunction(callbacks._onConsent) && callbacks._onConsent(deepCopy(params));
+    }else {
+        params.changedCategories = globalObj._state._lastChangedCategoryNames;
+        params.changedServices = globalObj._state._lastChangedServices;
+        isFunction(callbacks._onChange) && callbacks._onChange(deepCopy(params));
+    }
+
+    dispatchPluginEvent(eventName, deepCopy(params));
 };

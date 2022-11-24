@@ -1,4 +1,4 @@
-import { globalObj, fireEvent } from '../global';
+import { globalObj } from '../global';
 import {
     createNode,
     addClass,
@@ -13,6 +13,7 @@ import {
     getModalFocusableData,
     isString,
     isObject,
+    fireEvent,
     _log
 } from '../../utils/general';
 
