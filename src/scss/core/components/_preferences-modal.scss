@@ -178,8 +178,9 @@ $toggle-knob-icon-width: 2px;
                 display: none;
                 border: 1px solid var(--cc-cookie-category-block-border);
                 border-top: none;
-                border-bottom-left-radius: var(--cc-btn-border-radius);
-                border-bottom-right-radius: var(--cc-btn-border-radius);
+                border-radius: var(--cc-btn-border-radius);
+                border-top-left-radius: 0;
+                border-top-right-radius: 0;
             }
 
             .pm__section-desc{
