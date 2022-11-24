@@ -10,13 +10,14 @@ import {
     appendChild,
     elContains,
     arrayDiff,
+    deepCopy,
     uuidv4
 } from '../src/utils/general';
 
 import * as CookieConsent from "../src/index"
 import testConfig from "./config/basic-config"
 import { htmlHasClass } from './config/mocks-utils';
-import { globalObj, deepCopy } from '../src/core/global';
+import { globalObj } from '../src/core/global';
 
 /**
  * @type {import("../src/core/global").Api}
