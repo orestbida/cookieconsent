@@ -114,7 +114,7 @@ export class GlobalState {
             /**
             * @type {UserConfig}
             */
-            _userConfig: null,
+            _userConfig: {},
 
             _currentLanguageCode: '',
 
@@ -126,13 +126,13 @@ export class GlobalState {
             /**
             * @type {Translation}
             */
-            _currentTranslation: null,
+            _currentTranslation: {},
 
             /**
             * Internal state variables
             * @type {CookieValue}
             */
-            _savedCookieContent : null,
+            _savedCookieContent : {},
 
             /**
              * Store all event data-cc event listeners
