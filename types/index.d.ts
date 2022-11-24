@@ -593,7 +593,7 @@ declare namespace CookieConsent {
      * @param attributes Attributes added to the script
      * @returns Promise<boolean>: true if script is loaded successfully
      */
-    function loadScript(src: string, attributes?: {[key: string]: string}[]): Promise<boolean>
+    function loadScript(src: string, attributes?: {[key: string]: string}): Promise<boolean>
 
     /**
      * Store custom data inside plugin's own cookie.

@@ -11,6 +11,7 @@ import {
     isString,
     retrieveRejectedServices,
     isArray,
+    isObject,
     getModalFocusableData,
     getActiveElement,
     resolveEnabledCategories,
@@ -375,7 +376,7 @@ export const getUserPreferences = () => {
 /**
  * Dynamically load script (append to head)
  * @param {string} src
- * @param {object[]} [attrs] Custom attributes
+ * @param {{[key: string]: string}} [attrs] Custom attributes
  * @returns {Promise<boolean>} promise
  */
 export const loadScript = (src, attrs) => {
@@ -393,11 +394,13 @@ export const loadScript = (src, attrs) => {
         script = createNode('script');
 
         /**
-         * Add custom attributes (if provided)
+         * Add custom attributes
          */
-        isArray(attrs) && attrs.forEach(attr => {
-            setAttribute(script, attr.name, attr.value);
-        });
+        if(isObject(attrs)){
+            for(const key in attrs){
+                setAttribute(script, key, attrs[key]);
+            }
+        }
 
         script.onload = () => resolve(true);
         script.onerror = () => {
@@ -410,9 +413,6 @@ export const loadScript = (src, attrs) => {
 
         script.src = src;
 
-        /**
-         * Append script to head
-         */
         appendChild(document.head, script);
     });
 };

@@ -297,42 +297,37 @@ Loads script files (`.js`).
     ```javascript
     function(
         path: string,
-        attributes?: { name: string, value: string }[]
+        attributes?: {[key: string]: string}
     ): Promise<boolean>
     ```
 
 - **Examples** <br>
 
     ```javascript
-    // basic way
+    // basic usage
     cc.loadScript('path-to-script.js');
 
-    // recommended way (catch exceptions)
-    cc.loadScript('path-to-script.js')
-        .catch(() => console.log('Script failed to load!'));
+    // check if script is loaded successfully
+    const loaded = await cc.loadScript('path-to-script.js');
 
-    // do something when the script is loaded successfully
-    cc.loadScript('path-to-script.js')
-        .then(() => {
-            // script loaded successfully
-        })
-        .catch(() => console.log('Script failed to load!'));
+    if(!loaded){
+        console.log('Script failed to load!');
+    }
     ```
 
     You may also concatenate multiple `.loadScript` methods:
     ```javascript
     cc.loadScript('path-to-script1.js')
         .then(() => cc.loadScript('path-to-script2.js'))
-        .then(() => cc.loadScript('path-to-script3.js'))
-        .catch(() => console.log('Loading failed'))
+        .then(() => cc.loadScript('path-to-script3.js'));
     ```
 
     Load script with attributes:
     ```javascript
-    cc.loadScript('path-to-script.js', [
-        {name: 'id', value: 'ga_script'},
-        {name: 'another-attribute', value: 'value'}
-    ]);
+    cc.loadScript('path-to-script.js', {
+        'id': 'ga-script',
+        'another-attribute': 'another-value'
+    });
     ```
 
 
