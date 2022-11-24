@@ -67,7 +67,10 @@ export const createPreferencesModal = (api, createMainContainer) => {
         acceptAllBtnData = modalData.acceptAllBtn,
         acceptNecessaryBtnData = modalData.acceptNecessaryBtn,
         savePreferencesBtnData = modalData.savePreferencesBtn,
-        sectionsData = modalData.sections;
+        sectionsData = modalData.sections,
+        createFooter = acceptAllBtnData
+            || acceptNecessaryBtnData
+            || savePreferencesBtnData;
 
     if(!dom._pmContainer){
 
@@ -127,7 +130,8 @@ export const createPreferencesModal = (api, createMainContainer) => {
 
         appendChild(dom._pm, dom._pmHeader);
         appendChild(dom._pm, dom._pmBody);
-        appendChild(dom._pm, dom._pmFooter);
+
+        createFooter && appendChild(dom._pm, dom._pmFooter);
 
         appendChild(dom._pmContainer, dom._pm);
     }else{
