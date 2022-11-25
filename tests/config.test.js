@@ -17,7 +17,7 @@ describe("Check modals' html generation under different settings", () =>{
     })
 
     beforeEach(() => {
-        api.reset();
+        api.reset(true);
     })
 
     it('Consent Modal should not appear if consent is valid', async () => {
@@ -66,6 +66,15 @@ describe("Check modals' html generation under different settings", () =>{
         api.acceptCategory('all');
         expect(globalObj._state._allScriptTags.length).toBe(0);
         expect(document.body.querySelectorAll('script[data-category]').length).toBe(1);
+    })
+
+    it('Should append the html markup inside the "#app" root element', async () => {
+        document.body.innerHTML = '<div id="app"></div>';
+        testConfig.root = '#app';
+        await api.run(testConfig);
+        const app = document.getElementById('app');
+        const ccMain = document.getElementById('cc-main');
+        expect(ccMain.parentElement).toBe(app);
     })
 
     it('Should automatically enable & execute scripts when mode="opt-out"', async () => {
