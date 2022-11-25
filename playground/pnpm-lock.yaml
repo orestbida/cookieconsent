@@ -8,7 +8,7 @@ specifiers:
 
 devDependencies:
   sass: 1.56.1
-  vanilla-cookieconsent: github.com/orestbida/cookieconsent/e9c92ce6e448a98b2f5d6e81e798a48bf34d276e
+  vanilla-cookieconsent: github.com/orestbida/cookieconsent/c10f0a76773aa713bfd4fdb29df54a821accf54e
   vite: 3.2.4_sass@1.56.1
   vite-plugin-minify: 1.5.2_vite@3.2.4
 
@@ -403,7 +403,7 @@ packages:
       he: 1.2.0
       param-case: 3.0.4
       relateurl: 0.2.7
-      terser: 5.15.1
+      terser: 5.16.0
     dev: true
 
   /immutable/4.1.0:
@@ -561,8 +561,8 @@ packages:
     engines: {node: '>= 0.4'}
     dev: true
 
-  /terser/5.15.1:
-    resolution: {integrity: sha512-K1faMUvpm/FBxjBXud0LWVAGxmvoPbZbfTCYbSgaaYQaIXI3/TdI7a7ZGA73Zrou6Q8Zmz3oeUTsp/dj+ag2Xw==}
+  /terser/5.16.0:
+    resolution: {integrity: sha512-KjTV81QKStSfwbNiwlBXfcgMcOloyuRdb62/iLFPGBcVNF4EXjhdYBhYHmbJpiBrVxZhDvltE11j+LBQUxEEJg==}
     engines: {node: '>=10'}
     hasBin: true
     dependencies:
@@ -626,8 +626,8 @@ packages:
       fsevents: 2.3.2
     dev: true
 
-  github.com/orestbida/cookieconsent/e9c92ce6e448a98b2f5d6e81e798a48bf34d276e:
-    resolution: {tarball: https://codeload.github.com/orestbida/cookieconsent/tar.gz/e9c92ce6e448a98b2f5d6e81e798a48bf34d276e}
+  github.com/orestbida/cookieconsent/c10f0a76773aa713bfd4fdb29df54a821accf54e:
+    resolution: {tarball: https://codeload.github.com/orestbida/cookieconsent/tar.gz/c10f0a76773aa713bfd4fdb29df54a821accf54e}
     name: vanilla-cookieconsent
     version: 3.0.0-rc.9
     requiresBuild: true
