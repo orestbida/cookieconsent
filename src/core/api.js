@@ -626,44 +626,45 @@ export const run = async (userConfig) => {
 
 /**
  * Reset cookieconsent.
- * @param {boolean} deleteCookie Delete plugin's cookie
+ * @param {boolean} [deleteCookie] Delete plugin's cookie
  */
 export const reset = (deleteCookie) => {
 
-    const dom = globalObj._dom;
+    const { _ccMain, _htmlDom } = globalObj._dom;
     const { name, path, domain } = globalObj._config.cookie;
 
-    if(deleteCookie)
-        eraseCookies(name, path, domain);
+    deleteCookie && eraseCookies(name, path, domain);
 
     /**
      * Remove data-cc event listeners
      */
-    for(const item of globalObj._state._dataEventListeners){
-        item._element.removeEventListener(item._event, item._listener);
+    for(const {_element, _event, _listener} of globalObj._state._dataEventListeners){
+        _element.removeEventListener(_event, _listener);
     }
 
     /**
-     * Remove html from DOM
+     * Remove main container from DOM
      */
-    dom._ccMain && dom._ccMain.remove();
+    _ccMain?.remove();
 
     /**
      * Remove any remaining classes
      */
-    if(dom._htmlDom){
-        removeClass(dom._htmlDom, TOGGLE_DISABLE_INTERACTION_CLASS);
-        removeClass(dom._htmlDom, TOGGLE_PREFERENCES_MODAL_CLASS);
-        removeClass(dom._htmlDom, TOGGLE_CONSENT_MODAL_CLASS);
-    }
+    _htmlDom?.classList.remove(
+        TOGGLE_DISABLE_INTERACTION_CLASS,
+        TOGGLE_PREFERENCES_MODAL_CLASS,
+        TOGGLE_CONSENT_MODAL_CLASS
+    );
+
 
     const newGlobal = new GlobalState();
 
-    globalObj._state = newGlobal._state;
-    globalObj._dom = newGlobal._dom;
-    globalObj._config = newGlobal._config;
-    globalObj._callbacks = newGlobal._callbacks;
-    globalObj._customEvents = newGlobal._customEvents;
+    /**
+     * Reset all global state props.
+     */
+    for(const key in globalObj){
+        globalObj[key] = newGlobal[key];
+    }
 
     window._ccRun = false;
 };

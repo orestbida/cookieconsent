@@ -449,6 +449,7 @@ export const updateServicesState = (service, category) => {
 
         }else{
 
+            // Enable only one service (if valid) and disable all the others
             for(let serviceName in servicesInputs){
                 servicesInputs[serviceName].checked = service === serviceName;
                 dispatchInputChangeEvent(servicesInputs[serviceName]);
@@ -461,13 +462,12 @@ export const updateServicesState = (service, category) => {
     }else if(isArray(service)){
 
         for(let serviceName in servicesInputs){
-            servicesInputs[serviceName].checked = elContains(service, serviceName);
+            const validService = elContains(service, serviceName);
+            servicesInputs[serviceName].checked = validService;
             dispatchInputChangeEvent(servicesInputs[serviceName]);
-        }
 
-        for(let serviceName in allServiceNames){
-            if(elContains(service, serviceName))
-                _customServicesSelection[category].push(serviceName);
+            // Save enabled services
+            validService && _customServicesSelection[category].push(serviceName);
         }
     }
 };
@@ -568,7 +568,6 @@ export const arrayDiff = (arr1, arr2) => {
 
 /**
  * Calculate "accept type"
- * @param {{accepted: string[], rejected: string[]}} currentCategoriesState
  * @returns {'all'|'custom'|'necessary'} accept type
  */
 export const resolveAcceptType = () => {
@@ -816,8 +815,8 @@ export const closeModalOnOutsideClick = ({hidePreferences}) => {
  */
 export const getModalFocusableData = () => {
 
-    const state = globalObj._state;
-    const dom = globalObj._dom;
+    const { _state, _dom } = globalObj;
+
     /**
      * Note: any of the below focusable elements, which has the attribute tabindex="-1" AND is either
      * the first or last element of the modal, won't receive focus during "open/close" modal
@@ -841,14 +840,14 @@ export const getModalFocusableData = () => {
         array[1] = focusableElements[focusableElements.length - 1];
     };
 
-    if(state._consentModalExists)
-        saveAllFocusableElements(dom._cm, state._cmFocusableElements);
+    if(_state._consentModalExists)
+        saveAllFocusableElements(_dom._cm, _state._cmFocusableElements);
 
-    if(state._preferencesModalExists)
-        saveAllFocusableElements(dom._pm, state._pmFocusableElements);
+    if(_state._preferencesModalExists)
+        saveAllFocusableElements(_dom._pm, _state._pmFocusableElements);
 
-    state._tabbedOutside = false;
-    state._tabbedInsideModal = false;
+    _state._tabbedOutside = false;
+    _state._tabbedInsideModal = false;
 };
 
 /**
@@ -859,7 +858,15 @@ export const getModalFocusableData = () => {
  */
 export const fireEvent = (eventName, modalName, modal) => {
 
-    const callbacks = globalObj._callbacks;
+    const {
+        _onChange,
+        _onConsent,
+        _onFirstConsent,
+        _onModalHide,
+        _onModalReady,
+        _onModalShow
+    } = globalObj._callbacks;
+
     const events = globalObj._customEvents;
 
     const params = {
@@ -873,25 +880,25 @@ export const fireEvent = (eventName, modalName, modal) => {
         };
 
         if(eventName === events._onModalShow){
-            isFunction(callbacks._onModalShow) && callbacks._onModalShow(modalParams);
+            isFunction(_onModalShow) && _onModalShow(modalParams);
         }else if(eventName === events._onModalHide){
-            isFunction(callbacks._onModalHide) && callbacks._onModalHide(modalParams);
+            isFunction(_onModalHide) && _onModalHide(modalParams);
         }else{
             modalParams.modal = modal;
-            isFunction(callbacks._onModalReady) && callbacks._onModalReady(modalParams);
+            isFunction(_onModalReady) && _onModalReady(modalParams);
         }
 
         return dispatchPluginEvent(eventName, modalParams);
     }
 
     if(eventName === events._onFirstConsent){
-        isFunction(callbacks._onFirstConsent) && callbacks._onFirstConsent(deepCopy(params));
+        isFunction(_onFirstConsent) && _onFirstConsent(deepCopy(params));
     }else if(eventName === events._onConsent){
-        isFunction(callbacks._onConsent) && callbacks._onConsent(deepCopy(params));
+        isFunction(_onConsent) && _onConsent(deepCopy(params));
     }else {
         params.changedCategories = globalObj._state._lastChangedCategoryNames;
         params.changedServices = globalObj._state._lastChangedServices;
-        isFunction(callbacks._onChange) && callbacks._onChange(deepCopy(params));
+        isFunction(_onChange) && _onChange(deepCopy(params));
     }
 
     dispatchPluginEvent(eventName, deepCopy(params));
