@@ -30,6 +30,19 @@ export default defineConfig({
 
         nav: [
             {
+                text: 'Demo',
+                items: [
+                    {
+                        text: 'Playground',
+                        link: 'https://playground.cookieconsent.orestbida.com'
+                    },
+                    {
+                        text: 'Stackblitz',
+                        link: 'https://stackblitz.com/@orestbida/collections/cookieconsent-v3'
+                    }
+                ]
+            },
+            {
                 text: 'Guide',
                 link: '/essential/getting-started.html'
             },
