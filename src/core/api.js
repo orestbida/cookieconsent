@@ -19,6 +19,7 @@ import {
     updateServicesState,
     toggleDisableInteraction,
     fireEvent,
+    getKeys,
     deepCopy
 } from '../utils/general';
 
@@ -99,13 +100,14 @@ export const acceptedCategory = (category) => {
  */
 export const acceptService = (service, category) => {
 
-    const state = globalObj._state;
+    const { _allCategoryNames, _allDefinedServices } = globalObj._state;
 
     if(
         !service
         || !category
         || !isString(category)
-        || !elContains(state._allCategoryNames, category)
+        || !elContains(_allCategoryNames, category)
+        || getKeys(_allDefinedServices[category]).length === 0
     ) {
         return false;
     }
