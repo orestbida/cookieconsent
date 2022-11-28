@@ -553,6 +553,8 @@
             }
 
             consent_modal_exists = true;
+
+            _addDataButtonListeners(consent_modal_inner);
         }
 
         var _createSettingsModal = function(lang){
@@ -997,7 +999,6 @@
 
                 if(consent_modal_exists){
                     _createConsentModal(new_validated_lang);
-                    _addDataButtonListeners(consent_modal_inner);
                 }
 
                 _createSettingsModal(new_validated_lang);
