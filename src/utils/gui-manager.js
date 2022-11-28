@@ -125,16 +125,15 @@ export const guiManager = (applyToModal) => {
  */
 const setLayout = (modal, allowedLayoutsObj, userGuiOptions, modalClassPrefix, defaultLayoutName, modalClassName) => {
 
-    if(!userGuiOptions)
-        return;
-
     /**
      * Reset modal classes to default
      */
     modal.className = modalClassName;
 
-    const {layout, position, flipButtons} = userGuiOptions;
-    const equalWeightButtons = userGuiOptions.equalWeightButtons !== false;
+    const layout = userGuiOptions?.layout;
+    const position = userGuiOptions?.position;
+    const flipButtons = userGuiOptions?.flipButtons;
+    const equalWeightButtons = userGuiOptions?.equalWeightButtons !== false;
 
     const layoutSplit = layout?.split(' ') || [];
 

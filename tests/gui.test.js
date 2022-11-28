@@ -122,6 +122,15 @@ describe("Test UI options", () =>{
         expect(classList.contains('cm--flip')).toBe(true);
         expect(classList2.contains('pm--flip')).toBe(true);
     })
+
+    it('Should use "box" layout by default if no layout value is provided', async () => {
+        testConfig.guiOptions = undefined;
+        await api.run(testConfig);
+        const classList = getModalClassList('.cm');
+        const classList2 = getModalClassList('.pm');
+        expect(classList.contains('cm--box')).toBe(true);
+        expect(classList2.contains('pm--box')).toBe(true);
+    });
 })
 
 function getModalClassList(selector){
