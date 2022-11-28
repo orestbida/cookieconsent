@@ -1,6 +1,6 @@
 {
   "name": "vanilla-cookieconsent",
-  "version": "v2.8.8",
+  "version": "v2.8.9",
   "description": "🍪 Simple cross-browser cookie-consent plugin written in vanilla js.",
   "main": "dist/cookieconsent.js",
   "files": [
@@ -12,7 +12,7 @@
   "scripts": {
     "build:css": "postcss ./src/cookieconsent.css -o ./dist/cookieconsent.css",
     "build:js": "terser --config-file terser.config.json ./src/cookieconsent.js -o ./dist/cookieconsent.js",
-    "build": "npm run build:js && npm run build:css"
+    "build": "pnpm run build:js && pnpm run build:css"
   },
   "repository": {
     "type": "git",
@@ -32,10 +32,10 @@
   },
   "homepage": "https://github.com/orestbida/cookieconsent/tree/v2.8",
   "devDependencies": {
-    "cssnano": "^5.1.13",
-    "postcss": "^8.4.17",
+    "cssnano": "^5.1.14",
+    "postcss": "^8.4.19",
     "postcss-cli": "^10.0.0",
-    "postcss-custom-properties": "^12.1.9",
-    "terser": "^5.15.1"
+    "postcss-custom-properties": "^13.0.0",
+    "terser": "^5.16.0"
   }
 }

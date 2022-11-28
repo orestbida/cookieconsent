@@ -67,6 +67,7 @@ declare global {
         value: string
         enabled?: boolean
         readonly?: boolean
+        reload?: 'on_disable' | 'on_clear'
     }
 
     interface BlockSetting {

@@ -1,5 +1,5 @@
 /*!
- * CookieConsent v2.8.8
+ * CookieConsent v2.8.9
  * https://www.github.com/orestbida/cookieconsent
  * Author Orest Bida
  * Released under the MIT License
@@ -553,6 +553,8 @@
             }
 
             consent_modal_exists = true;
+
+            _addDataButtonListeners(consent_modal_inner);
         }
 
         var _createSettingsModal = function(lang){
@@ -997,7 +999,6 @@
 
                 if(consent_modal_exists){
                     _createConsentModal(new_validated_lang);
-                    _addDataButtonListeners(consent_modal_inner);
                 }
 
                 _createSettingsModal(new_validated_lang);
