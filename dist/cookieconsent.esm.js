@@ -1,5 +1,5 @@
 /*!
-* CookieConsent 3.0.0-rc.9
+* CookieConsent 3.0.0-rc.10
 * https://github.com/orestbida/cookieconsent
 * Author Orest Bida
 * Released under the MIT License
