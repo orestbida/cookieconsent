@@ -429,6 +429,13 @@
                 consent_modal.setAttribute('aria-labelledby', 'c-ttl');
                 consent_modal.setAttribute('aria-describedby', 'c-txt');
 
+                // exclude_tabindex, stop users being able to tab into the consent model
+                var gui_options_data = user_config['gui_options'];
+
+                if(gui_options_data && gui_options_data['consent_modal'] && gui_options_data['consent_modal']['exclude_tabindex'] === true) {
+                    consent_modal.setAttribute('tabIndex', '-1');
+                }
+
                 // Append consent modal to main container
                 all_modals_container.appendChild(consent_modal);
                 all_modals_container.appendChild(overlay);

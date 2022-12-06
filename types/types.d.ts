@@ -31,7 +31,8 @@ declare global {
             layout?: ModalLayout
             position?: ModalPosition
             transition?: GUITransition
-            swap_buttons?: boolean
+            swap_buttons?: boolean,
+            exclude_tabindex?: boolean,
         },
         settings_modal?: {
             layout?: SettingLayout

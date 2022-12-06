@@ -356,7 +356,8 @@ cookieconsent.run({
             layout: 'cloud',               // box/cloud/bar
             position: 'bottom center',     // bottom/middle/top + left/right/center
             transition: 'slide',           // zoom/slide
-            swap_buttons: false            // enable to invert buttons
+            swap_buttons: false,           // enable to invert buttons
+            exclude_tabindex: false        // exclude navigation through tabindex
         },
         settings_modal: {
             layout: 'box',                 // box/bar
