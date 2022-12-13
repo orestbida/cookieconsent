@@ -106,7 +106,7 @@ A __lightweight__ & __gdpr compliant__ cookie consent plugin written in plain ja
                 // auto_language: null                     // default: null; could also be 'browser' or 'document'
                 // autorun: true,                          // default: true
                 // force_consent: false,                   // default: false
-                // hide_from_bots: false,                  // default: false
+                // hide_from_bots: true,                   // default: true
                 // remove_cookie_tables: false             // default: false
                 // cookie_name: 'cc_cookie',               // default: 'cc_cookie'
                 // cookie_expiration: 182,                 // default: 182 (days)
@@ -236,7 +236,7 @@ A __lightweight__ & __gdpr compliant__ cookie consent plugin written in plain ja
                         // auto_language: '',                      // default: null; could also be 'browser' or 'document'
                         // autorun: true,                          // default: true
                         // force_consent: false,                   // default: false
-                        // hide_from_bots: false,                  // default: false
+                        // hide_from_bots: true,                   // default: true
                         // remove_cookie_tables: false             // default: false
                         // cookie_name: 'cc_cookie',               // default: 'cc_cookie'
                         // cookie_expiration: 182,                 // default: 182 (days)
@@ -756,7 +756,7 @@ Below a table which sums up all of the available options (must be passed to the 
 | `autoclear_cookies` 	| boolean  	| false   	| Enable if you want to automatically delete cookies when user opts-out of a specific category inside cookie settings               |
 | `page_scripts` 	    | boolean  	| false   	| Enable if you want to easily `manage existing <script>` tags. Check [manage third party scripts](#manage-third-party-scripts)     |
 | `remove_cookie_tables`| boolean  	| false   	| Enable if you want to remove the html cookie tables (but still want to make use of `autoclear_cookies`)                           |
-| `hide_from_bots`      | boolean  	| false   	| Enable if you don't want the plugin to run when a bot/crawler/webdriver is detected       |
+| `hide_from_bots`      | boolean  	| true    	| Disable if you want the plugin to run when a bot/crawler/webdriver is detected       |
 | `gui_options`         | object  	| -   	    | Customization option which allows to choose layout, position	and transition. Check [layout options & customization](#layout-options--customization) |
 | __`onAccept`__      	| function 	| -       	| Method run on: <br>  1. the moment the cookie consent is accepted <br> 2. after each page load (if cookie consent has already been accepted) |
 | __`onChange`__      	| function 	| -       	| Method run `whenever preferences are modified` (and only if cookie consent has already been accepted)                             |
