@@ -270,7 +270,7 @@ export class GlobalState {
             /**
             * @type {Object.<string, string[]>}
             */
-            _enabledServices: {},
+            _acceptedServices: {},
 
             /**
              * Keep track of the current state of the services
@@ -278,7 +278,7 @@ export class GlobalState {
              *
              * @type {Object.<string, string[]>}
              */
-            _customServicesSelection: {},
+            _enabledServices: {},
 
             /**
             * @type {Object.<string, string[]>}

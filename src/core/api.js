@@ -16,7 +16,7 @@ import {
     getActiveElement,
     resolveEnabledCategories,
     resolveEnabledServices,
-    updateServicesState,
+    updateModalToggles,
     toggleDisableInteraction,
     fireEvent,
     getKeys,
@@ -61,7 +61,6 @@ import {
     TOGGLE_DISABLE_INTERACTION_CLASS,
     TOGGLE_PREFERENCES_MODAL_CLASS,
     OPT_OUT_MODE,
-    OPT_IN_MODE,
     CONSENT_MODAL_NAME,
     ARIA_HIDDEN,
     PREFERENCES_MODAL_NAME
@@ -83,14 +82,12 @@ export const acceptCategory = (categories, excludedCategories = []) => {
  * @param {string} category
  */
 export const acceptedCategory = (category) => {
-    let categories;
 
-    if(!globalObj._state._invalidConsent || globalObj._config.mode === OPT_IN_MODE)
-        categories = getCurrentCategoriesState().accepted || [];
-    else  // mode is 'opt-out'
-        categories = globalObj._state._defaultEnabledCategories;
+    const acceptedCategories = !globalObj._state._invalidConsent
+        ? globalObj._state._acceptedCategories
+        : [];
 
-    return elContains(categories, category);
+    return elContains(acceptedCategories, category);
 };
 
 /**
@@ -100,7 +97,7 @@ export const acceptedCategory = (category) => {
  */
 export const acceptService = (service, category) => {
 
-    const { _allCategoryNames, _allDefinedServices } = globalObj._state;
+    const { _allCategoryNames, _allDefinedServices,  } = globalObj._state;
 
     if(
         !service
@@ -112,7 +109,7 @@ export const acceptService = (service, category) => {
         return false;
     }
 
-    updateServicesState(service, category);
+    updateModalToggles(service, category);
     acceptCategory();
 };
 
@@ -123,9 +120,12 @@ export const acceptService = (service, category) => {
  * @param {string} category
  */
 export const acceptedService = (service, category) => {
-    return elContains(globalObj._state._enabledServices[category] || [], service);
-};
+    const acceptedServices = !globalObj._state._invalidConsent
+        ? globalObj._state._acceptedServices[category]
+        : [];
 
+    return elContains(acceptedServices, service);
+};
 
 /**
  * Returns true if cookie was found and has valid value (not an empty string)
@@ -363,14 +363,14 @@ export const setLanguage = async (newLanguageCode, forceUpdate) => {
  */
 export const getUserPreferences = () => {
 
-    const { _acceptType, _enabledServices } = globalObj._state;
+    const { _acceptType, _acceptedServices } = globalObj._state;
     const { accepted, rejected } = getCurrentCategoriesState();
 
     return deepCopy({
         acceptType: _acceptType,
         acceptedCategories: accepted,
         rejectedCategories: rejected,
-        acceptedServices: _enabledServices,
+        acceptedServices: _acceptedServices,
         rejectedServices: retrieveRejectedServices()
     });
 };
@@ -566,8 +566,8 @@ const retrieveState = () => {
      */
     if(!state._invalidConsent){
 
-        state._enabledServices = {
-            ...state._enabledServices,
+        state._acceptedServices = {
+            ...state._acceptedServices,
             ...services
         };
 
@@ -576,11 +576,16 @@ const retrieveState = () => {
             ...categories
         ]);
     }else{
-        if(config.mode === OPT_OUT_MODE)
+        if(config.mode === OPT_OUT_MODE) {
             retrieveEnabledCategoriesAndServices();
+
+            state._acceptedCategories = [
+                ...state._defaultEnabledCategories
+            ];
+        }
     }
 
-    state._customServicesSelection = {...state._enabledServices};
+    state._enabledServices = {...state._acceptedServices};
 };
 
 /**

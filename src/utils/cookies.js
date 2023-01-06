@@ -134,7 +134,7 @@ export const saveCookiePreferences = () => {
     for(const categoryName of state._allCategoryNames){
 
         state._lastChangedServices[categoryName] = arrayDiff(
-            state._enabledServices[categoryName],
+            state._acceptedServices[categoryName],
             state._lastEnabledServices[categoryName]
         );
 
@@ -155,7 +155,7 @@ export const saveCookiePreferences = () => {
     for(const categoryName of state._allCategoryNames){
 
         const servicesToggles = globalObj._dom._serviceCheckboxInputs[categoryName];
-        const enabledServices = state._enabledServices[categoryName];
+        const enabledServices = state._acceptedServices[categoryName];
 
         for(const serviceName in servicesToggles){
             const serviceInput = servicesToggles[serviceName];
@@ -176,7 +176,7 @@ export const saveCookiePreferences = () => {
         data: state._cookieData,
         consentTimestamp: state._consentTimestamp.toISOString(),
         consentId: state._consentId,
-        services: deepCopy(state._enabledServices)
+        services: deepCopy(state._acceptedServices)
     };
 
     let firstUserConsent = false;

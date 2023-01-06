@@ -1,6 +1,5 @@
 import { globalObj } from '../core/global';
 import {
-    OPT_OUT_MODE,
     SCRIPT_TAG_SELECTOR,
     BUTTON_TAG, CLICK_EVENT,
     TOGGLE_DISABLE_INTERACTION_CLASS
@@ -173,6 +172,7 @@ export const fetchCategoriesAndServices = (allCategoryNames) => {
     const {
         _allDefinedCategories,
         _allDefinedServices,
+        _acceptedServices,
         _enabledServices,
         _readOnlyCategories
     } = globalObj._state;
@@ -184,6 +184,7 @@ export const fetchCategoriesAndServices = (allCategoryNames) => {
         const serviceNames = isObject(services) && getKeys(services) || [];
 
         _allDefinedServices[categoryName] = {};
+        _acceptedServices[categoryName] = [];
         _enabledServices[categoryName] = [];
 
         /**
@@ -191,7 +192,7 @@ export const fetchCategoriesAndServices = (allCategoryNames) => {
          */
         if(currCategory.readOnly){
             _readOnlyCategories.push(categoryName);
-            _enabledServices[categoryName] = serviceNames;
+            _acceptedServices[categoryName] = serviceNames;
         }
 
         globalObj._dom._serviceCheckboxInputs[categoryName] = {};
@@ -268,12 +269,12 @@ export const retrieveRejectedServices = () => {
     const {
         _allCategoryNames,
         _allDefinedServices,
-        _enabledServices
+        _acceptedServices
     } = globalObj._state;
 
     for(const categoryName of _allCategoryNames){
         rejectedServices[categoryName] = arrayDiff(
-            _enabledServices[categoryName],
+            _acceptedServices[categoryName],
             getKeys(_allDefinedServices[categoryName])
         );
     }
@@ -309,10 +310,7 @@ export const resolveEnabledCategories = (categories, excludedCategories) => {
         _acceptedCategories,
         _readOnlyCategories,
         _preferencesModalExists,
-        _invalidConsent,
-        _userConfig,
-        _defaultEnabledCategories,
-        _customServicesSelection,
+        _enabledServices,
         _allDefinedServices
     } = globalObj._state;
 
@@ -324,9 +322,7 @@ export const resolveEnabledCategories = (categories, excludedCategories) => {
     if(!categories){
         enabledCategories = _preferencesModalExists
             ? retrieveCategoriesFromModal()
-            : _invalidConsent && _userConfig.mode === OPT_OUT_MODE
-                ? _defaultEnabledCategories
-                : _acceptedCategories;
+            : _acceptedCategories;
     }else{
 
         if(isArray(categories)){
@@ -341,7 +337,7 @@ export const resolveEnabledCategories = (categories, excludedCategories) => {
          * If there are services, turn them all on or off
          */
         for(const categoryName of _allCategoryNames){
-            _customServicesSelection[categoryName] = elContains(enabledCategories, categoryName)
+            _enabledServices[categoryName] = elContains(enabledCategories, categoryName)
                 ? getKeys(_allDefinedServices[categoryName])
                 : [];
         }
@@ -367,9 +363,9 @@ export const resolveEnabledServices = (relativeCategory) => {
     const state = globalObj._state;
 
     const {
-        _customServicesSelection,
-        _readOnlyCategories,
         _enabledServices,
+        _readOnlyCategories,
+        _acceptedServices,
         _allDefinedServices,
         _allCategoryNames
     } = state;
@@ -381,13 +377,13 @@ export const resolveEnabledServices = (relativeCategory) => {
     /**
      * Save previously enabled services to calculate later on which of them was changed
      */
-    state._lastEnabledServices = deepCopy(_enabledServices);
+    state._lastEnabledServices = deepCopy(_acceptedServices);
 
     for(const categoryName of categoriesToConsider) {
 
         const services = _allDefinedServices[categoryName];
         const serviceNames = getKeys(services);
-        const customServicesSelection = _customServicesSelection[categoryName]?.length > 0;
+        const customServicesSelection = _enabledServices[categoryName]?.length > 0;
         const readOnlyCategory = elContains(_readOnlyCategories, categoryName);
 
         /**
@@ -397,25 +393,25 @@ export const resolveEnabledServices = (relativeCategory) => {
             continue;
 
         // Empty (previously) enabled services
-        _enabledServices[categoryName] = [];
+        _acceptedServices[categoryName] = [];
 
         // If category is marked as readOnly enable all its services
         if(readOnlyCategory){
-            _enabledServices[categoryName].push(...serviceNames);
+            _acceptedServices[categoryName].push(...serviceNames);
         }else{
 
             if(customServicesSelection){
-                const selectedServices = _customServicesSelection[categoryName];
-                _enabledServices[categoryName].push(...selectedServices);
+                const selectedServices = _enabledServices[categoryName];
+                _acceptedServices[categoryName].push(...selectedServices);
             }else{
-                _enabledServices[categoryName] = [];
+                _acceptedServices[categoryName] = [];
             }
         }
 
         /**
          * Make sure there are no duplicates inside array
          */
-        _enabledServices[categoryName] = unique(_enabledServices[categoryName]);
+        _acceptedServices[categoryName] = unique(_acceptedServices[categoryName]);
     }
 };
 
@@ -429,48 +425,76 @@ const dispatchPluginEvent = (eventName, data) => dispatchEvent(new CustomEvent(e
  * @param {string|string[]} service
  * @param {string} category
  */
-export const updateServicesState = (service, category) => {
+export const updateModalToggles = (service, category) => {
 
     const state = globalObj._state;
-
-    const {_allDefinedServices, _customServicesSelection } = state;
+    const {
+        _allDefinedServices,
+        _enabledServices,
+        _preferencesModalExists
+    } = state;
 
     const servicesInputs = globalObj._dom._serviceCheckboxInputs[category] || {};
+    const categoryInput = globalObj._dom._categoryCheckboxInputs[category] || {};
     const allServiceNames = getKeys(_allDefinedServices[category]);
 
     // Clear previously enabled services
-    _customServicesSelection[category] = [];
+    _enabledServices[category] = [];
 
     if(isString(service)){
         if(service === 'all'){
 
-            for(let serviceName in servicesInputs){
-                servicesInputs[serviceName].checked = true;
-                dispatchInputChangeEvent(servicesInputs[serviceName]);
+            // Enable all services
+            _enabledServices[category].push(...allServiceNames);
+
+            if(_preferencesModalExists){
+                for(let serviceName in servicesInputs){
+                    servicesInputs[serviceName].checked = true;
+                    dispatchInputChangeEvent(servicesInputs[serviceName]);
+                }
             }
 
         }else{
 
             // Enable only one service (if valid) and disable all the others
-            for(let serviceName in servicesInputs){
-                servicesInputs[serviceName].checked = service === serviceName;
-                dispatchInputChangeEvent(servicesInputs[serviceName]);
-            }
-
             if(elContains(allServiceNames, service))
-                _customServicesSelection[category].push(service);
+                _enabledServices[category].push(service);
 
+            if(_preferencesModalExists){
+                for(let serviceName in servicesInputs){
+                    servicesInputs[serviceName].checked = service === serviceName;
+                    dispatchInputChangeEvent(servicesInputs[serviceName]);
+                }
+            }
         }
     }else if(isArray(service)){
 
         for(let serviceName in servicesInputs){
             const validService = elContains(service, serviceName);
-            servicesInputs[serviceName].checked = validService;
-            dispatchInputChangeEvent(servicesInputs[serviceName]);
+            validService && _enabledServices[category].push(serviceName);
 
-            // Save enabled services
-            validService && _customServicesSelection[category].push(serviceName);
+            if(_preferencesModalExists){
+                servicesInputs[serviceName].checked = validService;
+                dispatchInputChangeEvent(servicesInputs[serviceName]);
+            }
         }
+    }
+
+    const uncheckCategory = _enabledServices[category].length === 0;
+
+    /**
+     * Remove the category from acceptedCategories if all services are disabled
+     */
+    if(uncheckCategory)
+        state._acceptedCategories = state._acceptedCategories.filter(cat => cat !== category);
+
+    /**
+     * If there are no services enabled in the
+     * current category, uncheck the category
+     */
+    if(_preferencesModalExists){
+        categoryInput.checked = uncheckCategory;
+        dispatchInputChangeEvent(categoryInput);
     }
 };
 

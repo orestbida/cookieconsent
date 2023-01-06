@@ -528,7 +528,7 @@ function createToggleLabel(label, value, sCurrentCategoryObject, isService, cate
             addEvent(toggle, CLICK_EVENT, () => {
                 const categoryServicesToggles = dom._serviceCheckboxInputs[value];
 
-                state._customServicesSelection[value] = [];
+                state._enabledServices[value] = [];
 
                 for(let serviceName in categoryServicesToggles){
                     categoryServicesToggles[serviceName].checked = toggle.checked;
@@ -543,17 +543,17 @@ function createToggleLabel(label, value, sCurrentCategoryObject, isService, cate
                 const categoryServicesToggles = dom._serviceCheckboxInputs[categoryName];
                 const categoryToggle = dom._categoryCheckboxInputs[categoryName];
 
-                state._customServicesSelection[categoryName] = [];
+                state._enabledServices[categoryName] = [];
 
                 for(let serviceName in categoryServicesToggles){
                     const serviceInput = categoryServicesToggles[serviceName];
 
                     if(serviceInput.checked){
-                        state._customServicesSelection[categoryName].push(serviceInput.value);
+                        state._enabledServices[categoryName].push(serviceInput.value);
                     }
                 }
 
-                categoryToggle.checked = state._customServicesSelection[categoryName].length > 0;
+                categoryToggle.checked = state._enabledServices[categoryName].length > 0;
             });
         })(categoryName);
 
@@ -571,7 +571,7 @@ function createToggleLabel(label, value, sCurrentCategoryObject, isService, cate
      */
     if(!state._invalidConsent){
         if(isService){
-            const enabledServices = state._enabledServices[categoryName];
+            const enabledServices = state._acceptedServices[categoryName];
             toggle.checked = sCurrentCategoryObject.readOnly || elContains(enabledServices, value);
         }else if(elContains(state._acceptedCategories, value)){
             toggle.checked = true;

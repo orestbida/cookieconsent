@@ -6,12 +6,12 @@ import { SCRIPT_TAG_SELECTOR } from './constants';
  * This function handles the loading/activation logic of the already
  * existing scripts based on the current accepted cookie categories
  *
- * @param {string[]} [mustEnableCategories]
+ * @param {string[]} [defaultEnabledCategories]
  */
-export const manageExistingScripts = (mustEnableCategories) => {
+export const manageExistingScripts = (defaultEnabledCategories) => {
 
     const {
-        _enabledServices,
+        _acceptedServices,
         _lastChangedServices,
         _allCategoryNames,
         _allDefinedServices,
@@ -27,7 +27,7 @@ export const manageExistingScripts = (mustEnableCategories) => {
     for(const categoryName of _allCategoryNames){
 
         const lastChangedServices = _lastChangedServices[categoryName]
-            || _enabledServices[categoryName]
+            || _acceptedServices[categoryName]
             || [];
 
         for(const serviceName of lastChangedServices){
@@ -39,7 +39,7 @@ export const manageExistingScripts = (mustEnableCategories) => {
 
             if(
                 !service._enabled
-                && elContains(_enabledServices[categoryName], serviceName)
+                && elContains(_acceptedServices[categoryName], serviceName)
                 && isFunction(onAccept)
             ){
                 service._enabled = true;
@@ -48,7 +48,7 @@ export const manageExistingScripts = (mustEnableCategories) => {
 
             else if(
                 service._enabled
-                && !elContains(_enabledServices[categoryName], serviceName)
+                && !elContains(_acceptedServices[categoryName], serviceName)
                 && isFunction(onReject)
             ){
                 service._enabled = false;
@@ -62,7 +62,7 @@ export const manageExistingScripts = (mustEnableCategories) => {
         return;
 
     const scripts = _allScriptTags;
-    const acceptedCategories = mustEnableCategories
+    const acceptedCategories = defaultEnabledCategories
         || _savedCookieContent.categories
         || [];
 
@@ -81,7 +81,7 @@ export const manageExistingScripts = (mustEnableCategories) => {
             const currScriptService = currScriptInfo._serviceName;
             const categoryAccepted = elContains(acceptedCategories, currScriptCategory);
             const serviceAccepted = currScriptService
-                ? elContains(_enabledServices[currScriptCategory], currScriptService)
+                ? elContains(_acceptedServices[currScriptCategory], currScriptService)
                 : false;
 
             /**
@@ -193,13 +193,13 @@ export const retrieveEnabledCategoriesAndServices = () => {
     for(const categoryName of state._allCategoryNames){
         const category = state._allDefinedCategories[categoryName];
 
-        if(category.enabled){
+        if(category.enabled || category.readOnly){
             state._defaultEnabledCategories.push(categoryName);
 
             const services = state._allDefinedServices[categoryName] || {};
 
             for(let serviceName in services){
-                state._enabledServices[categoryName].push(serviceName);
+                state._acceptedServices[categoryName].push(serviceName);
             }
         }
     }
