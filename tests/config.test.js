@@ -81,6 +81,6 @@ describe("Check modals' html generation under different settings", () =>{
         testConfig.mode = 'opt-out';
         api.eraseCookies('cc_cookie');
         await api.run(testConfig);
-        expect(api.acceptedCategory('analytics')).toBe(true);
+        expect(window.__service1Enabled).toBe(true);
     })
 })

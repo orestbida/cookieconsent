@@ -42,7 +42,7 @@ describe("API tests", () =>{
         fetch.mockClear();
     })
 
-    it('User preferences should be empty if consent is not valid', () => {
+    it('User preferences object should contain all the props.', () => {
         const userPreferences = api.getUserPreferences();
         expect(userPreferences).toMatchObject({
             acceptType: '',
@@ -233,22 +233,32 @@ describe("API tests", () =>{
 
     it('Should accept all services', () => {
         api.acceptService('all', 'analytics');
-        expect(globalObj._state._enabledServices['analytics'].length).toBe(getKeys(globalObj._state._allDefinedServices['analytics']).length)
+        const numAcceptedServices = api.getUserPreferences().acceptedServices['analytics'].length;
+        const numDefinedServices = Object.keys(api.getConfig('categories')['analytics'].services).length;
+        expect(numAcceptedServices).toBe(numDefinedServices+1);
     })
 
     it('Should reject all services', () => {
         api.acceptService([], 'analytics');
-        expect(globalObj._state._enabledServices['analytics'].length).toBe(0);
+        const numAcceptedServices = api.getUserPreferences().acceptedServices['analytics'].length;
+        expect(numAcceptedServices).toBe(0);
     })
 
     it('Should accept a specific service', () => {
         api.acceptService('service1', 'analytics');
-        expect(globalObj._state._enabledServices['analytics'].length).toBe(1);
+        const numAcceptedServices = api.getUserPreferences().acceptedServices['analytics'].length;
+        expect(numAcceptedServices).toBe(1);
     })
 
     it('Accepting a non existing service should reject all services', async () => {
         api.acceptService('does_not_exist', 'analytics');
-        expect(globalObj._state._enabledServices['analytics'].length).toBe(0);
+        const numAcceptedServices = api.getUserPreferences().acceptedServices['analytics'].length;
+        expect(numAcceptedServices).toBe(0);
+    });
+
+    it('acceptService should set the cookie', async () => {
+        api.acceptService('all', 'analytics');
+        expect(api.getCookie('consentId')).toBeTruthy();
     })
 
     it('Should return true when service is enabled', async () => {

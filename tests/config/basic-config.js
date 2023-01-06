@@ -29,7 +29,9 @@ const config = {
             services: {
                 service1: {
                     label: 'Service 1',
-                    onAccept: () => {},
+                    onAccept: () => {
+                        window.__service1Enabled = true;
+                    },
                     onReject: () => {}
                 },
                 service2: {

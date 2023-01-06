@@ -46,7 +46,9 @@ const config = {
             services: {
                 service1: {
                     label: 'Necessary Service 1',
-                    onAccept: () => {},
+                    onAccept: () => {
+                        window.__service1Enabled = true;
+                    },
                     onReject: () => {}
                 }
             }
@@ -72,7 +74,6 @@ const config = {
                     onAccept: () => {},
                     onReject: () => {}
                 }
-
             }
         },
         ads: {
