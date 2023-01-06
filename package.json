@@ -43,16 +43,16 @@
         "@types/jest": "^29.2.3",
         "babel-jest": "^29.3.1",
         "cssnano": "^5.1.14",
-        "eslint": "^8.28.0",
+        "eslint": "^8.31.0",
         "fast-glob": "^3.2.12",
         "jest": "^29.3.1",
         "jest-environment-jsdom": "^29.3.1",
         "postcss-combine-duplicated-selectors": "^10.0.3",
-        "rollup": "^3.5.0",
+        "rollup": "^3.9.1",
         "rollup-plugin-postcss": "^4.0.2",
-        "sass": "^1.56.1",
+        "sass": "^1.57.1",
         "sitemap": "^7.1.1",
-        "vitepress": "1.0.0-alpha.29"
+        "vitepress": "1.0.0-alpha.35"
     },
     "jest": {
         "transform": {
