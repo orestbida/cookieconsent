@@ -273,8 +273,11 @@ export class GlobalState {
             _enabledServices: {},
 
             /**
-            * @type {Object.<string, string[]>}
-            */
+             * Keep track of the current state of the services
+             * (may not be the same as enabledServices)
+             *
+             * @type {Object.<string, string[]>}
+             */
             _customServicesSelection: {},
 
             /**

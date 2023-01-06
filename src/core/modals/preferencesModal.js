@@ -45,10 +45,10 @@ export const createPreferencesModal = (api, createMainContainer) => {
     const {hide, hidePreferences, acceptCategory} = api;
 
     /**
-     * @param {string|string[]} [acceptType]
+     * @param {string|string[]} [categories]
      */
-    const acceptHelper = (acceptType) => {
-        acceptCategory(acceptType);
+    const acceptHelper = (categories) => {
+        acceptCategory(categories);
         hidePreferences();
         hide();
     };

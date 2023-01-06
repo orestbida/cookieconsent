@@ -579,6 +579,8 @@ const retrieveState = () => {
         if(config.mode === OPT_OUT_MODE)
             retrieveEnabledCategoriesAndServices();
     }
+
+    state._customServicesSelection = {...state._enabledServices};
 };
 
 /**

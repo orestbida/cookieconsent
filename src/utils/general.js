@@ -1,5 +1,6 @@
 import { globalObj } from '../core/global';
 import {
+    OPT_OUT_MODE,
     SCRIPT_TAG_SELECTOR,
     BUTTON_TAG, CLICK_EVENT,
     TOGGLE_DISABLE_INTERACTION_CLASS
@@ -281,7 +282,6 @@ export const retrieveRejectedServices = () => {
 };
 
 export const retrieveCategoriesFromModal = () => {
-    const { _customServicesSelection } = globalObj._state;
     const toggles = globalObj._dom._categoryCheckboxInputs;
 
     if(!toggles)
@@ -291,12 +291,6 @@ export const retrieveCategoriesFromModal = () => {
 
     for(let categoryName in toggles){
         if(toggles[categoryName].checked){
-            enabledCategories.push(categoryName);
-        }
-    }
-
-    for(let categoryName in _customServicesSelection) {
-        if(_customServicesSelection[categoryName].length > 0){
             enabledCategories.push(categoryName);
         }
     }
@@ -312,9 +306,14 @@ export const resolveEnabledCategories = (categories, excludedCategories) => {
 
     const {
         _allCategoryNames,
+        _acceptedCategories,
         _readOnlyCategories,
-        _savedCookieContent,
-        _preferencesModalExists
+        _preferencesModalExists,
+        _invalidConsent,
+        _userConfig,
+        _defaultEnabledCategories,
+        _customServicesSelection,
+        _allDefinedServices
     } = globalObj._state;
 
     /**
@@ -325,15 +324,26 @@ export const resolveEnabledCategories = (categories, excludedCategories) => {
     if(!categories){
         enabledCategories = _preferencesModalExists
             ? retrieveCategoriesFromModal()
-            : _savedCookieContent.categories;
+            : _invalidConsent && _userConfig.mode === OPT_OUT_MODE
+                ? _defaultEnabledCategories
+                : _acceptedCategories;
     }else{
+
         if(isArray(categories)){
             enabledCategories.push(...categories);
         }else if(isString(categories)){
-            if(categories === 'all')
-                enabledCategories = _allCategoryNames;
-            else
-                enabledCategories.push(categories);
+            enabledCategories = categories === 'all'
+                ? _allCategoryNames
+                : [categories];
+        }
+
+        /**
+         * If there are services, turn them all on or off
+         */
+        for(const categoryName of _allCategoryNames){
+            _customServicesSelection[categoryName] = elContains(enabledCategories, categoryName)
+                ? getKeys(_allDefinedServices[categoryName])
+                : [];
         }
     }
 
@@ -349,26 +359,31 @@ export const resolveEnabledCategories = (categories, excludedCategories) => {
     setAcceptedCategories(enabledCategories);
 };
 
-export const resolveEnabledServices = () => {
+/**
+ * @param {string} [relativeCategory]
+ */
+export const resolveEnabledServices = (relativeCategory) => {
 
     const state = globalObj._state;
 
     const {
-        _acceptType,
         _customServicesSelection,
         _readOnlyCategories,
-        _acceptedCategories,
         _enabledServices,
         _allDefinedServices,
         _allCategoryNames
     } = state;
+
+    const categoriesToConsider = relativeCategory
+        ? [relativeCategory]
+        : _allCategoryNames;
 
     /**
      * Save previously enabled services to calculate later on which of them was changed
      */
     state._lastEnabledServices = deepCopy(_enabledServices);
 
-    for(const categoryName of _allCategoryNames) {
+    for(const categoryName of categoriesToConsider) {
 
         const services = _allDefinedServices[categoryName];
         const serviceNames = getKeys(services);
@@ -388,26 +403,13 @@ export const resolveEnabledServices = () => {
         if(readOnlyCategory){
             _enabledServices[categoryName].push(...serviceNames);
         }else{
-            if(_acceptType === 'all'){
-                if(customServicesSelection){
-                    const selectedServices = _customServicesSelection[categoryName];
-                    _enabledServices[categoryName].push(...selectedServices);
-                }else{
-                    _enabledServices[categoryName].push(...serviceNames);
-                }
-            }else if(_acceptType === 'necessary'){
-                _enabledServices[categoryName] = [];
-            }else {
-                if(customServicesSelection){
-                    const selectedServices = _customServicesSelection[categoryName];
-                    _enabledServices[categoryName].push(...selectedServices);
-                }else if(elContains(_acceptedCategories, categoryName)){
-                    _enabledServices[categoryName].push(...serviceNames);
-                }
-            }
 
-            // Reset selection
-            state._customServicesSelection = {};
+            if(customServicesSelection){
+                const selectedServices = _customServicesSelection[categoryName];
+                _enabledServices[categoryName].push(...selectedServices);
+            }else{
+                _enabledServices[categoryName] = [];
+            }
         }
 
         /**

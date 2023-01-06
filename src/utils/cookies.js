@@ -6,7 +6,6 @@ import {
     _log,
     indexOf,
     uuidv4,
-    setAcceptedCategories,
     getRemainingExpirationTimeMS,
     getExpiresAfterDaysValue,
     elContains,
@@ -192,7 +191,6 @@ export const saveCookiePreferences = () => {
             firstUserConsent = true;
         }
 
-        setAcceptedCategories(state._acceptedCategories);
 
         if(!state._lastConsentTimestamp)
             state._lastConsentTimestamp = state._consentTimestamp;
