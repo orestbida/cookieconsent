@@ -1150,7 +1150,7 @@ Note:
             }
         </style>
         ```
-    For a full example check the <a href="demo/index2.html">second demo</a>.
+    For a full example check the <a href="demo/demo_gtm">second demo</a>.
     </p>
     </details>
 -   <details><summary>How to create custom cookie tables</summary>
