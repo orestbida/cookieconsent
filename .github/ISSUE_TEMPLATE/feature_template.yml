@@ -1,0 +1,30 @@
+name: Feature Request
+description: File a feature request
+title: "[Feat]: "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this feature request!
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: Is your feature request related to a problem? Please describe in a clear and concise way what you want to happen. Add any considered drawbacks.
+    validations:
+      required: true
+  - type: textarea
+    id: proposed-solution
+    attributes:
+      label: Proposed solution
+      description: Describe the solution you'd adopt (if you have one). E.g. code snippet example.
+    validations:
+      required: false
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional details
+      description: Anything you find useful. E.g. usage examples, screenshots ...
+    validations:
+      required: false
