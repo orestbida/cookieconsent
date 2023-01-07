@@ -27,7 +27,7 @@ body:
     id: steps-reproduce
     attributes:
       label: Steps to reproduce
-      description: Which steps do we need to take to reproduce this error?
+      description: Which steps do we need to take to reproduce this issue?
       placeholder: Concise list of steps
     validations:
       required: true
