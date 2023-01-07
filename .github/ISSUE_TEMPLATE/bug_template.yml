@@ -1,7 +1,7 @@
 name: Bug Report
 description: File a bug report
 title: "[Bug]: "
-labels: ["bug", "triage"]
+labels: ["bug"]
 body:
   - type: markdown
     attributes:
@@ -31,15 +31,19 @@ body:
       placeholder: Concise list of steps
     validations:
       required: true
-  - type: dropdown
+  - type: textarea
+    id: fix
+    attributes:
+      label: Proposed fix or additional info.
+      description: Do you have anything in mind that can help fix this issue?
+    validations:
+      required: false
+  - type: input
     id: version
     attributes:
       label: Version
       description: What version of cookieconsent are you using?
-      options:
-        - v2.8.0
-        - v3.0.0 (Default)
-        - other
+      placeholder: E.g. 2.8.9
     validations:
       required: true
   - type: dropdown
@@ -53,11 +57,3 @@ body:
         - Safari
         - Microsoft Edge
         - Other
-  - type: checkboxes
-    id: terms
-    attributes:
-      label: Code of Conduct
-      description: By submitting this issue, you agree to follow our [Code of Conduct](../CODE_OF_CONDUCT.md)
-      options:
-        - label: I agree to follow this project's Code of Conduct
-          required: true
