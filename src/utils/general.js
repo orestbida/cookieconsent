@@ -469,7 +469,7 @@ export const updateModalToggles = (service, category) => {
         }
     }else if(isArray(service)){
 
-        for(let serviceName in servicesInputs){
+        for(let serviceName of allServiceNames){
             const validService = elContains(service, serviceName);
             validService && _enabledServices[category].push(serviceName);
 
@@ -483,10 +483,11 @@ export const updateModalToggles = (service, category) => {
     const uncheckCategory = _enabledServices[category].length === 0;
 
     /**
-     * Remove the category from acceptedCategories if all services are disabled
+     * Remove/add the category from acceptedCategories
      */
-    if(uncheckCategory)
-        state._acceptedCategories = state._acceptedCategories.filter(cat => cat !== category);
+    state._acceptedCategories = uncheckCategory
+        ? state._acceptedCategories.filter(cat => cat !== category)
+        : unique([...state._acceptedCategories, category]);
 
     /**
      * If there are no services enabled in the
