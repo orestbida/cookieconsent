@@ -494,7 +494,7 @@ export const updateModalToggles = (service, category) => {
      * current category, uncheck the category
      */
     if(_preferencesModalExists){
-        categoryInput.checked = uncheckCategory;
+        categoryInput.checked = !uncheckCategory;
         dispatchInputChangeEvent(categoryInput);
     }
 };
