@@ -7,6 +7,10 @@ $toggle-knob-height: 23px;
 $toggle-knob-width: 50px;
 $toggle-knob-icon-width: 2px;
 
+$service-toggle-knob-height: 19px;
+$service-toggle-knob-width: 42px;
+$service-toggle-knob-icon-width: 1.7px;
+
 :root{
     --cc-pm-toggle-border-radius: 4em;
 }
@@ -315,13 +319,39 @@ $toggle-knob-icon-width: 2px;
         vertical-align: middle;
         z-index: 1;
         transform: translateZ(0);
+    }
 
-        &.toggle-service{
-            position: relative;
-            transform: scale(.85) translateZ(0);
-            transform-origin: right;
-            margin: 0;
-            right: 4px;
+    .toggle-service{
+        position: relative;
+        transform-origin: right;
+        margin: 0;
+        right: 2px;
+
+        width: $service-toggle-knob-width;
+        height: $service-toggle-knob-height;
+
+        .section__toggle,
+        .toggle__icon,.toggle__label {
+            width: $service-toggle-knob-width;
+            height: $service-toggle-knob-height;
+        }
+
+        .toggle__icon::after{
+            height: $service-toggle-knob-height;
+            width: $service-toggle-knob-height;
+        }
+
+        .section__toggle:checked ~ .toggle__icon::after{
+            transform: translateX(23px);
+        }
+
+        .toggle__icon-off::after,
+        .toggle__icon-off::before{
+            width: $service-toggle-knob-icon-width;
+        }
+
+        .toggle__icon-on::before{
+            border-width: 0 $service-toggle-knob-icon-width $service-toggle-knob-icon-width 0;
         }
     }
 
@@ -816,7 +846,7 @@ $toggle-knob-icon-width: 2px;
     }
 
     .toggle-service{
-        left: 3px;
+        left: 2px;
     }
 
     .pm__service-icon{
@@ -840,6 +870,10 @@ $toggle-knob-icon-width: 2px;
 
     .toggle__icon::after{
         transform: translateX(27px);
+    }
+
+    .toggle-service .toggle__icon::after{
+        transform: translateX(23px);
     }
 
     .section__toggle:checked ~ .toggle__icon::after{
