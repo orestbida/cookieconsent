@@ -6,14 +6,18 @@
 
 A __lightweight__ & __gdpr compliant__ cookie consent plugin written in plain javascript.
 
+## Demo
+You can check out the dedicated [playground](https://playground.cookieconsent.orestbida.com).
+
+There are also a few examples available on [Stackblitz](https://stackblitz.com/@orestbida/collections/cookieconsent-v3).
 
 ## Documentation
-To check out docs, visit [cookieconsent.orestbida.com](https://cookieconsent.orestbida.com)
+Docs. available at [cookieconsent.orestbida.com](https://cookieconsent.orestbida.com).
 
 ## Contributing
-TODO: Add Contributing Guide
+Please read the [contribution guide](/CONTRIBUTING.md).
 
-Thanks to all the people who already contributed
+Thanks to all the people who already contributed!
 
 <a href="https://github.com/orestbida/cookieconsent/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=orestbida/cookieconsent" />
