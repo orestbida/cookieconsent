@@ -26,6 +26,7 @@ import {
     BUTTON_TAG,
     BTN_GROUP_CLASS,
     CLICK_EVENT,
+    OPT_OUT_MODE,
     DATA_ROLE
 } from '../../utils/constants';
 
@@ -576,7 +577,7 @@ function createToggleLabel(label, value, sCurrentCategoryObject, isService, cate
         }else if(elContains(state._acceptedCategories, value)){
             toggle.checked = true;
         }
-    }else if(sCurrentCategoryObject.enabled || sCurrentCategoryObject.readOnly){
+    }else if(sCurrentCategoryObject.readOnly || (state._userConfig.mode === OPT_OUT_MODE && sCurrentCategoryObject.enabled)){
         toggle.checked = true;
     }
 
