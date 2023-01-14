@@ -531,8 +531,12 @@ function createToggleLabel(label, value, sCurrentCategoryObject, isService, cate
 
                 state._enabledServices[value] = [];
 
+                /**
+                 * Enable/disable all services
+                 */
                 for(let serviceName in categoryServicesToggles){
                     categoryServicesToggles[serviceName].checked = toggle.checked;
+                    state._enabledServices[value].push(serviceName);
                 }
             });
         })(value);

@@ -32,10 +32,11 @@ export const manageExistingScripts = (defaultEnabledCategories) => {
 
         for(const serviceName of lastChangedServices){
             const service = _allDefinedServices[categoryName][serviceName];
-            const {onAccept, onReject} = service;
 
             if(!service)
                 continue;
+
+            const {onAccept, onReject} = service;
 
             if(
                 !service._enabled
