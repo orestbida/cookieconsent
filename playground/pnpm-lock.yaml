@@ -8,7 +8,7 @@ specifiers:
 
 devDependencies:
   sass: 1.57.1
-  vanilla-cookieconsent: github.com/orestbida/cookieconsent/a9c118d56eb03475e16fc485f3948e393230d6bb
+  vanilla-cookieconsent: github.com/orestbida/cookieconsent/cad650f306276f0f2faff3723a4d6893ac8770b3
   vite: 4.0.4_sass@1.57.1
   vite-plugin-minify: 1.5.2_vite@4.0.4
 
@@ -403,11 +403,11 @@ packages:
       he: 1.2.0
       param-case: 3.0.4
       relateurl: 0.2.7
-      terser: 5.16.0
+      terser: 5.16.1
     dev: true
 
-  /immutable/4.1.0:
-    resolution: {integrity: sha512-oNkuqVTA8jqG1Q6c+UglTOD1xhC1BtjKI7XkCXRkZHrN5m18/XsnUp8Q89GkQO/z+0WjonSvl0FLhDYftp46nQ==}
+  /immutable/4.2.2:
+    resolution: {integrity: sha512-fTMKDwtbvO5tldky9QZ2fMX7slR0mYpY5nbnFWYp0fOzDhHqhgIw9KoYgxLWsoNTS9ZHGauHj18DTyEw6BK3Og==}
     dev: true
 
   /is-binary-path/2.1.0:
@@ -535,7 +535,7 @@ packages:
     hasBin: true
     dependencies:
       chokidar: 3.5.3
-      immutable: 4.1.0
+      immutable: 4.2.2
       source-map-js: 1.0.2
     dev: true
 
@@ -561,8 +561,8 @@ packages:
     engines: {node: '>= 0.4'}
     dev: true
 
-  /terser/5.16.0:
-    resolution: {integrity: sha512-KjTV81QKStSfwbNiwlBXfcgMcOloyuRdb62/iLFPGBcVNF4EXjhdYBhYHmbJpiBrVxZhDvltE11j+LBQUxEEJg==}
+  /terser/5.16.1:
+    resolution: {integrity: sha512-xvQfyfA1ayT0qdK47zskQgRZeWLoOQ8JQ6mIgRGVNwZKdQMU+5FkCBjmv4QjcrTzyZquRw2FVtlJSRUmMKQslw==}
     engines: {node: '>=10'}
     hasBin: true
     dependencies:
@@ -626,8 +626,8 @@ packages:
       fsevents: 2.3.2
     dev: true
 
-  github.com/orestbida/cookieconsent/a9c118d56eb03475e16fc485f3948e393230d6bb:
-    resolution: {tarball: https://codeload.github.com/orestbida/cookieconsent/tar.gz/a9c118d56eb03475e16fc485f3948e393230d6bb}
+  github.com/orestbida/cookieconsent/cad650f306276f0f2faff3723a4d6893ac8770b3:
+    resolution: {tarball: https://codeload.github.com/orestbida/cookieconsent/tar.gz/cad650f306276f0f2faff3723a4d6893ac8770b3}
     name: vanilla-cookieconsent
     version: 3.0.0-rc.12
     requiresBuild: true
