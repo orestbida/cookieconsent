@@ -8,7 +8,7 @@ specifiers:
 
 devDependencies:
   sass: 1.57.1
-  vanilla-cookieconsent: github.com/orestbida/cookieconsent/a0940fb473caf10e380942a17bdb6a1133c9c8eb
+  vanilla-cookieconsent: github.com/orestbida/cookieconsent/395ea5181681b117e37ffdcc9a0aeb612b136fbc
   vite: 4.0.4_sass@1.57.1
   vite-plugin-minify: 1.5.2_vite@4.0.4
 
@@ -626,8 +626,8 @@ packages:
       fsevents: 2.3.2
     dev: true
 
-  github.com/orestbida/cookieconsent/a0940fb473caf10e380942a17bdb6a1133c9c8eb:
-    resolution: {tarball: https://codeload.github.com/orestbida/cookieconsent/tar.gz/a0940fb473caf10e380942a17bdb6a1133c9c8eb}
+  github.com/orestbida/cookieconsent/395ea5181681b117e37ffdcc9a0aeb612b136fbc:
+    resolution: {tarball: https://codeload.github.com/orestbida/cookieconsent/tar.gz/395ea5181681b117e37ffdcc9a0aeb612b136fbc}
     name: vanilla-cookieconsent
     version: 3.0.0-rc.12
     requiresBuild: true
