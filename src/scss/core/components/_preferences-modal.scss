@@ -331,7 +331,8 @@ $service-toggle-knob-icon-width: 1.7px;
         height: $service-toggle-knob-height;
 
         .section__toggle,
-        .toggle__icon,.toggle__label {
+        .toggle__icon,
+        .toggle__label {
             width: $service-toggle-knob-width;
             height: $service-toggle-knob-height;
         }
@@ -348,10 +349,14 @@ $service-toggle-knob-icon-width: 1.7px;
         .toggle__icon-off::after,
         .toggle__icon-off::before{
             width: $service-toggle-knob-icon-width;
+            height: 9px;
+            margin: 0.1px 2px 0 auto;
         }
 
         .toggle__icon-on::before{
             border-width: 0 $service-toggle-knob-icon-width $service-toggle-knob-icon-width 0;
+            padding: 1.3px 1.3px 6px;
+            margin: -3.8px auto 0 6px;
         }
     }
 
