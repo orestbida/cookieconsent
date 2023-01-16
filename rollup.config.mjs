@@ -1,5 +1,5 @@
 import { defineConfig } from 'rollup';
-import { terser } from "@el3um4s/rollup-plugin-terser";
+import terser from "@rollup/plugin-terser";
 import postcssCombineDuplicatedSelectors from 'postcss-combine-duplicated-selectors';
 import cssnanoPlugin from 'cssnano';
 import postcss from 'rollup-plugin-postcss';

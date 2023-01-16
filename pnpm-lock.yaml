@@ -3,12 +3,12 @@ lockfileVersion: 5.4
 specifiers:
   '@babel/core': ^7.20.12
   '@babel/preset-env': ^7.20.2
-  '@el3um4s/rollup-plugin-terser': ^1.0.2
   '@rollup/plugin-eslint': ^9.0.2
+  '@rollup/plugin-terser': ^0.3.0
   '@types/jest': ^29.2.5
   babel-jest: ^29.3.1
   cssnano: ^5.1.14
-  eslint: ^8.31.0
+  eslint: ^8.32.0
   fast-glob: ^3.2.12
   jest: ^29.3.1
   jest-environment-jsdom: ^29.3.1
@@ -22,12 +22,12 @@ specifiers:
 devDependencies:
   '@babel/core': 7.20.12
   '@babel/preset-env': 7.20.2_@babel+core@7.20.12
-  '@el3um4s/rollup-plugin-terser': 1.0.2_rollup@3.10.0
   '@rollup/plugin-eslint': 9.0.2_rollup@3.10.0
+  '@rollup/plugin-terser': 0.3.0_rollup@3.10.0
   '@types/jest': 29.2.5
   babel-jest: 29.3.1_@babel+core@7.20.12
   cssnano: 5.1.14_postcss@8.4.20
-  eslint: 8.31.0
+  eslint: 8.32.0
   fast-glob: 3.2.12
   jest: 29.3.1
   jest-environment-jsdom: 29.3.1
@@ -1428,18 +1428,6 @@ packages:
       - '@algolia/client-search'
     dev: true
 
-  /@el3um4s/rollup-plugin-terser/1.0.2_rollup@3.10.0:
-    resolution: {integrity: sha512-QJx8pyBg89GFU47cWUt87trqgJpxnrr6pJeBKIs0sCoDfYuDGXfV6aLUV2I06h2r2MKpfIfflvceMBRo6FlZcw==}
-    peerDependencies:
-      rollup: '>=1.0.0'
-    dependencies:
-      '@babel/code-frame': 7.18.6
-      jest-worker: 29.3.1
-      rollup: 3.10.0
-      serialize-javascript: 6.0.0
-      terser: 5.15.1
-    dev: true
-
   /@esbuild/android-arm/0.16.14:
     resolution: {integrity: sha512-u0rITLxFIeYAvtJXBQNhNuV4YZe+MD1YvIWT7Nicj8hZAtRVZk2PgNH6KclcKDVHz1ChLKXRfX7d7tkbQBUfrg==}
     engines: {node: '>=12'}
@@ -1980,10 +1968,25 @@ packages:
         optional: true
     dependencies:
       '@rollup/pluginutils': 5.0.2_rollup@3.10.0
-      eslint: 8.31.0
+      eslint: 8.32.0
       rollup: 3.10.0
     transitivePeerDependencies:
       - supports-color
+    dev: true
+
+  /@rollup/plugin-terser/0.3.0_rollup@3.10.0:
+    resolution: {integrity: sha512-mYTkNW9KjOscS/3QWU5LfOKsR3/fAAVDaqcAe2TZ7ng6pN46f+C7FOZbITuIW/neA+PhcjoKl7yMyB3XcmA4gw==}
+    engines: {node: '>=14.0.0'}
+    peerDependencies:
+      rollup: ^2.x || ^3.x
+    peerDependenciesMeta:
+      rollup:
+        optional: true
+    dependencies:
+      rollup: 3.10.0
+      serialize-javascript: 6.0.0
+      smob: 0.0.6
+      terser: 5.15.1
     dev: true
 
   /@rollup/pluginutils/5.0.2_rollup@3.10.0:
@@ -3026,13 +3029,13 @@ packages:
       estraverse: 5.3.0
     dev: true
 
-  /eslint-utils/3.0.0_eslint@8.31.0:
+  /eslint-utils/3.0.0_eslint@8.32.0:
     resolution: {integrity: sha512-uuQC43IGctw68pJA1RgbQS8/NP7rch6Cwd4j3ZBtgo4/8Flj4eGE7ZYSZRN3iq5pVUv6GPdW5Z1RFleo84uLDA==}
     engines: {node: ^10.0.0 || ^12.0.0 || >= 14.0.0}
     peerDependencies:
       eslint: '>=5'
     dependencies:
-      eslint: 8.31.0
+      eslint: 8.32.0
       eslint-visitor-keys: 2.1.0
     dev: true
 
@@ -3046,8 +3049,8 @@ packages:
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
     dev: true
 
-  /eslint/8.31.0:
-    resolution: {integrity: sha512-0tQQEVdmPZ1UtUKXjX7EMm9BlgJ08G90IhWh0PKDCb3ZLsgAOHI8fYSIzYVZej92zsgq+ft0FGsxhJ3xo2tbuA==}
+  /eslint/8.32.0:
+    resolution: {integrity: sha512-nETVXpnthqKPFyuY2FNjz/bEd6nbosRgKbkgS/y1C7LJop96gYHWpiguLecMHQ2XCPxn77DS0P+68WzG6vkZSQ==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
     hasBin: true
     dependencies:
@@ -3062,7 +3065,7 @@ packages:
       doctrine: 3.0.0
       escape-string-regexp: 4.0.0
       eslint-scope: 7.1.1
-      eslint-utils: 3.0.0_eslint@8.31.0
+      eslint-utils: 3.0.0_eslint@8.32.0
       eslint-visitor-keys: 3.3.0
       espree: 9.4.1
       esquery: 1.4.0
@@ -5207,6 +5210,10 @@ packages:
   /slash/3.0.0:
     resolution: {integrity: sha512-g9Q1haeby36OSStwb4ntCGGGaKsaVSjQ68fBxoQcutl5fS1vuY18H3wSt3jFyFtrkx+Kz0V1G85A4MyAdDMi2Q==}
     engines: {node: '>=8'}
+    dev: true
+
+  /smob/0.0.6:
+    resolution: {integrity: sha512-V21+XeNni+tTyiST1MHsa84AQhT1aFZipzPpOFAVB8DkHzwJyjjAmt9bgwnuZiZWnIbMo2duE29wybxv/7HWUw==}
     dev: true
 
   /source-map-js/1.0.2:
