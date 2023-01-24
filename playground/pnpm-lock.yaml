@@ -8,7 +8,7 @@ specifiers:
 
 devDependencies:
   sass: 1.57.1
-  vanilla-cookieconsent: github.com/orestbida/cookieconsent/395ea5181681b117e37ffdcc9a0aeb612b136fbc
+  vanilla-cookieconsent: github.com/orestbida/cookieconsent/41baf8c493fab147e3a757c1481508857ed1f828
   vite: 4.0.4_sass@1.57.1
   vite-plugin-minify: 1.5.2_vite@4.0.4
 
@@ -249,8 +249,8 @@ packages:
       '@jridgewell/sourcemap-codec': 1.4.14
     dev: true
 
-  /acorn/8.8.1:
-    resolution: {integrity: sha512-7zFpHzhnqYKrkYdUjF1HI1bzd0VygEGX8lFk4k5zVMqHEoES+P+7TKI+EvLO9WVMJ8eekdO0aDEK044xTXwPPA==}
+  /acorn/8.8.2:
+    resolution: {integrity: sha512-xjIYgE8HBrkpd/sJqOGNspf8uHG+NOHGOw6a/Urj8taM2EXfdNAH2oFcPeIFfsv3+kz/mJrS5VuMqbNLjCa2vw==}
     engines: {node: '>=0.4.0'}
     hasBin: true
     dev: true
@@ -301,8 +301,8 @@ packages:
       fsevents: 2.3.2
     dev: true
 
-  /clean-css/5.3.1:
-    resolution: {integrity: sha512-lCr8OHhiWCTw4v8POJovCoh4T7I9U11yVsPjMWWnnMmp9ZowCxyad1Pathle/9HjaDp+fdQKjO9fQydE6RHTZg==}
+  /clean-css/5.3.2:
+    resolution: {integrity: sha512-JVJbM+f3d3Q704rF4bqQ5UUyTtuJ0JRKNbTKVEeujCCBoMdkEi+V+e8oktO9qGQNSvHrFTM6JZRXrUvGR1czww==}
     engines: {node: '>= 10.0'}
     dependencies:
       source-map: 0.6.1
@@ -398,7 +398,7 @@ packages:
     hasBin: true
     dependencies:
       camel-case: 4.1.2
-      clean-css: 5.3.1
+      clean-css: 5.3.2
       commander: 8.3.0
       he: 1.2.0
       param-case: 3.0.4
@@ -521,8 +521,8 @@ packages:
       supports-preserve-symlinks-flag: 1.0.0
     dev: true
 
-  /rollup/3.10.0:
-    resolution: {integrity: sha512-JmRYz44NjC1MjVF2VKxc0M1a97vn+cDxeqWmnwyAF4FvpjK8YFdHpaqvQB+3IxCvX05vJxKZkoMDU8TShhmJVA==}
+  /rollup/3.10.1:
+    resolution: {integrity: sha512-3Er+yel3bZbZX1g2kjVM+FW+RUWDxbG87fcqFM5/9HbPCTpbVp6JOLn7jlxnNlbu7s/N/uDA4EV/91E2gWnxzw==}
     engines: {node: '>=14.18.0', npm: '>=8.0.0'}
     hasBin: true
     optionalDependencies:
@@ -567,7 +567,7 @@ packages:
     hasBin: true
     dependencies:
       '@jridgewell/source-map': 0.3.2
-      acorn: 8.8.1
+      acorn: 8.8.2
       commander: 2.20.3
       source-map-support: 0.5.21
     dev: true
@@ -620,14 +620,14 @@ packages:
       esbuild: 0.16.17
       postcss: 8.4.21
       resolve: 1.22.1
-      rollup: 3.10.0
+      rollup: 3.10.1
       sass: 1.57.1
     optionalDependencies:
       fsevents: 2.3.2
     dev: true
 
-  github.com/orestbida/cookieconsent/395ea5181681b117e37ffdcc9a0aeb612b136fbc:
-    resolution: {tarball: https://codeload.github.com/orestbida/cookieconsent/tar.gz/395ea5181681b117e37ffdcc9a0aeb612b136fbc}
+  github.com/orestbida/cookieconsent/41baf8c493fab147e3a757c1481508857ed1f828:
+    resolution: {tarball: https://codeload.github.com/orestbida/cookieconsent/tar.gz/41baf8c493fab147e3a757c1481508857ed1f828}
     name: vanilla-cookieconsent
     version: 3.0.0-rc.12
     requiresBuild: true
