@@ -42,14 +42,14 @@ body:
     id: version
     attributes:
       label: Version
-      description: What version of cookieconsent are you using?
+      description: Which version of cookieconsent are you using?
       placeholder: E.g. 2.8.9
     validations:
       required: true
   - type: dropdown
     id: browsers
     attributes:
-      label: What browsers are you seeing the problem on?
+      label: On which browser do you see the issue?
       multiple: true
       options:
         - Firefox
