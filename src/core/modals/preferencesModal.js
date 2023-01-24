@@ -528,15 +528,15 @@ function createToggleLabel(label, value, sCurrentCategoryObject, isService, cate
         ((value)=>{
             addEvent(toggle, CLICK_EVENT, () => {
                 const categoryServicesToggles = dom._serviceCheckboxInputs[value];
-
+                const checked = toggle.checked;
                 state._enabledServices[value] = [];
 
                 /**
                  * Enable/disable all services
                  */
                 for(let serviceName in categoryServicesToggles){
-                    categoryServicesToggles[serviceName].checked = toggle.checked;
-                    state._enabledServices[value].push(serviceName);
+                    categoryServicesToggles[serviceName].checked = checked;
+                    checked && state._enabledServices[value].push(serviceName);
                 }
             });
         })(value);
