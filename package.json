@@ -12,7 +12,9 @@
     "scripts": {
         "preinstall": "npx only-allow pnpm",
         "dev": "rollup --config --watch",
-        "build": "rollup --config",
+        "build": "pnpm rollup:full & pnpm rollup:core",
+        "rollup:full": "rollup --config ./rollup-full.config.mjs",
+        "rollup:core": "rollup --config ./rollup-core.config.mjs",
         "docs:dev": "vitepress dev docs",
         "docs:build": "node ./docs/generate-sitemap.js && vitepress build docs ",
         "docs:serve": "vitepress serve docs",
@@ -58,11 +60,5 @@
         "transform": {
             "\\.[jt]sx?$": "babel-jest"
         }
-    },
-    "browserslist": [
-        ">0.2%",
-        "not dead",
-        "not ie <= 11",
-        "not op_mini all"
-    ]
+    }
 }

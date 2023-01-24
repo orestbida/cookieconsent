@@ -30,6 +30,8 @@ import {
     GlobalState
 } from './global';
 
+//{{START: GUI}}
+
 import {
     createConsentModal,
     createPreferencesModal,
@@ -44,6 +46,8 @@ import {
     setCurrentLanguageCode,
     validLanguageCode
 } from '../utils/language';
+
+//{{END: GUI}}
 
 import {
     setCookie,
@@ -165,6 +169,8 @@ export const eraseCookies = (cookies, path, domain) => {
 
     eraseCookiesHelper(allCookies, path, domain);
 };
+
+//{{START: GUI}}
 
 /**
  * Show cookie consent modal
@@ -356,6 +362,8 @@ export const setLanguage = async (newLanguageCode, forceUpdate) => {
 
     return false;
 };
+
+//{{END: GUI}}
 
 /**
  * Retrieve current user preferences (summary)
@@ -613,6 +621,9 @@ export const run = async (userConfig) => {
         retrieveState(userConfig);
 
         const consentIsValid = validConsent();
+
+        //{{START: GUI}}
+
         const translationLoaded = await loadTranslationData();
 
         if(!translationLoaded)
@@ -622,6 +633,8 @@ export const run = async (userConfig) => {
 
         if(_config.autoShow && !consentIsValid)
             show(true);
+
+        //{{END: GUI}}
 
         if(consentIsValid){
             manageExistingScripts();
@@ -639,7 +652,10 @@ export const run = async (userConfig) => {
  */
 export const reset = (deleteCookie) => {
 
+    //{{START: GUI}}
     const { _ccMain, _htmlDom } = globalObj._dom;
+    //{{END: GUI}}
+
     const { name, path, domain } = globalObj._config.cookie;
 
     deleteCookie && eraseCookies(name, path, domain);
@@ -650,6 +666,8 @@ export const reset = (deleteCookie) => {
     for(const {_element, _event, _listener} of globalObj._state._dataEventListeners){
         _element.removeEventListener(_event, _listener);
     }
+
+    //{{START: GUI}}
 
     /**
      * Remove main container from DOM
@@ -665,6 +683,7 @@ export const reset = (deleteCookie) => {
         TOGGLE_CONSENT_MODAL_CLASS
     );
 
+    //{{END: GUI}}
 
     const newGlobal = new GlobalState();
 

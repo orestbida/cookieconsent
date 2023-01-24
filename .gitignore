@@ -27,3 +27,5 @@ src/scss/core/_dynamic-reset.scss
 
 coverage
 docs/.vitepress
+
+src_tmp

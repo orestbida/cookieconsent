@@ -669,6 +669,7 @@ export const addDataButtonListeners = (elem, api, createPreferencesModal, create
         acceptCustomElements = getElements(ACCEPT_PREFIX + 'custom'),
         createPreferencesModalOnHover = globalObj._config.lazyHtmlGeneration;
 
+    //{{START: GUI}}
     for(const el of showPreferencesModalElements){
         setAttribute(el, 'aria-haspopup', 'dialog');
 
@@ -694,6 +695,7 @@ export const addDataButtonListeners = (elem, api, createPreferencesModal, create
             show(true);
         }, true);
     }
+    //{{END: GUI}}
 
     for(let el of acceptAllElements){
         addEvent(el, CLICK_EVENT, (event) => {
@@ -900,6 +902,8 @@ export const fireEvent = (eventName, modalName, modal) => {
         cookie: globalObj._state._savedCookieContent
     };
 
+    //{{START: GUI}}
+
     if(modalName){
 
         const modalParams = {
@@ -917,6 +921,8 @@ export const fireEvent = (eventName, modalName, modal) => {
 
         return dispatchPluginEvent(eventName, modalParams);
     }
+
+    //{{END: GUI}}
 
     if(eventName === events._onFirstConsent){
         isFunction(_onFirstConsent) && _onFirstConsent(deepCopy(params));

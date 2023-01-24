@@ -95,11 +95,15 @@ export class GlobalState {
         this._config = {
             mode: OPT_IN_MODE,
             revision: 0,
+
+            //{{START: GUI}}
             autoShow: true,
+            lazyHtmlGeneration: true,
+            //{{END: GUI}}
+
             autoClearCookies: true,
             manageScriptTags: true,
             hideFromBots: true,
-            lazyHtmlGeneration: true,
 
             cookie: {
                 name: COOKIE_NAME,
@@ -170,6 +174,7 @@ export class GlobalState {
 
             _invalidConsent : true,
 
+            //{{START: GUI}}
             _consentModalExists : false,
             _consentModalVisible : false,
 
@@ -186,6 +191,7 @@ export class GlobalState {
             * @type {HTMLElement[]}
             */
             _currentModalFocusableElements: [],
+            //{{END: GUI}}
 
             _revisionEnabled : false,
             _validRevision : true,
@@ -321,9 +327,11 @@ export class GlobalState {
             _onFirstConsent: 'cc:onFirstConsent',
             _onConsent: 'cc:onConsent',
             _onChange: 'cc:onChange',
+            //{{START: GUI}}
             _onModalShow: 'cc:onModalShow',
             _onModalHide: 'cc:onModalHide',
             _onModalReady: 'cc:onModalReady'
+            //{{END: GUI}}
         };
     }
 }

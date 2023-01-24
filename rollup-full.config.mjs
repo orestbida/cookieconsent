@@ -12,7 +12,7 @@ const cssComponentsDir = `${distDir}/css-components`;
 const input = `${srcDir}/index.js`;
 const productionMode = !process.env.ROLLUP_WATCH;
 
-const banner = `/*!
+export const banner = `/*!
 * CookieConsent ${pkg.version}
 * ${pkg.repository.url}
 * Author ${pkg.author}
@@ -74,6 +74,26 @@ const cssComponentsRollup = cssComponents.map(component => {
     }
 })
 
+export const terserPlugin = terser({
+    toplevel: true,
+    format: {
+        quote_style: 1,
+        comments: /^!/
+    },
+    mangle: {
+        properties: {
+            regex: /^_/,
+            reserved: ['__esModule', '_ccRun'],
+            keep_quoted: true
+        }
+    },
+    compress: {
+        drop_console: true,
+        passes: 3,
+        pure_funcs: [ '_log']
+    }
+});
+
 export default defineConfig(
     [
         {
@@ -98,25 +118,7 @@ export default defineConfig(
                     include: ['./src/**'],
                     exclude: ['./src/scss/**']
                 }),
-                productionMode && terser({
-                    toplevel: true,
-                    format: {
-                        quote_style: 1,
-                        comments: /^!/
-                    },
-                    mangle: {
-                        properties: {
-                            regex: /^_/,
-                            reserved: ['__esModule', '_ccRun'],
-                            keep_quoted: true
-                        }
-                    },
-                    compress: {
-                        drop_console: true,
-                        passes: 3,
-                        pure_funcs: [ '_log']
-                    }
-                }),
+                productionMode && terserPlugin,
             ]
         },
         {
