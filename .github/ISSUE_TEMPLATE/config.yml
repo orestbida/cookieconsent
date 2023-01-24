@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: CookieConsent v3 Documentation
+    url: https://cookieconsent.orestbida.com/
+    about: Check the documentation for CookieConsent v3
+  - name: Questions & Discussions
+    url: https://github.com/orestbida/cookieconsent/discussions
+    about: Open a discussion if you have another issue or question.
