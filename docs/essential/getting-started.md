@@ -9,8 +9,9 @@ You can download/import the plugin using one of the following methods:
 
 1. Install via [NPM](https://www.npmjs.com/package/vanilla-cookieconsent).
     ```shell
-    npm i vanilla-cookieconsent
-    yarn add vanilla-cookieconsent
+    npm i vanilla-cookieconsent@next
+    yarn add vanilla-cookieconsent@next
+    pnpm add vanilla-cookieconsent@next
     ```
 
     Special thanks to [Till Sanders](https://github.com/tillsanders) for bringing the plugin on npm!
