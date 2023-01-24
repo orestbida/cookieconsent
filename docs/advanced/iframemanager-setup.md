@@ -1,7 +1,7 @@
-# IframeManager Configuration
+# IframeManager set-up
 How to properly set up CookieConsent and IframeManager so that changes in state are reflected in both plugins.
 
-Checkout the [demo on Stackblitz](https://stackblitz.com/edit/web-platform-ahqgz3?file=index.js);
+Checkout the [demo on Stackblitz](https://stackblitz.com/edit/web-platform-ahqgz3?file=index.js).
 
 ::: info Info
 This is an example config. and assumes that all iframes belong to the `analytics` category.
@@ -41,7 +41,7 @@ im.run({
 });
 ```
 
-## 2. Connect CookieConsent -> IframeManager
+## Connect CookieConsent -> IframeManager
 Enable/disable iframes via CookieConsent:
 
 ```javascript
@@ -65,4 +65,6 @@ CookieConsent.run({
 })
 ```
 
-For more examples or details about the configuration options, checkout the [iframemanger repo](https://github.com/orestbida/iframemanager).
+<br>
+
+For more examples or details about the configuration options, checkout the [iframemanger](https://github.com/orestbida/iframemanager) repo.

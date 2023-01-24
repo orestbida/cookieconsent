@@ -121,7 +121,7 @@ function getGuideSidebar() {
                 { text: 'Custom Attribute', link: '/advanced/custom-attribute' },
                 { text: 'Revision Management', link: '/advanced/revision-management'},
                 { text: 'Consent Logging', link: '/advanced/consent-logging'},
-                { text: 'IframeManager', link: '/advanced/iframemanager'}
+                { text: 'IframeManager Setup', link: '/advanced/iframemanager'}
             ]
         },
         {
