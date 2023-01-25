@@ -169,7 +169,6 @@ $service-toggle-knob-icon-width: 1.7px;
                 border: 1px solid var(--cc-cookie-category-block-border);
                 transition: background-color .25s ease, border-color .25s ease;
                 min-height: 58px;
-                cursor: initial;
 
                 &:hover{
                     background: var(--cc-cookie-category-block-hover-bg);
@@ -308,24 +307,14 @@ $service-toggle-knob-icon-width: 1.7px;
 
     .section__toggle-wrapper{
         position: absolute;
-        right: 0;
-        top: 0;
-        bottom: 0;
-        display: inline-block;
-        margin: auto;
         right: 18px;
         cursor: pointer;
-        user-select: none;
-        vertical-align: middle;
         z-index: 1;
-        transform: translateZ(0);
     }
 
     .toggle-service{
         position: relative;
-        transform-origin: right;
-        margin: 0;
-        right: 2px;
+        right: 0;
 
         width: $service-toggle-knob-width;
         height: $service-toggle-knob-height;
@@ -337,9 +326,13 @@ $service-toggle-knob-icon-width: 1.7px;
             height: $service-toggle-knob-height;
         }
 
-        .toggle__icon::after{
-            height: $service-toggle-knob-height;
-            width: $service-toggle-knob-height;
+        .toggle__icon{
+            position: relative;
+
+            &::after{
+                height: $service-toggle-knob-height;
+                width: $service-toggle-knob-height;
+            }
         }
 
         .section__toggle:checked ~ .toggle__icon::after{
@@ -532,12 +525,12 @@ $service-toggle-knob-icon-width: 1.7px;
     }
 
     .pm__service{
-        padding: .3em 1em;
+        padding: .4em 1.2em;
         position: relative;
         display: flex;
         justify-content: space-between;
         transition: background-color .15s ease;
-        gap: 10px;
+        gap: 1em;
         align-items: center;
 
         &:hover{
@@ -547,22 +540,24 @@ $service-toggle-knob-icon-width: 1.7px;
 
     .pm__service-header{
         display: flex;
-        flex-direction: row;
         align-items: center;
+        width: 100%;
     }
 
     .pm__service-icon {
-        width: 8px;
+        min-width: 8px;
         height: 8px;
         border: 2px solid currentColor;
         border-radius: 100%;
-        margin-left: 9px;
+        margin-left: 7px;
         margin-right: 20px;
         margin-top: 1px;
     }
 
     .pm__service-title{
         font-size: .95em;
+        word-break: break-word;
+        width: 100%;
     }
 
     .pm__section-desc{
@@ -853,11 +848,11 @@ $service-toggle-knob-icon-width: 1.7px;
     }
 
     .toggle-service{
-        left: 2px;
+        left: 0;
     }
 
     .pm__service-icon{
-        margin-right: 9px;
+        margin-right: 5px;
         margin-left: 20px;
     }
 
@@ -927,7 +922,7 @@ $service-toggle-knob-icon-width: 1.7px;
             height: auto;
             transform: translateY($translate-y);
             border-radius: 0;
-            max-width: none;
+            max-width: none!important;
         }
 
         .pm__header,
