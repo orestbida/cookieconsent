@@ -1,24 +1,59 @@
-// obtain iframemanager object
-const manager = iframemanager();
+const im = iframemanager();
 
-// Configure with youtube embed
-manager.run({
+
+im.run({
+
+    onChange: ({ eventSource, changedServices }) => {
+        if(eventSource.type === 'click'){
+            CookieConsent.acceptService(
+                [
+                    ...CookieConsent.getUserPreferences().acceptedServices.analytics,
+                    ...changedServices
+                ],
+                'analytics'
+            );
+        }
+    },
+
     currLang: 'en',
+
     services : {
         youtube : {
             embedUrl: 'https://www.youtube-nocookie.com/embed/{data-id}',
             thumbnailUrl: 'https://i3.ytimg.com/vi/{data-id}/hqdefault.jpg',
+
             iframe : {
                 allow : 'accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen;',
             },
-            cookie : {
-                name : 'cc_youtube'
-            },
+
             languages : {
                 en : {
                     notice: 'This content is hosted by a third party. By showing the external content you accept the <a rel="noreferrer" href="https://www.youtube.com/t/terms" title="Terms and conditions" target="_blank">terms and conditions</a> of youtube.com.',
                     loadBtn: 'Load video',
                     loadAllBtn: 'Don\'t ask again'
+                }
+            }
+        },
+
+        vimeo: {
+            embedUrl: 'https://player.vimeo.com/video/{data-id}',
+
+            iframe: {
+                allow : 'fullscreen; picture-in-picture;'
+            },
+
+            thumbnailUrl: async (dataId, setThumbnail) => {
+                const url = `https://vimeo.com/api/v2/video/${dataId}.json`;
+                const response = await (await fetch(url)).json();
+                const thumbnailUrl = response[0]?.thumbnail_large;
+                thumbnailUrl && setThumbnail(thumbnailUrl);
+            },
+
+            languages: {
+                en : {
+                    notice: 'This content is hosted by a third party. By showing the external content you accept the <a rel="noreferrer noopener" href="https://vimeo.com/terms" target="_blank">terms and conditions</a> of vimeo.com.',
+                    loadBtn: 'Load once',
+                    loadAllBtn: "Don't ask again"
                 }
             }
         }
@@ -30,7 +65,6 @@ manager.run({
  * @type {import('../../types')}
  */
 CookieConsent.run({
-    disablePageInteraction: true,
 
     cookie: {
         name: 'cc_cookie_demo3'
@@ -83,20 +117,20 @@ CookieConsent.run({
             autoClear: {
                 cookies: [
                     {
-                        name: /^(_ga|_gid)/
+                        name: /^(_ga|_gid|im_)/
                     }
                 ]
             },
             services: {
-                IframeManager:{
-                    onAccept: () => {
-                        console.log("enabled iframemanager")
-                        manager.acceptService('all');
-                    },
-                    onReject: () => {
-                        console.log("disabled iframemanager")
-                        manager.rejectService('all');
-                    }
+                youtube: {
+                    label: 'Youtube Embed',
+                    onAccept: () => im.acceptService('youtube'),
+                    onReject: () => im.rejectService('youtube')
+                },
+                vimeo: {
+                    label: 'Vimeo Embed',
+                    onAccept: () => im.acceptService('vimeo'),
+                    onReject: () => im.rejectService('vimeo')
                 }
             }
         },

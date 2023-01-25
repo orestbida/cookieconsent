@@ -13,7 +13,37 @@
     <link rel="stylesheet" href="../../dist/cookieconsent.css" media="print" onload="this.media='all'">
 
     <!-- Load iframemanager css -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orestbida/iframemanager@v1.0/dist/iframemanager.css" media="print" onload="this.media='all'">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orestbida/iframemanager@1.2.0/dist/iframemanager.css" media="print" onload="this.media='all'">
+
+    <style>
+
+        #cc-main .cm,
+        #cc-main .pm{
+            --cc-modal-transition-duration: .25s;
+        }
+
+        #cc-main .pm.pm--box {
+            opacity: 0;
+            transform: translateY(-50%) scale(.97)!important;
+        }
+
+        /* visible */
+        .show--preferences #cc-main .cc--anim .pm.pm--box {
+            transform: translateY(-50%) scale(1)!important;
+        }
+
+        @media screen and (max-width: 640px) {
+            #cc-main .pm.pm--box {
+                transform: scale(.97)!important;
+            }
+
+            .show--preferences #cc-main .cc--anim .pm.pm--box {
+                transform: scale(1)!important;
+            }
+        }
+
+    </style>
+
 </head>
 <body>
 
@@ -34,7 +64,14 @@
 
     <br>
 
-    <script defer src="https://cdn.jsdelivr.net/gh/orestbida/iframemanager@v1.0/dist/iframemanager.js"></script>
+    <div
+        data-service="vimeo"
+        data-id="776749483"
+        data-title="Apple “Escape From The Office”"
+        data-autoscale
+    ></div>
+
+    <script defer src="https://cdn.jsdelivr.net/gh/orestbida/iframemanager@1.2.0/dist/iframemanager.js"></script>
     <script defer src="../../dist/cookieconsent.umd.js"></script>
     <script defer src="cookieconsent-init.js"></script>
 

@@ -21,7 +21,7 @@ cookieSettingsBtn.parentNode.insertBefore(resetCookiesBtn, cookieSettingsBtn.nex
 
 resetCookiesBtn.addEventListener('click', function(){
     CookieConsent.acceptCategory([]);
-    CookieConsent.eraseCookies([/^(cc_)/, CookieConsent.getConfig('cookie').name]);
+    CookieConsent.eraseCookies([/^(cc_)/, CookieConsent.getConfig('cookie').name, /^(im_)/]);
     window.location.reload();
 });
 
