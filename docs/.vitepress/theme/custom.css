@@ -352,7 +352,12 @@
     line-height: 1.8em;
 }
 
-nav ul li a[href*="required"]::after{
+span.required::after {
+    content: attr(data-label);
+}
+
+a.outline-link[href="#language"]::after,
+a.outline-link[href="#categories"]::after{
     content: 'required';
     position: relative;
     background-color: rgba(164, 126, 119, 0.15);

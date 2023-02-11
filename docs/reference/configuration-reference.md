@@ -481,7 +481,7 @@ Tweak main UI settings.
     }
     ```
 
-## categories <span class="required">required</span>
+## categories <span class="required" data-label="required"></span>
 
 Use to define your cookie categories.
 
@@ -655,7 +655,7 @@ Define individually togglable services.
 If one or more services are enabled, then the entire category will be treated as enabled/accepted.
 :::
 
-## language <span class="required">required</span>
+## language <span class="required" data-label="required"></span>
 
 Define your language settings and the translation(s).
 
@@ -669,7 +669,7 @@ Define your language settings and the translation(s).
     }
     ```
 
-### language.default <span class="required">required</span>
+### language.default <span class="required" data-label="required"></span>
 
 The desired default language.
 
@@ -718,7 +718,7 @@ List of languages that should use the RTL layout.
     })
     ```
 
-### language.translations <span class="required">required</span>
+### language.translations <span class="required" data-label="required"></span>
 
 Define the translation(s) content.
 
@@ -768,7 +768,7 @@ Define the translation(s) content.
     })
     ```
 
-### <span style="opacity: .6">[translation]</span>.consentModal<span class="required">required</span>
+### <span style="opacity: .6">[translation]</span>.consentModal<span class="required" data-label="required"></span>
 
 - **Type**:
     ```javascript
@@ -816,7 +816,7 @@ Define the translation(s) content.
     }
     ```
 
-### <span style="opacity: .6">[translation]</span>.preferencesModal<span class="required">required</span>
+### <span style="opacity: .6">[translation]</span>.preferencesModal<span class="required" data-label="required"></span>
 
 - **Type**:
     ```javascript
@@ -852,7 +852,7 @@ Define the translation(s) content.
     ```
 
 
-### <span style="opacity: .6">[translation]</span>.preferencesModal.sections<span class="required">required</span>
+### <span style="opacity: .6">[translation]</span>.preferencesModal.sections<span class="required" data-label="required"></span>
 
 - **Type**:
     ```javascript
