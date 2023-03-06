@@ -6,9 +6,11 @@
     --cc-btn-primary-bg: #2d4156;
     --cc-btn-primary-text: var(--cc-bg);
     --cc-btn-primary-hover-bg: #1d2e38;
+    --cc-btn-primary-hover-text: var(--cc-btn-primary-text);
     --cc-btn-secondary-bg: #eaeff2;
     --cc-btn-secondary-text: var(--cc-text);
     --cc-btn-secondary-hover-bg: #d8e0e6;
+    --cc-btn-secondary-hover-text: var(--cc-btn-secondary-text);
     --cc-btn-border-radius: 4px;
     --cc-toggle-bg-off: #919ea6;
     --cc-toggle-bg-on: var(--cc-btn-primary-bg);
@@ -32,9 +34,11 @@
     --cc-btn-primary-bg: #a6c4dd;
     --cc-btn-primary-text: #000;
     --cc-btn-primary-hover-bg: #c2dff7;
+    --cc-btn-primary-hover-text: var(--cc-btn-primary-text);
     --cc-btn-secondary-bg: #33383c;
     --cc-btn-secondary-text: var(--cc-text);
     --cc-btn-secondary-hover-bg: #3e454a;
+    --cc-btn-secondary-hover-text: var(--cc-btn-secondary-text);
     --cc-toggle-bg-off: #667481;
     --cc-toggle-bg-on: var(--cc-btn-primary-bg);
     --cc-toggle-bg-readonly: #454c54;
@@ -288,6 +292,7 @@
 #s-c-bn:active,
 #s-c-bn:hover{
     background: var(--cc-btn-secondary-hover-bg);
+    color: var(--cc-btn-secondary-hover-text);
 }
 
 /**
@@ -531,11 +536,13 @@ CookieConsent settings modal
 #c-bns.swap button:last-child:active,
 #c-bns.swap button:last-child:hover{
     background: var(--cc-btn-primary-hover-bg);
+    color: var(--cc-btn-primary-hover-text);
 }
 
 #c-bns.swap button:first-child:active,
 #c-bns.swap button:first-child:hover{
     background: var(--cc-btn-secondary-hover-bg);
+    color: var(--cc-btn-secondary-hover-text);
 }
 
 #s-hdr{
