@@ -22,7 +22,8 @@
     --cc-cookie-category-block-bg-hover: #e9eff4;
     --cc-section-border: #f1f3f5;
     --cc-cookie-table-border: #e9edf2;
-    --cc-overlay-bg: rgba(4, 6, 8, .85);
+    --cc-overlay-bg: rgb(4, 6, 8);
+    --cc-overlay-opacity: .85;
     --cc-webkit-scrollbar-bg: #cfd5db;
     --cc-webkit-scrollbar-bg-hover: #9199a0;
 }
@@ -211,7 +212,7 @@
 .force--consent.show--consent .c--anim #cm-ov,
 .show--settings .c--anim #cs-ov{
     visibility: visible!important;
-    opacity: 1!important;
+    opacity: var(--cc-overlay-opacity)!important;
 }
 
 #cm{
