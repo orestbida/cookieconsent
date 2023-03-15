@@ -38,7 +38,7 @@ This event is triggered only the very first time that the user expresses their c
     ```
 
 ## onConsent
-This event is triggered the very first time the user expresses expresses their choice of consent — just like `onFirstConsent` — but also **on every subsequent page load**.
+This event is triggered the very first time the user expresses their choice of consent — just like `onFirstConsent` — but also **on every subsequent page load**.
 
 - **Example** <br>
 
