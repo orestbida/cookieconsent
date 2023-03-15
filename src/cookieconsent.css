@@ -1,14 +1,18 @@
 /** Light color-scheme **/
 :root{
+    --cc-font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    --cc-font-size: 16px;
     --cc-bg: #fff;
     --cc-text: #2d4156;
     --cc-border-radius: .35em;
     --cc-btn-primary-bg: #2d4156;
     --cc-btn-primary-text: var(--cc-bg);
     --cc-btn-primary-hover-bg: #1d2e38;
+    --cc-btn-primary-hover-text: var(--cc-btn-primary-text);
     --cc-btn-secondary-bg: #eaeff2;
     --cc-btn-secondary-text: var(--cc-text);
     --cc-btn-secondary-hover-bg: #d8e0e6;
+    --cc-btn-secondary-hover-text: var(--cc-btn-secondary-text);
     --cc-btn-border-radius: 4px;
     --cc-toggle-bg-off: #919ea6;
     --cc-toggle-bg-on: var(--cc-btn-primary-bg);
@@ -20,7 +24,9 @@
     --cc-cookie-category-block-bg-hover: #e9eff4;
     --cc-section-border: #f1f3f5;
     --cc-cookie-table-border: #e9edf2;
-    --cc-overlay-bg: rgba(4, 6, 8, .85);
+    --cc-overlay-bg: rgb(4, 6, 8);
+    --cc-overlay-opacity: .85;
+    --cc-consent-modal-box-shadow: 0 0.625em 1.875em rgba(2, 2, 3, 0.28);
     --cc-webkit-scrollbar-bg: #cfd5db;
     --cc-webkit-scrollbar-bg-hover: #9199a0;
 }
@@ -32,9 +38,11 @@
     --cc-btn-primary-bg: #a6c4dd;
     --cc-btn-primary-text: #000;
     --cc-btn-primary-hover-bg: #c2dff7;
+    --cc-btn-primary-hover-text: var(--cc-btn-primary-text);
     --cc-btn-secondary-bg: #33383c;
     --cc-btn-secondary-text: var(--cc-text);
     --cc-btn-secondary-hover-bg: #3e454a;
+    --cc-btn-secondary-hover-text: var(--cc-btn-secondary-text);
     --cc-toggle-bg-off: #667481;
     --cc-toggle-bg-on: var(--cc-btn-primary-bg);
     --cc-toggle-bg-readonly: #454c54;
@@ -81,9 +89,9 @@
 }
 
 .cc_div {
-    font-size: 16px;
+    font-size: var(--cc-font-size);
     font-weight: 400;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    font-family: var(--cc-font-family);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
@@ -207,7 +215,7 @@
 .force--consent.show--consent .c--anim #cm-ov,
 .show--settings .c--anim #cs-ov{
     visibility: visible!important;
-    opacity: 1!important;
+    opacity: var(--cc-overlay-opacity)!important;
 }
 
 #cm{
@@ -221,7 +229,7 @@
     bottom: 1.250em;
     right: 1.250em;
     box-shadow: 0 0.625em 1.875em #000000;
-    box-shadow: 0 0.625em 1.875em rgba(2, 2, 3, 0.28);
+    box-shadow: var(--cc-consent-modal-box-shadow);
     opacity: 0;
     visibility: hidden;
     transform: scale(.95);
@@ -288,6 +296,7 @@
 #s-c-bn:active,
 #s-c-bn:hover{
     background: var(--cc-btn-secondary-hover-bg);
+    color: var(--cc-btn-secondary-hover-text);
 }
 
 /**
@@ -531,11 +540,13 @@ CookieConsent settings modal
 #c-bns.swap button:last-child:active,
 #c-bns.swap button:last-child:hover{
     background: var(--cc-btn-primary-hover-bg);
+    color: var(--cc-btn-primary-hover-text);
 }
 
 #c-bns.swap button:first-child:active,
 #c-bns.swap button:first-child:hover{
     background: var(--cc-btn-secondary-hover-bg);
+    color: var(--cc-btn-secondary-hover-text);
 }
 
 #s-hdr{
