@@ -972,8 +972,9 @@
             // Always create settings modal
             _createSettingsModal(lang);
 
-            // Finally append everything (main_container holds both modals)
-            (root || document.body).appendChild(main_container);
+            // Finally prepend everything (main_container holds both modals)
+            var rootEl = root || document.body; 
+            rootEl.insertBefore(main_container, rootEl.firstChild);
         }
 
         /**
