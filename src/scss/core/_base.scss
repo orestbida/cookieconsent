@@ -43,7 +43,6 @@
     a,
     .cc__link{
         font-weight: 600;
-        color: var(--cc-link-color);
         position: relative;
         background-image: linear-gradient(currentColor, currentColor);
         background-position: 0% 100%;
@@ -55,6 +54,10 @@
             color: var(--cc-primary-color);
             background-size: 100% 1px;
         }
+    }
+
+    .cc__link {
+        color: var(--cc-link-color);
     }
 
     /* Use Firefox's thin style scrollbar */
