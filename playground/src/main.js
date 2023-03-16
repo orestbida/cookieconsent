@@ -1,5 +1,5 @@
-import 'vanilla-cookieconsent/dist/cookieconsent.css';
-import * as CookieConsent from 'vanilla-cookieconsent';
+import '../../dist/cookieconsent.css';
+import * as CookieConsent from '../../dist/cookieconsent.esm';
 import { getState } from './components/stateManager';
 import { fireEvent, customEvents } from './components/utils';
 
@@ -14,6 +14,7 @@ import './components/printCategories';
 import './components/printValidConsent';
 import './components/guiOptions';
 import './components/consentModalElements';
+import './components/customThemes';
 
 CookieConsent
     .run(getState().cookieConsentConfig)

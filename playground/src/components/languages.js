@@ -7,7 +7,7 @@ const browserLanguage = getBrowserLanguage();
 /**
  * @type {NodeListOf<HTMLInputElement>}
  */
-const inputs = document.querySelectorAll('input[data-language]');
+const inputs = document.querySelectorAll('input[name="language-code"]');
 
 /** @type {HTMLInputElement} **/ const autoDetectCheckbox = getById('auto-language');
 /** @type {HTMLInputElement} **/ const detectedLanguageSpan = getById('detected-language');

@@ -20,17 +20,17 @@
                 <fieldset class="language-codes">
                     <legend>Demo Languages</legend>
 
-                    <input data-language="en" type="radio" id="language-en" name="language-code" value="en" checked>
-                    <label for="language-en">English</label><br>
-                    <input data-language="it" type="radio" id="language-it" name="language-code" value="it">
-                    <label for="language-it">Italian</label><br>
-                    <input data-language="de" type="radio" id="language-de" name="language-code" value="de">
-                    <label for="language-de">German</label><br>
-                    <input data-language="es" type="radio" id="language-es" name="language-code" value="es">
+                    <input type="radio" id="language-en" name="language-code" value="en" checked>
+                    <label for="language-en" tabindex="0" role="radio">English</label><br>
+                    <input type="radio" id="language-it" name="language-code" value="it">
+                    <label for="language-it" tabindex="0" role="radio">Italian</label><br>
+                    <input type="radio" id="language-de" name="language-code" value="de">
+                    <label for="language-de" tabindex="0">German</label><br>
+                    <input type="radio" id="language-es" name="language-code" value="es">
                     <label for="language-es">Spanish</label><br>
-                    <input data-language="fr" type="radio" id="language-fr" name="language-code" value="fr">
+                    <input type="radio" id="language-fr" name="language-code" value="fr">
                     <label for="language-fr">French</label><br>
-                    <input data-language="ar" type="radio" id="language-ar" name="language-code" value="ar">
+                    <input type="radio" id="language-ar" name="language-code" value="ar">
                     <label for="language-ar">Arabic <span class="badge">rtl</span></label><br>
                 </fieldset>
 
@@ -155,6 +155,33 @@
                         <div class="category" id="analytics-category">Analytics</div>
                         <div class="category" id="ads-category">Advertisement</div>
                     </div>
+                </fieldset>
+            </div>
+
+            <div class="flex">
+                <fieldset class="custom-themes">
+                    <legend>Custom Themes</legend>
+
+                    <input type="radio" id="default-light" name="theme" checked>
+                    <label for="default-light">Light theme</label>
+                    <br>
+
+                    <input type="radio" id="cc--darkmode" name="theme">
+                    <label for="cc--darkmode">Dark theme</label>
+                    <br>
+
+                    <input type="radio" id="cc--dark-turquoise" name="theme">
+                    <label for="cc--dark-turquoise">Dark Turquoise</label>
+                    <br>
+
+                    <input type="radio" id="cc--light-funky" name="theme">
+                    <label for="cc--light-funky">Light Funky</label>
+                    <br>
+
+                    <input type="radio" id="cc--elegant-black" name="theme">
+                    <label for="cc--elegant-black">Elegant Black</label>
+                    <br>
+
                 </fieldset>
             </div>
 

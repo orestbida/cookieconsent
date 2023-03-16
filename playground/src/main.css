@@ -4,19 +4,14 @@
 
 html{
     font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Helvetica, Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-    color: var(--cc-secondary-color);
+    color: rgba(244, 253, 255, 0.7);
     -ms-touch-action: manipulation;
         touch-action: manipulation;
     width: 100vw;
     overflow-x: hidden;
-}
-
-html.cc--darkmode{
-    color-scheme: dark;
-}
-
-html:not(.cc--darkmode){
-    --cc-overlay-bg: rgba(228, 231, 235, 0.89);
+    background-color: #000;
+    color-scheme: dark!important;
+    scrollbar-width: thin;
 }
 
 :root{
@@ -43,25 +38,28 @@ p {
     margin: 0
 }
 
+
+b{
+    font-weight: 600;
+}
+
+label {
+    font-weight: 400;
+    font-size: .9em;
+}
+
 fieldset{
     margin: 0;
     margin-top: var(--d-gap);
     padding: 10px 16px;
     border-radius: var(--d-border-radius);
-    border: 1px solid var(--cc-btn-secondary-hover-border-color);
+    border: 1px solid rgba(189, 202, 224, 0.283);
     transition: border-color .2s ease, background-color .2s ease;
-}
-
-fieldset:hover{
-    background-color: var(--cc-btn-secondary-border-color);
-    border-color: var(--cc-btn-secondary-border-color);
 }
 
 legend{
     font-size: .85em;
     font-weight: 600;
-    color: var(--cc-btn-secondary-hover-color);
-    background: var(--cc-btn-secondary-hover-border-color);
     border-radius: var(--d-border-radius);
     padding: 3px 8px 4px 8px;
 }
@@ -71,7 +69,6 @@ legend{
     font-size: .95em;
     line-height: 1.5;
     padding: 10px 16px;
-    background: var(--cc-btn-secondary-bg);
     border-radius: 6px;
 }
 
@@ -81,22 +78,17 @@ legend{
     color: #2e7ee4;
 }
 
-label {
-    font-weight: 600;
-    font-size: .9em;
-}
-
 input:checked + label{
-    color: var(--cc-primary-color);
+    color: #fff;
 }
 
 button {
     cursor: pointer;
     font-family: inherit;
-    background: var(--cc-btn-primary-bg);
-    border: 1px solid var(--cc-btn-primary-border-color);
+    background: rgb(46 46 46);
+    border: 1px solid #434343;
     border-radius: var(--d-border-radius);
-    color: var(--cc-btn-primary-color);
+    color: #fff;
     font-size: .85em;
     font-weight: 600;
     padding: 10px 16px;
@@ -105,9 +97,9 @@ button {
 }
 
 button:hover{
-    background: var(--cc-btn-primary-hover-bg);
-    border-color: var(--cc-btn-primary-hover-border-color);
-    color: var(--cc-btn-primary-hover-color);
+    background: #fff;
+    border-color: #fff;
+    color: #000;
 }
 
 .flex{
@@ -120,20 +112,3 @@ button:hover{
 .flex > div{
     flex: 1;
 }
-
-/** START: darkmode */
-
-.cc--darkmode fieldset{
-    border-color: var(--cc-btn-secondary-border-color)
-}
-
-.cc--darkmode fieldset:hover{
-    background-color: var(--cc-btn-secondary-bg);
-    border-color: var(--cc-btn-secondary-bg)
-}
-
-.cc--darkmode legend{
-    color: var(--cc-btn-secondary-color);
-    background: var(--cc-btn-secondary-border-color);
-}
-/** END: darkmode **/

@@ -5,7 +5,6 @@ export const DEMO_ITEM_NAME = 'demoState';
 
 export const defaultState = {
     cookieConsentConfig: defaultConfig,
-    darkmode: false,
     currLanguage: defaultConfig.language.default,
 
     enableCloseIcon: false,
@@ -14,6 +13,11 @@ export const defaultState = {
     removeShowPrefrencesBtn: false,
     removeFooter: false,
     removeTitle: false,
+
+    /**
+     * @type {'default-light' | 'cc--darkmode' | 'dark-turquoise' | 'light-funky' | 'elegant-black'}
+     */
+    _theme: 'cc--darkmode',
 
     /**
      * @type {import('vanilla-cookieconsent').ConsentModalPosition}
@@ -28,7 +32,7 @@ export const defaultState = {
     /**
      * Increase on every new playground update
      */
-    demoRevision: 14
+    demoRevision: 15
 };
 
 addEvent(window, customEvents._INIT, clearInvalidDemoState)

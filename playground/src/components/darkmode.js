@@ -1,21 +1,28 @@
 import { saveState, getState, defaultState } from './stateManager';
 import { customEvents, onEvent, addEvent, getById } from './utils';
 
+const DEFAULT_DARK_THEME = 'cc--darkmode';
+const DEFAULT_LIGHT_THEME = 'default-light';
+
 /**
  * @type {HTMLInputElement}
  */
 const checkbox = getById('darkmode');
 
-toggleDarkmode(getState().darkmode);
+toggleDarkmode(getState()._theme === DEFAULT_DARK_THEME);
 
 addEvent(checkbox, 'click', () => {
     toggleDarkmode(checkbox.checked);
 
     const state = getState();
-    state.darkmode = checkbox.checked;
+
+    state._theme = checkbox.checked
+        ? DEFAULT_DARK_THEME
+        : DEFAULT_LIGHT_THEME;
+
     saveState(state);
 
-    window.CookieConsent.show(true);
+    CookieConsent.show(true);
 });
 
 /**
@@ -33,5 +40,5 @@ function toggleDarkmode(enable) {
 }
 
 onEvent(customEvents._RESET, () => {
-    toggleDarkmode(defaultState.darkmode);
+    toggleDarkmode(defaultState._theme === DEFAULT_DARK_THEME);
 });
