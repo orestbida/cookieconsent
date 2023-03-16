@@ -42,7 +42,7 @@
         "@babel/preset-env": "^7.20.2",
         "@rollup/plugin-eslint": "^9.0.3",
         "@rollup/plugin-terser": "^0.4.0",
-        "@types/jest": "^29.4.2",
+        "@types/jest": "^29.5.0",
         "babel-jest": "^29.5.0",
         "cssnano": "^5.1.15",
         "eslint": "^8.36.0",
