@@ -769,7 +769,50 @@ export const handleFocusTrap = () => {
         if(e.key !== 'Tab')
             return;
 
-        const focusableElements = state._currentModalFocusableElements;
+        let focusableElements = state._currentModalFocusableElements;
+
+        /**
+         * If modals were both (just) hidden, and tab is pressed
+         * Set focus to the first focusable element
+         */
+        if(state._shouldHandleFirstTab &&
+            !state._consentModalVisible &&
+            !state._preferencesModalVisible
+        ) {
+
+            state._shouldHandleFirstTab = false;
+            const body = dom._document.body;
+
+            /**
+             * Only handle 'tab' event when the current active element is `body`
+             */
+            if(getActiveElement() === body){
+
+                const shiftPressed = !!e.shiftKey;
+                /**
+                 * If tab is pressed and ccMain is the first child of body,
+                 * don't do anything, tab will work naturally (no javascript)
+                 */
+                if(!shiftPressed && body.firstChild === dom._ccMain)
+                    return;
+
+                preventDefault(e);
+
+                /**
+                 * All focusable elements outside of ccMain
+                 */
+                focusableElements = [...getFocusableElements(body)]
+                    .filter(elem => !(elem.matches('#cc-main *') || !elem.offsetParent));
+
+                /**
+                 * Focus either the first or the last element
+                 */
+                return focusableElements[shiftPressed
+                    ? focusableElements.length - 1
+                    : 0
+                ]?.focus();
+            }
+        }
 
         // If there is any modal to focus
         if(focusableElements.length > 0){
@@ -839,6 +882,18 @@ export const closeModalOnOutsideClick = ({hidePreferences}) => {
 };
 
 /**
+ * Note: any of the below focusable elements, which has the attribute tabindex="-1" AND is either
+ * the first or last element of the modal, won't receive focus during "open/close" modal
+ */
+const focusableTypesSelector = ['[href]', BUTTON_TAG, 'input', 'details', '[tabindex]']
+    .map(selector => selector+':not([tabindex="-1"])').join(',');
+
+export const getFocusableElements = (root) => {
+    console.log(focusableTypesSelector);
+    return querySelectorAll(root, focusableTypesSelector);
+};
+
+/**
  * Save reference to first and last focusable elements inside each modal
  * to prevent losing focus while navigating with TAB
  */
@@ -847,20 +902,13 @@ export const getModalFocusableData = () => {
     const { _state, _dom } = globalObj;
 
     /**
-     * Note: any of the below focusable elements, which has the attribute tabindex="-1" AND is either
-     * the first or last element of the modal, won't receive focus during "open/close" modal
-     */
-    const focusableTypesSelector = ['[href]', BUTTON_TAG, 'input', 'details', '[tabindex="0"]']
-        .join(':not([tabindex="-1"]), ');
-
-    /**
      * Saves all focusable elements inside modal, into the array
      * @param {HTMLElement} modal
      * @param {Element[]} _array
      */
     const saveAllFocusableElements = (modal, array) => {
 
-        const focusableElements = querySelectorAll(modal, focusableTypesSelector);
+        const focusableElements = getFocusableElements(modal);
 
         /**
          * Save first and last elements (trap focus inside modal)

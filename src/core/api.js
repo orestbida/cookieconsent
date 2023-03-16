@@ -212,6 +212,7 @@ export const hide = () => {
 
     if(_state._consentModalExists){
         _state._consentModalVisible = false;
+        _state._shouldHandleFirstTab = true;
 
         if(_state._disablePageInteraction)
             toggleDisableInteraction();
@@ -220,8 +221,8 @@ export const hide = () => {
         setAttribute(_dom._cm, ARIA_HIDDEN, 'true');
 
         setTimeout(() => {
-            //restore focus to the last focused element
-            _state._lastFocusedElemBeforeModal.focus();
+            // restore focus to the last focused element
+            // _state._lastFocusedElemBeforeModal.focus();
             _state._currentModalFocusableElements = [];
         }, 200);
 
@@ -289,6 +290,7 @@ export const hidePreferences = () => {
     setAttribute(globalObj._dom._pm, ARIA_HIDDEN, 'true');
 
     state._preferencesModalVisible = false;
+    state._shouldHandleFirstTab = true;
 
     setTimeout(()=>{
         state._preferencesModalVisibleDelayed = false;
@@ -304,7 +306,7 @@ export const hidePreferences = () => {
         /**
          * Restore focus to last page element which had focus before modal opening
          */
-        state._lastFocusedElemBeforeModal && state._lastFocusedElemBeforeModal.focus();
+        //state._lastFocusedElemBeforeModal && state._lastFocusedElemBeforeModal.focus();
         state._currentModalFocusableElements = [];
     }
 

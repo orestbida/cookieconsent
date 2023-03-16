@@ -1,5 +1,5 @@
 import { globalObj } from '../global';
-import { createNode, appendChild, closeModalOnOutsideClick, handleFocusTrap, isString, addDataButtonListeners } from '../../utils/general';
+import { createNode, closeModalOnOutsideClick, handleFocusTrap, isString, addDataButtonListeners } from '../../utils/general';
 import { createConsentModal } from './consentModal';
 import { createPreferencesModal } from './preferencesModal';
 import { DIV_TAG } from '../../utils/constants';
@@ -25,8 +25,8 @@ export const createMainContainer = (api) => {
         if(root && isString(root))
             root = document.querySelector(root);
 
-        // Append main container to dom
-        appendChild(root || dom._document.body, dom._ccMain);
+        // Prepend main container to dom
+        (root || dom._document.body).prepend(dom._ccMain);
 
         closeModalOnOutsideClick(api);
     }

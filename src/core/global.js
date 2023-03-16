@@ -184,6 +184,7 @@ export class GlobalState {
             _clickedInsideModal : false,
             _tabbedInsideModal : false,
             _tabbedOutside : false,
+            _shouldHandleFirstTab: false,
 
             _preferencesModalVisibleDelayed : false,
 
