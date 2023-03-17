@@ -11,11 +11,17 @@
     --cc-btn-primary-text: var(--cc-bg);
     --cc-btn-primary-hover-bg: #1d2e38;
     --cc-btn-primary-hover-text: var(--cc-btn-primary-text);
+    --cc-btn-primary-border-color: var(--cc-btn-primary-bg);
+    --cc-btn-primary-hover-border-color: var(--cc-btn-primary-hover-bg);
     --cc-btn-secondary-bg: #eaeff2;
     --cc-btn-secondary-text: var(--cc-text);
     --cc-btn-secondary-hover-bg: #d8e0e6;
     --cc-btn-secondary-hover-text: var(--cc-btn-secondary-text);
+    --cc-btn-secondary-border-color: var(--cc-btn-secondary-bg);
+    --cc-btn-secondary-hover-border-color: var(--cc-btn-secondary-hover-bg);
     --cc-btn-border-radius: 4px;
+    --cc-btn-border-width: 0px;
+    --cc-btn-border-style: solid;
     --cc-toggle-bg-off: #919ea6;
     --cc-toggle-bg-on: var(--cc-btn-primary-bg);
     --cc-toggle-bg-readonly: #d5dee2;
@@ -41,10 +47,14 @@
     --cc-btn-primary-text: #000;
     --cc-btn-primary-hover-bg: #c2dff7;
     --cc-btn-primary-hover-text: var(--cc-btn-primary-text);
+    --cc-btn-primary-border-color: var(--cc-btn-primary-bg);
+    --cc-btn-primary-hover-border-color: var(--cc-btn-primary-hover-bg);
     --cc-btn-secondary-bg: #33383c;
     --cc-btn-secondary-text: var(--cc-text);
     --cc-btn-secondary-hover-bg: #3e454a;
     --cc-btn-secondary-hover-text: var(--cc-btn-secondary-text);
+    --cc-btn-secondary-border-color: var(--cc-btn-secondary-bg);
+    --cc-btn-secondary-hover-border-color: var(--cc-btn-secondary-hover-bg);
     --cc-toggle-bg-off: #667481;
     --cc-toggle-bg-on: var(--cc-btn-primary-bg);
     --cc-toggle-bg-readonly: #454c54;
@@ -149,7 +159,7 @@
 }
 
 .c--anim .c-bn{
-    transition: background-color .25s ease!important;
+    transition: background-color .25s ease, border-color .25s ease!important;
 }
 
 /* start transitions */
@@ -264,8 +274,10 @@
 }
 
 .cc_div .c-bn{
+    --cc-btn-border-color: var(--cc-btn-secondary-border-color);
     color: var(--cc-btn-secondary-text);
     background: var(--cc-btn-secondary-bg);
+    border: var(--cc-btn-border-width) var(--cc-btn-border-style) var(--cc-btn-border-color);
     padding: 1em 1.7em;
     display: inline-block;
     cursor: pointer;
@@ -297,6 +309,7 @@
 #s-cnt button + button:active,
 #s-c-bn:active,
 #s-c-bn:hover{
+    --cc-btn-border-color: var(--cc-btn-secondary-hover-border-color);
     background: var(--cc-btn-secondary-hover-bg);
     color: var(--cc-btn-secondary-hover-text);
 }
@@ -517,16 +530,19 @@ CookieConsent settings modal
 
 #c-bns button:first-child,
 #s-bns button:first-child{
+    --cc-btn-border-color: var(--cc-btn-primary-border-color);
     color: var(--cc-btn-primary-text);
     background: var(--cc-btn-primary-bg);
 }
 
 #c-bns.swap button:first-child{
+    --cc-btn-border-color: var(--cc-btn-secondary-border-color);
     color: var(--cc-btn-secondary-text);
     background: var(--cc-btn-secondary-bg);
 }
 
 #c-bns.swap button:last-child{
+    --cc-btn-border-color: var(--cc-btn-primary-border-color);
     color: var(--cc-btn-primary-text);
     background: var(--cc-btn-primary-bg);
 }
@@ -541,12 +557,14 @@ CookieConsent settings modal
 #s-bns button:first-child:hover,
 #c-bns.swap button:last-child:active,
 #c-bns.swap button:last-child:hover{
+    --cc-btn-border-color: var(--cc-btn-primary-hover-border-color);
     background: var(--cc-btn-primary-hover-bg);
     color: var(--cc-btn-primary-hover-text);
 }
 
 #c-bns.swap button:first-child:active,
 #c-bns.swap button:first-child:hover{
+    --cc-btn-border-color: var(--cc-btn-secondary-hover-border-color);
     background: var(--cc-btn-secondary-hover-bg);
     color: var(--cc-btn-secondary-hover-text);
 }
@@ -571,8 +589,8 @@ CookieConsent settings modal
 
 #s-c-bn{
     padding: 0;
-    width: 1.7em;
-    height: 1.7em;
+    width: calc(1.7em + var(--cc-btn-border-width) * 2);
+    height: calc(1.7em + var(--cc-btn-border-width) * 2);
     font-size: 1.45em;
     margin: 0;
     font-weight: initial;
