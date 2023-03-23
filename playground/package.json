@@ -10,7 +10,6 @@
   },
   "devDependencies": {
     "sass": "^1.59.3",
-    "vanilla-cookieconsent": "github:orestbida/cookieconsent#v3.0-beta",
     "vite": "^4.2.1",
     "vite-plugin-minify": "^1.5.2"
   }
