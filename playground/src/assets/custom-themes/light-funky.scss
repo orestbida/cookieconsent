@@ -33,4 +33,18 @@
 
     --cc-footer-border-color: #f1f3f5;
     --cc-footer-bg: var(--cc-bg);
+
+    --cc-btn-border-radius: 1rem .6rem 1.3rem .5rem / .5rem 1rem;
+    --cc-modal-border-radius: var(--cc-btn-border-radius);
+    --cc-pm-toggle-border-radius: var(--cc-btn-border-radius);
+}
+
+.cc--light-funky #cc-main .toggle__icon:after {
+    border-radius: var(--cc-btn-border-radius);
+}
+
+.cc--light-funky #cc-main .cm__btn--close {
+    border-radius: var(--cc-btn-border-radius);
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
 }
