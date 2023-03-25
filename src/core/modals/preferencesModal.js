@@ -349,7 +349,6 @@ export const createPreferencesModal = (api, createMainContainer) => {
                     const th = createNode('th');
 
                     th.id = 'cc__row-' + headerValue;
-                    setAttribute(th, 'role', 'columnheader');
                     setAttribute(th, 'scope', 'col');
                     addClassPm(th, 'table-th');
 
