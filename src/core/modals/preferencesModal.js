@@ -147,7 +147,7 @@ export const createPreferencesModal = (api, createMainContainer) => {
 
     let sectionToggleContainer;
 
-    sectionsData && sectionsData.forEach(section => {
+    sectionsData?.forEach((section, sectionIndex) => {
 
         const
             sTitleData = section.title,
@@ -348,7 +348,7 @@ export const createPreferencesModal = (api, createMainContainer) => {
                     const headerValue = headerData[headerKey];
                     const th = createNode('th');
 
-                    th.id = 'cc__row-' + headerValue;
+                    th.id = 'cc__row-' + headerValue + sectionIndex;
                     setAttribute(th, 'scope', 'col');
                     addClassPm(th, 'table-th');
 
@@ -380,7 +380,7 @@ export const createPreferencesModal = (api, createMainContainer) => {
 
                         addClassPm(td, 'table-td');
                         setAttribute(td, 'data-column', tdHeader);
-                        setAttribute(td, 'headers', 'cc__row-' + tdHeader);
+                        setAttribute(td, 'headers', 'cc__row-' + tdHeader + sectionIndex);
 
                         tdInner.insertAdjacentHTML('beforeend', tdValue);
 
