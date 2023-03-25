@@ -36,6 +36,6 @@
     "postcss": "^8.4.21",
     "postcss-cli": "^10.1.0",
     "postcss-custom-properties": "^13.1.4",
-    "terser": "^5.16.6"
+    "terser": "^5.16.8"
   }
 }
