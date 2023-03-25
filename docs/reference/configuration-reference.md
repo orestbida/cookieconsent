@@ -872,6 +872,7 @@ Define the translation(s) content.
     `CookieTable` type:
     ```javascript
     {
+        caption?: string
         headers: {[key: string]: string}
         body: {[key: string]: string}[]
     }
@@ -895,6 +896,7 @@ Define the translation(s) content.
             description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua',
             linkedCategory: 'analytics',
             cookieTable: {
+                caption: 'List of cookies',
                 headers: {
                     name: 'Name',
                     description: 'Description',
