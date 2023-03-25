@@ -299,6 +299,12 @@ declare namespace CookieConsent {
     }
 
     interface CookieTable {
+
+        /**
+         * Table caption
+         */
+        caption?: string,
+
         /**
          * Define the table headers (columns).
          */

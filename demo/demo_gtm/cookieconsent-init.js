@@ -52,6 +52,7 @@ CookieConsent.run({
 
     language: {
         default: 'en',
+        rtl: 'en',
 
         translations: {
             en: {
@@ -85,6 +86,7 @@ CookieConsent.run({
                             description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
                             linkedCategory: 'analytics',
                             cookieTable: {
+                                caption: 'Cookie tableeee',
                                 headers: {
                                     name: 'Cookie',
                                     domain: 'Domain',

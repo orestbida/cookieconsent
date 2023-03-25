@@ -156,6 +156,7 @@ export const createPreferencesModal = (api, createMainContainer) => {
             sCurrentCategoryObject = sLinkedCategory && state._allDefinedCategories[sLinkedCategory],
             sCookieTableData = section.cookieTable,
             sCookieTableBody = sCookieTableData?.body,
+            sCookieTableCaption = sCookieTableData?.caption,
             sCreateCookieTable = sCookieTableBody?.length > 0,
             hasToggle = !!sCurrentCategoryObject,
 
@@ -321,6 +322,13 @@ export const createPreferencesModal = (api, createMainContainer) => {
                 const table = createNode('table');
                 const thead = createNode('thead');
                 const tbody = createNode('tbody');
+
+                if(sCookieTableCaption) {
+                    const caption = createNode('caption');
+                    addClassPm(caption, 'table-caption');
+                    caption.innerHTML = sCookieTableCaption;
+                    table.appendChild(caption);
+                }
 
                 addClassPm(table, 'section-table');
                 addClassPm(thead, 'table-head');

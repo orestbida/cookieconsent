@@ -575,6 +575,12 @@ $service-toggle-knob-icon-width: 1.7px;
         font-size: .9em;
     }
 
+    .pm__table-caption {
+        border-top: 1px solid var(--cc-cookie-category-block-border);
+        text-align: start;
+    }
+
+    .pm__table-caption,
     .pm__table-head > tr{
         font-weight: 600;
         color: var(--cc-primary-color);
@@ -589,6 +595,7 @@ $service-toggle-knob-icon-width: 1.7px;
         }
     }
 
+    .pm__table-caption,
     .pm__table-th,
     .pm__table-td{
         padding: 0.625em;
