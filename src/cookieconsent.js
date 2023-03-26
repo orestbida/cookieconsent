@@ -1127,7 +1127,7 @@
             changed_settings = [];
 
             // Retrieve all toggle/checkbox values
-            var category_toggles = document.querySelectorAll('.c-tgl') || [];
+            var category_toggles = settings_container.querySelectorAll('.c-tgl') || [];
 
             // If there are opt in/out toggles ...
             if(category_toggles.length > 0){
