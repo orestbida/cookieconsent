@@ -617,18 +617,20 @@
                 new_settings_blocks = _createNode('div');
                 new_settings_blocks.id = 's-bl';
             }
+
+            var settings_modal_config = user_config.languages[lang]['settings_modal'];
             
             // Add label to close button
-            settings_close_btn.setAttribute('aria-label', user_config.languages[lang]['settings_modal']['close_btn_label'] || 'Close');
+            settings_close_btn.setAttribute('aria-label', settings_modal_config['close_btn_label'] || 'Close');
 
-            all_blocks = user_config.languages[lang]['settings_modal']['blocks'];
-            all_table_headers = user_config.languages[lang]['settings_modal']['cookie_table_headers'];
-            var table_caption = user_config.languages[lang]['settings_modal']['cookie_table_caption'];
+            all_blocks = settings_modal_config['blocks'];
+            all_table_headers = settings_modal_config['cookie_table_headers'];
+            var table_caption = settings_modal_config['cookie_table_caption'];
 
             var n_blocks = all_blocks.length;
 
             // Set settings modal title
-            settings_title.innerHTML = user_config.languages[lang]['settings_modal']['title'];
+            settings_title.innerHTML = settings_modal_config['title'];
 
             // Create settings modal content (blocks)
             for(var i=0; i<n_blocks; ++i){
@@ -890,9 +892,9 @@
                 });
             }
 
-            settings_accept_all_btn.innerHTML = user_config.languages[lang]['settings_modal']['accept_all_btn'];
+            settings_accept_all_btn.innerHTML = settings_modal_config['accept_all_btn'];
 
-            var reject_all_btn_text = user_config.languages[lang]['settings_modal']['reject_all_btn'];
+            var reject_all_btn_text = settings_modal_config['reject_all_btn'];
 
             // Add third [optional] reject all button if provided
             if(reject_all_btn_text){
@@ -931,7 +933,7 @@
                 });
             }
 
-            settings_save_btn.innerHTML = user_config.languages[lang]['settings_modal']['save_settings_btn'];
+            settings_save_btn.innerHTML = settings_modal_config['save_settings_btn'];
 
 
             if(new_settings_blocks) {
