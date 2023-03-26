@@ -735,6 +735,14 @@ CookieConsent settings modal
     overflow: hidden;
 }
 
+#s-bl caption {
+    display: block;
+    padding: 0.5rem 1rem;
+    font-size: .9em;
+    border-top: 1px solid var(--cc-cookie-table-border);
+    font-weight: 600;
+}
+
 #s-bl td,
 #s-bl th {
     padding: 0.8em 0.625em;

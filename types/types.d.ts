@@ -74,6 +74,7 @@ declare global {
         title: string
         description: string
         toggle?: ToggleSetting
+        cookie_table_caption?: string,
         cookie_table_headers?: Record<string, string>[]
         cookie_table?: Record<string, string | boolean>[]
     }

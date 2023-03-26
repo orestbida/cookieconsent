@@ -43,6 +43,7 @@
 
             /**
              * Global user configuration object
+             * @type {import('../types/types')}
              */
             user_config,
 
@@ -616,12 +617,13 @@
                 new_settings_blocks = _createNode('div');
                 new_settings_blocks.id = 's-bl';
             }
-
+            
             // Add label to close button
             settings_close_btn.setAttribute('aria-label', user_config.languages[lang]['settings_modal']['close_btn_label'] || 'Close');
 
             all_blocks = user_config.languages[lang]['settings_modal']['blocks'];
             all_table_headers = user_config.languages[lang]['settings_modal']['cookie_table_headers'];
+            var table_caption = user_config.languages[lang]['settings_modal']['cookie_table_caption'];
 
             var n_blocks = all_blocks.length;
 
@@ -810,8 +812,15 @@
                     var thead = _createNode('thead');
                     thead.appendChild(tr_tmp);
 
-                    // append header to table
                     var block_table = _createNode('table');
+                    
+                    if(table_caption) {
+                        var caption = _createNode('caption');
+                        caption.innerHTML = table_caption;
+                        block_table.appendChild(caption);
+                    }
+
+                    // append header to table
                     block_table.appendChild(thead);
 
                     var tbody_fragment = document.createDocumentFragment();
