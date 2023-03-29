@@ -43,7 +43,6 @@
 
             /**
              * Global user configuration object
-             * @type {import('../types/types')}
              */
             user_config,
 
