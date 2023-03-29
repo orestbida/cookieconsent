@@ -74,8 +74,6 @@ declare global {
         title: string
         description: string
         toggle?: ToggleSetting
-        cookie_table_caption?: string,
-        cookie_table_headers?: Record<string, string>[]
         cookie_table?: Record<string, string | boolean>[]
     }
 
@@ -85,6 +83,7 @@ declare global {
         accept_all_btn?: string
         reject_all_btn?: string
         close_btn_label?: string
+        cookie_table_caption?: string
         cookie_table_headers?: Record<string, string>[]
         blocks?: BlockSetting[]
     }
