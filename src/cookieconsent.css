@@ -58,7 +58,7 @@
     --cc-webkit-scrollbar-bg-hover: #9199a0;
 }
 
-#cc-main {
+#cc--main {
     z-index: var(--cc-z-index);
 }
 
@@ -1131,6 +1131,15 @@ html.force--consent.show--consent body{
     top: 0;
 }
 /* end positions */
+
+/* Disable transitions if prefers-reduced-motion detected */
+@media (prefers-reduced-motion) {
+    #cc--main #cm,
+    #cc--main #s-cnt,
+    #cc--main #s-inr{
+        transition: none!important;
+    }
+}
 
 @media screen and (max-width: 688px) {
 
