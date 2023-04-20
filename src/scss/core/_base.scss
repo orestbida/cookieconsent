@@ -29,6 +29,7 @@
     line-height: 1.15;
     -webkit-text-size-adjust: 100%;
     z-index: var(--cc-z-index);
+    position: fixed;
 
     &.cc--rtl{
         direction: rtl;
@@ -105,5 +106,12 @@ html.disable--interaction{
     &.show--consent body{
         height: auto!important;
         overflow: hidden!important;
+    }
+}
+
+// disable transition if prefers-reduced-motion detected
+@media (prefers-reduced-motion) {
+    #cc-main {
+        --cc-modal-transition-duration: 0s;
     }
 }
