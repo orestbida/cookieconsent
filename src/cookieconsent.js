@@ -87,6 +87,16 @@
              */
             current_focused_modal,
 
+            /**
+             * @type {HTMLSpanElement}
+             */
+            cmFocusSpan,
+
+            /**
+             * @type {HTMLSpanElement}
+             */
+            smFocusSpan,
+
             all_table_headers,
             all_blocks,
 
@@ -495,6 +505,7 @@
                     consent_primary_btn = _createNode('button');
                     consent_primary_btn.id = 'c-p-bn';
                     consent_primary_btn.className =  "c-bn";
+                    consent_primary_btn.appendChild(generateFocusSpan(1))
 
                     var _accept_type;
 
@@ -508,7 +519,7 @@
                     });
                 }
 
-                consent_primary_btn.innerHTML = user_config.languages[lang]['consent_modal']['primary_btn']['text'];
+                consent_primary_btn.firstElementChild.innerHTML = user_config.languages[lang]['consent_modal']['primary_btn']['text'];
             }
 
             // Add secondary button if not falsy
@@ -518,6 +529,7 @@
                     consent_secondary_btn = _createNode('button');
                     consent_secondary_btn.id = 'c-s-bn';
                     consent_secondary_btn.className = "c-bn c_link";
+                    consent_secondary_btn.appendChild(generateFocusSpan(1))
 
                     if(secondary_btn_data['role'] === 'accept_necessary'){
                         _addEvent(consent_secondary_btn, 'click', function(){
@@ -531,7 +543,7 @@
                     }
                 }
 
-                consent_secondary_btn.innerHTML = user_config.languages[lang]['consent_modal']['secondary_btn']['text'];
+                consent_secondary_btn.firstElementChild.innerHTML = user_config.languages[lang]['consent_modal']['secondary_btn']['text'];
             }
 
             // Swap buttons
@@ -581,6 +593,7 @@
                 settings_title = _createNode('div');
                 var settings_header = _createNode('div');
                 settings_close_btn = _createNode('button');
+                settings_close_btn.appendChild(generateFocusSpan(2));
                 var settings_close_btn_container = _createNode('div');
                 settings_blocks = _createNode('div');
                 var overlay = _createNode('div');
@@ -1335,13 +1348,13 @@
                     // If modal is not focused => focus modal
                     if(e.shiftKey){
                         if (activeElement === current_modal_focusable[0] || !current_focused_modal.contains(activeElement)) {
-                            current_modal_focusable[1].focus();
                             e.preventDefault();
+                            setFocus(current_modal_focusable[1])
                         }
                     }else{
                         if (document.activeElement === current_modal_focusable[1] || !current_focused_modal.contains(activeElement)) {
-                            current_modal_focusable[0].focus();
                             e.preventDefault();
+                            setFocus(current_modal_focusable[0]);
                         }
                     }
                 }
@@ -1866,11 +1879,14 @@
                 return;
 
             consent_modal_visible = false;
+
+            setFocus(cmFocusSpan);
+
             consent_modal.setAttribute('aria-hidden', 'true');
             _removeClass(html_dom, "show--consent");
 
             if(last_elem_before_modal) {
-                last_elem_before_modal.focus();
+                setFocus(last_elem_before_modal);
                 last_elem_before_modal = null;
             }
 
@@ -1907,19 +1923,22 @@
         _cookieconsent.hideSettings = function(){
 
             settings_modal_visible = false;
+
+            setFocus(smFocusSpan);
+
             settings_container.setAttribute('aria-hidden', 'true');
             _removeClass(html_dom, "show--settings");
 
             if(consent_modal_visible){
                 if(last_consent_modal_btn_focus) {
-                    last_consent_modal_btn_focus.focus();
+                    setFocus(last_consent_modal_btn_focus);
                     last_consent_modal_btn_focus = null;
                 }
                 current_focused_modal = consent_modal;
                 current_modal_focusable = consent_modal_focusable;
             }else{
                 if(last_elem_before_modal) {
-                    last_elem_before_modal.focus();
+                    setFocus(last_elem_before_modal);
                     last_elem_before_modal = null;
                 }
             }
@@ -2173,6 +2192,28 @@
          */
         var _hasClass = function(el, className) {
             return el.classList.contains(className);
+        }
+
+        /**
+         * @param {1 | 2} modal_id
+         */
+        var generateFocusSpan = function(modal_id) {
+            var span = _createNode('span');
+            span.tabIndex = -1;
+
+            if(modal_id === 1)
+                cmFocusSpan = span;
+            else
+                smFocusSpan = span;
+
+            return span;
+        }
+
+        /**
+         * @param {HTMLElement} el
+         */
+        var setFocus = function(el) {
+            el && el.focus();
         }
 
         return _cookieconsent;
