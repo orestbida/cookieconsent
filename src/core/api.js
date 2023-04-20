@@ -225,13 +225,13 @@ export const hide = () => {
     if(_state._disablePageInteraction)
         toggleDisableInteraction();
 
-    removeClass(_dom._htmlDom, TOGGLE_CONSENT_MODAL_CLASS);
-    setAttribute(_dom._cm, ARIA_HIDDEN, 'true');
-
     /**
      * Fix focus restoration
      */
     focus(_dom._focusSpan);
+
+    removeClass(_dom._htmlDom, TOGGLE_CONSENT_MODAL_CLASS);
+    setAttribute(_dom._cm, ARIA_HIDDEN, 'true');
 
     /**
      * Restore focus to last focused element
@@ -289,6 +289,11 @@ export const hidePreferences = () => {
 
     state._preferencesModalVisible = false;
 
+    /**
+     * Fix focus restoration
+     */
+    focus(globalObj._dom._pmFocusSpan);
+
     removeClass(globalObj._dom._htmlDom, TOGGLE_PREFERENCES_MODAL_CLASS);
     setAttribute(globalObj._dom._pm, ARIA_HIDDEN, 'true');
 
@@ -296,15 +301,9 @@ export const hidePreferences = () => {
      * If consent modal is visible, focus him (instead of page document)
      */
     if(state._consentModalVisible){
-        focus(state._lastFocusedModalElement);
+        focus(state._lastFocusedModalElement, 1);
         state._lastFocusedModalElement = null;
     }else{
-
-        /**
-         * Fix focus restoration
-         */
-        focus(globalObj._dom._pmFocusSpan);
-
         /**
          * Restore focus to last page element which had focus before modal opening
          */

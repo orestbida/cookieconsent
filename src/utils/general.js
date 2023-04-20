@@ -724,7 +724,9 @@ export const focus = (el, modalId) => {
     el?.focus();
 
     if(modalId) {
-        globalObj._state._currentFocusedModal = el;
+        globalObj._state._currentFocusedModal = modalId === 1
+            ? globalObj._dom._cmContainer
+            : globalObj._dom._pmContainer;
 
         globalObj._state._currentFocusEdges = modalId === 1
             ? globalObj._state._cmFocusableElements

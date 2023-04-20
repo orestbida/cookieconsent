@@ -5,17 +5,12 @@ import { createPreferencesModal } from './preferencesModal';
 import { DIV_TAG } from '../../utils/constants';
 import { handleRtlLanguage } from '../../utils/language';
 
-/**
- * @param {import('../global').Api} api
- */
-export const createMainContainer = (api) => {
+export const createMainContainer = () => {
     const dom = globalObj._dom;
 
     if(!dom._ccMain){
         dom._ccMain = createNode(DIV_TAG);
         dom._ccMain.id = 'cc-main';
-
-        dom._ccMain.style.position = 'fixed';
 
         handleRtlLanguage();
 
