@@ -76,8 +76,16 @@
             consent_modal_visible = false,
 
             settings_modal_visible = false,
-            clicked_inside_modal = false,
+
+            /**
+             * @type {HTMLElement[]}
+             */
             current_modal_focusable,
+
+            /**
+             * @type {HTMLDivElement}
+             */
+            current_focused_modal,
 
             all_table_headers,
             all_blocks,
@@ -423,6 +431,7 @@
                 consent_modal_inner_inner.id = 'c-inr-i';
                 overlay.id = 'cm-ov';
 
+                consent_modal.tabIndex = -1;
                 consent_modal.setAttribute('role', 'dialog');
                 consent_modal.setAttribute('aria-modal', 'true');
                 consent_modal.setAttribute('aria-hidden', 'false');
@@ -564,6 +573,7 @@
              */
             if(!settings_container){
                 settings_container = _createNode('div');
+                settings_container.tabIndex = -1;
                 var settings_container_valign = _createNode('div');
                 var settings = _createNode('div');
                 var settings_container_inner = _createNode('div');
@@ -602,9 +612,8 @@
                 settings_close_btn_container.appendChild(settings_close_btn);
 
                 // If 'esc' key is pressed inside settings_container div => hide settings
-                _addEvent(settings_container_valign, 'keydown', function(evt){
-                    evt = evt || window.event;
-                    if (evt.keyCode === 27) {
+                _addEvent(document, 'keydown', function(evt){
+                    if (evt.keyCode === 27 && settings_modal_visible) {
                         _cookieconsent.hideSettings(0);
                     }
                 }, true);
@@ -1307,62 +1316,39 @@
          * focusable element of current active modal
          */
         var _handleFocusTrap = function(){
-            var tabbedOutsideDiv = false;
-            var tabbedInsideModal = false;
 
             _addEvent(document, 'keydown', function(e){
-                e = e || window.event;
 
                 // If is tab key => ok
-                if(e.key !== 'Tab') return;
+                if(e.key !== 'Tab')
+                    return;
+
+                if(!consent_modal_visible && !settings_modal_visible)
+                    return;
 
                 // If there is any modal to focus
                 if(current_modal_focusable){
+
+                    var activeElement = document.activeElement;
+
                     // If reached natural end of the tab sequence => restart
+                    // If modal is not focused => focus modal
                     if(e.shiftKey){
-                        if (document.activeElement === current_modal_focusable[0]) {
+                        if (activeElement === current_modal_focusable[0] || !current_focused_modal.contains(activeElement)) {
                             current_modal_focusable[1].focus();
                             e.preventDefault();
                         }
                     }else{
-                        if (document.activeElement === current_modal_focusable[1]) {
+                        if (document.activeElement === current_modal_focusable[1] || !current_focused_modal.contains(activeElement)) {
                             current_modal_focusable[0].focus();
                             e.preventDefault();
                         }
                     }
-
-                    // If have not yet used tab (or shift+tab) and modal is open ...
-                    // Focus the first focusable element
-                    if(!tabbedInsideModal && !clicked_inside_modal){
-                        tabbedInsideModal = true;
-                        !tabbedOutsideDiv && e.preventDefault();
-
-                        if(e.shiftKey){
-                            if(current_modal_focusable[3]){
-                                if(!current_modal_focusable[2]){
-                                    current_modal_focusable[0].focus();
-                                }else{
-                                    current_modal_focusable[2].focus();
-                                }
-                            }else{
-                                current_modal_focusable[1].focus();
-                            }
-                        }else{
-                            if(current_modal_focusable[3]){
-                                current_modal_focusable[3].focus();
-                            }else{
-                                current_modal_focusable[0].focus();
-                            }
-                        }
-                    }
                 }
-
-                !tabbedInsideModal && (tabbedOutsideDiv = true);
             });
 
             if(document.contains){
-                _addEvent(main_container, 'click', function(e){
-                    e = e || window.event;
+                _addEvent(settings_container, 'click', function(e){
                     /**
                      * If click is on the foreground overlay (and not inside settings_modal),
                      * hide settings modal
@@ -1371,14 +1357,7 @@
                      */
                     if(settings_modal_visible){
                         if(!settings_inner.contains(e.target)){
-                            _cookieconsent.hideSettings(0);
-                            clicked_inside_modal = false;
-                        }else{
-                            clicked_inside_modal = true;
-                        }
-                    }else if(consent_modal_visible){
-                        if(consent_modal.contains(e.target)){
-                            clicked_inside_modal = true;
+                            _cookieconsent.hideSettings();
                         }
                     }
 
@@ -1560,41 +1539,6 @@
             }else{
                 _log("CookieConsent [NOTICE]: cookie consent already attached to body!");
             }
-        }
-
-        /**
-         * Show settings modal (with optional delay)
-         * @param {number} delay
-         */
-        _cookieconsent.showSettings = function(delay){
-            setTimeout(function() {
-                _addClass(html_dom, "show--settings");
-                settings_container.setAttribute('aria-hidden', 'false');
-                settings_modal_visible = true;
-
-                /**
-                 * Set focus to the first focusable element inside settings modal
-                 */
-                setTimeout(function(){
-                    // If there is no consent-modal, keep track of the last focused elem.
-                    if(!consent_modal_visible){
-                        last_elem_before_modal = document.activeElement;
-                    }else{
-                        last_consent_modal_btn_focus = document.activeElement;
-                    }
-
-                    if (settings_modal_focusable.length === 0) return;
-
-                    if(settings_modal_focusable[3]){
-                        settings_modal_focusable[3].focus();
-                    }else{
-                        settings_modal_focusable[0].focus();
-                    }
-                    current_modal_focusable = settings_modal_focusable;
-                }, 200);
-
-                _log("CookieConsent [SETTINGS]: show settings_modal");
-            }, delay > 0 ? delay : 0);
         }
 
         /**
@@ -1896,71 +1840,89 @@
             if(create_modal === true)
                 _createConsentModal(_config.current_lang);
 
-            if(consent_modal_exists){
-                setTimeout(function() {
-                    _addClass(html_dom, "show--consent");
+            if(!consent_modal_exists)
+                return;
 
-                    /**
-                     * Update attributes/internal statuses
-                     */
-                    consent_modal.setAttribute('aria-hidden', 'false');
-                    consent_modal_visible = true;
+            last_elem_before_modal = document.activeElement;
+            current_modal_focusable = consent_modal_focusable;
+            current_focused_modal = consent_modal;
 
-                    setTimeout(function(){
-                        last_elem_before_modal = document.activeElement;
-                        current_modal_focusable = consent_modal_focusable;
-                    }, 200);
+            consent_modal_visible = true;
+            consent_modal.removeAttribute('aria-hidden');
 
-                    _log("CookieConsent [MODAL]: show consent_modal");
-                }, delay > 0 ? delay : (create_modal ? 30 : 0));
-            }
+            setTimeout(function() {
+                _addClass(html_dom, "show--consent");
+                _log("CookieConsent [MODAL]: show consent_modal");
+            }, delay > 0 ? delay : (create_modal ? 30 : 0));
+
         }
 
         /**
          * Hide consent modal
          */
         _cookieconsent.hide = function(){
-            if(consent_modal_exists){
-                _removeClass(html_dom, "show--consent");
-                consent_modal.setAttribute('aria-hidden', 'true');
-                consent_modal_visible = false;
 
-                setTimeout(function(){
-                    //restore focus to the last page element which had focus before modal opening
-                    last_elem_before_modal.focus();
-                    current_modal_focusable = null;
-                }, 200);
+            if(!consent_modal_exists)
+                return;
 
-                _log("CookieConsent [MODAL]: hide");
+            consent_modal_visible = false;
+            consent_modal.setAttribute('aria-hidden', 'true');
+            _removeClass(html_dom, "show--consent");
+
+            if(last_elem_before_modal) {
+                last_elem_before_modal.focus();
+                last_elem_before_modal = null;
             }
+
+            _log("CookieConsent [MODAL]: hide");
+        }
+
+        /**
+         * Show settings modal (with optional delay)
+         * @param {number} delay
+         */
+        _cookieconsent.showSettings = function(delay){
+
+            settings_modal_visible = true;
+            settings_container.removeAttribute('aria-hidden');
+
+            if(consent_modal_visible){
+                last_consent_modal_btn_focus = document.activeElement;
+            }else{
+                last_elem_before_modal = document.activeElement;
+            }
+
+            current_focused_modal = settings_container;
+            current_modal_focusable = settings_modal_focusable;
+
+            setTimeout(function() {
+                _addClass(html_dom, "show--settings");
+                _log("CookieConsent [SETTINGS]: show settings_modal");
+            }, delay > 0 ? delay : 0);
         }
 
         /**
          * Hide settings modal
          */
         _cookieconsent.hideSettings = function(){
-            _removeClass(html_dom, "show--settings");
+
             settings_modal_visible = false;
             settings_container.setAttribute('aria-hidden', 'true');
+            _removeClass(html_dom, "show--settings");
 
-
-            setTimeout(function(){
-                /**
-                 * If consent modal is visible, focus him (instead of page document)
-                 */
-                if(consent_modal_visible){
-                    last_consent_modal_btn_focus && last_consent_modal_btn_focus.focus();
-                    current_modal_focusable = consent_modal_focusable;
-                }else{
-                    /**
-                     * Restore focus to last page element which had focus before modal opening
-                     */
-                    last_elem_before_modal && last_elem_before_modal.focus();
-                    current_modal_focusable = null;
+            if(consent_modal_visible){
+                if(last_consent_modal_btn_focus) {
+                    last_consent_modal_btn_focus.focus();
+                    last_consent_modal_btn_focus = null;
                 }
-
-                clicked_inside_modal = false;
-            }, 200);
+                current_focused_modal = consent_modal;
+                current_modal_focusable = consent_modal_focusable;
+            }else{
+                if(last_elem_before_modal) {
+                    last_elem_before_modal.focus();
+                    last_elem_before_modal = null;
+                }
+            }
 
             _log("CookieConsent [SETTINGS]: hide settings_modal");
         }
