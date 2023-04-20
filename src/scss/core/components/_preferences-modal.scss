@@ -777,7 +777,7 @@ $service-toggle-knob-icon-width: 1.7px;
     /* END: Bar layout */
 
     /* Dark overlay */
-    .pm-wrapper::before{
+    .pm-overlay{
         content: '';
         position: fixed;
         left: 0;
@@ -792,7 +792,7 @@ $service-toggle-knob-icon-width: 1.7px;
 
     .cc--anim{
         .pm,
-        &.pm-wrapper::before{
+        .pm-overlay{
             transition: opacity var(--cc-modal-transition-duration) ease,
                     visibility var(--cc-modal-transition-duration) ease,
                     transform var(--cc-modal-transition-duration) ease;
@@ -832,7 +832,7 @@ $service-toggle-knob-icon-width: 1.7px;
                 transform: translateX(0);
             }
 
-            &.pm-wrapper::before{
+            .pm-overlay{
                 opacity: 1;
                 visibility: visible;
             }

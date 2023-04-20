@@ -260,10 +260,6 @@ export const showPreferences = () => {
     addClass(globalObj._dom._htmlDom, TOGGLE_PREFERENCES_MODAL_CLASS);
     setAttribute(globalObj._dom._pm, ARIA_HIDDEN, 'false');
 
-    setTimeout(()=>{
-        state._preferencesModalVisibleDelayed = true;
-    }, 1);
-
     // If there is no consent-modal, keep track of the last focused elem.
     if(!state._consentModalVisible){
         state._lastFocusedElemBeforeModal = getActiveElement();
@@ -295,10 +291,6 @@ export const hidePreferences = () => {
 
     removeClass(globalObj._dom._htmlDom, TOGGLE_PREFERENCES_MODAL_CLASS);
     setAttribute(globalObj._dom._pm, ARIA_HIDDEN, 'true');
-
-    setTimeout(()=>{
-        state._preferencesModalVisibleDelayed = false;
-    }, 1);
 
     /**
      * If consent modal is visible, focus him (instead of page document)

@@ -185,8 +185,6 @@ export class GlobalState {
             _preferencesModalVisible : false,
             _preferencesModalExists: false,
 
-            _preferencesModalVisibleDelayed : false,
-
             /**
             * @type {HTMLElement[]}
             */

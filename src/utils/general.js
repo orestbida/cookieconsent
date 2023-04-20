@@ -820,29 +820,6 @@ export const handleFocusTrap = () => {
 };
 
 /**
- * Close preferences modal if click is outside
- * @param {import('../core/global').Api} api
- */
-export const closeModalOnOutsideClick = ({hidePreferences}) => {
-
-    const dom = globalObj._dom;
-
-    addEvent(dom._ccMain, CLICK_EVENT, (e) => {
-        const state = globalObj._state;
-
-        /**
-         * If click is on the foreground overlay (and not inside preferencesModal),
-         * hide preferences modal
-         */
-        if(state._preferencesModalVisibleDelayed){
-            if(!dom._pm.contains(e.target)){
-                hidePreferences();
-            }
-        }
-    });
-};
-
-/**
  * Note: any of the below focusable elements, which has the attribute tabindex="-1" AND is either
  * the first or last element of the modal, won't receive focus during "open/close" modal
  */

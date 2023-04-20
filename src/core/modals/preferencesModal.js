@@ -80,6 +80,16 @@ export const createPreferencesModal = (api, createMainContainer) => {
         addClass(dom._pmContainer, 'pm-wrapper');
         dom._pmContainer.tabIndex = -1;
 
+        // modal overlay
+        const pmOverlay = createNode('div');
+        addClass(pmOverlay, 'pm-overlay');
+        appendChild(dom._pmContainer, pmOverlay);
+
+        /**
+         * Hide modal when overlay is clicked
+         */
+        addEvent(pmOverlay, CLICK_EVENT, hidePreferences);
+
         // preferences modal
         dom._pm = createNode(DIV_TAG);
         dom._pm.style.visibility = 'hidden';
