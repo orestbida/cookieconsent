@@ -2079,7 +2079,7 @@
             cookieStr += " SameSite=" + _config.cookie_same_site + ";";
 
             // assures cookie works with localhost (=> don't specify domain if on localhost)
-            if(window.location.hostname.indexOf(".") > -1){
+            if(window.location.hostname.indexOf(".") > -1 && _config.cookie_domain){
                 cookieStr += " Domain=" + _config.cookie_domain + ";";
             }
 
