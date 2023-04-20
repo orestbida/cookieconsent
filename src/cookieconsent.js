@@ -309,7 +309,7 @@
              * @returns {NodeListOf<Element>}
              */
             function _getElements(data_role){
-                return (elem || document).querySelectorAll('a[data-cc="' + data_role + '"], button[data-cc="' + data_role + '"]');
+                return (elem || document).querySelectorAll('[data-cc="' + data_role + '"]');
             }
 
             /**
@@ -617,16 +617,19 @@
                 new_settings_blocks.id = 's-bl';
             }
 
-            // Add label to close button
-            settings_close_btn.setAttribute('aria-label', user_config.languages[lang]['settings_modal']['close_btn_label'] || 'Close');
+            var settings_modal_config = user_config.languages[lang]['settings_modal'];
 
-            all_blocks = user_config.languages[lang]['settings_modal']['blocks'];
-            all_table_headers = user_config.languages[lang]['settings_modal']['cookie_table_headers'];
+            // Add label to close button
+            settings_close_btn.setAttribute('aria-label', settings_modal_config['close_btn_label'] || 'Close');
+
+            all_blocks = settings_modal_config['blocks'];
+            all_table_headers = settings_modal_config['cookie_table_headers'];
+            var table_caption = settings_modal_config['cookie_table_caption'];
 
             var n_blocks = all_blocks.length;
 
             // Set settings modal title
-            settings_title.innerHTML = user_config.languages[lang]['settings_modal']['title'];
+            settings_title.innerHTML = settings_modal_config['title'];
 
             // Create settings modal content (blocks)
             for(var i=0; i<n_blocks; ++i){
@@ -810,8 +813,15 @@
                     var thead = _createNode('thead');
                     thead.appendChild(tr_tmp);
 
-                    // append header to table
                     var block_table = _createNode('table');
+
+                    if(table_caption) {
+                        var caption = _createNode('caption');
+                        caption.innerHTML = table_caption;
+                        block_table.appendChild(caption);
+                    }
+
+                    // append header to table
                     block_table.appendChild(thead);
 
                     var tbody_fragment = document.createDocumentFragment();
@@ -881,9 +891,9 @@
                 });
             }
 
-            settings_accept_all_btn.innerHTML = user_config.languages[lang]['settings_modal']['accept_all_btn'];
+            settings_accept_all_btn.innerHTML = settings_modal_config['accept_all_btn'];
 
-            var reject_all_btn_text = user_config.languages[lang]['settings_modal']['reject_all_btn'];
+            var reject_all_btn_text = settings_modal_config['reject_all_btn'];
 
             // Add third [optional] reject all button if provided
             if(reject_all_btn_text){
@@ -922,7 +932,7 @@
                 });
             }
 
-            settings_save_btn.innerHTML = user_config.languages[lang]['settings_modal']['save_settings_btn'];
+            settings_save_btn.innerHTML = settings_modal_config['save_settings_btn'];
 
 
             if(new_settings_blocks) {
@@ -958,7 +968,6 @@
 
             // Fix layout flash
             main_container.style.position = "fixed";
-            main_container.style.zIndex = "2147483647";
             main_container.innerHTML = '<div id="cc_div" class="cc_div"></div>'
             all_modals_container = main_container.children[0];
 
@@ -972,9 +981,8 @@
             // Always create settings modal
             _createSettingsModal(lang);
 
-            // Finally prepend everything (main_container holds both modals)
-            var rootEl = root || document.body; 
-            rootEl.insertBefore(main_container, rootEl.firstChild);
+            // Finally append everything (main_container holds both modals)
+            (root || document.body).appendChild(main_container);
         }
 
         /**
@@ -1116,7 +1124,7 @@
             changed_settings = [];
 
             // Retrieve all toggle/checkbox values
-            var category_toggles = document.querySelectorAll('.c-tgl') || [];
+            var category_toggles = settings_container.querySelectorAll('.c-tgl') || [];
 
             // If there are opt in/out toggles ...
             if(category_toggles.length > 0){
@@ -1621,7 +1629,7 @@
                      */
                     if(_inArray(accepted_categories, curr_script_category) > -1){
 
-                        curr_script.type = 'text/javascript';
+                        curr_script.type = curr_script.getAttribute('data-type') || 'text/javascript';
                         curr_script.removeAttribute(_config.script_selector);
 
                         // get current script data-src
@@ -2071,7 +2079,7 @@
             cookieStr += " SameSite=" + _config.cookie_same_site + ";";
 
             // assures cookie works with localhost (=> don't specify domain if on localhost)
-            if(window.location.hostname.indexOf(".") > -1){
+            if(window.location.hostname.indexOf(".") > -1 && _config.cookie_domain){
                 cookieStr += " Domain=" + _config.cookie_domain + ";";
             }
 

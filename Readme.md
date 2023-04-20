@@ -279,6 +279,7 @@ A __lightweight__ & __gdpr compliant__ cookie consent plugin written in plain ja
                                     accept_all_btn: 'Accept all',
                                     reject_all_btn: 'Reject all',
                                     close_btn_label: 'Close',
+                                    // cookie_table_caption: 'Cookie list',
                                     cookie_table_headers: [
                                         {col1: 'Name'},
                                         {col2: 'Domain'},
