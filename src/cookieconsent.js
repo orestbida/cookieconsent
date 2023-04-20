@@ -26,7 +26,7 @@
             'hide_from_bots': true,
             'cookie_name': 'cc_cookie',
             'cookie_expiration': 182,                 // default: 6 months (in days)
-            'cookie_domain': window.location.hostname,       // default: current domain
+            'cookie_domain': location.hostname,       // default: current domain
             'cookie_path': '/',
             'cookie_same_site': 'Lax',
             'use_rfc_cookie': false,
@@ -1218,7 +1218,7 @@
              * reload page if needed
              */
             if(reload_page)
-                window.location.reload();
+                location.reload();
         }
 
         /**
@@ -2079,11 +2079,11 @@
             cookieStr += " SameSite=" + _config.cookie_same_site + ";";
 
             // assures cookie works with localhost (=> don't specify domain if on localhost)
-            if(window.location.hostname.indexOf(".") > -1 && _config.cookie_domain){
+            if(location.hostname.indexOf(".") > -1 && _config.cookie_domain){
                 cookieStr += " Domain=" + _config.cookie_domain + ";";
             }
 
-            if(window.location.protocol === "https:") {
+            if(location.protocol === "https:") {
                 cookieStr += " Secure;";
             }
 
