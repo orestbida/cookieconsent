@@ -618,7 +618,7 @@
             }
 
             var settings_modal_config = user_config.languages[lang]['settings_modal'];
-            
+
             // Add label to close button
             settings_close_btn.setAttribute('aria-label', settings_modal_config['close_btn_label'] || 'Close');
 
@@ -814,7 +814,7 @@
                     thead.appendChild(tr_tmp);
 
                     var block_table = _createNode('table');
-                    
+
                     if(table_caption) {
                         var caption = _createNode('caption');
                         caption.innerHTML = table_caption;
@@ -982,9 +982,8 @@
             // Always create settings modal
             _createSettingsModal(lang);
 
-            // Finally prepend everything (main_container holds both modals)
-            var rootEl = root || document.body; 
-            rootEl.insertBefore(main_container, rootEl.firstChild);
+            // Finally append everything (main_container holds both modals)
+            (root || document.body).appendChild(main_container);
         }
 
         /**
