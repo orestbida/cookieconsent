@@ -25,8 +25,8 @@ export const createMainContainer = (api) => {
         if(root && isString(root))
             root = document.querySelector(root);
 
-        // Prepend main container to dom
-        (root || dom._document.body).prepend(dom._ccMain);
+        // Append main container to dom
+        (root || dom._document.body).appendChild(dom._ccMain);
 
         closeModalOnOutsideClick(api);
     }

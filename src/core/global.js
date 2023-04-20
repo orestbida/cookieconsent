@@ -68,6 +68,10 @@ import { COOKIE_NAME, OPT_IN_MODE } from '../utils/constants';
  *
  * @property {Object.<string, HTMLInputElement>} _categoryCheckboxInputs
  * @property {Object.<string, ServiceToggle>} _serviceCheckboxInputs
+ *
+ * // Used to properly restore focus when modal is closed
+ * @property {HTMLSpanElement} _focusSpan
+ * @property {HTMLSpanElement} _pmFocusSpan
  */
 
 /**
@@ -181,11 +185,6 @@ export class GlobalState {
             _preferencesModalVisible : false,
             _preferencesModalExists: false,
 
-            _clickedInsideModal : false,
-            _tabbedInsideModal : false,
-            _tabbedOutside : false,
-            _shouldHandleFirstTab: false,
-
             _preferencesModalVisibleDelayed : false,
 
             /**
@@ -262,6 +261,9 @@ export class GlobalState {
 
             /** @type {HTMLElement[]} **/ _cmFocusableElements : [],
             /** @type {HTMLElement[]} **/ _pmFocusableElements : [],
+
+            /** @type {HTMLDivElement} **/ _currentFocusedModal: null,
+            /** @type {HTMLDivElement[]} **/ _currentFocusEdges: [],
 
             /**
             * Keep track of enabled/disabled categories

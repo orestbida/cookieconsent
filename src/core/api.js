@@ -12,7 +12,7 @@ import {
     retrieveRejectedServices,
     isArray,
     isObject,
-    getModalFocusableData,
+    focus,
     getActiveElement,
     resolveEnabledCategories,
     resolveEnabledServices,
@@ -180,27 +180,34 @@ export const show = (createModal) => {
 
     const { _dom, _state } = globalObj;
 
-    if(createModal && !_state._consentModalExists)
-        createConsentModal(miniAPI, createMainContainer);
+    if(_state._consentModalVisible)
+        return;
 
-    if(_state._consentModalExists){
-        _state._consentModalVisible = true;
-
-        if(_state._disablePageInteraction)
-            toggleDisableInteraction(true);
-
-        addClass(_dom._htmlDom, TOGGLE_CONSENT_MODAL_CLASS);
-        setAttribute(_dom._cm, ARIA_HIDDEN, 'false');
-
-        setTimeout(() => {
-            _state._lastFocusedElemBeforeModal = getActiveElement();
-            _state._currentModalFocusableElements = _state._cmFocusableElements;
-        }, 200);
-
-        _log('CookieConsent [TOGGLE]: show consentModal');
-
-        fireEvent(globalObj._customEvents._onModalShow, CONSENT_MODAL_NAME);
+    if(!_state._consentModalExists) {
+        if(createModal) {
+            createConsentModal(miniAPI, createMainContainer);
+        } else {
+            return;
+        }
     }
+
+    _state._consentModalVisible = true;
+    _state._lastFocusedElemBeforeModal = getActiveElement();
+
+    if(_state._disablePageInteraction)
+        toggleDisableInteraction(true);
+
+    addClass(_dom._htmlDom, TOGGLE_CONSENT_MODAL_CLASS);
+    setAttribute(_dom._cm, ARIA_HIDDEN, 'false');
+
+    /**
+     * Set focus to consentModal
+     */
+    focus(_dom._cmContainer, 1);
+
+    _log('CookieConsent [TOGGLE]: show consentModal');
+
+    fireEvent(globalObj._customEvents._onModalShow, CONSENT_MODAL_NAME);
 };
 
 /**
@@ -210,26 +217,31 @@ export const hide = () => {
 
     const { _dom, _state, _customEvents } = globalObj;
 
-    if(_state._consentModalExists){
-        _state._consentModalVisible = false;
-        _state._shouldHandleFirstTab = true;
+    if(!_state._consentModalVisible)
+        return;
 
-        if(_state._disablePageInteraction)
-            toggleDisableInteraction();
+    _state._consentModalVisible = false;
 
-        removeClass(_dom._htmlDom, TOGGLE_CONSENT_MODAL_CLASS);
-        setAttribute(_dom._cm, ARIA_HIDDEN, 'true');
+    if(_state._disablePageInteraction)
+        toggleDisableInteraction();
 
-        setTimeout(() => {
-            // restore focus to the last focused element
-            // _state._lastFocusedElemBeforeModal.focus();
-            _state._currentModalFocusableElements = [];
-        }, 200);
+    removeClass(_dom._htmlDom, TOGGLE_CONSENT_MODAL_CLASS);
+    setAttribute(_dom._cm, ARIA_HIDDEN, 'true');
 
-        _log('CookieConsent [TOGGLE]: hide consentModal');
+    /**
+     * Fix focus restoration
+     */
+    focus(_dom._focusSpan);
 
-        fireEvent(_customEvents._onModalHide, CONSENT_MODAL_NAME);
-    }
+    /**
+     * Restore focus to last focused element
+     */
+    focus(_state._lastFocusedElemBeforeModal);
+    _state._lastFocusedElemBeforeModal = null;
+
+    _log('CookieConsent [TOGGLE]: hide consentModal');
+
+    fireEvent(_customEvents._onModalHide, CONSENT_MODAL_NAME);
 };
 
 /**
@@ -238,38 +250,31 @@ export const hide = () => {
 export const showPreferences = () => {
     const state = globalObj._state;
 
-    if(state._preferencesModalExists && state._preferencesModalVisible)
+    if(state._preferencesModalVisible)
         return;
 
     if(!state._preferencesModalExists)
         createPreferencesModal(miniAPI, createMainContainer);
 
+    state._preferencesModalVisible = true;
     addClass(globalObj._dom._htmlDom, TOGGLE_PREFERENCES_MODAL_CLASS);
     setAttribute(globalObj._dom._pm, ARIA_HIDDEN, 'false');
-    state._preferencesModalVisible = true;
 
     setTimeout(()=>{
         state._preferencesModalVisibleDelayed = true;
     }, 1);
 
+    // If there is no consent-modal, keep track of the last focused elem.
+    if(!state._consentModalVisible){
+        state._lastFocusedElemBeforeModal = getActiveElement();
+    }else{
+        state._lastFocusedModalElement = getActiveElement();
+    }
+
     /**
-     * Set focus to the first focusable element inside preferences modal
+     * Set focus to preferencesModal
      */
-    setTimeout(() => {
-        // If there is no consent-modal, keep track of the last focused elem.
-        if(!state._consentModalVisible){
-            state._lastFocusedElemBeforeModal = getActiveElement();
-        }else{
-            state._lastFocusedModalElement = getActiveElement();
-        }
-
-        if (state._pmFocusableElements.length === 0)
-            return;
-
-        state._pmFocusableElements[0].focus();
-
-        state._currentModalFocusableElements = state._pmFocusableElements;
-    }, 200);
+    focus(globalObj._dom._pmContainer, 2);
 
     _log('CookieConsent [TOGGLE]: show preferencesModal');
 
@@ -286,11 +291,10 @@ export const hidePreferences = () => {
     if(!state._preferencesModalVisible)
         return;
 
+    state._preferencesModalVisible = false;
+
     removeClass(globalObj._dom._htmlDom, TOGGLE_PREFERENCES_MODAL_CLASS);
     setAttribute(globalObj._dom._pm, ARIA_HIDDEN, 'true');
-
-    state._preferencesModalVisible = false;
-    state._shouldHandleFirstTab = true;
 
     setTimeout(()=>{
         state._preferencesModalVisibleDelayed = false;
@@ -300,17 +304,21 @@ export const hidePreferences = () => {
      * If consent modal is visible, focus him (instead of page document)
      */
     if(state._consentModalVisible){
-        state._lastFocusedModalElement && state._lastFocusedModalElement.focus();
-        state._currentModalFocusableElements = state._cmFocusableElements;
+        focus(state._lastFocusedModalElement);
+        state._lastFocusedModalElement = null;
     }else{
+
+        /**
+         * Fix focus restoration
+         */
+        focus(globalObj._dom._pmFocusSpan);
+
         /**
          * Restore focus to last page element which had focus before modal opening
          */
-        //state._lastFocusedElemBeforeModal && state._lastFocusedElemBeforeModal.focus();
-        state._currentModalFocusableElements = [];
+        focus(state._lastFocusedElemBeforeModal);
+        state._lastFocusedElemBeforeModal = null;
     }
-
-    state._clickedInsideModal = false;
 
     _log('CookieConsent [TOGGLE]: hide preferencesModal');
 
@@ -357,7 +365,6 @@ export const setLanguage = async (newLanguageCode, forceUpdate) => {
             createPreferencesModal(miniAPI, createMainContainer);
 
         handleRtlLanguage();
-        getModalFocusableData();
 
         return true;
     }

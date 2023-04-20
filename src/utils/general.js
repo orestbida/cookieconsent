@@ -717,6 +717,22 @@ export const addDataButtonListeners = (elem, api, createPreferencesModal, create
 };
 
 /**
+ * @param {HTMLElement} el
+ * @param {1 | 2} [modalId]
+ */
+export const focus = (el, modalId) => {
+    el?.focus();
+
+    if(modalId) {
+        globalObj._state._currentFocusedModal = el;
+
+        globalObj._state._currentFocusEdges = modalId === 1
+            ? globalObj._state._cmFocusableElements
+            : globalObj._state._pmFocusableElements;
+    }
+};
+
+/**
  * Obtain accepted and rejected categories
  * @returns {{accepted: string[], rejected: string[]}}
  */
@@ -769,84 +785,37 @@ export const handleFocusTrap = () => {
         if(e.key !== 'Tab')
             return;
 
-        let focusableElements = state._currentModalFocusableElements;
-
         /**
-         * If modals were both (just) hidden, and tab is pressed
-         * Set focus to the first focusable element
+         * Handle tab key only if at least one modal is visible
          */
-        if(state._shouldHandleFirstTab &&
-            !state._consentModalVisible &&
-            !state._preferencesModalVisible
-        ) {
+        if(!state._preferencesModalVisible && !state._consentModalVisible)
+            return;
 
-            state._shouldHandleFirstTab = false;
-            const body = dom._document.body;
+        const focusableElements = state._currentFocusEdges;
+        const currentModal = state._currentFocusedModal;
 
-            /**
-             * Only handle 'tab' event when the current active element is `body`
-             */
-            if(getActiveElement() === body){
-
-                const shiftPressed = !!e.shiftKey;
-                /**
-                 * If tab is pressed and ccMain is the first child of body,
-                 * don't do anything, tab will work naturally (no javascript)
-                 */
-                if(!shiftPressed && body.firstChild === dom._ccMain)
-                    return;
-
-                preventDefault(e);
-
-                /**
-                 * All focusable elements outside of ccMain
-                 */
-                focusableElements = [...getFocusableElements(body)]
-                    .filter(elem => !(elem.matches('#cc-main *') || !elem.offsetParent));
-
-                /**
-                 * Focus either the first or the last element
-                 */
-                return focusableElements[shiftPressed
-                    ? focusableElements.length - 1
-                    : 0
-                ]?.focus();
-            }
-        }
-
-        // If there is any modal to focus
+        // If there is any element to focus
         if(focusableElements.length > 0){
 
             const currentActiveElement = getActiveElement();
 
-            // If reached natural end of the tab sequence => restart
+            /**
+             * If reached natural end of the tab sequence => restart
+             * If current focused element is not inside modal => focus modal
+             */
             if(e.shiftKey){
-                if (currentActiveElement === focusableElements[0]) {
-                    focusableElements[1].focus();
+                if (currentActiveElement === focusableElements[0] || !currentModal.contains(currentActiveElement)) {
                     preventDefault(e);
+                    focus(focusableElements[1]);
                 }
             }else{
-                if (currentActiveElement === focusableElements[1]) {
-                    focusableElements[0].focus();
+                if (currentActiveElement === focusableElements[1] || !currentModal.contains(currentActiveElement)) {
                     preventDefault(e);
-                }
-            }
-
-            // If have not yet used tab (or shift+tab) and modal is open ...
-            // Focus the first focusable element
-            if(!state._tabbedInsideModal && !globalObj._state._clickedInsideModal){
-                state._tabbedInsideModal = true;
-                !state._tabbedOutside && preventDefault(e);
-
-                if(e.shiftKey){
-                    focusableElements[1].focus();
-                }else{
-                    focusableElements[0].focus();
+                    focus(focusableElements[0]);
                 }
             }
         }
 
-        !state._tabbedInsideModal && (state._tabbedOutside = true);
     }, true);
 };
 
@@ -868,16 +837,8 @@ export const closeModalOnOutsideClick = ({hidePreferences}) => {
         if(state._preferencesModalVisibleDelayed){
             if(!dom._pm.contains(e.target)){
                 hidePreferences();
-                state._clickedInsideModal = false;
-            }else{
-                state._clickedInsideModal = true;
-            }
-        }else if(state._consentModalVisible){
-            if(dom._cm.contains(e.target)){
-                state._clickedInsideModal = true;
             }
         }
-
     });
 };
 
@@ -888,16 +849,14 @@ export const closeModalOnOutsideClick = ({hidePreferences}) => {
 const focusableTypesSelector = ['[href]', BUTTON_TAG, 'input', 'details', '[tabindex]']
     .map(selector => selector+':not([tabindex="-1"])').join(',');
 
-export const getFocusableElements = (root) => {
-    console.log(focusableTypesSelector);
-    return querySelectorAll(root, focusableTypesSelector);
-};
+export const getFocusableElements = (root) => querySelectorAll(root, focusableTypesSelector);
 
 /**
  * Save reference to first and last focusable elements inside each modal
  * to prevent losing focus while navigating with TAB
+ * @param {1 | 2} [modalId]
  */
-export const getModalFocusableData = () => {
+export const getModalFocusableData = (modalId) => {
 
     const { _state, _dom } = globalObj;
 
@@ -917,14 +876,12 @@ export const getModalFocusableData = () => {
         array[1] = focusableElements[focusableElements.length - 1];
     };
 
-    if(_state._consentModalExists)
+    if(modalId === 1 && _state._consentModalExists)
         saveAllFocusableElements(_dom._cm, _state._cmFocusableElements);
 
-    if(_state._preferencesModalExists)
+    if(modalId === 2 && _state._preferencesModalExists)
         saveAllFocusableElements(_dom._pm, _state._pmFocusableElements);
 
-    _state._tabbedOutside = false;
-    _state._tabbedInsideModal = false;
 };
 
 /**

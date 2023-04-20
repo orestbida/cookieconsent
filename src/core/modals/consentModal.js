@@ -31,6 +31,19 @@ import { createPreferencesModal } from './preferencesModal';
  */
 
 /**
+ * @returns {HTMLSpanElement}
+ */
+const createFocusSpan = () => {
+    const span = createNode('span');
+    span.tabIndex = -1;
+
+    if(!globalObj._dom._focusSpan)
+        globalObj._dom._focusSpan = span;
+
+    return span;
+};
+
+/**
  * Create consent modal and append it to "cc-main" el.
  * @param {import("../global").Api} api
  * @param {CreateMainContainer} createMainContainer
@@ -80,6 +93,7 @@ export const createConsentModal = (api, createMainContainer) => {
         addClassCm(dom._cmTexts, 'texts');
         addClassCm(dom._cmBtns, 'btns');
 
+        dom._cmContainer.tabIndex = -1;
         setAttribute(dom._cm, 'role', 'dialog');
         setAttribute(dom._cm, 'aria-modal', 'true');
         setAttribute(dom._cm, ARIA_HIDDEN, 'false');
@@ -167,6 +181,7 @@ export const createConsentModal = (api, createMainContainer) => {
 
         if(!dom._cmAcceptAllBtn){
             dom._cmAcceptAllBtn = createNode(BUTTON_TAG);
+            appendChild(dom._cmAcceptAllBtn, createFocusSpan());
             addClassCm(dom._cmAcceptAllBtn, 'btn');
             setAttribute(dom._cmAcceptAllBtn, DATA_ROLE, 'all');
 
@@ -176,13 +191,14 @@ export const createConsentModal = (api, createMainContainer) => {
             });
         }
 
-        dom._cmAcceptAllBtn.innerHTML = acceptAllBtnData;
+        dom._cmAcceptAllBtn.firstElementChild.innerHTML = acceptAllBtnData;
     }
 
     if(acceptNecessaryBtnData){
 
         if(!dom._cmAcceptNecessaryBtn){
             dom._cmAcceptNecessaryBtn = createNode(BUTTON_TAG);
+            appendChild(dom._cmAcceptNecessaryBtn, createFocusSpan());
             addClassCm(dom._cmAcceptNecessaryBtn, 'btn');
             setAttribute(dom._cmAcceptNecessaryBtn, DATA_ROLE, 'necessary');
 
@@ -192,12 +208,13 @@ export const createConsentModal = (api, createMainContainer) => {
             });
         }
 
-        dom._cmAcceptNecessaryBtn.innerHTML = acceptNecessaryBtnData;
+        dom._cmAcceptNecessaryBtn.firstElementChild.innerHTML = acceptNecessaryBtnData;
     }
 
     if(showPreferencesBtnData){
         if(!dom._cmShowPreferencesBtn){
             dom._cmShowPreferencesBtn = createNode(BUTTON_TAG);
+            appendChild(dom._cmShowPreferencesBtn, createFocusSpan());
             addClassCm(dom._cmShowPreferencesBtn, 'btn');
             addClassCm(dom._cmShowPreferencesBtn, 'btn--secondary');
             setAttribute(dom._cmShowPreferencesBtn, DATA_ROLE, 'show');
@@ -209,7 +226,7 @@ export const createConsentModal = (api, createMainContainer) => {
             addEvent(dom._cmShowPreferencesBtn, CLICK_EVENT, showPreferences);
         }
 
-        dom._cmShowPreferencesBtn.innerHTML = showPreferencesBtnData;
+        dom._cmShowPreferencesBtn.firstElementChild.innerHTML = showPreferencesBtnData;
     }
 
     if(!dom._cmBtnGroup){
@@ -264,7 +281,7 @@ export const createConsentModal = (api, createMainContainer) => {
 
         fireEvent(globalObj._customEvents._onModalReady, CONSENT_MODAL_NAME, dom._cm);
         createMainContainer(api);
-        setTimeout(getModalFocusableData, 10);
+        getModalFocusableData(1);
         appendChild(dom._ccMain, dom._cmContainer);
 
         /**

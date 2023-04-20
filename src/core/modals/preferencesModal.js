@@ -78,6 +78,7 @@ export const createPreferencesModal = (api, createMainContainer) => {
         // modal container
         dom._pmContainer = createNode(DIV_TAG);
         addClass(dom._pmContainer, 'pm-wrapper');
+        dom._pmContainer.tabIndex = -1;
 
         // preferences modal
         dom._pm = createNode(DIV_TAG);
@@ -108,6 +109,10 @@ export const createPreferencesModal = (api, createMainContainer) => {
         addClassPm(dom._pmCloseBtn, 'close-btn');
         setAttribute(dom._pmCloseBtn, 'aria-label', modalData.closeIconLabel || '');
         addEvent(dom._pmCloseBtn, CLICK_EVENT, hidePreferences);
+
+        dom._pmFocusSpan = createNode('span');
+        dom._pmFocusSpan.tabIndex = -1;
+        appendChild(dom._pmCloseBtn, dom._pmFocusSpan);
 
         dom._pmBody = createNode(DIV_TAG);
         addClassPm(dom._pmBody, 'body');
@@ -478,7 +483,7 @@ export const createPreferencesModal = (api, createMainContainer) => {
 
         fireEvent(globalObj._customEvents._onModalReady, PREFERENCES_MODAL_NAME, dom._pm);
         createMainContainer(api);
-        setTimeout(getModalFocusableData, 10);
+        getModalFocusableData(2);
         appendChild(dom._ccMain, dom._pmContainer);
 
         /**
