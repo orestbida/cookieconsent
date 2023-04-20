@@ -968,7 +968,6 @@
 
             // Fix layout flash
             main_container.style.position = "fixed";
-            main_container.style.zIndex = "2147483647";
             main_container.innerHTML = '<div id="cc_div" class="cc_div"></div>'
             all_modals_container = main_container.children[0];
 

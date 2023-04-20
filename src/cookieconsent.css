@@ -3,6 +3,7 @@
     --cc-font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
     --cc-font-size: 16px;
     --cc-bg: #fff;
+    --cc-z-index: 2147483647;
     --cc-text: #2d4156;
     --cc-border-radius: .35em;
     --cc-btn-primary-bg: #2d4156;
@@ -55,6 +56,10 @@
     --cc-cookie-table-border: #2b3035;
     --cc-webkit-scrollbar-bg: #667481;
     --cc-webkit-scrollbar-bg-hover: #9199a0;
+}
+
+#cc-main {
+    z-index: var(--cc-z-index);
 }
 
 .cc_div *,
