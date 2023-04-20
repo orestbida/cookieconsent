@@ -3,6 +3,7 @@
     --cc-font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
     --cc-font-size: 16px;
     --cc-bg: #fff;
+    --cc-z-index: 2147483647;
     --cc-text: #2d4156;
     --cc-border-radius: .35em;
     --cc-btn-primary-bg: #2d4156;
@@ -55,6 +56,10 @@
     --cc-cookie-table-border: #2b3035;
     --cc-webkit-scrollbar-bg: #667481;
     --cc-webkit-scrollbar-bg-hover: #9199a0;
+}
+
+#cc-main {
+    z-index: var(--cc-z-index);
 }
 
 .cc_div *,
@@ -220,7 +225,7 @@
 
 #cm{
     font-family: inherit;
-    padding: 1.1em 1.5em 1.4em 1.5em;
+    padding: 1em 1.4em 1.3em 1.4em;
     position: fixed;
     z-index: 1;
     background: var(--cc-bg);
@@ -282,7 +287,7 @@
 #s-cnt button + button,
 #s-c-bn{
     float: right;
-    margin-left: 1em;
+    margin-left: .5rem;
 }
 
 #s-cnt #s-rall-bn{
@@ -315,6 +320,7 @@ CookieConsent settings modal
 
 #s-bl{
     outline: none;
+    scrollbar-width: thin;
 }
 
 #s-bl .title{
@@ -365,7 +371,7 @@ CookieConsent settings modal
 
 #s-bl .c-bl{
     padding: 1em;
-    margin-bottom: .5em;
+    margin-bottom: .4rem;
     border: 1px solid var(--cc-section-border);
     transition: background-color .25s ease;
 }
@@ -483,7 +489,7 @@ CookieConsent settings modal
     overflow-y: overlay;
     overflow-x: hidden;
     height: 100%;
-    padding: 1.3em 1.8em;
+    padding: 1.3em 1.6em;
     display: block;
     width: 100%;
 }
@@ -610,7 +616,7 @@ CookieConsent settings modal
 @media screen and (min-width: 688px) {
     /** works only on webkit-based browsers **/
     #s-bl::-webkit-scrollbar{
-        width: .9em;
+        width: .8em;
         height: 100%;
         background: transparent;
         border-radius: 0 0.250em 0.250em 0;
@@ -735,6 +741,13 @@ CookieConsent settings modal
     overflow: hidden;
 }
 
+#s-bl caption {
+    padding: 0.5rem 1rem;
+    font-size: .9em;
+    border-bottom: 1px solid var(--cc-cookie-table-border);
+    font-weight: 600;
+}
+
 #s-bl td,
 #s-bl th {
     padding: 0.8em 0.625em;
@@ -746,7 +759,8 @@ CookieConsent settings modal
 
 #s-bl th {
 	font-family: inherit;
-    padding: 1.2em 1.2em;
+    padding: 1em 1rem;
+    font-weight: 600;
 }
 
 #s-bl thead tr:first-child{
@@ -943,7 +957,7 @@ html.force--consent.show--consent body{
     left: 1em;
     right: 1em;
     overflow: hidden;
-    padding: 1.3em 2em;
+    padding: 1.2em 1.7em;
     width: unset;
 }
 
@@ -970,7 +984,7 @@ html.force--consent.show--consent body{
 }
 
 #cm.cloud .c-bn{
-    margin: .625em 0 0 0;
+    margin: .5rem 0 0 0;
     width: 100%;
 }
 
@@ -1022,8 +1036,8 @@ html.force--consent.show--consent body{
 .cc_div .bar #s-hdr,
 .cc_div .bar #s-bl,
 .cc_div .bar #s-bns {
-    padding-left: 1.6em;
-    padding-right: 1.6em;
+    padding-left: 1.4em;
+    padding-right: 1.4em;
 }
 
 .cc_div .bar #cs{
@@ -1055,6 +1069,12 @@ html.force--consent.show--consent body{
     display: block;
 }
 
+.cc_div .bar #s-bl caption {
+    display: block;
+    border-top: 0;
+    border-bottom: 1px solid var(--cc-cookie-table-border);
+}
+
 /* Hide table headers (but not display: none;, for accessibility) */
 .cc_div .bar #s-bl thead tr{
     position: absolute;
@@ -1075,7 +1095,7 @@ html.force--consent.show--consent body{
 
 .cc_div .bar #s-bl td:before {
     position: absolute;
-    left: 1em;
+    left: 1rem;
     padding-right: 0.625em;
     white-space: nowrap;
     content: attr(data-column);
@@ -1121,7 +1141,7 @@ html.force--consent.show--consent body{
         width: auto;
         max-width: 100%;
         margin: 0;
-        padding: 1.4em!important;
+        padding: 1.2em!important;
         right: 1em;
         left: 1em;
         bottom: 1em;
@@ -1195,12 +1215,12 @@ html.force--consent.show--consent body{
 
 	#s-bl,
     .cc_div .bar #s-bl{
-		padding: 1.3em;
+		padding: 1.2em;
     }
 
 	#s-hdr,
     .cc_div .bar #s-hdr{
-        padding: 0 1.3em;
+        padding: 0 1.2em;
     }
 
     /** dynamic table layout **/
@@ -1237,6 +1257,11 @@ html.force--consent.show--consent body{
         display: block;
     }
 
+    #s-bl caption {
+        border-bottom: 0;
+        display: block;
+    }
+
     /* Hide table headers (but not display: none;, for accessibility) */
     #s-bl thead tr{
         position: absolute;
@@ -1257,7 +1282,7 @@ html.force--consent.show--consent body{
 
     #s-bl td:before {
         position: absolute;
-        left: 1em;
+        left: 1rem;
         padding-right: 0.625em;
         white-space: nowrap;
         content: attr(data-column);
