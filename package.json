@@ -42,7 +42,7 @@
         "@babel/preset-env": "^7.21.4",
         "@rollup/plugin-eslint": "^9.0.3",
         "@rollup/plugin-terser": "^0.4.1",
-        "@types/jest": "^29.5.0",
+        "@types/jest": "^29.5.1",
         "babel-jest": "^29.5.0",
         "cssnano": "^6.0.0",
         "eslint": "^8.38.0",
@@ -50,11 +50,11 @@
         "jest": "^29.5.0",
         "jest-environment-jsdom": "^29.5.0",
         "postcss-combine-duplicated-selectors": "^10.0.3",
-        "rollup": "^3.20.4",
+        "rollup": "^3.20.6",
         "rollup-plugin-postcss": "^4.0.2",
         "sass": "^1.62.0",
         "sitemap": "^7.1.1",
-        "vitepress": "1.0.0-alpha.72"
+        "vitepress": "1.0.0-alpha.73"
     },
     "jest": {
         "transform": {
