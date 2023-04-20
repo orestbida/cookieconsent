@@ -58,7 +58,7 @@
     --cc-webkit-scrollbar-bg-hover: #9199a0;
 }
 
-#cc-main {
+#cc--main {
     z-index: var(--cc-z-index);
 }
 
