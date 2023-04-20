@@ -1132,6 +1132,15 @@ html.force--consent.show--consent body{
 }
 /* end positions */
 
+/* Disable transitions if prefers-reduced-motion detected */
+@media (prefers-reduced-motion) {
+    #cc--main #cm,
+    #cc--main #s-cnt,
+    #cc--main #s-inr{
+        transition: none!important;
+    }
+}
+
 @media screen and (max-width: 688px) {
 
     #cm,
