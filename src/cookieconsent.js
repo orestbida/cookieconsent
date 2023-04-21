@@ -627,12 +627,12 @@
                 // If 'esc' key is pressed inside settings_container div => hide settings
                 _addEvent(document, 'keydown', function(evt){
                     if (evt.keyCode === 27 && settings_modal_visible) {
-                        _cookieconsent.hideSettings(0);
+                        _cookieconsent.hideSettings();
                     }
                 }, true);
 
                 _addEvent(settings_close_btn, 'click', function(){
-                    _cookieconsent.hideSettings(0);
+                    _cookieconsent.hideSettings();
                 });
             }else{
                 new_settings_blocks = _createNode('div');
@@ -907,9 +907,9 @@
                 settings_buttons.appendChild(settings_accept_all_btn);
 
                 _addEvent(settings_accept_all_btn, 'click', function(){
+                    _cookieconsent.accept('all');
                     _cookieconsent.hideSettings();
                     _cookieconsent.hide();
-                    _cookieconsent.accept('all');
                 });
             }
 
@@ -926,9 +926,9 @@
                     settings_reject_all_btn.className = 'c-bn';
 
                     _addEvent(settings_reject_all_btn, 'click', function(){
+                        _cookieconsent.accept([]);
                         _cookieconsent.hideSettings();
                         _cookieconsent.hide();
-                        _cookieconsent.accept([]);
                     });
 
                     settings_inner.className = "bns-t";
@@ -948,9 +948,9 @@
                 // Add save preferences button onClick event
                 // Hide both settings modal and consent modal
                 _addEvent(settings_save_btn, 'click', function(){
+                    _cookieconsent.accept();
                     _cookieconsent.hideSettings();
                     _cookieconsent.hide();
-                    _cookieconsent.accept();
                 });
             }
 
@@ -1924,6 +1924,8 @@
 
             settings_modal_visible = false;
 
+            discardUnsavedToggles();
+
             setFocus(smFocusSpan);
 
             settings_container.setAttribute('aria-hidden', 'true');
@@ -2214,6 +2216,25 @@
          */
         var setFocus = function(el) {
             el && el.focus();
+        }
+
+        /**
+         * https://github.com/orestbida/cookieconsent/issues/481
+         */
+        var discardUnsavedToggles = function() {
+
+            /**
+             * @type {NodeListOf<HTMLInputElement>}
+             */
+            var toggles = settings_inner.querySelectorAll('.c-tgl');
+
+            for(var i=0; i<toggles.length; i++) {
+                var category = toggles[i].value;
+                var is_readonly = readonly_categories.indexOf(category) > -1;
+
+                toggles[i].checked = is_readonly || _cookieconsent.allowedCategory(category);
+            }
+
         }
 
         return _cookieconsent;

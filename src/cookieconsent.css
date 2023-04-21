@@ -5,7 +5,7 @@
     --cc-bg: #fff;
     --cc-z-index: 2147483647;
     --cc-text: #2d4156;
-    --cc-border-radius: .35em;
+    --cc-border-radius: .45rem;
     --cc-btn-primary-bg: #2d4156;
     --cc-btn-primary-text: var(--cc-bg);
     --cc-btn-primary-hover-bg: #1d2e38;
@@ -14,7 +14,7 @@
     --cc-btn-secondary-text: var(--cc-text);
     --cc-btn-secondary-hover-bg: #d8e0e6;
     --cc-btn-secondary-hover-text: var(--cc-btn-secondary-text);
-    --cc-btn-border-radius: 4px;
+    --cc-btn-border-radius: 0.375rem;
     --cc-toggle-bg-off: #919ea6;
     --cc-toggle-bg-on: var(--cc-btn-primary-bg);
     --cc-toggle-bg-readonly: #d5dee2;
@@ -27,7 +27,7 @@
     --cc-cookie-table-border: #e9edf2;
     --cc-overlay-bg: rgb(4, 6, 8);
     --cc-overlay-opacity: .85;
-    --cc-consent-modal-box-shadow: 0 0.625em 1.875em rgba(2, 2, 3, 0.28);
+    --cc-consent-modal-box-shadow: 0 0.625rem 1.875rem rgba(2, 2, 3, 0.28);
     --cc-webkit-scrollbar-bg: #cfd5db;
     --cc-webkit-scrollbar-bg-hover: #9199a0;
 }
