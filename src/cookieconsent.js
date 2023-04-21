@@ -627,12 +627,12 @@
                 // If 'esc' key is pressed inside settings_container div => hide settings
                 _addEvent(document, 'keydown', function(evt){
                     if (evt.keyCode === 27 && settings_modal_visible) {
-                        _cookieconsent.hideSettings(0);
+                        _cookieconsent.hideSettings();
                     }
                 }, true);
 
                 _addEvent(settings_close_btn, 'click', function(){
-                    _cookieconsent.hideSettings(0);
+                    _cookieconsent.hideSettings();
                 });
             }else{
                 new_settings_blocks = _createNode('div');
