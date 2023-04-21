@@ -298,7 +298,7 @@ export class GlobalState {
             _lastEnabledServices: {},
 
             /**
-            * @type {NodeListOf<Element>}
+            * @type {HTMLScriptElement[]}
             */
             _allScriptTags: [],
 

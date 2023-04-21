@@ -216,10 +216,12 @@ export const retrieveScriptElements = () => {
 
     const state = globalObj._state;
 
-    state._allScriptTags = querySelectorAll(globalObj._dom._document, 'script[' + SCRIPT_TAG_SELECTOR +']');
-    state._allScriptTagsInfo = [];
+    /**
+     * @type {NodeListOf<HTMLScriptElement>}
+     */
+    const scripts = querySelectorAll(document, 'script[' + SCRIPT_TAG_SELECTOR +']');
 
-    for(const scriptTag of state._allScriptTags){
+    for(const scriptTag of scripts){
 
         let scriptCategoryName = getAttribute(scriptTag, SCRIPT_TAG_SELECTOR);
         let scriptServiceName = scriptTag.dataset.service || '';
@@ -239,6 +241,8 @@ export const retrieveScriptElements = () => {
         }
 
         if(elContains(state._allCategoryNames, scriptCategoryName)){
+
+            state._allScriptTags.push(scriptTag);
 
             state._allScriptTagsInfo.push({
                 _executed: false,
