@@ -142,6 +142,10 @@
     border-color: transparent;
 }
 
+.cc_div .c-bn > span {
+    pointer-events: none
+}
+
 /* Make elements "animatable" */
 .c--anim #cm,
 .c--anim #s-cnt,
