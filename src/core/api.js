@@ -278,6 +278,41 @@ export const showPreferences = () => {
 };
 
 /**
+ * https://github.com/orestbida/cookieconsent/issues/481
+ */
+const discardUnsavedPreferences = () => {
+
+    const consentIsValid = validConsent();
+    const allDefinedCategories = globalObj._state._allDefinedCategories;
+    const categoryInputs = globalObj._dom._categoryCheckboxInputs;
+    const serviceInputs = globalObj._dom._serviceCheckboxInputs;
+
+    /**
+     * @param {string} category
+     */
+    const categoryEnabledByDefault = (category) => globalObj._state._userConfig.mode === OPT_OUT_MODE && !!allDefinedCategories[category].enabled;
+
+    for(const category in categoryInputs) {
+
+        const isReadOnly = !!allDefinedCategories[category].readOnly;
+
+        categoryInputs[category].checked = isReadOnly || (consentIsValid
+            ? acceptedCategory(category)
+            : categoryEnabledByDefault(category)
+        );
+
+        for(const service in serviceInputs[category]) {
+            serviceInputs[category][service].checked = isReadOnly || (consentIsValid
+                ? acceptedService(service, category)
+                : categoryEnabledByDefault(category)
+            );
+        }
+    }
+
+
+};
+
+/**
  * Hide preferences modal
  */
 export const hidePreferences = () => {
@@ -288,6 +323,8 @@ export const hidePreferences = () => {
         return;
 
     state._preferencesModalVisible = false;
+
+    discardUnsavedPreferences();
 
     /**
      * Fix focus restoration
