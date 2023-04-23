@@ -7,12 +7,12 @@
 
 :root{
     --cc-font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
-    --cc-modal-border-radius: .6em;
-    --cc-btn-border-radius: .5em;
+    --cc-modal-border-radius: .5rem;
+    --cc-btn-border-radius: .4rem;
     --cc-modal-transition-duration: .25s;
-    --cc-btn-gap: 5px;
+    --cc-btn-gap: .375rem;
     --cc-link-color: var(--cc-btn-primary-bg);
-    --cc-modal-margin: 1em;
+    --cc-modal-margin: 1rem;
     --cc-z-index: 2147483647;
 }
 
@@ -41,6 +41,10 @@
     a,
     .cm__title{
         font-weight: $font-weight-bold;
+    }
+
+    button > span {
+        pointer-events: none;
     }
 
     a,
