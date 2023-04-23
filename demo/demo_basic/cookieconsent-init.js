@@ -17,7 +17,6 @@ CookieConsent.run({
         preferencesModal: {
             layout: 'box',
             position: 'left',
-            equalWeightButtons: false,
             flipButtons: false
         }
     },
