@@ -7,7 +7,7 @@
 </div>
 <div align="center" style="text-align: center; max-width: 770px; margin: 0 auto;">
 
-A __lightweight__ & __gdpr compliant__ cookie consent plugin written in plain javascript.
+A __lightweight__ & __gdpr/ccpa compliant__ cookie consent plugin written in plain javascript.
 
 </div>
 <div style="padding-top: .6em;">
@@ -37,6 +37,7 @@ A __lightweight__ & __gdpr compliant__ cookie consent plugin written in plain ja
 - __Cross-browser__ support (IE10+ [*](#note-css-variables-are-not-supported-on-ie))
 - __Standalone__ (no external dependencies needed)
 - __GDPR compliant__
+- __CCPA compliant__
 - __Support for multi language__
 - __[WAI-ARIA](https://developer.mozilla.org/en-US/docs/Learn/Accessibility/WAI-ARIA_basics) compliant__
 - Allows you to __define different cookie categories with opt in/out toggle__
