@@ -493,7 +493,6 @@ export const createPreferencesModal = (api, createMainContainer) => {
 
         fireEvent(globalObj._customEvents._onModalReady, PREFERENCES_MODAL_NAME, dom._pm);
         createMainContainer(api);
-        getModalFocusableData(2);
         appendChild(dom._ccMain, dom._pmContainer);
 
         /**
@@ -501,6 +500,8 @@ export const createPreferencesModal = (api, createMainContainer) => {
          */
         setTimeout(() => addClass(dom._pmContainer, 'cc--anim'), 100);
     }
+
+    getModalFocusableData(2);
 };
 
 /**

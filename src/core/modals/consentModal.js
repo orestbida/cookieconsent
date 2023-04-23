@@ -281,7 +281,6 @@ export const createConsentModal = (api, createMainContainer) => {
 
         fireEvent(globalObj._customEvents._onModalReady, CONSENT_MODAL_NAME, dom._cm);
         createMainContainer(api);
-        getModalFocusableData(1);
         appendChild(dom._ccMain, dom._cmContainer);
 
         /**
@@ -289,6 +288,8 @@ export const createConsentModal = (api, createMainContainer) => {
          */
         setTimeout(() => addClass(dom._cmContainer, 'cc--anim'), 100);
     }
+
+    getModalFocusableData(1);
 
     addDataButtonListeners(dom._cmBody, api, createPreferencesModal, createMainContainer);
 };
