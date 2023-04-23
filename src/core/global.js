@@ -24,6 +24,7 @@ import { COOKIE_NAME, OPT_IN_MODE } from '../utils/constants';
 /**
  * Internal state for each script tag
  * @typedef {Object} ScriptInfo
+ * @property {HTMLScriptElement} _script
  * @property {string} _categoryName
  * @property {string} [_serviceName]
  * @property {boolean} _executed
@@ -86,7 +87,7 @@ import { COOKIE_NAME, OPT_IN_MODE } from '../utils/constants';
 
 /**
  * Pointers to all services toggles relative to a category
- * @typedef {Object.<string, HTMLElement>} ServiceToggle
+ * @typedef {Object.<string, HTMLInputElement>} ServiceToggle
  */
 
 export class GlobalState {
@@ -298,14 +299,9 @@ export class GlobalState {
             _lastEnabledServices: {},
 
             /**
-            * @type {HTMLScriptElement[]}
-            */
-            _allScriptTags: [],
-
-            /**
             * @type {ScriptInfo[]}
             */
-            _allScriptTagsInfo: []
+            _allScriptTags: []
         };
 
 

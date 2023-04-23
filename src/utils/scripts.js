@@ -1,6 +1,6 @@
 import { globalObj } from '../core/global';
 import { createNode, setAttribute, elContains, getAttribute, removeAttribute, isFunction } from './general';
-import { SCRIPT_TAG_SELECTOR } from './constants';
+import { OPT_OUT_MODE, SCRIPT_TAG_SELECTOR } from './constants';
 
 /**
  * This function handles the loading/activation logic of the already
@@ -16,7 +16,6 @@ export const manageExistingScripts = (defaultEnabledCategories) => {
         _allCategoryNames,
         _allDefinedServices,
         _allScriptTags,
-        _allScriptTagsInfo,
         _savedCookieContent,
         _lastChangedCategoryNames,
     } = globalObj._state;
@@ -70,116 +69,120 @@ export const manageExistingScripts = (defaultEnabledCategories) => {
     /**
      * Load scripts (sequentially), using a recursive function
      * which loops through the scripts array
-     * @param {Element[]} scripts scripts to load
+     * @param {import('../core/global').ScriptInfo[]} scripts scripts to load
      * @param {number} index current script to load
      */
     const loadScriptsHelper = (scripts, index) => {
-        if(index < scripts.length){
 
-            const currScript = scripts[index];
-            const currScriptInfo = _allScriptTagsInfo[index];
-            const currScriptCategory = currScriptInfo._categoryName;
-            const currScriptService = currScriptInfo._serviceName;
-            const categoryAccepted = elContains(acceptedCategories, currScriptCategory);
-            const serviceAccepted = currScriptService
-                ? elContains(_acceptedServices[currScriptCategory], currScriptService)
-                : false;
+        if(index >= scripts.length)
+            return;
+
+        const currScriptInfo = _allScriptTags[index];
+
+        /**
+         * Skip script if it was already executed
+         */
+        if(currScriptInfo._executed)
+            return;
+
+        const currScript = currScriptInfo._script;
+        const currScriptCategory = currScriptInfo._categoryName;
+        const currScriptService = currScriptInfo._serviceName;
+        const categoryAccepted = elContains(acceptedCategories, currScriptCategory);
+        const serviceAccepted = currScriptService
+            ? elContains(_acceptedServices[currScriptCategory], currScriptService)
+            : false;
+
+        const categoryWasJustEnabled = () => !currScriptService
+            && !currScriptInfo._runOnDisable
+            && categoryAccepted;
+
+        const serviceWasJustEnabled = () => currScriptService
+            && !currScriptInfo._runOnDisable
+            && serviceAccepted;
+
+        const categoryWasJustDisabled = () => !currScriptService
+            && currScriptInfo._runOnDisable
+            && !categoryAccepted
+            && elContains(_lastChangedCategoryNames, currScriptCategory);
+
+        const serviceWasJustDisabled = () => currScriptService
+            && currScriptInfo._runOnDisable
+            && !serviceAccepted
+            && elContains(_lastChangedServices[currScriptCategory] || [], currScriptService);
+
+        const shouldRunScript =
+            categoryWasJustEnabled()
+            || categoryWasJustDisabled()
+            || serviceWasJustEnabled()
+            || serviceWasJustDisabled();
+
+        if(shouldRunScript){
+
+            currScriptInfo._executed = true;
+
+            const dataType = getAttribute(currScript, 'type', true);
+
+            removeAttribute(currScript, 'type', !!dataType);
+            removeAttribute(currScript, SCRIPT_TAG_SELECTOR);
+
+            // Get current script data-src (if there is one)
+            let src = getAttribute(currScript, 'src', true);
+
+            // Some scripts (like ga) might throw warning if data-src is present
+            src && removeAttribute(currScript, 'src', true);
 
             /**
-             * Skip script if it was already executed
+             * Fresh script
+             * @type {HTMLScriptElement}
              */
-            if(!currScriptInfo._executed){
+            const freshScript = createNode('script');
 
-                let categoryWasJustEnabled = !currScriptService
-                    && !currScriptInfo._runOnDisable
-                    && categoryAccepted;
+            freshScript.textContent = currScript.innerHTML;
 
-                let serviceWasJustEnabled = currScriptService
-                    && !currScriptInfo._runOnDisable
-                    && serviceAccepted;
-
-                let categoryWasJustDisabled = !currScriptService
-                    && currScriptInfo._runOnDisable
-                    && !categoryAccepted
-                    && elContains(_lastChangedCategoryNames, currScriptCategory);
-
-                let serviceWasJustDisabled = currScriptService
-                    && currScriptInfo._runOnDisable
-                    && !serviceAccepted
-                    && elContains(_lastChangedServices[currScriptCategory] || [], currScriptService);
-
-                if(
-                    categoryWasJustEnabled
-                    || categoryWasJustDisabled
-                    || serviceWasJustEnabled
-                    || serviceWasJustDisabled
-                ){
-
-                    currScriptInfo._executed = true;
-
-                    const dataType = getAttribute(currScript, 'type', true);
-
-                    removeAttribute(currScript, 'type', !!dataType);
-                    removeAttribute(currScript, SCRIPT_TAG_SELECTOR);
-
-                    // Get current script data-src (if there is one)
-                    let src = getAttribute(currScript, 'src', true);
-
-                    // Some scripts (like ga) might throw warning if data-src is present
-                    src && removeAttribute(currScript, 'src', true);
-
-                    /**
-                     * Fresh script
-                     * @type {HTMLScriptElement}
-                     */
-                    const freshScript = createNode('script');
-
-                    freshScript.textContent = currScript.innerHTML;
-
-                    //Copy attributes over to the new "revived" script
-                    for(const {nodeName} of currScript.attributes){
-                        setAttribute(
-                            freshScript,
-                            nodeName,
-                            currScript[nodeName] || getAttribute(currScript, nodeName)
-                        );
-                    }
-
-                    /**
-                     * Set custom type
-                     */
-                    dataType && (freshScript.type = dataType);
-
-                    // Set src (if data-src found)
-                    src
-                        ? (freshScript.src = src)
-                        : (src = currScript.src);
-
-                    // If script has valid "src" attribute
-                    // try loading it sequentially
-                    if(src){
-                        // load script sequentially => the next script will not be loaded
-                        // until the current's script onload event triggers
-                        freshScript.onload = freshScript.onerror = () => {
-                            loadScriptsHelper(scripts, ++index);
-                        };
-                    }
-
-                    // Replace current "sleeping" script with the new "revived" one
-                    currScript.replaceWith(freshScript);
-
-                    /**
-                     * If we managed to get here and src is still set, it means that
-                     * the script is loading/loaded sequentially so don't go any further
-                     */
-                    if(src)
-                        return;
-                }
+            //Copy attributes over to the new "revived" script
+            for(const {nodeName} of currScript.attributes){
+                setAttribute(
+                    freshScript,
+                    nodeName,
+                    currScript[nodeName] || getAttribute(currScript, nodeName)
+                );
             }
 
-            // Go to next script right away
-            loadScriptsHelper(scripts, ++index);
+            /**
+             * Set custom type
+             */
+            dataType && (freshScript.type = dataType);
+
+            // Set src (if data-src found)
+            src
+                ? (freshScript.src = src)
+                : (src = currScript.src);
+
+            // If script has valid "src" attribute
+            // try loading it sequentially
+            if(src){
+                // load script sequentially => the next script will not be loaded
+                // until the current's script onload event triggers
+                freshScript.onload = freshScript.onerror = () => {
+                    loadScriptsHelper(scripts, ++index);
+                };
+            }
+
+            // Replace current "sleeping" script with the new "revived" one
+            currScript.replaceWith(freshScript);
+
+            /**
+             * If we managed to get here and src is still set, it means that
+             * the script is loading/loaded sequentially so don't go any further
+             */
+            if(src)
+                return;
         }
+
+
+        // Go to next script right away
+        loadScriptsHelper(scripts, ++index);
     };
 
     loadScriptsHelper(scripts, 0);
@@ -194,7 +197,7 @@ export const retrieveEnabledCategoriesAndServices = () => {
     for(const categoryName of state._allCategoryNames){
         const category = state._allDefinedCategories[categoryName];
 
-        if(category.enabled || category.readOnly){
+        if(category.readOnly || (category.enabled && state._userConfig.mode === OPT_OUT_MODE)){
             state._defaultEnabledCategories.push(categoryName);
 
             const services = state._allDefinedServices[categoryName] || {};

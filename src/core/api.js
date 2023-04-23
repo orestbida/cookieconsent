@@ -666,7 +666,7 @@ export const run = async (userConfig) => {
         if(!translationLoaded)
             return false;
 
-        await generateHtml(miniAPI);
+        generateHtml(miniAPI);
 
         if(_config.autoShow && !consentIsValid)
             show(true);

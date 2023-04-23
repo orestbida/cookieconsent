@@ -242,9 +242,8 @@ export const retrieveScriptElements = () => {
 
         if(elContains(state._allCategoryNames, scriptCategoryName)){
 
-            state._allScriptTags.push(scriptTag);
-
-            state._allScriptTagsInfo.push({
+            state._allScriptTags.push({
+                _script: scriptTag,
                 _executed: false,
                 _runOnDisable: runOnDisable,
                 _categoryName: scriptCategoryName,
@@ -558,11 +557,9 @@ export const getRemainingExpirationTimeMS = () => {
 export const fetchJson = async (url) => {
     try{
 
-        const response = await fetch(url, {
-            method: 'GET'
-        });
+        const response = await fetch(url);
 
-        return response.ok
+        return response?.ok
             ? await response.json()
             : false;
 
@@ -689,6 +686,11 @@ export const addDataButtonListeners = (elem, api, createPreferencesModal, create
                 if(!globalObj._state._preferencesModalExists)
                     createPreferencesModal(api, createMainContainer);
             }, true);
+
+            addEvent(el, 'focus', () => {
+                if(!globalObj._state._preferencesModalExists)
+                    createPreferencesModal(api, createMainContainer);
+            });
         }
     }
 
@@ -895,7 +897,7 @@ export const fireEvent = (eventName, modalName, modal) => {
     if(modalName){
 
         const modalParams = {
-            modalName: modalName
+            modalName
         };
 
         if(eventName === events._onModalShow){

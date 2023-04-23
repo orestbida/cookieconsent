@@ -27,7 +27,7 @@ export const createMainContainer = () => {
 /**
  * @param {import('../global').Api} api
  */
-export const generateHtml = async (api) => {
+export const generateHtml = (api) => {
 
     addDataButtonListeners(null, api, createPreferencesModal, createMainContainer);
 

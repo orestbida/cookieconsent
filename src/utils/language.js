@@ -87,7 +87,7 @@ export const resolveCurrentLanguageCode = () =>  {
 
 /**
  * Load translation
- * @param {string | null} desiredLanguageCode
+ * @param {string | null} [desiredLanguageCode]
  */
 export const loadTranslationData = async (desiredLanguageCode) => {
     const state = globalObj._state;
@@ -95,15 +95,9 @@ export const loadTranslationData = async (desiredLanguageCode) => {
     /**
      * @type {string}
      */
-    let currentLanguageCode;
-
-    /**
-     * Make sure languageCode is valid before retrieving the translation object
-     */
-    if(desiredLanguageCode && validLanguageCode(desiredLanguageCode))
-        currentLanguageCode = desiredLanguageCode;
-    else
-        currentLanguageCode = getCurrentLanguageCode();
+    let currentLanguageCode = validLanguageCode(desiredLanguageCode)
+        ? desiredLanguageCode
+        : getCurrentLanguageCode();
 
     let currentTranslation = state._allTranslations[currentLanguageCode];
 
@@ -112,7 +106,7 @@ export const loadTranslationData = async (desiredLanguageCode) => {
 
     /**
      * If translation is a string, fetch the external json file and replace
-     * the string (path to json file) with parsed language object
+     * the string (path to json file) with the parsed object
      */
     if(isString(currentTranslation)){
 
