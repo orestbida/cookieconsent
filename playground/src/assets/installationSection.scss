@@ -1,0 +1,56 @@
+ol > li {
+    margin-bottom: 1rem;
+}
+
+ol > li > p{
+    margin-bottom: .5rem;
+}
+
+code {
+    background: rgba(40, 130, 171, 0.231);
+    color: #81d2f7;
+    padding: 2px 4px;
+    border-radius: 0.3rem;
+    font-size: .9rem;
+}
+
+.code-block {
+    display: block;
+    white-space: pre;
+    width: 100%;
+    overflow: auto;
+    max-width: 600px;
+    padding: 1rem;
+    color: #78cd76;
+    background: #141414;
+    line-height: 1.1rem;
+}
+
+#downloadConfigBtn {
+    display: flex;
+    gap: 0.6rem;
+    align-items: center;
+    justify-content: space-between;
+    background: #f1b867;
+    color: #000;
+    border-color: #f1b867;
+
+    svg {
+        display: block;
+
+        > g {
+            stroke: currentColor;
+        }
+    }
+
+    &:focus {
+        background: #be9152;
+        color: #000;
+        border-color: #be9152;
+    }
+}
+
+.highlight--yellow {
+    color: rgb(255, 200, 118);
+    background: rgba(187, 160, 119, 0.251);
+}

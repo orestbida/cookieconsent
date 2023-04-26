@@ -1,3 +1,4 @@
+import '../assets/installationSection.scss';
 import { getById, addEvent } from "./utils";
 import { getState } from './stateManager';
 import { saveAs } from 'file-saver';
