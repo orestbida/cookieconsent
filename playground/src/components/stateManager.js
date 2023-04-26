@@ -32,7 +32,7 @@ export const defaultState = {
     /**
      * Increase on every new playground update
      */
-    demoRevision: 16
+    demoRevision: 17
 };
 
 addEvent(window, customEvents._INIT, clearInvalidDemoState)
