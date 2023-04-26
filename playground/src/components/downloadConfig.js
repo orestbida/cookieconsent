@@ -15,13 +15,19 @@ const configAsString = ({minify=false} = {}) => {
     const state = getState();
     const config = state.cookieConsentConfig;
     const translation = config.language.translations[state.currLanguage];
+    const darkModeEnabled = state._theme === 'cc--darkmode';
+
+    if(darkModeEnabled) {
+        scriptStr += `// Enable dark mode\n`;
+        scriptStr += `document.documentElement.classList.add('cc--darkmode');\n\n`;
+    }
 
     /**
      * Remove unneeded fields
      */
     config.root = undefined;
     config.cookie = undefined;
-    // config.categories.analytics.services = undefined;
+    config.categories.analytics.services = undefined;
 
     if(!config.disablePageInteraction)
         config.disablePageInteraction = undefined;
