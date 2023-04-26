@@ -12,5 +12,8 @@
     "sass": "^1.59.3",
     "vite": "^4.2.1",
     "vite-plugin-minify": "^1.5.2"
+  },
+  "dependencies": {
+    "file-saver": "^2.0.5"
   }
 }

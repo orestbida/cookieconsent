@@ -15,6 +15,7 @@ import './components/printValidConsent';
 import './components/guiOptions';
 import './components/consentModalElements';
 import './components/customThemes';
+import './components/downloadConfig';
 
 CookieConsent
     .run(getState().cookieConsentConfig)

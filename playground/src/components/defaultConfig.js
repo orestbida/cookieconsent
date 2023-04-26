@@ -14,7 +14,7 @@ import { deepCopy } from './utils';
  */
 
 /**
- * @type {import("vanilla-cookieconsent").CookieConsentConfig}
+ * @type {import("../../../types").CookieConsentConfig}
  */
 const defaultFullConfig = {
     root: 'main',
@@ -45,20 +45,13 @@ const defaultFullConfig = {
         },
         analytics: {
             services: {
-                'ga': {
-                    label: `
-                        <a
-                            href="https://marketingplatform.google.com/about/analytics/terms/us/"
-                            rel="noreferrer"
-                            target="_blank">
-                            Google Analytics 4
-                        </a>
-                    `
+                ga: {
+                    label: `<a href="https://marketingplatform.google.com/about/analytics/terms/us/" rel="noreferrer" target="_blank">Google Analytics 4</a>`
                 },
-                'clarity': {
+                clarity: {
                     label: 'Microsoft Clarity'
                 },
-                'another2': {
+                another2: {
                     label: 'Yet another service'
                 }
             }

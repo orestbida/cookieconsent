@@ -1,5 +1,10 @@
 lockfileVersion: '6.0'
 
+dependencies:
+  file-saver:
+    specifier: ^2.0.5
+    version: 2.0.5
+
 devDependencies:
   sass:
     specifier: ^1.59.3
@@ -352,6 +357,10 @@ packages:
       '@esbuild/win32-ia32': 0.17.12
       '@esbuild/win32-x64': 0.17.12
     dev: true
+
+  /file-saver@2.0.5:
+    resolution: {integrity: sha512-P9bmyZ3h/PRG+Nzga+rbdI4OEpNDzAVyy74uVO9ATgzLK6VtAsYybF/+TOCvrc0MO793d6+42lLyZTw7/ArVzA==}
+    dev: false
 
   /fill-range@7.0.1:
     resolution: {integrity: sha512-qOo9F+dMUmC2Lcb4BbVvnKJxTPjCm+RRpe4gDuGrzkL7mEVl/djYSu2OdQ2Pa302N4oqkSg9ir6jaLWJ2USVpQ==}
