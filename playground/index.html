@@ -26,18 +26,34 @@
                     <section class="languages">
                         <h2>Translations (🚧)</h2>
 
-                        <input type="radio" id="language-en" name="language-code" value="en" checked>
-                        <label for="language-en" tabindex="0" role="radio">English</label><br>
-                        <input type="radio" id="language-it" name="language-code" value="it">
-                        <label for="language-it" tabindex="0" role="radio">Italian</label><br>
-                        <input type="radio" id="language-de" name="language-code" value="de">
-                        <label for="language-de" tabindex="0">German</label><br>
-                        <input type="radio" id="language-es" name="language-code" value="es">
-                        <label for="language-es">Spanish</label><br>
-                        <input type="radio" id="language-fr" name="language-code" value="fr">
-                        <label for="language-fr">French</label><br>
-                        <input type="radio" id="language-ar" name="language-code" value="ar">
-                        <label for="language-ar">Arabic <span class="badge">rtl</span></label><br>
+                        <div class="checkbox-div">
+                            <input type="radio" id="language-en" name="language-code" value="en" checked>
+                            <label for="language-en" tabindex="0" role="radio">English</label>
+                        </div>
+
+                        <div class="checkbox-div">
+                            <input type="radio" id="language-it" name="language-code" value="it">
+                            <label for="language-it" tabindex="0" role="radio">Italian</label>
+                        </div>
+
+                        <div class="checkbox-div">
+                            <input type="radio" id="language-de" name="language-code" value="de">
+                            <label for="language-de" tabindex="0">German</label>
+                        </div>
+
+                        <div class="checkbox-div">
+                            <input type="radio" id="language-es" name="language-code" value="es">
+                            <label for="language-es">Spanish</label>
+                        </div>
+                        <div class="checkbox-div">
+                            <input type="radio" id="language-fr" name="language-code" value="fr">
+                            <label for="language-fr">French</label>
+                        </div>
+
+                        <div class="checkbox-div">
+                            <input type="radio" id="language-ar" name="language-code" value="ar">
+                            <label for="language-ar">Arabic <span class="badge">rtl</span></label>
+                        </div>
                     </section>
                     <section class="language-more-options">
                         <h2>Language options</h2>
@@ -51,8 +67,10 @@
                         <br>
                         <div class="auto-language">
 
-                            <input type="checkbox" id="auto-language" name="autoLanguage">
-                            <label for="auto-language">Auto detect language</label>
+                            <div class="checkbox-div">
+                                <input type="checkbox" id="auto-language" name="autoLanguage">
+                                <label for="auto-language">Auto detect language</label>
+                            </div>
 
                             <div class="auto-language__details">
                                 <p>Detected language: <code id="detected-language">-</code></p>
@@ -61,12 +79,17 @@
                         </div>
                     </section>
                     <section>
-                        <input type="checkbox" id="darkmode" name="darkmode">
-                        <label for="darkmode">Enable dark-mode</label>
 
-                        <br>
-                        <input type="checkbox" id="disablePageInteraction" name="disablePageInteraction">
-                        <label for="disablePageInteraction">disablePageInteraction</label>
+                        <div class="checkbox-div">
+                            <input type="checkbox" id="darkmode" name="darkmode">
+                            <label for="darkmode">Enable dark-mode</label>
+                        </div>
+
+                        <div class="checkbox-div">
+                            <input type="checkbox" id="disablePageInteraction" name="disablePageInteraction">
+                            <label for="disablePageInteraction">disablePageInteraction</label>
+                        </div>
+
                     </section>
                 </div>
             </div>
@@ -92,11 +115,11 @@
 
                         </select>
                     </div>
-                    <div class="flip">
+                    <div class="flip checkbox-div">
                         <input type="checkbox" id="cm-flip" name="flip">
                         <label for="cm-flip">Flip buttons</label>
                     </div>
-                    <div class="weight">
+                    <div class="weight checkbox-div">
                         <input type="checkbox" id="cm-weight" name="weight">
                         <label for="cm-weight">Equal weight buttons</label>
                     </div>
@@ -118,11 +141,11 @@
                             <option data-excludedLayout="box" value="right">right</option>
                         </select>
                     </div>
-                    <div class="flip">
+                    <div class="flip checkbox-div">
                         <input type="checkbox" id="pm-flip" name="flip">
                         <label for="pm-flip">Flip buttons</label>
                     </div>
-                    <div class="weight">
+                    <div class="weight checkbox-div">
                         <input type="checkbox" id="pm-weight" name="weight">
                         <label for="pm-weight">Equal weight buttons</label>
                     </div>
@@ -132,25 +155,30 @@
             <section>
                 <h2>Consent Modal Elements (🚧)</h2>
 
-                <input type="checkbox" id="close-icon" name="closeIcon">
-                <label for="close-icon">Add <b>X icon</b> (box layout only) = accept necessary</label>
-                <br>
+                <div class="checkbox-div">
+                    <input type="checkbox" id="close-icon" name="closeIcon">
+                    <label for="close-icon">Add <b>X icon</b> (box layout only) = accept necessary</label>
+                </div>
 
-                <input type="checkbox" id="accept-necessary-btn" name="AcceptNecessary">
-                <label for="accept-necessary-btn">Remove <b>accept necessary</b> button</label>
-                <br>
+                <div class="checkbox-div">
+                    <input type="checkbox" id="accept-necessary-btn" name="AcceptNecessary">
+                    <label for="accept-necessary-btn">Remove <b>accept necessary</b> button</label>
+                </div>
 
-                <input type="checkbox" id="show-preferences-btn" name="ShowPreferences">
-                <label for="show-preferences-btn">Remove <b>show preferences</b> button</label>
-                <br>
+                <div class="checkbox-div">
+                    <input type="checkbox" id="show-preferences-btn" name="ShowPreferences">
+                    <label for="show-preferences-btn">Remove <b>show preferences</b> button</label>
+                </div>
 
-                <input type="checkbox" id="remove-footer" name="RemoveFooter">
-                <label for="remove-footer">Remove <b>footer</b> section</label>
-                <br>
+                <div class="checkbox-div">
+                    <input type="checkbox" id="remove-footer" name="RemoveFooter">
+                    <label for="remove-footer">Remove <b>footer</b> section</label>
+                </div>
 
-                <input type="checkbox" id="remove-title" name="RemoveTitle">
-                <label for="remove-title">Remove <b>title</b></label>
-
+                <div class="checkbox-div">
+                    <input type="checkbox" id="remove-title" name="RemoveTitle">
+                    <label for="remove-title">Remove <b>title</b></label>
+                </div>
             </section>
 
             <!-- <div class="flex">
