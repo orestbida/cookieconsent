@@ -28,10 +28,14 @@
     -moz-tab-size: 4;
     -o-tab-size: 4;
     tab-size: 4;
-    padding: 1rem 1.5em;
+    padding: 1rem 0;
     overflow-x: auto;
     font-size: .875rem;
     scrollbar-width: thin;
+}
+
+.hl .line {
+    padding: 0 1.5rem;
 }
 
 .hl--line-numbers .hl__shiki{
@@ -81,7 +85,6 @@
 
 .hl__content{
     position: relative;
-    overflow: hidden;
 }
 
 .hl--line-numbers .hl__content{

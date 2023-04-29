@@ -7,6 +7,7 @@ export const defaultState = {
     cookieConsentConfig: defaultConfig,
     currLanguage: defaultConfig.language.default,
 
+    enabledTranslations: ['en'],
     enableCloseIcon: false,
 
     removeAcceptNecessaryBtn: false,

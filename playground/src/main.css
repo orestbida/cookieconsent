@@ -46,9 +46,9 @@ h2 {
 }
 
 p {
-    margin: 0
+    margin: 0;
+    font-size: .9rem;
 }
-
 
 b{
     font-weight: 600;
@@ -58,7 +58,6 @@ label {
     font-weight: 400;
     font-size: .9em;
 }
-
 
 .warning {
     background: rgba(255, 231, 201, 0.144);
@@ -78,11 +77,19 @@ label {
     font-weight: 600;
 }
 
+.translations-title {
+    margin-bottom: .5rem;
+}
+
+.translations-description {
+    margin-bottom: 1rem;
+}
+
 .checkbox-div {
     display: flex;
     align-items: center;
     gap: .5rem;
-    margin-top: .2rem;
+    margin-top: .35rem;
 }
 
 .checkbox-div  input {
@@ -92,6 +99,162 @@ label {
 .auto-language {
     border-top: 1px dashed rgba(241, 245, 255, 0.11);
     padding-top: 1rem;
+}
+
+input[type=checkbox],
+input[type=radio] {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
+
+input[type="checkbox"]:not(.language-input) {
+    height: 19px;
+    width: 19px;
+    outline: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    margin: 0;
+    cursor: pointer;
+    border-radius: .35rem;
+    border: 1px solid rgb(102, 102, 102);
+    box-sizing: content-box;
+    box-shadow: 0 0 0 0 rgba(206, 227, 255, 0.199);
+    transition: border-color .2s ease,
+                background-color .2s ease,
+                box-shadow .2s ease;
+}
+
+input[type="checkbox"]:not(.language-input):hover {
+    border-color: #275EFE;
+}
+
+input[type="checkbox"]:not(.language-input):focus {
+    box-shadow: 0 0 0 3px rgba(206, 227, 255, 0.199);
+}
+
+input[type="checkbox"]:not(.language-input):checked {
+    border-color: #396af9;
+    background-color: #275EFE;
+}
+
+input[type="checkbox"]:not(.language-input):disabled {
+    border-color: #343434!important;
+    background-color: #303030!important;
+    box-shadow: none!important;
+    cursor: not-allowed;
+}
+
+input[type="checkbox"]:not(.language-input)::after {
+    position: absolute;
+    content: "";
+    margin-top: -1px;
+    margin-left: 1px;
+    width: 4px;
+    height: 8px;
+    border: 2px solid #fff;
+    border-top: 0;
+    border-left: 0;
+    opacity: 0;
+    transform: scale(.8) rotate(43deg);
+    transition: transform .2s ease, opacity .2s ease;
+}
+
+input[type="checkbox"]:not(.language-input):checked::after {
+    transform: scale(1) rotate(43deg);
+    opacity: 1;
+}
+
+.translations-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: .5rem;
+}
+
+.translations-list label {
+    position: relative;
+    cursor: pointer;
+}
+
+.translations-list input {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    cursor: pointer;
+    outline: none;
+}
+
+.translations-list .label {
+    pointer-events: none;
+    cursor: pointer;
+    display: block;
+    padding: 0.7rem 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #262626;
+    border-radius: 0.45rem;
+    border: 1px solid #303030;
+    color: rgb(195, 200, 204);
+    box-shadow: 0 0 0 0 rgba(206, 227, 255, 0.199);
+    transition: border-color .2s ease,
+                background-color .2s ease,
+                box-shadow .2s ease,
+                color .2s ease;
+}
+
+.translations-list label:hover .label{
+    border-color: rgb(66, 66, 66);
+}
+
+
+.translations-list input:focus ~ .label{
+    border-color: rgb(66, 66, 66);
+    box-shadow: 0 0 0 3px rgba(99, 167, 255, 0.199);
+}
+
+.translations-list .tick {
+    height: 22px;
+    width: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    border-radius: 100%;
+    opacity: 0;
+    transform: translateX(3px);
+    background-color: rgba(255, 255, 255, 0.253);
+    box-sizing: content-box;
+    transition: opacity .2s ease, transform .2s ease;
+}
+
+.translations-list .tick::after {
+    position: absolute;
+    content: "";
+    margin-top: -1px;
+    margin-left: 1px;
+    width: 4px;
+    height: 8px;
+    border: 2px solid #fff;
+    border-top: 0;
+    border-left: 0;
+    transform: rotate(43deg);
+    transition: transform .2s ease;
+}
+
+.translations-list input:checked ~ .label {
+    background-color: #396af9;
+    border-color: #4b76f5;
+    color: #fff;
+}
+
+.translations-list input:checked ~ .label .tick {
+    opacity: 1;
+    transform: translateX(0);
 }
 
 .auto-language__details{
@@ -140,6 +303,14 @@ li > div:last-child {
     margin-bottom: 0;
 }
 
+code {
+    background: rgba(171, 193, 255, 0.12);
+    color: #a5c8ff;
+    padding: 0.15rem 0.3rem;
+    border-radius: 0.3rem;
+    font-size: .85rem;
+}
+
 section {
     padding: 1rem 1.4rem;
     background-color: rgba(248, 252, 255, 0.103);
@@ -150,6 +321,7 @@ section {
 section.installation {
     background-color: rgba(248, 252, 255, 0.062);
 }
+
 button {
     cursor: pointer;
     font-family: inherit;

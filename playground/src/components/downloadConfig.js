@@ -15,7 +15,7 @@ const configAsString = ({minify=false} = {}) => {
 
     const state = getState();
     const config = state.cookieConsentConfig;
-    const translation = config.language.translations[state.currLanguage];
+    const allTranslations = config.language.translations;
     const darkModeEnabled = state._theme === 'cc--darkmode';
 
     if(darkModeEnabled) {
@@ -34,12 +34,12 @@ const configAsString = ({minify=false} = {}) => {
         config.disablePageInteraction = undefined;
 
     /**
-     * Remove all languages except current
+     * Remove all translations except those specified by the user
      */
-    config.language = {};
-    config.language.default = state.currLanguage;
-    config.language.translations = {};
-    config.language.translations[state.currLanguage] = translation;
+    for(const languageCode in allTranslations) {
+        if(!state.enabledTranslations.includes(languageCode))
+            allTranslations[languageCode] = undefined;
+    }
 
     /**
      * config. as string

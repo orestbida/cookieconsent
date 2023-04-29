@@ -1,5 +1,5 @@
 import { defaultConfig } from './defaultConfig';
-import { getState, saveState } from './stateManager';
+import { defaultState, getState, saveState } from './stateManager';
 import { addEvent, customEvents, getById, onEvent } from './utils';
 
 const browserLanguage = getBrowserLanguage();
@@ -7,7 +7,9 @@ const browserLanguage = getBrowserLanguage();
 /**
  * @type {NodeListOf<HTMLInputElement>}
  */
-const inputs = document.querySelectorAll('input[name="language-code"]');
+const translationInputs = document.querySelectorAll('input[name="language-code"]');
+
+const currentActiveLanguageSpan = getById('current-language');
 
 /** @type {HTMLInputElement} **/ const autoDetectCheckbox = getById('auto-language');
 /** @type {HTMLInputElement} **/ const detectedLanguageSpan = getById('detected-language');
@@ -24,23 +26,25 @@ if(autoDetectEnabled)
 else
     setActiveLanguage(currentLanguage);
 
-inputs.forEach(input => {
+toggleTranslations(state.enabledTranslations);
+
+translationInputs.forEach(input => {
     addEvent(input, 'change', () => {
-        const currLanguage = input.value;
+        const languageCode = input.value;
+        const enabled = input.checked;
 
         const state = getState();
-        state.cookieConsentConfig.language.default = currLanguage;
-        state.cookieConsentConfig.language.autoDetect = undefined;
-        state.currLanguage = currLanguage;
+        const translations = state.enabledTranslations;
+
+        const languageFound = translations.includes(languageCode);
+
+        if(enabled) {
+            !languageFound && translations.push(languageCode);
+        } else {
+            languageFound && (state.enabledTranslations = state.enabledTranslations.filter(language => language !== languageCode));
+        }
 
         saveState(state);
-        setAutoDetectLanguage(false);
-
-        window.CookieConsent
-            .setLanguage(currLanguage)
-            .then(() => {
-                window.CookieConsent.show(true);
-            });
     });
 });
 
@@ -86,7 +90,7 @@ function getBrowserLanguage(){
  */
 function setActiveLanguage(languageCode){
     if(allLanguages.includes(languageCode))
-        getById(`language-${languageCode}`).checked = true;
+        currentActiveLanguageSpan.textContent = languageCode;
 }
 
 /**
@@ -129,4 +133,15 @@ onEvent(customEvents._RESET, () => {
 
     if(autoDetectEnabled)
         setAutoDetectLanguage(currentLanguage);
+
+    toggleTranslations(defaultState.enabledTranslations)
 });
+
+/**
+ * @param {string[]} enabledTranslations
+ */
+function toggleTranslations(enabledTranslations) {
+    for(const input of translationInputs) {
+        input.checked = enabledTranslations.includes(input.value);
+    }
+}

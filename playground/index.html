@@ -23,37 +23,47 @@
             <div class="language-codes">
 
                 <div class="flex">
-                    <section class="languages">
-                        <h2>Translations (🚧)</h2>
+                    <section class="translations">
+                        <h2 class="translations-title">Default Translations (🚧)</h2>
+                        <p class="translations-description">Select the translations to include in your configuration.</p>
 
-                        <div class="checkbox-div">
-                            <input type="radio" id="language-en" name="language-code" value="en" checked>
-                            <label for="language-en" tabindex="0" role="radio">English</label>
+                        <div class="translations-list">
+
+                            <label for="language-en">
+                                <input class="language-input" type="checkbox" id="language-en" name="language-code" value="en" checked>
+                                <span class="label">English <span class="tick"></span></span>
+                            </label>
+
+
+                            <label for="language-it">
+                                <input class="language-input" type="checkbox" id="language-it" name="language-code" value="it">
+                                <span class="label">Italian <span class="tick"></span></span>
+                            </label>
+
+                            <label for="language-de">
+                                <input class="language-input" type="checkbox" id="language-de" name="language-code" value="de">
+                                <span class="label">German <span class="tick"></span></span>
+                            </label>
+
+
+                            <label for="language-es">
+                                <input class="language-input" type="checkbox" id="language-es" name="language-code" value="es">
+                                <span class="label">Spanish <span class="tick"></span></span>
+                            </label>
+
+
+                            <label for="language-fr">
+                                <input class="language-input" type="checkbox" id="language-fr" name="language-code" value="fr">
+                                <span class="label">French <span class="tick"></span></span>
+                            </label>
+
+                            <label for="language-ar">
+                                <input class="language-input" type="checkbox" id="language-ar" name="language-code" value="ar">
+                                <span class="label">Arabic <span class="tick"></span></span>
+                            </label>
+
                         </div>
 
-                        <div class="checkbox-div">
-                            <input type="radio" id="language-it" name="language-code" value="it">
-                            <label for="language-it" tabindex="0" role="radio">Italian</label>
-                        </div>
-
-                        <div class="checkbox-div">
-                            <input type="radio" id="language-de" name="language-code" value="de">
-                            <label for="language-de" tabindex="0">German</label>
-                        </div>
-
-                        <div class="checkbox-div">
-                            <input type="radio" id="language-es" name="language-code" value="es">
-                            <label for="language-es">Spanish</label>
-                        </div>
-                        <div class="checkbox-div">
-                            <input type="radio" id="language-fr" name="language-code" value="fr">
-                            <label for="language-fr">French</label>
-                        </div>
-
-                        <div class="checkbox-div">
-                            <input type="radio" id="language-ar" name="language-code" value="ar">
-                            <label for="language-ar">Arabic <span class="badge">rtl</span></label>
-                        </div>
                     </section>
                     <section class="language-more-options">
                         <h2>Language options</h2>
@@ -62,6 +72,7 @@
                             <select name="default-language" id="default-language">
                                 <option value="en">en</option>
                             </select>
+                            <p>Current language: <code id="current-language">-</code></p>
                         </div>
 
                         <br>
@@ -87,7 +98,7 @@
 
                         <div class="checkbox-div">
                             <input type="checkbox" id="disablePageInteraction" name="disablePageInteraction">
-                            <label for="disablePageInteraction">disablePageInteraction</label>
+                            <label for="disablePageInteraction">Disable page interaction</label>
                         </div>
 
                     </section>
