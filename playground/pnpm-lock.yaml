@@ -4,6 +4,9 @@ dependencies:
   file-saver:
     specifier: ^2.0.5
     version: 2.0.5
+  shiki-es:
+    specifier: ^0.2.0
+    version: 0.2.0
 
 devDependencies:
   sass:
@@ -546,6 +549,10 @@ packages:
       immutable: 4.3.0
       source-map-js: 1.0.2
     dev: true
+
+  /shiki-es@0.2.0:
+    resolution: {integrity: sha512-RbRMD+IuJJseSZljDdne9ThrUYrwBwJR04FvN4VXpfsU3MNID5VJGHLAD5je/HGThCyEKNgH+nEkSFEWKD7C3Q==}
+    dev: false
 
   /source-map-js@1.0.2:
     resolution: {integrity: sha512-R0XvVJ9WusLiqTCEiGCmICCMplcCkIwwR11mOSD9CR5u+IXYdiseeEuXCVAjS54zqwkLcPNnmU4OeJ6tUrWhDw==}
