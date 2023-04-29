@@ -56,12 +56,21 @@ label {
 
 
 .warning {
-    background: rgba(255, 231, 201, 0.071);
+    background: rgba(255, 231, 201, 0.144);
     padding: 0.6rem 1rem;
     border-radius: 0.4rem;
     font-size: .9rem;
-    color: #ffe78f;
+
     border: 1px solid rgba(255, 231, 143, 0.09);
+    display: flex;
+    flex-direction: column;
+    gap: .5rem
+}
+
+.warning-title {
+    color: #ffe78f;
+    font-size: 1rem;
+    font-weight: 600;
 }
 
 fieldset{
@@ -135,6 +144,9 @@ section {
     border: 1px solid rgba(248, 252, 255, 0.034);
 }
 
+section.installation {
+    background-color: rgba(248, 252, 255, 0.062);
+}
 button {
     cursor: pointer;
     font-family: inherit;
