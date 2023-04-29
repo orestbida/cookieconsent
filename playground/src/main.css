@@ -130,7 +130,7 @@ li > div:last-child {
 
 section {
     padding: 1rem 1.4rem;
-    background-color: rgba(248, 252, 255, 0.034);
+    background-color: rgba(248, 252, 255, 0.103);
     border-radius: .4rem;
     border: 1px solid rgba(248, 252, 255, 0.034);
 }
