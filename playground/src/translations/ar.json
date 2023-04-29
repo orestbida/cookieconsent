@@ -51,10 +51,6 @@
                 "linkedCategory": "ads"
             },
             {
-                "title": "تفاصيل موافقتك",
-                "description": "<p>consent id: <span id=\"consent-id\">-</span></p><p>consent date: <span id=\"consent-timestamp\">-</span></p><p>last update: <span id=\"last-consent-timestamp\">-</span></p>"
-            },
-            {
                 "title": "معلومات اكثر",
                 "description": "لأي استفسار يتعلق بسياستي الخاصة بملفات تعريف الارتباط وخياراتك ، يرجى  <a class=\"cc__link\" href=\"#yourdomain.com\">الاتصال بي</a>."
             }

@@ -51,10 +51,6 @@
                 "linkedCategory": "ads"
             },
             {
-                "title": "Sus datos de consentimiento",
-                "description": "<p>consent id: <span id=\"consent-id\">-</span></p><p>consent date: <span id=\"consent-timestamp\">-</span></p><p>last update: <span id=\"last-consent-timestamp\">-</span></p>"
-            },
-            {
                 "title": "Más información",
                 "description": "For any query in relation to my policy on cookies and your choices, please <a class=\"cc__link\" href=\"#yourdomain.com\">contact me</a>."
             }
