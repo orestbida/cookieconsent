@@ -80,12 +80,18 @@ legend{
     padding: 3px 8px 4px 8px;
 }
 
+.auto-language {
+    border-top: 1px dashed rgba(241, 245, 255, 0.11);
+    padding-top: 1rem;
+}
+
 .auto-language__details{
-    margin-top: 10px;
-    font-size: .95em;
+    margin-top: 1rem;
+    font-size: .9rem;
     line-height: 1.5;
-    padding: 10px 16px;
-    border-radius: 6px;
+    padding: 10px 1rem;
+    border-radius: .4rem;
+    background: rgba(237, 248, 255, 0.078);
 }
 
 .auto-language__details span{
@@ -150,14 +156,10 @@ button:hover{
 }
 
 .flex{
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     gap: var(--d-gap);
     margin-bottom: var(--d-gap);
-}
-
-.flex > fieldset,
-.flex > div{
-    flex: 1;
 }
 
 .themes {
@@ -168,6 +170,7 @@ button:hover{
 
 .themes label {
     position: relative;
+    cursor: pointer;
 }
 
 .themes input {

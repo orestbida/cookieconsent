@@ -16,56 +16,61 @@
             <br>
         </header>
         <main>
-            <div class="flex">
-                <fieldset class="language-codes">
-                    <legend>Demo Languages</legend>
 
-                    <input type="radio" id="language-en" name="language-code" value="en" checked>
-                    <label for="language-en" tabindex="0" role="radio">English</label><br>
-                    <input type="radio" id="language-it" name="language-code" value="it">
-                    <label for="language-it" tabindex="0" role="radio">Italian</label><br>
-                    <input type="radio" id="language-de" name="language-code" value="de">
-                    <label for="language-de" tabindex="0">German</label><br>
-                    <input type="radio" id="language-es" name="language-code" value="es">
-                    <label for="language-es">Spanish</label><br>
-                    <input type="radio" id="language-fr" name="language-code" value="fr">
-                    <label for="language-fr">French</label><br>
-                    <input type="radio" id="language-ar" name="language-code" value="ar">
-                    <label for="language-ar">Arabic <span class="badge">rtl</span></label><br>
-                </fieldset>
+            <div class="language-codes">
 
-                <fieldset class="auto-language">
-                    <legend>Auto Language</legend>
+                <div class="flex">
+                    <section class="languages">
+                        <h2>Translations</h2>
 
-                    <input type="checkbox" id="auto-language" name="autoLanguage">
-                    <label for="auto-language">Detect browser language</label>
+                        <input type="radio" id="language-en" name="language-code" value="en" checked>
+                        <label for="language-en" tabindex="0" role="radio">English</label><br>
+                        <input type="radio" id="language-it" name="language-code" value="it">
+                        <label for="language-it" tabindex="0" role="radio">Italian</label><br>
+                        <input type="radio" id="language-de" name="language-code" value="de">
+                        <label for="language-de" tabindex="0">German</label><br>
+                        <input type="radio" id="language-es" name="language-code" value="es">
+                        <label for="language-es">Spanish</label><br>
+                        <input type="radio" id="language-fr" name="language-code" value="fr">
+                        <label for="language-fr">French</label><br>
+                        <input type="radio" id="language-ar" name="language-code" value="ar">
+                        <label for="language-ar">Arabic <span class="badge">rtl</span></label><br>
+                    </section>
+                    <section class="language-more-options">
+                        <h2>Language options</h2>
+                        <div class="default-language">
+                            <label for="default-language">Default language (🚧)</label>
+                            <select name="default-language" id="default-language">
+                                <option value="en">en</option>
+                            </select>
+                        </div>
 
-                    <div class="auto-language__details">
-                        <p>Detected language: <span id="detected-language">-</span></p>
-                        <p>Translation found: <span id="translation-found">-</span></p>
-                    </div>
-                </fieldset>
+                        <br>
+                        <div class="auto-language">
+
+                            <input type="checkbox" id="auto-language" name="autoLanguage">
+                            <label for="auto-language">Auto detect language</label>
+
+                            <div class="auto-language__details">
+                                <p>Detected language: <code id="detected-language">-</code></p>
+                                <p>Translation found: <code id="translation-found">-</code></p>
+                            </div>
+                        </div>
+                    </section>
+                    <section>
+                        <input type="checkbox" id="darkmode" name="darkmode">
+                        <label for="darkmode">Enable dark-mode</label>
+
+                        <br>
+                        <input type="checkbox" id="disablePageInteraction" name="disablePageInteraction">
+                        <label for="disablePageInteraction">disablePageInteraction</label>
+                    </section>
+                </div>
             </div>
 
             <div class="flex">
-                <fieldset class="darkmode">
-                    <legend>Toggle Dark Mode</legend>
-
-                    <input type="checkbox" id="darkmode" name="darkmode">
-                    <label for="darkmode">Darkmode</label>
-                </fieldset>
-
-                <fieldset class="disablePageInteraction">
-                    <legend>Disable Page Interaction</legend>
-
-                    <input type="checkbox" id="disablePageInteraction" name="disablePageInteraction">
-                    <label for="disablePageInteraction">disablePageInteraction</label>
-                </fieldset>
-            </div>
-
-            <div class="flex">
-                <fieldset class="consent-modal">
-                    <legend>Consent Modal</legend>
+                <section class="consent-modal">
+                    <h2>Consent Modal UI</h2>
                     <div class="layout">
                         <label for="cm-layout">Layout</label>
                         <select name="layout" id="cm-layout">
@@ -92,9 +97,9 @@
                         <input type="checkbox" id="cm-weight" name="weight">
                         <label for="cm-weight">Equal weight buttons</label>
                     </div>
-                </fieldset>
-                <fieldset class="preferences-modal">
-                    <legend>Preferences Modal</legend>
+                </section>
+                <section class="preferences-modal">
+                    <h2>Preferences Modal UI</h2>
                     <div class="layout">
                         <label for="pm-layout">Layout</label>
                         <select name="layout" id="pm-layout">
@@ -118,7 +123,7 @@
                         <input type="checkbox" id="pm-weight" name="weight">
                         <label for="pm-weight">Equal weight buttons</label>
                     </div>
-                </fieldset>
+                </section>
             </div>
 
             <fieldset>
