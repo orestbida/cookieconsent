@@ -11,8 +11,8 @@
     </head>
     <body>
         <header>
-            <h1>CookieConsent v3 Playground (WIP)</h1>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+            <h1>CookieConsent v3 - Playground</h1>
+            <p class="warning">Page under construction! 🚧</p>
             <br>
         </header>
         <main>
@@ -144,7 +144,8 @@
                 <label for="remove-title">Remove <b>title</b></label>
 
             </fieldset>
-            <div class="flex">
+
+            <!-- <div class="flex">
                 <fieldset class="consent-status" id="consent-status">
                     <legend>Valid Consent</legend>
                 </fieldset>
@@ -156,34 +157,7 @@
                         <div class="category" id="ads-category">Advertisement</div>
                     </div>
                 </fieldset>
-            </div>
-
-            <div class="flex">
-                <fieldset class="custom-themes">
-                    <legend>Demo Themes</legend>
-
-                    <input type="radio" id="default-light" name="theme" checked>
-                    <label for="default-light">Light theme (default)</label>
-                    <br>
-
-                    <input type="radio" id="cc--darkmode" name="theme">
-                    <label for="cc--darkmode">Dark theme (default)</label>
-                    <br>
-
-                    <input type="radio" id="cc--dark-turquoise" name="theme">
-                    <label for="cc--dark-turquoise">Dark Turquoise</label>
-                    <br>
-
-                    <input type="radio" id="cc--light-funky" name="theme">
-                    <label for="cc--light-funky">Light Funky</label>
-                    <br>
-
-                    <input disabled type="radio" id="cc--elegant-black" name="theme">
-                    <label for="cc--elegant-black">Elegant Black (wip)</label>
-                    <br>
-
-                </fieldset>
-            </div>
+            </div> -->
 
             <br>
             <button type="button" data-cc="show-preferencesModal">Open Preferences Modal</button>
@@ -191,18 +165,47 @@
 
             <br>
             <br>
-            <div>
-                <b>Installation</b>
+            <section>
+
+                <h2>Themes</h2>
+
+                <div class="themes">
+                    <label for="default-light">
+                        <input type="radio" id="default-light" name="theme" checked>
+                        <span class="input-label">Light theme (default)</span>
+                    </label>
+
+                    <label for="cc--darkmode">
+                        <input type="radio" id="cc--darkmode" name="theme">
+                        <span class="input-label">Dark theme (default)</span>
+                    </label>
+
+                    <label for="cc--dark-turquoise">
+                        <input type="radio" id="cc--dark-turquoise" name="theme">
+                        <span class="input-label">Dark Turquoise</span>
+                    </label>
+
+                    <label for="cc--light-funky">
+                        <input type="radio" id="cc--light-funky" name="theme">
+                        <span class="input-label">Light Funky</span>
+                    </label>
+
+                    <label for="cc--elegant-black">
+                        <input disabled type="radio" id="cc--elegant-black" name="theme">
+                        <span class="input-label">Elegant Black (wip)</span>
+                    </label>
+                </div>
+            </section>
+
+            <br>
+            <br>
+            <section class="installation">
+                <h2>Installation</h2>
                 <ol>
-                    <li>
-                        <p>Add the stylesheet in the <code>&lt;head&gt;</code> tag:</p>
-                        <!--SHIKI language="html"
-                        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@v3.0.0-rc.13/dist/cookieconsent.css">
-                        -->
-                    </li>
+
                     <li>
                         <p>Download the
-                            <code class="highlight--yellow">cookieconsent-config.js</code> javascript file:
+                            <code class="highlight--green">cookieconsent-config.js</code> javascript file:
                         </p>
                         <button type="button" id="downloadConfigBtn">
                             <span>
@@ -210,12 +213,17 @@
                             </span>
                             cookieconsent-config.js
                         </button>
-
                     </li>
                     <li>
                         <p>Add the script in the <code>&lt;body&gt;</code> tag:</p>
                         <!--SHIKI language="html"
                         <script type="module" src="cookieconsent-config.js"></script>
+                        -->
+                    </li>
+                    <li>
+                        <p>Add the stylesheet in the <code>&lt;head&gt;</code> tag:</p>
+                        <!--SHIKI language="html"
+                        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@v3.0.0-rc.13/dist/cookieconsent.css">
                         -->
                     </li>
                 </ol>

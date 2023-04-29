@@ -113,7 +113,7 @@ async function ShikiHighlight(opts = {}) {
                             return `<pre class="hl__shiki">${children}</pre>`
                         },
                         code({ children }) {
-                            return `<code>${children}</code>`
+                            return `<code tabindex="0">${children}</code>`
                         },
                         line({index, children}) {
                             let focus = shouldFocusLines && focusIndexes[index + 1] === true;
@@ -144,7 +144,7 @@ async function ShikiHighlight(opts = {}) {
                         ? `<${titleTag} class="hl__title">${title.trim()}</${titleTag}>`
                         : ''
                     }
-                    <div class="hl__content" tabindex="0">
+                    <div class="hl__content">
                         ${preHtml}
                         ${showLineNumbers ? lineNumbers : ''}
                     </div>

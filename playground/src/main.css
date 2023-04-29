@@ -32,6 +32,12 @@ body{
 h1,
 h2 {
     font-weight: 600;
+    color: #e1e4e7;
+}
+
+h2 {
+    margin: 0 0 1.5rem 0;
+    font-size: 1.2rem;
 }
 
 p {
@@ -46,6 +52,16 @@ b{
 label {
     font-weight: 400;
     font-size: .9em;
+}
+
+
+.warning {
+    background: rgba(255, 231, 201, 0.071);
+    padding: 0.6rem 1rem;
+    border-radius: 0.4rem;
+    font-size: .9rem;
+    color: #ffe78f;
+    border: 1px solid rgba(255, 231, 143, 0.09);
 }
 
 fieldset{
@@ -78,8 +94,39 @@ legend{
     color: #2e7ee4;
 }
 
-input:checked + label{
+input:checked + label,
+input:checked + .input-label{
     color: #fff;
+}
+
+ul, ol {
+    padding: 0 0 0 1rem;
+}
+
+ul > li,
+ol > li {
+    margin-bottom: 1.4rem;
+}
+
+ul > li:last-child,
+ol > li:last-child {
+    margin-bottom: 0;
+}
+
+ul > li > p,
+ol > li > p{
+    margin-bottom: .7rem;
+}
+
+li > div:last-child {
+    margin-bottom: 0;
+}
+
+section {
+    padding: 1rem 1.4rem;
+    background-color: rgba(248, 252, 255, 0.034);
+    border-radius: .4rem;
+    border: 1px solid rgba(248, 252, 255, 0.034);
 }
 
 button {
@@ -112,6 +159,62 @@ button:hover{
 .flex > div{
     flex: 1;
 }
+
+.themes {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 0.4rem;
+}
+
+.themes label {
+    position: relative;
+}
+
+.themes input {
+    border: 0;
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    opacity: 0;
+    cursor: pointer;
+    border: 2px solid transparent;
+}
+
+.themes .input-label {
+    display: block;
+    background: #ffffff24;
+    padding: 1rem;
+    border-radius: 0.4rem;
+    pointer-events: none;
+    border: 2px solid transparent;
+}
+
+.themes input:focus + .input-label{
+    border-color: rgb(255, 255, 255);
+}
+
+.themes input:checked + .input-label {
+    color: #fff;
+    background: #555c5c;
+}
+
+.themes input:disabled + .input-label {
+    color: rgba(255, 255, 255, 0.253);
+    background: #555c5c1f;
+}
+
+.themes input:disabled {
+    cursor: not-allowed;
+}
+
+.themes input:checked + .input-label {
+    background: #555c5c;
+}
+
 
 .hl{
     position: relative;

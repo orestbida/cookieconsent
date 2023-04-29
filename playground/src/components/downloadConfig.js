@@ -61,5 +61,5 @@ addEvent(downloadBtn, 'click', () => {
     const config = configAsString();
 
     const blob = new Blob([config], {type: 'text/javascript;charset=utf-8'});
-    saveAs(blob, 'cookieconsent-config.js',);
+    saveAs(blob, 'cookieconsent-config.js');
 });

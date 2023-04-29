@@ -1,11 +1,3 @@
-ol > li {
-    margin-bottom: 1rem;
-}
-
-ol > li > p{
-    margin-bottom: .5rem;
-}
-
 code {
     background: rgba(40, 130, 171, 0.231);
     color: #81d2f7;
@@ -31,9 +23,9 @@ code {
     gap: 0.6rem;
     align-items: center;
     justify-content: space-between;
-    background: #f1b867;
-    color: #000;
-    border-color: #f1b867;
+    background: rgba(74, 195, 124, 0.05);
+    color: #4ac37c;
+    border-color: rgba(74, 195, 104, 0.32);
 
     svg {
         display: block;
@@ -43,14 +35,29 @@ code {
         }
     }
 
+    &:hover,
     &:focus {
-        background: #be9152;
+        background: #4ac37c;
+        border-color: #4ac37c;
         color: #000;
-        border-color: #be9152;
     }
+
+    &:active {
+        transition: none;
+        background: #357a52;
+        border-color: #357a52;
+        color: #000;
+    }
+
+
 }
 
 .highlight--yellow {
     color: rgb(255, 200, 118);
     background: rgba(187, 160, 119, 0.251);
+}
+
+.highlight--green {
+    color: #65c98e;
+    background: rgba(213, 255, 230, 0.13);
 }
