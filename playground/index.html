@@ -24,16 +24,15 @@
 
                 <div class="flex">
                     <section class="translations">
-                        <h2 class="translations-title">Default Translations (🚧)</h2>
+                        <h2 class="translations-title">Translations</h2>
                         <p class="translations-description">Select the translations to include in your configuration.</p>
 
                         <div class="translations-list">
 
                             <label for="language-en">
-                                <input class="language-input" type="checkbox" id="language-en" name="language-code" value="en" checked>
+                                <input class="language-input" type="checkbox" id="language-en" name="language-code" value="en">
                                 <span class="label">English <span class="tick"></span></span>
                             </label>
-
 
                             <label for="language-it">
                                 <input class="language-input" type="checkbox" id="language-it" name="language-code" value="it">
@@ -45,12 +44,10 @@
                                 <span class="label">German <span class="tick"></span></span>
                             </label>
 
-
                             <label for="language-es">
                                 <input class="language-input" type="checkbox" id="language-es" name="language-code" value="es">
                                 <span class="label">Spanish <span class="tick"></span></span>
                             </label>
-
 
                             <label for="language-fr">
                                 <input class="language-input" type="checkbox" id="language-fr" name="language-code" value="fr">
@@ -64,15 +61,20 @@
 
                         </div>
 
+                        <br>
+                        <button type="button">Edit translations 🚧</button>
                     </section>
                     <section class="language-more-options">
-                        <h2>Language options</h2>
+                        <h2>Language options 🚧</h2>
                         <div class="default-language">
-                            <label for="default-language">Default language (🚧)</label>
-                            <select name="default-language" id="default-language">
-                                <option value="en">en</option>
-                            </select>
-                            <p>Current language: <code id="current-language">-</code></p>
+                            <label class="select-label" for="default-language">
+                                <span>Default language 🚧</span><span class="select-input">
+                                    <select name="default-language" id="default-language">
+                                        <option value="en">en</option>
+                                    </select>
+                                    <span class="arrow-icon"></span>
+                                </span>
+                            </label>
                         </div>
 
                         <br>
@@ -82,6 +84,16 @@
                                 <input type="checkbox" id="auto-language" name="autoLanguage">
                                 <label for="auto-language">Auto detect language</label>
                             </div>
+
+                            <label class="select-label autodetect" for="autodetect-mode">
+                                <span>Detect from</span><span class="select-input">
+                                    <select name="autodetect" id="autodetect-mode" disabled>
+                                        <option value="document">document</option>
+                                        <option value="browser">browser</option>
+                                    </select>
+                                    <span class="arrow-icon"></span>
+                                </span>
+                            </label>
 
                             <div class="auto-language__details">
                                 <p>Detected language: <code id="detected-language">-</code></p>
@@ -108,58 +120,77 @@
             <div class="flex">
                 <section class="consent-modal">
                     <h2>Consent Modal UI</h2>
-                    <div class="layout">
-                        <label for="cm-layout">Layout</label>
-                        <select name="layout" id="cm-layout">
-                            <option value="box">box</option>
-                            <option value="box inline">box inline</option>
-                            <option value="box wide">box wide</option>
-                            <option value="cloud">cloud</option>
-                            <option value="cloud inline">cloud inline</option>
-                            <option value="bar">bar</option>
-                            <option value="bar inline">bar inline</option>
-                        </select>
-                    </div>
-                    <div class="vertical">
-                        <label for="cm-position">Position</label>
-                        <select name="vertical" id="cm-position">
 
-                        </select>
-                    </div>
-                    <div class="flip checkbox-div">
-                        <input type="checkbox" id="cm-flip" name="flip">
-                        <label for="cm-flip">Flip buttons</label>
-                    </div>
-                    <div class="weight checkbox-div">
-                        <input type="checkbox" id="cm-weight" name="weight">
-                        <label for="cm-weight">Equal weight buttons</label>
+                    <label class="select-label" for="cm-layout">
+                        <span>Layout</span><span class="select-input">
+                            <select name="layout" id="cm-layout">
+                                <option value="box">box</option>
+                                <option value="box inline">box inline</option>
+                                <option value="box wide">box wide</option>
+                                <option value="cloud">cloud</option>
+                                <option value="cloud inline">cloud inline</option>
+                                <option value="bar">bar</option>
+                                <option value="bar inline">bar inline</option>
+                            </select>
+                            <span class="arrow-icon"></span>
+                        </span>
+                    </label>
+
+                    <label class="select-label" for="cm-position">
+                        <span>Position</span><span class="select-input">
+                            <select name="vertical" id="cm-position">
+
+                            </select>
+                            <span class="arrow-icon"></span>
+                        </span>
+                    </label>
+
+                    <div class="checkbox-group">
+                        <div class="flip checkbox-div">
+                            <input type="checkbox" id="cm-flip" name="flip">
+                            <label for="cm-flip">Flip buttons</label>
+                        </div>
+                        <div class="weight checkbox-div">
+                            <input type="checkbox" id="cm-weight" name="weight">
+                            <label for="cm-weight">Equal weight buttons</label>
+                        </div>
                     </div>
                 </section>
                 <section class="preferences-modal">
                     <h2>Preferences Modal UI</h2>
-                    <div class="layout">
-                        <label for="pm-layout">Layout</label>
-                        <select name="layout" id="pm-layout">
-                            <option value="box">box</option>
-                            <option value="bar">bar</option>
-                            <option value="bar wide">bar wide</option>
-                        </select>
+
+                    <label class="select-label" for="pm-layout">
+                        <span>Layout</span><span class="select-input">
+                            <select name="layout" id="pm-layout">
+                                <option value="box">box</option>
+                                <option value="bar">bar</option>
+                                <option value="bar wide">bar wide</option>
+                            </select>
+                            <span class="arrow-icon"></span>
+                        </span>
+                    </label>
+
+                    <label class="select-label" for="pm-position">
+                        <span>Position</span><span class="select-input">
+                            <select name="position" id="pm-position">
+                                <option data-excludedLayout="box" value="left">left</option>
+                                <option data-excludedLayout="box" value="right">right</option>
+                            </select>
+                            <span class="arrow-icon"></span>
+                        </span>
+                    </label>
+
+                    <div class="checkbox-group">
+                        <div class="flip checkbox-div">
+                            <input type="checkbox" id="pm-flip" name="flip">
+                            <label for="pm-flip">Flip buttons</label>
+                        </div>
+                        <div class="weight checkbox-div">
+                            <input type="checkbox" id="pm-weight" name="weight">
+                            <label for="pm-weight">Equal weight buttons</label>
+                        </div>
                     </div>
-                    <div class="vertical">
-                        <label for="pm-position">Position</label>
-                        <select name="position" id="pm-position">
-                            <option data-excludedLayout="box" value="left">left</option>
-                            <option data-excludedLayout="box" value="right">right</option>
-                        </select>
-                    </div>
-                    <div class="flip checkbox-div">
-                        <input type="checkbox" id="pm-flip" name="flip">
-                        <label for="pm-flip">Flip buttons</label>
-                    </div>
-                    <div class="weight checkbox-div">
-                        <input type="checkbox" id="pm-weight" name="weight">
-                        <label for="pm-weight">Equal weight buttons</label>
-                    </div>
+
                 </section>
             </div>
 
@@ -239,7 +270,7 @@
 
                     <label for="cc--elegant-black">
                         <input disabled type="radio" id="cc--elegant-black" name="theme">
-                        <span class="input-label">Elegant Black (wip)</span>
+                        <span class="input-label">Elegant Black 🚧</span>
                     </label>
                 </div>
             </section>

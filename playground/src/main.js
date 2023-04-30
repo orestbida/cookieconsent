@@ -5,8 +5,9 @@ import { fireEvent, customEvents } from './components/utils';
 
 window.CookieConsent = CookieConsent;
 
+import './components/language';
+import './components/translations';
 import './components/disablePageInteraction';
-import './components/languages';
 import './components/darkmode';
 import './components/buttons';
 // import './components/consentDetails';

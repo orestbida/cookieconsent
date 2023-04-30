@@ -19,6 +19,7 @@ html{
 :root{
     --d-gap: 10px;
     --d-border-radius: 6px;
+    --d-select-height: 36px;
 }
 
 body{
@@ -85,6 +86,10 @@ label {
     margin-bottom: 1rem;
 }
 
+.checkbox-group {
+    margin-top: .6rem;
+}
+
 .checkbox-div {
     display: flex;
     align-items: center;
@@ -101,13 +106,16 @@ label {
     padding-top: 1rem;
 }
 
+select,
 input[type=checkbox],
 input[type=radio] {
     appearance: none;
     -webkit-appearance: none;
     -moz-appearance: none;
+    font-family: inherit;
 }
 
+/** Custom checkbox **/
 input[type="checkbox"]:not(.language-input) {
     height: 19px;
     width: 19px;
@@ -165,6 +173,100 @@ input[type="checkbox"]:not(.language-input)::after {
 input[type="checkbox"]:not(.language-input):checked::after {
     transform: scale(1) rotate(43deg);
     opacity: 1;
+}
+
+/** End custom checkbox **/
+
+/** Custom select **/
+select {
+    height: var(--d-select-height);
+    padding: 0 1.8rem 0 1rem;
+    border-top-right-radius: .3rem;
+    border-bottom-right-radius: .3rem;
+    cursor: pointer;
+    outline: none;
+    display: block;
+    border: 1px solid transparent;
+    box-shadow: 0 0 0 rgba(255, 255, 255, 0.12);
+    transition: color .2s ease,
+                background-color .2s ease,
+                border-color .2s ease,
+                box-shadow .2s ease;
+    font-weight: 600;
+}
+
+select:hover {
+    border: 1px solid #646464;
+}
+
+select:focus {
+    border: 1px solid rgb(91, 94, 95);
+    background: #4a4c4e;
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.12);
+}
+
+select:disabled {
+    cursor: not-allowed;
+    border-color: transparent!important;
+}
+
+select:disabled ~ .arrow-icon::before{
+    border-color: #6b6b6b;
+}
+
+.select-label {
+    display: inline-block;
+    margin-bottom: 0.3rem;
+}
+
+.select-label > span:first-child {
+    min-width: 5.3rem;
+    vertical-align: middle;
+    display: inline-block;
+    line-height: var(--d-select-height);
+    height: var(--d-select-height);
+    background-color: #333333;
+    padding: 0 1rem;
+    border-top-left-radius: 0.3rem;
+    border-bottom-left-radius: 0.3rem;
+    border: 1px solid #3b3b3b;
+    margin-right: 1px;
+    white-space: nowrap;
+}
+
+.select-input {
+    position: relative;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+select ~ .arrow-icon {
+    pointer-events: none;
+    height: 20px;
+    width: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: .3rem;
+}
+
+select ~ .arrow-icon::before {
+    border: solid rgb(255, 255, 255);
+    border-width: 0 2px 2px 0;
+    content: "";
+    padding: 2px;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%) rotate(45deg);
+    z-index: 1;
+}
+/** End custom select **/
+
+.autodetect {
+    margin-top: .5rem;
 }
 
 .translations-list {
@@ -409,5 +511,9 @@ button:hover{
     .themes,
     .flex {
         grid-template-columns: auto;
+    }
+
+    .select-label {
+        display: flex;
     }
 }
