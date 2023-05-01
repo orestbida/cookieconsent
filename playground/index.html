@@ -23,7 +23,7 @@
             <div class="language-codes">
 
                 <div class="flex">
-                    <section class="translations">
+                    <section class="translations" id="translations-section">
                         <h2 class="translations-title">Translations</h2>
                         <p class="translations-description">Select the translations to include in your configuration.</p>
 
@@ -62,15 +62,21 @@
                         </div>
 
                         <br>
-                        <button type="button">Edit translations 🚧</button>
+                        <button type="button" id="edit-translations-btn">Edit translations 🚧</button>
                     </section>
                     <section class="language-more-options">
-                        <h2>Language options 🚧</h2>
+                        <h2>Language options</h2>
                         <div class="default-language">
                             <label class="select-label" for="default-language">
-                                <span>Default language 🚧</span><span class="select-input">
+                                <span>Default language</span><span class="select-input">
                                     <select name="default-language" id="default-language">
-                                        <option value="en">en</option>
+                                        <option value="disabled" disabled selected>—</option>
+                                        <option value="en">English</option>
+                                        <option value="it">Italian</option>
+                                        <option value="de">German</option>
+                                        <option value="es">Spanish</option>
+                                        <option value="fr">French</option>
+                                        <option value="ar">Arabic</option>
                                     </select>
                                     <span class="arrow-icon"></span>
                                 </span>
@@ -95,9 +101,10 @@
                                 </span>
                             </label>
 
-                            <div class="auto-language__details">
+                            <div class="language__details">
                                 <p>Detected language: <code id="detected-language">-</code></p>
-                                <p>Translation found: <code id="translation-found">-</code></p>
+                                <p>Translation loaded 🚧: <code id="translation-found">-</code></p>
+                                <p>Current language: <code id="current-active-language">-</code></p>
                             </div>
                         </div>
                     </section>
@@ -195,7 +202,7 @@
             </div>
 
             <section>
-                <h2>Consent Modal Elements (🚧)</h2>
+                <h2>Consent Modal Elements</h2>
 
                 <div class="checkbox-div">
                     <input type="checkbox" id="close-icon" name="closeIcon">

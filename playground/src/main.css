@@ -185,14 +185,14 @@ select {
     border-bottom-right-radius: .3rem;
     cursor: pointer;
     outline: none;
-    display: block;
     border: 1px solid transparent;
     box-shadow: 0 0 0 rgba(255, 255, 255, 0.12);
+    font-weight: 600;
+    width: 100%;
     transition: color .2s ease,
                 background-color .2s ease,
                 border-color .2s ease,
                 box-shadow .2s ease;
-    font-weight: 600;
 }
 
 select:hover {
@@ -215,16 +215,16 @@ select:disabled ~ .arrow-icon::before{
 }
 
 .select-label {
-    display: inline-block;
+    display: flex;
     margin-bottom: 0.3rem;
+    width: fit-content;
 }
 
 .select-label > span:first-child {
     min-width: 5.3rem;
-    vertical-align: middle;
-    display: inline-block;
-    line-height: var(--d-select-height);
+    display: flex;
     height: var(--d-select-height);
+    align-items: center;
     background-color: #333333;
     padding: 0 1rem;
     border-top-left-radius: 0.3rem;
@@ -236,8 +236,6 @@ select:disabled ~ .arrow-icon::before{
 
 .select-input {
     position: relative;
-    display: inline-block;
-    vertical-align: middle;
 }
 
 select ~ .arrow-icon {
@@ -359,7 +357,7 @@ select ~ .arrow-icon::before {
     transform: translateX(0);
 }
 
-.auto-language__details{
+.language__details{
     margin-top: 1rem;
     font-size: .9rem;
     line-height: 1.5;
@@ -371,10 +369,14 @@ select ~ .arrow-icon::before {
     background: rgba(237, 248, 255, 0.078);
 }
 
-.auto-language__details span{
-    font-weight: 600;
-    margin-left: 5px;
-    color: #2e7ee4;
+.language__details p {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.language__details code {
+    padding: 0.1rem 0.3rem;
 }
 
 input:checked + label,
@@ -418,10 +420,18 @@ section {
     background-color: rgba(248, 252, 255, 0.103);
     border-radius: .4rem;
     border: 1px solid rgba(248, 252, 255, 0.034);
+    transition: border-color .2s ease,
+                background-color .2s ease,
+                box-shadow .2s ease;
 }
 
 section.installation {
     background-color: rgba(248, 252, 255, 0.062);
+}
+
+section.no-translations-error {
+    border-color:#986a4d;
+    box-shadow: 0 0 0 4px #ff96002b;
 }
 
 button {
@@ -442,6 +452,17 @@ button:hover{
     background: #fff;
     border-color: #fff;
     color: #000;
+}
+
+#edit-translations-btn {
+    width: 100%;
+}
+
+#edit-translations-btn:disabled {
+    color: #000;
+    background: #ffac5d;
+    border-color: #ffac5d;
+    cursor: not-allowed;
 }
 
 .flex{
@@ -513,7 +534,10 @@ button:hover{
         grid-template-columns: auto;
     }
 
+    .select-input {
+        flex: 1;
+    }
     .select-label {
-        display: flex;
+        width: auto;
     }
 }
