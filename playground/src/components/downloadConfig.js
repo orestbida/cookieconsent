@@ -2,6 +2,7 @@ import '../assets/installationSection.scss';
 import { getById, addEvent } from "./utils";
 import { getState } from './stateManager';
 import { saveAs } from 'file-saver';
+import { enabledTranslation } from './translations';
 
 /**
  * @type {HTMLAnchorElement}
@@ -37,7 +38,7 @@ const configAsString = ({minify=false} = {}) => {
      * Remove all translations except those specified by the user
      */
     for(const languageCode in allTranslations) {
-        if(!state.enabledTranslations.includes(languageCode))
+        if(!enabledTranslation(languageCode, state))
             allTranslations[languageCode] = undefined;
     }
 

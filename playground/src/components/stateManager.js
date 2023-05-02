@@ -8,6 +8,7 @@ export const defaultState = {
     currLanguage: defaultConfig.language.default,
 
     enabledTranslations: ['en'],
+    enabledCategories: ['necessary', 'analytics'],
     enableCloseIcon: false,
 
     removeAcceptNecessaryBtn: false,
@@ -33,7 +34,7 @@ export const defaultState = {
     /**
      * Increase on every new playground update
      */
-    demoRevision: 18
+    demoRevision: 19
 };
 
 addEvent(window, customEvents._INIT, clearInvalidDemoState)

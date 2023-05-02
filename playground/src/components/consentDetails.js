@@ -1,6 +1,5 @@
 import { onEvent, customEvents } from './utils'
 
-
 const updateFields = () => {
 
     const modal = document.querySelector('#cc-main .pm');

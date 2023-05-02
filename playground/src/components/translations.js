@@ -1,4 +1,4 @@
-import { updateDefaultLanguageOptions, defaultLanguageSelect, setDefaultLanguage, setActiveLanguage, detectLanguage } from './language';
+import { updateDefaultLanguageOptions, defaultLanguageSelect, updateDefaultLanguage, updateCurrentLanguage, detectLanguage, autoDetectEnabled, updateTranslationFound } from './language';
 import { defaultState, getState, saveState } from './stateManager';
 import { addEvent, customEvents, getById, onEvent } from './utils';
 
@@ -26,6 +26,7 @@ translationInputs.forEach(input => {
 
         const state = getState();
         const translations = state.enabledTranslations;
+        const language = state.cookieConsentConfig.language;
 
         const languageFound = translations.includes(languageCode);
 
@@ -38,23 +39,29 @@ translationInputs.forEach(input => {
         toggleMissingTranslationError(state.enabledTranslations)
         updateDefaultLanguageOptions(state.enabledTranslations);
 
-        if(!state.enabledTranslations.includes(defaultLanguageSelect.value)) {
-            const currentDefaultLang = state.enabledTranslations[0] || '';
-            setDefaultLanguage(currentDefaultLang);
-            state.cookieConsentConfig.language.default = currentDefaultLang;
+        const autoDetect = autoDetectEnabled(language.autoDetect);
+        const autoDetectedLanguage = autoDetect ? detectLanguage(language.autoDetect) : '';
 
-            state.currLanguage = currentDefaultLang;
-            currentDefaultLang && window.CookieConsent.setLanguage(currentDefaultLang);
+        const currLanguage =
+            (enabledTranslation(autoDetectedLanguage, state) && autoDetectedLanguage)
+            || (enabledTranslation(language.default, state) && language.default)
+            || state.enabledTranslations[0]
+            || '';
+
+        if(autoDetect) {
+            updateTranslationFound(currLanguage === autoDetectedLanguage);
         }
 
-        /** [TODO: FIX ABOMINATION] */
-        if(state.cookieConsentConfig.language.autoDetect && state.enabledTranslations.includes(detectLanguage(state.cookieConsentConfig.language.autoDetect))) {
-            setActiveLanguage(detectLanguage(state.cookieConsentConfig.language.autoDetect), state);
-        } else {
-            setActiveLanguage(state.cookieConsentConfig.language.default, state, );
+        if(!enabledTranslation(language.default, state)) {
+            language.default = currLanguage;
+            updateDefaultLanguage(currLanguage);
         }
+
+        updateCurrentLanguage(currLanguage, state);
 
         saveState(state);
+
+        currLanguage && CookieConsent.setLanguage(currLanguage);
     });
 });
 
@@ -87,4 +94,14 @@ function toggleMissingTranslationError(enabledTranslations) {
     editTranslationsBtn.textContent = error
         ? 'Translation required'
         : editTranslationsBtnText;
+}
+
+/**
+ *
+ * @param {string} translation
+ * @param {{}} [state]
+ * @returns {boolean}
+ */
+export function enabledTranslation(translation, state) {
+    return (state || getState()).enabledTranslations.includes(translation);
 }

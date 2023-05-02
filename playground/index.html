@@ -12,6 +12,7 @@
     <body>
         <header>
             <h1>CookieConsent v3 - Playground</h1>
+
             <div class="warning">
                 <p class="warning-title">Page under construction! 🚧</p>
                 <p class="warning-description">Some config. parameters are missing or don't work.</p>
@@ -19,9 +20,39 @@
             <br>
         </header>
         <main>
+            <div class="flex">
 
+                <section class="categories-section">
+                    <h2>Categories 🚧</h2>
+                    <p class="categories-description">Select the cookie categories.</p>
+
+                    <div class="translations-list">
+
+                        <label>
+                            <input class="category-input custom-input" type="checkbox" value="necessary" checked disabled>
+                            <span class="label">Necessary <span class="tick">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><g fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><rect width="16" height="10" x="4" y="11" rx="2" ry="2"/><path d="M16.5 11V8h0c0-2.8-.5-5-4.5-5S7.5 5.2 7.5 8h0v3"/></g></svg>
+                            </span></span>
+                        </label>
+
+                        <label>
+                            <input class="category-input custom-input" type="checkbox" value="preferences">
+                            <span class="label">Preferences <span class="tick"></span></span>
+                        </label>
+
+                        <label>
+                            <input class="category-input custom-input" type="checkbox" value="analytics">
+                            <span class="label">Analytics <span class="tick"></span></span>
+                        </label>
+
+                        <label>
+                            <input class="category-input custom-input" type="checkbox" value="marketing">
+                            <span class="label">Marketing <span class="tick"></span></span>
+                        </label>
+                    </div>
+                </section>
+            </div>
             <div class="language-codes">
-
                 <div class="flex">
                     <section class="translations" id="translations-section">
                         <h2 class="translations-title">Translations</h2>
@@ -30,32 +61,32 @@
                         <div class="translations-list">
 
                             <label for="language-en">
-                                <input class="language-input" type="checkbox" id="language-en" name="language-code" value="en">
+                                <input class="custom-input" type="checkbox" id="language-en" name="language-code" value="en">
                                 <span class="label">English <span class="tick"></span></span>
                             </label>
 
                             <label for="language-it">
-                                <input class="language-input" type="checkbox" id="language-it" name="language-code" value="it">
+                                <input class="custom-input" type="checkbox" id="language-it" name="language-code" value="it">
                                 <span class="label">Italian <span class="tick"></span></span>
                             </label>
 
                             <label for="language-de">
-                                <input class="language-input" type="checkbox" id="language-de" name="language-code" value="de">
+                                <input class="custom-input" type="checkbox" id="language-de" name="language-code" value="de">
                                 <span class="label">German <span class="tick"></span></span>
                             </label>
 
                             <label for="language-es">
-                                <input class="language-input" type="checkbox" id="language-es" name="language-code" value="es">
+                                <input class="custom-input" type="checkbox" id="language-es" name="language-code" value="es">
                                 <span class="label">Spanish <span class="tick"></span></span>
                             </label>
 
                             <label for="language-fr">
-                                <input class="language-input" type="checkbox" id="language-fr" name="language-code" value="fr">
+                                <input class="custom-input" type="checkbox" id="language-fr" name="language-code" value="fr">
                                 <span class="label">French <span class="tick"></span></span>
                             </label>
 
                             <label for="language-ar">
-                                <input class="language-input" type="checkbox" id="language-ar" name="language-code" value="ar">
+                                <input class="custom-input" type="checkbox" id="language-ar" name="language-code" value="ar">
                                 <span class="label">Arabic <span class="tick"></span></span>
                             </label>
 
@@ -103,24 +134,12 @@
 
                             <div class="language__details">
                                 <p>Detected language: <code id="detected-language">-</code></p>
-                                <p>Translation loaded 🚧: <code id="translation-found">-</code></p>
+                                <p>Translation loaded: <code id="translation-found">-</code></p>
                                 <p>Current language: <code id="current-active-language">-</code></p>
                             </div>
                         </div>
                     </section>
-                    <section>
 
-                        <div class="checkbox-div">
-                            <input type="checkbox" id="darkmode" name="darkmode">
-                            <label for="darkmode">Enable dark-mode</label>
-                        </div>
-
-                        <div class="checkbox-div">
-                            <input type="checkbox" id="disablePageInteraction" name="disablePageInteraction">
-                            <label for="disablePageInteraction">Disable page interaction</label>
-                        </div>
-
-                    </section>
                 </div>
             </div>
 
@@ -202,31 +221,47 @@
             </div>
 
             <section>
-                <h2>Consent Modal Elements</h2>
+                <div class="flex">
+                    <div>
+                        <h2>Consent Modal Elements</h2>
 
-                <div class="checkbox-div">
-                    <input type="checkbox" id="close-icon" name="closeIcon">
-                    <label for="close-icon">Add <b>X icon</b> (box layout only) = accept necessary</label>
-                </div>
+                        <div class="checkbox-div">
+                            <input type="checkbox" id="close-icon" name="closeIcon">
+                            <label for="close-icon">Add <b>X icon</b> (box layout only) = accept necessary</label>
+                        </div>
 
-                <div class="checkbox-div">
-                    <input type="checkbox" id="accept-necessary-btn" name="AcceptNecessary">
-                    <label for="accept-necessary-btn">Remove <b>accept necessary</b> button</label>
-                </div>
+                        <div class="checkbox-div">
+                            <input type="checkbox" id="accept-necessary-btn" name="AcceptNecessary">
+                            <label for="accept-necessary-btn">Remove <b>accept necessary</b> button</label>
+                        </div>
 
-                <div class="checkbox-div">
-                    <input type="checkbox" id="show-preferences-btn" name="ShowPreferences">
-                    <label for="show-preferences-btn">Remove <b>show preferences</b> button</label>
-                </div>
+                        <div class="checkbox-div">
+                            <input type="checkbox" id="show-preferences-btn" name="ShowPreferences">
+                            <label for="show-preferences-btn">Remove <b>show preferences</b> button</label>
+                        </div>
 
-                <div class="checkbox-div">
-                    <input type="checkbox" id="remove-footer" name="RemoveFooter">
-                    <label for="remove-footer">Remove <b>footer</b> section</label>
-                </div>
+                        <div class="checkbox-div">
+                            <input type="checkbox" id="remove-footer" name="RemoveFooter">
+                            <label for="remove-footer">Remove <b>footer</b> section</label>
+                        </div>
 
-                <div class="checkbox-div">
-                    <input type="checkbox" id="remove-title" name="RemoveTitle">
-                    <label for="remove-title">Remove <b>title</b></label>
+                        <div class="checkbox-div">
+                            <input type="checkbox" id="remove-title" name="RemoveTitle">
+                            <label for="remove-title">Remove <b>title</b></label>
+                        </div>
+                    </div>
+                    <div>
+                        <h2>Misc</h2>
+                        <div class="checkbox-div">
+                            <input type="checkbox" id="darkmode" name="darkmode">
+                            <label for="darkmode">Enable dark-mode</label>
+                        </div>
+
+                        <div class="checkbox-div">
+                            <input type="checkbox" id="disablePageInteraction" name="disablePageInteraction">
+                            <label for="disablePageInteraction">Disable page interaction</label>
+                        </div>
+                    </div>
                 </div>
             </section>
 
