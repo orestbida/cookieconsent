@@ -9,9 +9,9 @@
     "preview": "vite preview"
   },
   "devDependencies": {
-    "sass": "^1.59.3",
+    "sass": "^1.62.1",
     "shiki-es": "^0.2.0",
-    "vite": "^4.2.1",
+    "vite": "^4.3.4",
     "vite-plugin-minify": "^1.5.2"
   },
   "dependencies": {
