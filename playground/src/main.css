@@ -14,13 +14,16 @@ html{
     background-color: #000;
     color-scheme: dark!important;
     scrollbar-width: thin;
+    -webkit-text-size-adjust: none;
+    -moz-text-size-adjust: none;
+    text-size-adjust: none;
 }
 
 :root{
-    --d-gap: 10px;
-    --d-border-radius: 6px;
-    --d-select-height: 36px;
-    --d-checkbox-width: 19px;
+    --d-gap: .625rem;
+    --d-border-radius: .375rem;
+    --d-select-height: 2.25rem;
+    --d-checkbox-width: 1.1875rem;
 }
 
 body{
@@ -31,9 +34,6 @@ body{
     padding: 12px;
     width: 100vw;
     overflow-x: hidden;
-    -webkit-text-size-adjust: none;
-    -moz-text-size-adjust: none;
-    text-size-adjust: none;
 }
 
 h1,
@@ -67,7 +67,7 @@ label {
     border-radius: 0.4rem;
     font-size: .9rem;
 
-    border: 1px solid rgba(255, 231, 143, 0.09);
+    border: .0625rem solid rgba(255, 231, 143, 0.09);
     display: flex;
     flex-direction: column;
     gap: .5rem
@@ -104,7 +104,7 @@ label {
 }
 
 .auto-language {
-    border-top: 1px dashed rgba(241, 245, 255, 0.11);
+    border-top: .0625rem dashed rgba(241, 245, 255, 0.11);
     padding-top: 1rem;
 }
 
@@ -115,6 +115,7 @@ input[type=radio] {
     -webkit-appearance: none;
     -moz-appearance: none;
     font-family: inherit;
+    font-size: inherit;
 }
 
 .custom-input:disabled {
@@ -153,7 +154,7 @@ input[type="checkbox"]:not(.custom-input) {
     margin: 0;
     cursor: pointer;
     border-radius: .3rem;
-    border: 1px solid rgb(102, 102, 102);
+    border: .0625rem solid rgb(102, 102, 102);
     box-sizing: content-box;
     box-shadow: 0 0 0 0 rgba(206, 227, 255, 0.199);
     transition: border-color .2s ease,
@@ -184,11 +185,11 @@ input[type="checkbox"]:not(.custom-input):disabled {
 input[type="checkbox"]:not(.custom-input)::after {
     position: absolute;
     content: "";
-    margin-top: -1px;
-    margin-left: 1px;
-    width: 4px;
-    height: 8px;
-    border: 2px solid #fff;
+    margin-top: -.0625rem;
+    margin-left: .0625rem;
+    width: .25rem;
+    height: .5rem;
+    border: .125rem solid #fff;
     border-top: 0;
     border-left: 0;
     opacity: 0;
@@ -207,12 +208,13 @@ input[type="checkbox"]:not(.custom-input):checked::after {
 select {
     height: var(--d-select-height);
     padding: 0 1.8rem 0 1rem;
+    border-radius: 0;
     border-top-right-radius: .3rem;
     border-bottom-right-radius: .3rem;
     cursor: pointer;
     outline: none;
     background: #454748;
-    border: 1px solid transparent;
+    border: .0625rem solid transparent;
     box-shadow: 0 0 0 rgba(255, 255, 255, 0.12);
     font-weight: 600;
     width: 100%;
@@ -223,11 +225,11 @@ select {
 }
 
 select:hover {
-    border: 1px solid #646464;
+    border: .0625rem solid #646464;
 }
 
 select:focus {
-    border: 1px solid rgb(91, 94, 95);
+    border: .0625rem solid rgb(91, 94, 95);
     background: #4a4c4e;
     box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.12);
 }
@@ -256,8 +258,8 @@ select:disabled ~ .arrow-icon::before{
     padding: 0 1rem;
     border-top-left-radius: 0.3rem;
     border-bottom-left-radius: 0.3rem;
-    border: 1px solid #3b3b3b;
-    margin-right: 1px;
+    border: .0625rem solid #3b3b3b;
+    margin-right: .0625rem;
     white-space: nowrap;
 }
 
@@ -280,9 +282,9 @@ select ~ .arrow-icon {
 
 select ~ .arrow-icon::before {
     border: solid rgb(255, 255, 255);
-    border-width: 0 2px 2px 0;
+    border-width: 0 .125rem .125rem 0;
     content: "";
-    padding: 2px;
+    padding: .125rem;
     position: absolute;
     top: 50%;
     transform: translateY(-50%) rotate(45deg);
@@ -325,7 +327,7 @@ select ~ .arrow-icon::before {
     align-items: center;
     background-color: #262626;
     border-radius: 0.45rem;
-    border: 1px solid #303030;
+    border: .0625rem solid #303030;
     color: rgb(195, 200, 204);
     box-shadow: 0 0 0 0 rgba(206, 227, 255, 0.199);
     transition: border-color .2s ease,
@@ -345,8 +347,8 @@ select ~ .arrow-icon::before {
 }
 
 .translations-list .tick {
-    height: 22px;
-    width: 22px;
+    height: 1.375rem;
+    width: 1.375rem;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -362,11 +364,11 @@ select ~ .arrow-icon::before {
 .translations-list .tick::after {
     position: absolute;
     content: "";
-    margin-top: -1px;
-    margin-left: 1px;
-    width: 4px;
-    height: 8px;
-    border: 2px solid #fff;
+    margin-top: -.0625rem;
+    margin-left: .0625rem;
+    width: .25rem;
+    height: .5rem;
+    border: .125rem solid #fff;
     border-top: 0;
     border-left: 0;
     transform: rotate(43deg);
@@ -388,7 +390,7 @@ select ~ .arrow-icon::before {
     margin-top: 1rem;
     font-size: .9rem;
     line-height: 1.5;
-    padding: 10px 1rem;
+    padding: .625rem 1rem;
     display: flex;
     flex-direction: column;
     gap: 0.1rem;
@@ -446,7 +448,7 @@ section {
     padding: 1rem 1.4rem;
     background-color: rgba(248, 252, 255, 0.103);
     border-radius: .4rem;
-    border: 1px solid rgba(248, 252, 255, 0.034);
+    border: .0625rem solid rgba(248, 252, 255, 0.034);
     transition: border-color .2s ease,
                 background-color .2s ease,
                 box-shadow .2s ease;
@@ -458,19 +460,19 @@ section.installation {
 
 section.no-translations-error {
     border-color:#986a4d;
-    box-shadow: 0 0 0 4px #ff96002b;
+    box-shadow: 0 0 0 .25rem #ff96002b;
 }
 
 button {
     cursor: pointer;
     font-family: inherit;
     background: rgb(46 46 46);
-    border: 1px solid #434343;
+    border: .0625rem solid #434343;
     border-radius: var(--d-border-radius);
     color: #fff;
     font-size: .85em;
     font-weight: 600;
-    padding: 10px 16px;
+    padding: .625rem 1rem;
     text-align: center;
     transition: background-color .15s ease,border-color .15s ease,color .15s ease;
 }
@@ -521,7 +523,7 @@ button:hover{
     bottom: 0;
     opacity: 0;
     cursor: pointer;
-    border: 2px solid transparent;
+    border: .125rem solid transparent;
 }
 
 .themes .input-label {
@@ -530,7 +532,7 @@ button:hover{
     padding: 1rem;
     border-radius: 0.4rem;
     pointer-events: none;
-    border: 2px solid transparent;
+    border: .125rem solid transparent;
 }
 
 .themes input:focus + .input-label{
