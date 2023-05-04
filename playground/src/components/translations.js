@@ -1,4 +1,4 @@
-import { updateDefaultLanguageOptions, defaultLanguageSelect, updateDefaultLanguage, updateCurrentLanguage, detectLanguage, autoDetectEnabled, updateTranslationFound } from './language';
+import { updateDefaultLanguageOptions, updateDefaultLanguage, updateCurrentLanguage, detectLanguage, autoDetectEnabled, updateTranslationFound } from './language';
 import { defaultState, getState, saveState } from './stateManager';
 import { addEvent, customEvents, getById, onEvent } from './utils';
 
@@ -36,7 +36,7 @@ translationInputs.forEach(input => {
             languageFound && (state._enabledTranslations = state._enabledTranslations.filter(language => language !== languageCode));
         }
 
-        toggleMissingTranslationError(state._enabledTranslations)
+        toggleMissingTranslationError(state._enabledTranslations);
         updateDefaultLanguageOptions(state._enabledTranslations);
 
         const autoDetect = autoDetectEnabled(language.autoDetect);
@@ -60,8 +60,6 @@ translationInputs.forEach(input => {
         updateCurrentLanguage(currLanguage, state);
 
         saveState(state);
-
-        currLanguage && CookieConsent.setLanguage(currLanguage);
     });
 });
 

@@ -1,8 +1,7 @@
 import '../assets/installationSection.scss';
 import { getById, addEvent } from "./utils";
-import { getState } from './stateManager';
+import { getCurrentUserConfig, getState } from './stateManager';
 import { saveAs } from 'file-saver';
-import { enabledTranslation } from './translations';
 
 /**
  * @type {HTMLAnchorElement}
@@ -15,31 +14,12 @@ const configAsString = ({minify=false} = {}) => {
     let scriptStr = `import { run } from 'https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@${pluginVersion}/dist/cookieconsent.esm.js';\n\n`;
 
     const state = getState();
-    const config = state._cookieConsentConfig;
-    const allTranslations = config.language.translations;
+    const config = getCurrentUserConfig(state);
     const darkModeEnabled = state._theme === 'cc--darkmode';
 
     if(darkModeEnabled) {
         scriptStr += `// Enable dark mode\n`;
         scriptStr += `document.documentElement.classList.add('cc--darkmode');\n\n`;
-    }
-
-    /**
-     * Remove unneeded fields
-     */
-    config.root = undefined;
-    config.cookie = undefined;
-    config.categories.analytics.services = undefined;
-
-    if(!config.disablePageInteraction)
-        config.disablePageInteraction = undefined;
-
-    /**
-     * Remove all translations except those specified by the user
-     */
-    for(const languageCode in allTranslations) {
-        if(!enabledTranslation(languageCode, state))
-            allTranslations[languageCode] = undefined;
     }
 
     /**

@@ -4,7 +4,6 @@ import it from '../translations/it.json';
 import es from '../translations/es.json';
 import fr from '../translations/fr.json';
 import ar from '../translations/ar.json';
-import { deepCopy } from './utils';
 
 /**
  * WARNING: this object will be
@@ -43,20 +42,8 @@ const defaultFullConfig = {
             readOnly: true,
             enabled: true
         },
-        analytics: {
-            services: {
-                ga: {
-                    label: `<a href="https://marketingplatform.google.com/about/analytics/terms/us/" rel="noreferrer" target="_blank">Google Analytics 4</a>`
-                },
-                clarity: {
-                    label: 'Microsoft Clarity'
-                },
-                another2: {
-                    label: 'Yet another service'
-                }
-            }
-        },
-        ads: {}
+        analytics: {},
+        marketing: {}
     },
 
     language: {
@@ -81,10 +68,24 @@ const defaultFullConfig = {
 */
 const defaultConfig = deepCopy(defaultFullConfig);
 
-const translations = defaultConfig.language.translations;
-for(let lang in translations){
-    translations[lang].consentModal.closeIconLabel = undefined;
-}
+function deepCopy(el) {
+
+    if (typeof el !== 'object' )
+        return el;
+
+    if (el instanceof Date)
+        return new Date(el.getTime());
+
+    let clone = Array.isArray(el) ? [] : {};
+
+    for (let key in el) {
+        let value = el[key];
+
+        clone[key] = deepCopy(value);
+    }
+
+    return clone;
+};
 
 export {
     defaultFullConfig,

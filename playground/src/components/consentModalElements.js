@@ -1,6 +1,6 @@
 import { defaultFullConfig } from './defaultConfig';
-import { getState, saveState, defaultState } from './stateManager';
-import { addEvent, getById, customEvents, reRunPlugin } from './utils';
+import { getState, saveState, defaultState, reRunPlugin } from './stateManager';
+import { addEvent, getById, customEvents } from './utils';
 
 const state = getState();
 
@@ -28,7 +28,7 @@ addEvent(enableXIconCheckbox, 'change', function(){
 
     toggleConsentModalElement(state, 'closeIconLabel', !enabled);
     saveState(state);
-    reRunPlugin(state._cookieConsentConfig, 'consentModal');
+    reRunPlugin(state, 'consentModal');
 });
 
 addEvent(removeAcceptNecessaryBtnCheckbox, 'change', function() {
@@ -43,7 +43,7 @@ addEvent(removeAcceptNecessaryBtnCheckbox, 'change', function() {
 
     toggleConsentModalElement(state, 'acceptNecessaryBtn', remove);
     saveState(state);
-    reRunPlugin(state._cookieConsentConfig, 'consentModal');
+    reRunPlugin(state, 'consentModal');
 });
 
 addEvent(removeShowPreferencesBtnCheckbox, 'change', function() {
@@ -58,7 +58,7 @@ addEvent(removeShowPreferencesBtnCheckbox, 'change', function() {
 
     toggleConsentModalElement(state, 'showPreferencesBtn', remove);
     saveState(state);
-    reRunPlugin(state._cookieConsentConfig, 'consentModal');
+    reRunPlugin(state, 'consentModal');
 });
 
 addEvent(removeFooterCheckbox, 'change', function() {
@@ -73,7 +73,7 @@ addEvent(removeFooterCheckbox, 'change', function() {
 
     toggleConsentModalElement(state, 'footer', remove);
     saveState(state);
-    reRunPlugin(state._cookieConsentConfig, 'consentModal');
+    reRunPlugin(state, 'consentModal');
 });
 
 addEvent(removeTitleCheckbox, 'change', function() {
@@ -93,7 +93,7 @@ addEvent(removeTitleCheckbox, 'change', function() {
 
     toggleConsentModalElement(state, 'title', remove);
     saveState(state);
-    reRunPlugin(state._cookieConsentConfig, 'consentModal');
+    reRunPlugin(state, 'consentModal');
 });
 
 addEvent(window, customEvents._RESET, () => {

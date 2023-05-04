@@ -60,20 +60,6 @@ export const addEvent = (el, eventType, fn) => {
 };
 
 /**
- * @param {import('../../../types').CookieConsentConfig} config
- * @param {'consentModal' | 'preferencesModal'} [showModal]
- */
-export const reRunPlugin = (config, showModal) => {
-    const cc = win.CookieConsent;
-
-    cc.reset();
-    cc.run(config);
-
-    showModal === 'consentModal' && cc.show(true);
-    showModal === 'preferencesModal' && cc.showPreferences();
-};
-
-/**
  * @param {string} selector
  */
 export const getById = (selector) => document.getElementById(selector);

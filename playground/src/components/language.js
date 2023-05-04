@@ -1,6 +1,6 @@
 import { defaultFullConfig } from './defaultConfig';
 import { defaultConfig } from './defaultConfig';
-import { defaultState, getState, saveState } from './stateManager';
+import { defaultState, getState, reRunPlugin, saveState } from './stateManager';
 import { enabledTranslation } from './translations';
 import { addEvent, customEvents, getById, onEvent } from './utils';
 
@@ -35,15 +35,13 @@ if(autoDetect) {
 toggleAutoDetectCheckbox(autoDetect)
 updateDefaultLanguageOptions(state._enabledTranslations);
 updateDefaultLanguage(language.default);
-updateCurrentLanguage(currLang);
+updateCurrentLanguage(currLang, false);
 
 addEvent(autoDetectCheckbox, 'change', () => {
 
     const state = getState();
     const language = state._cookieConsentConfig.language;
     const enable = autoDetectCheckbox.checked;
-
-
 
     if(enable){
 
@@ -52,7 +50,7 @@ addEvent(autoDetectCheckbox, 'change', () => {
         updateDetectedLanguage(detectedLang, state);
 
         if(enabledTranslation(detectedLang, state)){
-            updateCurrentLanguage(detectedLang);
+            updateCurrentLanguage(detectedLang, state);
         }
 
         setAutoDetectMode(language.autoDetect);
@@ -61,7 +59,7 @@ addEvent(autoDetectCheckbox, 'change', () => {
         language.autoDetect = undefined;
         updateDetectedLanguage('', state);
         setAutoDetectMode('');
-        updateCurrentLanguage(language.default);
+        updateCurrentLanguage(language.default, state);
     }
 
     saveState(state);
@@ -72,15 +70,15 @@ addEvent(autoDetectModeSelect, 'change', () => {
 
     if(autoDetectEnabled(mode)) {
         const state = getState();
+        state._cookieConsentConfig.language.autoDetect = mode;
 
         const detectedLanguage = detectLanguage(mode);
         updateDetectedLanguage(detectedLanguage);
 
         if(enabledTranslation(detectedLanguage, state)){
-            updateCurrentLanguage(detectedLanguage);
+            updateCurrentLanguage(detectedLanguage, state);
         }
 
-        state._cookieConsentConfig.language.autoDetect = mode;
         saveState(state);
     }
 });
@@ -108,9 +106,9 @@ onEvent(customEvents._RESET, () => {
     updateDefaultLanguage(defaultLang);
     setAutoDetectMode(language.autoDetect);
     updateDetectedLanguage(defaultLang, defaultState);
-    updateCurrentLanguage(defaultLang, defaultState);
     toggleAutoDetectCheckbox(true);
     updateDefaultLanguageOptions(defaultState._enabledTranslations);
+    updateCurrentLanguage(defaultLang, defaultState);
 });
 
 
@@ -147,6 +145,22 @@ export function updateCurrentLanguage(languageCode, newState){
         : '-';
 
     currentActiveLanguageSpan.textContent = currLanguage;
+
+    if(currLanguage === '-') {
+        window.CookieConsent?.reset();
+        return;
+    }
+
+    if(newState === false)
+        return;
+
+    if(!document.getElementById('cc-main')) {
+        setTimeout(() => {
+            reRunPlugin(state, 'consentModal');
+        }, 100);
+    } else {
+        reRunPlugin(state, 'consentModal')
+    }
 }
 
 /**

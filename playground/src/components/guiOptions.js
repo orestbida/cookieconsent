@@ -1,7 +1,7 @@
 import '../assets/guiOptions.scss';
 import { defaultConfig } from './defaultConfig';
-import { getState, saveState } from './stateManager';
-import { onEvent, customEvents, reRunPlugin, addEvent, getById } from './utils';
+import { getState, reRunPlugin, saveState } from './stateManager';
+import { onEvent, customEvents, addEvent, getById } from './utils';
 
 const CHANGE_EVENT = 'change';
 const CONSENT_MODAL_NAME = 'consentModal';
@@ -157,7 +157,7 @@ function updateGuiOptionsState(modalName, key, value) {
 
     state._cookieConsentConfig.guiOptions[modalName][key] = value;
     saveState(state);
-    reRunPlugin(state._cookieConsentConfig, modalName);
+    reRunPlugin(state, modalName);
 }
 
 /**

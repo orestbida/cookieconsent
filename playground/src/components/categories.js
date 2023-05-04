@@ -1,5 +1,5 @@
 import { onEvent, customEvents } from './utils'
-import { getState, defaultState, saveState } from './stateManager'
+import { getState, reRunPlugin, saveState } from './stateManager'
 
 /**
  * @type {NodeListOf<HTMLInputElement>}
@@ -24,6 +24,7 @@ categoryInputs.forEach(input => {
         )];
 
         saveState(state);
+        reRunPlugin(state, 'consentModal');
     });
 })
 
@@ -31,11 +32,6 @@ categoryInputs.forEach(input => {
  * @param {string[]} enabledCategories
  */
 function toggleCategories(enabledCategories) {
-
-    enabledCategories = Array.from(new Set([
-        ...enabledCategories,
-        ...defaultState._enabledCategories
-    ]));
 
     for(const input of categoryInputs) {
         input.checked = enabledCategories.includes(input.value);

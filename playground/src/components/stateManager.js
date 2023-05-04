@@ -4,6 +4,7 @@ import { deepCopy, fireEvent, customEvents, addEvent } from './utils';
 export const DEMO_ITEM_NAME = 'demoState';
 
 export const defaultState = {
+
     _cookieConsentConfig: defaultConfig,
     _currLanguage: defaultConfig.language.default,
 
@@ -120,3 +121,80 @@ function clearInvalidDemoState() {
         }
     }
 }
+
+/**
+ * @param {typeof defaultState} state
+ */
+export const getCurrentUserConfig = (state) => {
+
+    /**
+     * @type {import('../../../types').CookieConsentConfig}
+     */
+    const config = deepCopy(state._cookieConsentConfig);
+    const allTranslations = config.language.translations;
+
+    /**
+     * Remove unneeded fields
+     */
+    delete config.root;
+    delete config.cookie;
+
+    if(!config.disablePageInteraction)
+        delete config.disablePageInteraction;
+
+    /**
+     * Remove unselected translations
+     */
+    for(const languageCode in allTranslations) {
+
+        if(!state._enabledTranslations.includes(languageCode)) {
+            delete allTranslations[languageCode];
+        } else {
+
+            /**
+             * @type {import('../../../types').PreferencesModalOptions}
+             */
+            const preferencesModal = allTranslations[languageCode].preferencesModal;
+
+            /**
+             * Remove all sections with a 'linkedCategory' that is not selected by the user
+             */
+            const filteredSections = preferencesModal.sections.filter(section =>
+                !section.linkedCategory
+                || state._enabledCategories.includes(section.linkedCategory
+            ));
+
+            preferencesModal.sections = filteredSections;
+        }
+    }
+
+    if(!('ar' in allTranslations))
+        delete config.language.rtl;
+
+    /**
+     * Remove unselected categories
+     */
+    for(const category in config.categories) {
+        if(!state._enabledCategories.includes(category)) {
+            delete config.categories[category];
+        }
+    }
+
+    return config;
+}
+
+/**
+ * @param {typeof defaultState} state
+ * @param {'consentModal' | 'preferencesModal'} [showModal]
+ */
+export const reRunPlugin = (state, showModal) => {
+    const cc = window.CookieConsent;
+
+    cc.reset();
+    const config = getCurrentUserConfig(state);
+
+    cc.run(config).then(() => {
+        showModal === 'consentModal' && cc.show(true);
+        showModal === 'preferencesModal' && cc.showPreferences();
+    });
+};

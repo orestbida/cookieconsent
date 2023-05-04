@@ -1,7 +1,7 @@
 import '../../dist/cookieconsent.css';
 import * as CookieConsent from '../../dist/cookieconsent.esm';
-import { getState } from './components/stateManager';
 import { fireEvent, customEvents } from './components/utils';
+import { getCurrentUserConfig, getState } from './components/stateManager';
 
 window.CookieConsent = CookieConsent;
 
@@ -20,5 +20,5 @@ import './components/customThemes';
 import './components/downloadConfig';
 
 CookieConsent
-    .run(getState()._cookieConsentConfig)
+    .run(getCurrentUserConfig(getState()))
     .then(() => fireEvent(customEvents._INIT));
