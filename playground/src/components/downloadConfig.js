@@ -15,7 +15,7 @@ const configAsString = ({minify=false} = {}) => {
     let scriptStr = `import { run } from 'https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@${pluginVersion}/dist/cookieconsent.esm.js';\n\n`;
 
     const state = getState();
-    const config = state.cookieConsentConfig;
+    const config = state._cookieConsentConfig;
     const allTranslations = config.language.translations;
     const darkModeEnabled = state._theme === 'cc--darkmode';
 

@@ -4,17 +4,17 @@ import { deepCopy, fireEvent, customEvents, addEvent } from './utils';
 export const DEMO_ITEM_NAME = 'demoState';
 
 export const defaultState = {
-    cookieConsentConfig: defaultConfig,
-    currLanguage: defaultConfig.language.default,
+    _cookieConsentConfig: defaultConfig,
+    _currLanguage: defaultConfig.language.default,
 
-    enabledTranslations: ['en'],
-    enabledCategories: ['necessary', 'analytics'],
-    enableCloseIcon: false,
+    _enabledTranslations: ['en'],
+    _enabledCategories: ['necessary', 'analytics'],
+    _enableCloseIcon: false,
 
-    removeAcceptNecessaryBtn: false,
-    removeShowPrefrencesBtn: false,
-    removeFooter: false,
-    removeTitle: false,
+    _removeAcceptNecessaryBtn: false,
+    _removeShowPrefrencesBtn: false,
+    _removeFooter: false,
+    _removeTitle: false,
 
     /**
      * @type {'default-light' | 'cc--darkmode' | 'dark-turquoise' | 'light-funky' | 'elegant-black'}
@@ -22,19 +22,19 @@ export const defaultState = {
     _theme: 'cc--darkmode',
 
     /**
-     * @type {import('vanilla-cookieconsent').ConsentModalPosition}
+     * @type {import('../../../types').ConsentModalPosition}
      */
-    lastNonBarPosition: '',
+    _lastNonBarPosition: '',
 
     /**
-     * @type {import('vanilla-cookieconsent').ConsentModalPosition}
+     * @type {import('../../../types').ConsentModalPosition}
      */
-    lastBarPosition: '',
+    _lastBarPosition: '',
 
     /**
      * Increase on every new playground update
      */
-    demoRevision: 19
+    _demoRevision: 20
 };
 
 addEvent(window, customEvents._INIT, clearInvalidDemoState)
@@ -112,7 +112,7 @@ function clearInvalidDemoState() {
                     return resetState();
             }
 
-            if(savedState.demoRevision !== defaultState.demoRevision)
+            if(savedState._demoRevision !== defaultState._demoRevision)
                 return resetState();
 
         }catch(e){

@@ -8,7 +8,7 @@ const categoryInputs = document.querySelectorAll('.category-input');
 
 const state = getState();
 
-toggleCategories(state.enabledCategories);
+toggleCategories(state._enabledCategories);
 
 categoryInputs.forEach(input => {
 
@@ -17,10 +17,10 @@ categoryInputs.forEach(input => {
         const category = input.value;
         const state = getState();
 
-        state.enabledCategories = [...new Set(
+        state._enabledCategories = [...new Set(
             !enabled
-                ? state.enabledCategories.filter(cat => cat !== category)
-                : [...state.enabledCategories, category]
+                ? state._enabledCategories.filter(cat => cat !== category)
+                : [...state._enabledCategories, category]
         )];
 
         saveState(state);
@@ -34,7 +34,7 @@ function toggleCategories(enabledCategories) {
 
     enabledCategories = Array.from(new Set([
         ...enabledCategories,
-        ...defaultState.enabledCategories
+        ...defaultState._enabledCategories
     ]));
 
     for(const input of categoryInputs) {

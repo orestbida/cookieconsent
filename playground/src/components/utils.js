@@ -60,7 +60,7 @@ export const addEvent = (el, eventType, fn) => {
 };
 
 /**
- * @param {import("vanilla-cookieconsent").CookieConsentConfig} config
+ * @param {import('../../../types').CookieConsentConfig} config
  * @param {'consentModal' | 'preferencesModal'} [showModal]
  */
 export const reRunPlugin = (config, showModal) => {

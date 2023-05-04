@@ -6,24 +6,24 @@ import { addEvent, customEvents, getById, onEvent } from './utils';
  */
 const checkbox = getById('disablePageInteraction');
 
-checkbox.checked = !!getState().cookieConsentConfig.disablePageInteraction;
+checkbox.checked = !!getState()._cookieConsentConfig.disablePageInteraction;
 
 addEvent(checkbox, 'change', () => {
 
     const state = getState();
-    state.cookieConsentConfig.disablePageInteraction = checkbox.checked;
+    state._cookieConsentConfig.disablePageInteraction = checkbox.checked;
     saveState(state);
 
     const cookieconsent = window.CookieConsent;
 
     cookieconsent.reset();
     cookieconsent
-        .run(state.cookieConsentConfig)
+        .run(state._cookieConsentConfig)
         .then(() => {
             cookieconsent.show(true);
         });
 });
 
 onEvent(customEvents._RESET, () => {
-    checkbox.checked = defaultState.cookieConsentConfig.disablePageInteraction;
+    checkbox.checked = defaultState._cookieConsentConfig.disablePageInteraction;
 });

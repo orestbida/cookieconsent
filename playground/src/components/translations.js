@@ -14,7 +14,7 @@ const translationsSection = getById('translations-section');
 const editTranslationsBtn = getById('edit-translations-btn');
 const editTranslationsBtnText = editTranslationsBtn.textContent;
 
-const enabledTranslations = getState().enabledTranslations;
+const enabledTranslations = getState()._enabledTranslations;
 
 toggleTranslations(enabledTranslations);
 toggleMissingTranslationError(enabledTranslations);
@@ -25,19 +25,19 @@ translationInputs.forEach(input => {
         const enabled = input.checked;
 
         const state = getState();
-        const translations = state.enabledTranslations;
-        const language = state.cookieConsentConfig.language;
+        const translations = state._enabledTranslations;
+        const language = state._cookieConsentConfig.language;
 
         const languageFound = translations.includes(languageCode);
 
         if(enabled) {
             !languageFound && translations.push(languageCode);
         } else {
-            languageFound && (state.enabledTranslations = state.enabledTranslations.filter(language => language !== languageCode));
+            languageFound && (state._enabledTranslations = state._enabledTranslations.filter(language => language !== languageCode));
         }
 
-        toggleMissingTranslationError(state.enabledTranslations)
-        updateDefaultLanguageOptions(state.enabledTranslations);
+        toggleMissingTranslationError(state._enabledTranslations)
+        updateDefaultLanguageOptions(state._enabledTranslations);
 
         const autoDetect = autoDetectEnabled(language.autoDetect);
         const autoDetectedLanguage = autoDetect ? detectLanguage(language.autoDetect) : '';
@@ -45,7 +45,7 @@ translationInputs.forEach(input => {
         const currLanguage =
             (enabledTranslation(autoDetectedLanguage, state) && autoDetectedLanguage)
             || (enabledTranslation(language.default, state) && language.default)
-            || state.enabledTranslations[0]
+            || state._enabledTranslations[0]
             || '';
 
         if(autoDetect) {
@@ -66,7 +66,7 @@ translationInputs.forEach(input => {
 });
 
 onEvent(customEvents._RESET, () => {
-    toggleTranslations(defaultState.enabledTranslations)
+    toggleTranslations(defaultState._enabledTranslations)
 });
 
 /**
@@ -103,5 +103,5 @@ function toggleMissingTranslationError(enabledTranslations) {
  * @returns {boolean}
  */
 export function enabledTranslation(translation, state) {
-    return (state || getState()).enabledTranslations.includes(translation);
+    return (state || getState())._enabledTranslations.includes(translation);
 }

@@ -10,11 +10,11 @@ const state = getState();
 /** @type {HTMLInputElement} **/ const removeFooterCheckbox = getById('remove-footer');
 /** @type {HTMLInputElement} **/ const removeTitleCheckbox = getById('remove-title');
 
-toggleCloseIcon(state.enableCloseIcon);
-toggleRemoveAcceptNecessaryBtn(state.removeAcceptNecessaryBtn);
-toggleRemoveShowPreferencesBtn(state.removeShowPrefrencesBtn);
-toggleRemoveFooter(state.removeFooter);
-toggleRemoveTitle(state.removeTitle);
+toggleCloseIcon(state._enableCloseIcon);
+toggleRemoveAcceptNecessaryBtn(state._removeAcceptNecessaryBtn);
+toggleRemoveShowPreferencesBtn(state._removeShowPrefrencesBtn);
+toggleRemoveFooter(state._removeFooter);
+toggleRemoveTitle(state._removeTitle);
 
 addEvent(enableXIconCheckbox, 'change', function(){
 
@@ -24,11 +24,11 @@ addEvent(enableXIconCheckbox, 'change', function(){
     const enabled = this.checked;
 
     const state = getState();
-    state.enableCloseIcon = enabled;
+    state._enableCloseIcon = enabled;
 
     toggleConsentModalElement(state, 'closeIconLabel', !enabled);
     saveState(state);
-    reRunPlugin(state.cookieConsentConfig, 'consentModal');
+    reRunPlugin(state._cookieConsentConfig, 'consentModal');
 });
 
 addEvent(removeAcceptNecessaryBtnCheckbox, 'change', function() {
@@ -39,11 +39,11 @@ addEvent(removeAcceptNecessaryBtnCheckbox, 'change', function() {
     const remove = this.checked;
 
     const state = getState();
-    state.removeAcceptNecessaryBtn = remove;
+    state._removeAcceptNecessaryBtn = remove;
 
     toggleConsentModalElement(state, 'acceptNecessaryBtn', remove);
     saveState(state);
-    reRunPlugin(state.cookieConsentConfig, 'consentModal');
+    reRunPlugin(state._cookieConsentConfig, 'consentModal');
 });
 
 addEvent(removeShowPreferencesBtnCheckbox, 'change', function() {
@@ -54,11 +54,11 @@ addEvent(removeShowPreferencesBtnCheckbox, 'change', function() {
     const remove = this.checked;
 
     const state = getState();
-    state.removeShowPrefrencesBtn = remove;
+    state._removeShowPrefrencesBtn = remove;
 
     toggleConsentModalElement(state, 'showPreferencesBtn', remove);
     saveState(state);
-    reRunPlugin(state.cookieConsentConfig, 'consentModal');
+    reRunPlugin(state._cookieConsentConfig, 'consentModal');
 });
 
 addEvent(removeFooterCheckbox, 'change', function() {
@@ -69,11 +69,11 @@ addEvent(removeFooterCheckbox, 'change', function() {
     const remove = this.checked;
 
     const state = getState();
-    state.removeFooter = remove;
+    state._removeFooter = remove;
 
     toggleConsentModalElement(state, 'footer', remove);
     saveState(state);
-    reRunPlugin(state.cookieConsentConfig, 'consentModal');
+    reRunPlugin(state._cookieConsentConfig, 'consentModal');
 });
 
 addEvent(removeTitleCheckbox, 'change', function() {
@@ -89,19 +89,19 @@ addEvent(removeTitleCheckbox, 'change', function() {
     enableXIconCheckbox.disabled = remove;
 
     const state = getState();
-    state.removeTitle = remove;
+    state._removeTitle = remove;
 
     toggleConsentModalElement(state, 'title', remove);
     saveState(state);
-    reRunPlugin(state.cookieConsentConfig, 'consentModal');
+    reRunPlugin(state._cookieConsentConfig, 'consentModal');
 });
 
 addEvent(window, customEvents._RESET, () => {
-    toggleCloseIcon(defaultState.enableCloseIcon);
-    toggleRemoveAcceptNecessaryBtn(defaultState.removeAcceptNecessaryBtn);
-    toggleRemoveShowPreferencesBtn(defaultState.removeShowPrefrencesBtn);
-    toggleRemoveFooter(defaultState.removeFooter);
-    toggleRemoveTitle(defaultState.removeTitle);
+    toggleCloseIcon(defaultState._enableCloseIcon);
+    toggleRemoveAcceptNecessaryBtn(defaultState._removeAcceptNecessaryBtn);
+    toggleRemoveShowPreferencesBtn(defaultState._removeShowPrefrencesBtn);
+    toggleRemoveFooter(defaultState._removeFooter);
+    toggleRemoveTitle(defaultState._removeTitle);
 });
 
 /**
@@ -144,16 +144,16 @@ function toggleRemoveTitle(remove) {
 
 /**
  * @param {typeof defaultState} state
- * @param {keyof import('vanilla-cookieconsent').ConsentModalOptions} elementName
+ * @param {keyof import('../../../types').ConsentModalOptions} elementName
  * @param {boolean} remove
  */
 function toggleConsentModalElement(state, elementName, remove){
-    const translations = state.cookieConsentConfig.language.translations;
+    const translations = state._cookieConsentConfig.language.translations;
 
     for(let lang in translations){
 
         /**
-         * @type {import('vanilla-cookieconsent').Translation}
+         * @type {import('../../../types').Translation}
          */
         const translation = translations[lang];
         translation.consentModal[elementName] = remove

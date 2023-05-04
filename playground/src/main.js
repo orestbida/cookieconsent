@@ -20,5 +20,5 @@ import './components/customThemes';
 import './components/downloadConfig';
 
 CookieConsent
-    .run(getState().cookieConsentConfig)
+    .run(getState()._cookieConsentConfig)
     .then(() => fireEvent(customEvents._INIT));

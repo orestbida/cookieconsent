@@ -14,7 +14,7 @@ const currentActiveLanguageSpan = getById('current-active-language');
 /** @type {HTMLSelectElement} **/ export const defaultLanguageSelect = getById('default-language');
 
 const state = getState();
-const language = state.cookieConsentConfig.language;
+const language = state._cookieConsentConfig.language;
 const allLanguages = Object.keys(defaultFullConfig.language.translations);
 
 const autoDetectMode = language.autoDetect;
@@ -33,14 +33,14 @@ if(autoDetect) {
 }
 
 toggleAutoDetectCheckbox(autoDetect)
-updateDefaultLanguageOptions(state.enabledTranslations);
+updateDefaultLanguageOptions(state._enabledTranslations);
 updateDefaultLanguage(language.default);
 updateCurrentLanguage(currLang);
 
 addEvent(autoDetectCheckbox, 'change', () => {
 
     const state = getState();
-    const language = state.cookieConsentConfig.language;
+    const language = state._cookieConsentConfig.language;
     const enable = autoDetectCheckbox.checked;
 
 
@@ -80,7 +80,7 @@ addEvent(autoDetectModeSelect, 'change', () => {
             updateCurrentLanguage(detectedLanguage);
         }
 
-        state.cookieConsentConfig.language.autoDetect = mode;
+        state._cookieConsentConfig.language.autoDetect = mode;
         saveState(state);
     }
 });
@@ -88,7 +88,7 @@ addEvent(autoDetectModeSelect, 'change', () => {
 addEvent(defaultLanguageSelect, 'change', () => {
     const lang = defaultLanguageSelect.value;
     const state = getState();
-    const language = state.cookieConsentConfig.language;
+    const language = state._cookieConsentConfig.language;
 
     if(enabledTranslation(lang, state)){
         language.default = lang;
@@ -110,7 +110,7 @@ onEvent(customEvents._RESET, () => {
     updateDetectedLanguage(defaultLang, defaultState);
     updateCurrentLanguage(defaultLang, defaultState);
     toggleAutoDetectCheckbox(true);
-    updateDefaultLanguageOptions(defaultState.enabledTranslations);
+    updateDefaultLanguageOptions(defaultState._enabledTranslations);
 });
 
 

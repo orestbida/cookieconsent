@@ -39,17 +39,17 @@ const cmLayoutYValues = ['top', 'middle', 'bottom'];
 const cmLayoutXValues = ['left', 'center', 'right'];
 
 /**
- * @type {import('vanilla-cookieconsent').ConsentModalLayout}
+ * @type {import('../../../types').ConsentModalLayout}
  */
 let currentCMLayoutValue = '';
 
 /**
- * @type {import('vanilla-cookieconsent').PreferencesModalLayout}
+ * @type {import('../../../types').PreferencesModalLayout}
  */
 let currentPMLayoutValue = '';
 
 /**
- * @param {import('vanilla-cookieconsent').ConsentModalPosition} position
+ * @param {import('../../../types').ConsentModalPosition} position
  */
 const validBarPositions = (position) => position === 'top' || position === 'bottom';
 
@@ -113,13 +113,13 @@ function updateGuiOptionsState(modalName, key, value) {
             const layout = currentCMLayoutValue;
             const isBarLayout = layout.startsWith('bar');
 
-            const consentModal = state.cookieConsentConfig.guiOptions.consentModal;
+            const consentModal = state._cookieConsentConfig.guiOptions.consentModal;
             const currentPosition = consentModal.position;
 
             if(validBarPositions(currentPosition)){
-                state.lastBarPosition = currentPosition
+                state._lastBarPosition = currentPosition
             }else{
-                state.lastNonBarPosition = currentPosition;
+                state._lastNonBarPosition = currentPosition;
             }
 
             if(!isBarLayout && validBarPositions(currentPosition) || isBarLayout && !validBarPositions(currentPosition)){
@@ -128,20 +128,20 @@ function updateGuiOptionsState(modalName, key, value) {
 
                 if(isBarLayout){
                     if(!validBarPositions(currentPosition))
-                        consentModal.position = htmlElements[CONSENT_MODAL_NAME].position.value = state.lastBarPosition || 'bottom';
+                        consentModal.position = htmlElements[CONSENT_MODAL_NAME].position.value = state._lastBarPosition || 'bottom';
                 }else{
-                    consentModal.position = htmlElements[CONSENT_MODAL_NAME].position.value = state.lastNonBarPosition || defaultConfig.guiOptions.consentModal.position;
+                    consentModal.position = htmlElements[CONSENT_MODAL_NAME].position.value = state._lastNonBarPosition || defaultConfig.guiOptions.consentModal.position;
                 }
             }
         }
 
         if(key === 'position'){
-            const currentPosition = state.cookieConsentConfig.guiOptions.consentModal.position;
+            const currentPosition = state._cookieConsentConfig.guiOptions.consentModal.position;
 
             if(validBarPositions(currentPosition)){
-                state.lastBarPosition = currentPosition
+                state._lastBarPosition = currentPosition
             }else{
-                state.lastNonBarPosition = currentPosition;
+                state._lastNonBarPosition = currentPosition;
             }
         }
     }else {
@@ -155,9 +155,9 @@ function updateGuiOptionsState(modalName, key, value) {
 
     }
 
-    state.cookieConsentConfig.guiOptions[modalName][key] = value;
+    state._cookieConsentConfig.guiOptions[modalName][key] = value;
     saveState(state);
-    reRunPlugin(state.cookieConsentConfig, modalName);
+    reRunPlugin(state._cookieConsentConfig, modalName);
 }
 
 /**

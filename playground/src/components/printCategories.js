@@ -12,7 +12,7 @@ const ENABLED_CLASS = 'category--enabled';
 onEvent(customEvents._ON_CONSENT, ({detail}) => {
 
     /**
-     * @type {import('vanilla-cookieconsent').CookieValue}
+     * @type {import('../../../types').CookieValue}
      */
     const cookie = detail.cookie;
 
