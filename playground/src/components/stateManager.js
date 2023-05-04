@@ -35,7 +35,7 @@ export const defaultState = {
     /**
      * Increase on every new playground update
      */
-    _demoRevision: 20
+    _demoRevision: 21
 };
 
 addEvent(window, customEvents._INIT, clearInvalidDemoState)
@@ -152,9 +152,29 @@ export const getCurrentUserConfig = (state) => {
         } else {
 
             /**
-             * @type {import('../../../types').PreferencesModalOptions}
+             * @type {import('../../../types').Translation}
              */
-            const preferencesModal = allTranslations[languageCode].preferencesModal;
+            const translation = allTranslations[languageCode];
+
+            /**
+             * Remove closeIcon
+             */
+            if(!state._enableCloseIcon)
+                delete translation.consentModal.closeIconLabel;
+
+            if(state._removeAcceptNecessaryBtn)
+                delete translation.consentModal.acceptNecessaryBtn;
+
+            if(state._removeShowPrefrencesBtn)
+                delete translation.consentModal.showPreferencesBtn;
+
+            if(state._removeTitle)
+                delete translation.consentModal.title;
+
+            if(state._removeFooter)
+                delete translation.consentModal.footer;
+
+            const preferencesModal = translation.preferencesModal;
 
             /**
              * Remove all sections with a 'linkedCategory' that is not selected by the user
