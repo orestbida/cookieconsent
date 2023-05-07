@@ -1,5 +1,5 @@
 import { onEvent, customEvents } from './utils'
-import { getState, reRunPlugin, saveState } from './stateManager'
+import { defaultState, getState, reRunPlugin, saveState } from './stateManager'
 
 /**
  * @type {NodeListOf<HTMLInputElement>}
@@ -39,5 +39,5 @@ function toggleCategories(enabledCategories) {
 }
 
 onEvent(customEvents._RESET, () => {
-    toggleCategories([]);
+    toggleCategories(defaultState._enabledCategories);
 });
