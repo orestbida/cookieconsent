@@ -29,9 +29,9 @@ html{
 body{
     width: 100vw;
     overflow-x: hidden;
-    max-width: 700px;
+    max-width: 43.75rem;
     margin: 0 auto;
-    padding: 12px;
+    padding: .75rem;
     width: 100vw;
     overflow-x: hidden;
 }
@@ -167,7 +167,7 @@ input[type="checkbox"]:not(.custom-input):hover {
 }
 
 input[type="checkbox"]:not(.custom-input):focus {
-    box-shadow: 0 0 0 3px rgba(206, 227, 255, 0.199);
+    box-shadow: 0 0 0 .1875rem rgba(206, 227, 255, 0.199);
 }
 
 input[type="checkbox"]:not(.custom-input):checked {
@@ -231,7 +231,7 @@ select:hover {
 select:focus {
     border: .0625rem solid rgb(91, 94, 95);
     background: #4a4c4e;
-    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.12);
+    box-shadow: 0 0 0 .1875rem rgba(255, 255, 255, 0.12);
 }
 
 select:disabled {
@@ -250,7 +250,7 @@ select:disabled ~ .arrow-icon::before{
 }
 
 .select-label > span:first-child {
-    min-width: 5.3rem;
+    min-width: 5.5rem;
     display: flex;
     height: var(--d-select-height);
     align-items: center;
@@ -269,8 +269,8 @@ select:disabled ~ .arrow-icon::before{
 
 select ~ .arrow-icon {
     pointer-events: none;
-    height: 20px;
-    width: 20px;
+    height: 1.25rem;
+    width: 1.25rem;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -343,7 +343,7 @@ select ~ .arrow-icon::before {
 
 .translations-list input:focus ~ .label{
     border-color: rgb(66, 66, 66);
-    box-shadow: 0 0 0 3px rgba(99, 167, 255, 0.199);
+    box-shadow: 0 0 0 .1875rem rgba(99, 167, 255, 0.199);
 }
 
 .translations-list .tick {
@@ -355,7 +355,7 @@ select ~ .arrow-icon::before {
     position: relative;
     border-radius: 100%;
     opacity: 0;
-    transform: translateX(3px);
+    transform: translateX(.1875rem);
     background-color: rgba(255, 255, 255, 0.253);
     box-sizing: content-box;
     transition: opacity .2s ease, transform .2s ease;
@@ -557,7 +557,12 @@ button:hover{
     background: #555c5c;
 }
 
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 37.5rem) {
+
+    section {
+        padding: .8rem;
+    }
+
     .themes,
     .flex {
         grid-template-columns: auto;
