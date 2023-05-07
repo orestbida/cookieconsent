@@ -557,6 +557,78 @@ button:hover{
     background: #555c5c;
 }
 
+/** Edit translations modal **/
+
+.dialog-container,
+.dialog-overlay {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
+
+.dialog-container {
+    z-index: 2;
+    display: flex;
+}
+
+.dialog-container[aria-hidden='true'] {
+    display: none;
+}
+
+
+.dialog-overlay {
+    background-color: rgba(0, 0, 0, 0.808);
+    animation: fade-in 300ms ease forwards;
+}
+
+.dialog-content {
+    margin: auto;
+    z-index: 2;
+    position: absolute;
+    max-width: 600px;
+    width: 100%;
+    top: 1rem;
+    bottom: 1rem;
+    left: 0;
+    max-height: 500px;
+    right: 0;
+    padding: 1rem 1.4rem;
+    background-color: #222324;
+    border-radius: 0.4rem;
+    border: 0.0625rem solid rgba(248, 252, 255, 0.034);
+    animation: fade-in 400ms ease forwards, slide-up 300ms forwards;
+}
+
+.dialog-content h1 {
+    font-size: 1.15rem;
+}
+
+.dialog-content h1,
+.dialog-content h2 {
+    margin: 0;
+}
+
+.dialog-content .close-btn {
+    position: absolute;
+    right: 1.4rem;
+}
+
+@keyframes fade-in {
+    from {
+        opacity: 0;
+    }
+}
+
+@keyframes slide-up {
+    from {
+        transform: translateY(10%);
+    }
+}
+
+/** End edit translations modal **/
+
 @media only screen and (max-width: 37.5rem) {
 
     section {

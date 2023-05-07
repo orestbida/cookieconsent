@@ -93,7 +93,29 @@
                         </div>
 
                         <br>
-                        <button type="button" id="edit-translations-btn">Edit translations 🚧</button>
+                        <button type="button" id="edit-translations-btn" data-a11y-dialog-show="edit-translations-dialog">Edit translations 🚧</button>
+
+                        <!-- 1. The dialog container -->
+                        <div
+                            class="dialog-container"
+                            id="edit-translations-dialog"
+                            aria-labelledby="dialog-title"
+                            aria-hidden="true"
+                        >
+                            <!-- 2. The dialog overlay -->
+                            <div class="dialog-overlay" data-a11y-dialog-hide></div>
+                            <!-- 3. The actual dialog -->
+                            <div class="dialog-content" role="document">
+                                <!-- 4. The close button -->
+                                <button type="button" class="close-btn" data-a11y-dialog-hide aria-label="Close dialog">
+                                    &times;
+                                </button>
+                                <!-- 5. The dialog title -->
+                                <h1 id="dialog-title">Edit translations</h1>
+                                <!-- 6. Dialog content -->
+                            </div>
+                        </div>
+
                     </section>
                     <section class="language-more-options">
                         <h2>Language options</h2>

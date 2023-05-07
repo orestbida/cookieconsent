@@ -7,6 +7,7 @@ window.CookieConsent = CookieConsent;
 
 import './components/language';
 import './components/translations';
+import './components/editTranslationsDialog';
 import './components/categories';
 import './components/disablePageInteraction';
 import './components/darkmode';
