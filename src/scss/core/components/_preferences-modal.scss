@@ -303,6 +303,7 @@ $service-toggle-knob-icon-width: 1.7px;
         width: $toggle-knob-width;
         height: $toggle-knob-height;
         border-radius: var(--cc-pm-toggle-border-radius);
+        transform: translateZ(0); /* Fix safari weird glitch */
     }
 
     .section__toggle-wrapper{
