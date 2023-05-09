@@ -3,6 +3,11 @@ import { createNode, setAttribute, elContains, getAttribute, removeAttribute, is
 import { OPT_OUT_MODE, SCRIPT_TAG_SELECTOR } from './constants';
 
 /**
+ * @param {string} type
+ */
+const validMimeType = type => ['text/javascript', 'module'].includes(type);
+
+/**
  * This function handles the loading/activation logic of the already
  * existing scripts based on the current accepted cookie categories
  *
@@ -159,9 +164,11 @@ export const manageExistingScripts = (defaultEnabledCategories) => {
                 ? (freshScript.src = src)
                 : (src = currScript.src);
 
+            const externalScript = !!src && (dataType ? validMimeType(dataType) : true);
+
             // If script has valid "src" attribute
             // try loading it sequentially
-            if(src){
+            if(externalScript){
                 // load script sequentially => the next script will not be loaded
                 // until the current's script onload event triggers
                 freshScript.onload = freshScript.onerror = () => {
@@ -176,7 +183,7 @@ export const manageExistingScripts = (defaultEnabledCategories) => {
              * If we managed to get here and src is still set, it means that
              * the script is loading/loaded sequentially so don't go any further
              */
-            if(src)
+            if(externalScript)
                 return;
         }
 
