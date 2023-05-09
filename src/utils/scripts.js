@@ -88,7 +88,7 @@ export const manageExistingScripts = (defaultEnabledCategories) => {
          * Skip script if it was already executed
          */
         if(currScriptInfo._executed)
-            return;
+            return loadScriptsHelper(scripts, index+1);
 
         const currScript = currScriptInfo._script;
         const currScriptCategory = currScriptInfo._categoryName;
