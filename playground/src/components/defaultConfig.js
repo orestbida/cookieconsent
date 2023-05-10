@@ -40,7 +40,6 @@ const defaultFullConfig = {
     categories: {
         necessary: {
             readOnly: true,
-            enabled: true
         },
         analytics: {},
         marketing: {}

@@ -1,17 +1,19 @@
 import '../assets/installationSection.scss';
-import { getById, addEvent } from "./utils";
+import { getById, addEvent, unquoteJson} from "./utils";
 import { getCurrentUserConfig, getState } from './stateManager';
 import { saveAs } from 'file-saver';
+import { fetchLatestRelease } from './fetchRelease';
 
 /**
  * @type {HTMLAnchorElement}
  */
 const downloadBtn = getById('downloadConfigBtn');
-const pluginVersion = 'v3.0.0-rc.13';
 
-const configAsString = ({minify=false} = {}) => {
+const configAsString = async ({minify=false} = {}) => {
 
-    let scriptStr = `import { run } from 'https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@${pluginVersion}/dist/cookieconsent.esm.js';\n\n`;
+    const latest = await fetchLatestRelease();
+
+    let scriptStr = `import { run } from 'https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@${latest}/dist/cookieconsent.esm.js';\n\n`;
 
     const state = getState();
     const config = getCurrentUserConfig(state);
@@ -23,11 +25,14 @@ const configAsString = ({minify=false} = {}) => {
     }
 
     /**
-     * config. as string
+     * Config. as string
      */
-    const configStr = minify
-        ? JSON.stringify(config)
-        : JSON.stringify(config, null, 4);
+    let configStr = JSON.stringify(config, minify ? undefined : null, minify ? undefined : 4);
+
+    /**
+     * Remove double quotes from keys
+     */
+    configStr = unquoteJson(configStr);
 
     /**
      * Append config.
@@ -37,9 +42,9 @@ const configAsString = ({minify=false} = {}) => {
     return scriptStr;
 }
 
-addEvent(downloadBtn, 'click', () => {
+addEvent(downloadBtn, 'click', async () => {
 
-    const config = configAsString();
+    const config = await configAsString();
 
     const blob = new Blob([config], {type: 'text/javascript;charset=utf-8'});
     saveAs(blob, 'cookieconsent-config.js');

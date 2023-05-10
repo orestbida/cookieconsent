@@ -39,6 +39,12 @@ export const fireEvent = (eventType) => {
 };
 
 /**
+ * @param {string} json
+ * @returns {string}
+ */
+export const unquoteJson = json => json.replaceAll(/"([^"]+)":/g, "$1:");
+
+/**
  * @callback Callback
  */
 
