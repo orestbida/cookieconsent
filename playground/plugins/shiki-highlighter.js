@@ -51,6 +51,7 @@ async function ShikiHighlight(opts = {}) {
                 const focusIndexes = getIndexes((attrs.match(/focus="([^\"]+)"/i))?.[1] || '');
                 const showLineNumbers = attrs.includes('lineNumbers');
                 const isDetails = attrs.includes('details');
+                const fetchRelease = attrs.includes('fetchRelease');
 
                 const shouldHighlightLines = Object.keys(highlightIndexes).length > 0;
                 const shouldFocusLines = Object.keys(focusIndexes).length > 0;
@@ -118,6 +119,9 @@ async function ShikiHighlight(opts = {}) {
                         line({index, children}) {
                             let focus = shouldFocusLines && focusIndexes[index + 1] === true;
                             let className = 'line' + (focus ? ' line--focus' : '');
+
+                            if(fetchRelease)
+                                children = children.replace('{{latest_release}}', '<span data-latest-release></span>');
 
                             return  `<span class="${className}">${children}</span>`
                         }
