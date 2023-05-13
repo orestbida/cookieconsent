@@ -47,8 +47,8 @@ A __lightweight__ & __gdpr compliant__ cookie consent plugin written in plain ja
 
     ```bash
     # CDN links
-    https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@v2.9.0/dist/cookieconsent.js
-    https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@v2.9.0/dist/cookieconsent.css
+    https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@v2.9.1/dist/cookieconsent.js
+    https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@v2.9.1/dist/cookieconsent.css
     ```
 
     Thanks to [Till Sanders](https://github.com/tillsanders) for bringing the plugin on npm.
