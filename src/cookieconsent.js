@@ -1,5 +1,5 @@
 /*!
- * CookieConsent v2.9.0
+ * CookieConsent v2.9.1
  * https://www.github.com/orestbida/cookieconsent
  * Author Orest Bida
  * Released under the MIT License
@@ -80,12 +80,12 @@
             /**
              * @type {HTMLElement[]}
              */
-            current_modal_focusable,
+            focusable_edges,
 
             /**
              * @type {HTMLDivElement}
              */
-            current_focused_modal,
+            focused_modal,
 
             /**
              * @type {HTMLSpanElement}
@@ -98,6 +98,10 @@
             smFocusSpan,
 
             all_table_headers,
+
+            /**
+             * @type {{}[]}
+             */
             all_blocks,
 
             // Helper callback functions
@@ -173,7 +177,7 @@
 
         /**
          * Keep track of readonly toggles
-         * @type {boolean[]}
+         * @type {string[]}
          */
         var readonly_categories = [];
 
@@ -346,14 +350,14 @@
         /**
          * Get a valid language (at least 1 must be defined)
          * @param {string} lang - desired language
-         * @param {Object} all_languages - all defined languages
+         * @param {{}} all_languages - all defined languages
          * @returns {string} validated language
          */
         var _getValidatedLanguage = function(lang, all_languages){
-            if(Object.prototype.hasOwnProperty.call(all_languages, lang)){
+            if(all_languages.hasOwnProperty(lang)){
                 return lang;
             }else if(_getKeys(all_languages).length > 0){
-                if(Object.prototype.hasOwnProperty.call(all_languages, _config.current_lang)){
+                if(all_languages.hasOwnProperty(_config.current_lang)){
                     return _config.current_lang ;
                 }else{
                     return _getKeys(all_languages)[0];
@@ -598,6 +602,17 @@
                 settings_blocks = _createNode('div');
                 var overlay = _createNode('div');
 
+                _addEvent(settings_container_inner, 'click', function(e){
+                    /**
+                     * If click is on the foreground overlay (and not inside settings_modal),
+                     * hide settings modal
+                     */
+                    if(settings_modal_visible && !settings_inner.contains(e.target)){
+                        _cookieconsent.hideSettings();
+                    }
+
+                }, true);
+
                 /**
                  * Set ids
                  */
@@ -661,7 +676,7 @@
                     toggle_data = all_blocks[i]['toggle'],
                     cookie_table_data = all_blocks[i]['cookie_table'],
                     remove_cookie_tables = user_config['remove_cookie_tables'] === true,
-                    isExpandable = (description_data && 'truthy') || (!remove_cookie_tables && (cookie_table_data && 'truthy'));
+                    isExpandable = !!description_data || (!remove_cookie_tables && !!cookie_table_data);
 
                 // Create title
                 var block_section = _createNode('div');
@@ -755,9 +770,7 @@
                     if(toggle_data['readonly']){
                         block_switch.disabled = true;
                         _addClass(block_switch_span, 'c-ro');
-                        !new_settings_blocks && readonly_categories.push(true);
-                    }else{
-                        !new_settings_blocks && readonly_categories.push(false);
+                        !new_settings_blocks && readonly_categories.push(cookie_category);
                     }
 
                     _addClass(block_table_container, 'b-acc');
@@ -1076,14 +1089,14 @@
                 var curr_block = all_blocks[i];
 
                 // If current block has a toggle for opt in/out
-                if(Object.prototype.hasOwnProperty.call(curr_block, "toggle")){
+                if(curr_block.hasOwnProperty('toggle')){
 
                     // if current block has a cookie table, an off toggle,
                     // and its preferences were just changed => delete cookies
                     var category_just_disabled = _inArray(changed_settings, curr_block['toggle']['value']) > -1;
                     if(
                         !toggle_states[++count] &&
-                        Object.prototype.hasOwnProperty.call(curr_block, "cookie_table") &&
+                        curr_block.hasOwnProperty('cookie_table') &&
                         (clearOnFirstAction || category_just_disabled)
                     ){
                         var curr_cookie_table = curr_block['cookie_table'];
@@ -1340,42 +1353,26 @@
                     return;
 
                 // If there is any modal to focus
-                if(current_modal_focusable){
+                if(focusable_edges){
 
-                    var activeElement = document.activeElement;
+                    var activeElement = getActiveElement();
 
                     // If reached natural end of the tab sequence => restart
                     // If modal is not focused => focus modal
                     if(e.shiftKey){
-                        if (activeElement === current_modal_focusable[0] || !current_focused_modal.contains(activeElement)) {
+                        if (activeElement === focusable_edges[0] || !focused_modal.contains(activeElement)) {
                             e.preventDefault();
-                            setFocus(current_modal_focusable[1])
+                            setFocus(focusable_edges[1])
                         }
                     }else{
-                        if (document.activeElement === current_modal_focusable[1] || !current_focused_modal.contains(activeElement)) {
+                        if (activeElement === focusable_edges[1] || !focused_modal.contains(activeElement)) {
                             e.preventDefault();
-                            setFocus(current_modal_focusable[0]);
+                            setFocus(focusable_edges[0]);
                         }
                     }
                 }
             });
 
-            if(document.contains){
-                _addEvent(settings_container, 'click', function(e){
-                    /**
-                     * If click is on the foreground overlay (and not inside settings_modal),
-                     * hide settings modal
-                     *
-                     * Notice: click on div is not supported in IE
-                     */
-                    if(settings_modal_visible){
-                        if(!settings_inner.contains(e.target)){
-                            _cookieconsent.hideSettings();
-                        }
-                    }
-
-                }, true);
-            }
         }
 
         /**
@@ -1756,9 +1753,7 @@
             var type = 'custom';
 
             // number of categories marked as necessary/readonly
-            var necessary_categories_length = readonly_categories.filter(function(readonly){
-                return readonly === true;
-            }).length;
+            var necessary_categories_length = readonly_categories.length;
 
             // calculate accept type based on accepted/rejected categories
             if(currentCategoriesState.accepted.length === all_categories.length)
@@ -1856,9 +1851,9 @@
             if(!consent_modal_exists)
                 return;
 
-            last_elem_before_modal = document.activeElement;
-            current_modal_focusable = consent_modal_focusable;
-            current_focused_modal = consent_modal;
+            last_elem_before_modal = getActiveElement();
+            focusable_edges = consent_modal_focusable;
+            focused_modal = consent_modal;
 
             consent_modal_visible = true;
             consent_modal.removeAttribute('aria-hidden');
@@ -1885,10 +1880,8 @@
             consent_modal.setAttribute('aria-hidden', 'true');
             _removeClass(html_dom, "show--consent");
 
-            if(last_elem_before_modal) {
-                setFocus(last_elem_before_modal);
-                last_elem_before_modal = null;
-            }
+            setFocus(last_elem_before_modal);
+            last_elem_before_modal = null;
 
             _log("CookieConsent [MODAL]: hide");
         }
@@ -1903,13 +1896,13 @@
             settings_container.removeAttribute('aria-hidden');
 
             if(consent_modal_visible){
-                last_consent_modal_btn_focus = document.activeElement;
+                last_consent_modal_btn_focus = getActiveElement();
             }else{
-                last_elem_before_modal = document.activeElement;
+                last_elem_before_modal = getActiveElement();
             }
 
-            current_focused_modal = settings_container;
-            current_modal_focusable = settings_modal_focusable;
+            focused_modal = settings_container;
+            focusable_edges = settings_modal_focusable;
 
             setTimeout(function() {
                 _addClass(html_dom, "show--settings");
@@ -1932,17 +1925,15 @@
             _removeClass(html_dom, "show--settings");
 
             if(consent_modal_visible){
-                if(last_consent_modal_btn_focus) {
-                    setFocus(last_consent_modal_btn_focus);
-                    last_consent_modal_btn_focus = null;
-                }
-                current_focused_modal = consent_modal;
-                current_modal_focusable = consent_modal_focusable;
+
+                setFocus(last_consent_modal_btn_focus);
+                last_consent_modal_btn_focus = null;
+
+                focused_modal = consent_modal;
+                focusable_edges = consent_modal_focusable;
             }else{
-                if(last_elem_before_modal) {
-                    setFocus(last_elem_before_modal);
-                    last_elem_before_modal = null;
-                }
+                setFocus(last_elem_before_modal);
+                last_elem_before_modal = null;
             }
 
             _log("CookieConsent [SETTINGS]: hide settings_modal");
@@ -2007,7 +1998,7 @@
             // Add back all the categories set as "readonly/required"
             for(i=0; i<all_categories.length; i++){
                 if(
-                    readonly_categories[i] === true &&
+                    readonly_categories.includes(all_categories[i]) === true &&
                     _inArray(to_accept, all_categories[i]) === -1
                 ){
                     to_accept.push(all_categories[i]);
@@ -2215,7 +2206,7 @@
          * @param {HTMLElement} el
          */
         var setFocus = function(el) {
-            el && el.focus();
+            el && el instanceof HTMLElement && el.focus();
         }
 
         /**
@@ -2230,11 +2221,18 @@
 
             for(var i=0; i<toggles.length; i++) {
                 var category = toggles[i].value;
-                var is_readonly = readonly_categories.indexOf(category) > -1;
+                var is_readonly = readonly_categories.includes(category);
 
                 toggles[i].checked = is_readonly || _cookieconsent.allowedCategory(category);
             }
 
+        }
+
+        /**
+         * @returns {Element | null}
+         */
+        var getActiveElement = function() {
+            return document.activeElement;
         }
 
         return _cookieconsent;
