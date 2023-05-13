@@ -177,7 +177,7 @@
 
         /**
          * Keep track of readonly toggles
-         * @type {boolean[]}
+         * @type {string[]}
          */
         var readonly_categories = [];
 
@@ -770,9 +770,7 @@
                     if(toggle_data['readonly']){
                         block_switch.disabled = true;
                         _addClass(block_switch_span, 'c-ro');
-                        !new_settings_blocks && readonly_categories.push(true);
-                    }else{
-                        !new_settings_blocks && readonly_categories.push(false);
+                        !new_settings_blocks && readonly_categories.push(cookie_category);
                     }
 
                     _addClass(block_table_container, 'b-acc');
@@ -1755,9 +1753,7 @@
             var type = 'custom';
 
             // number of categories marked as necessary/readonly
-            var necessary_categories_length = readonly_categories.filter(function(readonly){
-                return readonly === true;
-            }).length;
+            var necessary_categories_length = readonly_categories.length;
 
             // calculate accept type based on accepted/rejected categories
             if(currentCategoriesState.accepted.length === all_categories.length)
@@ -2002,7 +1998,7 @@
             // Add back all the categories set as "readonly/required"
             for(i=0; i<all_categories.length; i++){
                 if(
-                    readonly_categories[i] === true &&
+                    readonly_categories.includes(all_categories[i]) === true &&
                     _inArray(to_accept, all_categories[i]) === -1
                 ){
                     to_accept.push(all_categories[i]);
@@ -2225,7 +2221,7 @@
 
             for(var i=0; i<toggles.length; i++) {
                 var category = toggles[i].value;
-                var is_readonly = readonly_categories.indexOf(category) > -1;
+                var is_readonly = readonly_categories.includes(category);
 
                 toggles[i].checked = is_readonly || _cookieconsent.allowedCategory(category);
             }
