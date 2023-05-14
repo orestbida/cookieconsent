@@ -22,9 +22,14 @@
                 "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
             },
             {
-                "title": "Cookies Strictement Nécessaires <span class=\"pm__badge\">Toujours Activé</span>",
+                "title": "Cookies de Fonctionnalité",
                 "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
                 "linkedCategory": "necessary"
+            },
+            {
+                "title": "Cookies Strictement Nécessaires <span class=\"pm__badge\">Toujours Activé</span>",
+                "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+                "linkedCategory": "functionality"
             },
             {
                 "title": "Cookies Analytiques",

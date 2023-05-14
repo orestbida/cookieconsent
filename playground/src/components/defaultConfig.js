@@ -41,6 +41,7 @@ const defaultFullConfig = {
         necessary: {
             readOnly: true,
         },
+        functionality: {},
         analytics: {},
         marketing: {}
     },
