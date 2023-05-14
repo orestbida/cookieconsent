@@ -79,8 +79,9 @@ label {
     font-weight: 600;
 }
 
+.categories-title,
 .translations-title {
-    margin-bottom: .5rem;
+    margin-bottom: .8rem;
 }
 
 .translations-description,
@@ -296,18 +297,22 @@ select ~ .arrow-icon::before {
     margin-top: .5rem;
 }
 
-.translations-list {
+.custom-inputs {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: .5rem;
 }
 
-.translations-list label {
+.custom-inputs--categories {
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+}
+
+.custom-inputs label {
     position: relative;
     cursor: pointer;
 }
 
-.translations-list input {
+.custom-inputs input {
     position: absolute;
     top: 0;
     left: 0;
@@ -317,7 +322,7 @@ select ~ .arrow-icon::before {
     outline: none;
 }
 
-.translations-list .label {
+.custom-inputs .label {
     pointer-events: none;
     cursor: pointer;
     display: block;
@@ -336,17 +341,17 @@ select ~ .arrow-icon::before {
                 color .2s ease;
 }
 
-.translations-list label:hover .label{
+.custom-inputs label:hover .label{
     border-color: rgb(66, 66, 66);
 }
 
 
-.translations-list input:focus ~ .label{
+.custom-inputs input:focus ~ .label{
     border-color: rgb(66, 66, 66);
     box-shadow: 0 0 0 .1875rem rgba(99, 167, 255, 0.199);
 }
 
-.translations-list .tick {
+.custom-inputs .tick {
     height: 1.375rem;
     width: 1.375rem;
     display: flex;
@@ -361,7 +366,7 @@ select ~ .arrow-icon::before {
     transition: opacity .2s ease, transform .2s ease;
 }
 
-.translations-list .tick::after {
+.custom-inputs .tick::after {
     position: absolute;
     content: "";
     margin-top: -.0625rem;
@@ -375,13 +380,13 @@ select ~ .arrow-icon::before {
     transition: transform .2s ease;
 }
 
-.translations-list input:checked ~ .label {
+.custom-inputs input:checked ~ .label {
     background-color: #396af9;
     border-color: #4b76f5;
     color: #fff;
 }
 
-.translations-list input:checked ~ .label .tick {
+.custom-inputs input:checked ~ .label .tick {
     opacity: 1;
     transform: translateX(0);
 }
@@ -452,6 +457,10 @@ section {
     transition: border-color .2s ease,
                 background-color .2s ease,
                 box-shadow .2s ease;
+}
+
+section.categories-section {
+    margin-bottom: var(--d-gap);
 }
 
 section.installation {
@@ -628,6 +637,12 @@ button:hover{
 }
 
 /** End edit translations modal **/
+
+@media only screen and (max-width: 42rem) {
+    .custom-inputs--categories {
+        grid-template-columns: 1fr 1fr;
+    }
+}
 
 @media only screen and (max-width: 37.5rem) {
 

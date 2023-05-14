@@ -1,0 +1,49 @@
+.translations-editor {
+    margin-top: 2rem;
+    gap: 1rem;
+    display: flex;
+}
+
+.translation-btns {
+    display: flex;
+    flex-direction: column;
+    gap: .3rem;
+    width: 5rem;
+}
+
+[data-current-translation="ar"] .translation-btn--ar,
+[data-current-translation="en"] .translation-btn--en,
+[data-current-translation="de"] .translation-btn--de,
+[data-current-translation="es"] .translation-btn--es,
+[data-current-translation="fr"] .translation-btn--fr,
+[data-current-translation="it"] .translation-btn--it {
+    background-color: #396af9;
+    border-color: #4b76f5;
+    color: #fff;
+}
+
+.translation-editor {
+    flex: 1;
+}
+
+.editor {
+    display: flex;
+    gap: .3rem;
+    flex-direction: column;
+    flex: 1;
+
+    & > input,
+    & > textarea {
+        padding: .7rem 1rem;
+        border-radius: .4rem;
+        border: none;
+        font-family: inherit;
+    }
+
+    & > textarea {
+        min-height: 5rem;
+        max-height: 10rem;
+        resize: vertical;
+        width: 100%!important;
+    }
+}

@@ -20,45 +20,44 @@
             <br>
         </header>
         <main>
-            <div class="flex">
 
-                <section class="categories-section">
-                    <h2>Categories</h2>
-                    <p class="categories-description">Select the cookie categories.</p>
+            <section class="categories-section">
+                <h2 class="categories-title">Categories</h2>
+                <p class="categories-description">Select the applicable cookie categories for your website.</p>
 
-                    <div class="translations-list">
+                <div class="custom-inputs custom-inputs--categories">
 
-                        <label>
-                            <input class="category-input custom-input" type="checkbox" value="necessary" checked disabled>
-                            <span class="label">Necessary <span class="tick">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><g fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><rect width="16" height="10" x="4" y="11" rx="2" ry="2"/><path d="M16.5 11V8h0c0-2.8-.5-5-4.5-5S7.5 5.2 7.5 8h0v3"/></g></svg>
-                            </span></span>
-                        </label>
+                    <label>
+                        <input class="category-input custom-input" type="checkbox" value="necessary" checked disabled>
+                        <span class="label">Necessary <span class="tick">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><g fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><rect width="16" height="10" x="4" y="11" rx="2" ry="2"/><path d="M16.5 11V8h0c0-2.8-.5-5-4.5-5S7.5 5.2 7.5 8h0v3"/></g></svg>
+                        </span></span>
+                    </label>
 
-                        <label>
-                            <input class="category-input custom-input" type="checkbox" value="functionality">
-                            <span class="label">Functionality <span class="tick"></span></span>
-                        </label>
+                    <label>
+                        <input class="category-input custom-input" type="checkbox" value="functionality">
+                        <span class="label">Functionality <span class="tick"></span></span>
+                    </label>
 
-                        <label>
-                            <input class="category-input custom-input" type="checkbox" value="analytics">
-                            <span class="label">Analytics <span class="tick"></span></span>
-                        </label>
+                    <label>
+                        <input class="category-input custom-input" type="checkbox" value="analytics">
+                        <span class="label">Analytics <span class="tick"></span></span>
+                    </label>
 
-                        <label>
-                            <input class="category-input custom-input" type="checkbox" value="marketing">
-                            <span class="label">Marketing <span class="tick"></span></span>
-                        </label>
-                    </div>
-                </section>
-            </div>
+                    <label>
+                        <input class="category-input custom-input" type="checkbox" value="marketing">
+                        <span class="label">Marketing <span class="tick"></span></span>
+                    </label>
+                </div>
+            </section>
+
             <div class="language-codes">
                 <div class="flex">
                     <section class="translations" id="translations-section">
                         <h2 class="translations-title">Translations</h2>
                         <p class="translations-description">Select the translations to include in your configuration.</p>
 
-                        <div class="translations-list">
+                        <div class="custom-inputs">
 
                             <label for="language-en">
                                 <input class="custom-input" type="checkbox" id="language-en" name="language-code" value="en">
@@ -111,8 +110,22 @@
                                     &times;
                                 </button>
                                 <!-- 5. The dialog title -->
-                                <h1 id="dialog-title">Edit translations</h1>
-                                <!-- 6. Dialog content -->
+                                <h1 id="dialog-title">Edit translations 🚧</h1>
+
+                                <div class="translations-editor">
+                                    <div class="translation-btns"></div>
+                                    <div class="translation-editor">
+                                        <div class="editor editor--cm">
+                                            <input type="text" id="consent-modal-title" placeholder="Title">
+                                            <textarea id="consent-modal-description" placeholder="Description"></textarea>
+                                            <input type="text" id="consent-modal-accept-btn" placeholder="Accept all button">
+                                            <input type="text" id="consent-modal-reject-btn" placeholder="Reject all button">
+                                            <input type="text" id="consent-modal-manage-btn" placeholder="Manage preferences button">
+                                            <textarea id="consent-modal-footer" placeholder="Footer"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
 
