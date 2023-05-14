@@ -132,6 +132,9 @@ function toggleRemoveFooter(remove) {
     removeFooterCheckbox.checked = remove;
 }
 
+/**
+ * @param {boolean} remove
+ */
 function toggleRemoveTitle(remove) {
     removeTitleCheckbox.checked = remove;
 

@@ -1,5 +1,3 @@
-const win = window;
-
 /**
  * Clone object using recursion
  * @param {any} el
@@ -35,7 +33,7 @@ export const customEvents = {
  * @param {string} eventType
  */
 export const fireEvent = (eventType) => {
-    win.dispatchEvent(new CustomEvent(eventType));
+    window.dispatchEvent(new CustomEvent(eventType));
 };
 
 /**
@@ -53,7 +51,7 @@ export const unquoteJson = json => json.replaceAll(/"([^"]+)":/g, "$1:");
  * @param {Callback} fn
  */
 export const onEvent = (eventType, fn) => {
-    win.addEventListener(eventType, fn);
+    window.addEventListener(eventType, fn);
 };
 
 /**

@@ -623,7 +623,7 @@ button:hover{
 
 @keyframes slide-up {
     from {
-        transform: translateY(10%);
+        transform: translateY(5%);
     }
 }
 

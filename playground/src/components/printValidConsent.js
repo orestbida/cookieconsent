@@ -1,7 +1,7 @@
 import '../assets/printValidConsent.scss';
-import { onEvent, customEvents } from './utils';
+import { onEvent, customEvents, getById } from './utils';
 
-const statusDiv = document.getElementById('consent-status');
+const statusDiv = getById('consent-status');
 const ENABLED_CLASS = 'consent-status--valid';
 
 onEvent(customEvents._ON_CONSENT, () => {

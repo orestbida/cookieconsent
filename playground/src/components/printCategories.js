@@ -1,10 +1,10 @@
 import '../assets/printCategories.scss';
-import { onEvent, customEvents } from './utils';
+import { onEvent, customEvents, getById } from './utils';
 
 const divs = {
-    necessary: document.getElementById('necessary-category'),
-    analytics: document.getElementById('analytics-category'),
-    ads: document.getElementById('ads-category')
+    necessary: getById('necessary-category'),
+    analytics: getById('analytics-category'),
+    ads: getById('ads-category')
 };
 
 const ENABLED_CLASS = 'category--enabled';

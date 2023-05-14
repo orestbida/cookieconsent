@@ -154,7 +154,7 @@ export function updateCurrentLanguage(languageCode, newState){
     if(newState === false)
         return;
 
-    if(!document.getElementById('cc-main')) {
+    if(!getById('cc-main')) {
         setTimeout(() => {
             reRunPlugin(state, 'consentModal');
         }, 100);
