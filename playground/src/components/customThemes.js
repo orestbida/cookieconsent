@@ -5,35 +5,41 @@ import { saveState, getState, defaultState } from './stateManager';
 import { customEvents, onEvent, addEvent, getById } from './utils';
 import { toggleDarkmode } from './darkmode';
 
-const html = document.documentElement;
-
-let theme = getState()._theme;
-
 /**
  * @type {NodeListOf<HTMLInputElement>}
  */
 const inputs = document.querySelectorAll('input[name="theme"]');
 
-toggleTheme(theme);
+/**
+ * @type {typeof defaultState._theme}
+ */
+let theme = '';
 
-for(const input of inputs) {
-    addEvent(input, 'change', () => {
+onEvent(customEvents._PLAYGROUND_READY, () => {
 
-        const state = getState();
-        const currTheme = input.id;
-        theme = state._theme;
+    theme = getState()._theme;
+    toggleTheme(theme);
 
-        const isDefaultDarkMode = currTheme === 'cc--darkmode';
+    for(const input of inputs) {
+        addEvent(input, 'change', () => {
 
-        state._theme = currTheme;
-        saveState(state);
+            const state = getState();
+            const currTheme = input.id;
+            theme = state._theme;
 
-        toggleTheme(currTheme);
-        toggleDarkmode(isDefaultDarkMode)
+            const isDefaultDarkMode = currTheme === 'cc--darkmode';
 
-        CookieConsent.show(true);
-    });
-}
+            state._theme = currTheme;
+            saveState(state);
+
+            toggleTheme(currTheme);
+            toggleDarkmode(isDefaultDarkMode)
+
+            CookieConsent.show(true);
+        });
+    }
+
+});
 
 /**
  * @param {typeof defaultState._theme} currTheme
@@ -41,8 +47,10 @@ for(const input of inputs) {
 export function toggleTheme(currTheme) {
     getById(currTheme).checked = true;
 
-    html.classList.add(currTheme);
-    theme !== currTheme && html.classList.remove(theme);
+    const { classList } = document.documentElement;
+
+    classList.add(currTheme);
+    theme !== currTheme && theme && classList.remove(theme);
     theme = currTheme;
 };
 

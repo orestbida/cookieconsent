@@ -121,7 +121,7 @@ async function ShikiHighlight(opts = {}) {
                             let className = 'line' + (focus ? ' line--focus' : '');
 
                             if(fetchRelease)
-                                children = children.replace('{{latest_release}}', '<span data-latest-release></span>');
+                                children = children.replaceAll('{{latest_release}}', '<span data-latest-release></span>');
 
                             return  `<span class="${className}">${children}</span>`
                         }

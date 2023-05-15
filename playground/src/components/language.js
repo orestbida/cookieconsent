@@ -13,29 +13,37 @@ const currentActiveLanguageSpan = getById('current-active-language');
 /** @type {HTMLSelectElement} **/ const autoDetectModeSelect = getById('autodetect-mode');
 /** @type {HTMLSelectElement} **/ export const defaultLanguageSelect = getById('default-language');
 
-const state = getState();
-const language = state._cookieConsentConfig.language;
-const allLanguages = Object.keys(defaultFullConfig.language.translations);
+/**
+ * @type {string[]}
+ */
+let allLanguages = [];
 
-const autoDetectMode = language.autoDetect;
-const autoDetect = autoDetectEnabled(autoDetectMode);
-const detectedLanguage = detectLanguage(autoDetectMode);
+onEvent(customEvents._PLAYGROUND_READY, () => {
 
-const currLang = autoDetect && enabledTranslation(detectedLanguage, state)
-    ? detectedLanguage
-    : language.default;
+    const state = getState();
+    const language = state._cookieConsentConfig.language;
+    allLanguages = Object.keys(defaultFullConfig.language.translations);
 
-if(autoDetect) {
-    setAutoDetectMode(autoDetectMode);
-    updateDetectedLanguage(detectedLanguage, state)
-} else {
-    setAutoDetectMode('');
-}
+    const autoDetectMode = language.autoDetect;
+    const autoDetect = autoDetectEnabled(autoDetectMode);
+    const detectedLanguage = detectLanguage(autoDetectMode);
 
-toggleAutoDetectCheckbox(autoDetect)
-updateDefaultLanguageOptions(state._enabledTranslations);
-updateDefaultLanguage(language.default);
-updateCurrentLanguage(currLang, false);
+    const currLang = autoDetect && enabledTranslation(detectedLanguage, state)
+        ? detectedLanguage
+        : language.default;
+
+    if(autoDetect) {
+        setAutoDetectMode(autoDetectMode);
+        updateDetectedLanguage(detectedLanguage, state)
+    } else {
+        setAutoDetectMode('');
+    }
+
+    toggleAutoDetectCheckbox(autoDetect)
+    updateDefaultLanguageOptions(state._enabledTranslations);
+    updateDefaultLanguage(language.default);
+    updateCurrentLanguage(currLang, false);
+});
 
 addEvent(autoDetectCheckbox, 'change', () => {
 

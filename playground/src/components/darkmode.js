@@ -10,7 +10,9 @@ const DEFAULT_LIGHT_THEME = 'default-light';
  */
 const checkbox = getById('darkmode');
 
-toggleDarkmode(getState()._theme === DEFAULT_DARK_THEME);
+onEvent(customEvents._PLAYGROUND_READY, () => {
+    toggleDarkmode(getState()._theme === DEFAULT_DARK_THEME);
+});
 
 addEvent(checkbox, 'click', () => {
 

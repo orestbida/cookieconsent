@@ -16,6 +16,7 @@ export const defaultState = {
     _removeShowPrefrencesBtn: false,
     _removeFooter: false,
     _removeTitle: false,
+    _latestRelease: '',
 
     /**
      * @type {'default-light' | 'cc--darkmode' | 'dark-turquoise' | 'light-funky' | 'elegant-black'}
@@ -35,10 +36,8 @@ export const defaultState = {
     /**
      * Increase on every new playground update
      */
-    _demoRevision: 21
+    _demoRevision: 22
 };
-
-addEvent(window, customEvents._INIT, clearInvalidDemoState)
 
 /**
  * Get current state
@@ -98,7 +97,8 @@ export const saveState = (newState) => {
     );
 };
 
-function clearInvalidDemoState() {
+export function clearInvalidDemoState() {
+
     /**
      * @type {typeof defaultState}
      */

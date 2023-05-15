@@ -1,8 +1,12 @@
+import { customEvents, onEvent } from "./utils";
+
 let latest = '';
 
 const releaseSpans = document.querySelectorAll('[data-latest-release]');
 
-updateReleaseSpans();
+onEvent(customEvents._PLAYGROUND_READY, async () => {
+    await updateReleaseSpans();
+});
 
 /**
  * Get last published v3 release
@@ -23,7 +27,7 @@ export async function fetchLatestRelease() {
 /**
  * Update all elements with "data-latest-release" attribute
  */
-export async function updateReleaseSpans() {
+export async function updateReleaseSpans(state) {
 
     latest ||= await fetchLatestRelease();
 

@@ -1,8 +1,6 @@
 import { defaultFullConfig } from './defaultConfig';
 import { getState, saveState, defaultState, reRunPlugin } from './stateManager';
-import { addEvent, getById, customEvents } from './utils';
-
-const state = getState();
+import { addEvent, getById, customEvents, onEvent } from './utils';
 
 /** @type {HTMLInputElement} **/ const enableXIconCheckbox = getById('close-icon');
 /** @type {HTMLInputElement} **/ const removeAcceptNecessaryBtnCheckbox = getById('accept-necessary-btn');
@@ -10,11 +8,15 @@ const state = getState();
 /** @type {HTMLInputElement} **/ const removeFooterCheckbox = getById('remove-footer');
 /** @type {HTMLInputElement} **/ const removeTitleCheckbox = getById('remove-title');
 
-toggleCloseIcon(state._enableCloseIcon);
-toggleRemoveAcceptNecessaryBtn(state._removeAcceptNecessaryBtn);
-toggleRemoveShowPreferencesBtn(state._removeShowPrefrencesBtn);
-toggleRemoveFooter(state._removeFooter);
-toggleRemoveTitle(state._removeTitle);
+onEvent(customEvents._PLAYGROUND_READY, () => {
+    const state = getState();
+
+    toggleCloseIcon(state._enableCloseIcon);
+    toggleRemoveAcceptNecessaryBtn(state._removeAcceptNecessaryBtn);
+    toggleRemoveShowPreferencesBtn(state._removeShowPrefrencesBtn);
+    toggleRemoveFooter(state._removeFooter);
+    toggleRemoveTitle(state._removeTitle);
+});
 
 addEvent(enableXIconCheckbox, 'change', function(){
 

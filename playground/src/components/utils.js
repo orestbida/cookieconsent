@@ -22,6 +22,7 @@ export const deepCopy = (el) => {
 };
 
 export const customEvents = {
+    _PLAYGROUND_READY: 'pg:ready',
     _INIT: 'cc:onInit',
     _RESET: 'cc:reset',
     _ON_CONSENT: 'cc:onConsent',

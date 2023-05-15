@@ -14,52 +14,55 @@ const translationsSection = getById('translations-section');
 const editTranslationsBtn = getById('edit-translations-btn');
 const editTranslationsBtnText = editTranslationsBtn.textContent;
 
-const enabledTranslations = getState()._enabledTranslations;
+onEvent(customEvents._PLAYGROUND_READY, () => {
 
-toggleTranslations(enabledTranslations);
-toggleMissingTranslationError(enabledTranslations);
+    const enabledTranslations = getState()._enabledTranslations;
 
-translationInputs.forEach(input => {
-    addEvent(input, 'change', () => {
-        const languageCode = input.value;
-        const enabled = input.checked;
+    toggleTranslations(enabledTranslations);
+    toggleMissingTranslationError(enabledTranslations);
 
-        const state = getState();
-        const translations = state._enabledTranslations;
-        const language = state._cookieConsentConfig.language;
+    translationInputs.forEach(input => {
+        addEvent(input, 'change', () => {
+            const languageCode = input.value;
+            const enabled = input.checked;
 
-        const languageFound = translations.includes(languageCode);
+            const state = getState();
+            const translations = state._enabledTranslations;
+            const language = state._cookieConsentConfig.language;
 
-        if(enabled) {
-            !languageFound && translations.push(languageCode);
-        } else {
-            languageFound && (state._enabledTranslations = state._enabledTranslations.filter(language => language !== languageCode));
-        }
+            const languageFound = translations.includes(languageCode);
 
-        toggleMissingTranslationError(state._enabledTranslations);
-        updateDefaultLanguageOptions(state._enabledTranslations);
+            if(enabled) {
+                !languageFound && translations.push(languageCode);
+            } else {
+                languageFound && (state._enabledTranslations = state._enabledTranslations.filter(language => language !== languageCode));
+            }
 
-        const autoDetect = autoDetectEnabled(language.autoDetect);
-        const autoDetectedLanguage = autoDetect ? detectLanguage(language.autoDetect) : '';
+            toggleMissingTranslationError(state._enabledTranslations);
+            updateDefaultLanguageOptions(state._enabledTranslations);
 
-        const currLanguage =
-            (enabledTranslation(autoDetectedLanguage, state) && autoDetectedLanguage)
-            || (enabledTranslation(language.default, state) && language.default)
-            || state._enabledTranslations[0]
-            || '';
+            const autoDetect = autoDetectEnabled(language.autoDetect);
+            const autoDetectedLanguage = autoDetect ? detectLanguage(language.autoDetect) : '';
 
-        if(autoDetect) {
-            updateTranslationFound(currLanguage === autoDetectedLanguage);
-        }
+            const currLanguage =
+                (enabledTranslation(autoDetectedLanguage, state) && autoDetectedLanguage)
+                || (enabledTranslation(language.default, state) && language.default)
+                || state._enabledTranslations[0]
+                || '';
 
-        if(!enabledTranslation(language.default, state)) {
-            language.default = currLanguage;
-            updateDefaultLanguage(currLanguage);
-        }
+            if(autoDetect) {
+                updateTranslationFound(currLanguage === autoDetectedLanguage);
+            }
 
-        updateCurrentLanguage(currLanguage, state);
+            if(!enabledTranslation(language.default, state)) {
+                language.default = currLanguage;
+                updateDefaultLanguage(currLanguage);
+            }
 
-        saveState(state);
+            updateCurrentLanguage(currLanguage, state);
+
+            saveState(state);
+        });
     });
 });
 

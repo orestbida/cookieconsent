@@ -6,7 +6,9 @@ import { addEvent, customEvents, getById, onEvent } from './utils';
  */
 const checkbox = getById('disablePageInteraction');
 
-checkbox.checked = !!getState()._cookieConsentConfig.disablePageInteraction;
+onEvent(customEvents._PLAYGROUND_READY, () => {
+    checkbox.checked = !!getState()._cookieConsentConfig.disablePageInteraction;
+});
 
 addEvent(checkbox, 'change', () => {
 
