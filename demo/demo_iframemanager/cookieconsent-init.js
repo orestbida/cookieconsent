@@ -45,7 +45,7 @@ im.run({
             thumbnailUrl: async (dataId, setThumbnail) => {
                 const url = `https://vimeo.com/api/v2/video/${dataId}.json`;
                 const response = await (await fetch(url)).json();
-                const thumbnailUrl = response[0]?.thumbnail_large;
+                const thumbnailUrl = response && response[0].thumbnail_large;
                 thumbnailUrl && setThumbnail(thumbnailUrl);
             },
 
