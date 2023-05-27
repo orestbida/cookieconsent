@@ -112,8 +112,8 @@ export const createConsentModal = (api, createMainContainer) => {
         const
             boxLayout = 'box',
             guiOptions = state._userConfig.guiOptions,
-            consentModalOptions = guiOptions?.consentModal,
-            consentModalLayout = consentModalOptions?.layout || boxLayout,
+            consentModalOptions = guiOptions && guiOptions.consentModal,
+            consentModalLayout = consentModalOptions && consentModalOptions.layout || boxLayout,
             isBoxLayout = consentModalLayout.split(' ')[0] === boxLayout;
 
         /**

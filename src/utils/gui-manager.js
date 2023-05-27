@@ -88,8 +88,8 @@ const ALL_PM_LAYOUTS = {
 export const guiManager = (applyToModal) => {
 
     const guiOptions = globalObj._state._userConfig.guiOptions;
-    const consentModalOptions = guiOptions?.consentModal;
-    const preferencesModalOptions = guiOptions?.preferencesModal;
+    const consentModalOptions = guiOptions && guiOptions.consentModal;
+    const preferencesModalOptions = guiOptions && guiOptions.preferencesModal;
 
     if(applyToModal === 0){
         setLayout(
@@ -130,12 +130,12 @@ const setLayout = (modal, allowedLayoutsObj, userGuiOptions, modalClassPrefix, d
      */
     modal.className = modalClassName;
 
-    const layout = userGuiOptions?.layout;
-    const position = userGuiOptions?.position;
-    const flipButtons = userGuiOptions?.flipButtons;
-    const equalWeightButtons = userGuiOptions?.equalWeightButtons !== false;
+    const layout = userGuiOptions && userGuiOptions.layout;
+    const position = userGuiOptions && userGuiOptions.position;
+    const flipButtons = userGuiOptions && userGuiOptions.flipButtons;
+    const equalWeightButtons = userGuiOptions && userGuiOptions.equalWeightButtons !== false;
 
-    const layoutSplit = layout?.split(' ') || [];
+    const layoutSplit = layout && layout.split(' ') || [];
 
     const layoutName = layoutSplit[0];
     const layoutVariant = layoutSplit[1];
@@ -147,7 +147,7 @@ const setLayout = (modal, allowedLayoutsObj, userGuiOptions, modalClassPrefix, d
     const currentLayout = allowedLayoutsObj[currentLayoutName];
     const currentLayoutVariant = elContains(currentLayout._variants, layoutVariant) && layoutVariant;
 
-    const positionSplit = position?.split(' ') || [];
+    const positionSplit = position && position.split(' ') || [];
     const positionV = positionSplit[0];
 
     const positionH = modalClassPrefix === CLASS_CONSTANTS._pmPrefix

@@ -162,7 +162,7 @@ export const createPreferencesModal = (api, createMainContainer) => {
 
     let sectionToggleContainer;
 
-    sectionsData?.forEach((section, sectionIndex) => {
+    sectionsData && sectionsData.forEach((section, sectionIndex) => {
 
         const
             sTitleData = section.title,
@@ -170,9 +170,9 @@ export const createPreferencesModal = (api, createMainContainer) => {
             sLinkedCategory = section.linkedCategory,
             sCurrentCategoryObject = sLinkedCategory && state._allDefinedCategories[sLinkedCategory],
             sCookieTableData = section.cookieTable,
-            sCookieTableBody = sCookieTableData?.body,
-            sCookieTableCaption = sCookieTableData?.caption,
-            sCreateCookieTable = sCookieTableBody?.length > 0,
+            sCookieTableBody = sCookieTableData && sCookieTableData.body,
+            sCookieTableCaption = sCookieTableData && sCookieTableData.caption,
+            sCreateCookieTable = sCookieTableBody && sCookieTableBody.length > 0,
             hasToggle = !!sCurrentCategoryObject,
 
             /**
@@ -204,7 +204,7 @@ export const createPreferencesModal = (api, createMainContainer) => {
                 for(const serviceName of sServiceNames){
 
                     const service = sServices[serviceName];
-                    const serviceLabel = service?.label || serviceName;
+                    const serviceLabel = service && service.label || serviceName;
                     const serviceDiv = createNode(DIV_TAG);
                     const serviceHeader = createNode(DIV_TAG);
                     const serviceIconContainer = createNode(DIV_TAG);

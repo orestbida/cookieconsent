@@ -386,7 +386,7 @@ export const resolveEnabledServices = (relativeCategory) => {
 
         const services = _allDefinedServices[categoryName];
         const serviceNames = getKeys(services);
-        const customServicesSelection = _enabledServices[categoryName]?.length > 0;
+        const customServicesSelection = _enabledServices[categoryName] && _enabledServices[categoryName].length > 0;
         const readOnlyCategory = elContains(_readOnlyCategories, categoryName);
 
         /**
@@ -559,7 +559,7 @@ export const fetchJson = async (url) => {
 
         const response = await fetch(url);
 
-        return response?.ok
+        return response && response.ok
             ? await response.json()
             : false;
 
@@ -727,7 +727,7 @@ export const addDataButtonListeners = (elem, api, createPreferencesModal, create
  * @param {1 | 2} [modalId]
  */
 export const focus = (el, modalId) => {
-    el?.focus();
+    el && el.focus();
 
     if(modalId) {
         globalObj._state._currentFocusedModal = modalId === 1

@@ -709,12 +709,12 @@ export const reset = (deleteCookie) => {
     /**
      * Remove main container from DOM
      */
-    _ccMain?.remove();
+    _ccMain && _ccMain.remove();
 
     /**
      * Remove any remaining classes
      */
-    _htmlDom?.classList.remove(
+    _htmlDom && _htmlDom.classList.remove(
         TOGGLE_DISABLE_INTERACTION_CLASS,
         TOGGLE_PREFERENCES_MODAL_CLASS,
         TOGGLE_CONSENT_MODAL_CLASS

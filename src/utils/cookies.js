@@ -54,7 +54,7 @@ export const autoclearCookiesHelper = (clearOnFirstConsent) => {
         const
             category = state._allDefinedCategories[currentCategoryName],
             autoClear = category.autoClear,
-            autoClearCookies = autoClear?.cookies || [],
+            autoClearCookies = autoClear && autoClear.cookies || [],
 
             categoryWasJustChanged = elContains(state._lastChangedCategoryNames, currentCategoryName),
             categoryIsDisabled = !elContains(state._acceptedCategories, currentCategoryName),
