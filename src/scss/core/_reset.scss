@@ -12,10 +12,19 @@
         box-sizing: border-box;
     }
 
+    button,
+    .pm__badge {
+        all: initial;
+        box-sizing: border-box;
+        color: unset;
+        visibility: unset;
+    }
+
     /* Restore outline and cursor*/
     a,
     button,
-    input{
+    input,
+    .pm__badge {
         font-family: inherit;
         font-size: 100%;
         line-height: normal;

@@ -1,6 +1,7 @@
 @import "../global";
 
 $sections-padding: 1em 1.3em;
+$footer-links-gap: 1.3em;
 
 #cc-main{
 
@@ -97,14 +98,64 @@ $sections-padding: 1em 1.3em;
         display: flex;
         flex-direction: column;
         justify-content: center;
-        gap: var(--cc-btn-gap);
         border-top: 1px solid var(--cc-separator-border-color);
     }
 
-    .cm__btn-group{
+    .cm__btn-group {
         display: grid;
         grid-auto-columns: minmax(0, 1fr);
-        gap: var(--cc-btn-gap);
+    }
+
+    .cm__btn + .cm__btn,
+    .cm__btn-group + .cm__btn-group {
+        margin-top: $cc-btn-gap;
+    }
+
+    .cm--flip {
+        .cm__btn + .cm__btn,
+        .cm__btn-group + .cm__btn-group {
+            margin-top: 0;
+            margin-bottom: $cc-btn-gap;
+        }
+    }
+
+    .cm--inline {
+
+        .cm__btn + .cm__btn {
+            margin-top: 0;
+            margin-left: $cc-btn-gap;
+        }
+
+        &.cm--flip {
+
+            .cm__btn + .cm__btn {
+                margin-bottom: 0;
+                margin-left: 0;
+                margin-right: $cc-btn-gap;
+            }
+
+            .cm__btn-group + .cm__btn-group {
+                margin-right: 0;
+
+                margin-bottom: $cc-btn-gap;
+            }
+        }
+    }
+
+    .cm--wide {
+        .cm__btn + .cm__btn,
+        .cm__btn-group + .cm__btn-group {
+            margin-top: 0;
+            margin-left: $cc-btn-gap;
+        }
+
+        &.cm--flip {
+            .cm__btn + .cm__btn,
+            .cm__btn-group + .cm__btn-group {
+                margin-bottom: 0;
+                margin-right: $cc-btn-gap;
+            }
+        }
     }
 
     /** Start: Layout with 2 buttons, one of
@@ -244,12 +295,15 @@ $sections-padding: 1em 1.3em;
         flex-direction: row;
     }
 
-    .cm__link-group{
+    .cm__link-group {
         font-size: .8em;
         display: flex;
         flex-direction: row;
         width: 100%;
-        gap: 1.3em
+
+        & > * + * {
+            margin-left: $footer-links-gap;
+        }
     }
 
     .cm--flip{
@@ -413,10 +467,19 @@ $sections-padding: 1em 1.3em;
             border-top: none;
             flex-direction: row;
             justify-content: space-between;
+            max-width: 23em;
         }
 
         .cm__btn-group{
             grid-auto-flow: column;
+        }
+
+        &:not(.cm--inline) {
+            .cm__btn + .cm__btn,
+            .cm__btn-group + .cm__btn-group {
+                margin-top: 0;
+                margin-left: $cc-btn-gap;
+            }
         }
 
         .cm__btn{
@@ -426,6 +489,15 @@ $sections-padding: 1em 1.3em;
         }
 
         &.cm--flip{
+
+            &:not(.cm--inline){
+                .cm__btn + .cm__btn,
+                .cm__btn-group + .cm__btn-group {
+                    margin-bottom: 0;
+                    margin-left: 0;
+                    margin-right: $cc-btn-gap;
+                }
+            }
 
             .cm__btns{
                 flex-direction: row-reverse;
@@ -553,6 +625,45 @@ $sections-padding: 1em 1.3em;
             padding-left: 2em;
         }
     }
+
+    .cm--inline {
+        .cm__btn + .cm__btn {
+            margin-left: 0;
+            margin-right: $cc-btn-gap;
+        }
+
+        &.cm--flip {
+            .cm__btn + .cm__btn {
+                margin-left: $cc-btn-gap;
+                margin-right: 0;
+            }
+        }
+    }
+
+    .cm:not(.cm--inline) {
+        &.cm--bar,
+        &.cm--wide {
+
+            .cm__btn + .cm__btn,
+            .cm__btn-group + .cm__btn-group {
+                margin-left: 0;
+                margin-right: $cc-btn-gap;
+            }
+
+            &.cm--flip {
+                .cm__btn + .cm__btn {
+                    margin-left: $cc-btn-gap;
+                    margin-right: 0;
+                }
+            }
+        }
+    }
+
+    .cm__link-group > * + * {
+        margin-left: 0;
+        margin-right: $footer-links-gap;
+    }
+
 }
 /* End: Fix RTL alyout */
 
@@ -584,6 +695,20 @@ $sections-padding: 1em 1.3em;
             min-width: auto!important;
             border-left: none!important;
             border-top: 1px solid var(--cc-separator-border-color)!important;
+        }
+
+        .cm__btn + .cm__btn,
+        .cm__btn-group + .cm__btn-group {
+            margin: 0!important;
+            margin-top: $cc-btn-gap!important;
+        }
+
+        .cm--flip {
+            .cm__btn + .cm__btn,
+            .cm__btn-group + .cm__btn-group {
+                margin-top: 0!important;
+                margin-bottom: $cc-btn-gap!important;
+            }
         }
 
         .cm__btn-group{
