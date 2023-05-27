@@ -1,5 +1,5 @@
-import { onEvent, customEvents } from './utils'
-import { defaultState, getState, reRunPlugin, saveState } from './stateManager'
+import { onEvent, customEvents } from './utils';
+import { defaultState, getState, reRunPlugin, saveState } from './stateManager';
 
 /**
  * @type {NodeListOf<HTMLInputElement>}
@@ -25,9 +25,9 @@ onEvent(customEvents._PLAYGROUND_READY, () => {
             )];
 
             saveState(state);
-            reRunPlugin(state, 'consentModal');
+            reRunPlugin(state, 1);
         });
-    })
+    });
 });
 
 /**

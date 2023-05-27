@@ -1,4 +1,4 @@
-import { onEvent, customEvents } from './utils'
+import { onEvent, customEvents } from './utils';
 
 const updateFields = () => {
 

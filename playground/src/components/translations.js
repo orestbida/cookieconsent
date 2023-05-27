@@ -67,7 +67,7 @@ onEvent(customEvents._PLAYGROUND_READY, () => {
 });
 
 onEvent(customEvents._RESET, () => {
-    toggleTranslations(defaultState._enabledTranslations)
+    toggleTranslations(defaultState._enabledTranslations);
 });
 
 /**

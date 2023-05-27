@@ -1,4 +1,4 @@
-import { defaultState, getState, saveState } from './stateManager';
+import { defaultState, getState, reRunPlugin, saveState } from './stateManager';
 import { addEvent, customEvents, getById, onEvent } from './utils';
 
 /**
@@ -15,15 +15,7 @@ addEvent(checkbox, 'change', () => {
     const state = getState();
     state._cookieConsentConfig.disablePageInteraction = checkbox.checked;
     saveState(state);
-
-    const cookieconsent = window.CookieConsent;
-
-    cookieconsent.reset();
-    cookieconsent
-        .run(state._cookieConsentConfig)
-        .then(() => {
-            cookieconsent.show(true);
-        });
+    reRunPlugin(state, 1);
 });
 
 onEvent(customEvents._RESET, () => {

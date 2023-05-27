@@ -1,5 +1,5 @@
 import '../assets/installationSection.scss';
-import { getById, addEvent, unquoteJson} from "./utils";
+import { getById, addEvent, unquoteJson} from './utils';
 import { getCurrentUserConfig, getState } from './stateManager';
 import { saveAs } from 'file-saver';
 import { fetchLatestRelease } from './fetchRelease';
@@ -20,8 +20,8 @@ const configAsString = async ({minify=false} = {}) => {
     const darkModeEnabled = state._theme === 'cc--darkmode';
 
     if(darkModeEnabled) {
-        scriptStr += `// Enable dark mode\n`;
-        scriptStr += `document.documentElement.classList.add('cc--darkmode');\n\n`;
+        scriptStr += '// Enable dark mode\n';
+        scriptStr += 'document.documentElement.classList.add(\'cc--darkmode\');\n\n';
     }
 
     /**
@@ -40,7 +40,7 @@ const configAsString = async ({minify=false} = {}) => {
     scriptStr += `run(${configStr});`;
 
     return scriptStr;
-}
+};
 
 addEvent(downloadBtn, 'click', async () => {
 

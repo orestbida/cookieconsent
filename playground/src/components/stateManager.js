@@ -1,5 +1,5 @@
 import { defaultConfig } from './defaultConfig';
-import { deepCopy, fireEvent, customEvents, addEvent } from './utils';
+import { deepCopy, fireEvent, customEvents } from './utils';
 
 export const DEMO_ITEM_NAME = 'demoState';
 
@@ -182,6 +182,7 @@ export const getCurrentUserConfig = (state) => {
             const filteredSections = preferencesModal.sections.filter(section =>
                 !section.linkedCategory
                 || state._enabledCategories.includes(section.linkedCategory
+                // eslint-disable-next-line indent
             ));
 
             preferencesModal.sections = filteredSections;
@@ -201,11 +202,11 @@ export const getCurrentUserConfig = (state) => {
     }
 
     return config;
-}
+};
 
 /**
  * @param {typeof defaultState} state
- * @param {'consentModal' | 'preferencesModal'} [showModal]
+ * @param {1 | 2} [showModal]
  */
 export const reRunPlugin = (state, showModal) => {
     const cc = window.CookieConsent;
@@ -214,7 +215,7 @@ export const reRunPlugin = (state, showModal) => {
     const config = getCurrentUserConfig(state);
 
     cc.run(config).then(() => {
-        showModal === 'consentModal' && cc.show(true);
-        showModal === 'preferencesModal' && cc.showPreferences();
+        showModal === 1 && cc.show(true);
+        showModal === 2 && cc.showPreferences();
     });
 };

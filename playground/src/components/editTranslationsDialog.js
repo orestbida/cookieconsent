@@ -1,6 +1,7 @@
 import '../assets/translationsEditor.scss';
-import A11yDialog from 'a11y-dialog'
-import { getById, addEvent } from './utils'
+import A11yDialog from 'a11y-dialog';
+import { getById, addEvent } from './utils';
+// eslint-disable-next-line no-unused-vars
 import { getState, defaultState } from './stateManager';
 
 const container = getById('edit-translations-dialog');
@@ -36,7 +37,7 @@ function updateEditor(enabledTranslations) {
 
     const state = getState();
 
-    enabledTranslations ||= state._enabledTranslations;
+    enabledTranslations = enabledTranslations || state._enabledTranslations;
 
     /**
      * Make sure there is at least one translation
@@ -74,7 +75,7 @@ function updateEditorFields(state) {
      */
     const translation = config.language.translations[selectedTranslation];
 
-    const { consentModal, preferencesModal } = translation;
+    const { consentModal } = translation;
 
     /**
      * Consent modal fields
@@ -129,5 +130,5 @@ function setActiveTranslation(translation) {
  * @param {string[]} arr2
  */
 function equalArrays(arr1, arr2) {
-    return JSON.stringify(arr1.sort()) === JSON.stringify(arr2.sort())
+    return JSON.stringify(arr1.sort()) === JSON.stringify(arr2.sort());
 }

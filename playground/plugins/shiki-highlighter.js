@@ -12,7 +12,7 @@ const defaultOptions = {
  */
 async function ShikiHighlight(opts = {}) {
 
-    const options = { ...defaultOptions, ...opts }
+    const options = { ...defaultOptions, ...opts };
     const shiki = await getHighlighter(options);
 
     return {
@@ -45,10 +45,10 @@ async function ShikiHighlight(opts = {}) {
                 const attrs = split[0].split('<!--SHIKI')[1].trim();
                 const indentationSpaces = split[split.length - 1].split(' ').length - 1;
 
-                const title = (attrs.match(/title="([^\"]+)"/i))?.[1] || '';
-                const language = (attrs.match(/language="([^\"]+)"/i))?.[1] || '';
-                const highlightIndexes = getIndexes((attrs.match(/highlight="([^\"]+)"/i))?.[1] || '');
-                const focusIndexes = getIndexes((attrs.match(/focus="([^\"]+)"/i))?.[1] || '');
+                const title = (attrs.match(/title="([^"]+)"/i))?.[1] || '';
+                const language = (attrs.match(/language="([^"]+)"/i))?.[1] || '';
+                const highlightIndexes = getIndexes((attrs.match(/highlight="([^"]+)"/i))?.[1] || '');
+                const focusIndexes = getIndexes((attrs.match(/focus="([^"]+)"/i))?.[1] || '');
                 const showLineNumbers = attrs.includes('lineNumbers');
                 const isDetails = attrs.includes('details');
                 const fetchRelease = attrs.includes('fetchRelease');
@@ -111,10 +111,10 @@ async function ShikiHighlight(opts = {}) {
                 const preHtml = renderToHtml(tokens, {
                     elements: {
                         pre({ children }) {
-                            return `<pre class="hl__shiki">${children}</pre>`
+                            return `<pre class="hl__shiki">${children}</pre>`;
                         },
                         code({ children }) {
-                            return `<code tabindex="0">${children}</code>`
+                            return `<code tabindex="0">${children}</code>`;
                         },
                         line({index, children}) {
                             let focus = shouldFocusLines && focusIndexes[index + 1] === true;
@@ -123,7 +123,7 @@ async function ShikiHighlight(opts = {}) {
                             if(fetchRelease)
                                 children = children.replaceAll('{{latest_release}}', '<span data-latest-release></span>');
 
-                            return  `<span class="${className}">${children}</span>`
+                            return  `<span class="${className}">${children}</span>`;
                         }
                     }
                 });

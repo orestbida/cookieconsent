@@ -33,9 +33,9 @@ onEvent(customEvents._PLAYGROUND_READY, () => {
             saveState(state);
 
             toggleTheme(currTheme);
-            toggleDarkmode(isDefaultDarkMode)
+            toggleDarkmode(isDefaultDarkMode);
 
-            CookieConsent.show(true);
+            window.CookieConsent.show(true);
         });
     }
 
@@ -52,6 +52,6 @@ export function toggleTheme(currTheme) {
     classList.add(currTheme);
     theme !== currTheme && theme && classList.remove(theme);
     theme = currTheme;
-};
+}
 
 onEvent(customEvents._RESET, () => toggleTheme(defaultState._theme));

@@ -33,7 +33,7 @@ addEvent(checkbox, 'click', () => {
 
     saveState(state);
 
-    CookieConsent.show(true);
+    window.CookieConsent.show(true);
 });
 
 /**

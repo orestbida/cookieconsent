@@ -117,7 +117,7 @@ function updateGuiOptionsState(modalName, key, value) {
             const currentPosition = consentModal.position;
 
             if(validBarPositions(currentPosition)){
-                state._lastBarPosition = currentPosition
+                state._lastBarPosition = currentPosition;
             }else{
                 state._lastNonBarPosition = currentPosition;
             }
@@ -139,7 +139,7 @@ function updateGuiOptionsState(modalName, key, value) {
             const currentPosition = state._cookieConsentConfig.guiOptions.consentModal.position;
 
             if(validBarPositions(currentPosition)){
-                state._lastBarPosition = currentPosition
+                state._lastBarPosition = currentPosition;
             }else{
                 state._lastNonBarPosition = currentPosition;
             }
@@ -157,7 +157,7 @@ function updateGuiOptionsState(modalName, key, value) {
 
     state._cookieConsentConfig.guiOptions[modalName][key] = value;
     saveState(state);
-    reRunPlugin(state, modalName);
+    reRunPlugin(state, modalName === 'consentModal' ? 1 : 2);
 }
 
 /**
@@ -237,12 +237,12 @@ function generateOptions(yAlignments, xAlignments){
             xAlignments.forEach(x => {
                 optionValue = y + ' ' + x;
                 generateOption(optionValue);
-            })
+            });
         }else{
             generateOption(optionValue);
         }
 
-    })
+    });
 
     function generateOption(value){
         let option = document.createElement('option');
@@ -263,9 +263,9 @@ function generateCMPositionOptions(all){
         newOptions = generateOptions(
             cmLayoutYValues,
             cmLayoutXValues
-        )
+        );
     }else{
-        newOptions = generateOptions(['top', 'bottom'])
+        newOptions = generateOptions(['top', 'bottom']);
     }
 
     htmlElements[CONSENT_MODAL_NAME].position.replaceChildren(newOptions);

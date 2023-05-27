@@ -30,7 +30,7 @@ addEvent(enableXIconCheckbox, 'change', function(){
 
     toggleConsentModalElement(state, 'closeIconLabel', !enabled);
     saveState(state);
-    reRunPlugin(state, 'consentModal');
+    reRunPlugin(state, 1);
 });
 
 addEvent(removeAcceptNecessaryBtnCheckbox, 'change', function() {
@@ -45,7 +45,7 @@ addEvent(removeAcceptNecessaryBtnCheckbox, 'change', function() {
 
     toggleConsentModalElement(state, 'acceptNecessaryBtn', remove);
     saveState(state);
-    reRunPlugin(state, 'consentModal');
+    reRunPlugin(state, 1);
 });
 
 addEvent(removeShowPreferencesBtnCheckbox, 'change', function() {
@@ -60,7 +60,7 @@ addEvent(removeShowPreferencesBtnCheckbox, 'change', function() {
 
     toggleConsentModalElement(state, 'showPreferencesBtn', remove);
     saveState(state);
-    reRunPlugin(state, 'consentModal');
+    reRunPlugin(state, 1);
 });
 
 addEvent(removeFooterCheckbox, 'change', function() {
@@ -75,7 +75,7 @@ addEvent(removeFooterCheckbox, 'change', function() {
 
     toggleConsentModalElement(state, 'footer', remove);
     saveState(state);
-    reRunPlugin(state, 'consentModal');
+    reRunPlugin(state, 1);
 });
 
 addEvent(removeTitleCheckbox, 'change', function() {
@@ -95,7 +95,7 @@ addEvent(removeTitleCheckbox, 'change', function() {
 
     toggleConsentModalElement(state, 'title', remove);
     saveState(state);
-    reRunPlugin(state, 'consentModal');
+    reRunPlugin(state, 1);
 });
 
 addEvent(window, customEvents._RESET, () => {

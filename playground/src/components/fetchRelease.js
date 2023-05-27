@@ -1,4 +1,4 @@
-import { customEvents, onEvent } from "./utils";
+import { customEvents, onEvent } from './utils';
 
 let latest = '';
 
@@ -27,9 +27,9 @@ export async function fetchLatestRelease() {
 /**
  * Update all elements with "data-latest-release" attribute
  */
-export async function updateReleaseSpans(state) {
+export async function updateReleaseSpans() {
 
-    latest ||= await fetchLatestRelease();
+    latest = latest || await fetchLatestRelease();
 
     for(const el of releaseSpans) {
         el.textContent = latest;

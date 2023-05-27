@@ -85,9 +85,9 @@ function deepCopy(el) {
     }
 
     return clone;
-};
+}
 
 export {
     defaultFullConfig,
     defaultConfig
-}
+};

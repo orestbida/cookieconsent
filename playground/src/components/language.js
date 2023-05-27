@@ -34,12 +34,12 @@ onEvent(customEvents._PLAYGROUND_READY, () => {
 
     if(autoDetect) {
         setAutoDetectMode(autoDetectMode);
-        updateDetectedLanguage(detectedLanguage, state)
+        updateDetectedLanguage(detectedLanguage, state);
     } else {
         setAutoDetectMode('');
     }
 
-    toggleAutoDetectCheckbox(autoDetect)
+    toggleAutoDetectCheckbox(autoDetect);
     updateDefaultLanguageOptions(state._enabledTranslations);
     updateDefaultLanguage(language.default);
     updateCurrentLanguage(currLang, false);
@@ -53,7 +53,7 @@ addEvent(autoDetectCheckbox, 'change', () => {
 
     if(enable){
 
-        language.autoDetect ||= defaultConfig.language.autoDetect;
+        language.autoDetect = language.autoDetect || defaultConfig.language.autoDetect;
         const detectedLang = detectLanguage(language.autoDetect);
         updateDetectedLanguage(detectedLang, state);
 
@@ -136,7 +136,7 @@ export function detectLanguage(mode) {
     if(mode === 'browser')
         return getBrowserLanguage();
     else if(mode === 'document')
-        return getDocumentLanguage()
+        return getDocumentLanguage();
 
     return '';
 }
@@ -155,7 +155,7 @@ export function updateCurrentLanguage(languageCode, newState){
     currentActiveLanguageSpan.textContent = currLanguage;
 
     if(currLanguage === '-') {
-        window.CookieConsent?.reset();
+        window.CookieConsent && window.CookieConsent.reset();
         return;
     }
 
@@ -164,15 +164,16 @@ export function updateCurrentLanguage(languageCode, newState){
 
     if(!getById('cc-main')) {
         setTimeout(() => {
-            reRunPlugin(state, 'consentModal');
+            reRunPlugin(state, 1);
         }, 100);
     } else {
-        reRunPlugin(state, 'consentModal')
+        reRunPlugin(state, 1);
     }
 }
 
 /**
  * @param {string|boolean} languageCode
+ * @param {typeof defaultState} [state]
  */
 function updateDetectedLanguage(languageCode, state){
 
@@ -251,6 +252,9 @@ export function updateTranslationFound(found) {
         : 'false';
 }
 
+/**
+ * @param {string} mode
+ */
 export function autoDetectEnabled(mode) {
     return autoDetectModes.includes(mode);
 }
