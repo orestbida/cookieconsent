@@ -1,11 +1,14 @@
 #downloadConfigBtn {
     display: flex;
-    gap: 0.6rem;
     align-items: center;
     justify-content: space-between;
     background: rgba(74, 195, 124, 0.05);
     color: #4ac37c;
     border-color: rgba(74, 195, 104, 0.32);
+
+    span {
+        margin-right: .6rem;
+    }
 
     svg {
         display: block;

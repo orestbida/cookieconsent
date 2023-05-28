@@ -268,5 +268,6 @@ function generateCMPositionOptions(all){
         newOptions = generateOptions(['top', 'bottom']);
     }
 
-    htmlElements[CONSENT_MODAL_NAME].position.replaceChildren(newOptions);
+    htmlElements[CONSENT_MODAL_NAME].position.textContent = '';
+    htmlElements[CONSENT_MODAL_NAME].position.appendChild(newOptions);
 }

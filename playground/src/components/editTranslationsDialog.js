@@ -113,7 +113,8 @@ function updateAvailableTranslations(enabledTranslations, state) {
         });
     }
 
-    translationsBtns.replaceChildren(fragment);
+    translationsBtns.textContent = '';
+    translationsBtns.appendChild(fragment);
 }
 
 /**

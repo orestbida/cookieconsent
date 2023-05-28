@@ -61,54 +61,6 @@ label {
     font-size: .9em;
 }
 
-.warning {
-    background: rgba(255, 231, 201, 0.144);
-    padding: 0.8rem 1rem;
-    border-radius: 0.4rem;
-    font-size: .9rem;
-
-    border: .0625rem solid rgba(255, 231, 143, 0.09);
-    display: flex;
-    flex-direction: column;
-    gap: .5rem
-}
-
-.warning-title {
-    color: #ffe78f;
-    font-size: 1rem;
-    font-weight: 600;
-}
-
-.categories-title,
-.translations-title {
-    margin-bottom: .8rem;
-}
-
-.translations-description,
-.categories-description {
-    margin-bottom: 1rem;
-}
-
-.checkbox-group {
-    margin-top: .6rem;
-}
-
-.checkbox-div {
-    display: flex;
-    align-items: center;
-    gap: .5rem;
-    margin-top: .35rem;
-}
-
-.checkbox-div  input {
-    margin: 0;
-}
-
-.auto-language {
-    border-top: .0625rem dashed rgba(241, 245, 255, 0.11);
-    padding-top: 1rem;
-}
-
 select,
 input[type=checkbox],
 input[type=radio] {
@@ -117,6 +69,7 @@ input[type=radio] {
     -moz-appearance: none;
     font-family: inherit;
     font-size: inherit;
+    color: inherit;
 }
 
 .custom-input:disabled {
@@ -291,7 +244,52 @@ select ~ .arrow-icon::before {
     transform: translateY(-50%) rotate(45deg);
     z-index: 1;
 }
-/** End custom select **/
+
+.warning {
+    background: rgba(255, 231, 201, 0.144);
+    padding: 0.8rem 1rem;
+    border-radius: 0.4rem;
+    font-size: .9rem;
+    border: .0625rem solid rgba(255, 231, 143, 0.09);
+    display: flex;
+    flex-direction: column;
+}
+
+.warning-title {
+    color: #ffe78f;
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: .5rem;
+}
+
+.categories-title,
+.translations-title {
+    margin-bottom: .8rem;
+}
+
+.translations-description,
+.categories-description {
+    margin-bottom: 1rem;
+}
+
+.checkbox-group {
+    margin-top: .6rem;
+}
+
+.checkbox-div {
+    display: flex;
+    align-items: center;
+    margin-top: .35rem;
+}
+
+.checkbox-div input[type="checkbox"] {
+    margin-right: .5rem;
+}
+
+.auto-language {
+    border-top: .0625rem dashed rgba(241, 245, 255, 0.11);
+    padding-top: 1rem;
+}
 
 .autodetect {
     margin-top: .5rem;
@@ -398,7 +396,6 @@ select ~ .arrow-icon::before {
     padding: .625rem 1rem;
     display: flex;
     flex-direction: column;
-    gap: 0.1rem;
     border-radius: 0.4rem;
     background: rgba(237, 248, 255, 0.078);
 }
@@ -407,6 +404,10 @@ select ~ .arrow-icon::before {
     display: flex;
     align-items: center;
     justify-content: space-between;
+}
+
+.language__details p + p {
+    margin-top: .1rem;
 }
 
 .language__details code {

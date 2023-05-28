@@ -1,14 +1,17 @@
 .translations-editor {
     margin-top: 2rem;
-    gap: 1rem;
     display: flex;
 }
 
 .translation-btns {
     display: flex;
     flex-direction: column;
-    gap: .3rem;
     width: 5rem;
+    margin-right: 1rem;
+}
+
+.translation-btns button + button {
+    margin-top: .3rem;
 }
 
 [data-current-translation="ar"] .translation-btn--ar,
@@ -28,16 +31,21 @@
 
 .editor {
     display: flex;
-    gap: .3rem;
     flex-direction: column;
     flex: 1;
 
+    & > * + * {
+        margin-top: .3rem;
+    }
+
     & > input,
     & > textarea {
+        background: #363636;
         padding: .7rem 1rem;
         border-radius: .4rem;
         border: none;
         font-family: inherit;
+        color: inherit;
     }
 
     & > textarea {
