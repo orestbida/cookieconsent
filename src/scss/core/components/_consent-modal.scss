@@ -467,7 +467,6 @@ $footer-links-gap: 1.3em;
             border-top: none;
             flex-direction: row;
             justify-content: space-between;
-            max-width: 23em;
         }
 
         .cm__btn-group{
@@ -524,6 +523,7 @@ $footer-links-gap: 1.3em;
             .cm__btns{
                 flex-direction: column;
                 justify-content: center;
+                max-width: 23em;
             }
 
             &.cm--flip{
