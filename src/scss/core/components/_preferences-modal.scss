@@ -38,6 +38,10 @@ $service-toggle-knob-icon-width: 1.7px;
         box-shadow: $modal-box-shadow;
     }
 
+    svg {
+        fill: none;
+    }
+
     .pm__header,
     .pm__body,
     .pm__footer{
@@ -76,7 +80,7 @@ $service-toggle-knob-icon-width: 1.7px;
 
         svg{
             stroke: var(--cc-btn-secondary-color);
-            transform: scale(.6);
+            transform: scale(.5);
             transition: stroke .15s ease;
             width: 100%;
         }
@@ -193,9 +197,8 @@ $service-toggle-knob-icon-width: 1.7px;
                     border-bottom-right-radius: 0;
                 }
 
-                .pm__section-arrow::before{
-                    transform: translateY(-20%) rotate(225deg);
-                    margin-top: 0;
+                .pm__section-arrow svg{
+                    transform: scale(.5) rotate(180deg);
                 }
 
                 .pm__section-desc-wrapper{
@@ -222,16 +225,9 @@ $service-toggle-knob-icon-width: 1.7px;
                 border-radius: 100%;
                 pointer-events: none;
 
-                &::before{
-                    content: "";
-                    border: solid var(--cc-btn-secondary-color);
-                    border-width: 0 2px 2px 0;
-                    padding: 2px;
-                    position: absolute;
-                    transform: translateY(-50%) rotate(45deg);
-                    top: 50%;
-                    margin-top: -1px;
-                    z-index: 1;
+                svg {
+                    stroke: var(--cc-btn-secondary-color);
+                    transform: scale(.5);
                 }
             }
         }
@@ -393,7 +389,7 @@ $service-toggle-knob-icon-width: 1.7px;
 
         svg {
             stroke: var(--cc-toggle-on-bg);
-            transform: scale(.6) rotate(-45deg);
+            transform: scale(.55) rotate(-45deg);
         }
     }
 
@@ -402,7 +398,7 @@ $service-toggle-knob-icon-width: 1.7px;
 
         svg {
             stroke: var(--cc-toggle-off-bg);
-            transform: scale(.7)
+            transform: scale(.55)
         }
     }
 

@@ -252,6 +252,7 @@ export const createPreferencesModal = (api, createMainContainer) => {
                  * Arrow icon span
                  */
                 const sTitleIcon = createNode('span');
+                sTitleIcon.innerHTML = getSvgIcon(2, 3.5);
                 addClassPm(sTitleIcon, 'section-arrow');
                 appendChild(sTitleContainer, sTitleIcon);
 
@@ -529,8 +530,8 @@ function createToggleLabel(label, value, sCurrentCategoryObject, isService, cate
     /** @type {HTMLSpanElement} */  const toggleOnIcon = createNode('span');
     /** @type {HTMLSpanElement} */  const toggleOffIcon = createNode('span');
 
-    toggleOnIcon.innerHTML = getSvgIcon(true, 2);
-    toggleOffIcon.innerHTML = getSvgIcon(false, 2);
+    toggleOnIcon.innerHTML = getSvgIcon(1, 3);
+    toggleOffIcon.innerHTML = getSvgIcon(0, 3);
 
     toggle.type = 'checkbox';
 

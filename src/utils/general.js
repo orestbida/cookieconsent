@@ -779,15 +779,19 @@ export const toggleDisableInteraction = (enable) => {
     }
 };
 
-/**
- * x and v (tick) icons
- * @param {boolean} [tickIcon]
- */
-export const getSvgIcon = (tickIcon = false, strokeWidth = 1.5) => {
-    const xIconPath = '<path d="M6.25,6.25,17.75,17.75"></path><path d="M6.25,17.75,17.75,6.25"></path>';
-    const tickIconPath = '<path d="M 3.789 11.236 L 9.529 16.976"/></path><path d="M 9.007 17.518 L 20.439 6.086"></path>';
+const svgIcons = [
+    '<path d="M 19.5 4.5 L 4.5 19.5 M 4.5 4.501 L 19.5 19.5"/>',    // X
+    '<path d="M 3.572 13.406 L 8.281 18.115 L 20.428 5.885"/>',     // TICK
+    '<path d="M 21.999 6.94 L 11.639 17.18 L 2.001 6.82"/> '        // BOTTOM ARROW
+];
 
-    return `<svg viewBox="0 0 24 24" stroke-width="${strokeWidth}">${ tickIcon ? tickIconPath: xIconPath }</svg>`;
+/**
+ * [0: x, 1: tick, 2: arrow]
+ * @param {0 | 1 | 2} [iconIndex]
+ * @param {number} [strokeWidth]
+ */
+export const getSvgIcon = (iconIndex = 0, strokeWidth = 1.5) => {
+    return `<svg viewBox="0 0 24 24" stroke-width="${strokeWidth}">${svgIcons[iconIndex]}</svg>`;
 };
 
 /**
