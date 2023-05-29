@@ -78,6 +78,7 @@ $service-toggle-knob-icon-width: 1.7px;
             stroke: var(--cc-btn-secondary-color);
             transform: scale(.6);
             transition: stroke .15s ease;
+            width: 100%;
         }
 
         &:hover{
