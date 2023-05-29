@@ -40,6 +40,7 @@ $service-toggle-knob-icon-width: 1.7px;
 
     svg {
         fill: none;
+        width: 100%;
     }
 
     .pm__header,
@@ -82,7 +83,6 @@ $service-toggle-knob-icon-width: 1.7px;
             stroke: var(--cc-btn-secondary-color);
             transform: scale(.5);
             transition: stroke .15s ease;
-            width: 100%;
         }
 
         &:hover{
