@@ -10,6 +10,7 @@ import {
     addEvent,
     getModalFocusableData,
     addDataButtonListeners,
+    getSvgIcon,
     fireEvent
 } from '../../utils/general';
 
@@ -122,6 +123,7 @@ export const createConsentModal = (api, createMainContainer) => {
         if(consentModalTitleValue && closeIconLabelData && isBoxLayout){
             if(!dom._cmCloseIconBtn){
                 dom._cmCloseIconBtn = createNode(BUTTON_TAG);
+                dom._cmCloseIconBtn.innerHTML = getSvgIcon();
                 addClassCm(dom._cmCloseIconBtn, 'btn');
                 addClassCm(dom._cmCloseIconBtn, 'btn--close');
                 addEvent(dom._cmCloseIconBtn, CLICK_EVENT, () => {

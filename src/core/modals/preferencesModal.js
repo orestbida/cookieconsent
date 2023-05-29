@@ -14,6 +14,7 @@ import {
     isString,
     isObject,
     fireEvent,
+    getSvgIcon,
     _log
 } from '../../utils/general';
 
@@ -122,6 +123,7 @@ export const createPreferencesModal = (api, createMainContainer) => {
 
         dom._pmFocusSpan = createNode('span');
         dom._pmFocusSpan.tabIndex = -1;
+        dom._pmFocusSpan.innerHTML = getSvgIcon();
         appendChild(dom._pmCloseBtn, dom._pmFocusSpan);
 
         dom._pmBody = createNode(DIV_TAG);
@@ -520,11 +522,15 @@ function createToggleLabel(label, value, sCurrentCategoryObject, isService, cate
     /** @type {HTMLLabelElement} */ const toggleLabel = createNode('label');
     /** @type {HTMLInputElement} */ const toggle = createNode('input');
     /** @type {HTMLSpanElement} */  const toggleIcon = createNode('span');
+    /** @type {HTMLSpanElement} */  const toggleIconCircle = createNode('span');
     /** @type {HTMLSpanElement} */  const toggleLabelSpan = createNode('span');
 
     // each will contain 2 pseudo-elements to generate 'tick' and 'x' icons
     /** @type {HTMLSpanElement} */  const toggleOnIcon = createNode('span');
     /** @type {HTMLSpanElement} */  const toggleOffIcon = createNode('span');
+
+    toggleOnIcon.innerHTML = getSvgIcon(true, 2);
+    toggleOffIcon.innerHTML = getSvgIcon(false, 2);
 
     toggle.type = 'checkbox';
 
@@ -533,6 +539,7 @@ function createToggleLabel(label, value, sCurrentCategoryObject, isService, cate
     addClass(toggleOnIcon, 'toggle__icon-on');
     addClass(toggleOffIcon, 'toggle__icon-off');
     addClass(toggleIcon, 'toggle__icon');
+    addClass(toggleIconCircle, 'toggle__icon-circle');
     addClass(toggleLabelSpan, 'toggle__label');
 
     setAttribute(toggleIcon, ARIA_HIDDEN, 'true');
@@ -590,8 +597,9 @@ function createToggleLabel(label, value, sCurrentCategoryObject, isService, cate
     toggle.value = value;
     toggleLabelSpan.textContent = label.replace(/<.*>.*<\/.*>/gm, '');
 
-    appendChild(toggleIcon, toggleOffIcon);
-    appendChild(toggleIcon, toggleOnIcon);
+    appendChild(toggleIconCircle, toggleOffIcon);
+    appendChild(toggleIconCircle, toggleOnIcon);
+    appendChild(toggleIcon, toggleIconCircle);
 
     /**
      * If consent is valid => retrieve category states from cookie

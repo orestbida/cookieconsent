@@ -780,6 +780,17 @@ export const toggleDisableInteraction = (enable) => {
 };
 
 /**
+ * x and v (tick) icons
+ * @param {boolean} [tickIcon]
+ */
+export const getSvgIcon = (tickIcon = false, strokeWidth = 1.5) => {
+    const xIconPath = '<path d="M6.25,6.25,17.75,17.75"></path><path d="M6.25,17.75,17.75,6.25"></path>';
+    const tickIconPath = '<path d="M 3.789 11.236 L 9.529 16.976"/></path><path d="M 9.007 17.518 L 20.439 6.086"></path>';
+
+    return `<svg viewBox="0 0 24 24" stroke-width="${strokeWidth}">${ tickIcon ? tickIconPath: xIconPath }</svg>`;
+};
+
+/**
  * Trap focus inside modal and focus the first
  * focusable element of current active modal
  */

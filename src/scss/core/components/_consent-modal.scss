@@ -224,44 +224,26 @@ $footer-links-gap: 1.3em;
             font-size: 1em;
             overflow: hidden;
 
-            &::after,
-            &::before {
-                content: "";
-                position: absolute;
-                top: 50%;
-                left: 0;
-                right: 0;
-                margin: auto;
-                background: var(--cc-btn-primary-color);
-                height: .9em;
-                width: 1.5px;
-                margin-top: 1px;
-                transform: translateY(-50%) rotate(45deg);
-                transition: all 0.15s ease;
+            svg {
+                stroke: var(--cc-btn-primary-color);
+                transform: scale(.6);
+                transition: stroke .15s ease;
             }
 
-            &::after {
-                transform: translateY(-50%) rotate(-45deg);
-            }
-
-            &:hover{
-
-                &::after,
-                &::before{
-                    background: var(--cc-btn-primary-hover-color);
+            &:hover {
+                svg {
+                    stroke: var(--cc-btn-primary-hover-color);
                 }
             }
 
             &.cm__btn--secondary{
-                &::after,
-                &::before{
-                    background: var(--cc-btn-secondary-color);
+                svg {
+                    stroke: var(--cc-btn-secondary-color);
                 }
 
-                &:hover{
-                    &::after,
-                    &::before{
-                        background: var(--cc-btn-secondary-hover-color);
+                &:hover {
+                    svg {
+                        stroke: var(--cc-btn-secondary-hover-color);
                     }
                 }
             }

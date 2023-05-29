@@ -68,32 +68,24 @@ $service-toggle-knob-icon-width: 1.7px;
         border: 1px solid var(--cc-btn-secondary-border-color);
         transition: all .15s ease;
 
-        span::after,
-        span::before{
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 0;
-            right: 0;
-            margin: auto;
-            height: 0.9em;
-            width: 1.5px;
-            background: var(--cc-btn-secondary-color);
-            transform: translateY(-50%) rotate(45deg);
-            transition: all .15s ease;
+        span {
+            display: flex;
+            height: 100%;
+            width: 100%;
         }
 
-        span::after {
-            transform: translateY(-50%) rotate(-45deg);
+        svg{
+            stroke: var(--cc-btn-secondary-color);
+            transform: scale(.6);
+            transition: stroke .15s ease;
         }
 
         &:hover{
             border-color: var(--cc-btn-secondary-hover-border-color);
             background: var(--cc-btn-secondary-hover-bg);
 
-            span::after,
-            span::before{
-                background: var(--cc-btn-secondary-hover-color);
+            svg{
+                stroke: var(--cc-btn-secondary-hover-color);
             }
         }
     }
@@ -330,27 +322,17 @@ $service-toggle-knob-icon-width: 1.7px;
         .toggle__icon{
             position: relative;
 
-            &::after{
-                height: $service-toggle-knob-height;
-                width: $service-toggle-knob-height;
+        }
+
+        .toggle__icon-circle {
+            height: $service-toggle-knob-height;
+            width: $service-toggle-knob-height;
+        }
+
+        .section__toggle:checked ~ .toggle__icon{
+            .toggle__icon-circle {
+                transform: translateX(23px);
             }
-        }
-
-        .section__toggle:checked ~ .toggle__icon::after{
-            transform: translateX(23px);
-        }
-
-        .toggle__icon-off::after,
-        .toggle__icon-off::before{
-            width: $service-toggle-knob-icon-width;
-            height: 9px;
-            margin: 0.1px 2px 0 auto;
-        }
-
-        .toggle__icon-on::before{
-            border-width: 0 $service-toggle-knob-icon-width $service-toggle-knob-icon-width 0;
-            padding: 1.3px 1.3px 6px;
-            margin: -3.8px auto 0 6px;
         }
     }
 
@@ -380,82 +362,46 @@ $service-toggle-knob-icon-width: 1.7px;
         pointer-events: none;
         display: flex;
         flex-direction: row;
+    }
 
-        &::after{
-            content: "";
-            position: absolute;
-            display: block;
-            left: 0;
-            top: 0;
-            width: $toggle-knob-height;
-            height: $toggle-knob-height;
-            border: none;
-            background: var(--cc-toggle-off-knob-bg);
-            box-shadow: 0 1px 2px rgba(24, 32, 3, .36);
-            transition: transform .25s ease, background-color .25s ease;
-            border-radius: 100%;
-        }
+    .toggle__icon-circle {
+        position: absolute;
+        display: block;
+        left: 0;
+        top: 0;
+        width: $toggle-knob-height;
+        height: $toggle-knob-height;
+        border: none;
+        background: var(--cc-toggle-off-knob-bg);
+        box-shadow: 0 1px 2px rgba(24, 32, 3, .36);
+        transition: transform .25s ease, background-color .25s ease;
+        border-radius: 100%;
     }
 
     .toggle__icon-on,
     .toggle__icon-off{
         height: 100%;
-        position: relative;
-        flex: 1;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        text-align: center;
-        transform: translateZ(0);
+        position: absolute;
+        width: 100%;
         transition: opacity .15s ease;
     }
 
     .toggle__icon-on{
-        left: 0;
         opacity: 0;
-        z-index: 1;
+        transform: rotate(45deg);
 
-        &::before{
-            border: solid var(--cc-toggle-on-bg);
-            border-width: 0 $toggle-knob-icon-width $toggle-knob-icon-width 0;
-            padding: 1.5px;
-            display: inline-block;
-            padding-bottom: 7px;
-            content: '';
-            margin: 0 auto;
-            top: 50%;
-            transform: rotate(45deg) translate(-50%);
-            margin-top: -4.5px;
-            margin-left: 7px;
-            position: absolute;
+        svg {
+            stroke: var(--cc-toggle-on-bg);
+            transform: scale(.6) rotate(-45deg);
         }
     }
 
     .toggle__icon-off{
         opacity: 1;
-        z-index: 1;
 
-        &::after,
-        &::before {
-            content: '';
-            top: 50%;
-            height: 0.7em;
-            width: $toggle-knob-icon-width;
-            display: block;
-            background: var(--cc-toggle-off-bg);
-            margin: 0 auto;
-            margin-right: 2px;
-            margin-top: .5px;
-            position: absolute;
-            transform-origin: center;
-        }
-
-        &::before{
-            transform: translateY(-50%) rotate(45deg);
-        }
-
-        &::after{
-            transform: translateY(-50%) rotate(-45deg);
+        svg {
+            stroke: var(--cc-toggle-off-bg);
+            transform: scale(.7)
         }
     }
 
@@ -465,7 +411,7 @@ $service-toggle-knob-icon-width: 1.7px;
             background: var(--cc-toggle-on-bg);
             box-shadow: 0 0 0 1px var(--cc-toggle-on-bg);
 
-            &::after{
+            .toggle__icon-circle {
                 transform: translateX(calc($toggle-knob-width - $toggle-knob-height));
                 background-color: var(--cc-toggle-on-knob-bg);
             }
@@ -484,15 +430,13 @@ $service-toggle-knob-icon-width: 1.7px;
                 background: var(--cc-toggle-readonly-bg);
                 box-shadow: 0 0 0 1px var(--cc-toggle-readonly-bg);
 
-                &::after{
+                .toggle__icon-circle {
                     background: var(--cc-toggle-readonly-knob-bg);
                     box-shadow: none;
                 }
 
-                .toggle__icon-on::before,
-                .toggle__icon-off::before,
-                .toggle__icon-off::after{
-                    border-color: var(--cc-toggle-readonly-knob-icon-color)
+                svg {
+                    stroke: var(--cc-toggle-readonly-knob-icon-color);
                 }
             }
         }
@@ -900,28 +844,21 @@ $service-toggle-knob-icon-width: 1.7px;
         margin-right: 1em;
     }
 
-    .toggle__icon::after{
+    .toggle__icon-circle{
         transform: translateX(27px);
     }
 
-    .toggle-service .toggle__icon::after{
+    .toggle-service .toggle__icon-circle {
         transform: translateX(23px);
     }
 
-    .section__toggle:checked ~ .toggle__icon::after{
-        transform: translateX(0);
+
+    .section__toggle:checked ~ .toggle__icon{
+        .toggle__icon-circle {
+            transform: translateX(0);
+        }
     }
 
-    .toggle__icon-off::after,
-    .toggle__icon-off::before {
-        margin-right: unset;
-        margin-left: 2px;
-    }
-
-    .toggle__icon-on::before {
-        margin-right: unset;
-        margin-left: 2px;
-    }
 
     .pm__table-th,
     .pm__table-td{
