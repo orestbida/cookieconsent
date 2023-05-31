@@ -602,16 +602,33 @@
                 settings_blocks = _createNode('div');
                 var overlay = _createNode('div');
 
-                _addEvent(settings_container_inner, 'click', function(e){
+                var clickedInsideModal = false;
+
+                _addEvent(settings_container, 'mouseup', function(e){
+
                     /**
-                     * If click is on the foreground overlay (and not inside settings_modal),
-                     * hide settings modal
+                     * Hide modal if mouse pointer is outside modal
                      */
-                    if(settings_modal_visible && !settings_inner.contains(e.target)){
+                    if(
+                        settings_modal_visible
+                        && !clickedInsideModal
+                        && !settings_inner.contains(e.target)
+                    ){
                         _cookieconsent.hideSettings();
                     }
 
-                }, true);
+                });
+
+                _addEvent(settings_container, 'mousedown', function(e){
+
+                    /**
+                     * Check if click started inside modal or not
+                     */
+                    if(settings_modal_visible){
+                        clickedInsideModal = settings_inner.contains(e.target);
+                    }
+
+                });
 
                 /**
                  * Set ids

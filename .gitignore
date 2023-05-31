@@ -4,3 +4,6 @@ dev_tools/
 *.env
 *.jar
 node_modules
+docs
+coverage
+src_tmp

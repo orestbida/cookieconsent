@@ -17,24 +17,22 @@ A __lightweight__ & __gdpr/ccpa compliant__ cookie consent plugin written in pla
 </div>
 
 ## Table of contents
-- [Table of contents](#table-of-contents)
 - [Key features](#key-features)
-- [Installation & Usage](#installation--usage)
-- [Layout options & customization](#layout-options--customization)
-- [How to block/manage scripts](#how-to-blockmanage-scripts)
-- [API methods](#api-methods)
-- [Available `data-cc` actions](#available-data-cc-actions)
-- [Available callbacks](#available-callbacks)
-  - [All configuration options](#all-configuration-options)
-- [Full example configurations](#full-example-configurations)
-  - [How to configure languages & cookie settings](#how-to-configure-languages--cookie-settings)
-- [How to enable/manage revisions](#how-to-enablemanage-revisions)
+- [Installation & usage](#installation--usage)
+- [How to block scripts](#how-to-blockmanage-scripts)
+- [How to clear cookies](#how-to-clear-cookies)
+- [Layout & customization](#layout-options--customization)
+- [API](#api)
+- [Callbacks](#available-callbacks)
+- [Custom `data-cc` actions](#available-data-cc-attribute-values)
+- [Configuration options](#all-configuration-options)
+- [How to manage revisions](#how-to-enable-revisions)
 - [FAQ](#faq)
 - [License](#license)
 
 ## Key features
 - __Lightweight__
-- __Cross-browser__ support (IE10+ [*](#note-css-variables-are-not-supported-on-ie))
+- __Cross-browser__ support
 - __Standalone__ (no external dependencies needed)
 - __GDPR compliant__
 - __CCPA compliant__
@@ -44,7 +42,7 @@ A __lightweight__ & __gdpr/ccpa compliant__ cookie consent plugin written in pla
 - Allows you to __define custom cookie tables__ to specify the cookies you use
 
 ## Installation & Usage
-1. Download the [latest release](https://github.com/orestbida/cookieconsent/releases/latest) or use via CDN or [NPM](https://www.npmjs.com/package/vanilla-cookieconsent)
+1. Download the [latest release](https://github.com/orestbida/cookieconsent/releases/latest) or use via CDN/[NPM](https://www.npmjs.com/package/vanilla-cookieconsent)
 
     ```bash
     # CDN links
@@ -52,41 +50,45 @@ A __lightweight__ & __gdpr/ccpa compliant__ cookie consent plugin written in pla
     https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@v2.9.1/dist/cookieconsent.css
     ```
 
-    Thanks to [Till Sanders](https://github.com/tillsanders) for bringing the plugin on npm.
+    Thanks to [Till Sanders](https://github.com/tillsanders) for bringing the plugin on npm!
 
     ```bash
     npm i vanilla-cookieconsent
-    yarn add vanilla-cookieconsent
     ```
 
-1. Import the plugin: add a `script` tag pointing to `cookieconsent.js`
+1. Import the production version of the plugin (`dist` folder):
     ```html
     <html>
         <head>
-            <!-- head content -->
-            <!-- Deferred CSS loading (recommended) -->
-            <link rel="stylesheet" href="<path-to-cookieconsent.css>" media="print" onload="this.media='all'">
+            <!-- Load stylesheet -->
+            <link rel="stylesheet" href="cookieconsent.css">
         </head>
         <body>
-            <!-- body content -->
-            <script defer src="<path-to-cookieconsent.js>"></script>
+            <!-- Load script with the "defer" keyword -->
+            <script defer src="cookieconsent.js"></script>
         </body>
     </html>
     ```
-    <span>Note: replace `<path-to-cookieconsent.js>` and `<path-to-cookieconsent.css>` with valid paths!</span>
-    <br>
 
-3. Configure and run
-    -   <details><summary>As external script</summary>
+    If you're on React, check out the [FAQ](#faq) for more details or this live [Stackblitz](https://stackblitz.com/edit/nextjs-euxk9k?file=components%2FCookieConsentComponent.js) demo.
+
+    If you're using VUE/Nuxt, check out this [example setup](https://github.com/orestbida/cookieconsent/issues/42#issuecomment-899387614).
+
+
+3. Configure the plugin:
+
+    Since there are no default settings, you must configure the (cookie) categories and at least one language! Example configurations:
+
+    -   <details><summary>using an external script</summary>
         <p>
 
         - Create a `.js` file (e.g. `cookieconsent-init.js`) and import it in your html page
 
             ```html
             <body>
-                <!-- body content ... -->
-                <script defer src="<path-to-cookieconsent.js>"></script>
-                <script defer src="<path-to-cookieconsent-init.js>"></script>
+                <!-- Load script with the "defer" keyword -->
+                <script defer src="cookieconsent.js"></script>
+                <script defer src="cookieconsent-init.js"></script>
             <body>
             ```
 
@@ -211,13 +213,13 @@ A __lightweight__ & __gdpr/ccpa compliant__ cookie consent plugin written in pla
             ```
         </p>
         </details>
-    -   <details><summary>As inline script</summary>
+    -   <details><summary>using an inline script</summary>
         <p>
 
         ```html
         <body>
-            <!-- body content ... -->
-            <script defer src="<path-to-cookieconsent.js>"></script>
+            <!-- Load script with the "defer" keyword -->
+            <script defer src="cookieconsent.js"></script>
 
             <!-- Inline script -->
             <script>
@@ -345,10 +347,17 @@ A __lightweight__ & __gdpr/ccpa compliant__ cookie consent plugin written in pla
         ```
       </p>
     </details>
-    <br>
+
+4. Add a button/link to show the settings modal:
+    ```html
+    <button type="button" data-cc="c-settings">Manage cookie settings</button>
+    ```
+5. Now you must configure the scripts and cookies.
+    * [How to block/manage script tags](#how-to-blockmanage-scripts)
+    * [How to autoclear cookies](#how-to-clear-cookies)
 
 ## Layout options & customization
-You can change the color scheme with css variables inside cookieconsent.css. You can also change some basic layout options via the `gui_options` inside the config. object; example:
+You can choose a few layout options via `gui_options`.
 
 ```javascript
 cookieconsent.run({
@@ -362,36 +371,24 @@ cookieconsent.run({
         },
         settings_modal: {
             layout: 'box',                 // box/bar
-            // position: 'left',           // left/right
+            position: 'left',              // left/right
             transition: 'slide'            // zoom/slide
         }
     }
     //...
 });
 ```
-<i>Default layout is `box` and default transition is `zoom`.</i>
 
-You can alter the color scheme by overriding the available css variables which you can find [here](src/cookieconsent.css).
+### How to customize the color scheme
 
-### Note: css variables are not supported on IE
-
-How to build an ad-hoc stylesheet with your color scheme:
-
-0. make sure you have [nodejs](https://nodejs.org/en/download/) installed
-1. download/clone this repo.
-2. run `npm install`
-3. modify `src/cookieconsent.css` (css variables that will apply to IE are under the `:root` css selector)
-4. run `npm run build`
-5. use the newly generated `dist/cookieconsent.css` stylesheet
-
-Alternatively, you could load a css variables polyfill.
+You can customize the color scheme using css variables, which you can find them at the top of [cookieconsent.css](src/cookieconsent.css) file.
 
 <br>
 
 ## How to block/manage scripts
-You can manage any script (inline or external) via the `page_scripts` option:
+You can manage any script tag (inline or external).
 
-1. Enable page scripts management:
+1. Enable `page_scripts` option:
 
     ```javascript
     cookieconsent.run({
@@ -403,31 +400,166 @@ You can manage any script (inline or external) via the `page_scripts` option:
 2. Set `type="text/plain"` and `data-cookiecategory="<category>"` to any `script` tag you want to manage:
 
     ```html
-    <script type="text/plain" data-cookiecategory="analytics" src="analytics.js" defer></script>
+    <!-- External script -->
+    <script
+        type="text/plain"
+        data-cookiecategory="analytics"
+        src="analytics.js">
+    </script>
 
-    <script type="text/plain" data-cookiecategory="ads">
+    <!-- Inline script -->
+    <script
+        type="text/plain"
+        data-cookiecategory="ads">
         console.log('"ads" category accepted');
     </script>
     ```
-    <i>Note: `data-cookiecategory` must be a valid category defined inside the configuration object</i>
 
+    You can also specify a custom type via the `data-type` attribute:
+    ```html
+    <script
+        type="text/plain"
+        data-type="module"
+        data-cookiecategory="analytics"
+        src="test.js">
+    </script>
+    ```
 
-## API methods
-After getting the plugin like so:
+    Note: the `type="text/plain"` disables the script tag (required attribute)!
+
+<br>
+
+## How to clear cookies
+
+You can configure the plugin so that it automatically clears existing cookies when a category is rejected/disabled.
+
+Cookies must be listed manually as the plugin is not aware of them.
+
+1. Enable the `autoclear_cookies` option:
+    ```js
+    cc.run({
+        // ...
+        autoclear_cookies: true,
+        // ...
+    });
+    ```
+
+2. Add the `settings_modal.cookie_table_headers` field:
+
+    ```js
+    cc.run({
+        // ...
+        autoclear_cookies: true,
+
+        languages: {
+            en: {
+                // ...
+                settings_modal: {
+                    // ...
+                    cookie_table_headers: [
+                        {col1: 'Name'},
+                        {col2: 'Service'},
+                        {col3: 'Description'}
+                    ]
+                }
+            }
+        }
+    });
+    ```
+
+3. Add the `cookie_table` field under the desired category block. A category block must contain the `toggle` object with a valid category name (`toggle.value`).
+
+    ```js
+    cc.run({
+        // ...
+        autoclear_cookies: true,
+        // ...
+
+        languages: {
+            'en': {
+                // ...
+                settings_modal: {
+                    // ...
+                    cookie_table_headers: [
+                        {col1: 'Name'},
+                        {col2: 'Service'},
+                        {col3: 'Description'}
+                    ],
+                    blocks: [
+                        // ...
+                        {
+                            // ...
+                            toggle: {
+                                value: 'analytics'
+                            },
+                            cookie_table: [
+                                {
+                                    col1: '^_ga',
+                                    col2: 'Google Analytics',
+                                    col3: 'description ...',
+                                    is_regex: true
+                                },
+                                {
+                                    col1: '_gid',
+                                    col2: 'Google Analytics',
+                                    col3: 'description ...',
+                                }
+                            ]
+                        }
+                    ]
+                }
+            }
+        }
+    });
+    ```
+
+    The `is_regex` option is handy if you want to match multiple cookies without specifying them individually.
+
+    This matches all cookies starting with `'_ga'`
+    ```javascript
+    {
+        col1: '^_ga',
+        col2: '...',
+        col3: '...',
+        is_regex: true
+    }
+    ```
+    This only matches the specific `'_ga'` cookie:
+    ```javascript
+    {
+        col1: '_ga',
+        col2: '...',
+        col3: '...'
+    }
+    ```
+
+    You can also customize the table (add/remove columns).
+
+    **For the autoclear cookies function to work, the _first_ column must contain the name of the cookie!**
+
+    [Full example demo.](https://github.com/orestbida/cookieconsent/blob/9ad310e7edcac7bf23600ff0e23d42254d3fced2/demo/demo_iframemanager/cookieconsent-init.js#L139).
+
+<br>
+
+## API
+Once you configure and run the plugin:
 
 ```javascript
-var cookieconsent = initCookieConsent();
+const cc = initCookieConsent();
+
+cc.run({
+    // required config.
+});
 ```
 
 the following methods are available:
 
-- cookieconsent`.run(<config_object>)`
-- cookieconsent`.show(<optional_delay>, <create_modal>)`
-- cookieconsent`.hide()`
-- cookieconsent`.showSettings(<optional_delay>)`
-- cookieconsent`.hideSettings()`
+* cookieconsent`.show(delay?: number, createModal?: boolean)`
+* cookieconsent`.hide()`
+* cookieconsent`.showSettings(delay?: number)`
+* cookieconsent`.hideSettings()`
 
-Additional methods for an easier management of your scripts and cookie settings (expand them to see usage example):
+Additional methods (expand for more details):
 - <details><summary>cookieconsent<code>.accept(&lt;accepted_categories&gt;, &lt;optional_rejected_categories&gt;)</code> [v2.5.0+]</summary>
     <p>
 
@@ -469,10 +601,10 @@ Additional methods for an easier management of your scripts and cookie settings 
     ```javascript
     // ...
     toggle: {
-        value: 'analytics',     // cookie category
-        enabled: false,         // default status
-        readonly: false         // allow to enable/disable
-        // reload: 'on_disable',   // allows to reload page when the current cookie category is deselected
+        value: 'analytics',      // cookie category
+        enabled?: false,         // default status
+        readonly?: false         // allow to enable/disable
+        reload?: 'on_disable',   // allows to reload page when the current cookie category is deselected
     }
     // ...
     ```
@@ -635,22 +767,6 @@ Additional methods for an easier management of your scripts and cookie settings 
 
 <br>
 
-## Available `data-cc` actions
-Any button (or link) can use the custom `data-cc` attribute to perform a few actions without manually invoking the api methods.
-
-Valid values:
-- `c-settings`: show settings modal
-- `accept-all`: accept all categories
-- `accept-necessary`: accept only categories marked as necessary/readonly (reject all)
-- `accept-custom`: accept currently selected categories inside the settings modal
-
-Examples:
-```html
-<button type="button" data-cc="c-settings">Show cookie settings</button>
-<button type="button" data-cc="accept-all">Accept all cookies</button>
-```
-<br>
-
 ## Available callbacks
 The following functions have to be defined inside the configuration object passed to the `.run()` method.
 
@@ -674,7 +790,7 @@ The following functions have to be defined inside the configuration object passe
     cc.run({
         // ...
         onAccept: function(cookie){
-            // load somescript, google analytics ...
+            // load script, e.g. google analytics ...
         },
         // ...
     });
@@ -737,7 +853,22 @@ The following functions have to be defined inside the configuration object passe
 
 <br>
 
-### All configuration options
+## Available `data-cc` attribute values
+You can add the `data-cc` attribute to any element (typically a button) to perform a few actions without having to use code.
+
+Valid values:
+- `c-settings`: show settings modal
+- `accept-all`: accept all categories
+- `accept-necessary`: accept only categories marked as necessary/readonly (reject all)
+- `accept-custom`: accept currently selected categories inside the settings modal
+
+Example:
+```html
+<button type="button" data-cc="c-settings">Show cookie settings</button>
+```
+<br>
+
+## Configuration options
 
 Below a table which sums up all of the available options (must be passed to the .run() method).
 | Option              	| Type     	| Default 	| Description                                                                                                                       |
@@ -765,247 +896,11 @@ Below a table which sums up all of the available options (must be passed to the 
 | __`onFirstAction`__   | function 	| -       	| Method run only `once` when the user makes the initial choice (accept/reject)                                                     |
 | `languages`      	    | object 	| -       	| [Check below](#how-to-configure-languages--cookie-settings) for configuration
 
-## Full example configurations
--   <details><summary>Configuration with gtag.js - Google Analytics</summary>
-    <p>
 
-    1. enable `page_scripts`
-    2. set `type="text/plain"` and `data-cookiecategory="<your-category>"` to each script:
+## How to manage revisions
+Revision can be enabled by setting a value different from `0` (default). If the saved revision number (stored in the cookie) is different from the current one, ask for consent.
 
-    <br>
-
-    ```html
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script type="text/plain" data-cookiecategory="analytics" async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
-    <script type="text/plain" data-cookiecategory="analytics">
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){window.dataLayer.push(arguments);}
-        gtag('js', new Date());
-
-        gtag('config', 'GA_MEASUREMENT_ID');
-    </script>
-
-    <script defer src="<path-to-cookieconsent.js>"></script>
-    <script>
-        window.addEventListener('load', function () {
-            // obtain cookieconsent plugin
-            var cookieconsent = initCookieConsent();
-
-            // run plugin with config object
-            cookieconsent.run({
-                autorun: true,
-                current_lang: 'en',
-                autoclear_cookies: true,
-                page_scripts: true,
-
-                onFirstAction: function(user_preferences, cookie){
-                    // callback triggered only once
-                },
-
-                onAccept: function (cookie) {
-                    // ... cookieconsent accepted
-                },
-
-                onChange: function (cookie, changed_preferences) {
-                    // ... cookieconsent preferences were changed
-                },
-
-                languages: {
-                    en: {
-                        consent_modal: {
-                            title: 'I use cookies',
-                            description: 'Hi, this website uses essential cookies to ensure its proper operation and tracking cookies to understand how you interact with it. The latter will be set only upon approval. <a aria-label="Cookie policy" class="cc-link" href="#">Read more</a>',
-                            primary_btn: {
-                                text: 'Accept',
-                                role: 'accept_all'              // 'accept_selected' or 'accept_all'
-                            },
-                            secondary_btn: {
-                                text: 'Settings',
-                                role: 'settings'                // 'settings' or 'accept_necessary'
-                            }
-                        },
-                        settings_modal: {
-                            title: 'Cookie preferences',
-                            save_settings_btn: 'Save settings',
-                            accept_all_btn: 'Accept all',
-                            reject_all_btn: 'Reject all',       // optional, [v.2.5.0 +]
-                            cookie_table_headers: [
-                                {col1: 'Name'},
-                                {col2: 'Domain'},
-                                {col3: 'Expiration'},
-                                {col4: 'Description'},
-                                {col5: 'Type'}
-                            ],
-                            blocks: [
-                                {
-                                    title: 'Cookie usage',
-                                    description: 'I use cookies to ensure the basic functionalities of the website and to enhance your online experience. You can choose for each category to opt-in/out whenever you want.'
-                                }, {
-                                    title: 'Strictly necessary cookies',
-                                    description: 'These cookies are essential for the proper functioning of my website. Without these cookies, the website would not work properly.',
-                                    toggle: {
-                                        value: 'necessary',
-                                        enabled: true,
-                                        readonly: true
-                                    }
-                                }, {
-                                    title: 'Analytics cookies',
-                                    description: 'These cookies collect information about how you use the website, which pages you visited and which links you clicked on. All of the data is anonymized and cannot be used to identify you.',
-                                    toggle: {
-                                        value: 'analytics',
-                                        enabled: false,
-                                        readonly: false
-                                    },
-                                    cookie_table: [
-                                        {
-                                            col1: '^_ga',
-                                            col2: 'google.com',
-                                            col3: '2 years',
-                                            col4: 'description ...',
-                                            col5: 'Permanent cookie',
-                                            is_regex: true
-                                        },
-                                        {
-                                            col1: '_gid',
-                                            col2: 'google.com',
-                                            col3: '1 day',
-                                            col4: 'description ...',
-                                            col5: 'Permanent cookie'
-                                        }
-                                    ]
-                                }, {
-                                    title: 'More information',
-                                    description: 'For any queries in relation to my policy on cookies and your choices, please <a class="cc-link" href="#yourwebsite">contact me</a>.',
-                                }
-                            ]
-                        }
-                    }
-                }
-            });
-        });
-    </script>
-    ```
-
-    </p>
-    </details>
-
-### How to configure languages & cookie settings
-Languages is an object which basically holds all of the text/html of your cookie modals in different languages. In here you can define `cookie categories`, `cookie tables`, `opt-in/out toggle` for each category and more. For each language, a `consent_modal` object and a `settings_modal` object must be configured.
-
-<details><summary>Example with <b>multiple languages</b> ('en' and 'it')</summary>
-<p>
-
-```javascript
-cookieconsent.run({
-    // ...,
-    languages: {
-        'en': {
-            consent_modal: {
-                title: 'Title here ...',
-                description: 'Description here ...',
-                primary_btn: {
-                    text: 'Accept',
-                    role: 'accept_all'      // 'accept_selected' or 'accept_all'
-                },
-                secondary_btn: {
-                    text: 'Settings',
-                    role: 'settings'        // 'settings' or 'accept_necessary'
-                }
-            },
-            settings_modal: {
-                title: 'Cookie preferences ...',
-                save_settings_btn: 'Save settings',
-                accept_all_btn: 'Accept all',
-                blocks: [
-                    {
-                        title: 'First block title ...',
-                        description: 'First block description ...'
-                    }, {
-                        title: 'Second block title ...',
-                        description: 'Second block description ...',
-                        toggle: {
-                            value: 'my_category1',
-                            enabled: true,
-                            readonly: true
-                        }
-                    }, {
-                        title: 'Third block title ...',
-                        description: 'Third block description ...',
-                        toggle: {
-                            value: 'my_category2',
-                            enabled: false,
-                            readonly: false
-                        }
-                    }
-                ]
-            }
-        },
-        'it': {
-            consent_modal: {
-                title: 'Title in italian here ...',
-                description: 'Description in italian here ...',
-                primary_btn: {
-                    text: 'Accept in italian',
-                    role: 'accept_all'      //'accept_selected' or 'accept_all'
-                },
-                secondary_btn: {
-                    text: 'Settings',
-                    role: 'settings'        //'settings' or 'accept_necessary'
-                }
-            },
-            settings_modal: {
-                title: 'Cookie preferences ...',
-                save_settings_btn: 'Save settings in italian',
-                accept_all_btn: "Accept all",
-                blocks: [
-                    {
-                        title: 'First block title in italian ...',
-                        description: 'First block description in italian ...'
-                    }, {
-                        title: 'Second block title in italian ...',
-                        description: 'Second block description in italian...',
-                        toggle: {
-                            value: 'my_category1',
-                            enabled: true,
-                            readonly: true
-                        }
-                    }, {
-                        title: 'Third block title in italian ...',
-                        description: 'Third block description in italian...',
-                        toggle: {
-                            value: 'my_category2',
-                            enabled: false,
-                            readonly: false
-                        }
-                    }
-                ]
-            }
-        }
-    }
-});
-```
-
-</p>
-</details>
-
-<details><summary>Example with <b>custom cookie table</b></summary>
-<p>
-
-You can create tables with a custom number of columns to explain what each cookie does.
-
-**NOTE**: If you want to also use `autoclear_cookie`, make sure the first column of the cookie table contains the name of the cookie.
-
-[Check demo app.js](demo/app.js) which has a full example with cookie table.
-
-</p>
-</details>
-
-## How to enable/manage revisions
-Note:
-- default revision number is 0
-- if existing revision number is different from the one you just specified => show consent modal
-
-1. Enable revisions by specifying a valid `revision` parameter:
+1. Enable revisions by setting a `revision` number > 0:
 
     ```javascript
     cookieconsent.run({
@@ -1015,7 +910,7 @@ Note:
     })
     ```
 
-2. Set a valid `revision_message` parameter (optional) inside `consent_modal`, and add the following placeholder `{{revision_message}}` inside `description`:
+2. You can optionally set a revision message. To do this, add the `revision_message` parameter inside `consent_modal`, and also place the following placeholder `{{revision_message}}` inside the `description` field:
 
     ```javascript
     cookieconsent.run({
@@ -1215,9 +1110,9 @@ Note:
             useEffect(() => {
 
                 if (!document.getElementById('cc--main')) {
-                    window.CookieConsentApi = window.initCookieConsent();
-                    window.CookieConsentApi.run({
-                        // your config
+                    window.CC = window.initCookieConsent();
+                    window.CC.run({
+                        // your config (required)
                     });
                 }
 
@@ -1227,7 +1122,7 @@ Note:
         }
         ```
 
-    2. Import the component only once (generally in your main/root component like `App.js` or `index.js`)
+    2. Import the component in your main/root file (e.g. `App.js`):
 
         ```javascript
         import CookieConsent from "./<path-to-CookieConsent.js-component>";
