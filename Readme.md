@@ -18,13 +18,13 @@ A __lightweight__ & __gdpr/ccpa compliant__ cookie consent plugin written in pla
 
 ## Table of contents
 - [Key features](#key-features)
-- [Installation & Usage](#installation--usage)
+- [Installation & usage](#installation--usage)
 - [How to block scripts](#how-to-blockmanage-scripts)
 - [How to clear cookies](#how-to-clear-cookies)
-- [Layouts & Customization](#layout-options--customization)
-- [API methods](#api)
-- [Available `data-cc` actions](#available-data-cc-actions)
-- [Available callbacks](#available-callbacks)
+- [Layout & customization](#layout-options--customization)
+- [API](#api)
+- [Callbacks](#available-callbacks)
+- [Custom `data-cc` actions](#available-data-cc-attribute-values)
 - [Configuration options](#all-configuration-options)
 - [How to manage revisions](#how-to-enable-revisions)
 - [FAQ](#faq)
@@ -767,21 +767,6 @@ Additional methods (expand for more details):
 
 <br>
 
-## Available `data-cc` attribute values
-You can add the `data-cc` attribute to any element (typically a button) to perform a few actions without having to use code.
-
-Valid values:
-- `c-settings`: show settings modal
-- `accept-all`: accept all categories
-- `accept-necessary`: accept only categories marked as necessary/readonly (reject all)
-- `accept-custom`: accept currently selected categories inside the settings modal
-
-Example:
-```html
-<button type="button" data-cc="c-settings">Show cookie settings</button>
-```
-<br>
-
 ## Available callbacks
 The following functions have to be defined inside the configuration object passed to the `.run()` method.
 
@@ -868,7 +853,22 @@ The following functions have to be defined inside the configuration object passe
 
 <br>
 
-### All configuration options
+## Available `data-cc` attribute values
+You can add the `data-cc` attribute to any element (typically a button) to perform a few actions without having to use code.
+
+Valid values:
+- `c-settings`: show settings modal
+- `accept-all`: accept all categories
+- `accept-necessary`: accept only categories marked as necessary/readonly (reject all)
+- `accept-custom`: accept currently selected categories inside the settings modal
+
+Example:
+```html
+<button type="button" data-cc="c-settings">Show cookie settings</button>
+```
+<br>
+
+## Configuration options
 
 Below a table which sums up all of the available options (must be passed to the .run() method).
 | Option              	| Type     	| Default 	| Description                                                                                                                       |
