@@ -664,7 +664,7 @@ CookieConsent settings modal
 .cc_div .b-tg .c-tgl {
     position: absolute;
     cursor: pointer;
-    display: block;
+    display: contents;
     top: 0;
     left: 0;
     margin: 0;
