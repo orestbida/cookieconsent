@@ -24,9 +24,11 @@ A __lightweight__ & __gdpr/ccpa compliant__ cookie consent plugin written in pla
 - [Layout & customization](#layout-options--customization)
 - [API](#api)
 - [Callbacks](#available-callbacks)
-- [Custom `data-cc` actions](#available-data-cc-attribute-values)
+- [Custom `data-cc` attribute](#available-data-cc-attribute-values)
 - [Configuration options](#all-configuration-options)
 - [How to manage revisions](#how-to-enable-revisions)
+- [How to share consent across subdomains](#how-to-share-consent-across-subdomains)
+- [How to block iframes](#how-to-block-iframes)
 - [FAQ](#faq)
 - [License](#license)
 
@@ -38,8 +40,8 @@ A __lightweight__ & __gdpr/ccpa compliant__ cookie consent plugin written in pla
 - __CCPA compliant__
 - __Support for multi language__
 - __[WAI-ARIA](https://developer.mozilla.org/en-US/docs/Learn/Accessibility/WAI-ARIA_basics) compliant__
-- Allows you to __define different cookie categories with opt in/out toggle__
-- Allows you to __define custom cookie tables__ to specify the cookies you use
+
+<br>
 
 ## Installation & Usage
 1. Download the [latest release](https://github.com/orestbida/cookieconsent/releases/latest) or use via CDN/[NPM](https://www.npmjs.com/package/vanilla-cookieconsent)
@@ -381,7 +383,7 @@ cookieconsent.run({
 
 ### How to customize the color scheme
 
-You can customize the color scheme using css variables, which you can find them at the top of [cookieconsent.css](src/cookieconsent.css) file.
+You can customize the color scheme using css variables, which you can find at the top of [cookieconsent.css](src/cookieconsent.css) file.
 
 <br>
 
@@ -554,13 +556,14 @@ cc.run({
 
 the following methods are available:
 
-* cookieconsent`.show(delay?: number, createModal?: boolean)`
-* cookieconsent`.hide()`
-* cookieconsent`.showSettings(delay?: number)`
-* cookieconsent`.hideSettings()`
+* cc`.show(delay?: number, createModal?: boolean)`
+* cc`.hide()`
+* cc`.showSettings(delay?: number)`
+* cc`.hideSettings()`
 
-Additional methods (expand for more details):
-- <details><summary>cookieconsent<code>.accept(&lt;accepted_categories&gt;, &lt;optional_rejected_categories&gt;)</code> [v2.5.0+]</summary>
+<br>
+
+- <details><summary>cc<code>.accept(&lt;accepted_categories&gt;, &lt;optional_rejected_categories&gt;)</code> [v2.5.0+]</summary>
     <p>
 
     - accepted_categories: `string` or `string[]`
@@ -573,24 +576,24 @@ Additional methods (expand for more details):
     Examples:
 
     ```javascript
-    cookieconsent.accept('all');                // accept all categories
-    cookieconsent.accept([]);                   // accept none (reject all)
-    cookieconsent.accept('analytics');          // accept only analytics category
-    cookieconsent.accept(['cat_1', 'cat_2']);   // accept only these 2 categories
-    cookieconsent.accept();                     // accept all currently selected categories inside modal
+    cc.accept('all');                // accept all categories
+    cc.accept([]);                   // accept none (reject all)
+    cc.accept('analytics');          // accept only analytics category
+    cc.accept(['cat_1', 'cat_2']);   // accept only these 2 categories
+    cc.accept();                     // accept all currently selected categories inside modal
 
-    cookieconsent.accept('all', ['analytics']); // accept all except "analytics" category
-    cookieconsent.accept('all', ['cat_1', 'cat_2']); // accept all except these 2 categories
+    cc.accept('all', ['analytics']); // accept all except "analytics" category
+    cc.accept('all', ['cat_1', 'cat_2']); // accept all except these 2 categories
     ```
 
     How to later reject a specific category (cookieconsent already accepted)? Same as above:
 
     ```javascript
-    cookieconsent.accept('all', ['targeting']);     // opt out of targeting category
+    cc.accept('all', ['targeting']);     // opt out of targeting category
     ```
     </p>
     </details>
-- <details><summary>cookieconsent<code>.allowedCategory(&lt;category_name&gt;)</code></summary>
+- <details><summary>cc<code>.allowedCategory(&lt;category_name&gt;)</code></summary>
     <p>
 
     <b>Note:</b> there are no default cookie categories, you create them!
@@ -612,26 +615,26 @@ Additional methods (expand for more details):
     Example:
     ```javascript
     // Check if user accepts cookie consent with analytics category enabled
-    if (cookieconsent.allowedCategory('analytics')) {
+    if (cc.allowedCategory('analytics')) {
         // yoo, you might want to load analytics.js ...
     };
     ```
     </p>
     </details>
-- <details><summary>cookieconsent<code>.validCookie(&lt;cookie_name&gt;)</code></summary>
+- <details><summary>cc<code>.validCookie(&lt;cookie_name&gt;)</code></summary>
     <p>
 
     If cookie exists and has non empty (<code>''</code>) value => return <code>true</code>, otherwise <code>false</code>.
 
     ```javascript
     // Example: check if '_gid' cookie is set
-    if (!cookieconsent.validCookie('_gid')) {
+    if (!c.validCookie('_gid')) {
         // yoo, _gid cookie is not set, do something ...
     };
     ```
     </p>
     </details>
-- <details><summary>cookieconsent<code>.eraseCookies(&lt;cookie_names&gt;, &lt;optional_path&gt;, &lt;optional_domains&gt;)</code> [v2.5.0+]</summary>
+- <details><summary>cc<code>.eraseCookies(&lt;cookie_names&gt;, &lt;optional_path&gt;, &lt;optional_domains&gt;)</code> [v2.5.0+]</summary>
     <p>
 
     - cookie_names: `string[]`
@@ -643,27 +646,27 @@ Additional methods (expand for more details):
     Examples:
 
     ```javascript
-    cookieconsent.eraseCookies(['cc_cookies']);             // erase "cc_cookie" if it exists
-    cookieconsent.eraseCookies(['cookie1', 'cookie2']);     // erase these 2 cookies
+    cc.eraseCookies(['cc_cookies']);             // erase "cc_cookie" if it exists
+    cc.eraseCookies(['cookie1', 'cookie2']);     // erase these 2 cookies
 
-    cookieconsent.eraseCookies(['cc_cookie'], "/demo");
-    cookieconsent.eraseCookies(['cc_cookie'], "/demo", [location.hostname]);
+    cc.eraseCookies(['cc_cookie'], "/demo");
+    cc.eraseCookies(['cc_cookie'], "/demo", [location.hostname]);
     ```
     </p>
     </details>
-- <details><summary>cookieconsent<code>.loadScript(&lt;path&gt;, &lt;callback_function&gt;, &lt;optional_custom_attributes&gt;)</code></summary>
+- <details><summary>cc<code>.loadScript(&lt;path&gt;, &lt;callback_function&gt;, &lt;optional_custom_attributes&gt;)</code></summary>
     <p>
 
     Basic example:
 
     ```javascript
-    cookieconsent.loadScript('https://www.google-analytics.com/analytics.js', function(){
+    cc.loadScript('https://www.google-analytics.com/analytics.js', function(){
         // Script loaded, do something
     });
     ```
     How to load scripts with custom attributes:
     ```javascript
-    cookieconsent.loadScript('https://www.google-analytics.com/analytics.js', function(){
+    cc.loadScript('https://www.google-analytics.com/analytics.js', function(){
         // Script loaded, do something
     }, [
         {name: 'id', value: 'ga_id'},
@@ -672,7 +675,7 @@ Additional methods (expand for more details):
     ```
     </p>
     </details>
-- <details><summary>cookieconsent<code>.set(&lt;field&gt;, &lt;object&gt;)</code> [v2.6.0+]</summary>
+- <details><summary>cc<code>.set(&lt;field&gt;, &lt;object&gt;)</code> [v2.6.0+]</summary>
     <p>
 
     The `.set()` method allows you to set the following values:
@@ -684,36 +687,36 @@ Additional methods (expand for more details):
     How to save custom `data`:
     ```javascript
     // Set cookie's "data" field to whatever the value of the `value` prop. is
-    cookieconsent.set('data', {value: {id: 21, country: "italy"}});
+    cc.set('data', {value: {id: 21, country: "italy"}});
 
     // Only add/update the specified props.
-    cookieconsent.set('data', {value: {id: 22, new_prop: 'new prop value'}, mode: 'update'});
+    cc.set('data', {value: {id: 22, new_prop: 'new prop value'}, mode: 'update'});
     ```
     </p>
     </details>
-- <details><summary>cookieconsent<code>.get(&lt;field&gt;)</code> [v2.6.0+]</summary>
+- <details><summary>cc<code>.get(&lt;field&gt;)</code> [v2.6.0+]</summary>
     <p>
 
     The `.get()` method allows you to retrieve any of the fields inside the plugin's cookie:
     ```javascript
-    cookieconsent.get('level');     // retrieve all accepted categories (if cookie exists)
-    cookieconsent.get('data');      // retrieve custom data (if cookie exists)
-    cookieconsent.get('revision');  // retrieve revision number (if cookie exists)
+    cc.get('level');     // retrieve all accepted categories (if cookie exists)
+    cc.get('data');      // retrieve custom data (if cookie exists)
+    cc.get('revision');  // retrieve revision number (if cookie exists)
     ```
     </p>
     </details>
-- <details><summary>cookieconsent<code>.getConfig(&lt;field&gt;)</code> [v2.7.0+]</summary>
+- <details><summary>cc<code>.getConfig(&lt;field&gt;)</code> [v2.7.0+]</summary>
     <p>
 
     The `.getConfig()` method allows you to read configuration options from the current instance:
     ```javascript
-    cookieconsent.getConfig('current_lang');        // get currently used language
-    cookieconsent.getConfig('cookie_expiration');   // get configured cookie expiration
+    cc.getConfig('current_lang');        // get currently used language
+    cc.getConfig('cookie_expiration');   // get configured cookie expiration
     // ...
     ```
     </p>
     </details>
-- <details><summary>cookieconsent<code>.getUserPreferences()</code> [v2.7.0+]</summary>
+- <details><summary>cc<code>.getUserPreferences()</code> [v2.7.0+]</summary>
     <p>
 
     The `.getUserPreferences()` returns the following object (for analytics/logging purposes):
@@ -726,7 +729,7 @@ Additional methods (expand for more details):
     ```
     </p>
     </details>
-- <details><summary>cookieconsent<code>.updateScripts()</code> [v2.7.0+]</summary>
+- <details><summary>cc<code>.updateScripts()</code> [v2.7.0+]</summary>
     <p>
 
     This method allows the plugin to manage dynamically added/injected scripts that have been loaded after the plugin's execution.
@@ -734,7 +737,7 @@ Additional methods (expand for more details):
     E.g. dynamic content generated by server side languages like php, node, ruby ...
     </p>
     </details>
-- <details><summary>cookieconsent<code>.updateLanguage(&lt;language&gt;, &lt;force_update&gt;)</code> [v2.8.0+]</summary>
+- <details><summary>cc<code>.updateLanguage(&lt;language&gt;, &lt;force_update&gt;)</code> [v2.8.0+]</summary>
     <p>
 
     Use this method to change modal's language dynamically (without page reload).
@@ -746,7 +749,7 @@ Additional methods (expand for more details):
 
     Example:
     ```javascript
-    cookieconsent.updateLanguage('it');
+    cc.updateLanguage('it');
     ```
 
     Note: language will change only if it is valid (already defined) and different from the current language!
@@ -756,10 +759,10 @@ Additional methods (expand for more details):
     You can also forcefully update the modals (useful if you dynamically change the content of the modals). Example:
     ```javascript
     // Change content: e.g. modify modal title
-    cookieconsent.getConfig('languages').en.consent_modal.title = 'New title';
+    cc.getConfig('languages').en.consent_modal.title = 'New title';
 
     // Update changes
-    cookieconsent.updateLanguage('en', true);
+    cc.updateLanguage('en', true);
     ```
 
     </p>
@@ -768,7 +771,6 @@ Additional methods (expand for more details):
 <br>
 
 ## Available callbacks
-The following functions have to be defined inside the configuration object passed to the `.run()` method.
 
 - <details><summary><code>onAccept</code></summary>
     <p>
@@ -853,7 +855,7 @@ The following functions have to be defined inside the configuration object passe
 
 <br>
 
-## Available `data-cc` attribute values
+## Custom `data-cc` attribute
 You can add the `data-cc` attribute to any element (typically a button) to perform a few actions without having to use code.
 
 Valid values:
@@ -882,7 +884,7 @@ Below a table which sums up all of the available options (must be passed to the 
 | `cookie_domain` 	    | string   	| location.hostname | Specify your domain (will be grabbed by default) or a subdomain                                                           |
 | `cookie_same_site` 	| string   	| "Lax"     | SameSite attribute                                                           |
 | `use_rfc_cookie` 	    | boolean   | false     | Enable if you want the value of the cookie to be rfc compliant                                            |
-| `force_consent`       | boolean   | false     | Enable if you want to block page navigation until user action (check [faq](#faq) for a proper implementation) |
+| `force_consent`       | boolean   | false     | Enable if you want to block page navigation until user action (Check out the [FAQ > Make consent required item](#faq) for a proper implementation) |
 | `revision`            | number  	| 0   	    | Specify this option to enable revisions. [Check below](#how-to-enablemanage-revisions) for a proper usage |
 | `current_lang`      	| string   	| -       	| Specify one of the languages you have defined (can also be dynamic): `'en'`, `'de'` ...                                           |
 | `auto_language`     	| string  	| null  	| Language auto-detection strategy. Null to disable (default), `"browser"` to get user's browser language or `"document"` to read value from `<html lang="...">` of current page. If language is not defined => use specified `current_lang` |
@@ -891,14 +893,15 @@ Below a table which sums up all of the available options (must be passed to the 
 | `remove_cookie_tables`| boolean  	| false   	| Enable if you want to remove the html cookie tables (but still want to make use of `autoclear_cookies`)                           |
 | `hide_from_bots`      | boolean  	| true    	| Disable if you want the plugin to run when a bot/crawler/webdriver is detected       |
 | `gui_options`         | object  	| -   	    | Customization option which allows to choose layout, position	and transition. Check [layout options & customization](#layout-options--customization) |
-| __`onAccept`__      	| function 	| -       	| Method run on: <br>  1. the moment the cookie consent is accepted <br> 2. after each page load (if cookie consent has already been accepted) |
-| __`onChange`__      	| function 	| -       	| Method run `whenever preferences are modified` (and only if cookie consent has already been accepted)                             |
-| __`onFirstAction`__   | function 	| -       	| Method run only `once` when the user makes the initial choice (accept/reject)                                                     |
-| `languages`      	    | object 	| -       	| [Check below](#how-to-configure-languages--cookie-settings) for configuration
+| __`onAccept`__      	| function 	| -       	| Callback run on: <br>  1. the moment the cookie consent is accepted <br> 2. after each page load (if cookie consent has already been accepted) |
+| __`onChange`__      	| function 	| -       	| Callback run **whenever preferences are modified** (and only if cookie consent has already been accepted)                             |
+| __`onFirstAction`__   | function 	| -       	| Callback executed **once**, on the users first consent action.                                                  |
+| `languages`      	    | object 	| -       	| Defined in [types.d.ts](https://github.com/orestbida/cookieconsent/blob/f83cacea7d3dfba22eb96910f03af0fea290f5a2/types/types.d.ts#L91-L94)
 
+<br>
 
 ## How to manage revisions
-Revision can be enabled by setting a value different from `0` (default). If the saved revision number (stored in the cookie) is different from the current one, ask for consent.
+Revisions can be enabled by setting a value different from `0` (default). If the saved revision number (stored in the cookie) is different from the current one, the consent modal will be shown.
 
 1. Enable revisions by setting a `revision` number > 0:
 
@@ -932,8 +935,35 @@ Revision can be enabled by setting a value different from `0` (default). If the 
     })
     ```
 
+<br>
+
+## How to share consent across subdomains
+
+If your main domain and subdomain share the same cookieconsent configuration, you can also share the consent by pointing all configurations to the same cookie (using the main domain).
+
+In the plugin's config. simply specify the main domain in the `cookie_domain` option:
+
+```js
+var cc = initCookieConsent();
+
+cc.run({
+    // ...
+    cookie_domain: 'domain.com'
+});
+```
+
+E.g. if your main domain is `"loremipsum.com"` or `"www.loremipsum.com"`, you have to put `"loremipsum.com"`.
+
+<br>
+
+## How to block iframes
+
+CookieConsent does not have any built-in functionality to block iframes. You can however use [iframemanager](https://github.com/orestbida/iframemanager) which was specifically designed for this task.
+
+<br>
+
 ## FAQ
--   <details><summary>How to enable dark-mode</summary>
+-   <details><summary>How to enable dark mode</summary>
     <p>
 
     Either manually add the following class `c_darkmode` to the body/html tag, or toggle it via javascript:
@@ -948,12 +978,12 @@ Revision can be enabled by setting a value different from `0` (default). If the 
 
     Create a button (or link) with `data-cc="c-settings"` attribute:
     ```javascript
-    <button type="button" aria-label="View cookie settings" data-cc="c-settings">Cookie Settings</button>
+    <button type="button" data-cc="c-settings">Cookie Settings</button>
     ```
 
     </p>
     </details>
--   <details><summary>How to integrate with my multi-language website</summary>
+-   <details><summary>How to integrate with a multi-language website</summary>
     <p>
 
     If you have multiple versions of your html page, each with a different &lt;html <b>lang="..."</b> &gt; attribute, you can grab this value using:
@@ -1139,6 +1169,8 @@ Revision can be enabled by setting a value different from `0` (default). If the 
         ```
     </p>
     </details>
+
+<br>
 
 ## License
 Distributed under the MIT License. See [LICENSE](https://github.com/orestbida/cookieconsent/blob/master/LICENSE) for more information.
