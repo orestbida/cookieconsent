@@ -366,7 +366,7 @@ You can manage any script tag (inline or external).
 1. Enable `page_scripts` option:
 
     ```javascript
-    cookieconsent.run({
+    cc.run({
         // ...
         page_scripts: true
         // ...
@@ -520,7 +520,7 @@ Cookies must be listed manually as the plugin is not aware of them.
 You can choose a few layout options via `gui_options`.
 
 ```javascript
-cookieconsent.run({
+cc.run({
     // ...
     gui_options: {
         consent_modal: {
@@ -630,7 +630,7 @@ the following methods are available:
 
     ```javascript
     // Example: check if '_gid' cookie is set
-    if (!c.validCookie('_gid')) {
+    if (!cc.validCookie('_gid')) {
         // yoo, _gid cookie is not set, do something ...
     };
     ```
@@ -1042,8 +1042,8 @@ CookieConsent does not have any built-in functionality to block iframes. You can
         cc.run({
             // ...
             onAccept: function () {
-                if (cookieconsent.allowedCategory('analytics')) {
-                    cookieconsent.loadScript('analytics.js', function () {
+                if (cc.allowedCategory('analytics')) {
+                    cc.loadScript('analytics.js', function () {
                         // script loaded ...
                     });
                 }
@@ -1063,7 +1063,7 @@ CookieConsent does not have any built-in functionality to block iframes. You can
 
     1. enable `force_consent` option:
         ```javascript
-        cookieconsent.run({
+        cc.run({
             // ...
             force_consent: true,
             // ...
