@@ -24,9 +24,9 @@ A __lightweight__ & __gdpr/ccpa compliant__ cookie consent plugin written in pla
 - [Layout & customization](#layout-options--customization)
 - [API](#api)
 - [Callbacks](#available-callbacks)
-- [Custom `data-cc` attribute](#available-data-cc-attribute-values)
-- [Configuration options](#all-configuration-options)
-- [How to manage revisions](#how-to-enable-revisions)
+- [Custom `data-cc` attribute](#custom-data-cc-attribute)
+- [Configuration options](#configuration-options)
+- [How to manage revisions](#how-to-manage-revisions)
 - [How to share consent across subdomains](#how-to-share-consent-across-subdomains)
 - [How to block iframes](#how-to-block-iframes)
 - [FAQ](#faq)
@@ -357,34 +357,7 @@ A __lightweight__ & __gdpr/ccpa compliant__ cookie consent plugin written in pla
 5. Now you must configure the scripts and cookies.
     * [How to block/manage script tags](#how-to-blockmanage-scripts)
     * [How to autoclear cookies](#how-to-clear-cookies)
-
-## Layout options & customization
-You can choose a few layout options via `gui_options`.
-
-```javascript
-cookieconsent.run({
-    // ...
-    gui_options: {
-        consent_modal: {
-            layout: 'cloud',               // box/cloud/bar
-            position: 'bottom center',     // bottom/middle/top + left/right/center
-            transition: 'slide',           // zoom/slide
-            swap_buttons: false            // enable to invert buttons
-        },
-        settings_modal: {
-            layout: 'box',                 // box/bar
-            position: 'left',              // left/right
-            transition: 'slide'            // zoom/slide
-        }
-    }
-    //...
-});
-```
-
-### How to customize the color scheme
-
-You can customize the color scheme using css variables, which you can find at the top of [cookieconsent.css](src/cookieconsent.css) file.
-
+            
 <br>
 
 ## How to block/manage scripts
@@ -539,10 +512,39 @@ Cookies must be listed manually as the plugin is not aware of them.
 
     **For the autoclear cookies function to work, the _first_ column must contain the name of the cookie!**
 
-    [Full example demo.](https://github.com/orestbida/cookieconsent/blob/9ad310e7edcac7bf23600ff0e23d42254d3fced2/demo/demo_iframemanager/cookieconsent-init.js#L139).
+    [Full example](https://github.com/orestbida/cookieconsent/blob/9ad310e7edcac7bf23600ff0e23d42254d3fced2/demo/demo_iframemanager/cookieconsent-init.js#L139).
 
 <br>
+            
+## Layout options & customization
+You can choose a few layout options via `gui_options`.
 
+```javascript
+cookieconsent.run({
+    // ...
+    gui_options: {
+        consent_modal: {
+            layout: 'cloud',               // box/cloud/bar
+            position: 'bottom center',     // bottom/middle/top + left/right/center
+            transition: 'slide',           // zoom/slide
+            swap_buttons: false            // enable to invert buttons
+        },
+        settings_modal: {
+            layout: 'box',                 // box/bar
+            position: 'left',              // left/right
+            transition: 'slide'            // zoom/slide
+        }
+    }
+    //...
+});
+```
+
+### How to customize the color scheme
+
+You can customize the color scheme using css variables, which you can find at the top of [cookieconsent.css](src/cookieconsent.css) file.
+
+<br>
+            
 ## API
 Once you configure and run the plugin:
 
@@ -906,7 +908,7 @@ Revisions can be enabled by setting a value different from `0` (default). If the
 1. Enable revisions by setting a `revision` number > 0:
 
     ```javascript
-    cookieconsent.run({
+    cc.run({
         // ...,
         revision: 1,
         // ...
@@ -916,7 +918,7 @@ Revisions can be enabled by setting a value different from `0` (default). If the
 2. You can optionally set a revision message. To do this, add the `revision_message` parameter inside `consent_modal`, and also place the following placeholder `{{revision_message}}` inside the `description` field:
 
     ```javascript
-    cookieconsent.run({
+    cc.run({
         // ...,
         revision: 1,
         // ...,
@@ -995,7 +997,7 @@ CookieConsent does not have any built-in functionality to block iframes. You can
     and then set it as `current_lang` value like this:
 
     ```javascript
-    cookieconsent.run({
+    cc.run({
         // ...
         current_lang: document.documentElement.getAttribute('lang'),
         // ...
@@ -1017,7 +1019,7 @@ CookieConsent does not have any built-in functionality to block iframes. You can
         1. enable `page_scripts`:
 
             ```javascript
-            cookieconsent.run({
+            cc.run({
                 // ...
                 page_scripts: true,
                 // ...
@@ -1037,17 +1039,18 @@ CookieConsent does not have any built-in functionality to block iframes. You can
         Load script using the `.loadScript()` method inside the `onAccept` method:
 
         ```javascript
-        cookieconsent.run({
+        cc.run({
             // ...
             onAccept: function () {
                 if (cookieconsent.allowedCategory('analytics')) {
-                    cookieconsent.loadScript('<path-to-analytics.js', function () {
+                    cookieconsent.loadScript('analytics.js', function () {
                         // script loaded ...
                     });
                 }
             }
         })
         ```
+              
         </p>
         </details>
 
