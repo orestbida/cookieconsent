@@ -36,7 +36,6 @@ import { createPreferencesModal } from './preferencesModal';
  */
 const createFocusSpan = () => {
     const span = createNode('span');
-    span.tabIndex = -1;
 
     if(!globalObj._dom._focusSpan)
         globalObj._dom._focusSpan = span;
