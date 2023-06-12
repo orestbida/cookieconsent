@@ -122,7 +122,6 @@ export const createPreferencesModal = (api, createMainContainer) => {
         addEvent(dom._pmCloseBtn, CLICK_EVENT, hidePreferences);
 
         dom._pmFocusSpan = createNode('span');
-        dom._pmFocusSpan.tabIndex = -1;
         dom._pmFocusSpan.innerHTML = getSvgIcon();
         appendChild(dom._pmCloseBtn, dom._pmFocusSpan);
 
@@ -360,7 +359,6 @@ export const createPreferencesModal = (api, createMainContainer) => {
                  */
                 const trHeadFragment = dom._document.createDocumentFragment();
                 const trHead = createNode('tr');
-                setAttribute(trHead, 'role', 'row');
 
                 for(const headerKey of tableHeadersKeys){
                     const headerValue = headerData[headerKey];
@@ -385,7 +383,6 @@ export const createPreferencesModal = (api, createMainContainer) => {
                 for(const bodyItem of sCookieTableBody){
 
                     const tr = createNode('tr');
-                    setAttribute(tr, 'role', 'row');
                     addClassPm(tr, 'table-tr');
 
                     for(const tdKey of tableHeadersKeys){

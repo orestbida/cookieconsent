@@ -226,9 +226,9 @@ export const hide = () => {
         toggleDisableInteraction();
 
     /**
-     * Fix focus restoration
+     * Fix focus restoration to body with Chrome
      */
-    focus(_dom._focusSpan);
+    focus(_dom._focusSpan, false, true);
 
     removeClass(_dom._htmlDom, TOGGLE_CONSENT_MODAL_CLASS);
     setAttribute(_dom._cm, ARIA_HIDDEN, 'true');
@@ -327,9 +327,9 @@ export const hidePreferences = () => {
     discardUnsavedPreferences();
 
     /**
-     * Fix focus restoration
+     * Fix focus restoration to body with Chrome
      */
-    focus(globalObj._dom._pmFocusSpan);
+    focus(globalObj._dom._pmFocusSpan, false, true);
 
     removeClass(globalObj._dom._htmlDom, TOGGLE_PREFERENCES_MODAL_CLASS);
     setAttribute(globalObj._dom._pm, ARIA_HIDDEN, 'true');

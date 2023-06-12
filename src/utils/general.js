@@ -725,9 +725,19 @@ export const addDataButtonListeners = (elem, api, createPreferencesModal, create
 /**
  * @param {HTMLElement} el
  * @param {1 | 2} [modalId]
+ * @param {boolean} [toggleTabIndex]
  */
-export const focus = (el, modalId) => {
-    el && el.focus();
+export const focus = (el, modalId, toggleTabIndex) => {
+
+    if(el){
+        /**
+         * Momentarily add the `tabindex` attribute to fix
+         * a bug with focus restoration in chrome
+         */
+        toggleTabIndex && (el.tabIndex = -1);
+
+        el.focus();
+    }
 
     if(modalId) {
         globalObj._state._currentFocusedModal = modalId === 1
@@ -738,6 +748,12 @@ export const focus = (el, modalId) => {
             ? globalObj._state._cmFocusableElements
             : globalObj._state._pmFocusableElements;
     }
+
+    /**
+     * Remove the `tabindex` attribute so
+     * that the html markup is valid again
+     */
+    toggleTabIndex && (el && el.removeAttribute('tabindex'));
 };
 
 /**
