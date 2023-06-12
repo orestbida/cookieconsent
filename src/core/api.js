@@ -228,11 +228,7 @@ export const hide = () => {
     /**
      * Fix focus restoration to body with Chrome
      */
-    if (_dom._focusSpan) {
-        _dom._focusSpan.tabIndex = -1;
-        focus(_dom._focusSpan);
-        _dom._focusSpan.removeAttribute('tabindex');
-    }
+    focus(_dom._focusSpan, false, true);
 
     removeClass(_dom._htmlDom, TOGGLE_CONSENT_MODAL_CLASS);
     setAttribute(_dom._cm, ARIA_HIDDEN, 'true');
@@ -333,11 +329,7 @@ export const hidePreferences = () => {
     /**
      * Fix focus restoration to body with Chrome
      */
-    if (globalObj._dom._pmFocusSpan) {
-        globalObj._dom._pmFocusSpan.tabIndex = -1;
-        focus(globalObj._dom._pmFocusSpan);
-        globalObj._dom._pmFocusSpan.removeAttribute('tabindex');
-    }
+    focus(globalObj._dom._pmFocusSpan, false, true);
 
     removeClass(globalObj._dom._htmlDom, TOGGLE_PREFERENCES_MODAL_CLASS);
     setAttribute(globalObj._dom._pm, ARIA_HIDDEN, 'true');
