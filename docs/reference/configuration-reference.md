@@ -832,7 +832,7 @@ Define the translation(s) content.
     ```
 - **Details**:
 
-    - `serviceCounterLabel`: if you're using services, you can specify a label such as `'Service(s)'` to clarify what the counter means. The counter is only displayed if `guiOptions.preferencesModal.layout` is set to `box` or `bar wide`.
+    - `serviceCounterLabel`: if you're using services, you can specify a label such as `'Service(s)'` to clarify what the counter means. The counter will not be displayed if `guiOptions.preferencesModal.layout` is set to `bar`, as well as on narrow viewports.
 
 - **Example**:
 
