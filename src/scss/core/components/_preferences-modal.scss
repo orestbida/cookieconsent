@@ -651,6 +651,10 @@ $service-toggle-knob-icon-width: 1.7px;
             display: none;
         }
 
+        .pm__table-caption{
+            display: block;
+        }
+
         .pm__table-tr:not(:last-child){
             border-bottom: 1px solid var(--cc-separator-border-color)
         }
@@ -917,6 +921,7 @@ $service-toggle-knob-icon-width: 1.7px;
 
         /* Start: Table -> vertical table */
         .pm__section-table,
+        .pm__table-caption,
         .pm__table-body,
         .pm__table-tr,
         .pm__table-th,
