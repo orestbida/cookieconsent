@@ -133,7 +133,7 @@ const setLayout = (modal, allowedLayoutsObj, userGuiOptions, modalClassPrefix, d
     const layout = userGuiOptions && userGuiOptions.layout;
     const position = userGuiOptions && userGuiOptions.position;
     const flipButtons = userGuiOptions && userGuiOptions.flipButtons;
-    const equalWeightButtons = userGuiOptions && userGuiOptions.equalWeightButtons !== false;
+    const equalWeightButtons = !userGuiOptions || userGuiOptions.equalWeightButtons !== false;
 
     const layoutSplit = layout && layout.split(' ') || [];
 

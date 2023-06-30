@@ -83,4 +83,11 @@ describe("Check modals' html generation under different settings", () =>{
         await api.run(testConfig);
         expect(window.__service1Enabled).toBe(true);
     })
+
+    it('equalWeightButtons option should be enabled by default', async () => {
+        delete testConfig.guiOptions;
+        await api.run(testConfig);
+        const necessaryBtnClasses = [...document.querySelector('.cm__btn[data-role="necessary"]').classList];
+        expect(necessaryBtnClasses).not.toContain('cm__btn--secondary');
+    })
 })
