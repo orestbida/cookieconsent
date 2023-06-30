@@ -234,8 +234,8 @@ export const createConsentModal = (api, createMainContainer) => {
         dom._cmBtnGroup = createNode(DIV_TAG);
         addClassCm(dom._cmBtnGroup, BTN_GROUP_CLASS);
 
-        acceptNecessaryBtnData && appendChild(dom._cmBtnGroup, dom._cmAcceptNecessaryBtn);
         acceptAllBtnData && appendChild(dom._cmBtnGroup, dom._cmAcceptAllBtn);
+        acceptNecessaryBtnData && appendChild(dom._cmBtnGroup, dom._cmAcceptNecessaryBtn);
 
         (acceptAllBtnData || acceptNecessaryBtnData) && appendChild(dom._cmBody, dom._cmBtnGroup);
         appendChild(dom._cmBtns, dom._cmBtnGroup);
