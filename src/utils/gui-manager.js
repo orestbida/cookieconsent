@@ -162,7 +162,9 @@ const setLayout = (modal, allowedLayoutsObj, userGuiOptions, modalClassPrefix, d
         ? positionH
         : currentLayout._defaultAlignH;
 
-    const addModalClass = className => addClass(modal, modalClassPrefix + className);
+    const addModalClass = className => {
+        className && addClass(modal, modalClassPrefix + className);
+    };
 
     addModalClass(currentLayoutName);
     addModalClass(currentLayoutVariant);
