@@ -695,14 +695,20 @@ $service-toggle-knob-icon-width: 1.7px;
 
             .pm__btn + .pm__btn,
             .pm__btn-group + .pm__btn-group {
+                margin: 0;
                 margin-top: $cc-btn-gap;
-                margin-left: 0;
             }
 
             &.pm--flip{
                 .pm__footer,
                 .pm__btn-group{
                     flex-direction: column-reverse;
+                }
+
+                .pm__btn + .pm__btn,
+                .pm__btn-group + .pm__btn-group {
+                    margin-bottom: $cc-btn-gap;
+                    margin-top: 0;
                 }
             }
 
@@ -889,6 +895,13 @@ $service-toggle-knob-icon-width: 1.7px;
         .pm__btn-group + .pm__btn-group {
             margin-left: $cc-btn-gap;
             margin-right: 0;
+        }
+
+        &.pm--bar:not(.pm--wide) {
+            .pm__btn + .pm__btn,
+            .pm__btn-group + .pm__btn-group {
+                margin-left: 0;
+            }
         }
     }
 }
