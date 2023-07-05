@@ -10,7 +10,6 @@
     ],
     "types": "types/index.d.ts",
     "scripts": {
-        "preinstall": "npx only-allow pnpm",
         "dev": "rollup --config ./rollup-full.config.mjs --watch",
         "build": "pnpm rollup:full & pnpm rollup:core",
         "rollup:full": "rollup --config ./rollup-full.config.mjs",
