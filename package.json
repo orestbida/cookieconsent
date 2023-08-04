@@ -49,11 +49,11 @@
         "jest": "^29.6.2",
         "jest-environment-jsdom": "^29.6.2",
         "postcss-combine-duplicated-selectors": "^10.0.3",
-        "rollup": "^3.27.0",
+        "rollup": "^3.27.2",
         "rollup-plugin-postcss": "^4.0.2",
-        "sass": "^1.64.1",
+        "sass": "^1.64.2",
         "sitemap": "^7.1.1",
-        "vitepress": "1.0.0-beta.6"
+        "vitepress": "1.0.0-beta.7"
     },
     "jest": {
         "transform": {
