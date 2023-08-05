@@ -1559,7 +1559,7 @@
                 }else{
                     if(_config.mode === 'opt-out'){
                         _log("CookieConsent [CONFIG] mode='" + _config.mode + "', default enabled categories:", default_enabled_categories);
-                        _manageExistingScripts(default_enabled_categories);
+                        _manageExistingScripts();
                     }
                     _log("CookieConsent [NOTICE]: ask for consent!");
                 }
@@ -1569,18 +1569,23 @@
         }
 
         /**
-         * This function handles the loading/activation logic of the already
-         * existing scripts based on the current accepted cookie categories
-         *
-         * @param {string[]} [must_enable_categories]
+         * Handles the activation logic of script elements
+         * based on enabled categories
          */
-        var _manageExistingScripts = function(must_enable_categories){
+        var _manageExistingScripts = function(){
 
             if(!_config.page_scripts) return;
 
+            /**
+             * @type {string[]}
+             */
+            var enabled_categories = saved_cookie_content['categories'] || [];
+
+            if(invalid_consent && _config.mode === 'opt-out')
+                enabled_categories = default_enabled_categories;
+
             // get all the scripts with "cookie-category" attribute
             var scripts = document.querySelectorAll('script[' + _config.script_selector + ']');
-            var accepted_categories = must_enable_categories || saved_cookie_content['categories'] || [];
 
             /**
              * Load scripts (sequentially), using a recursive function
@@ -1598,7 +1603,7 @@
                      * If current script's category is on the array of categories
                      * accepted by the user => load script
                      */
-                    if(_inArray(accepted_categories, curr_script_category) > -1){
+                    if(_inArray(enabled_categories, curr_script_category) > -1){
 
                         curr_script.type = curr_script.getAttribute('data-type') || 'text/javascript';
                         curr_script.removeAttribute(_config.script_selector);
