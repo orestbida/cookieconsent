@@ -357,7 +357,7 @@ A __lightweight__ & __gdpr/ccpa compliant__ cookie consent plugin written in pla
 5. Now you must configure the scripts and cookies.
     * [How to block/manage script tags](#how-to-blockmanage-scripts)
     * [How to autoclear cookies](#how-to-clear-cookies)
-            
+
 <br>
 
 ## How to block/manage scripts
@@ -515,7 +515,7 @@ Cookies must be listed manually as the plugin is not aware of them.
     [Full example](https://github.com/orestbida/cookieconsent/blob/9ad310e7edcac7bf23600ff0e23d42254d3fced2/demo/demo_iframemanager/cookieconsent-init.js#L139).
 
 <br>
-            
+
 ## Layout options & customization
 You can choose a few layout options via `gui_options`.
 
@@ -544,7 +544,7 @@ cc.run({
 You can customize the color scheme using css variables, which you can find at the top of [cookieconsent.css](src/cookieconsent.css) file.
 
 <br>
-            
+
 ## API
 Once you configure and run the plugin:
 
@@ -633,6 +633,19 @@ the following methods are available:
     if (!cc.validCookie('_gid')) {
         // yoo, _gid cookie is not set, do something ...
     };
+    ```
+    </p>
+    </details>
+- <details><summary>cc<code>.validConsent()</code></summary>
+    <p>
+
+    If consent is valid return <code>true</code>, otherwise <code>false</code>.
+
+    ```javascript
+    // Example: show modal if consent is not valid
+    if (!cc.validConsent()) {
+        cc.show();
+    }
     ```
     </p>
     </details>
@@ -1050,7 +1063,7 @@ CookieConsent does not have any built-in functionality to block iframes. You can
             }
         })
         ```
-              
+
         </p>
         </details>
 

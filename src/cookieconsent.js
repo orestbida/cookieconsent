@@ -2131,6 +2131,10 @@
             return _getCookie(cookie_name, 'one', true) !== "";
         }
 
+        _cookieconsent.validConsent = function(){
+            return !invalid_consent;
+        }
+
         /**
          * Function to run when event is fired
          * @callback eventFired

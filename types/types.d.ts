@@ -137,6 +137,7 @@ declare global {
         show(delay?: number, create_modal?: boolean): void
         eraseCookies(_cookies: string | string[], _path?: string, _domain?: string): void
         validCookie(cookie_name: string): boolean
+        validConsent(): boolean
         allowedCategory(cookie_category: string): boolean
         set(field: string, data: Record<string, any>): boolean
         get(field: string, cookie_name?: string): Record<string, any>
