@@ -470,10 +470,8 @@
             if(consent_modal_title_value){
 
                 if(!consent_modal_title){
-                    consent_modal_title = _createNode('div');
+                    consent_modal_title = _createNode('h2');
                     consent_modal_title.id = 'c-ttl';
-                    consent_modal_title.setAttribute('role', 'heading');
-                    consent_modal_title.setAttribute('aria-level', '2');
                     consent_modal_inner_inner.appendChild(consent_modal_title);
                 }
 
@@ -594,7 +592,7 @@
                 var settings = _createNode('div');
                 var settings_container_inner = _createNode('div');
                 settings_inner = _createNode('div');
-                settings_title = _createNode('div');
+                settings_title = _createNode('h2');
                 var settings_header = _createNode('div');
                 settings_close_btn = _createNode('button');
                 settings_close_btn.appendChild(generateFocusSpan(2));
@@ -650,7 +648,6 @@
                 settings_container.setAttribute('aria-modal', 'true');
                 settings_container.setAttribute('aria-hidden', 'true');
                 settings_container.setAttribute('aria-labelledby', 's-ttl');
-                settings_title.setAttribute('role', 'heading');
                 settings_container.style.visibility = overlay.style.visibility = "hidden";
                 overlay.style.opacity = 0;
 
