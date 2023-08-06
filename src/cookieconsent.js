@@ -378,30 +378,10 @@
             var allowed_focusable_types = ['[href]', 'button', 'input', 'details', '[tabindex="0"]'];
 
             function _getAllFocusableElements(modal, _array){
-                var focus_later=false, focus_first=false;
 
                 // ie might throw exception due to complex unsupported selector => a:not([tabindex="-1"])
                 try{
                     var focusable_elems = modal.querySelectorAll(allowed_focusable_types.join(':not([tabindex="-1"]), '));
-                    var attr, len=focusable_elems.length, i=0;
-
-                    while(i < len){
-
-                        attr = focusable_elems[i].getAttribute('data-focus');
-
-                        if(!focus_first && attr === "1"){
-                            focus_first = focusable_elems[i];
-
-                        }else if(attr === "0"){
-                            focus_later = focusable_elems[i];
-                            if(!focus_first && focusable_elems[i+1].getAttribute('data-focus') !== "0"){
-                                focus_first = focusable_elems[i+1];
-                            }
-                        }
-
-                        i++;
-                    }
-
                 }catch(e){
                     return modal.querySelectorAll(allowed_focusable_types.join(', '));
                 }
@@ -411,8 +391,6 @@
                  */
                 _array[0] = focusable_elems[0];
                 _array[1] = focusable_elems[focusable_elems.length - 1];
-                _array[2] = focus_later;
-                _array[3] = focus_first;
             }
 
             /**
