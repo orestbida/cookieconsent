@@ -1223,10 +1223,10 @@
                 if(_config.autoclear_cookies)
                     _autoclearCookies(true);
 
-                if(typeof onFirstAction === 'function')
+                if(isFunction(onFirstAction))
                     onFirstAction(_cookieconsent.getUserPreferences(), saved_cookie_content);
 
-                if(typeof onAccept === 'function')
+                if(isFunction(onAccept))
                     onAccept(saved_cookie_content);
 
                 /**
@@ -1526,7 +1526,7 @@
 
                     _manageExistingScripts();
 
-                    if(typeof onAccept === 'function')
+                    if(isFunction(onAccept))
                         onAccept(saved_cookie_content);
 
                     _log("CookieConsent [NOTICE]: consent already given!", saved_cookie_content);
@@ -1796,7 +1796,7 @@
          */
         _cookieconsent.loadScript = function(src, callback, attrs){
 
-            var function_defined = typeof callback === 'function';
+            var function_defined = isFunction(callback);
 
             // Load script only if not already loaded
             if(!document.querySelector('script[src="' + src + '"]')){
@@ -2234,6 +2234,13 @@
          */
         var getActiveElement = function() {
             return document.activeElement;
+        }
+
+        /**
+         * @param {any} fn
+         */
+        var isFunction = function(fn) {
+            return typeof fn === 'function';
         }
 
         return _cookieconsent;
