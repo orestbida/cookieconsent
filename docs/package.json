@@ -1,4 +1,5 @@
 {
   "private": true,
-  "name": "cookieconsent-docs"
+  "name": "cookieconsent-docs",
+  "type": "module"
 }
