@@ -13,7 +13,7 @@ const configAsString = async ({minify=false} = {}) => {
 
     const latest = await fetchLatestRelease();
 
-    let scriptStr = `import { run } from 'https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@${latest}/dist/cookieconsent.esm.js';\n\n`;
+    let scriptStr = `import 'https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@${latest}/dist/cookieconsent.umd.js';\n\n`;
 
     const state = getState();
     const config = getCurrentUserConfig(state);
