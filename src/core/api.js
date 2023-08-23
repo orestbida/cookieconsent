@@ -44,7 +44,7 @@ import {
     handleRtlLanguage,
     loadTranslationData,
     setCurrentLanguageCode,
-    validLanguageCode
+    getAvailableLanguage
 } from '../utils/language';
 
 //{{END: GUI}}
@@ -369,7 +369,7 @@ var miniAPI = {
  */
 export const setLanguage = async (newLanguageCode, forceUpdate) => {
 
-    if(!validLanguageCode(newLanguageCode))
+    if(!getAvailableLanguage(newLanguageCode))
         return false;
 
     const state = globalObj._state;
