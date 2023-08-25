@@ -4,7 +4,7 @@ import {
     resolveCurrentLanguageCode,
     getCurrentLanguageCode,
     getDocumentLanguageCode,
-    validLanguageCode,
+    getAvailableLanguage,
     loadTranslationData
 } from '../src/utils/language'
 
@@ -14,18 +14,33 @@ describe('Test language utils', () => {
         Object.defineProperty(global.navigator, 'language', {value: 'it-IT', configurable: true});
     })
 
-    it("Should return true when translation is defined", () => {
+    it("Should return the language when the exact translation is defined", () => {
         globalObj._state._allTranslations = {
             en: {}
         }
-        expect(validLanguageCode('en')).toBe(true);
+        expect(getAvailableLanguage('en')).toBe('en');
     });
 
-    it("Should return false when translation is not defined", () => {
+    it("Should return the full language code when the translation is defined", () => {
+        globalObj._state._allTranslations = {
+            'en': {},
+            'en-GB': {}
+        }
+        expect(getAvailableLanguage('en-GB')).toBe('en-GB');
+    });
+
+    it("Should return the fallback language when the translation is not defined", () => {
         globalObj._state._allTranslations = {
             en: {}
         }
-        expect(validLanguageCode('it')).toBe(false);
+        expect(getAvailableLanguage('en-GB')).toBe('en');
+    });
+
+    it("Should return null when translation is not defined", () => {
+        globalObj._state._allTranslations = {
+            en: {}
+        }
+        expect(getAvailableLanguage('it')).toBe(null);
     });
 
     it("Should return current language", () => {
@@ -35,7 +50,7 @@ describe('Test language utils', () => {
 
     it("Should return the browser's language code", () => {
         const language = getBrowserLanguageCode();
-        expect(language).toBe('it');
+        expect(language).toBe('it-IT');
     });
 
     it("Should return the document's 'lang' attribute", () => {
@@ -72,7 +87,7 @@ describe('Test language utils', () => {
     })
 
     it('Should use the language defined in the html tag', () => {
-        document.documentElement.lang = 'en';
+        document.documentElement.lang = 'en-US';
 
         globalObj._state._userConfig = {
             language : {
@@ -102,5 +117,20 @@ describe('Test language utils', () => {
         const validTranslationData = await loadTranslationData('it');
 
         expect(validTranslationData).toBe(false)
+    });
+
+    it('Should return the default language if the detection method is not supported', () => {
+        globalObj._state._allTranslations = {
+            it: {}
+        }
+        globalObj._state._currentLanguageCode = '';
+        globalObj._state._userConfig = {
+            language: {
+                default: 'it',
+                autoDetect: 'not-supported'
+            }
+        };
+
+        expect(resolveCurrentLanguageCode()).toBe('it')
     });
 });

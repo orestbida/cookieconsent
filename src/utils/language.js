@@ -10,12 +10,30 @@ import {
 } from './general';
 
 /**
- * Check if language is valid/defined
- * @param {string} languageCode
- * @returns {boolean} True if language is defined
+ * Detect the available language. The language autodetection process prioritizes finding translations
+ * for the complete language code. If translations for the complete code are unavailable, the detection
+ * mechanism then resorts to searching for the language-only version.
+ * Works with 'en', 'en_US' and 'en-US'.
+ *
+ * @param {string} languageCode - The language code to be detected.
+ * @returns {?string} The detected language code, or null if not detected.
  */
-export const validLanguageCode = (languageCode) => {
-    return isString(languageCode) && languageCode in globalObj._state._allTranslations;
+export const getAvailableLanguage = (languageCode) => {
+    if (!isString(languageCode))
+        return null;
+
+    if (languageCode in globalObj._state._allTranslations)
+        return languageCode;
+
+    /**
+     * @type {string}
+     */
+    let language = languageCode.slice(0, 2);
+
+    if (language in globalObj._state._allTranslations)
+        return language;
+
+    return null;
 };
 
 /**
@@ -39,12 +57,7 @@ export const setCurrentLanguageCode = (newLanguageCode) => {
  * returns only the first 2 chars: en-US => en
  * @returns {string} language
  */
-export const getBrowserLanguageCode = () => {
-    const browserLanguage = navigator.language.slice(0, 2).toLowerCase();
-    _log('CookieConsent [LANG]: browser language is "'+ browserLanguage + '"');
-
-    return browserLanguage;
-};
+export const getBrowserLanguageCode = () => navigator.language;
 
 /**
  * Get the lang attribute
@@ -64,18 +77,17 @@ export const resolveCurrentLanguageCode = () =>  {
 
         _log('CookieConsent [LANG]: autoDetect strategy: "' + autoDetect + '"');
 
+        const detectionStrategies = {
+            browser: getBrowserLanguageCode(),
+            document: getDocumentLanguageCode()
+        };
+
         /**
          * @type {string}
          */
-        let newLanguageCode;
+        const newLanguageCode = getAvailableLanguage(detectionStrategies[autoDetect]);
 
-        if (autoDetect === 'browser')
-            newLanguageCode = getBrowserLanguageCode();
-
-        else if(autoDetect === 'document')
-            newLanguageCode = getDocumentLanguageCode();
-
-        if(validLanguageCode(newLanguageCode))
+        if (newLanguageCode)
             return newLanguageCode;
     }
 
@@ -95,7 +107,7 @@ export const loadTranslationData = async (desiredLanguageCode) => {
     /**
      * @type {string}
      */
-    let currentLanguageCode = validLanguageCode(desiredLanguageCode)
+    let currentLanguageCode = getAvailableLanguage(desiredLanguageCode)
         ? desiredLanguageCode
         : getCurrentLanguageCode();
 
