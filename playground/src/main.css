@@ -604,11 +604,21 @@ button:hover{
     left: 0;
     max-height: 500px;
     right: 0;
-    padding: 1rem 1.4rem;
     background-color: #222324;
     border-radius: 0.4rem;
     border: 0.0625rem solid rgba(248, 252, 255, 0.034);
     animation: fade-in 400ms ease forwards, slide-up 300ms forwards;
+}
+
+.dialog-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+}
+
+.dialog-body {
+    height: calc(100% - 72px);
 }
 
 .dialog-content h1 {
@@ -618,11 +628,6 @@ button:hover{
 .dialog-content h1,
 .dialog-content h2 {
     margin: 0;
-}
-
-.dialog-content .close-btn {
-    position: absolute;
-    right: 1.4rem;
 }
 
 @keyframes fade-in {

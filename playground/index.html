@@ -105,25 +105,42 @@
                             <div class="dialog-overlay" data-a11y-dialog-hide></div>
                             <!-- 3. The actual dialog -->
                             <div class="dialog-content" role="document">
-                                <!-- 4. The close button -->
-                                <button type="button" class="close-btn" data-a11y-dialog-hide aria-label="Close dialog">
-                                    &times;
-                                </button>
-                                <!-- 5. The dialog title -->
-                                <h1 id="dialog-title">Edit translations 🚧</h1>
 
-                                <div class="translations-editor">
-                                    <div class="translation-btns"></div>
-                                    <div class="translation-editor">
-                                        <div class="editor editor--cm">
-                                            <input type="text" id="consent-modal-title" placeholder="Title">
-                                            <textarea id="consent-modal-description" placeholder="Description"></textarea>
-                                            <input type="text" id="consent-modal-accept-btn" placeholder="Accept all button">
-                                            <input type="text" id="consent-modal-reject-btn" placeholder="Reject all button">
-                                            <input type="text" id="consent-modal-manage-btn" placeholder="Manage preferences button">
-                                            <textarea id="consent-modal-footer" placeholder="Footer"></textarea>
+                                <div class="dialog-header">
+                                    <h1 id="dialog-title">Edit translations 🚧</h1>
+                                    <button type="button" class="close-btn" data-a11y-dialog-hide aria-label="Close dialog">
+                                        &times;
+                                    </button>
+                                </div>
+
+                                <div class="dialog-body">
+                                    <div class="translations-editor">
+                                        <div class="translation-btns"></div>
+                                        <div class="translation-editor">
+                                            <div class="editor editor--cm">
+                                                <h2>Consent modal</h2>
+                                                <input type="text" id="consent-modal-title" placeholder="Title">
+                                                <textarea id="consent-modal-description" placeholder="Description"></textarea>
+                                                <input type="text" id="consent-modal-accept-btn" placeholder="Accept all button">
+                                                <input type="text" id="consent-modal-reject-btn" placeholder="Reject all button">
+                                                <input type="text" id="consent-modal-manage-btn" placeholder="Manage preferences button">
+                                                <textarea id="consent-modal-footer" placeholder="Footer"></textarea>
+                                            </div>
+
+                                            <div class="editor editor--pm">
+                                                <h2>Preferences modal</h2>
+                                                <input type="text" id="pm-title" placeholder="Title">
+                                                <input type="text" id="pm-close-icon-label" placeholder="Close icon label">
+                                                <input type="text" id="pm-accept-btn" placeholder="Accept all button">
+                                                <input type="text" id="pm-reject-btn" placeholder="Reject all button">
+                                                <input type="text" id="pm-save-btn" placeholder="Save preferences button">
+                                            </div>
                                         </div>
                                     </div>
+                                </div>
+
+                                <div class="dialog-footer">
+                                    <button type="button">Save</button>
                                 </div>
 
                             </div>

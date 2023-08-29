@@ -1,13 +1,14 @@
 .translations-editor {
-    margin-top: 2rem;
-    display: flex;
+    height: 100%;
+    overflow: auto;
 }
 
 .translation-btns {
     display: flex;
     flex-direction: column;
     width: 5rem;
-    margin-right: 1rem;
+    position: absolute;
+    left: 1rem;
 }
 
 .translation-btns button + button {
@@ -26,7 +27,8 @@
 }
 
 .translation-editor {
-    flex: 1;
+    overflow: auto;
+    padding: 0 1rem 1rem 7rem;
 }
 
 .editor {
@@ -53,5 +55,13 @@
         max-height: 10rem;
         resize: vertical;
         width: 100%!important;
+    }
+
+    h2 {
+        margin-bottom: .5rem;
+    }
+
+    + .editor {
+        margin-top: 1.5rem;
     }
 }

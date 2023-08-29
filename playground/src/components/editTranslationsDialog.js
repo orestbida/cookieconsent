@@ -16,14 +16,30 @@ const cmRejectBtn = getById('consent-modal-reject-btn');
 const cmManageBtn = getById('consent-modal-manage-btn');
 const cmFooter = getById('consent-modal-footer');
 
+
+const pmTitle = getById('pm-title');
+const pmCloseIcon = getById('pm-close-icon-label');
+const pmAcceptBtn = getById('pm-accept-btn');
+const pmRejectBtn = getById('pm-reject-btn');
+const pmSaveBtn = getById('pm-save-btn');
+
+setTimeout(() => {
+    updateEditor(); dialog.show();
+}, 100);
+
+/**
+ * @type {HTMLButtonElement}
+ */
+const editBtn = getById('edit-translations-btn');
+
 let lastEnabledTranslations = [];
 let selectedTranslation = '';
 
 /**
  * Show dialog on click
  */
-addEvent(getById('edit-translations-btn'), 'click', function () {
-    if(this.disabled)
+addEvent(editBtn, 'click', function () {
+    if(editBtn.disabled)
         return;
 
     if(updateEditor() !== false)
@@ -75,7 +91,7 @@ function updateEditorFields(state) {
      */
     const translation = config.language.translations[selectedTranslation];
 
-    const { consentModal } = translation;
+    const { consentModal, preferencesModal } = translation;
 
     /**
      * Consent modal fields
@@ -86,6 +102,15 @@ function updateEditorFields(state) {
     cmRejectBtn.value = consentModal.acceptNecessaryBtn || '';
     cmManageBtn.value = consentModal.showPreferencesBtn || '';
     cmFooter.value = consentModal.footer || '';
+
+    /**
+     * Preferences modal fields
+     */
+    pmTitle.value = preferencesModal.title || '';
+    pmCloseIcon.value = preferencesModal.closeIconLabel || '';
+    pmAcceptBtn.value = preferencesModal.acceptAllBtn || '';
+    pmRejectBtn.value = preferencesModal.acceptNecessaryBtn || '';
+    pmSaveBtn.value = preferencesModal.savePreferencesBtn || '';
 
     /**
      * Preferences modal fields
