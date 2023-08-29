@@ -33,77 +33,33 @@ guiOptions: {
 ## Color schemes
 The plugin ships with both a `light` (default) and a `dark` theme.
 
-### Enable dark color scheme
 The dark theme can be enabled by adding the `cc--darkmode` class to the `html` element. You could also use javascript to toggle the dark mode on/off:
 ```javascript
 document.documentElement.classList.add('cc--darkmode');
 ```
 
-### Custom color scheme
-You can develop your own theme by modifying/overriding the available css variables:
+## Available css variables
+You can develop your own theme by modifying/overriding the available css variables which can find in [/src/scss/abstracts](https://github.com/orestbida/cookieconsent/tree/v3.0-beta/src/scss/abstracts/).
+
+More css variables:
 
 ```css
-:root{
-    /* Default light color scheme */
-    --cc-bg: #ffffff;
-    --cc-primary-color: #2c2f31;
-    --cc-secondary-color: #5e6266;
-
-    --cc-btn-primary-bg: #30363c;
-    --cc-btn-primary-color: #ffffff;
-    --cc-btn-primary-border-color: var(--cc-btn-primary-bg);
-    --cc-btn-primary-hover-bg: #000000;
-    --cc-btn-primary-hover-color: #ffffff;
-    --cc-btn-primary-hover-border-color: var(--cc-btn-primary-hover-bg);
-
-    --cc-btn-secondary-bg: #eaeff2;
-    --cc-btn-secondary-color: var(--cc-primary-color);
-    --cc-btn-secondary-border-color: var(--cc-btn-secondary-bg);
-    --cc-btn-secondary-hover-bg: #d4dae0;
-    --cc-btn-secondary-hover-color: #000000;
-    --cc-btn-secondary-hover-border-color: #d4dae0;
-
-    --cc-separator-border-color: #f0f4f7;
-
-    --cc-toggle-on-bg: var(--cc-btn-primary-bg);
-    --cc-toggle-off-bg: #667481;
-    --cc-toggle-on-knob-bg: #ffffff;
-    --cc-toggle-off-knob-bg: var(--cc-toggle-on-knob-bg);
-
-    --cc-toggle-enabled-icon-color: var(--cc-bg);   // yes (v tick)
-    --cc-toggle-disabled-icon-color: var(--cc-bg);  // no (x tick)
-
-    --cc-toggle-readonly-bg: #d5dee2;
-    --cc-toggle-readonly-knob-bg: #fff;
-    --cc-toggle-readonly-knob-icon-color: var(--cc-toggle-readonly-bg);
-
-    --cc-section-category-border: var(--cc-cookie-category-block-bg);
-
-    --cc-cookie-category-block-bg: #f0f4f7;
-    --cc-cookie-category-block-border: #f0f4f7;
-    --cc-cookie-category-block-hover-bg: #e9eff4;
-    --cc-cookie-category-block-hover-border: #e9eff4;
-    --cc-cookie-category-expanded-block-bg: transparent;
-    --cc-cookie-category-expanded-block-hover-bg: #dee4e9;
-
-    --cc-overlay-bg: rgba(0, 0, 0, 0.541);
-    --cc-webkit-scrollbar-bg: var(--cc-section-category-border);
-    --cc-webkit-scrollbar-hover-bg: var(--cc-btn-primary-hover-bg);
-
-    --cc-footer-bg: var(--cc-btn-secondary-bg);
-    --cc-footer-color: var(--cc-secondary-color);
-    --cc-footer-border-color: #e4eaed;
-
-    --cc-link-color: var(--cc-btn-primary-bg);
-
-    /*A few more */
+#cc-main {
     --cc-font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
-    --cc-modal-margin: 1em;
-    --cc-modal-border-radius: .6em;
+    --cc-modal-border-radius: .5rem;
+    --cc-btn-border-radius: .4rem;
     --cc-modal-transition-duration: .25s;
-    --cc-btn-gap: 5px;
-    --cc-btn-border-radius: .5em;
-    --cc-pm-toggle-border-radius: 4em;
+    --cc-modal-margin: 1rem;
+    --cc-z-index: 2147483647;
+}
+```
+
+## Disable transitions
+You can disable all transitions simply by setting the transition duration to 0:
+
+```css
+#cc-main {
+    --cc-modal-transition-duration: 0;
 }
 ```
 
@@ -129,3 +85,8 @@ You can develop your own theme by modifying/overriding the available css variabl
         --cc-btn-border-radius: 10px;
     }
     ```
+
+<script setup>
+    import pkg from '../../package.json';
+    const repoUrl = pkg.repository.url;
+</script>
