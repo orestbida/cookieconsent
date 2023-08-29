@@ -65,7 +65,7 @@ export default defineConfig({
                 items: [
                     {
                         text: 'Changelog',
-                        link: pkg.repository.url + '/releases/'
+                        link: pkg.repository.url + '/releases?q=cookieconsent+v3'
                     }
                 ]
             },

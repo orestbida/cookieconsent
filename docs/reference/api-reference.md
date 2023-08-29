@@ -1,9 +1,5 @@
 # API Reference
 
-::: info
-`?` means that the parameter/property is optional.
-:::
-
 ## run
 
 Configures the plugin with the provided config. object.
