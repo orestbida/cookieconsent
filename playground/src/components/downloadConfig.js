@@ -37,7 +37,7 @@ const configAsString = async ({minify=false} = {}) => {
     /**
      * Append config.
      */
-    scriptStr += `run(${configStr});`;
+    scriptStr += `CookieConsent.run(${configStr});`;
 
     return scriptStr;
 };
