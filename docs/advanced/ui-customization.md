@@ -85,8 +85,3 @@ You can disable all transitions simply by setting the transition duration to 0:
         --cc-btn-border-radius: 10px;
     }
     ```
-
-<script setup>
-    import pkg from '../../package.json';
-    const repoUrl = pkg.repository.url;
-</script>
