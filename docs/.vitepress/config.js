@@ -7,6 +7,11 @@ import { SitemapStream } from 'sitemap'
 
 const sitemapLinks = []
 
+const split = pkg.repository.url.split('/tree/');
+const repoUrl = split[0];
+const branch = split[1] || 'master';
+const editLink = `${repoUrl}/edit/${branch}/docs/:path`;
+
 export default defineConfig({
     lang: 'en-US',
     title: 'CookieConsent',
@@ -25,7 +30,7 @@ export default defineConfig({
         ],
 
         editLink: {
-            pattern: `${pkg.repository.url}/edit/v3.0-beta/docs/:path`,
+            pattern: editLink,
             text: 'Suggest changes to this page'
         },
         algolia: {
