@@ -189,11 +189,10 @@ Number of days before the cookie expires.
     ```javascript
     cc.run({
         cookie: {
-            expiresAfterDays: (acceptType) => {
-                if(acceptType === 'all')
-                    return 365.25;
-
-                return 182;
+            expiresAfterDays: acceptType => {
+                return acceptType === 'all'
+                    ? 365.25
+                    : 182;
             }
         }
     })

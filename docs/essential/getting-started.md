@@ -8,11 +8,22 @@ You can download/import the plugin using one of the following methods:
 <br>
 
 1. Install via [NPM](https://www.npmjs.com/package/vanilla-cookieconsent).
-    ```shell
+
+    ::: code-group
+
+    ```sh [npm]
     npm i vanilla-cookieconsent@next
-    yarn add vanilla-cookieconsent@next
+    ```
+
+    ```sh [pnpm]
     pnpm add vanilla-cookieconsent@next
     ```
+
+    ```sh [yarn]
+    yarn add vanilla-cookieconsent@next
+    ```
+
+    :::
 
     Special thanks to [Till Sanders](https://github.com/tillsanders) for bringing the plugin on npm!
 
@@ -36,16 +47,12 @@ Here are some of the most common setups to help you get up and running.
 
 ### HTML
 Import `cookieconsent.css` and `cookieconsent.js` files respectively in the head and body section. Create a new file — `cookieconsent-init.js` — and import it in the body section.
-```html{9,13-14}
+```html{5,9-10}
 <html>
     <head>
         <!-- head content -->
 
-        <!-- Typical CSS loading -->
-        <!-- <link rel="stylesheet" href="path-to-cookieconsent.css"> -->
-
-        <!-- Deferred CSS loading (recommended) -->
-        <link rel="stylesheet" href="path-to-cookieconsent.css" media="print" onload="this.media='all'">
+        <link rel="stylesheet" href="path-to-cookieconsent.css">
     </head>
     <body>
         <!-- body content -->
@@ -175,15 +182,7 @@ The most basic configuration requires the definition of the following 2 fields:
 * **Basic example config.** <br>
 
     ```javascript
-    {
-
-        onConsent: function () {
-            // consent was given
-        },
-
-        onChange: function () {
-            // user changed his/her preferences
-        },
+    CookieConsent.run({
 
         categories: {
             necessary: {
@@ -252,7 +251,7 @@ The most basic configuration requires the definition of the following 2 fields:
                 }
             }
         }
-    }
+    });
     ```
 
 You should now see the consent modal pop up!
