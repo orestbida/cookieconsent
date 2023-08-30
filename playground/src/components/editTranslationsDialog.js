@@ -23,10 +23,6 @@ const pmAcceptBtn = getById('pm-accept-btn');
 const pmRejectBtn = getById('pm-reject-btn');
 const pmSaveBtn = getById('pm-save-btn');
 
-setTimeout(() => {
-    updateEditor(); dialog.show();
-}, 100);
-
 /**
  * @type {HTMLButtonElement}
  */
