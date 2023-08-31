@@ -597,24 +597,51 @@ button:hover{
     margin: auto;
     z-index: 2;
     position: absolute;
-    max-width: 600px;
+    max-width: 700px;
+    max-height: 700px;
     width: 100%;
     top: 1rem;
     bottom: 1rem;
     left: 0;
-    max-height: 500px;
+
     right: 0;
     background-color: #222324;
     border-radius: 0.4rem;
     border: 0.0625rem solid rgba(248, 252, 255, 0.034);
-    animation: fade-in 400ms ease forwards, slide-up 300ms forwards;
 }
 
 .dialog-header {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-start;
+    gap: 1rem;
     padding: 1rem;
+}
+
+.dialog-title {
+    background: #45474882;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    padding: 0 1rem;
+    border-top-left-radius: 0.4rem;
+    border-bottom-left-radius: 0.4rem;
+    font-size: 1rem;
+}
+
+.dialog-header--left {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    gap: 1rem;
+}
+
+.dialog-close-btn {
+    width: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 40px;
 }
 
 .dialog-body {
@@ -628,18 +655,6 @@ button:hover{
 .dialog-content h1,
 .dialog-content h2 {
     margin: 0;
-}
-
-@keyframes fade-in {
-    from {
-        opacity: 0;
-    }
-}
-
-@keyframes slide-up {
-    from {
-        transform: translateY(5%);
-    }
 }
 
 /** End edit translations modal **/

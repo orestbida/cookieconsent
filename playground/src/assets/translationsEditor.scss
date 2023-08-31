@@ -3,17 +3,6 @@
     overflow: auto;
 }
 
-.translation-btns {
-    display: flex;
-    flex-direction: column;
-    width: 5rem;
-    position: absolute;
-    left: 1rem;
-}
-
-.translation-btns button + button {
-    margin-top: .3rem;
-}
 
 [data-current-translation="ar"] .translation-btn--ar,
 [data-current-translation="en"] .translation-btn--en,
@@ -28,7 +17,7 @@
 
 .translation-editor {
     overflow: auto;
-    padding: 0 1rem 1rem 7rem;
+    padding: 0 1rem 1rem 1rem;
 }
 
 .editor {
@@ -64,4 +53,26 @@
     + .editor {
         margin-top: 1.5rem;
     }
+}
+
+#editor-language-codes {
+    width: 100%;
+    max-width: 100px;
+}
+
+.pm-section {
+    gap: .3rem;
+
+    & > * {
+        display: block;
+        width: 100%;
+
+        & + * {
+            margin-top: .3rem;
+        }
+    }
+}
+
+.pm-section-delete-btn {
+    width: auto;
 }

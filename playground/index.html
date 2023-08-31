@@ -107,15 +107,17 @@
                             <div class="dialog-content" role="document">
 
                                 <div class="dialog-header">
-                                    <h1 id="dialog-title">Edit translations 🚧</h1>
-                                    <button type="button" class="close-btn" data-a11y-dialog-hide aria-label="Close dialog">
+                                    <div class="dialog-header--left">
+                                        <h1 id="dialog-title">Edit translation</h1>
+                                        <select id="editor-language-codes"></select>
+                                    </div>
+                                    <button type="button" class="dialog-close-btn" data-a11y-dialog-hide aria-label="Close dialog">
                                         &times;
                                     </button>
                                 </div>
 
                                 <div class="dialog-body">
                                     <div class="translations-editor">
-                                        <div class="translation-btns"></div>
                                         <div class="translation-editor">
                                             <div class="editor editor--cm">
                                                 <h2>Consent modal</h2>
@@ -134,12 +136,17 @@
                                                 <input type="text" id="pm-accept-btn" placeholder="Accept all button">
                                                 <input type="text" id="pm-reject-btn" placeholder="Reject all button">
                                                 <input type="text" id="pm-save-btn" placeholder="Save preferences button">
+                                                <input type="text" id="pm-service-counter-label" placeholder="Service counter label">
+                                                <h3>Sections</h3>
+                                                <ol id="pm-sections"></ol>
+                                                <button type="button" id="add-section-btn">Add section</button>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
 
                                 <div class="dialog-footer">
+                                    <button type="button">Preview</button>
                                     <button type="button">Save</button>
                                 </div>
 
