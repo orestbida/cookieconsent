@@ -7,7 +7,7 @@
         "acceptNecessaryBtn": "Reject all",
         "showPreferencesBtn": "Manage preferences",
         "closeIconLabel": "Reject all and close",
-        "footer": "<a href=\"#link\">Privacy Policy</a><a href=\"#link\">Terms and conditions</a>"
+        "footer": "<a href=\"#link\">Privacy Policy</a>\n<a href=\"#link\">Terms and conditions</a>"
     },
     "preferencesModal": {
         "title": "Consent Preferences Center",

@@ -7,7 +7,7 @@
         "acceptNecessaryBtn": "قبول الكل",
         "showPreferencesBtn": "إدارة التفضيلات",
         "closeIconLabel": "Reject all and close",
-        "footer": "<a href=\"#link\">سياسة الخصوصية</a><a href=\"#link\">الأحكام والشروط</a>"
+        "footer": "<a href=\"#link\">سياسة الخصوصية</a>\n<a href=\"#link\">الأحكام والشروط</a>"
     },
     "preferencesModal": {
         "title": "مركز تفضيلات الموافقة",
