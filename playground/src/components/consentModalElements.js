@@ -12,10 +12,10 @@ onEvent(customEvents._PLAYGROUND_READY, () => {
     const state = getState();
 
     toggleCloseIcon(state._enableCloseIcon);
-    toggleRemoveAcceptNecessaryBtn(state._removeAcceptNecessaryBtn);
-    toggleRemoveShowPreferencesBtn(state._removeShowPrefrencesBtn);
-    toggleRemoveFooter(state._removeFooter);
-    toggleRemoveTitle(state._removeTitle);
+    // toggleRemoveAcceptNecessaryBtn(state._removeAcceptNecessaryBtn);
+    // toggleRemoveShowPreferencesBtn(state._removeShowPrefrencesBtn);
+    // toggleRemoveFooter(state._removeFooter);
+    // toggleRemoveTitle(state._removeTitle);
 });
 
 addEvent(enableXIconCheckbox, 'change', function(){
@@ -33,77 +33,77 @@ addEvent(enableXIconCheckbox, 'change', function(){
     reRunPlugin(state, 1);
 });
 
-addEvent(removeAcceptNecessaryBtnCheckbox, 'change', function() {
+// addEvent(removeAcceptNecessaryBtnCheckbox, 'change', function() {
 
-    /**
-     * @type {boolean}
-     */
-    const remove = this.checked;
+//     /**
+//      * @type {boolean}
+//      */
+//     const remove = this.checked;
 
-    const state = getState();
-    state._removeAcceptNecessaryBtn = remove;
+//     const state = getState();
+//     state._removeAcceptNecessaryBtn = remove;
 
-    toggleConsentModalElement(state, 'acceptNecessaryBtn', remove);
-    saveState(state);
-    reRunPlugin(state, 1);
-});
+//     toggleConsentModalElement(state, 'acceptNecessaryBtn', remove);
+//     saveState(state);
+//     reRunPlugin(state, 1);
+// });
 
-addEvent(removeShowPreferencesBtnCheckbox, 'change', function() {
+// addEvent(removeShowPreferencesBtnCheckbox, 'change', function() {
 
-    /**
-     * @type {boolean}
-     */
-    const remove = this.checked;
+//     /**
+//      * @type {boolean}
+//      */
+//     const remove = this.checked;
 
-    const state = getState();
-    state._removeShowPrefrencesBtn = remove;
+//     const state = getState();
+//     state._removeShowPrefrencesBtn = remove;
 
-    toggleConsentModalElement(state, 'showPreferencesBtn', remove);
-    saveState(state);
-    reRunPlugin(state, 1);
-});
+//     toggleConsentModalElement(state, 'showPreferencesBtn', remove);
+//     saveState(state);
+//     reRunPlugin(state, 1);
+// });
 
-addEvent(removeFooterCheckbox, 'change', function() {
+// addEvent(removeFooterCheckbox, 'change', function() {
 
-    /**
-     * @type {boolean}
-     */
-    const remove = this.checked;
+//     /**
+//      * @type {boolean}
+//      */
+//     const remove = this.checked;
 
-    const state = getState();
-    state._removeFooter = remove;
+//     const state = getState();
+//     state._removeFooter = remove;
 
-    toggleConsentModalElement(state, 'footer', remove);
-    saveState(state);
-    reRunPlugin(state, 1);
-});
+//     toggleConsentModalElement(state, 'footer', remove);
+//     saveState(state);
+//     reRunPlugin(state, 1);
+// });
 
-addEvent(removeTitleCheckbox, 'change', function() {
+// addEvent(removeTitleCheckbox, 'change', function() {
 
-    /**
-     * @type {boolean}
-     */
-    const remove = this.checked;
+//     /**
+//      * @type {boolean}
+//      */
+//     const remove = this.checked;
 
-    /**
-     * Disable close icon checkbox if title is removed
-     */
-    enableXIconCheckbox.disabled = remove;
+//     /**
+//      * Disable close icon checkbox if title is removed
+//      */
+//     enableXIconCheckbox.disabled = remove;
 
-    const state = getState();
-    state._removeTitle = remove;
+//     const state = getState();
+//     state._removeTitle = remove;
 
-    toggleConsentModalElement(state, 'title', remove);
-    saveState(state);
-    reRunPlugin(state, 1);
-});
+//     toggleConsentModalElement(state, 'title', remove);
+//     saveState(state);
+//     reRunPlugin(state, 1);
+// });
 
 addEvent(window, customEvents._RESET, () => {
     toggleCloseIcon(defaultState._enableCloseIcon);
-    toggleRemoveAcceptNecessaryBtn(defaultState._removeAcceptNecessaryBtn);
-    toggleRemoveShowPreferencesBtn(defaultState._removeShowPrefrencesBtn);
-    toggleRemoveFooter(defaultState._removeFooter);
-    toggleRemoveTitle(defaultState._removeTitle);
+    // toggleRemoveAcceptNecessaryBtn(defaultState._removeAcceptNecessaryBtn);
+    // toggleRemoveShowPreferencesBtn(defaultState._removeShowPrefrencesBtn);
+    // toggleRemoveFooter(defaultState._removeFooter);
+    // toggleRemoveTitle(defaultState._removeTitle);
 });
 
 /**

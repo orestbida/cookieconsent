@@ -28,7 +28,7 @@ html{
 
 body{
     width: 100vw;
-    max-width: 43.75rem;
+    max-width: 56rem;
     margin: 0 auto;
     padding: .75rem;
     width: 100vw;
@@ -40,12 +40,13 @@ body{
 
 h1,
 h2,
-h3 {
+h3,
+h4 {
     font-weight: 600;
     color: #e1e4e7;
 }
 
-h2 {
+h4 {
     margin: 0 0 1.5rem 0;
     font-size: 1.2rem;
 }
@@ -63,6 +64,17 @@ label {
     font-weight: 400;
     font-size: .9em;
     position: relative;
+}
+
+.page-subtitle {
+    max-width: 350px;
+    font-weight: 400;
+    font-size: 1rem;
+    color: #afb6bd;
+}
+
+.announcements {
+    margin: 2rem 0!important;
 }
 
 select,
@@ -249,6 +261,7 @@ select ~ .arrow-icon::before {
     z-index: 1;
 }
 
+/** Warning **/
 .warning {
     background: rgba(255, 231, 201, 0.144);
     padding: 0.8rem 1rem;
@@ -257,6 +270,7 @@ select ~ .arrow-icon::before {
     border: .0625rem solid rgba(255, 231, 143, 0.09);
     display: flex;
     flex-direction: column;
+    text-decoration: none;
 }
 
 .warning-title {
@@ -265,6 +279,56 @@ select ~ .arrow-icon::before {
     font-weight: 600;
     margin-bottom: .5rem;
 }
+
+.warning-description {
+    color: #c7c5b4;
+}
+
+a.warning {
+    transition: background-color .2s ease, border-color .2s ease;
+}
+
+a.warning:hover,
+a.warning:focus {
+    background-color: rgba(255, 231, 201, 0.2);
+    border-color: rgba(255, 231, 143, 0.2);
+}
+/** End Warning **/
+
+
+/** Info **/
+.info {
+    background: rgba(186, 218, 248, 0.144);
+    padding: 0.8rem 1rem;
+    border-radius: 0.4rem;
+    font-size: .9rem;
+    border: .0625rem solid rgba(143, 201, 255, 0.09);
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+}
+
+.info-title {
+    color: #91bae0;
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: .5rem;
+}
+
+.info-description {
+    color: #b4c0c7;
+}
+
+a.info {
+    transition: background-color .2s ease, border-color .2s ease;
+}
+
+a.info:hover,
+a.info:focus {
+    background-color: rgba(186, 218, 248, 0.2);
+    border-color: rgba(143, 201, 255, 0.2);
+}
+/** End Info **/
 
 .categories-title,
 .translations-title {
@@ -302,11 +366,11 @@ select ~ .arrow-icon::before {
 .custom-inputs {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: .5rem;
+    gap: .3rem;
 }
 
 .custom-inputs--categories {
-    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-columns: 1fr;
 }
 
 .custom-inputs label {
@@ -455,17 +519,13 @@ code {
 }
 
 section {
-    padding: 1rem 1.4rem;
+    padding: 1rem;
     background-color: rgba(248, 252, 255, 0.103);
     border-radius: .4rem;
     border: .0625rem solid rgba(248, 252, 255, 0.034);
     transition: border-color .2s ease,
                 background-color .2s ease,
                 box-shadow .2s ease;
-}
-
-section.categories-section {
-    margin-bottom: var(--d-gap);
 }
 
 section.installation {
@@ -508,9 +568,9 @@ button:hover{
     cursor: not-allowed;
 }
 
-.flex{
+.flex {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr;
     gap: var(--d-gap);
     margin-bottom: var(--d-gap);
 }

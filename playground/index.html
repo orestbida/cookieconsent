@@ -11,222 +11,237 @@
     </head>
     <body>
         <header>
-            <h1>CookieConsent v3 - Playground</h1>
+            <h1 class="page-title">CookieConsent <span>v3</span></h1>
+            <h2 class="page-subtitle">A lightweight, GDPR and CCPA compliant Consent Management Tool written in vanilla JS.</h2>
 
-            <div class="warning">
-                <p class="warning-title">Page under construction! 🚧</p>
-                <p class="warning-description">Some config. parameters are missing or don't work.</p>
-            </div>
-            <br>
+            <p>
+                <a href="https://cookieconsent.orestbida.com/" target="_blank" rel="noopener noreferrer">Documentation</a>
+                |
+                <a href="https://stackblitz.com/@orestbida/collections/cookieconsent-v3" target="_blank" rel="noopener noreferrer">Live demos</a>
+            </p>
+
         </header>
+
+        <div class="flex announcements">
+            <div class="info">
+                <p class="info-title">Page under construction! 🚧</p>
+                <p class="info-description">Some config. parameters are missing or don't work.</p>
+            </div>
+            <a class="warning" href="https://github.com/orestbida/cookieconsent/discussions/523" target="_blank">
+                <p class="warning-title">New Google requirements 🚨</p>
+                <p class="warning-description">Google ads related product will no longer work with CookieConsent!</p>
+            </a>
+        </div>
+
         <main>
+            <h3>Categories & Translations</h3>
 
-            <section class="categories-section">
-                <h2 class="categories-title">Categories</h2>
-                <p class="categories-description">Select the applicable cookie categories for your website.</p>
+            <div class="flex">
+                <section class="categories-section">
+                    <h4 class="categories-title">Categories</h4>
+                    <p class="categories-description">Select the applicable cookie categories for your website.</p>
 
-                <div class="custom-inputs custom-inputs--categories">
+                    <div class="custom-inputs custom-inputs--categories">
 
-                    <label>
-                        <input class="category-input custom-input" type="checkbox" value="necessary" checked disabled>
-                        <span class="label">Necessary <span class="tick">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><g fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><rect width="16" height="10" x="4" y="11" rx="2" ry="2"/><path d="M16.5 11V8h0c0-2.8-.5-5-4.5-5S7.5 5.2 7.5 8h0v3"/></g></svg>
-                        </span></span>
-                    </label>
+                        <label>
+                            <input class="category-input custom-input" type="checkbox" value="necessary" checked disabled>
+                            <span class="label">Necessary <span class="tick">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><g fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><rect width="16" height="10" x="4" y="11" rx="2" ry="2"/><path d="M16.5 11V8h0c0-2.8-.5-5-4.5-5S7.5 5.2 7.5 8h0v3"/></g></svg>
+                            </span></span>
+                        </label>
 
-                    <label>
-                        <input class="category-input custom-input" type="checkbox" value="functionality">
-                        <span class="label">Functionality <span class="tick"></span></span>
-                    </label>
+                        <label>
+                            <input class="category-input custom-input" type="checkbox" value="functionality">
+                            <span class="label">Functionality <span class="tick"></span></span>
+                        </label>
 
-                    <label>
-                        <input class="category-input custom-input" type="checkbox" value="analytics">
-                        <span class="label">Analytics <span class="tick"></span></span>
-                    </label>
+                        <label>
+                            <input class="category-input custom-input" type="checkbox" value="analytics">
+                            <span class="label">Analytics <span class="tick"></span></span>
+                        </label>
 
-                    <label>
-                        <input class="category-input custom-input" type="checkbox" value="marketing">
-                        <span class="label">Marketing <span class="tick"></span></span>
-                    </label>
-                </div>
-            </section>
+                        <label>
+                            <input class="category-input custom-input" type="checkbox" value="marketing">
+                            <span class="label">Marketing <span class="tick"></span></span>
+                        </label>
+                    </div>
+                </section>
+                <section class="translations" id="translations-section">
+                    <h4 class="translations-title">Translations</h4>
+                    <p class="translations-description">Select the translations to include in your configuration.</p>
 
-            <div class="language-codes">
-                <div class="flex">
-                    <section class="translations" id="translations-section">
-                        <h2 class="translations-title">Translations</h2>
-                        <p class="translations-description">Select the translations to include in your configuration.</p>
+                    <div class="custom-inputs">
 
-                        <div class="custom-inputs">
+                        <label for="language-en">
+                            <input class="custom-input" type="checkbox" id="language-en" name="language-code" value="en">
+                            <span class="label">English <span class="tick"></span></span>
+                        </label>
 
-                            <label for="language-en">
-                                <input class="custom-input" type="checkbox" id="language-en" name="language-code" value="en">
-                                <span class="label">English <span class="tick"></span></span>
-                            </label>
+                        <label for="language-it">
+                            <input class="custom-input" type="checkbox" id="language-it" name="language-code" value="it">
+                            <span class="label">Italian <span class="tick"></span></span>
+                        </label>
 
-                            <label for="language-it">
-                                <input class="custom-input" type="checkbox" id="language-it" name="language-code" value="it">
-                                <span class="label">Italian <span class="tick"></span></span>
-                            </label>
+                        <label for="language-de">
+                            <input class="custom-input" type="checkbox" id="language-de" name="language-code" value="de">
+                            <span class="label">German <span class="tick"></span></span>
+                        </label>
 
-                            <label for="language-de">
-                                <input class="custom-input" type="checkbox" id="language-de" name="language-code" value="de">
-                                <span class="label">German <span class="tick"></span></span>
-                            </label>
+                        <label for="language-es">
+                            <input class="custom-input" type="checkbox" id="language-es" name="language-code" value="es">
+                            <span class="label">Spanish <span class="tick"></span></span>
+                        </label>
 
-                            <label for="language-es">
-                                <input class="custom-input" type="checkbox" id="language-es" name="language-code" value="es">
-                                <span class="label">Spanish <span class="tick"></span></span>
-                            </label>
+                        <label for="language-fr">
+                            <input class="custom-input" type="checkbox" id="language-fr" name="language-code" value="fr">
+                            <span class="label">French <span class="tick"></span></span>
+                        </label>
 
-                            <label for="language-fr">
-                                <input class="custom-input" type="checkbox" id="language-fr" name="language-code" value="fr">
-                                <span class="label">French <span class="tick"></span></span>
-                            </label>
+                        <label for="language-ar">
+                            <input class="custom-input" type="checkbox" id="language-ar" name="language-code" value="ar">
+                            <span class="label">Arabic <span class="tick"></span></span>
+                        </label>
 
-                            <label for="language-ar">
-                                <input class="custom-input" type="checkbox" id="language-ar" name="language-code" value="ar">
-                                <span class="label">Arabic <span class="tick"></span></span>
-                            </label>
+                    </div>
 
-                        </div>
+                    <br>
+                    <button type="button" id="edit-translations-btn" data-a11y-dialog-show="edit-translations-dialog">Edit translations</button>
 
-                        <br>
-                        <button type="button" id="edit-translations-btn" data-a11y-dialog-show="edit-translations-dialog">Edit translations</button>
+                    <!-- 1. The dialog container -->
+                    <div
+                        class="dialog-container"
+                        id="edit-translations-dialog"
+                        aria-labelledby="dialog-title"
+                        aria-hidden="true"
+                    >
+                        <!-- 2. The dialog overlay -->
+                        <div class="dialog-overlay"></div>
+                        <!-- 3. The actual dialog -->
+                        <div class="dialog-content" role="document">
 
-                        <!-- 1. The dialog container -->
-                        <div
-                            class="dialog-container"
-                            id="edit-translations-dialog"
-                            aria-labelledby="dialog-title"
-                            aria-hidden="true"
-                        >
-                            <!-- 2. The dialog overlay -->
-                            <div class="dialog-overlay"></div>
-                            <!-- 3. The actual dialog -->
-                            <div class="dialog-content" role="document">
-
-                                <div class="dialog-header">
-                                    <div class="dialog-header--left">
-                                        <h1 id="dialog-title" class="dialog-title">Edit translation</h1>
-                                        <label class="select-translation" for="editor-language-codes">
-                                            <select id="editor-language-codes"></select>
-                                            <span class="arrow-icon"></span>
-                                        </label>
-                                    </div>
-                                    <button type="button" class="dialog-close-btn" data-a11y-dialog-hide aria-label="Close dialog">
-                                        &times;
-                                    </button>
+                            <div class="dialog-header">
+                                <div class="dialog-header--left">
+                                    <h1 id="dialog-title" class="dialog-title">Edit translation</h1>
+                                    <label class="select-translation" for="editor-language-codes">
+                                        <select id="editor-language-codes"></select>
+                                        <span class="arrow-icon"></span>
+                                    </label>
                                 </div>
+                                <button type="button" class="dialog-close-btn" data-a11y-dialog-hide aria-label="Close dialog">
+                                    &times;
+                                </button>
+                            </div>
 
-                                <div class="dialog-body">
-                                    <div id="editor-container" class="translations-editor">
-                                        <div class="translation-editor" id="translation-editor">
-                                            <div class="editor editor--cm">
-                                                <h2>Consent modal</h2>
-                                                <textarea id="consent-modal-title" placeholder="Title" class="small-textarea"></textarea>
+                            <div class="dialog-body">
+                                <div id="editor-container" class="translations-editor">
+                                    <div class="translation-editor" id="translation-editor">
+                                        <div class="editor editor--cm">
+                                            <h4>Consent modal</h4>
+                                            <textarea id="consent-modal-title" placeholder="Title" class="small-textarea"></textarea>
 
-                                                <div class="footer-textarea textarea-highlight" id="textarea-cm-description">
-                                                    <textarea id="consent-modal-description" placeholder="Description" spellcheck="false"></textarea>
+                                            <div class="footer-textarea textarea-highlight" id="textarea-cm-description">
+                                                <textarea id="consent-modal-description" placeholder="Description" spellcheck="false"></textarea>
 
-                                                    <pre id="highlighting" aria-hidden="true">
-                                                        <code class="language-html" id="highlighting-content"></code>
-                                                    </pre>
-                                                </div>
-
-                                                <input type="text" id="consent-modal-accept-btn" placeholder="Accept all button">
-                                                <input type="text" id="consent-modal-reject-btn" placeholder="Reject all button">
-                                                <input type="text" id="consent-modal-manage-btn" placeholder="Manage preferences button">
-
-                                                <div class="footer-textarea textarea-highlight" id="textarea-cm-footer">
-                                                    <textarea id="editing" placeholder="Footer" spellcheck="false"></textarea>
-
-                                                    <pre id="highlighting" aria-hidden="true">
-                                                        <code class="language-html" id="highlighting-content"></code>
-                                                    </pre>
-                                                </div>
-
+                                                <pre id="highlighting" aria-hidden="true">
+                                                    <code class="language-html" id="highlighting-content"></code>
+                                                </pre>
                                             </div>
 
-                                            <div class="editor editor--pm">
-                                                <h2>Preferences modal</h2>
-                                                <textarea id="pm-title" placeholder="Title" class="small-textarea"></textarea>
-                                                <input type="text" id="pm-close-icon-label" placeholder="Close icon label">
-                                                <input type="text" id="pm-accept-btn" placeholder="Accept all button">
-                                                <input type="text" id="pm-reject-btn" placeholder="Reject all button">
-                                                <input type="text" id="pm-save-btn" placeholder="Save preferences button">
-                                                <input type="text" id="pm-service-counter-label" placeholder="Service counter label">
+                                            <input type="text" id="consent-modal-accept-btn" placeholder="Accept all button">
+                                            <input type="text" id="consent-modal-reject-btn" placeholder="Reject all button">
+                                            <input type="text" id="consent-modal-manage-btn" placeholder="Manage preferences button">
 
-                                                <div class="pm-sections">
-                                                    <h3 class="pm-sections-title">Sections <span id="sections-counter"></span></h3>
-                                                    <ol id="pm-sections"></ol>
-                                                    <button type="button" id="add-section-btn">Add section</button>
-                                                </div>
+                                            <div class="footer-textarea textarea-highlight" id="textarea-cm-footer">
+                                                <textarea id="editing" placeholder="Footer" spellcheck="false"></textarea>
 
+                                                <pre id="highlighting" aria-hidden="true">
+                                                    <code class="language-html" id="highlighting-content"></code>
+                                                </pre>
                                             </div>
+
+                                        </div>
+
+                                        <div class="editor editor--pm">
+                                            <h4>Preferences modal</h4>
+                                            <textarea id="pm-title" placeholder="Title" class="small-textarea"></textarea>
+                                            <input type="text" id="pm-close-icon-label" placeholder="Close icon label">
+                                            <input type="text" id="pm-accept-btn" placeholder="Accept all button">
+                                            <input type="text" id="pm-reject-btn" placeholder="Reject all button">
+                                            <input type="text" id="pm-save-btn" placeholder="Save preferences button">
+                                            <input type="text" id="pm-service-counter-label" placeholder="Service counter label">
+
+                                            <div class="pm-sections">
+                                                <h3 class="pm-sections-title">Sections <span id="sections-counter"></span></h3>
+                                                <ol id="pm-sections"></ol>
+                                                <button type="button" id="add-section-btn">Add section</button>
+                                            </div>
+
                                         </div>
                                     </div>
                                 </div>
-
-                                <div class="dialog-footer">
-                                    <button type="button" id="save-translation-config-btn">Save & Preview</button>
-                                </div>
-
-                            </div>
-                        </div>
-
-                    </section>
-                    <section class="language-more-options">
-                        <h2>Language options</h2>
-                        <div class="default-language">
-                            <label class="select-label" for="default-language">
-                                <span>Default language</span><span class="select-input">
-                                    <select name="default-language" id="default-language">
-                                        <option value="disabled" disabled selected>—</option>
-                                        <option value="en">English</option>
-                                        <option value="it">Italian</option>
-                                        <option value="de">German</option>
-                                        <option value="es">Spanish</option>
-                                        <option value="fr">French</option>
-                                        <option value="ar">Arabic</option>
-                                    </select>
-                                    <span class="arrow-icon"></span>
-                                </span>
-                            </label>
-                        </div>
-
-                        <br>
-                        <div class="auto-language">
-
-                            <div class="checkbox-div">
-                                <input type="checkbox" id="auto-language" name="autoLanguage">
-                                <label for="auto-language">Auto detect language</label>
                             </div>
 
-                            <label class="select-label autodetect" for="autodetect-mode">
-                                <span>Detect from</span><span class="select-input">
-                                    <select name="autodetect" id="autodetect-mode" disabled>
-                                        <option value="document">document</option>
-                                        <option value="browser">browser</option>
-                                    </select>
-                                    <span class="arrow-icon"></span>
-                                </span>
-                            </label>
-
-                            <div class="language__details">
-                                <p>Detected language: <code id="detected-language">-</code></p>
-                                <p>Translation loaded: <code id="translation-found">-</code></p>
-                                <p>Current language: <code id="current-active-language">-</code></p>
+                            <div class="dialog-footer">
+                                <button type="button" id="save-translation-config-btn">Save & Preview</button>
                             </div>
-                        </div>
-                    </section>
 
-                </div>
+                        </div>
+                    </div>
+
+                </section>
+                <section class="language-more-options">
+                    <h4>Language options</h4>
+                    <div class="default-language">
+                        <label class="select-label" for="default-language">
+                            <span>Default lang.</span><span class="select-input">
+                                <select name="default-language" id="default-language">
+                                    <option value="disabled" disabled selected>—</option>
+                                    <option value="en">English</option>
+                                    <option value="it">Italian</option>
+                                    <option value="de">German</option>
+                                    <option value="es">Spanish</option>
+                                    <option value="fr">French</option>
+                                    <option value="ar">Arabic</option>
+                                </select>
+                                <span class="arrow-icon"></span>
+                            </span>
+                        </label>
+                    </div>
+
+                    <br>
+                    <div class="auto-language">
+
+                        <div class="checkbox-div">
+                            <input type="checkbox" id="auto-language" name="autoLanguage">
+                            <label for="auto-language">Auto detect language</label>
+                        </div>
+
+                        <label class="select-label autodetect" for="autodetect-mode">
+                            <span>Detect from</span><span class="select-input">
+                                <select name="autodetect" id="autodetect-mode" disabled>
+                                    <option value="document">document</option>
+                                    <option value="browser">browser</option>
+                                </select>
+                                <span class="arrow-icon"></span>
+                            </span>
+                        </label>
+
+                        <div class="language__details">
+                            <p>Detected language: <code id="detected-language">-</code></p>
+                            <p>Translation loaded: <code id="translation-found">-</code></p>
+                            <p>Current language: <code id="current-active-language">-</code></p>
+                        </div>
+                    </div>
+                </section>
+
             </div>
 
+
+
+            <h3>GUI Options</h3>
             <div class="flex">
                 <section class="consent-modal">
-                    <h2>Consent Modal UI</h2>
+                    <h4>Consent Modal</h4>
 
                     <label class="select-label" for="cm-layout">
                         <span>Layout</span><span class="select-input">
@@ -264,7 +279,7 @@
                     </div>
                 </section>
                 <section class="preferences-modal">
-                    <h2>Preferences Modal UI</h2>
+                    <h4>Preferences Modal</h4>
 
                     <label class="select-label" for="pm-layout">
                         <span>Layout</span><span class="select-input">
@@ -299,52 +314,26 @@
                     </div>
 
                 </section>
+
+                <section>
+                    <h4>Misc</h4>
+
+                    <div class="checkbox-div">
+                        <input type="checkbox" id="close-icon" name="closeIcon">
+                        <label for="close-icon">Add <b>X icon</b> (box layout only) = accept necessary</label>
+                    </div>
+
+                    <div class="checkbox-div">
+                        <input type="checkbox" id="darkmode" name="darkmode">
+                        <label for="darkmode">Enable dark-mode</label>
+                    </div>
+
+                    <div class="checkbox-div">
+                        <input type="checkbox" id="disablePageInteraction" name="disablePageInteraction">
+                        <label for="disablePageInteraction">Disable page interaction</label>
+                    </div>
+                </section>
             </div>
-
-            <section>
-                <div class="flex">
-                    <div>
-                        <h2>Consent Modal Elements</h2>
-
-                        <div class="checkbox-div">
-                            <input type="checkbox" id="close-icon" name="closeIcon">
-                            <label for="close-icon">Add <b>X icon</b> (box layout only) = accept necessary</label>
-                        </div>
-
-                        <div class="checkbox-div">
-                            <input type="checkbox" id="accept-necessary-btn" name="AcceptNecessary">
-                            <label for="accept-necessary-btn">Remove <b>accept necessary</b> button</label>
-                        </div>
-
-                        <div class="checkbox-div">
-                            <input type="checkbox" id="show-preferences-btn" name="ShowPreferences">
-                            <label for="show-preferences-btn">Remove <b>show preferences</b> button</label>
-                        </div>
-
-                        <div class="checkbox-div">
-                            <input type="checkbox" id="remove-footer" name="RemoveFooter">
-                            <label for="remove-footer">Remove <b>footer</b> section</label>
-                        </div>
-
-                        <div class="checkbox-div">
-                            <input type="checkbox" id="remove-title" name="RemoveTitle">
-                            <label for="remove-title">Remove <b>title</b></label>
-                        </div>
-                    </div>
-                    <div>
-                        <h2>Misc</h2>
-                        <div class="checkbox-div">
-                            <input type="checkbox" id="darkmode" name="darkmode">
-                            <label for="darkmode">Enable dark-mode</label>
-                        </div>
-
-                        <div class="checkbox-div">
-                            <input type="checkbox" id="disablePageInteraction" name="disablePageInteraction">
-                            <label for="disablePageInteraction">Disable page interaction</label>
-                        </div>
-                    </div>
-                </div>
-            </section>
 
             <!-- <div class="flex">
                 <fieldset class="consent-status" id="consent-status">
@@ -368,7 +357,7 @@
             <br>
             <section>
 
-                <h2>Themes</h2>
+                <h4>Themes</h4>
 
                 <div class="themes">
                     <label for="default-light">
@@ -401,7 +390,7 @@
             <br>
             <br>
             <section class="installation">
-                <h2>Installation</h2>
+                <h4>Installation</h4>
                 <ol>
 
                     <li>
