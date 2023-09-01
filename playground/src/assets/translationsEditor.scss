@@ -1,6 +1,7 @@
 .translations-editor {
     height: 100%;
     overflow: auto;
+    scrollbar-width: thin;
 }
 
 
@@ -29,21 +30,27 @@
         margin-top: .3rem;
     }
 
-    & > input,
-    & > textarea {
-        background: #363636;
-        padding: .7rem 1rem;
-        border-radius: .4rem;
-        border: none;
-        font-family: inherit;
+    input,
+    textarea {
         color: inherit;
+        font-family: inherit;
+        background: #272829;
+        border: 1px solid #323335;
+        padding: 0.7rem 1rem;
+        border-radius: 0.4rem;
     }
 
-    & > textarea {
-        min-height: 5rem;
-        max-height: 10rem;
+    textarea {
+        min-height: 6rem;
+        max-height: 20rem;
         resize: vertical;
         width: 100%!important;
+        scrollbar-width: thin;
+    }
+
+    .small-textarea {
+        min-height: 2.6rem;
+        height: 2.6rem;
     }
 
     h2 {
@@ -74,5 +81,65 @@
 }
 
 .pm-section-delete-btn {
-    width: auto;
+    background-color: #e77373;
+    color: black;
+    border-color: #f69393;
+}
+
+.pm-section-label-btn-container {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    justify-content: space-between;
+}
+
+.pm-section-label-btn-container .select-label {
+    margin-bottom: 0;
+}
+
+.pm-section label {
+    display: flex;
+}
+
+.pm-sections {
+    border-radius: 0.4rem;
+    border: 1px solid #424242;
+}
+
+#pm-sections {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    border-top: 1px solid #424242;
+}
+
+.pm-section {
+    border-bottom: 1px solid #424242;
+    padding: 0.5rem;
+    margin-bottom: 0;
+}
+
+.pm-sections-title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1rem;
+    margin: 0;
+    padding: 0.6rem 0.8rem;
+}
+
+#sections-counter {
+    background: #474747;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 100%;
+    font-size: .7rem;
+    border: 1px solid #5a5a5a;
+}
+
+#add-section-btn {
+    margin: .5rem;
 }

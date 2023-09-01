@@ -36,7 +36,7 @@ export const defaultState = {
     /**
      * Increase on every new playground update
      */
-    _demoRevision: 27
+    _demoRevision: 29
 };
 
 /**
@@ -157,6 +157,11 @@ export const getCurrentUserConfig = (state) => {
             const translation = allTranslations[languageCode];
 
             /**
+             * TODO: Remove this when label is implemented
+             */
+            delete translation.consentModal.label;
+
+            /**
              * Remove closeIcon
              */
             if(!state._enableCloseIcon)
@@ -179,11 +184,16 @@ export const getCurrentUserConfig = (state) => {
             /**
              * Remove all sections with a 'linkedCategory' that is not selected by the user
              */
-            const filteredSections = preferencesModal.sections.filter(section =>
-                !section.linkedCategory
-                || state._enabledCategories.includes(section.linkedCategory
-                // eslint-disable-next-line indent
-            ));
+            const filteredSections = preferencesModal.sections.filter(section => {
+
+                /**
+                 * TODO: Remove this when label is implemented
+                 */
+                delete section.cookieTable;
+
+                return !section.linkedCategory
+                    || state._enabledCategories.includes(section.linkedCategory);
+            });
 
             preferencesModal.sections = filteredSections;
         }

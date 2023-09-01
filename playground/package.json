@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "a11y-dialog": "^8.0.1",
+    "deep-equal": "^2.2.2",
     "file-saver": "^2.0.5"
   }
 }

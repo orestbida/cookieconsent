@@ -92,7 +92,7 @@
                         </div>
 
                         <br>
-                        <button type="button" id="edit-translations-btn" data-a11y-dialog-show="edit-translations-dialog">Edit translations 🚧</button>
+                        <button type="button" id="edit-translations-btn" data-a11y-dialog-show="edit-translations-dialog">Edit translations</button>
 
                         <!-- 1. The dialog container -->
                         <div
@@ -108,8 +108,11 @@
 
                                 <div class="dialog-header">
                                     <div class="dialog-header--left">
-                                        <h1 id="dialog-title">Edit translation</h1>
-                                        <select id="editor-language-codes"></select>
+                                        <h1 id="dialog-title" class="dialog-title">Edit translation</h1>
+                                        <label class="select-translation" for="editor-language-codes">
+                                            <select id="editor-language-codes"></select>
+                                            <span class="arrow-icon"></span>
+                                        </label>
                                     </div>
                                     <button type="button" class="dialog-close-btn" data-a11y-dialog-hide aria-label="Close dialog">
                                         &times;
@@ -118,36 +121,39 @@
 
                                 <div class="dialog-body">
                                     <div class="translations-editor">
-                                        <div class="translation-editor">
+                                        <div class="translation-editor" id="translation-editor">
                                             <div class="editor editor--cm">
                                                 <h2>Consent modal</h2>
-                                                <input type="text" id="consent-modal-title" placeholder="Title">
+                                                <textarea id="consent-modal-title" placeholder="Title" class="small-textarea"></textarea>
                                                 <textarea id="consent-modal-description" placeholder="Description"></textarea>
                                                 <input type="text" id="consent-modal-accept-btn" placeholder="Accept all button">
                                                 <input type="text" id="consent-modal-reject-btn" placeholder="Reject all button">
                                                 <input type="text" id="consent-modal-manage-btn" placeholder="Manage preferences button">
-                                                <textarea id="consent-modal-footer" placeholder="Footer"></textarea>
+                                                <textarea id="consent-modal-footer" placeholder="Footer" spellcheck="false"></textarea>
                                             </div>
 
                                             <div class="editor editor--pm">
                                                 <h2>Preferences modal</h2>
-                                                <input type="text" id="pm-title" placeholder="Title">
+                                                <textarea id="pm-title" placeholder="Title" class="small-textarea"></textarea>
                                                 <input type="text" id="pm-close-icon-label" placeholder="Close icon label">
                                                 <input type="text" id="pm-accept-btn" placeholder="Accept all button">
                                                 <input type="text" id="pm-reject-btn" placeholder="Reject all button">
                                                 <input type="text" id="pm-save-btn" placeholder="Save preferences button">
                                                 <input type="text" id="pm-service-counter-label" placeholder="Service counter label">
-                                                <h3>Sections</h3>
-                                                <ol id="pm-sections"></ol>
-                                                <button type="button" id="add-section-btn">Add section</button>
+
+                                                <div class="pm-sections">
+                                                    <h3 class="pm-sections-title">Sections <span id="sections-counter"></span></h3>
+                                                    <ol id="pm-sections"></ol>
+                                                    <button type="button" id="add-section-btn">Add section</button>
+                                                </div>
+
                                             </div>
                                         </div>
                                     </div>
                                 </div>
 
                                 <div class="dialog-footer">
-                                    <button type="button">Preview</button>
-                                    <button type="button">Save</button>
+                                    <button type="button" id="save-translation-config-btn">Save & Preview</button>
                                 </div>
 
                             </div>

@@ -28,16 +28,19 @@ html{
 
 body{
     width: 100vw;
-    overflow-x: hidden;
     max-width: 43.75rem;
     margin: 0 auto;
     padding: .75rem;
     width: 100vw;
     overflow-x: hidden;
+    -webkit-text-size-adjust: none;
+    -moz-text-size-adjust: none;
+    text-size-adjust: none;
 }
 
 h1,
-h2 {
+h2,
+h3 {
     font-weight: 600;
     color: #e1e4e7;
 }
@@ -59,6 +62,7 @@ b{
 label {
     font-weight: 400;
     font-size: .9em;
+    position: relative;
 }
 
 select,
@@ -598,14 +602,14 @@ button:hover{
     z-index: 2;
     position: absolute;
     max-width: 700px;
-    max-height: 700px;
-    width: 100%;
+    max-height: 1200px;
+    width: auto;
     top: 1rem;
     bottom: 1rem;
-    left: 0;
-
-    right: 0;
-    background-color: #222324;
+    left: 0.5rem;
+    right: 0.5rem;
+    overflow: hidden;
+    background-color: #171819;
     border-radius: 0.4rem;
     border: 0.0625rem solid rgba(248, 252, 255, 0.034);
 }
@@ -619,21 +623,24 @@ button:hover{
 }
 
 .dialog-title {
-    background: #45474882;
-    height: 36px;
     display: flex;
+    height: var(--d-select-height);
     align-items: center;
+    background-color: #333333;
     padding: 0 1rem;
-    border-top-left-radius: 0.4rem;
-    border-bottom-left-radius: 0.4rem;
-    font-size: 1rem;
+    border-top-left-radius: 0.3rem;
+    border-bottom-left-radius: 0.3rem;
+    border: 0.0625rem solid #3b3b3b;
+    margin-right: 0.0625rem;
+    white-space: nowrap;
+    font-size: .9rem;
 }
 
 .dialog-header--left {
     display: flex;
     flex: 1;
     align-items: center;
-    gap: 1rem;
+    gap: .0625rem;
 }
 
 .dialog-close-btn {
@@ -645,11 +652,18 @@ button:hover{
 }
 
 .dialog-body {
-    height: calc(100% - 72px);
+    height: calc(100% - 144px);
 }
 
-.dialog-content h1 {
-    font-size: 1.15rem;
+.dialog-footer {
+    height: 72px;
+    align-items: center;
+    display: flex;
+    gap: 0.5rem;
+    justify-content: flex-end;
+    padding: 0 1rem;
+    border-top: 1px solid #2b2b2b;
+
 }
 
 .dialog-content h1,

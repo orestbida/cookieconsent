@@ -2,7 +2,8 @@ import '../assets/translationsEditor.scss';
 import A11yDialog from 'a11y-dialog';
 import { getById, addEvent } from './utils';
 // eslint-disable-next-line no-unused-vars
-import { getState, defaultState } from './stateManager';
+import { getState, defaultState, saveState, reRunPlugin, getCurrentUserConfig } from './stateManager';
+import deepEqual from 'deep-equal';
 
 const container = getById('edit-translations-dialog');
 
@@ -13,35 +14,41 @@ const selectEditorTranslation = getById('editor-language-codes');
 
 const dialog = new A11yDialog(container);
 
-const cmTitle = getById('consent-modal-title');
-const cmDescription = getById('consent-modal-description');
-const cmAcceptBtn = getById('consent-modal-accept-btn');
-const cmRejectBtn = getById('consent-modal-reject-btn');
-const cmManageBtn = getById('consent-modal-manage-btn');
-const cmFooter = getById('consent-modal-footer');
+/** @type {HTMLInputElement} **/    const cmTitle = getById('consent-modal-title');
+/** @type {HTMLTextAreaElement} **/ const cmDescription = getById('consent-modal-description');
+/** @type {HTMLInputElement} **/    const cmAcceptBtn = getById('consent-modal-accept-btn');
+/** @type {HTMLInputElement} **/    const cmRejectBtn = getById('consent-modal-reject-btn');
+/** @type {HTMLInputElement} **/    const cmManageBtn = getById('consent-modal-manage-btn');
+/** @type {HTMLTextAreaElement} **/ const cmFooter = getById('consent-modal-footer');
 
-
-const pmTitle = getById('pm-title');
-const pmCloseIcon = getById('pm-close-icon-label');
-const pmAcceptBtn = getById('pm-accept-btn');
-const pmRejectBtn = getById('pm-reject-btn');
-const pmSaveBtn = getById('pm-save-btn');
-const pmServiceConterLabel = getById('pm-service-counter-label');
+/** @type {HTMLInputElement} **/    const pmTitle = getById('pm-title');
+/** @type {HTMLInputElement} **/    const pmCloseIcon = getById('pm-close-icon-label');
+/** @type {HTMLInputElement} **/    const pmAcceptBtn = getById('pm-accept-btn');
+/** @type {HTMLInputElement} **/    const pmRejectBtn = getById('pm-reject-btn');
+/** @type {HTMLInputElement} **/    const pmSaveBtn = getById('pm-save-btn');
+/** @type {HTMLInputElement} **/    const pmServiceConterLabel = getById('pm-service-counter-label');
 
 /**
  * @type {HTMLButtonElement}
  */
 const editBtn = getById('edit-translations-btn');
 
+/**
+ * @type {HTMLButtonElement}
+ */
+const saveTranslationBtn = getById('save-translation-config-btn');
 
 /**
  * @type {HTMLButtonElement}
  */
 const addSectionBtn = getById('add-section-btn');
 const pmSections = getById('pm-sections');
+const pmSectionsCounter = getById('sections-counter');
 
 let lastEnabledTranslations = [];
-let selectedTranslation = '';
+let currentLanguage = '';
+let sectionsCounter = 0;
+let equalEditorData = true;
 
 /**
  * @type {typeof defaultState}
@@ -60,13 +67,55 @@ addEvent(editBtn, 'click', () => {
      */
     state = getState();
 
-    if(updateEditor() !== false)
+    if(updateEditor() !== false) {
         dialog.show();
+        currentLanguage = selectEditorTranslation.value;
+    }
+
 });
 
 addEvent(addSectionBtn, 'click', () => {
     const section = createSection();
     appendSection(section);
+});
+
+addEvent(saveTranslationBtn, 'click', () => {
+    const currentLanguage = selectEditorTranslation.value;
+    const state = getState();
+    const translations = state._cookieConsentConfig.language.translations;
+
+    translations[currentLanguage] = retrieveCurrentTranslationFromEditor();
+
+    saveState(state);
+    reRunPlugin(state, 1);
+    window.CookieConsent.setLanguage(currentLanguage);
+});
+
+addEvent(selectEditorTranslation, 'focus', () => {
+
+    const currentTranslation = retrieveCurrentTranslationFromEditor();
+    const previousTranslation = getCurrentUserConfig(getState()).language.translations[currentLanguage];
+
+    equalEditorData = deepEqual(
+        currentTranslation,
+        previousTranslation
+    );
+});
+
+addEvent(selectEditorTranslation, 'change', (event) => {
+
+    if(!equalEditorData) {
+        if(!confirm('You have unsaved changes. Are you sure you want to change the language without saving the current config.?')) {
+            event.preventDefault();
+            selectEditorTranslation.value = currentLanguage;
+            return false;
+        }
+    }
+
+    currentLanguage = selectEditorTranslation.value;
+    setActiveTranslation(currentLanguage);
+    updateEditorFields();
+    equalEditorData = true;
 });
 
 /**
@@ -94,8 +143,9 @@ function updateEditor(enabledTranslations) {
      * Mark the first translation as the one that
      * should be opened in the editor by default
      */
-    if(!enabledTranslations.includes(selectedTranslation)) {
-        setActiveTranslation(enabledTranslations[0]);
+    if(!enabledTranslations.includes(currentLanguage)) {
+        currentLanguage = enabledTranslations[0];
+        setActiveTranslation(currentLanguage);
     }
 
     updateAvailableTranslations(enabledTranslations, state);
@@ -103,16 +153,18 @@ function updateEditor(enabledTranslations) {
 }
 
 /**
- * @param {typeof defaultState} [state]
+ * @param {typeof defaultState} [_state]
  */
-function updateEditorFields(state) {
+function updateEditorFields(_state) {
 
-    const config = (state || getState())._cookieConsentConfig;
+    const state = _state || getState();
+
+    const config = state._cookieConsentConfig;
 
     /**
      * @type {import('../../../types').Translation}
      */
-    const translation = config.language.translations[selectedTranslation];
+    const translation = config.language.translations[currentLanguage];
 
     const { consentModal, preferencesModal } = translation;
 
@@ -144,9 +196,16 @@ function updateEditorFields(state) {
     const newSections = [];
 
     for(const section of sections) {
-        if(state._enabledCategories.includes(section.linkedCategory))
-            newSections.push(createSection(section));
+
+        const shouldCreateSection =
+            !section.linkedCategory
+            || state._enabledCategories.includes(section.linkedCategory);
+
+        shouldCreateSection && newSections.push(createSection(section));
     }
+
+    sectionsCounter = newSections.length;
+    setSectionsCounter(sectionsCounter);
 
     pmSections.replaceChildren(...newSections);
 }
@@ -155,7 +214,7 @@ function updateEditorFields(state) {
  * @param {string[]} enabledTranslations
  * @param {typeof defaultState} state
  */
-function updateAvailableTranslations(enabledTranslations, state) {
+function updateAvailableTranslations(enabledTranslations) {
 
     const options = [];
 
@@ -167,19 +226,15 @@ function updateAvailableTranslations(enabledTranslations, state) {
         options.push(option);
     }
 
-    selectEditorTranslation.addEventListener('change', () => {
-        setActiveTranslation(selectEditorTranslation.value);
-        updateEditorFields(state);
-    });
-
     selectEditorTranslation.replaceChildren(...options);
+    selectEditorTranslation.value = currentLanguage;
 }
 
 /**
  * @param {string} translation
  */
 function setActiveTranslation(translation) {
-    selectedTranslation = translation;
+    currentLanguage = translation;
     selectEditorTranslation.setAttribute('data-current-translation', translation);
 }
 
@@ -215,7 +270,7 @@ function createSection(sectionData) {
     const title = document.createElement('textarea');
     title.value = sectionData?.title || '';
     title.placeholder = 'Title';
-    title.className = 'pm-section-title';
+    title.className = 'pm-section-title small-textarea';
     section.appendChild(title);
 
     const description = document.createElement('textarea');
@@ -224,11 +279,23 @@ function createSection(sectionData) {
     description.className = 'pm-section-description';
     section.appendChild(description);
 
+    const labelAndBtnContainer = document.createElement('div');
+    labelAndBtnContainer.className = 'pm-section-label-btn-container';
+
+    const selectLabel = document.createElement('label');
+    const selectSpanTitle = document.createElement('span');
+    const selectSpanContainer = document.createElement('span');
+    const selectArrowSpan = document.createElement('span');
     const select = document.createElement('select');
+
+    selectLabel.className = 'select-label';
     select.className = 'pm-section-linked-category';
+    selectArrowSpan.className = 'arrow-icon';
+    selectSpanTitle.textContent = 'Linked category';
+    selectSpanContainer.className = 'select-input';
 
     const linkedCategory = sectionData?.linkedCategory;
-    const categories = ['disabled', ...state._enabledCategories];
+    const categories = ['', ...state._enabledCategories];
 
     for(const category of categories) {
         const option = document.createElement('option');
@@ -238,20 +305,85 @@ function createSection(sectionData) {
         if(category === linkedCategory && state._enabledCategories.includes(linkedCategory)){
             option.selected = true;
             option.textContent = linkedCategory;
-        } else if(category === 'disabled'){
+        } else if(!category){
             option.selected = true;
-            option.textContent = 'No linked category';
+            option.textContent = '—';
         }
 
         select.appendChild(option);
     }
-    section.appendChild(select);
+
+    selectSpanContainer.appendChild(select);
+    selectSpanContainer.appendChild(selectArrowSpan);
+    selectLabel.appendChild(selectSpanTitle);
+    selectLabel.appendChild(selectSpanContainer);
+    labelAndBtnContainer.appendChild(selectLabel);
 
     const deleteBtn = document.createElement('button');
-    deleteBtn.textContent = 'Delete';
+    deleteBtn.textContent = 'Delete section';
     deleteBtn.className = 'pm-section-delete-btn';
-    addEvent(deleteBtn, 'click', () => section.remove());
-    section.appendChild(deleteBtn);
+
+    addEvent(deleteBtn, 'click', () => {
+        sectionsCounter -= 1;
+        section.remove();
+        setSectionsCounter(sectionsCounter);
+    });
+
+    labelAndBtnContainer.appendChild(deleteBtn);
+    section.appendChild(labelAndBtnContainer);
+
+    sectionsCounter += 1;
+    setSectionsCounter(sectionsCounter);
 
     return section;
+}
+
+/**
+ * @param {number} value
+ */
+function setSectionsCounter(value) {
+    pmSectionsCounter.textContent = value;
+}
+
+function retrieveCurrentTranslationFromEditor() {
+    /**
+     * @type {import('../../../types').ConsentModalOptions}
+     */
+    const consentModal = {};
+    consentModal.title = cmTitle.value;
+    consentModal.description = cmDescription.value;
+    consentModal.acceptAllBtn = cmAcceptBtn.value;
+    consentModal.acceptNecessaryBtn = cmRejectBtn.value;
+    consentModal.showPreferencesBtn = cmManageBtn.value;
+    consentModal.footer = cmFooter.value;
+
+    /**
+     * @type {import('../../../types').PreferencesModalOptions}
+     */
+    const preferencesModal = {};
+    preferencesModal.title = pmTitle.value;
+    preferencesModal.closeIconLabel = pmCloseIcon.value;
+    preferencesModal.acceptAllBtn = pmAcceptBtn.value;
+    preferencesModal.acceptNecessaryBtn = pmRejectBtn.value;
+    preferencesModal.savePreferencesBtn = pmSaveBtn.value;
+    preferencesModal.serviceCounterLabel = pmServiceConterLabel.value;
+
+    preferencesModal.sections = [];
+
+    for(const sectionElement of pmSections.children) {
+
+        const title = sectionElement.querySelector('.pm-section-title').value;
+        const description = sectionElement.querySelector('.pm-section-description').value;
+        const linkedCategory = sectionElement.querySelector('.pm-section-linked-category').value;
+
+        const obj = {title, description};
+        linkedCategory && (obj.linkedCategory = linkedCategory);
+
+        preferencesModal.sections.push(obj);
+    }
+
+    return {
+        consentModal,
+        preferencesModal
+    };
 }
