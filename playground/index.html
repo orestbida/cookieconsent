@@ -102,7 +102,7 @@
                             aria-hidden="true"
                         >
                             <!-- 2. The dialog overlay -->
-                            <div class="dialog-overlay" data-a11y-dialog-hide></div>
+                            <div class="dialog-overlay"></div>
                             <!-- 3. The actual dialog -->
                             <div class="dialog-content" role="document">
 
@@ -120,16 +120,32 @@
                                 </div>
 
                                 <div class="dialog-body">
-                                    <div class="translations-editor">
+                                    <div id="editor-container" class="translations-editor">
                                         <div class="translation-editor" id="translation-editor">
                                             <div class="editor editor--cm">
                                                 <h2>Consent modal</h2>
                                                 <textarea id="consent-modal-title" placeholder="Title" class="small-textarea"></textarea>
-                                                <textarea id="consent-modal-description" placeholder="Description"></textarea>
+
+                                                <div class="footer-textarea textarea-highlight" id="textarea-cm-description">
+                                                    <textarea id="consent-modal-description" placeholder="Description" spellcheck="false"></textarea>
+
+                                                    <pre id="highlighting" aria-hidden="true">
+                                                        <code class="language-html" id="highlighting-content"></code>
+                                                    </pre>
+                                                </div>
+
                                                 <input type="text" id="consent-modal-accept-btn" placeholder="Accept all button">
                                                 <input type="text" id="consent-modal-reject-btn" placeholder="Reject all button">
                                                 <input type="text" id="consent-modal-manage-btn" placeholder="Manage preferences button">
-                                                <textarea id="consent-modal-footer" placeholder="Footer" spellcheck="false"></textarea>
+
+                                                <div class="footer-textarea textarea-highlight" id="textarea-cm-footer">
+                                                    <textarea id="editing" placeholder="Footer" spellcheck="false"></textarea>
+
+                                                    <pre id="highlighting" aria-hidden="true">
+                                                        <code class="language-html" id="highlighting-content"></code>
+                                                    </pre>
+                                                </div>
+
                                             </div>
 
                                             <div class="editor editor--pm">

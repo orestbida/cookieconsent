@@ -36,7 +36,7 @@ export const defaultState = {
     /**
      * Increase on every new playground update
      */
-    _demoRevision: 29
+    _demoRevision: 30
 };
 
 /**
@@ -91,10 +91,14 @@ export const resetState = () => {
  * @param {typeof defaultState} newState
  */
 export const saveState = (newState) => {
-    newState && localStorage.setItem(
-        DEMO_ITEM_NAME,
-        JSON.stringify(newState)
-    );
+    try{
+        newState && localStorage.setItem(
+            DEMO_ITEM_NAME,
+            JSON.stringify(newState)
+        );
+    }catch(e){
+        console.error('Failed to save state:', e);
+    }
 };
 
 export function clearInvalidDemoState() {

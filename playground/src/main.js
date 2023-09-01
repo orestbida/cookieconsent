@@ -12,13 +12,11 @@ import './components/categories';
 import './components/disablePageInteraction';
 import './components/darkmode';
 import './components/buttons';
-// import './components/consentDetails';
-// import './components/printCategories';
-// import './components/printValidConsent';
 import './components/guiOptions';
 import './components/consentModalElements';
 import './components/customThemes';
 import './components/downloadConfig';
+import './components/textareaHighlight';
 
 clearInvalidDemoState();
 fireEvent(customEvents._PLAYGROUND_READY);

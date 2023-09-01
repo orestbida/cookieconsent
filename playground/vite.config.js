@@ -1,6 +1,6 @@
-import { defineConfig } from 'vite'
-import { ViteMinifyPlugin } from 'vite-plugin-minify'
-import { ShikiHighlight } from './plugins/shiki-highlighter'
+import { defineConfig } from 'vite';
+import { ViteMinifyPlugin } from 'vite-plugin-minify';
+import { ShikiHighlight } from './plugins/shiki-highlighter';
 
 export default defineConfig({
 
@@ -27,4 +27,4 @@ export default defineConfig({
             }
         }
     },
-})
+});

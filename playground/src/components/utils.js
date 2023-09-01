@@ -1,3 +1,5 @@
+import Prims from 'prismjs';
+
 /**
  * Clone object using recursion
  * @param {any} el
@@ -75,4 +77,42 @@ export const deepEqual = (x, y) => {
         ok(x).length === ok(y).length &&
         ok(x).every(key => deepEqual(x[key], y[key]))
     ) : (x === y);
+};
+
+ /**
+  * @param {HTMLDivElement} rootEl Information about the user.
+  */
+export const enableSyntaxHighlighting = (rootEl) => {
+
+    /**
+     * @type {import('prismjs')}
+     */
+    const highlighter = Prims;
+
+    /** @type {HTMLTextAreaElement} **/ const textarea = rootEl.querySelector('textarea');
+    /** @type {HTMLPreElement} **/      const pre = rootEl.querySelector('pre');
+    /** @type {HTMLElement} **/         const code = rootEl.querySelector('code');
+
+    addEvent(textarea, 'input', highlightFn);
+
+    /**
+     * Fix scrolling
+     */
+    addEvent(textarea, 'scroll', () => {
+        code.setAttribute('style', `min-height: ${textarea.scrollHeight}px`);
+        pre.scrollTop = textarea.scrollTop;
+        pre.scrollLeft = textarea.scrollLeft;
+    });
+
+    addEvent(textarea, 'resize', () => {
+        code.setAttribute('style', `min-height: ${pre.scrollHeight}px`);
+    });
+
+    function highlightFn()  {
+        code.textContent = textarea.value;
+        highlighter.highlightElement(code);
+        code.setAttribute('style', `min-height: ${textarea.scrollHeight}px`);
+    }
+
+    return highlightFn;
 };

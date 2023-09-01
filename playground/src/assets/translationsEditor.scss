@@ -38,6 +38,7 @@
         border: 1px solid #323335;
         padding: 0.7rem 1rem;
         border-radius: 0.4rem;
+        font-size: 14px;
     }
 
     textarea {
@@ -49,8 +50,8 @@
     }
 
     .small-textarea {
-        min-height: 2.6rem;
-        height: 2.6rem;
+        min-height: 2.7rem;
+        height: 2.7rem;
     }
 
     h2 {
@@ -59,6 +60,10 @@
 
     + .editor {
         margin-top: 1.5rem;
+    }
+
+    textarea {
+        border: 1px solid #323335;
     }
 }
 

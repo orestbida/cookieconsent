@@ -1,25 +1,21 @@
 import '../assets/translationsEditor.scss';
 import A11yDialog from 'a11y-dialog';
 import { getById, addEvent } from './utils';
-// eslint-disable-next-line no-unused-vars
 import { getState, defaultState, saveState, reRunPlugin, getCurrentUserConfig } from './stateManager';
 import deepEqual from 'deep-equal';
+import { refreshHighlighting } from './textareaHighlight';
 
 const container = getById('edit-translations-dialog');
-
-/**
- * @type {HTMLSelectElement}
- */
-const selectEditorTranslation = getById('editor-language-codes');
-
 const dialog = new A11yDialog(container);
+
+/** @type {HTMLSelectElement} **/   const selectEditorTranslation = getById('editor-language-codes');
 
 /** @type {HTMLInputElement} **/    const cmTitle = getById('consent-modal-title');
 /** @type {HTMLTextAreaElement} **/ const cmDescription = getById('consent-modal-description');
 /** @type {HTMLInputElement} **/    const cmAcceptBtn = getById('consent-modal-accept-btn');
 /** @type {HTMLInputElement} **/    const cmRejectBtn = getById('consent-modal-reject-btn');
 /** @type {HTMLInputElement} **/    const cmManageBtn = getById('consent-modal-manage-btn');
-/** @type {HTMLTextAreaElement} **/ const cmFooter = getById('consent-modal-footer');
+/** @type {HTMLTextAreaElement} **/ const cmFooter = getById('editing');
 
 /** @type {HTMLInputElement} **/    const pmTitle = getById('pm-title');
 /** @type {HTMLInputElement} **/    const pmCloseIcon = getById('pm-close-icon-label');
@@ -28,22 +24,12 @@ const dialog = new A11yDialog(container);
 /** @type {HTMLInputElement} **/    const pmSaveBtn = getById('pm-save-btn');
 /** @type {HTMLInputElement} **/    const pmServiceConterLabel = getById('pm-service-counter-label');
 
-/**
- * @type {HTMLButtonElement}
- */
-const editBtn = getById('edit-translations-btn');
+/** @type {HTMLButtonElement} **/   const editBtn = getById('edit-translations-btn');
+/** @type {HTMLButtonElement} **/   const saveTranslationBtn = getById('save-translation-config-btn');
 
-/**
- * @type {HTMLButtonElement}
- */
-const saveTranslationBtn = getById('save-translation-config-btn');
-
-/**
- * @type {HTMLButtonElement}
- */
-const addSectionBtn = getById('add-section-btn');
-const pmSections = getById('pm-sections');
-const pmSectionsCounter = getById('sections-counter');
+/** @type {HTMLButtonElement} **/   const addSectionBtn = getById('add-section-btn');
+/** @type {HTMLButtonElement} **/   const pmSections = getById('pm-sections');
+/** @type {HTMLButtonElement} **/   const pmSectionsCounter = getById('sections-counter');
 
 let lastEnabledTranslations = [];
 let currentLanguage = '';
@@ -69,6 +55,7 @@ addEvent(editBtn, 'click', () => {
 
     if(updateEditor() !== false) {
         dialog.show();
+        refreshHighlighting();
         currentLanguage = selectEditorTranslation.value;
     }
 
@@ -115,6 +102,7 @@ addEvent(selectEditorTranslation, 'change', (event) => {
     currentLanguage = selectEditorTranslation.value;
     setActiveTranslation(currentLanguage);
     updateEditorFields();
+    refreshHighlighting();
     equalEditorData = true;
 });
 

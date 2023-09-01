@@ -1,0 +1,62 @@
+#editor-container .textarea-highlight {
+
+    position: relative;
+
+    textarea,
+    pre {
+        border: 0;
+        display: block;
+        overflow: auto;
+        white-space: pre;
+    }
+
+    textarea {
+        padding: 0;
+        z-index: 1;
+        position: relative;
+        color: transparent;
+        background: transparent;
+        caret-color: white;
+    }
+
+    pre {
+        z-index: 0;
+    }
+
+    textarea,
+    pre,
+    code {
+        font-size: 14px;
+        font-family: inherit;
+        line-height: 18px;
+    }
+
+    pre,
+    code {
+        margin: 0;
+        padding: 0;
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+    }
+
+    textarea,
+    code {
+        padding: 1rem;
+        font-size: 14px;
+        font-family: inherit;
+        white-space: pre-wrap;
+    }
+
+    pre {
+        background-color: #272829;
+        border-radius: .4rem;
+    }
+
+    code {
+        background: transparent;
+    }
+
+}
