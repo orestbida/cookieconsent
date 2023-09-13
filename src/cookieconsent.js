@@ -2223,8 +2223,9 @@
             for(var i=0; i<toggles.length; i++) {
                 var category = toggles[i].value;
                 var is_readonly = readonly_categories.includes(category);
+                var is_default = default_enabled_categories.includes(category);
 
-                toggles[i].checked = is_readonly || _cookieconsent.allowedCategory(category);
+                toggles[i].checked = is_readonly || is_default || _cookieconsent.allowedCategory(category);
             }
 
         }
