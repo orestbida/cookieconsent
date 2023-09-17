@@ -107,14 +107,14 @@ import * as CookieConsent from "vanilla-cookieconsent";
 
 export default {
     install: (app, pluginConfig) => {
-        app.config.globalProperties.$cc = CookieConsent;
+        app.config.globalProperties.$CookieConsent = CookieConsent;
         app.config.globalProperties.$CookieConsent.run(pluginConfig);
     }
 }
 ```
 
 ::: info
-The newly created VUE Plugin will allow you to access CookieConsent from any component, using either `this.$cc` or `$cc`.
+The newly created VUE Plugin will allow you to access CookieConsent from any component, using either `this.$CookieConsent` or `$CookieConsent`.
 :::
 
 "Register" the plugin in your root/APP component, inside `main.js`:
