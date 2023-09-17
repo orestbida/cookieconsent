@@ -9,14 +9,14 @@ The language object requires the definition of the following 2 fields:
 - `language.default` default language
 - `language.translations` object containing the text contents used to generate the modals
 
-Check out the [Language Config Reference](/reference/configuration-reference.html#language-required) section for all the possible options.
+Check out the [language config.](/reference/configuration-reference.html#language) section for all the available options.
 
 ## External translations
 The cleanest solution is to separate the translations from the plugin's configuration.
 
 1. Create a new translation file, e.g. `en.json`:
 
-    ::: details en.json content
+    ::: details en.json
     ```json
     {
         "consentModal": {

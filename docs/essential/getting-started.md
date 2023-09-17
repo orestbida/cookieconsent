@@ -28,10 +28,17 @@ You can download/import the plugin using one of the following methods:
     Special thanks to [Till Sanders](https://github.com/tillsanders) for bringing the plugin on npm!
 
 2. Use the CDN hosted version.
+
+    stylesheet:
     ```
-    https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@v3.0.0-rc.16/dist/cookieconsent.umd.js
     https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@v3.0.0-rc.16/dist/cookieconsent.css
     ```
+
+    script:
+    ```
+    https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@v3.0.0-rc.16/dist/cookieconsent.umd.js
+    ```
+
 3. Download the [latest release](https://github.com/orestbida/cookieconsent/releases?q=cookieconsent+v3) from github and use the optimized files located in the `dist` folder.
 
 
@@ -46,29 +53,25 @@ Here are some of the most common setups to help you get up and running.
 <br>
 
 ### HTML
-Import `cookieconsent.css` and `cookieconsent.js` files respectively in the head and body section. Create a new file — `cookieconsent-init.js` — and import it in the body section.
-```html{5,9-10}
+Add the stylesheet in the head section. Create a new file — `cookieconsent-config.js` — and add it in the body section.
+```html{4,8}
 <html>
     <head>
         <!-- head content -->
-
-        <link rel="stylesheet" href="path-to-cookieconsent.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@v3.0.0-rc.16/dist/cookieconsent.css">
     </head>
     <body>
         <!-- body content -->
-        <script defer src="path-to-cookieconsent.js"></script>
-        <script defer src="path-to-cookieconsent-init.js"></script>
+        <script type="module" src="cookieconsent-config.js"></script>
     </body>
 </html>
 ```
 
-::: warning Note
-Replace `path-to-cookieconsent.js`, `path-to-cookieconsent.css` and `path-to-cookieconsent-init.js` with valid paths.
-:::
+Import and [configure](#configuration) the plugin inside `cookieconsent-config.js`:
 
+```javascript{1}
+import 'https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@v3.0.0-rc.16/dist/cookieconsent.umd.js';
 
-[Configure](#configuration) the plugin inside `cookieconsent-init.js`:
-```javascript
 CookieConsent.run({
     // your config. goes here (required)
 });
@@ -96,10 +99,11 @@ export default function App() {
 
 ### Vue
 
-Create a new [VUE Plugin](https://vuejs.org/essential/reusability/plugins.html), `CookieConsentVue.js`:
+Create a new [Vue plugin](https://vuejs.org/guide/reusability/plugins.html): `CookieConsentVue.js`:
+
 ```javascript
 import "vanilla-cookieconsent/dist/cookieconsent.css";
-import * as CookieConsent from "vanilla-cookieconsent"
+import * as CookieConsent from "vanilla-cookieconsent";
 
 export default {
     install: (app, pluginConfig) => {
@@ -132,7 +136,7 @@ createApp(App)
 ### Angular
 
 Declare the `cookieconsent.css` style in the `angular.json` file:
-```json
+```json{6}
 {
     ...
         "build": {
@@ -169,15 +173,15 @@ export class AppComponent implements AfterViewInit{
 }
 ```
 
-Finally, [Configure](#configuration) the plugin.
+Finally, [configure](#configuration) the plugin.
 
 <br>
 
 ## Configuration
 The most basic configuration requires the definition of the following 2 fields:
 
-- `categories`
-- `language`
+- [`categories`](/reference/configuration-reference.html#categories) <span class="required" data-label="required"></span>
+- [`language`](/reference/configuration-reference.html#language) <span class="required" data-label="required"></span>
 
 * **Basic example config.** <br>
 
@@ -260,7 +264,7 @@ You should now see the consent modal pop up!
 You can also define [external translation files](/advanced/language-configuration.html#external-translations).
 :::
 
-If you're having trouble setting up the plugin, you can check out a few [demo examples](https://github.com/orestbida/cookieconsent/tree/master/demo) on github.
+If you're having trouble setting up the plugin, you can check out a few [demo examples](https://github.com/orestbida/cookieconsent/tree/v3.0-beta/demo) on github.
 
 <br>
 

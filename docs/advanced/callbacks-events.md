@@ -12,10 +12,6 @@ Available callbacks:
 
 <br>
 
-::: info
-To use an event listener, simply prepend `cc:` to the callback name.
-:::
-
 ## onFirstConsent
 This event is triggered only the very first time that the user expresses their choice of consent (accept/reject).
 
@@ -23,7 +19,7 @@ This event is triggered only the very first time that the user expresses their c
 
     ```javascript
     cc.run({
-        onFirstConsent: function({cookie}){
+        onFirstConsent: ({cookie}) => {
             // do something
         }
     });
@@ -31,8 +27,9 @@ This event is triggered only the very first time that the user expresses their c
 
     using event listener:
     ```javascript
-    window.addEventListener('cc:onFirstConsent', function(event){
-        // event.detail.cookie
+    window.addEventListener('cc:onFirstConsent', ({detail}) => {
+        // detail.cookie
+
         // do something
     });
     ```
@@ -44,7 +41,7 @@ This event is triggered the very first time the user expresses their choice of c
 
     ```javascript
     cc.run({
-        onConsent: function({cookie}){
+        onConsent: ({cookie}) => {
             // do something
         }
     });
@@ -52,8 +49,9 @@ This event is triggered the very first time the user expresses their choice of c
 
     using event listener:
     ```javascript
-    window.addEventListener('cc:onConsent', function(event){
-        // event.detail.cookie
+    window.addEventListener('cc:onConsent', ({detail}) => {
+        // detail.cookie
+
         // do something
     });
     ```
@@ -65,7 +63,7 @@ This event is triggered when the user modifies their preferences and only if con
 
     ```javascript
     cc.run({
-        onChange: function({cookie, changedCategories, changedServices}){
+        onChange: ({cookie, changedCategories, changedServices}) => {
             // do something
         }
     });
@@ -73,11 +71,11 @@ This event is triggered when the user modifies their preferences and only if con
 
     using event listener:
     ```javascript
-    window.addEventListener('cc:onChange', function(event){
+    window.addEventListener('cc:onChange', ({detail}) => {
         /**
-         * event.detail.cookie
-         * event.detail.changedCategories
-         * event.detail.changedServices
+         * detail.cookie
+         * detail.changedCategories
+         * detail.changedServices
          */
 
         // do something
@@ -91,7 +89,7 @@ This event is triggered when one of the modals is visible.
 
     ```javascript
     cc.run({
-        onModalShow: function({modalName}){
+        onModalShow: ({modalName}) => {
             // do something
         }
     });
@@ -99,9 +97,9 @@ This event is triggered when one of the modals is visible.
 
     using event listener:
     ```javascript
-    window.addEventListener('cc:onModalShow', function(event){
+    window.addEventListener('cc:onModalShow', ({detail}) => {
         /**
-         * event.detail.modalName
+         * detail.modalName
          */
 
         // do something
@@ -115,7 +113,7 @@ This event is triggered when one of the modals is hidden.
 
     ```javascript
     cc.run({
-        onModalHide: function({modalName}){
+        onModalHide: ({modalName}) => {
             // do something
         }
     });
@@ -123,9 +121,9 @@ This event is triggered when one of the modals is hidden.
 
     using event listener:
     ```javascript
-    window.addEventListener('cc:onModalHide', function(event){
+    window.addEventListener('cc:onModalHide', ({detail}) => {
         /**
-         * event.detail.modalName
+         * detail.modalName
          */
 
         // do something
@@ -139,7 +137,7 @@ This event is triggered when a modal is created and appended to the DOM.
 
     ```javascript
     cc.run({
-        onModalReady: function({modalName, modal}){
+        onModalReady: ({modalName, modal}) => {
             // do something
         }
     });
@@ -147,10 +145,10 @@ This event is triggered when a modal is created and appended to the DOM.
 
     using event listener:
     ```javascript
-    window.addEventListener('cc:onModalReady', function(event){
+    window.addEventListener('cc:onModalReady', ({detail}) => {
         /**
-         * event.detail.modalName
-         * event.detail.modal
+         * detail.modalName
+         * detail.modal
          */
 
         // do something

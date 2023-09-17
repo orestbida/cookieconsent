@@ -1,3 +1,13 @@
+:root {
+    --vp-code-font-size: .875rem;
+}
+
+html,
+pre,
+.VPSidebar {
+    scrollbar-width: thin;
+}
+
 /* START: Algolia Search */
 
 .dark .algolia-search-box *,
@@ -107,19 +117,6 @@ a.outline-link[href="#categories"]::after{
 }
 
 .vp-doc a {
-    text-decoration: none!important;
-    background-image: linear-gradient(currentColor,currentColor);
-    background-position: 0 100%;
-    background-repeat: no-repeat;
-    background-size: 0 1px;
-
-    transition: background-size .25s,
-                color .25s ease;
-}
-
-.vp-doc a:focus,
-.vp-doc a:hover {
-    text-decoration: none!important;
-    color: var(--vp-c-brand-dark);
-    background-size: 100% 1px;
+    position: relative;
+    transition: color .25s ease, opacity .25s ease!important;
 }

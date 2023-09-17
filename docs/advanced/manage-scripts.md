@@ -29,31 +29,34 @@ You can manage any script tag. by adding the following 2 attributes (both requir
 
 Before:
 ```html
-<!-- E.g. enable this script only if analytics category is accepted -->
 <script>
-    // Script enabled
+    // Always executed
 </script>
 ```
 
 After:
-```html
-<script type="text/plain" data-category="analytics">
-    // Analytics category enabled
+```html{2-3}
+<script
+    type="text/plain"
+    data-category="analytics">
+    // Executed when the "analytics" category is enabled
 </script>
 ```
 
 You can also run **scripts when a category is disabled** (if it was previously enabled) by prepending the `'!'` character to the category name:
 
-```html
-<script type="text/plain" data-category="!analytics">
-    // Analytics category disabled
+```html{3}
+<script
+    type="text/plain"
+    data-category="!analytics">
+    // Executed when the "analytics category is disabled
 </script>
 ```
 
-::: warning type="module"
-When a script tag is enabled, the `type` attribute is removed by default. To keep the `type="module"` attribute you must specify `data-type="module"`.
+::: warning Custom type
+You can set a custom script type via the `data-type` atttribute. E.g. to set the `type="module"` attribute you must specify `data-type="module"`.
 
-```html
+```html{6}
 <script
     type="text/plain"
     src="my-service-module.js"
@@ -72,16 +75,22 @@ A service represents a script — or a group of scripts — associated to a name
 You can define a service by adding the following attribute:
 - `data-service="your-service-name"`
 
-```html
-<script type="text/plain" data-category="analytics" data-service="Google Analytics">
-    // Google Analytics enabled
+```html{4}
+<script
+    type="text/plain"
+    data-category="analytics"
+    data-service="Google Analytics">
+    // Executed when the "Google Analytics" service is enabled
 </script>
 ```
 
 You can add the `'!'` before the service name to run some clean-up logic when the service is disabled:
-```html
-<script type="text/plain" data-category="analytics" data-service="!Google Analytics">
-    // Google Analytics disabled
+```html{4}
+<script
+    type="text/plain"
+    data-category="analytics"
+    data-service="!Google Analytics">
+    // Executed when the "Google Analytics" service is disabled
 </script>
 ```
 <br>

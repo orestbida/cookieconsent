@@ -8,7 +8,7 @@ This is an example config. and assumes that all iframes belong to the `analytics
 :::
 
 ## Connect IframeManager -> CookieConsent
-When an iframe is accepted via a button click we must notify cookieconsent using the `onChange` callback:
+When an iframe is accepted via a button click we must notify CookieConsent using the `onChange` callback:
 
 ::: warning Note
 The `onChange` callback is available in iframemanager v1.2.0+.

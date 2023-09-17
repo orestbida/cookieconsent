@@ -39,7 +39,7 @@ document.documentElement.classList.add('cc--darkmode');
 ```
 
 ## Available css variables
-You can develop your own theme by modifying/overriding the available css variables which can find in [/src/scss/abstracts](https://github.com/orestbida/cookieconsent/tree/v3.0-beta/src/scss/abstracts/).
+You can develop your own theme by modifying/overriding the available css variables in [/src/scss/abstracts](https://github.com/orestbida/cookieconsent/tree/v3.0-beta/src/scss/abstracts/).
 
 More css variables:
 
@@ -63,7 +63,7 @@ You can disable all transitions simply by setting the transition duration to 0:
 }
 ```
 
-## How to use CSS variables:
+## How to change CSS variables:
 
 1. Create a new `.css` file (or declare the style inline using the `<style>` tag)
 2. Overwrite existing css variables:
