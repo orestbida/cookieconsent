@@ -5,7 +5,7 @@ There is no built-in API for consent logging. You can simply use the browser's `
 ## How to retrieve user's consent
 There are 2 main API methods that allow you to retrieve everything about the current user's preferences:
 
-* [`getUserPreferences()`](/reference/api-reference.html#getcookie)
+* [`getUserPreferences()`](/reference/api-reference.html#getuserpreferences)
 * [`getCookie()`](/reference/api-reference.html#getcookie)
 
 ## How to send to your backend

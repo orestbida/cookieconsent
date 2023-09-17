@@ -11,7 +11,7 @@ Configures the plugin with the provided config. object.
     ```
 - **Details**
 
-    The `config` argument is required and must contain — at least — the [`categories`](/reference/configuration-reference.html#categories-required) and [`language`](/reference/configuration-reference.html#language-required) properties.
+    The `config` argument is required and must contain — at least — the [`categories`](/reference/configuration-reference.html#categories) and [`language`](/reference/configuration-reference.html#language) properties.
 
 - **Example**
     ```javascript
