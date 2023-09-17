@@ -1,3 +1,5 @@
+import "../../dist/cookieconsent.umd.js";
+
 /**
  * Enable suggestions
  * @type {import('../../types')}

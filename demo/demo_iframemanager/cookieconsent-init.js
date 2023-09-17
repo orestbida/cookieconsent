@@ -1,5 +1,7 @@
-const im = iframemanager();
+import "https://cdn.jsdelivr.net/gh/orestbida/iframemanager@1.2.5/dist/iframemanager.js";
+import "../../dist/cookieconsent.umd.js";
 
+const im = iframemanager();
 
 im.run({
 

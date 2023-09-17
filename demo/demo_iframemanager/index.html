@@ -12,36 +12,6 @@
 
     <!-- Load iframemanager css -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orestbida/iframemanager@1.2.5/dist/iframemanager.css">
-
-    <style>
-
-        /* #cc-main .cm,
-        #cc-main .pm{
-            --cc-modal-transition-duration: .25s;
-        }
-
-        #cc-main .pm.pm--box {
-            opacity: 0;
-            transform: translateY(-50%) scale(.97)!important;
-        }
-
-
-        .show--preferences #cc-main .cc--anim .pm.pm--box {
-            transform: translateY(-50%) scale(1)!important;
-        }
-
-        @media screen and (max-width: 640px) {
-            #cc-main .pm.pm--box {
-                transform: scale(.97)!important;
-            }
-
-            .show--preferences #cc-main .cc--anim .pm.pm--box {
-                transform: scale(1)!important;
-            }
-        } */
-
-    </style>
-
 </head>
 <body>
 
@@ -69,9 +39,8 @@
         data-autoscale
     ></div>
 
-    <script defer src="https://cdn.jsdelivr.net/gh/orestbida/iframemanager@1.2.5/dist/iframemanager.js"></script>
-    <script defer src="../../dist/cookieconsent.umd.js"></script>
-    <script defer src="cookieconsent-init.js"></script>
+    <!-- Load plugin scripts -->
+    <script type="module" src="cookieconsent-init.js"></script>
 
     <script type="text/plain" data-category="analytics">
         console.log('enabled analytics');

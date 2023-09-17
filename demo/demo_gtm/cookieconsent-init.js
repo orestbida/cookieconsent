@@ -1,3 +1,4 @@
+import "../../dist/cookieconsent.umd.js";
 
 /**
  * Enable suggestions
