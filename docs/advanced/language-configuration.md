@@ -82,7 +82,7 @@ The cleanest solution is to separate the translations from the plugin's configur
 2. Configure the plugin for use with the external `en.json` translation:
 
     ```javascript
-    cc.run({
+    CookieConsent.run({
         language: {
             default: 'en',
             translations: {
@@ -99,7 +99,7 @@ You can set up multiple languages by following the same steps!
 An inline translation is easier to implement, but might also make the configuration harder to manage — especially if you have a lot of translations.
 
 ```javascript
-cc.run({
+CookieConsent.run({
     language: {
         default: 'en',
         translations: {

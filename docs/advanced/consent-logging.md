@@ -18,8 +18,8 @@ Here is a full example.
 function logConsent(){
 
     // Retrieve all the fields
-    const cookie = cc.getCookie();
-    const preferences = cc.getUserPreferences();
+    const cookie = CookieConsent.getCookie();
+    const preferences = CookieConsent.getUserPreferences();
 
     // In this example we're saving only 4 fields
     const userConsent = {

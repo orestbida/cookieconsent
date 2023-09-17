@@ -108,7 +108,7 @@ import * as CookieConsent from "vanilla-cookieconsent";
 export default {
     install: (app, pluginConfig) => {
         app.config.globalProperties.$cc = CookieConsent;
-        app.config.globalProperties.$cc.run(pluginConfig);
+        app.config.globalProperties.$CookieConsent.run(pluginConfig);
     }
 }
 ```
@@ -178,85 +178,247 @@ Finally, [configure](#configuration) the plugin.
 <br>
 
 ## Configuration
-The most basic configuration requires the definition of the following 2 fields:
 
-- [`categories`](/reference/configuration-reference.html#categories) <span class="required" data-label="required"></span>
-- [`language`](/reference/configuration-reference.html#language) <span class="required" data-label="required"></span>
+All configs. require the following 2 fields to be set up properly:
 
-* **Basic example config.** <br>
+- [`categories`](/reference/configuration-reference.html#categories)
+- [`language`](/reference/configuration-reference.html#language)
 
-    ```javascript
-    CookieConsent.run({
+::: code-group
 
-        categories: {
-            necessary: {
-                enabled: true,  // this category is enabled by default
-                readOnly: true  // this category cannot be disabled
-            },
-            analytics: {
-                enabled: false,
-                readOnly: false,
+```javascript [Basic example]
+/**
+ * All config. options available here:
+ * https://cookieconsent.orestbida.com/reference/configuration-reference.html
+ */
+CookieConsent.run({
 
-                // Delete specific cookies when the user opts-out of this category
-                autoClear: {
-                    cookies: [
+    categories: {
+        necessary: {
+            enabled: true,  // this category is enabled by default
+            readOnly: true  // this category cannot be disabled
+        },
+        analytics: {}
+    },
+
+    language: {
+        default: 'en',
+        translations: {
+            en: {
+                consentModal: {
+                    title: 'We use cookies',
+                    description: 'Cookie modal description',
+                    acceptAllBtn: 'Accept all',
+                    acceptNecessaryBtn: 'Reject all',
+                    showPreferencesBtn: 'Manage Individual preferences'
+                },
+                preferencesModal: {
+                    title: 'Manage cookie preferences',
+                    acceptAllBtn: 'Accept all',
+                    acceptNecessaryBtn: 'Reject all',
+                    savePreferencesBtn: 'Accept current selection',
+                    closeIconLabel: 'Close modal',
+                    sections: [
                         {
-                            name: /^_ga/,   // regex: match all cookies starting with '_ga'
+                            title: 'Somebody said ... cookies?',
+                            description: 'I want one!'
                         },
                         {
-                            name: '_gid',   // string: exact cookie name
+                            title: 'Strictly Necessary cookies',
+                            description: 'These cookies are essential for the proper functioning of the website and cannot be disabled.',
+
+                            //this field will generate a toggle linked to the 'necessary' category
+                            linkedCategory: 'necessary'
+                        },
+                        {
+                            title: 'Performance and Analytics',
+                            description: 'These cookies collect information about how you use our website. All of the data is anonymized and cannot be used to identify you.',
+                            linkedCategory: 'analytics'
+                        },
+                        {
+                            title: 'More information',
+                            description: 'For any queries in relation to my policy on cookies and your choices, please <a href="#contact-page">contact us</a>'
                         }
                     ]
                 }
             }
+        }
+    }
+});
+```
+
+```javascript [Fully featured example]
+/**
+ * All config. options available here:
+ * https://cookieconsent.orestbida.com/reference/configuration-reference.html
+ */
+CookieConsent.run({
+
+    // root: 'body',
+    // autoShow: true,
+    // disablePageInteraction: true,
+    // hideFromBots: true,
+    // mode: 'opt-in',
+    // revision: 0,
+
+    cookie: {
+        name: 'cc_cookie',
+        // domain: location.hostname,
+        // path: '/',
+        // sameSite: "Lax",
+        // expiresAfterDays: 365,
+    },
+
+    // https://cookieconsent.orestbida.com/reference/configuration-reference.html#guioptions
+    guiOptions: {
+        consentModal: {
+            layout: 'cloud inline',
+            position: 'bottom center',
+            equalWeightButtons: true,
+            flipButtons: false
         },
+        preferencesModal: {
+            layout: 'box',
+            equalWeightButtons: true,
+            flipButtons: false
+        }
+    },
 
-        language: {
-            default: 'en',
+    onFirstConsent: ({cookie}) => {
+        console.log('onFirstConsent fired',cookie);
+    },
 
-            translations: {
-                en: {
-                    consentModal: {
-                        title: 'We use cookies',
-                        description: 'Cookie modal description',
-                        acceptAllBtn: 'Accept all',
-                        acceptNecessaryBtn: 'Reject all',
-                        showPreferencesBtn: 'Manage Individual preferences'
+    onConsent: ({cookie}) => {
+        console.log('onConsent fired!', cookie)
+    },
+
+    onChange: ({changedCategories, changedServices}) => {
+        console.log('onChange fired!', changedCategories, changedServices);
+    },
+
+    onModalReady: ({modalName}) => {
+        console.log('ready:', modalName);
+    },
+
+    onModalShow: ({modalName}) => {
+        console.log('visible:', modalName);
+    },
+
+    onModalHide: ({modalName}) => {
+        console.log('hidden:', modalName);
+    },
+
+    categories: {
+        necessary: {
+            enabled: true,  // this category is enabled by default
+            readOnly: true  // this category cannot be disabled
+        },
+        analytics: {
+            autoClear: {
+                cookies: [
+                    {
+                        name: /^_ga/,   // regex: match all cookies starting with '_ga'
                     },
-                    preferencesModal: {
-                        title: 'Manage cookie preferences',
-                        acceptAllBtn: 'Accept all',
-                        acceptNecessaryBtn: 'Reject all',
-                        savePreferencesBtn: 'Accept current selection',
-                        closeIconLabel: 'Close modal',
-                        sections: [
-                            {
-                                title: 'Somebody said ... cookies?',
-                                description: 'I want one!'
-                            },
-                            {
-                                title: 'Strictly Necessary cookies',
-                                description: 'These cookies are essential for the proper functioning of the website and cannot be disabled.',
-
-                                //this field will generate a toggle linked to the 'necessary' category
-                                linkedCategory: 'necessary'
-                            },
-                            {
-                                title: 'Performance and Analytics',
-                                description: 'These cookies collect information about how you use our website. All of the data is anonymized and cannot be used to identify you.',
-                                linkedCategory: 'analytics'
-                            },
-                            {
-                                title: 'More information',
-                                description: 'For any queries in relation to my policy on cookies and your choices, please <a href="#contact-page">contact us</a>'
-                            }
-                        ]
+                    {
+                        name: '_gid',   // string: exact cookie name
                     }
+                ]
+            },
+
+            // https://cookieconsent.orestbida.com/reference/configuration-reference.html#category-services
+            services: {
+                ga: {
+                    label: 'Google Analytics',
+                    onAccept: () => {},
+                    onReject: () => {}
+                },
+                youtube: {
+                    label: 'Youtube Embed',
+                    onAccept: () => {},
+                    onReject: () => {}
+                },
+            }
+        },
+        ads: {}
+    },
+
+    language: {
+        default: 'en',
+        translations: {
+            en: {
+                consentModal: {
+                    title: 'We use cookies',
+                    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua',
+                    acceptAllBtn: 'Accept all',
+                    acceptNecessaryBtn: 'Reject all',
+                    showPreferencesBtn: 'Manage Individual preferences',
+                    // closeIconLabel: 'Reject all and close modal',
+                    footer: `
+                        <a href="#path-to-impressum.html" target="_blank">Impressum</a>
+                        <a href="#path-to-privacy-policy.html" target="_blank">Privacy Policy</a>
+                    `,
+                },
+                preferencesModal: {
+                    title: 'Manage cookie preferences',
+                    acceptAllBtn: 'Accept all',
+                    acceptNecessaryBtn: 'Reject all',
+                    savePreferencesBtn: 'Accept current selection',
+                    closeIconLabel: 'Close modal',
+                    serviceCounterLabel: 'Service|Services',
+                    sections: [
+                        {
+                            title: 'Your Privacy Choices',
+                            description: `In this panel you can express some preferences related to the processing of your personal information. You may review and change expressed choices at any time by resurfacing this panel via the provided link. To deny your consent to the specific processing activities described below, switch the toggles to off or use the “Reject all” button and confirm you want to save your choices.`,
+                        },
+                        {
+                            title: 'Strictly Necessary',
+                            description: 'These cookies are essential for the proper functioning of the website and cannot be disabled.',
+
+                            //this field will generate a toggle linked to the 'necessary' category
+                            linkedCategory: 'necessary'
+                        },
+                        {
+                            title: 'Performance and Analytics',
+                            description: 'These cookies collect information about how you use our website. All of the data is anonymized and cannot be used to identify you.',
+                            linkedCategory: 'analytics',
+                            cookieTable: {
+                                caption: 'Cookie table',
+                                headers: {
+                                    name: 'Cookie',
+                                    domain: 'Domain',
+                                    desc: 'Description'
+                                },
+                                body: [
+                                    {
+                                        name: '_ga',
+                                        domain: location.hostname,
+                                        desc: 'Description 1',
+                                    },
+                                    {
+                                        name: '_gid',
+                                        domain: location.hostname,
+                                        desc: 'Description 2',
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            title: 'Targeting and Advertising',
+                            description: 'These cookies are used to make advertising messages more relevant to you and your interests. The intention is to display ads that are relevant and engaging for the individual user and thereby more valuable for publishers and third party advertisers.',
+                            linkedCategory: 'ads',
+                        },
+                        {
+                            title: 'More information',
+                            description: 'For any queries in relation to my policy on cookies and your choices, please <a href="#contact-page">contact us</a>'
+                        }
+                    ]
                 }
             }
         }
-    });
-    ```
+    }
+});
+```
+:::
 
 You should now see the consent modal pop up!
 
@@ -268,41 +430,14 @@ If you're having trouble setting up the plugin, you can check out a few [demo ex
 
 <br>
 
-
-## Manage scripts/cookies
-You can block any `script` tag by simply adding the following 2 attributes:
-
-- `type="text/plain"` disables the script
-- `data-category="category-name"` enables the script if the specified category is accepted
-
-Before:
-```html
-<script src="external.js"></script>
-
-<script>
-    console.log("Hi i'm an inline script!");
-</script>
-```
-
-After:
-```html
-<script src="external.js" type="text/plain" data-category="analytics"></script>
-
-<script type="text/plain" data-category="analytics">
-    console.log("Hi, I'm an inline script!");
-</script>
-```
-
-You can also use [callbacks or custom events](/advanced/callbacks-events) for more flexibility.
-
-<br>
-
-## Open preferences modal
-The simplest way to open the preferences modal is by creating a `button` (or a link) with the following attribute:
-- `data-cc="show-preferencesModal"`
+## How to open the preferences modal
+You can open the preferences modal using a `button` with the following [`data-cc`](/advanced/custom-attribute) attribute:
 
 ```html
 <button type="button" data-cc="show-preferencesModal">Manage cookie preferences</button>
 ```
 
-Check out all the possible [data-cc](/advanced/custom-attribute)  values.
+## How to block scripts/cookies
+Showing the consent banner is not enough for you to be compliant with the GDPR. You also need to block all scripts/cookies until the user gives their consent.
+
+Go to the [scripts management](/advanced/manage-scripts.html) section for more details.

@@ -6,7 +6,7 @@ You can enable the revision management if you need to refresh the consent due to
 ## Enable revisions
 To enable revisions, you just need to specify a valid `revision` number in your configuration:
 ```javascript
-cc.run({
+CookieConsent.run({
     revision: 1
 });
 ```
@@ -24,7 +24,7 @@ Optionally, you can also set a revision message to let your users know what has 
 2. Specify the `{{startBrackets}}revisionMessage{{endBrackets}}` placeholder inside `consentModal.description`
 
 ```javascript
-cc.run({
+CookieConsent.run({
     revision: 1,
 
     language: {

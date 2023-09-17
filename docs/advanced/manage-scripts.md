@@ -9,7 +9,7 @@ There are two ways to manage your scripts:
 * `data-category`: name of the category
 * `data-service` (optional): if specified, a toggle will be generated in the `preferencesModal`
 * `data-type` (optional): custom type (e.g. `"module"`)
-* `data-src` (optional): can be used instead of `src` to avooid validation issues
+* `data-src` (optional): can be used instead of `src` to avoid validation issues
 
 Example usage:
 ```html
@@ -54,7 +54,7 @@ You can also run **scripts when a category is disabled** (if it was previously e
 ```
 
 ::: warning Custom type
-You can set a custom script type via the `data-type` atttribute. E.g. to set the `type="module"` attribute you must specify `data-type="module"`.
+You can set a custom script type via the `data-type` attribute. E.g. to set the `type="module"` attribute you must specify `data-type="module"`.
 
 ```html{6}
 <script
@@ -98,13 +98,13 @@ You can add the `'!'` before the service name to run some clean-up logic when th
 ## Using callbacks/events
 You can adapt the above examples for use inside the `onConsent` callback:
 ```javascript
-cc.run({
+CookieConsent.run({
     onConsent: function(){
-        if(cc.acceptedCategory('analytics')){
+        if(CookieConsent.acceptedCategory('analytics')){
             // Analytics category enabled
         }
 
-        if(cc.acceptedService('Google Analytics', 'analytics')){
+        if(CookieConsent.acceptedService('Google Analytics', 'analytics')){
             // Google Analytics enabled
         }
     }
@@ -114,18 +114,18 @@ cc.run({
 Another handy callback is the `onChange` callback, fired when the state of the categories or services is changed (assuming that consent was already expressed).
 
 ```javascript
-cc.run({
+CookieConsent.run({
     onChange: function({changedCategories, changedServices}){
         if(changedCategories.includes('analytics')){
 
-            if(cc.acceptedCategory('analytics')){
+            if(CookieConsent.acceptedCategory('analytics')){
                 // Analytics category was just enabled
             }else{
                 // Analytics category was just disabled
             }
 
             if(changedServices['analytics'].includes('Google Analytics')){
-                if(cc.acceptedService('Google Analytics', 'analytics')){
+                if(CookieConsent.acceptedService('Google Analytics', 'analytics')){
                     // Google Analytics was just enabled
                 }else{
                     // Google Analytics was just disabled

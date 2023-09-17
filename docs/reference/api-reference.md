@@ -15,7 +15,7 @@ Configures the plugin with the provided config. object.
 
 - **Example**
     ```javascript
-    cc.run({
+    CookieConsent.run({
         categories: {
             // categories here
         },
@@ -47,10 +47,10 @@ Shows the consent modal.
 
 - **Example**
     ```javascript
-    cc.show();
+    CookieConsent.show();
 
     // show modal (if it doesn't exist, create it)
-    cc.show(true);
+    CookieConsent.show(true);
     ```
 
 ## hide
@@ -65,7 +65,7 @@ Hides the consent modal.
 
 - **Example**
     ```javascript
-    cc.hide();
+    CookieConsent.hide();
     ```
 
 ## showPreferences
@@ -80,7 +80,7 @@ Shows the preferences modal.
 
 - **Example**
     ```javascript
-    cc.showPreferences();
+    CookieConsent.showPreferences();
     ```
 
 
@@ -96,7 +96,7 @@ Hides the preferences modal.
 
 - **Example**
     ```javascript
-    cc.hidePreferences();
+    CookieConsent.hidePreferences();
     ```
 
 ## acceptCategory
@@ -121,15 +121,15 @@ Accepts or rejects categories.
 
 - **Examples**
     ```javascript
-    cc.acceptCategory('all');                // accept all categories
-    cc.acceptCategory([]);                   // reject all (accept only categories marked as readOnly/necessary)
-    cc.acceptCategory();                     // accept currently selected categories inside the preferences modal
+    CookieConsent.acceptCategory('all');                // accept all categories
+    CookieConsent.acceptCategory([]);                   // reject all (accept only categories marked as readOnly/necessary)
+    CookieConsent.acceptCategory();                     // accept currently selected categories inside the preferences modal
 
-    cc.acceptCategory('analytics');          // accept only the "analytics" category
-    cc.acceptCategory(['cat_1', 'cat_2']);   // accept only these 2 categories
+    CookieConsent.acceptCategory('analytics');          // accept only the "analytics" category
+    CookieConsent.acceptCategory(['cat_1', 'cat_2']);   // accept only these 2 categories
 
-    cc.acceptCategory('all', ['analytics']); // accept all categories except the "analytics" category
-    cc.acceptCategory('all', ['cat_1', 'cat_2']); // accept all categories except these 2
+    CookieConsent.acceptCategory('all', ['analytics']); // accept all categories except the "analytics" category
+    CookieConsent.acceptCategory('all', ['cat_1', 'cat_2']); // accept all categories except these 2
     ```
 
 
@@ -145,11 +145,11 @@ Returns `true` if the specified category was accepted, otherwise `false`.
 
 - **Examples**
     ```javascript
-    if(cc.acceptedCategory('analytics')){
+    if(CookieConsent.acceptedCategory('analytics')){
         // great
     }
 
-    if(!cc.acceptedCategory('ads')){
+    if(!CookieConsent.acceptedCategory('ads')){
         // not so great
     }
     ```
@@ -175,11 +175,11 @@ Accepts or rejects services.
 
 - **Examples**
     ```javascript
-    cc.acceptService('all', 'analytics');   // accept all services (in the 'analytics' category)
-    cc.acceptService([], 'analytics');      // reject all services
+    CookieConsent.acceptService('all', 'analytics');   // accept all services (in the 'analytics' category)
+    CookieConsent.acceptService([], 'analytics');      // reject all services
 
-    cc.acceptService('service1', 'analytics');     // accept only this specific service (reject all the others)
-    cc.acceptService(['service1', 'service2'], 'analytics');   // accept only these 2 services (reject all the others)
+    CookieConsent.acceptService('service1', 'analytics');     // accept only this specific service (reject all the others)
+    CookieConsent.acceptService(['service1', 'service2'], 'analytics');   // accept only these 2 services (reject all the others)
     ```
 
 ## acceptedService
@@ -197,7 +197,7 @@ Returns `true` if the service inside the category is accepted, otherwise `false`
 
 - **Examples**
     ```javascript
-    if(cc.acceptedService('Google Analytics', 'analytics')){
+    if(CookieConsent.acceptedService('Google Analytics', 'analytics')){
         // great
     }else{
         // not so great
@@ -222,7 +222,7 @@ Returns `true` if consent is valid.
 
 - **Example**
     ```javascript
-    if(cc.validConsent()){
+    if(CookieConsent.validConsent()){
         // consent is valid
     }else{
         // consent is not valid
@@ -248,7 +248,7 @@ Returns `true` if the specified cookie is valid (it exists and its content is no
     Check if the `'gid'` cookie is set.
 
     ```javascript
-    if(cc.validCookie('_gid')){
+    if(CookieConsent.validCookie('_gid')){
         // _gid cookie is valid!
     }else{
         // _gid cookie is not set ...
@@ -274,12 +274,12 @@ Removes one or multiple cookies.
     Delete the plugin's own cookie
 
     ```javascript
-    cc.eraseCookies('cc_cookie');
+    CookieConsent.eraseCookies('cc_cookie');
     ```
 
     Delete the `_gid` and all cookies starting with `_ga`:
     ```javascript
-    cc.eraseCookies(['_gid', /^_ga/], '/', location.hostname);
+    CookieConsent.eraseCookies(['_gid', /^_ga/], '/', location.hostname);
     ```
 
 
@@ -301,10 +301,10 @@ Loads script files (`.js`).
 
     ```javascript
     // basic usage
-    cc.loadScript('path-to-script.js');
+    CookieConsent.loadScript('path-to-script.js');
 
     // check if script is loaded successfully
-    const loaded = await cc.loadScript('path-to-script.js');
+    const loaded = await CookieConsent.loadScript('path-to-script.js');
 
     if(!loaded){
         console.log('Script failed to load!');
@@ -313,14 +313,14 @@ Loads script files (`.js`).
 
     You may also concatenate multiple `.loadScript` methods:
     ```javascript
-    cc.loadScript('path-to-script1.js')
-        .then(() => cc.loadScript('path-to-script2.js'))
-        .then(() => cc.loadScript('path-to-script3.js'));
+    CookieConsent.loadScript('path-to-script1.js')
+        .then(() => CookieConsent.loadScript('path-to-script2.js'))
+        .then(() => CookieConsent.loadScript('path-to-script3.js'));
     ```
 
     Load script with attributes:
     ```javascript
-    cc.loadScript('path-to-script.js', {
+    CookieConsent.loadScript('path-to-script.js', {
         'id': 'ga-script',
         'another-attribute': 'another-value'
     });
@@ -350,10 +350,10 @@ Returns the plugin's own cookie, or just one of the fields.
 - **Example**
     ```javascript
     // Get only the 'data' field
-    const data = cc.getCookie('data');
+    const data = CookieConsent.getCookie('data');
 
     // Get all fields
-    const cookieContent = cc.getCookie();
+    const cookieContent = CookieConsent.getCookie();
     ```
 
 ## getConfig
@@ -368,10 +368,10 @@ Returns the configuration object or one of its fields.
 - **Example**
     ```javascript
     // Get the entire config
-    const config = cc.getConfig();
+    const config = CookieConsent.getConfig();
 
     // Get only the language' prop.
-    const language = cc.getConfig('language');
+    const language = CookieConsent.getConfig('language');
     ```
 
 ## getUserPreferences
@@ -399,7 +399,7 @@ Returns user's preferences, such as accepted/rejected categories and services.
 - **Example** <br>
 
     ```javascript
-    const preferences = cc.getUserPreferences();
+    const preferences = CookieConsent.getUserPreferences();
 
     if(preferences.acceptType === 'all'){
         console.log("Awesome!");
@@ -426,15 +426,15 @@ Changes the modal's language. Returns a `Promise<boolean>` which evaluates to `t
 
     ```javascript
     // Simple usage
-    cc.setLanguage('it');
+    CookieConsent.setLanguage('it');
 
     // Get return value
-    const success = await cc.setLanguage('en');
+    const success = await CookieConsent.setLanguage('en');
     ```
 
     Forcefully refresh modals (re-generates the html content):
     ```javascript
-    cc.setLanguage('en', true);
+    CookieConsent.setLanguage('en', true);
     ```
 
 ## setCookieData
@@ -464,30 +464,30 @@ Save custom data into the cookie. Returns `true` if the data was set successfull
 
     ```javascript
     // First set: true
-    cc.setData({
+    CookieConsent.setData({
         value: {id: 21, lang: 'it'}
     }); //{id: 21, lang: 'it'}
 
     // Change only the 'id' field: true
-    cc.setData({
+    CookieConsent.setData({
         value: {id: 22},
         mode: 'update'
     }); //{id: 22, lang: 'it'}
 
     // Add a new field: true
-    cc.setData({
+    CookieConsent.setData({
         value: {newField: 'newValue'},
         mode: 'update'
     }); //{id: 22, lang: 'it', newField: 'newValue'}
 
     // Change 'id' to a string value: FALSE
-    cc.setData({
+    CookieConsent.setData({
         value: {id: 'hello'},
         mode: 'update'
     }); //{id: 22, lang: 'it', newField: 'newValue'}
 
     // Overwrite: true
-    cc.setData({
+    CookieConsent.setData({
         value: 'overwriteEverything'
     }); // 'overwriteEverything'
     ```
@@ -513,5 +513,5 @@ Reset CookieConsent.
 
 - **Example**:
     ```javascript
-    cc.reset(true);
+    CookieConsent.reset(true);
     ```

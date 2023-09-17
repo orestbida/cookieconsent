@@ -14,7 +14,7 @@ Root (parent) element where the modal will be appended as a last child.
 - **Default**: `document.body`
 - **Example**: <br>
     ```javascript
-    cc.run({
+    CookieConsent.run({
         root: '#app'  // css selector
     })
     ```
@@ -42,7 +42,7 @@ Changes the scripts' activation logic when consent is not valid.
 
     const dynamicMode = euCountries.contains(userCountry) ? 'opt-in' : 'opt-out';
 
-    cc.run({
+    CookieConsent.run({
         mode: dynamicMode
     })
     ```
@@ -58,11 +58,11 @@ Automatically show the consent modal if consent is not valid.
     Disable `autoShow` and show modal after 3 seconds:
 
     ```javascript
-    cc.run({
+    CookieConsent.run({
         autoShow: false
     })
 
-    setTimeout(cc.show, 3000)
+    setTimeout(CookieConsent.show, 3000)
     ```
 
 ## revision
@@ -187,7 +187,7 @@ Number of days before the cookie expires.
     If the user accepted all categories, set `expiresAfterDays=365.25`, otherwise set `expiresAfterDays=182`.
 
     ```javascript
-    cc.run({
+    CookieConsent.run({
         cookie: {
             expiresAfterDays: acceptType => {
                 return acceptType === 'all'
@@ -212,13 +212,13 @@ Callback function executed once, on the user's first consent action.
 - **Type**:
   ```javascript
   function({
-      cookie: {} // same as cc.getCookie()
+      cookie: {} // same as CookieConsent.getCookie()
   }): void
   ```
 
 * **Example**: <br>
     ```javascript
-    cc.run({
+    CookieConsent.run({
         onFirstConsent: ({cookie}) => {
             // do something
         }
@@ -235,13 +235,13 @@ Callback function executed on the user's first consent action and after each pag
 - **Type**:
   ```javascript
   function({
-      cookie: {} // same value as cc.getCookie()
+      cookie: {} // same value as CookieConsent.getCookie()
   }): void
   ```
 
 * **Example**: <br>
     ```javascript
-    cc.run({
+    CookieConsent.run({
         onConsent: ({cookie}) => {
             // do something
         }
@@ -259,25 +259,25 @@ Callback function executed when the user's preferences — such as accepted cate
 - **Type**:
   ```javascript
   function({
-      cookie: {},   // same as cc.getCookie()
+      cookie: {},   // same as CookieConsent.getCookie()
       changedCategories: string[],
       changedPreferences: {[category: string]: string[]}
   }): void
   ```
 - **Example**: <br>
     ```javascript
-    cc.run({
+    CookieConsent.run({
         onChange: ({cookie, changedCategories, changedPreferences}) => {
             if(changedCategories.includes('analytics')){
 
-                if(cc.acceptedCategory('analytics')){
+                if(CookieConsent.acceptedCategory('analytics')){
                     // the analytics category was just enabled
                 }else{
                     // the analytics category was just disabled
                 }
 
                 if(changedServices['analytics'].includes('Google Analytics')){
-                    if(cc.acceptedService('Google Analytics', 'analytics')){
+                    if(CookieConsent.acceptedService('Google Analytics', 'analytics')){
                         // Google Analytics was just enabled
                     }else{
                         // Google Analytics was just disabled
@@ -301,7 +301,7 @@ Callback function executed when one of the modals is visible.
 
 * **Example**: <br>
     ```javascript
-    cc.run({
+    CookieConsent.run({
         onModalShow: ({modalName}) => {
             // do something
         }
@@ -328,7 +328,7 @@ Callback function executed when one of the modals is hidden.
 
 * **Example**: <br>
     ```javascript
-    cc.run({
+    CookieConsent.run({
         onModalHide: ({modalName}) => {
             // do something
         }
@@ -354,7 +354,7 @@ Callback function executed when one of the modals is created and appended to the
 
 * **Example**: <br>
     ```javascript
-    cc.run({
+    CookieConsent.run({
         onModalReady: ({modalName, modal}) => {
             // do something
         }
@@ -497,7 +497,7 @@ Use to define your cookie categories.
 
     How to define the `analytics` category:
     ```javascript
-    cc.run({
+    CookieConsent.run({
         categories: {
             analytics: {}
         }
@@ -512,7 +512,7 @@ Mark the category as enabled by default.
 - **Default**: `false`
 - **Example**: <br>
     ```javascript
-    cc.run({
+    CookieConsent.run({
         categories: {
             necessary: {
                 enabled: true
@@ -533,7 +533,7 @@ Treat the category as read-only/necessary (always enabled).
 - **Default**: `false`
 - **Example**:
     ```javascript
-    cc.run({
+    CookieConsent.run({
         categories: {
             necessary: {
                 readOnly: true
@@ -574,7 +574,7 @@ Clear cookies when the user rejects the cookie category.
     Clear the `'_gid'` cookie and all the other cookies starting with `'_ga'` when the user opts-out of the "analytics" category.
 
     ```javascript
-    cc.run({
+    CookieConsent.run({
         categories: {
             analytics: {
                 readOnly: false,
@@ -622,7 +622,7 @@ Define individually togglable services.
 
     Defining 2 services: `ga` and `new_service`:
     ```javascript
-    cc.run({
+    CookieConsent.run({
         categories: {
             analytics: {
                 services: {
@@ -675,7 +675,7 @@ The desired default language.
 - **Type**: `string`
 - **Example**:
     ```javascript
-    cc.run({
+    CookieConsent.run({
         language: {
             default: 'en'
         }
@@ -703,7 +703,7 @@ List of languages that should use the RTL layout.
 - **Type**: `string | string[]`
 - **Example**: <br>
     ```javascript
-    cc.run({
+    CookieConsent.run({
         language: {
             default: 'en',
             rtl: 'ar',  // enable RTL for Arabic
@@ -738,7 +738,7 @@ Define the translation(s) content.
 
     External translation file:
     ```javascript
-    cc.run({
+    CookieConsent.run({
         language: {
             default: 'en',
             translations: {
@@ -750,7 +750,7 @@ Define the translation(s) content.
 
     Inline translation object:
     ```javascript
-    cc.run({
+    CookieConsent.run({
         language: {
             default: 'en',
             translations: {

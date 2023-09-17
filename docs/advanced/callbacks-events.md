@@ -18,7 +18,7 @@ This event is triggered only the very first time that the user expresses their c
 - **Example** <br>
 
     ```javascript
-    cc.run({
+    CookieConsent.run({
         onFirstConsent: ({cookie}) => {
             // do something
         }
@@ -40,7 +40,7 @@ This event is triggered the very first time the user expresses their choice of c
 - **Example** <br>
 
     ```javascript
-    cc.run({
+    CookieConsent.run({
         onConsent: ({cookie}) => {
             // do something
         }
@@ -62,7 +62,7 @@ This event is triggered when the user modifies their preferences and only if con
 - **Example** <br>
 
     ```javascript
-    cc.run({
+    CookieConsent.run({
         onChange: ({cookie, changedCategories, changedServices}) => {
             // do something
         }
@@ -88,7 +88,7 @@ This event is triggered when one of the modals is visible.
 - **Example** <br>
 
     ```javascript
-    cc.run({
+    CookieConsent.run({
         onModalShow: ({modalName}) => {
             // do something
         }
@@ -112,7 +112,7 @@ This event is triggered when one of the modals is hidden.
 - **Example** <br>
 
     ```javascript
-    cc.run({
+    CookieConsent.run({
         onModalHide: ({modalName}) => {
             // do something
         }
@@ -136,7 +136,7 @@ This event is triggered when a modal is created and appended to the DOM.
 - **Example** <br>
 
     ```javascript
-    cc.run({
+    CookieConsent.run({
         onModalReady: ({modalName, modal}) => {
             // do something
         }
