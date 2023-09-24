@@ -488,29 +488,38 @@ Cookies must be listed manually as the plugin is not aware of them.
     });
     ```
 
+    **For the autoclear function to work, the _first_ column must contain the name of the cookie!**
+
+    You can also specify 3 optional fields for each cookie item:
+    * `is_regex`: boolean
+    * `domain`: string
+    * `path`: string
+
     The `is_regex` option is handy if you want to match multiple cookies without specifying them individually.
 
-    This matches all cookies starting with `'_ga'`
     ```javascript
+    // Match all cookies starting with `'_ga'`
     {
         col1: '^_ga',
-        col2: '...',
-        col3: '...',
         is_regex: true
     }
     ```
-    This only matches the specific `'_ga'` cookie:
+
     ```javascript
+    // Match only the `'_ga'` cookie
     {
         col1: '_ga',
-        col2: '...',
-        col3: '...'
     }
     ```
 
-    You can also customize the table (add/remove columns).
+    The domain `domain` option is useful when you are in a subdomain but you want to clear cookies set in the main domain:
 
-    **For the autoclear cookies function to work, the _first_ column must contain the name of the cookie!**
+    ```javascript
+    {
+        col1: '_ga',
+        domain: 'example.com'   // main domain
+    }
+    ```
 
     [Full example](https://github.com/orestbida/cookieconsent/blob/9ad310e7edcac7bf23600ff0e23d42254d3fced2/demo/demo_iframemanager/cookieconsent-init.js#L139).
 
