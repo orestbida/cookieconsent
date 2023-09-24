@@ -70,11 +70,18 @@ declare global {
         reload?: 'on_disable' | 'on_clear'
     }
 
+    interface CookieTableItem {
+        domain?: string
+        path?: string
+        is_regex?: boolean
+        [key: string]: string | boolean | undefined
+    }
+
     interface BlockSetting {
         title: string
         description: string
         toggle?: ToggleSetting
-        cookie_table?: Record<string, string | boolean>[]
+        cookie_table?: CookieTableItem[]
     }
 
     interface SettingsModalLanguageSetting {
