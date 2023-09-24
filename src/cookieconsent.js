@@ -16,9 +16,11 @@
          * CHANGE THIS FLAG FALSE TO DISABLE console.log()
          */
         var ENABLE_LOGS = true;
+        var OPT_IN = 'opt-in';
+        var OPT_OUT = 'opt-out';
 
         var _config = {
-            'mode': 'opt-in',                         // 'opt-in', 'opt-out'
+            'mode': OPT_IN,                         // 'opt-in', 'opt-out'
             'current_lang': 'en',
             'auto_language': null,
             'autorun': true,                          // run as soon as loaded
@@ -251,8 +253,8 @@
             if(typeof user_config['onChange'] === "function")
                 onChange = user_config['onChange'];
 
-            if(user_config['mode'] === 'opt-out')
-                _config.mode = 'opt-out';
+            if(user_config['mode'] === OPT_OUT)
+                _config.mode = OPT_OUT;
 
             if(typeof user_config['revision'] === "number"){
                 user_config['revision'] > -1 && (_config.revision = user_config['revision']);
@@ -740,15 +742,14 @@
                         }else{
                             !new_settings_blocks && toggle_states.push(false);
                         }
-                    }else if(toggle_data['enabled']){
+                    }else if(toggle_data['enabled'] && _config.mode === OPT_OUT){
                         block_switch.checked = true;
                         !new_settings_blocks && toggle_states.push(true);
 
                         /**
                          * Keep track of categories enabled by default (useful when mode=='opt-out')
                          */
-                        if(toggle_data['enabled'])
-                            !new_settings_blocks && default_enabled_categories.push(cookie_category);
+                        !new_settings_blocks && default_enabled_categories.push(cookie_category);
 
                     }else{
                         !new_settings_blocks && toggle_states.push(false);
@@ -1234,7 +1235,7 @@
                  */
                 invalid_consent = false;
 
-                if(_config.mode === 'opt-in') return;
+                if(_config.mode === OPT_IN) return;
             }
 
             // fire onChange only if settings were changed
@@ -1442,7 +1443,7 @@
          */
         _cookieconsent.allowedCategory = function(cookie_category){
 
-            if(!invalid_consent || _config.mode === 'opt-in')
+            if(!invalid_consent || _config.mode === OPT_IN)
                 var allowed_categories = JSON.parse(_getCookie(_config.cookie_name, 'one', true) || '{}')['categories'] || []
             else  // mode is 'opt-out'
                 var allowed_categories = default_enabled_categories;
@@ -1532,7 +1533,7 @@
                     _log("CookieConsent [NOTICE]: consent already given!", saved_cookie_content);
 
                 }else{
-                    if(_config.mode === 'opt-out'){
+                    if(_config.mode === OPT_OUT){
                         _log("CookieConsent [CONFIG] mode='" + _config.mode + "', default enabled categories:", default_enabled_categories);
                         _manageExistingScripts();
                     }
@@ -1556,7 +1557,7 @@
              */
             var enabled_categories = saved_cookie_content['categories'] || [];
 
-            if(invalid_consent && _config.mode === 'opt-out')
+            if(invalid_consent && _config.mode === OPT_OUT)
                 enabled_categories = default_enabled_categories;
 
             // get all the scripts with "cookie-category" attribute
