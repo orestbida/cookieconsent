@@ -577,8 +577,8 @@ button:hover{
 
 .themes {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 0.4rem;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 0.5rem;
 }
 
 .themes label {
@@ -607,6 +607,20 @@ button:hover{
     border-radius: 0.4rem;
     pointer-events: none;
     border: .125rem solid transparent;
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+}
+
+.themes .theme-type {
+    font-weight: 600;
+    font-size: .8rem;
+}
+
+.themes .theme-name {
+    font-size: 1.2em;
+    margin-bottom: 1rem;
+    font-weight: 600;
 }
 
 .themes input:focus + .input-label{
@@ -630,6 +644,102 @@ button:hover{
 .themes input:checked + .input-label {
     background: #555c5c;
 }
+
+.custom-themes {
+    margin-top: 1rem;
+}
+
+.custom-themes .hl {
+    margin-bottom: 0;
+    overflow: hidden;
+}
+
+.custom-themes .hl__title:hover{
+    background-color: #191e22;
+}
+
+.custom-themes .hl__title {
+    font-size: .9rem;
+    color: #b0c4d4;
+}
+
+.custom-block {
+    font-size: 0.9rem;
+    padding: 1rem 1.4rem;
+    margin: 1rem 0;
+    border-radius: 0.5rem;
+}
+.custom-block--info {
+    background-color: #3c637747;
+    border: 0.0625rem solid rgba(210, 238, 255, 0.04);
+}
+.custom-block--info .custom-block__title {
+    color: #7ec9e7;
+}
+
+.custom-block[open] > summary::before {
+    transform: translateY(-10%) rotate(225deg);
+}
+
+.custom-block[open] summary {
+    border-bottom: 0.0625rem solid #232a31;
+}
+
+.custom-block summary {
+    cursor: pointer;
+    transition: color .2s ease, background-color .2s ease;
+}
+
+.custom-block summary::before {
+    border-style: solid;
+    border-width: 0 0.125rem 0.125rem 0;
+    padding: 0.2em;
+    display: inline-block;
+    top: 0.0625rem;
+    position: relative;
+    content: "";
+    margin-right: 1em;
+    transform: translateY(-50%) rotate(45deg);
+}
+
+.custom-block--warning {
+    background-color: #2c282647;
+    border: 0.0625rem solid rgba(255, 240, 210, 0.04);
+}
+.custom-block .custom-block--warning .custom-block__title {
+    color: #e7b97e;
+}
+.custom-block .custom-block--tip .custom-block__title {
+    color: #7ee79a;
+}
+.custom-block--details {
+    padding: 0;
+}
+.custom-block--details .custom-block__desc {
+    padding: 1em 1.4em;
+}
+.custom-block summary {
+    padding-bottom: 0;
+    display: block;
+    padding: 0.75em 1.4em;
+}
+.custom-block__title {
+    font-weight: 600;
+}
+.custom-block__desc {
+    overflow: hidden;
+}
+.custom-block__desc p, .custom-block__desc ul {
+    margin-bottom: 0;
+    margin-top: 0.8125rem;
+}
+.custom-block__desc > *:first-child {
+    margin-top: 0;
+}
+.custom-block__desc > *:last-child {
+    margin-bottom: 0;
+}
+
 
 /** Edit translations modal **/
 
