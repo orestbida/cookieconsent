@@ -33,9 +33,9 @@
   "homepage": "https://github.com/orestbida/cookieconsent/tree/v2.8",
   "devDependencies": {
     "cssnano": "^6.0.1",
-    "postcss": "^8.4.30",
+    "postcss": "^8.4.31",
     "postcss-cli": "^10.1.0",
-    "postcss-custom-properties": "^13.3.1",
-    "terser": "^5.20.0"
+    "postcss-custom-properties": "^13.3.2",
+    "terser": "^5.21.0"
   }
 }
