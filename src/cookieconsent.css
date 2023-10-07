@@ -30,6 +30,7 @@
     --cc-consent-modal-box-shadow: 0 0.625rem 1.875rem rgba(2, 2, 3, 0.28);
     --cc-webkit-scrollbar-bg: #cfd5db;
     --cc-webkit-scrollbar-bg-hover: #9199a0;
+    --cc-bar-max-width: 32rem;
 }
 
 /** Dark color-scheme **/
@@ -1018,7 +1019,7 @@ html.force--consent.show--consent body{
 }
 
 #cm.bar #c-inr{
-    max-width: 32em;
+    max-width: var(--cc-bar-max-width);
     margin: 0 auto;
 }
 
