@@ -11,6 +11,7 @@ import {
     getModalFocusableData,
     addDataButtonListeners,
     getSvgIcon,
+    handleFocusTrap,
     fireEvent
 } from '../../utils/general';
 
@@ -279,6 +280,7 @@ export const createConsentModal = (api, createMainContainer) => {
         fireEvent(globalObj._customEvents._onModalReady, CONSENT_MODAL_NAME, dom._cm);
         createMainContainer(api);
         appendChild(dom._ccMain, dom._cmContainer);
+        handleFocusTrap(dom._cm);
 
         /**
          * Enable transition

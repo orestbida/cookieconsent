@@ -254,15 +254,12 @@ export class GlobalState {
 
             /**
             * Both of the arrays below have the same structure:
-            * [0]: holds reference to the FIRST focusable element inside modal
-            * [1]: holds reference to the LAST focusable element inside modal
+            * [0]: first focusable element inside modal
+            * [1]: last focusable element inside modal
             */
 
             /** @type {HTMLElement[]} **/ _cmFocusableElements : [],
             /** @type {HTMLElement[]} **/ _pmFocusableElements : [],
-
-            /** @type {HTMLDivElement} **/ _currentFocusedModal: null,
-            /** @type {HTMLDivElement[]} **/ _currentFocusEdges: [],
 
             /**
             * Keep track of enabled/disabled categories

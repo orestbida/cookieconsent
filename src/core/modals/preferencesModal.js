@@ -15,6 +15,7 @@ import {
     isObject,
     fireEvent,
     getSvgIcon,
+    handleFocusTrap,
     _log
 } from '../../utils/general';
 
@@ -491,6 +492,7 @@ export const createPreferencesModal = (api, createMainContainer) => {
         fireEvent(globalObj._customEvents._onModalReady, PREFERENCES_MODAL_NAME, dom._pm);
         createMainContainer(api);
         appendChild(dom._ccMain, dom._pmContainer);
+        handleFocusTrap(dom._pm);
 
         /**
          * Enable transition

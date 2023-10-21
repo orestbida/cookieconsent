@@ -36,8 +36,6 @@ export const generateHtml = (api) => {
 
     if(!globalObj._config.lazyHtmlGeneration)
         createPreferencesModal(api, createMainContainer);
-
-    handleFocusTrap();
 };
 
 export * from './consentModal';

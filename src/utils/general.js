@@ -739,16 +739,6 @@ export const focus = (el, modalId, toggleTabIndex) => {
         el.focus();
     }
 
-    if(modalId) {
-        globalObj._state._currentFocusedModal = modalId === 1
-            ? globalObj._dom._cm
-            : globalObj._dom._pm;
-
-        globalObj._state._currentFocusEdges = modalId === 1
-            ? globalObj._state._cmFocusableElements
-            : globalObj._state._pmFocusableElements;
-    }
-
     /**
      * Remove the `tabindex` attribute so
      * that the html markup is valid again
@@ -833,52 +823,65 @@ export const getSvgIcon = (iconIndex = 0, strokeWidth = 1.5) => {
 /**
  * Trap focus inside modal and focus the first
  * focusable element of current active modal
+ * @param {HTMLDivElement} modal
  */
-export const handleFocusTrap = () => {
+export const handleFocusTrap = (modal) => {
 
     const dom = globalObj._dom;
     const state = globalObj._state;
-    const trapFocusScope = globalObj._state._userConfig.disablePageInteraction
-        ? dom._htmlDom
-        : dom._ccMain;
 
-    addEvent(trapFocusScope, 'keydown', (e) => {
+    /**
+     * @param {HTMLDivElement} modal
+     * @param {HTMLElement[]} focusableElements
+     */
+    const trapFocus = (modal) => {
 
-        if(e.key !== 'Tab')
-            return;
+        const isConsentModal = modal === dom._cm;
 
-        /**
-         * Handle tab key only if at least one modal is visible
-         */
-        if(!state._preferencesModalVisible && !state._consentModalVisible)
-            return;
+        const scope = state._userConfig.disablePageInteraction
+            ? dom._htmlDom
+            : isConsentModal
+                ? dom._ccMain
+                : dom._htmlDom;
 
-        const focusableElements = state._currentFocusEdges;
-        const currentModal = state._currentFocusedModal;
+        const getFocusableElements = () => isConsentModal
+            ? state._cmFocusableElements
+            : state._pmFocusableElements;
 
-        // If there is any element to focus
-        if(focusableElements.length > 0){
+        const isModalVisible = () => isConsentModal
+            ? state._consentModalVisible && !state._preferencesModalVisible
+            : state._preferencesModalVisible;
+
+        addEvent(scope, 'keydown', (e) => {
+
+            if (e.key !== 'Tab' || !isModalVisible())
+                return;
 
             const currentActiveElement = getActiveElement();
+            const focusableElements = getFocusableElements();
+
+            if(focusableElements.length === 0)
+                return;
 
             /**
              * If reached natural end of the tab sequence => restart
              * If current focused element is not inside modal => focus modal
              */
-            if(e.shiftKey){
-                if (currentActiveElement === focusableElements[0] || !currentModal.contains(currentActiveElement)) {
+            if (e.shiftKey) {
+                if (currentActiveElement === focusableElements[0] || !modal.contains(currentActiveElement)) {
                     preventDefault(e);
                     focus(focusableElements[1]);
                 }
-            }else{
-                if (currentActiveElement === focusableElements[1] || !currentModal.contains(currentActiveElement)) {
+            } else {
+                if (currentActiveElement === focusableElements[1] || !modal.contains(currentActiveElement)) {
                     preventDefault(e);
                     focus(focusableElements[0]);
                 }
             }
-        }
+        }, true);
+    };
 
-    }, true);
+    trapFocus(modal);
 };
 
 /**
@@ -902,7 +905,7 @@ export const getModalFocusableData = (modalId) => {
     /**
      * Saves all focusable elements inside modal, into the array
      * @param {HTMLElement} modal
-     * @param {Element[]} _array
+     * @param {Element[]} array
      */
     const saveAllFocusableElements = (modal, array) => {
 
