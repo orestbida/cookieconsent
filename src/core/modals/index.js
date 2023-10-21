@@ -1,5 +1,5 @@
 import { globalObj } from '../global';
-import { createNode, handleFocusTrap, isString, addDataButtonListeners } from '../../utils/general';
+import { createNode, isString, addDataButtonListeners } from '../../utils/general';
 import { createConsentModal } from './consentModal';
 import { createPreferencesModal } from './preferencesModal';
 import { DIV_TAG } from '../../utils/constants';
