@@ -20,6 +20,7 @@ import {
     toggleDisableInteraction,
     fireEvent,
     getKeys,
+    focusAfterTransition,
     deepCopy
 } from '../utils/general';
 
@@ -197,13 +198,17 @@ export const show = (createModal) => {
     if(_state._disablePageInteraction)
         toggleDisableInteraction(true);
 
+    focusAfterTransition(_dom._cm, 1);
+
     addClass(_dom._htmlDom, TOGGLE_CONSENT_MODAL_CLASS);
     setAttribute(_dom._cm, ARIA_HIDDEN, 'false');
 
     /**
      * Set focus to consentModal
      */
-    focus(_dom._cmContainer, 1);
+    setTimeout(() => {
+        focus(globalObj._dom._cmDivTabindex, 1);
+    }, 100);
 
     _log('CookieConsent [TOGGLE]: show consentModal');
 
@@ -257,8 +262,6 @@ export const showPreferences = () => {
         createPreferencesModal(miniAPI, createMainContainer);
 
     state._preferencesModalVisible = true;
-    addClass(globalObj._dom._htmlDom, TOGGLE_PREFERENCES_MODAL_CLASS);
-    setAttribute(globalObj._dom._pm, ARIA_HIDDEN, 'false');
 
     // If there is no consent-modal, keep track of the last focused elem.
     if(!state._consentModalVisible){
@@ -267,10 +270,17 @@ export const showPreferences = () => {
         state._lastFocusedModalElement = getActiveElement();
     }
 
+    focusAfterTransition(globalObj._dom._pm, 2);
+
+    addClass(globalObj._dom._htmlDom, TOGGLE_PREFERENCES_MODAL_CLASS);
+    setAttribute(globalObj._dom._pm, ARIA_HIDDEN, 'false');
+
     /**
      * Set focus to preferencesModal
      */
-    focus(globalObj._dom._pmContainer, 2);
+    setTimeout(() => {
+        focus(globalObj._dom._pmDivTabindex, 2);
+    }, 100);
 
     _log('CookieConsent [TOGGLE]: show preferencesModal');
 

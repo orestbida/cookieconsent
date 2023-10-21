@@ -93,7 +93,6 @@ export const createConsentModal = (api, createMainContainer) => {
         addClassCm(dom._cmTexts, 'texts');
         addClassCm(dom._cmBtns, 'btns');
 
-        dom._cmContainer.tabIndex = -1;
         setAttribute(dom._cm, 'role', 'dialog');
         setAttribute(dom._cm, 'aria-modal', 'true');
         setAttribute(dom._cm, ARIA_HIDDEN, 'false');
@@ -103,11 +102,6 @@ export const createConsentModal = (api, createMainContainer) => {
             setAttribute(dom._cm, 'aria-label', consentModalLabelValue);
         else if(consentModalTitleValue)
             setAttribute(dom._cm, 'aria-labelledby', 'cm__title');
-
-        /**
-         * Make modal by default hidden to prevent weird page jumps/flashes (shown only once css is loaded)
-         */
-        dom._cm.style.visibility = 'hidden';
 
         const
             boxLayout = 'box',
@@ -140,6 +134,10 @@ export const createConsentModal = (api, createMainContainer) => {
         if(acceptAllBtnData || acceptNecessaryBtnData || showPreferencesBtnData)
             appendChild(dom._cmBody, dom._cmBtns);
 
+        dom._cmDivTabindex = createNode(DIV_TAG);
+        setAttribute(dom._cmDivTabindex, 'tabIndex', -1);
+        appendChild(dom._cm, dom._cmDivTabindex);
+
         appendChild(dom._cm, dom._cmBody);
         appendChild(dom._cmContainer, dom._cm);
     }
@@ -147,10 +145,8 @@ export const createConsentModal = (api, createMainContainer) => {
     if(consentModalTitleValue){
 
         if(!dom._cmTitle){
-            dom._cmTitle = createNode(DIV_TAG);
+            dom._cmTitle = createNode('h2');
             dom._cmTitle.className = dom._cmTitle.id = 'cm__title';
-            setAttribute(dom._cmTitle, 'role', 'heading');
-            setAttribute(dom._cmTitle, 'aria-level', '2');
             appendChild(dom._cmTexts, dom._cmTitle);
         }
 
@@ -170,7 +166,7 @@ export const createConsentModal = (api, createMainContainer) => {
         }
 
         if(!dom._cmDescription){
-            dom._cmDescription = createNode(DIV_TAG);
+            dom._cmDescription = createNode('p');
             dom._cmDescription.className = dom._cmDescription.id = 'cm__desc';
             appendChild(dom._cmTexts, dom._cmDescription);
         }

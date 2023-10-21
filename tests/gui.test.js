@@ -1,4 +1,5 @@
 import { globalObj } from "../src/core/global";
+import { getActiveElement } from "../src/utils/general";
 import * as CookieConsent from "../src/index"
 import testConfig from "./config/full-config";
 
@@ -130,6 +131,26 @@ describe("Test UI options", () =>{
         const classList2 = getModalClassList('.pm');
         expect(classList.contains('cm--box')).toBe(true);
         expect(classList2.contains('pm--box')).toBe(true);
+    });
+
+    it('consentModal should receive focus when it is shown', async () => {
+        await api.run(testConfig);
+        const prevActiveElement = getActiveElement();
+        api.show();
+        await new Promise(r => setTimeout(r, 300));
+        const currActiveElement = getActiveElement();
+        expect(currActiveElement).not.toBe(prevActiveElement);
+        expect(document.querySelector('.cm > div[tabIndex="-1"]')).toBe(currActiveElement);
+    });
+
+    it('preferencesModal should receive focus when it is shown', async () => {
+        await api.run(testConfig);
+        const prevActiveElement = getActiveElement();
+        api.showPreferences();
+        await new Promise(r => setTimeout(r, 300));
+        const currActiveElement = getActiveElement();
+        expect(currActiveElement).not.toBe(prevActiveElement);
+        expect(document.querySelector('.pm > div[tabIndex="-1"]')).toBe(currActiveElement);
     });
 })
 

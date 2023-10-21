@@ -79,7 +79,6 @@ export const createPreferencesModal = (api, createMainContainer) => {
         // modal container
         dom._pmContainer = createNode(DIV_TAG);
         addClass(dom._pmContainer, 'pm-wrapper');
-        dom._pmContainer.tabIndex = -1;
 
         // modal overlay
         const pmOverlay = createNode('div');
@@ -93,7 +92,6 @@ export const createPreferencesModal = (api, createMainContainer) => {
 
         // preferences modal
         dom._pm = createNode(DIV_TAG);
-        dom._pm.style.visibility = 'hidden';
 
         addClass(dom._pm, 'pm');
         setAttribute(dom._pm, 'role', 'dialog');
@@ -110,11 +108,9 @@ export const createPreferencesModal = (api, createMainContainer) => {
         dom._pmHeader = createNode(DIV_TAG);
         addClassPm(dom._pmHeader, 'header');
 
-        dom._pmTitle = createNode(DIV_TAG);
+        dom._pmTitle = createNode('h2');
         addClassPm(dom._pmTitle, 'title');
         dom._pmTitle.id = 'pm__title';
-        setAttribute(dom._pmTitle, 'role', 'heading');
-        setAttribute(dom._pmTitle, 'aria-level', '2');
 
         dom._pmCloseBtn = createNode(BUTTON_TAG);
         addClassPm(dom._pmCloseBtn, 'close-btn');
@@ -144,6 +140,10 @@ export const createPreferencesModal = (api, createMainContainer) => {
 
         appendChild(dom._pmHeader, dom._pmTitle);
         appendChild(dom._pmHeader, dom._pmCloseBtn);
+
+        dom._pmDivTabindex = createNode(DIV_TAG);
+        setAttribute(dom._pmDivTabindex, 'tabIndex', -1);
+        appendChild(dom._pm, dom._pmDivTabindex);
 
         appendChild(dom._pm, dom._pmHeader);
         appendChild(dom._pm, dom._pmBody);
@@ -305,7 +305,7 @@ export const createPreferencesModal = (api, createMainContainer) => {
         }
 
         if(sDescriptionData){
-            var sDesc = createNode(DIV_TAG);
+            var sDesc = createNode('p');
             addClassPm(sDesc, 'section-desc');
 
             sDesc.innerHTML = sDescriptionData;

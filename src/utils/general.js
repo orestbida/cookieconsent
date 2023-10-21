@@ -517,7 +517,7 @@ export const uuidv4 = () => {
  * Add event listener to dom object (cross browser function)
  * @param {Element} elem
  * @param {keyof WindowEventMap} event
- * @param {EventListenerOrEventListenerObject} fn
+ * @param {EventListener} fn
  * @param {boolean} [saveListener]
  */
 export const addEvent = (elem, event, fn, saveListener) => {
@@ -741,8 +741,8 @@ export const focus = (el, modalId, toggleTabIndex) => {
 
     if(modalId) {
         globalObj._state._currentFocusedModal = modalId === 1
-            ? globalObj._dom._cmContainer
-            : globalObj._dom._pmContainer;
+            ? globalObj._dom._cm
+            : globalObj._dom._pm;
 
         globalObj._state._currentFocusEdges = modalId === 1
             ? globalObj._state._cmFocusableElements
@@ -754,6 +754,26 @@ export const focus = (el, modalId, toggleTabIndex) => {
      * that the html markup is valid again
      */
     toggleTabIndex && (el && el.removeAttribute('tabindex'));
+};
+
+/**
+ * @param {HTMLDivElement} element
+ * @param {1 | 2} modalId
+ */
+export const focusAfterTransition = (element, modalId) => {
+
+    const getVisibleDiv = (modalId) => modalId === 1
+        ? globalObj._dom._cmDivTabindex
+        : globalObj._dom._pmDivTabindex;
+
+    const setFocus = (event) => {
+        event.target.removeEventListener('transitionend', setFocus);
+        if (event.propertyName === 'opacity' && getComputedStyle(element).opacity === '1') {
+            focus(getVisibleDiv(modalId), modalId);
+        }
+    };
+
+    addEvent(element, 'transitionend', setFocus);
 };
 
 /**
@@ -818,8 +838,11 @@ export const handleFocusTrap = () => {
 
     const dom = globalObj._dom;
     const state = globalObj._state;
+    const trapFocusScope = globalObj._state._userConfig.disablePageInteraction
+        ? dom._htmlDom
+        : dom._ccMain;
 
-    addEvent(dom._htmlDom, 'keydown', (e) => {
+    addEvent(trapFocusScope, 'keydown', (e) => {
 
         if(e.key !== 'Tab')
             return;
