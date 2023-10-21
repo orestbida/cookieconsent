@@ -83,10 +83,10 @@
         }
 
         ::-webkit-scrollbar-thumb{
-            border: .25em solid var(--cc-bg);
+            border: .25rem solid var(--cc-bg);
             -webkit-background-clip: padding-box;
             background-clip: padding-box;
-            border-radius: 1em;
+            border-radius: 1rem;
             background: var(--cc-toggle-readonly-bg);
 
             &:hover {

@@ -1,6 +1,7 @@
 @import "../global";
 
-$sections-padding: 1em 1.3em;
+$sections-padding-y: 1em;
+$sections-padding-x: 1.3em;
 $footer-links-gap: 1.3em;
 
 #cc-main{
@@ -60,11 +61,10 @@ $footer-links-gap: 1.3em;
         justify-content: space-between;
     }
 
-    .cm__texts,
     .cm__btns,
     .cm__links{
         width: unset;
-        padding: $sections-padding;
+        padding: $sections-padding-y $sections-padding-x;
     }
 
     .cm__texts{
@@ -72,7 +72,12 @@ $footer-links-gap: 1.3em;
         flex-direction: column;
         justify-content: center;
         flex: 1;
-        padding-bottom: 0;
+        padding: $sections-padding-y 0 0;
+    }
+
+    .cm__title,
+    .cm__desc{
+        padding: 0 $sections-padding-x;
     }
 
     .cm__title{
@@ -664,7 +669,8 @@ $footer-links-gap: 1.3em;
             padding: 0!important;
         }
 
-        .cm__texts,
+        .cm__title,
+        .cm__desc,
         .cm__btns,
         .cm__links{
             padding-left: 1.1em!important;
