@@ -300,7 +300,7 @@ const discardUnsavedPreferences = () => {
     /**
      * @param {string} category
      */
-    const categoryEnabledByDefault = (category) => globalObj._state._userConfig.mode === OPT_OUT_MODE && !!allDefinedCategories[category].enabled;
+    const categoryEnabledByDefault = (category) => elContains(globalObj._state._defaultEnabledCategories, category);
 
     for(const category in categoryInputs) {
 
@@ -614,6 +614,7 @@ const retrieveState = () => {
         || !validCategories;
 
     _log('CookieConsent [STATUS] valid consent:', !state._invalidConsent);
+    retrieveEnabledCategoriesAndServices();
 
     /**
      * Retrieve last accepted categories from cookie
@@ -632,8 +633,6 @@ const retrieveState = () => {
         ]);
     }else{
         if(config.mode === OPT_OUT_MODE) {
-            retrieveEnabledCategoriesAndServices();
-
             state._acceptedCategories = [
                 ...state._defaultEnabledCategories
             ];

@@ -1,6 +1,6 @@
 import { globalObj } from '../core/global';
 import { createNode, setAttribute, elContains, getAttribute, removeAttribute, isFunction } from './general';
-import { OPT_OUT_MODE, SCRIPT_TAG_SELECTOR } from './constants';
+import { SCRIPT_TAG_SELECTOR } from './constants';
 
 /**
  * @param {string} type
@@ -204,7 +204,7 @@ export const retrieveEnabledCategoriesAndServices = () => {
     for(const categoryName of state._allCategoryNames){
         const category = state._allDefinedCategories[categoryName];
 
-        if(category.readOnly || (category.enabled && state._userConfig.mode === OPT_OUT_MODE)){
+        if(category.readOnly || (category.enabled && state._invalidConsent)){
             state._defaultEnabledCategories.push(categoryName);
 
             const services = state._allDefinedServices[categoryName] || {};
