@@ -1,17 +1,27 @@
 version: 2.1
 
 orbs:
-  node: circleci/node@5.0.2
+  node: circleci/node@5.1.0
 
 jobs:
   run-test:
     docker:
       - image: cimg/node:lts
+    working_directory: ~/repo
+
     steps:
       - checkout
       - run:
           name: Check changed files or skip
-          command: git show -m HEAD --name-only --pretty="" | egrep -q "^(src|tests|\.circleci).*\.(js|ts|yml)$|^(package\.json|rollup\.config\.js)$" || circleci-agent step halt
+          command: |
+            changed_files=$(git diff --name-only $CIRCLE_SHA1...$CIRCLE_BRANCH)
+            
+            if [[ -n $(echo "$changed_files" | grep -E "src/|tests/") ]]; then
+              echo "Detected changes in src or tests directory. Running tests..."
+            else
+              echo "No changes in src or tests directory. Skipping tests."
+              exit 0
+            fi
       - restore_cache:
           name: Restore pnpm Package Cache
           keys:
