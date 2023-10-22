@@ -51,6 +51,21 @@ h4 {
     font-size: 1.2rem;
 }
 
+h3, h4 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.7rem;
+}
+
+h3 {
+    justify-content: flex-start;
+}
+
+section h3 {
+    margin-top: 0;
+}
+
 p {
     margin: 0;
     font-size: .9rem;
@@ -86,6 +101,31 @@ input[type=radio] {
     font-family: inherit;
     font-size: inherit;
     color: inherit;
+}
+
+a.help-icon {
+    background: #eef4ff17;
+    color: #f0f4ff9e;
+    width: 24px;
+    height: 24px;
+    font-size: .9rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    padding-bottom: 1px;
+    border-radius: 100%;
+    border: 1px solid #ffffff05;
+    transition: color .25s ease,
+                background-color .25s ease,
+                border-color .25s ease;
+}
+
+a.help-icon:focus,
+a.help-icon:hover {
+    color: #000;
+    background-color: #fff;
+    border-color: #fff;
 }
 
 .custom-input:disabled {
@@ -348,6 +388,10 @@ a.info:focus {
     display: flex;
     align-items: center;
     margin-top: .35rem;
+}
+
+.checkbox-div label {
+    margin-bottom: 2px;
 }
 
 .checkbox-div input[type="checkbox"] {
