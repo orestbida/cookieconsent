@@ -454,16 +454,15 @@ $service-toggle-knob-icon-width: 1.7px;
         flex-direction: column;
         font-size: .9em;
         color: var(--cc-secondary-color);
+
+        & > * + * {
+            border-top: 1px solid var(--cc-cookie-category-block-border);
+        }
     }
 
     .pm__section-services{
         display: flex;
         flex-direction: column;
-
-        & + div,
-        & + table{
-            border-top: 1px solid var(--cc-cookie-category-block-border);
-        }
     }
 
     .pm__service{
@@ -518,8 +517,7 @@ $service-toggle-knob-icon-width: 1.7px;
     }
 
     .pm__table-caption {
-        border-top: 1px solid var(--cc-cookie-category-block-border);
-        text-align: start;
+        text-align: left;
     }
 
     .pm__table-caption,
