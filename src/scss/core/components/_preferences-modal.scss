@@ -372,7 +372,7 @@ $service-toggle-knob-icon-width: 1.7px;
         background: var(--cc-toggle-off-knob-bg);
         box-shadow: 0 1px 2px rgba(24, 32, 3, .36);
         transition: transform .25s ease, background-color .25s ease;
-        border-radius: 100%;
+        border-radius: var(--cc-pm-toggle-border-radius);
     }
 
     .toggle__icon-on,
