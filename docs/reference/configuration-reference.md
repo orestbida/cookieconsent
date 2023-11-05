@@ -489,7 +489,8 @@ Use to define your cookie categories.
     {[category: string]: {
         enabled?: boolean,
         readOnly?: boolean,
-        autoClear?: AutoClear
+        autoClear?: AutoClear,
+        services?: Service[]
     }}
     ```
 
@@ -537,9 +538,6 @@ Treat the category as read-only/necessary (always enabled).
         categories: {
             necessary: {
                 readOnly: true
-            },
-            analytics: {
-                readOnly: false
             }
         }
     })
@@ -607,7 +605,8 @@ Define individually togglable services.
         [service: string]: {
             label?: string,
             onAccept?: () => void,
-            onReject?: () => void
+            onReject?: () => void,
+            cookies: CookieItem[]
         }
     }
     ```
@@ -617,6 +616,7 @@ Define individually togglable services.
     - `label`: overwrites the visible name in the preferencesModal (can be html)
     - `onAccept`: callback function executed when the service is accepted
     - `onReject`: callback function executed when the service is rejected (assuming that it was previously accepted)
+    - `cookies`: array of cookies to erase when the service is disabled/rejected
 
 * **Example**:
 
@@ -633,7 +633,12 @@ Define individually togglable services.
                         },
                         onReject: () => {
                             // disable ga
-                        }
+                        },
+                        cookies: [
+                            {
+                                name: /^(_ga|_gid)/
+                            }
+                        ]
                     },
                     new_service: {
                         label: 'Another Service',
