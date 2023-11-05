@@ -130,6 +130,7 @@ export const saveCookiePreferences = () => {
             servicesWereChanged = true;
     }
 
+    //{{START: GUI}}
     const categoryToggles = globalObj._dom._categoryCheckboxInputs;
 
     /**
@@ -149,6 +150,7 @@ export const saveCookiePreferences = () => {
             serviceInput.checked = elContains(enabledServices, serviceName);
         }
     }
+    //{{END: GUI}}
 
     if(!state._consentTimestamp)
         state._consentTimestamp = new Date();

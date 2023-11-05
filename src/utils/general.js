@@ -323,9 +323,10 @@ export const resolveEnabledCategories = (categories, excludedCategories) => {
     let enabledCategories = [];
 
     if(!categories){
-        enabledCategories = _preferencesModalExists
-            ? retrieveCategoriesFromModal()
-            : _acceptedCategories;
+        enabledCategories = _acceptedCategories;
+        //{{START: GUI}}
+        enabledCategories = _preferencesModalExists && retrieveCategoriesFromModal();
+        //{{END: GUI}}
     }else{
 
         if(isArray(categories)){

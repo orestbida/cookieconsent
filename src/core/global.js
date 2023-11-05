@@ -249,6 +249,8 @@ export class GlobalState {
             * (used later to restore focus when both modals are closed)
             */
 
+            //{{START: GUI}}
+
             /** @type {HTMLElement} **/_lastFocusedElemBeforeModal: false,
             /** @type {HTMLElement} **/_lastFocusedModalElement: false,
 
@@ -266,6 +268,8 @@ export class GlobalState {
             * @type {boolean[]}
             */
             _allToggleStates : [],
+
+            //{{END: GUI}}
 
             /**
             * @type {Object.<string, Services>}
@@ -301,6 +305,7 @@ export class GlobalState {
             _allScriptTags: []
         };
 
+        //{{START: GUI}}
 
         /**
          * Pointers to main dom elements
@@ -310,6 +315,8 @@ export class GlobalState {
             _categoryCheckboxInputs: {},
             _serviceCheckboxInputs: {}
         };
+
+        //{{END: GUI}}
 
         /**
          * Callback functions

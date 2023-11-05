@@ -27,7 +27,9 @@ export const setConfig = (userConfig) => {
      * (avoid window/document is not defined error)
      */
     _dom._document = doc;
+    //{{START: GUI}}
     _dom._htmlDom = doc.documentElement;
+    //{{END: GUI}}
     cookie.domain = location.hostname;
 
     /**
