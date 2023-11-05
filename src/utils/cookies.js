@@ -60,6 +60,24 @@ export const autoclearCookiesHelper = (isFirstConsent) => {
     const allCookiesArray = getAllCookies();
     const categoriesToClear = getCategoriesWithCookies(isFirstConsent);
 
+    /**
+     * Clear cookies for each disabled service
+     */
+    for(const categoryName in state._lastChangedServices) {
+        for(const serviceName of state._lastChangedServices[categoryName]) {
+            const serviceCookies = state._allDefinedServices[categoryName][serviceName].cookies;
+            const serviceIsDisabled = !elContains(state._acceptedServices[categoryName], serviceName);
+
+            if(!serviceIsDisabled || !serviceCookies)
+                continue;
+
+            for(const cookieItem of serviceCookies) {
+                const foundCookies = findMatchingCookies(allCookiesArray, cookieItem.name);
+                eraseCookiesHelper(foundCookies, cookieItem.path, cookieItem.domain);
+            }
+        }
+    }
+
     for(const currentCategoryName of categoriesToClear){
         const category = state._allDefinedCategories[currentCategoryName];
         const autoClear = category.autoClear;
@@ -111,7 +129,9 @@ export const saveCookiePreferences = () => {
         if(state._lastChangedServices[categoryName].length > 0)
             servicesWereChanged = true;
     }
+
     const categoryToggles = globalObj._dom._categoryCheckboxInputs;
+
     /**
      * If the category is accepted check checkbox,
      * otherwise uncheck it
@@ -146,8 +166,9 @@ export const saveCookiePreferences = () => {
     };
 
     let isFirstConsent = false;
+    const stateChanged = categoriesWereChanged || servicesWereChanged;
 
-    if(state._invalidConsent || categoriesWereChanged || servicesWereChanged){
+    if(state._invalidConsent || stateChanged){
         /**
          * Set consent as valid
          */
@@ -165,7 +186,7 @@ export const saveCookiePreferences = () => {
         setCookie();
 
         const isAutoClearEnabled = globalObj._config.autoClearCookies;
-        const shouldClearCookies = isFirstConsent || categoriesWereChanged;
+        const shouldClearCookies = isFirstConsent || stateChanged;
 
         if(isAutoClearEnabled && shouldClearCookies)
             autoclearCookiesHelper(isFirstConsent);
@@ -181,7 +202,7 @@ export const saveCookiePreferences = () => {
             return;
     }
 
-    if(categoriesWereChanged || servicesWereChanged)
+    if(stateChanged)
         fireEvent(globalObj._customEvents._onChange);
 
     /**

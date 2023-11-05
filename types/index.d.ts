@@ -90,7 +90,12 @@ declare namespace CookieConsent {
          * Callback executed when the service is rejected
          * (assuming that it was previously enabled).
          */
-        onReject?: () => void
+        onReject?: () => void,
+
+        /**
+         * Array of cookies to clear.
+         */
+        cookies?: CookieItem[]
     }
 
     interface UserPreferences {
