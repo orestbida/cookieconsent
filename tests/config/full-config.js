@@ -1,3 +1,5 @@
+import { setCookie } from './mocks-utils';
+
 /**
  * @type {import('../../src/core/global').UserConfig}
  */
@@ -66,13 +68,28 @@ const config = {
             services: {
                 service1: {
                     label: 'Service 1',
-                    onAccept: () => {},
-                    onReject: () => {}
+                    onAccept: () => {
+                        setCookie('service1Cookie1', 1, 1);
+                        setCookie('service1Cookie2', 1, 1);
+                    },
+                    onReject: () => {},
+                    cookies: [
+                        {
+                            name: /^service1Cookie/
+                        }
+                    ]
                 },
                 service2: {
                     label: 'Service 2',
-                    onAccept: () => {},
-                    onReject: () => {}
+                    onAccept: () => {
+                        setCookie('service2Cookie', 1, 1);
+                    },
+                    onReject: () => {},
+                    cookies: [
+                        {
+                            name: 'service2Cookie'
+                        }
+                    ]
                 }
             }
         },

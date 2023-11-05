@@ -323,14 +323,23 @@ describe("API tests", () =>{
         expect(cookieData).toHaveProperty('new_prop');
     })
 
-    it('Should autoClearCookies when category is rejected', () => {
-        api.acceptCategory('all');
-        setCookie('test_cookie_1', JSON.stringify({test_key: 'test_value'}));
-        setCookie('test_cookie_2', JSON.stringify({test_key: 'test_value'}));
-        expect(api.validCookie('test_cookie_1')).toBe(true);
-        expect(api.validCookie('test_cookie_2')).toBe(true);
-        api.acceptCategory('all', ['analytics']);
-        expect(api.validCookie('test_cookie_1')).toBe(false);
-        expect(api.validCookie('test_cookie_2')).toBe(false);
+    it('Should erase cookies when category is rejected', () => {
+        api.acceptCategory('analytics');
+        expect(api.validCookie('service1Cookie1')).toBe(true);
+        expect(api.validCookie('service1Cookie2')).toBe(true);
+        expect(api.validCookie('service2Cookie')).toBe(true);
+        api.acceptCategory([]);
+        expect(api.validCookie('service1Cookie1')).toBe(false);
+        expect(api.validCookie('service1Cookie2')).toBe(false);
+        expect(api.validCookie('service2Cookie')).toBe(false);
+    })
+
+    it('Should erase specific service cookie when service is rejected', () => {
+        api.acceptService('service1', 'analytics');
+        expect(api.validCookie('service1Cookie1')).toBe(true);
+        expect(api.validCookie('service1Cookie2')).toBe(true);
+        api.acceptService([], 'analytics');
+        expect(api.validCookie('service1Cookie1')).toBe(false);
+        expect(api.validCookie('service1Cookie2')).toBe(false);
     })
 })

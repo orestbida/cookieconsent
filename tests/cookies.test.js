@@ -40,7 +40,7 @@ describe("Cookie should be created successfully", () =>{
         });
     });
 
-    it('Should erase "cc_cookie"', () => {
+    it('Should erase cookie', () => {
         setCookie('test_cookie', '{"ciao": 21}');
         eraseCookiesHelper(['test_cookie'], '/', [location.host]);
         const ccCookie = getSingleCookie('test_cookie');
@@ -51,16 +51,17 @@ describe("Cookie should be created successfully", () =>{
         setCookie('test_cookie', '{"ciao": 21}');
         const cookieValue = parseCookie(getSingleCookie('test_cookie', true));
         expect(cookieValue.ciao).toBe(21);
+        eraseCookiesHelper(['test_cookie']);
     })
 
     it('Should return all cookies', () => {
-        setCookie('test_cookie_2', '{"ciao": 22}');
         const allCookies = getAllCookies();
-        expect(allCookies.length).toBe(3);
+        expect(allCookies.length).toBe(4);  // 3 service cookies + cc_cookie
     })
 
     it('Should return only the cookies that match the regex', () => {
-        const allCookies = getAllCookies(/^test_/);
+        const allCookies = getAllCookies(/^service1Cookie/);
         expect(allCookies.length).toBe(2);
+        expect(allCookies).toContain('service1Cookie1', 'service1Cookie2');
     })
 })
