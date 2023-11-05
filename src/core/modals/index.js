@@ -8,27 +8,26 @@ import { handleRtlLanguage } from '../../utils/language';
 export const createMainContainer = () => {
     const dom = globalObj._dom;
 
-    if(!dom._ccMain){
-        dom._ccMain = createNode(DIV_TAG);
-        dom._ccMain.id = 'cc-main';
+    if(dom._ccMain) return;
 
-        handleRtlLanguage();
+    dom._ccMain = createNode(DIV_TAG);
+    dom._ccMain.id = 'cc-main';
 
-        let root = globalObj._state._userConfig.root;
+    handleRtlLanguage();
 
-        if(root && isString(root))
-            root = document.querySelector(root);
+    let root = globalObj._state._userConfig.root;
 
-        // Append main container to dom
-        (root || dom._document.body).appendChild(dom._ccMain);
-    }
+    if(root && isString(root))
+        root = document.querySelector(root);
+
+    // Append main container to dom
+    (root || dom._document.body).appendChild(dom._ccMain);
 };
 
 /**
  * @param {import('../global').Api} api
  */
 export const generateHtml = (api) => {
-
     addDataButtonListeners(null, api, createPreferencesModal, createMainContainer);
 
     if(globalObj._state._invalidConsent)

@@ -636,7 +636,6 @@ export const setAcceptedCategories = (acceptedCategories) => {
  * @param {createModal} [createPreferencesModal]
  */
 export const addDataButtonListeners = (elem, api, createPreferencesModal, createMainContainer) => {
-
     const ACCEPT_PREFIX = 'accept-';
 
     const {
@@ -673,7 +672,6 @@ export const addDataButtonListeners = (elem, api, createPreferencesModal, create
     //{{START: GUI}}
     for(const el of showPreferencesModalElements){
         setAttribute(el, 'aria-haspopup', 'dialog');
-
         addEvent(el, CLICK_EVENT, (event) => {
             preventDefault(event);
             showPreferences();
@@ -682,7 +680,6 @@ export const addDataButtonListeners = (elem, api, createPreferencesModal, create
         if(createPreferencesModalOnHover){
             addEvent(el, 'mouseenter', (event) => {
                 preventDefault(event);
-
                 if(!globalObj._state._preferencesModalExists)
                     createPreferencesModal(api, createMainContainer);
             }, true);
@@ -724,26 +721,25 @@ export const addDataButtonListeners = (elem, api, createPreferencesModal, create
 
 /**
  * @param {HTMLElement} el
- * @param {1 | 2} [modalId]
  * @param {boolean} [toggleTabIndex]
  */
-export const focus = (el, modalId, toggleTabIndex) => {
+export const focus = (el, toggleTabIndex) => {
 
-    if(el){
-        /**
-         * Momentarily add the `tabindex` attribute to fix
-         * a bug with focus restoration in chrome
-         */
-        toggleTabIndex && (el.tabIndex = -1);
+    if(!el) return;
 
-        el.focus();
-    }
+    /**
+     * Momentarily add the `tabindex` attribute to fix
+     * a bug with focus restoration in chrome
+     */
+    toggleTabIndex && (el.tabIndex = -1);
+
+    el.focus();
 
     /**
      * Remove the `tabindex` attribute so
      * that the html markup is valid again
      */
-    toggleTabIndex && (el && el.removeAttribute('tabindex'));
+    toggleTabIndex && el.removeAttribute('tabindex');
 };
 
 /**
@@ -751,7 +747,6 @@ export const focus = (el, modalId, toggleTabIndex) => {
  * @param {1 | 2} modalId
  */
 export const focusAfterTransition = (element, modalId) => {
-
     const getVisibleDiv = (modalId) => modalId === 1
         ? globalObj._dom._cmDivTabindex
         : globalObj._dom._pmDivTabindex;
@@ -759,7 +754,7 @@ export const focusAfterTransition = (element, modalId) => {
     const setFocus = (event) => {
         event.target.removeEventListener('transitionend', setFocus);
         if (event.propertyName === 'opacity' && getComputedStyle(element).opacity === '1') {
-            focus(getVisibleDiv(modalId), modalId);
+            focus(getVisibleDiv(modalId));
         }
     };
 
@@ -826,7 +821,6 @@ export const getSvgIcon = (iconIndex = 0, strokeWidth = 1.5) => {
  * @param {HTMLDivElement} modal
  */
 export const handleFocusTrap = (modal) => {
-
     const dom = globalObj._dom;
     const state = globalObj._state;
 
@@ -835,7 +829,6 @@ export const handleFocusTrap = (modal) => {
      * @param {HTMLElement[]} focusableElements
      */
     const trapFocus = (modal) => {
-
         const isConsentModal = modal === dom._cm;
 
         const scope = state._userConfig.disablePageInteraction
@@ -853,7 +846,6 @@ export const handleFocusTrap = (modal) => {
             : state._preferencesModalVisible;
 
         addEvent(scope, 'keydown', (e) => {
-
             if (e.key !== 'Tab' || !isModalVisible())
                 return;
 
@@ -899,7 +891,6 @@ export const getFocusableElements = (root) => querySelectorAll(root, focusableTy
  * @param {1 | 2} [modalId]
  */
 export const getModalFocusableData = (modalId) => {
-
     const { _state, _dom } = globalObj;
 
     /**
@@ -908,7 +899,6 @@ export const getModalFocusableData = (modalId) => {
      * @param {Element[]} array
      */
     const saveAllFocusableElements = (modal, array) => {
-
         const focusableElements = getFocusableElements(modal);
 
         /**
@@ -923,7 +913,6 @@ export const getModalFocusableData = (modalId) => {
 
     if(modalId === 2 && _state._preferencesModalExists)
         saveAllFocusableElements(_dom._pm, _state._pmFocusableElements);
-
 };
 
 /**
@@ -933,7 +922,6 @@ export const getModalFocusableData = (modalId) => {
  * @param {HTMLElement} [modal]
  */
 export const fireEvent = (eventName, modalName, modal) => {
-
     const {
         _onChange,
         _onConsent,
@@ -945,17 +933,10 @@ export const fireEvent = (eventName, modalName, modal) => {
 
     const events = globalObj._customEvents;
 
-    const params = {
-        cookie: globalObj._state._savedCookieContent
-    };
-
     //{{START: GUI}}
 
     if(modalName){
-
-        const modalParams = {
-            modalName
-        };
+        const modalParams = { modalName };
 
         if(eventName === events._onModalShow){
             isFunction(_onModalShow) && _onModalShow(modalParams);
@@ -970,6 +951,10 @@ export const fireEvent = (eventName, modalName, modal) => {
     }
 
     //{{END: GUI}}
+
+    const params = {
+        cookie: globalObj._state._savedCookieContent
+    };
 
     if(eventName === events._onFirstConsent){
         isFunction(_onFirstConsent) && _onFirstConsent(deepCopy(params));

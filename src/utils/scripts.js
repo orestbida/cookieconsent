@@ -14,7 +14,6 @@ const validMimeType = type => ['text/javascript', 'module'].includes(type);
  * @param {string[]} [defaultEnabledCategories]
  */
 export const manageExistingScripts = (defaultEnabledCategories) => {
-
     const {
         _acceptedServices,
         _lastChangedServices,
@@ -29,7 +28,6 @@ export const manageExistingScripts = (defaultEnabledCategories) => {
      * Automatically Enable/Disable internal services
      */
     for(const categoryName of _allCategoryNames){
-
         const lastChangedServices = _lastChangedServices[categoryName]
             || _acceptedServices[categoryName]
             || [];
@@ -59,7 +57,6 @@ export const manageExistingScripts = (defaultEnabledCategories) => {
                 service._enabled = false;
                 onReject();
             }
-
         }
     }
 
@@ -78,7 +75,6 @@ export const manageExistingScripts = (defaultEnabledCategories) => {
      * @param {number} index current script to load
      */
     const loadScriptsHelper = (scripts, index) => {
-
         if(index >= scripts.length)
             return;
 
@@ -123,9 +119,7 @@ export const manageExistingScripts = (defaultEnabledCategories) => {
             || serviceWasJustDisabled();
 
         if(shouldRunScript){
-
             currScriptInfo._executed = true;
-
             const dataType = getAttribute(currScript, 'type', true);
 
             removeAttribute(currScript, 'type', !!dataType);

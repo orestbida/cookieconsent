@@ -455,8 +455,8 @@ $service-toggle-knob-icon-width: 1.7px;
         font-size: .9em;
         color: var(--cc-secondary-color);
 
-        & > * + * {
-            border-top: 1px solid var(--cc-cookie-category-block-border);
+        & > *:not(:last-child) {
+            border-bottom: 1px solid var(--cc-cookie-category-block-border);
         }
     }
 
@@ -490,7 +490,7 @@ $service-toggle-knob-icon-width: 1.7px;
         height: 8px;
         border: 2px solid currentColor;
         border-radius: 100%;
-        margin-left: 7px;
+        margin-left: 6px;
         margin-right: 20px;
         margin-top: 1px;
     }

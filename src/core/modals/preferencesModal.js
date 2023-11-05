@@ -41,7 +41,6 @@ import {
  * @param {CreateMainContainer} createMainContainer
  */
 export const createPreferencesModal = (api, createMainContainer) => {
-
     const state = globalObj._state;
     const dom = globalObj._dom;
     const {hide, hidePreferences, acceptCategory} = api;
@@ -69,18 +68,15 @@ export const createPreferencesModal = (api, createMainContainer) => {
         acceptAllBtnData = modalData.acceptAllBtn,
         acceptNecessaryBtnData = modalData.acceptNecessaryBtn,
         savePreferencesBtnData = modalData.savePreferencesBtn,
-        sectionsData = modalData.sections,
+        sectionsData = modalData.sections || [],
         createFooter = acceptAllBtnData
             || acceptNecessaryBtnData
             || savePreferencesBtnData;
 
     if(!dom._pmContainer){
-
-        // modal container
         dom._pmContainer = createNode(DIV_TAG);
         addClass(dom._pmContainer, 'pm-wrapper');
 
-        // modal overlay
         const pmOverlay = createNode('div');
         addClass(pmOverlay, 'pm-overlay');
         appendChild(dom._pmContainer, pmOverlay);
@@ -90,7 +86,7 @@ export const createPreferencesModal = (api, createMainContainer) => {
          */
         addEvent(pmOverlay, CLICK_EVENT, hidePreferences);
 
-        // preferences modal
+        // Preferences modal
         dom._pm = createNode(DIV_TAG);
 
         addClass(dom._pm, 'pm');
@@ -163,8 +159,7 @@ export const createPreferencesModal = (api, createMainContainer) => {
 
     let sectionToggleContainer;
 
-    sectionsData && sectionsData.forEach((section, sectionIndex) => {
-
+    sectionsData.forEach((section, sectionIndex) => {
         const
             sTitleData = section.title,
             sDescriptionData = section.description,
@@ -196,14 +191,12 @@ export const createPreferencesModal = (api, createMainContainer) => {
         let nServices = sServiceNames.length;
 
         if(sIsExpandableToggle){
-
             if(nServices > 0){
 
                 const servicesContainer = createNode(DIV_TAG);
                 addClassPm(servicesContainer, 'section-services');
 
                 for(const serviceName of sServiceNames){
-
                     const service = sServices[serviceName];
                     const serviceLabel = service && service.label || serviceName;
                     const serviceDiv = createNode(DIV_TAG);
@@ -232,7 +225,6 @@ export const createPreferencesModal = (api, createMainContainer) => {
         }
 
         if(sTitleData){
-
             var sTitleContainer = createNode(DIV_TAG);
 
             var sTitle = hasToggle
@@ -307,9 +299,7 @@ export const createPreferencesModal = (api, createMainContainer) => {
         if(sDescriptionData){
             var sDesc = createNode('p');
             addClassPm(sDesc, 'section-desc');
-
             sDesc.innerHTML = sDescriptionData;
-
             appendChild(sDescContainer, sDesc);
         }
 
@@ -381,12 +371,10 @@ export const createPreferencesModal = (api, createMainContainer) => {
                 const bodyFragment = dom._document.createDocumentFragment();
 
                 for(const bodyItem of sCookieTableBody){
-
                     const tr = createNode('tr');
                     addClassPm(tr, 'table-tr');
 
                     for(const tdKey of tableHeadersKeys){
-
                         const tdHeader = headerData[tdKey];
                         const tdValue = bodyItem[tdKey];
 
@@ -511,7 +499,6 @@ export const createPreferencesModal = (api, createMainContainer) => {
  * @param {string} categoryName
  */
 function createToggleLabel(label, value, sCurrentCategoryObject, isService, categoryName){
-
     const state = globalObj._state;
     const dom = globalObj._dom;
 
@@ -567,10 +554,8 @@ function createToggleLabel(label, value, sCurrentCategoryObject, isService, cate
             });
         })(value);
     }else{
-
         ((categoryName) => {
             addEvent(toggle, 'change', () => {
-
                 const categoryServicesToggles = dom._serviceCheckboxInputs[categoryName];
                 const categoryToggle = dom._categoryCheckboxInputs[categoryName];
 

@@ -207,7 +207,7 @@ export const show = (createModal) => {
      * Set focus to consentModal
      */
     setTimeout(() => {
-        focus(globalObj._dom._cmDivTabindex, 1);
+        focus(globalObj._dom._cmDivTabindex);
     }, 100);
 
     _log('CookieConsent [TOGGLE]: show consentModal');
@@ -233,7 +233,7 @@ export const hide = () => {
     /**
      * Fix focus restoration to body with Chrome
      */
-    focus(_dom._focusSpan, false, true);
+    focus(_dom._focusSpan, true);
 
     removeClass(_dom._htmlDom, TOGGLE_CONSENT_MODAL_CLASS);
     setAttribute(_dom._cm, ARIA_HIDDEN, 'true');
@@ -279,7 +279,7 @@ export const showPreferences = () => {
      * Set focus to preferencesModal
      */
     setTimeout(() => {
-        focus(globalObj._dom._pmDivTabindex, 2);
+        focus(globalObj._dom._pmDivTabindex);
     }, 100);
 
     _log('CookieConsent [TOGGLE]: show preferencesModal');
@@ -303,7 +303,6 @@ const discardUnsavedPreferences = () => {
     const categoryEnabledByDefault = (category) => elContains(globalObj._state._defaultEnabledCategories, category);
 
     for(const category in categoryInputs) {
-
         const isReadOnly = !!allDefinedCategories[category].readOnly;
 
         categoryInputs[category].checked = isReadOnly || (consentIsValid
@@ -318,15 +317,12 @@ const discardUnsavedPreferences = () => {
             );
         }
     }
-
-
 };
 
 /**
  * Hide preferences modal
  */
 export const hidePreferences = () => {
-
     const state = globalObj._state;
 
     if(!state._preferencesModalVisible)
@@ -339,7 +335,7 @@ export const hidePreferences = () => {
     /**
      * Fix focus restoration to body with Chrome
      */
-    focus(globalObj._dom._pmFocusSpan, false, true);
+    focus(globalObj._dom._pmFocusSpan, true);
 
     removeClass(globalObj._dom._htmlDom, TOGGLE_PREFERENCES_MODAL_CLASS);
     setAttribute(globalObj._dom._pm, ARIA_HIDDEN, 'true');
@@ -348,7 +344,7 @@ export const hidePreferences = () => {
      * If consent modal is visible, focus him (instead of page document)
      */
     if(state._consentModalVisible){
-        focus(state._lastFocusedModalElement, 1);
+        focus(state._lastFocusedModalElement);
         state._lastFocusedModalElement = null;
     }else{
         /**

@@ -50,7 +50,6 @@ const createFocusSpan = () => {
  * @param {CreateMainContainer} createMainContainer
  */
 export const createConsentModal = (api, createMainContainer) => {
-
     const state = globalObj._state;
     const dom = globalObj._dom;
     const {hide, showPreferences, acceptCategory} = api;
@@ -81,7 +80,6 @@ export const createConsentModal = (api, createMainContainer) => {
 
     // Create modal if it doesn't exist
     if(!dom._cmContainer){
-
         dom._cmContainer = createNode(DIV_TAG);
         dom._cm = createNode(DIV_TAG);
         dom._cmBody = createNode(DIV_TAG);
@@ -144,7 +142,6 @@ export const createConsentModal = (api, createMainContainer) => {
     }
 
     if(consentModalTitleValue){
-
         if(!dom._cmTitle){
             dom._cmTitle = createNode('h2');
             dom._cmTitle.className = dom._cmTitle.id = 'cm__title';
@@ -176,7 +173,6 @@ export const createConsentModal = (api, createMainContainer) => {
     }
 
     if(acceptAllBtnData){
-
         if(!dom._cmAcceptAllBtn){
             dom._cmAcceptAllBtn = createNode(BUTTON_TAG);
             appendChild(dom._cmAcceptAllBtn, createFocusSpan());
@@ -193,7 +189,6 @@ export const createConsentModal = (api, createMainContainer) => {
     }
 
     if(acceptNecessaryBtnData){
-
         if(!dom._cmAcceptNecessaryBtn){
             dom._cmAcceptNecessaryBtn = createNode(BUTTON_TAG);
             appendChild(dom._cmAcceptNecessaryBtn, createFocusSpan());
@@ -239,7 +234,6 @@ export const createConsentModal = (api, createMainContainer) => {
     }
 
     if(dom._cmShowPreferencesBtn && !dom._cmBtnGroup2){
-
         dom._cmBtnGroup2 = createNode(DIV_TAG);
 
         if((!dom._cmAcceptNecessaryBtn || !dom._cmAcceptAllBtn)){

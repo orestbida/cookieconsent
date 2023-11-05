@@ -8,7 +8,6 @@ import { resolveCurrentLanguageCode, setCurrentLanguageCode } from '../utils/lan
  * @param {import("./global").UserConfig} userConfig
  */
 export const setConfig = (userConfig) => {
-
     const { _dom, _config, _state } = globalObj;
 
     const

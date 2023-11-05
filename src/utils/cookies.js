@@ -15,124 +15,94 @@ import {
 } from './general';
 
 /**
- * Delete all cookies which are unused (based on selected preferences)
- * @param {boolean} [clearOnFirstConsent]
+ * @param {boolean} [isFirstConsent]
  */
-export const autoclearCookiesHelper = (clearOnFirstConsent) => {
-
+const getCategoriesWithCookies = (isFirstConsent) => {
     const state = globalObj._state;
-    const allCookiesArray = getAllCookies();
 
-    // reset reload state
-    state._reloadPage = false;
-
-    let categoriesToCheck = clearOnFirstConsent
+    const categoriesToFilter = isFirstConsent
         ? state._allCategoryNames
         : state._lastChangedCategoryNames;
 
     /**
      * Filter out categories with readOnly=true or don't have an autoClear object
      */
-    categoriesToCheck = categoriesToCheck.filter((categoryName) => {
-        let currentCategoryObject = state._allDefinedCategories[categoryName];
+    return categoriesToFilter.filter(categoryName => {
+        const currentCategoryObject = state._allDefinedCategories[categoryName];
 
-        /**
-         * Make sure that:
-         *  category != falsy
-         *  readOnly = falsy
-         *  autoClear = truthy (assuming that it is a valid object)
-         */
-        return(
-            !!currentCategoryObject
+        return !!currentCategoryObject
             && !currentCategoryObject.readOnly
-            && !!currentCategoryObject.autoClear
-        );
+            && !!currentCategoryObject.autoClear;
     });
+};
 
-    for(const currentCategoryName of categoriesToCheck){
+/**
+ * @param {string[]} allCookies
+ * @param {string} cookieName
+ */
+const findMatchingCookies = (allCookies, cookieName) => {
+    if(cookieName instanceof RegExp) {
+        return allCookies.filter(cookie => cookieName.test(cookie));
+    }else{
+        const cookieIndex = indexOf(allCookies, cookieName);
+        return cookieIndex > -1
+            ? [allCookies[cookieIndex]]
+            : [];
+    }
+};
 
-        const
-            category = state._allDefinedCategories[currentCategoryName],
-            autoClear = category.autoClear,
-            autoClearCookies = autoClear && autoClear.cookies || [],
+/**
+ * Delete all unused cookies
+ * @param {boolean} [isFirstConsent]
+ */
+export const autoclearCookiesHelper = (isFirstConsent) => {
+    const state = globalObj._state;
+    const allCookiesArray = getAllCookies();
+    const categoriesToClear = getCategoriesWithCookies(isFirstConsent);
 
-            categoryWasJustChanged = elContains(state._lastChangedCategoryNames, currentCategoryName),
-            categoryIsDisabled = !elContains(state._acceptedCategories, currentCategoryName),
-            categoryWasJustDisabled = categoryWasJustChanged && categoryIsDisabled;
+    for(const currentCategoryName of categoriesToClear){
+        const category = state._allDefinedCategories[currentCategoryName];
+        const autoClear = category.autoClear;
+        const autoClearCookies = autoClear && autoClear.cookies || [];
 
-        if(
-            (clearOnFirstConsent && categoryIsDisabled) ||
-            (!clearOnFirstConsent && categoryWasJustDisabled)
-        ){
+        const categoryWasJustChanged = elContains(state._lastChangedCategoryNames, currentCategoryName);
+        const categoryIsDisabled = !elContains(state._acceptedCategories, currentCategoryName);
+        const categoryWasJustDisabled = categoryWasJustChanged && categoryIsDisabled;
 
-            // check if page needs to be reloaded after autoClear (if category was just disabled)
-            if(autoClear.reloadPage === true && categoryWasJustDisabled)
-                state._reloadPage = true;
+        const shouldClearCookies = isFirstConsent
+            ? categoryIsDisabled
+            : categoryWasJustDisabled;
 
-            for(const cookieItem of autoClearCookies){
+        if(!shouldClearCookies)
+            continue;
 
-                /**
-                 * List of all cookies matching the current cookie name
-                 * @type {string[]}
-                 */
-                let foundCookies = [];
+        if(autoClear.reloadPage && categoryWasJustDisabled)
+            state._reloadPage = true;
 
-                const
-                    cookieItemName = cookieItem.name,
-                    cookieItemDomain = cookieItem.domain,
-                    cookieItemPath = cookieItem.path;
-
-                // If regex provided => filter array of cookies
-                if(cookieItemName instanceof RegExp){
-                    for(let cookie of allCookiesArray){
-                        if(cookieItemName.test(cookie))
-                            foundCookies.push(cookie);
-                    }
-                }else{
-                    let foundCookieIndex = indexOf(allCookiesArray, cookieItemName);
-
-                    if(foundCookieIndex > -1)
-                        foundCookies.push(allCookiesArray[foundCookieIndex]);
-                }
-
-                _log('CookieConsent [AUTOCLEAR]: search cookie: "' + cookieItemName + '", found:', foundCookies);
-
-                // Delete cookie(s)
-                if(foundCookies.length > 0)
-                    eraseCookiesHelper(foundCookies, cookieItemPath, cookieItemDomain);
-            }
+        for(const cookieItem of autoClearCookies){
+            const foundCookies = findMatchingCookies(allCookiesArray, cookieItem.name);
+            eraseCookiesHelper(foundCookies, cookieItem.path, cookieItem.domain);
         }
     }
 };
 
-
 export const saveCookiePreferences = () => {
-
     const state = globalObj._state;
 
     /**
      * Determine if categories were changed from last state (saved in the cookie)
      */
-    if(globalObj._config.mode === OPT_OUT_MODE && state._invalidConsent){
-        state._lastChangedCategoryNames = arrayDiff(
-            state._defaultEnabledCategories,
-            state._acceptedCategories
-        );
-    }else{
-        state._lastChangedCategoryNames = arrayDiff(
-            state._acceptedCategories,
-            state._savedCookieContent.categories
-        );
-    }
+    state._lastChangedCategoryNames = globalObj._config.mode === OPT_OUT_MODE && state._invalidConsent
+        ? arrayDiff(state._defaultEnabledCategories, state._acceptedCategories)
+        : arrayDiff(state._acceptedCategories, state._savedCookieContent.categories);
 
-    let categoriesWereChanged = state._lastChangedCategoryNames.length > 0,
-        servicesWereChanged = false;
+    let categoriesWereChanged = state._lastChangedCategoryNames.length > 0;
+    let servicesWereChanged = false;
 
     /**
      * Determine if services were changed from last state
      */
     for(const categoryName of state._allCategoryNames){
-
         state._lastChangedServices[categoryName] = arrayDiff(
             state._acceptedServices[categoryName],
             state._lastEnabledServices[categoryName]
@@ -141,19 +111,16 @@ export const saveCookiePreferences = () => {
         if(state._lastChangedServices[categoryName].length > 0)
             servicesWereChanged = true;
     }
-
     const categoryToggles = globalObj._dom._categoryCheckboxInputs;
-
     /**
      * If the category is accepted check checkbox,
      * otherwise uncheck it
      */
-    for(let categoryName in categoryToggles){
+    for(const categoryName in categoryToggles){
         categoryToggles[categoryName].checked = elContains(state._acceptedCategories, categoryName);
     }
 
     for(const categoryName of state._allCategoryNames){
-
         const servicesToggles = globalObj._dom._serviceCheckboxInputs[categoryName];
         const enabledServices = state._acceptedServices[categoryName];
 
@@ -162,7 +129,6 @@ export const saveCookiePreferences = () => {
             serviceInput.checked = elContains(enabledServices, serviceName);
         }
     }
-
 
     if(!state._consentTimestamp)
         state._consentTimestamp = new Date();
@@ -179,41 +145,35 @@ export const saveCookiePreferences = () => {
         services: deepCopy(state._acceptedServices)
     };
 
-    let firstUserConsent = false;
+    let isFirstConsent = false;
 
     if(state._invalidConsent || categoriesWereChanged || servicesWereChanged){
-
         /**
          * Set consent as valid
          */
         if(state._invalidConsent) {
             state._invalidConsent = false;
-            firstUserConsent = true;
+            isFirstConsent = true;
         }
 
-
-        if(!state._lastConsentTimestamp)
-            state._lastConsentTimestamp = state._consentTimestamp;
-        else
-            state._lastConsentTimestamp = new Date();
+        state._lastConsentTimestamp = !state._lastConsentTimestamp
+            ? state._consentTimestamp
+            : new Date();
 
         state._savedCookieContent.lastConsentTimestamp = state._lastConsentTimestamp.toISOString();
 
         setCookie();
 
-        /**
-         * Clear cookies:
-         * - on first consent
-         * - on category change (consent must be valid)
-         */
-        if(globalObj._config.autoClearCookies && (firstUserConsent || (!state._invalidConsent && categoriesWereChanged)))
-            autoclearCookiesHelper(firstUserConsent);
+        const isAutoClearEnabled = globalObj._config.autoClearCookies;
+        const shouldClearCookies = isFirstConsent || categoriesWereChanged;
+
+        if(isAutoClearEnabled && shouldClearCookies)
+            autoclearCookiesHelper(isFirstConsent);
 
         manageExistingScripts();
     }
 
-    if(firstUserConsent){
-
+    if(isFirstConsent){
         fireEvent(globalObj._customEvents._onFirstConsent);
         fireEvent(globalObj._customEvents._onConsent);
 
@@ -227,18 +187,20 @@ export const saveCookiePreferences = () => {
     /**
      * Reload page if needed
      */
-    if(state._reloadPage)
+    if(state._reloadPage) {
+        state._reloadPage = false;
         location.reload();
+    }
 };
 
 /**
- * Set cookie, by specifying name and value
+ * Set plugin's cookie
  * @param {boolean} [useRemainingExpirationTime]
  */
 export const setCookie = (useRemainingExpirationTime) => {
 
-    const {hostname, protocol} = location;
-    const {name, path, domain, sameSite} = globalObj._config.cookie;
+    const { hostname, protocol } = location;
+    const { name, path, domain, sameSite } = globalObj._config.cookie;
 
     /**
      * Encode value (RFC compliant)
@@ -299,12 +261,13 @@ export const parseCookie = (value) => {
  * @param {string} [customDomain]
  */
 export const eraseCookiesHelper = (cookies, customPath, customDomain) => {
+    if(cookies.length === 0)
+        return;
 
-    const
-        domain = customDomain || globalObj._config.cookie.domain,
-        path = customPath || globalObj._config.cookie.path,
-        isWwwSubdomain = domain.slice(0, 4) === 'www.',
-        mainDomain = isWwwSubdomain && domain.substring(4);
+    const domain = customDomain || globalObj._config.cookie.domain;
+    const path = customPath || globalObj._config.cookie.path;
+    const isWwwSubdomain = domain.slice(0, 4) === 'www.';
+    const mainDomain = isWwwSubdomain && domain.substring(4);
 
     /**
      * Helper function to erase cookie
@@ -369,7 +332,6 @@ export const getSingleCookie = (name, getValue) => {
  * @returns {string[]}
  */
 export const getAllCookies = (regex) => {
-
     const allCookies = document.cookie.split(/;\s*/);
 
     /**

@@ -86,7 +86,6 @@ const ALL_PM_LAYOUTS = {
  * @param {0 | 1} applyToModal
  */
 export const guiManager = (applyToModal) => {
-
     const guiOptions = globalObj._state._userConfig.guiOptions;
     const consentModalOptions = guiOptions && guiOptions.consentModal;
     const preferencesModalOptions = guiOptions && guiOptions.preferencesModal;
@@ -124,7 +123,6 @@ export const guiManager = (applyToModal) => {
  * @param {'cm' | 'pm'} modalClassName
  */
 const setLayout = (modal, allowedLayoutsObj, userGuiOptions, modalClassPrefix, defaultLayoutName, modalClassName) => {
-
     /**
      * Reset modal classes to default
      */
@@ -180,7 +178,6 @@ const setLayout = (modal, allowedLayoutsObj, userGuiOptions, modalClassPrefix, d
      * Add classes to buttons
      */
     if(modalClassName === 'cm'){
-
         const {_cmAcceptNecessaryBtn, _cmCloseIconBtn} = globalObj._dom;
 
         if(_cmAcceptNecessaryBtn){

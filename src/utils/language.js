@@ -70,11 +70,9 @@ export const getDocumentLanguageCode = () => document.documentElement.lang;
  * @returns {string} language code
  */
 export const resolveCurrentLanguageCode = () =>  {
-
     const autoDetect = globalObj._state._userConfig.language.autoDetect;
 
     if(autoDetect){
-
         _log('CookieConsent [LANG]: autoDetect strategy: "' + autoDetect + '"');
 
         const detectionStrategies = {
@@ -121,7 +119,6 @@ export const loadTranslationData = async (desiredLanguageCode) => {
      * the string (path to json file) with the parsed object
      */
     if(isString(currentTranslation)){
-
         const fetchedTranslation = await fetchJson(currentTranslation);
 
         if(!fetchedTranslation)
