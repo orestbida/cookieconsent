@@ -6,7 +6,6 @@ import { htmlHasClass } from "./config/mocks-utils";
  * @type {import("../src/core/global").Api}
  */
 let api;
-let testConfig;
 
 const consentModalClassToggle = 'show--consent';
 const preferencesModalClassToggle = 'show--preferences'
@@ -19,6 +18,7 @@ global.fetch = jest.fn(() =>
 );
 
 describe("API tests", () =>{
+    let testConfig;
 
     beforeAll(async () => {
 
@@ -33,15 +33,16 @@ describe("API tests", () =>{
     })
 
     beforeEach(async () => {
-        const mod = await import('./config/full-config');
-        testConfig = mod.default;
+        await jest.isolateModulesAsync(async () => {
+            const mod = await import('./config/full-config');
+            testConfig = mod.default; 
+        })
         await api.run(testConfig);
     });
 
     afterEach( async () => {
         api.reset(true);
         fetch.mockClear();
-        jest.resetModules();        
     })
 
     it('User preferences object should contain all the props.', () => {
