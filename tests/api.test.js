@@ -1,13 +1,12 @@
 import * as CookieConsent from "../src/index"
-import testConfig from "./config/full-config";
-import { getKeys } from "../src/utils/general";
 import { globalObj } from "../src/core/global";
-import { htmlHasClass, setCookie } from "./config/mocks-utils";
+import { htmlHasClass } from "./config/mocks-utils";
 
 /**
  * @type {import("../src/core/global").Api}
  */
 let api;
+let testConfig;
 
 const consentModalClassToggle = 'show--consent';
 const preferencesModalClassToggle = 'show--preferences'
@@ -34,12 +33,15 @@ describe("API tests", () =>{
     })
 
     beforeEach(async () => {
+        const mod = await import('./config/full-config');
+        testConfig = mod.default;
         await api.run(testConfig);
     });
 
     afterEach( async () => {
         api.reset(true);
         fetch.mockClear();
+        jest.resetModules();        
     })
 
     it('User preferences object should contain all the props.', () => {
@@ -341,5 +343,56 @@ describe("API tests", () =>{
         api.acceptService([], 'analytics');
         expect(api.validCookie('service1Cookie1')).toBe(false);
         expect(api.validCookie('service1Cookie2')).toBe(false);
+    })
+
+    it('Should call service onAccept and onReject when both defined', async () => {
+        api.reset(true);
+        const onAccept = jest.fn();
+        const onReject = jest.fn();
+        testConfig.categories.analytics.services.service2.onAccept = onAccept;
+        testConfig.categories.analytics.services.service2.onReject = onReject;
+        await api.run(testConfig);
+
+        api.acceptService('service2', 'analytics');
+        api.acceptService([], 'analytics');
+        expect(onAccept).toHaveBeenCalledTimes(1);
+        expect(onReject).toHaveBeenCalledTimes(1);
+
+        api.acceptService('service2', 'analytics');
+        api.acceptService([], 'analytics');
+        expect(onAccept).toHaveBeenCalledTimes(2);
+        expect(onReject).toHaveBeenCalledTimes(2);
+    })
+
+    it('Should call service onAccept when onReject not defined', async () => {        
+        api.reset(true);
+        const onAccept = jest.fn();
+        testConfig.categories.analytics.services.service2.onAccept = onAccept;
+        testConfig.categories.analytics.services.service2.onReject = null;
+        await api.run(testConfig);
+        
+        api.acceptService('service2', 'analytics');
+        api.acceptService([], 'analytics');
+        expect(onAccept).toHaveBeenCalledTimes(1);
+
+        api.acceptService('service2', 'analytics');
+        api.acceptService([], 'analytics');
+        expect(onAccept).toHaveBeenCalledTimes(2);        
+    })   
+    
+    it('Should call service onReject when onAccept not defined', async () => {        
+        api.reset(true);
+        const onReject = jest.fn();
+        testConfig.categories.analytics.services.service2.onAccept = null;
+        testConfig.categories.analytics.services.service2.onReject = onReject;
+        await api.run(testConfig);
+        
+        api.acceptService('service2', 'analytics');
+        api.acceptService([], 'analytics');
+        expect(onReject).toHaveBeenCalledTimes(1)
+
+        api.acceptService('service2', 'analytics');
+        api.acceptService([], 'analytics');
+        expect(onReject).toHaveBeenCalledTimes(2)
     })
 })
