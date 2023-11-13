@@ -378,7 +378,7 @@ describe("API tests", () =>{
 
         api.acceptService('service2', 'analytics');
         api.acceptService([], 'analytics');
-        expect(onAccept).toHaveBeenCalledTimes(2);        
+        expect(onAccept).toHaveBeenCalledTimes(1);        
     })   
     
     it('Should call service onReject when onAccept not defined', async () => {        
@@ -390,10 +390,10 @@ describe("API tests", () =>{
         
         api.acceptService('service2', 'analytics');
         api.acceptService([], 'analytics');
-        expect(onReject).toHaveBeenCalledTimes(1)
+        expect(onReject).toHaveBeenCalledTimes(0)
 
         api.acceptService('service2', 'analytics');
         api.acceptService([], 'analytics');
-        expect(onReject).toHaveBeenCalledTimes(2)
+        expect(onReject).toHaveBeenCalledTimes(0)
     })
 })
