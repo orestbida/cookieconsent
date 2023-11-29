@@ -993,6 +993,7 @@
             // Create main container which holds both consent modal & settings modal
             main_container = _createNode('div');
             main_container.id = 'cc--main';
+            main_container.setAttribute("data-nosnippet", "true");          
 
             // Fix layout flash
             main_container.style.position = "fixed";
