@@ -11,7 +11,8 @@ export const createMainContainer = () => {
     if(dom._ccMain) return;
 
     dom._ccMain = createNode(DIV_TAG);
-    dom._ccMain.id = 'cc-main';
+    dom._ccMain.id = 'cc-main';    
+    dom._ccMain.setAttribute('data-nosnippet', 'true');
 
     handleRtlLanguage();
 
