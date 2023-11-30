@@ -35,7 +35,7 @@ describe("API tests", () =>{
     beforeEach(async () => {
         await jest.isolateModulesAsync(async () => {
             const mod = await import('./config/full-config');
-            testConfig = mod.default; 
+            testConfig = mod.default;
         })
         await api.run(testConfig);
     });
@@ -365,29 +365,29 @@ describe("API tests", () =>{
         expect(onReject).toHaveBeenCalledTimes(2);
     })
 
-    it('Should call service onAccept when onReject not defined', async () => {        
+    it('Should call service onAccept once when onReject not defined', async () => {
         api.reset(true);
         const onAccept = jest.fn();
         testConfig.categories.analytics.services.service2.onAccept = onAccept;
         testConfig.categories.analytics.services.service2.onReject = null;
         await api.run(testConfig);
-        
+
         api.acceptService('service2', 'analytics');
         api.acceptService([], 'analytics');
         expect(onAccept).toHaveBeenCalledTimes(1);
 
         api.acceptService('service2', 'analytics');
         api.acceptService([], 'analytics');
-        expect(onAccept).toHaveBeenCalledTimes(1);        
-    })   
-    
-    it('Should call service onReject when onAccept not defined', async () => {        
+        expect(onAccept).toHaveBeenCalledTimes(1);
+    })
+
+    it('Should not call service onReject when onAccept not defined', async () => {
         api.reset(true);
         const onReject = jest.fn();
         testConfig.categories.analytics.services.service2.onAccept = null;
         testConfig.categories.analytics.services.service2.onReject = onReject;
         await api.run(testConfig);
-        
+
         api.acceptService('service2', 'analytics');
         api.acceptService([], 'analytics');
         expect(onReject).toHaveBeenCalledTimes(0)
