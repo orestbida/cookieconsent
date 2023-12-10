@@ -8,7 +8,7 @@ import { fireClickEvent, htmlHasClass } from "./config/mocks-utils";
  */
 let api;
 
-describe("Consent Modal buttons test", () =>{
+describe("Consent Modal buttons test", () => {
 
     beforeAll(() => {
         api = CookieConsent;
@@ -52,7 +52,7 @@ describe("Consent Modal buttons test", () =>{
     })
 })
 
-describe('Preferences Modal buttons test', () =>{
+describe('Preferences Modal buttons test', () => {
 
     beforeAll(() => {
         api = CookieConsent;

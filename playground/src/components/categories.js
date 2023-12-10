@@ -34,8 +34,7 @@ onEvent(customEvents._PLAYGROUND_READY, () => {
  * @param {string[]} enabledCategories
  */
 function toggleCategories(enabledCategories) {
-
-    for(const input of categoryInputs) {
+    for (const input of categoryInputs) {
         input.checked = enabledCategories.includes(input.value);
     }
 }

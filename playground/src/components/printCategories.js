@@ -45,7 +45,7 @@ onEvent(customEvents._RESET, () => {
  * @param {HTMLElement} el
  * @param {boolean} enable
  */
-function toggleCategory(el, enable){
+function toggleCategory(el, enable) {
     const action = enable
         ? 'add'
         : 'remove';
@@ -56,8 +56,8 @@ function toggleCategory(el, enable){
 /**
  * @param {boolean} enable
  */
-function toggleAll(enable){
-    for(let key in divs){
+function toggleAll(enable) {
+    for (let key in divs) {
         toggleCategory(divs[key], enable);
     }
 }

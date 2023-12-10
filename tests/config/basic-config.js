@@ -2,7 +2,6 @@
  * @type {import('../../src/core/global').UserConfig}
  */
 const config = {
-
     mode: 'opt-out',
 
     cookie: {

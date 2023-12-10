@@ -15,7 +15,6 @@ const editTranslationsBtn = getById('edit-translations-btn');
 const editTranslationsBtnText = editTranslationsBtn.textContent;
 
 onEvent(customEvents._PLAYGROUND_READY, () => {
-
     const enabledTranslations = getState()._enabledTranslations;
 
     toggleTranslations(enabledTranslations);
@@ -32,7 +31,7 @@ onEvent(customEvents._PLAYGROUND_READY, () => {
 
             const languageFound = translations.includes(languageCode);
 
-            if(enabled) {
+            if (enabled) {
                 !languageFound && translations.push(languageCode);
             } else {
                 languageFound && (state._enabledTranslations = state._enabledTranslations.filter(language => language !== languageCode));
@@ -50,17 +49,16 @@ onEvent(customEvents._PLAYGROUND_READY, () => {
                 || state._enabledTranslations[0]
                 || '';
 
-            if(autoDetect) {
+            if (autoDetect) {
                 updateTranslationFound(currLanguage === autoDetectedLanguage);
             }
 
-            if(!enabledTranslation(language.default, state)) {
+            if (!enabledTranslation(language.default, state)) {
                 language.default = currLanguage;
                 updateDefaultLanguage(currLanguage);
             }
 
             updateCurrentLanguage(currLanguage, state);
-
             saveState(state);
         });
     });
@@ -74,7 +72,7 @@ onEvent(customEvents._RESET, () => {
  * @param {string[]} enabledTranslations
  */
 function toggleTranslations(enabledTranslations) {
-    for(const input of translationInputs) {
+    for (const input of translationInputs) {
         input.checked = enabledTranslations.includes(input.value);
     }
 }
@@ -83,7 +81,6 @@ function toggleTranslations(enabledTranslations) {
  * @param {string[]} enabledTranslations
  */
 function toggleMissingTranslationError(enabledTranslations) {
-
     const error = enabledTranslations.length === 0;
 
     translationsSection.classList[error

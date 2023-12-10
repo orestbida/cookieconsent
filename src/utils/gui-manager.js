@@ -90,7 +90,7 @@ export const guiManager = (applyToModal) => {
     const consentModalOptions = guiOptions && guiOptions.consentModal;
     const preferencesModalOptions = guiOptions && guiOptions.preferencesModal;
 
-    if(applyToModal === 0){
+    if (applyToModal === 0) {
         setLayout(
             globalObj._dom._cm,
             ALL_CM_LAYOUTS,
@@ -101,7 +101,7 @@ export const guiManager = (applyToModal) => {
         );
     }
 
-    if(applyToModal === 1){
+    if (applyToModal === 1) {
         setLayout(
             globalObj._dom._pm,
             ALL_PM_LAYOUTS,
@@ -177,24 +177,24 @@ const setLayout = (modal, allowedLayoutsObj, userGuiOptions, modalClassPrefix, d
     /**
      * Add classes to buttons
      */
-    if(modalClassName === 'cm'){
+    if (modalClassName === 'cm') {
         const {_cmAcceptNecessaryBtn, _cmCloseIconBtn} = globalObj._dom;
 
-        if(_cmAcceptNecessaryBtn){
+        if (_cmAcceptNecessaryBtn) {
             equalWeightButtons
                 ? removeClass(_cmAcceptNecessaryBtn, btnClass)
                 : addClass(_cmAcceptNecessaryBtn, btnClass);
         }
 
-        if(_cmCloseIconBtn){
+        if (_cmCloseIconBtn) {
             equalWeightButtons
                 ? removeClass(_cmCloseIconBtn, btnClass)
                 : addClass(_cmCloseIconBtn, btnClass);
         }
-    }else{
+    } else {
         const { _pmAcceptNecessaryBtn } =  globalObj._dom;
 
-        if(_pmAcceptNecessaryBtn){
+        if (_pmAcceptNecessaryBtn) {
             equalWeightButtons
                 ? removeClass(_pmAcceptNecessaryBtn, btnClass)
                 : addClass(_pmAcceptNecessaryBtn, btnClass);

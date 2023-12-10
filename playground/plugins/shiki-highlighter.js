@@ -40,7 +40,7 @@ function shikiHighlightBlock(html, shiki) {
     let htmlString = html;
     const codeBlocks = html.matchAll(/<!--SHIKI (.*?)-->/gs);
 
-    for(const block of codeBlocks) {
+    for (const block of codeBlocks) {
 
         /**
          * @type {string}
@@ -48,7 +48,7 @@ function shikiHighlightBlock(html, shiki) {
         const blockString = block[0];
         const split = blockString.split('\n');
 
-        if(split.length < 1)
+        if (split.length < 1)
             continue;
 
         /**
@@ -80,7 +80,7 @@ function shikiHighlightBlock(html, shiki) {
 
             const emptyRow = row.trim() === '';
 
-            if(emptyRow)
+            if (emptyRow)
                 row = '';
 
             return (!emptyRow && row.slice(0, indentationSpaces).trim() === ''
@@ -99,17 +99,17 @@ function shikiHighlightBlock(html, shiki) {
             */
         let lineNumbers = '';
 
-        if(showLineNumbers){
+        if (showLineNumbers) {
 
             lineNumbers = '<div class="hl__numbers" aria-hidden="true">';
 
-            for(let i=1; i<=nRows; i++){
+            for (let i=1; i<=nRows; i++) {
                 const className = [];
 
-                if(shouldFocusLines && focusIndexes[i] === true)
+                if (shouldFocusLines && focusIndexes[i] === true)
                     className.push('line--focus');
 
-                if(shouldHighlightLines && highlightIndexes[i] === true)
+                if (shouldHighlightLines && highlightIndexes[i] === true)
                     className.push('line--highlight');
 
                 lineNumbers += `<span class="${className.join(' ')}"></span>`;
@@ -132,7 +132,7 @@ function shikiHighlightBlock(html, shiki) {
                     let focus = shouldFocusLines && focusIndexes[index + 1] === true;
                     let className = 'line' + (focus ? ' line--focus' : '');
 
-                    if(fetchRelease)
+                    if (fetchRelease)
                         children = children.replaceAll('{{latest_release}}', '<span data-latest-release></span>');
 
                     return  `<span class="${className}">${children}</span>`;
@@ -183,7 +183,7 @@ function createCustomBlock(html) {
     let htmlString = html;
     const codeBlocks = html.matchAll(/!!!--CustomBlock (.*?)--!!!/gs);
 
-    for(const block of codeBlocks) {
+    for (const block of codeBlocks) {
 
         /**
          * @type {string}
@@ -191,7 +191,7 @@ function createCustomBlock(html) {
         const blockString = block[0];
         const split = blockString.split('\n');
 
-        if(split.length < 1)
+        if (split.length < 1)
             continue;
 
         /**
@@ -217,7 +217,7 @@ function createCustomBlock(html) {
 
             const emptyRow = row.trim() === '';
 
-            if(emptyRow)
+            if (emptyRow)
                 row = '';
 
             return (!emptyRow && row.slice(0, indentationSpaces).trim() === ''
@@ -226,7 +226,7 @@ function createCustomBlock(html) {
 
         }).join('\n');
 
-        if(fetchRelease)
+        if (fetchRelease)
             bodyCleaned = bodyCleaned.replaceAll('{{latest_release}}', '<span data-latest-release></span>');
 
         const tag = title && isDetails
@@ -276,7 +276,7 @@ function getIndexes(rangeStr) {
      * "2-3,5,8-11"
      */
 
-    if(!rangeStr)
+    if (!rangeStr)
         return {};
 
     /**
@@ -289,16 +289,16 @@ function getIndexes(rangeStr) {
 
     const ranges = {};
 
-    for(const indexGroup of split){
+    for (const indexGroup of split) {
         const indexes = indexGroup.split('-') || [];
 
-        if(indexes.length === 1){
+        if (indexes.length === 1) {
             ranges[indexes] = true;
-        }else{
+        } else {
             const start = parseInt(indexes[0]);
             const end = parseInt(indexes[1]);
 
-            for(let index=start; index<=end; index++){
+            for (let index=start; index<=end; index++) {
                 ranges[index] = true;
             }
         }

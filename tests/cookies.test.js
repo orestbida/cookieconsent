@@ -14,7 +14,7 @@ import {
  */
 let api;
 
-describe("Cookie should be created successfully", () =>{
+describe("Cookie should be created successfully", () => {
     beforeAll(async () => {
         api = CookieConsent;
         await api.run(testConfig);

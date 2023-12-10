@@ -8,7 +8,7 @@ import testConfig from "./config/full-config";
  */
 let api;
 
-describe("Test UI options", () =>{
+describe("Test UI options", () => {
 
     beforeAll(() => {
         api = CookieConsent;
@@ -154,6 +154,6 @@ describe("Test UI options", () =>{
     });
 })
 
-function getModalClassList(selector){
+function getModalClassList(selector) {
     return document.querySelector(selector).classList;
 }

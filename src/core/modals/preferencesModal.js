@@ -59,7 +59,7 @@ export const createPreferencesModal = (api, createMainContainer) => {
      */
     const modalData = state._currentTranslation && state._currentTranslation.preferencesModal;
 
-    if(!modalData)
+    if (!modalData)
         return;
 
     const
@@ -73,7 +73,7 @@ export const createPreferencesModal = (api, createMainContainer) => {
             || acceptNecessaryBtnData
             || savePreferencesBtnData;
 
-    if(!dom._pmContainer){
+    if (!dom._pmContainer) {
         dom._pmContainer = createNode(DIV_TAG);
         addClass(dom._pmContainer, 'pm-wrapper');
 
@@ -147,12 +147,12 @@ export const createPreferencesModal = (api, createMainContainer) => {
         createFooter && appendChild(dom._pm, dom._pmFooter);
 
         appendChild(dom._pmContainer, dom._pm);
-    }else{
+    } else {
         dom._pmNewBody = createNode(DIV_TAG);
         addClassPm(dom._pmNewBody, 'body');
     }
 
-    if(titleData){
+    if (titleData) {
         dom._pmTitle.innerHTML = titleData;
         closeIconLabelData && setAttribute(dom._pmCloseBtn, 'aria-label', closeIconLabelData);
     }
@@ -183,20 +183,20 @@ export const createPreferencesModal = (api, createMainContainer) => {
         var s = createNode(DIV_TAG);
         addClassPm(s, 'section');
 
-        if(sIsExpandableToggle || sDescriptionData){
+        if (sIsExpandableToggle || sDescriptionData) {
             var sDescContainer = createNode(DIV_TAG);
             addClassPm(sDescContainer, 'section-desc-wrapper');
         }
 
         let nServices = sServiceNames.length;
 
-        if(sIsExpandableToggle){
-            if(nServices > 0){
+        if (sIsExpandableToggle) {
+            if (nServices > 0) {
 
                 const servicesContainer = createNode(DIV_TAG);
                 addClassPm(servicesContainer, 'section-services');
 
-                for(const serviceName of sServiceNames){
+                for (const serviceName of sServiceNames) {
                     const service = sServices[serviceName];
                     const serviceLabel = service && service.label || serviceName;
                     const serviceDiv = createNode(DIV_TAG);
@@ -224,7 +224,7 @@ export const createPreferencesModal = (api, createMainContainer) => {
             }
         }
 
-        if(sTitleData){
+        if (sTitleData) {
             var sTitleContainer = createNode(DIV_TAG);
 
             var sTitle = hasToggle
@@ -237,7 +237,7 @@ export const createPreferencesModal = (api, createMainContainer) => {
             sTitle.innerHTML = sTitleData;
             appendChild(sTitleContainer, sTitle);
 
-            if(hasToggle){
+            if (hasToggle) {
 
                 /**
                  * Arrow icon span
@@ -253,7 +253,7 @@ export const createPreferencesModal = (api, createMainContainer) => {
 
                 let serviceCounterLabel = modalData.serviceCounterLabel;
 
-                if(nServices > 0 && isString(serviceCounterLabel)){
+                if (nServices > 0 && isString(serviceCounterLabel)) {
                     let serviceCounter = createNode('span');
 
                     addClassPm(serviceCounter, 'badge');
@@ -261,10 +261,10 @@ export const createPreferencesModal = (api, createMainContainer) => {
                     setAttribute(serviceCounter, ARIA_HIDDEN, true);
                     setAttribute(serviceCounter, 'data-servicecounter', nServices);
 
-                    if(serviceCounterLabel){
+                    if (serviceCounterLabel) {
                         serviceCounterLabel = serviceCounterLabel.split('|');
 
-                        if(serviceCounterLabel.length > 1 && nServices > 1)
+                        if (serviceCounterLabel.length > 1 && nServices > 1)
                             serviceCounterLabel = serviceCounterLabel[1];
                         else
                             serviceCounterLabel = serviceCounterLabel[0];
@@ -279,7 +279,7 @@ export const createPreferencesModal = (api, createMainContainer) => {
                     appendChild(sTitle, serviceCounter);
                 }
 
-                if(sIsExpandableToggle){
+                if (sIsExpandableToggle) {
                     addClassPm(s, 'section--expandable');
                     var expandableDivId = sLinkedCategory + '-desc';
                     setAttribute(sTitle, 'aria-expanded', false);
@@ -288,7 +288,7 @@ export const createPreferencesModal = (api, createMainContainer) => {
 
                 appendChild(sTitleContainer, toggleLabel);
 
-            }else{
+            } else {
                 setAttribute(sTitle, 'role', 'heading');
                 setAttribute(sTitle, 'aria-level', '3');
             }
@@ -296,14 +296,14 @@ export const createPreferencesModal = (api, createMainContainer) => {
             appendChild(s, sTitleContainer);
         }
 
-        if(sDescriptionData){
+        if (sDescriptionData) {
             var sDesc = createNode('p');
             addClassPm(sDesc, 'section-desc');
             sDesc.innerHTML = sDescriptionData;
             appendChild(sDescContainer, sDesc);
         }
 
-        if(sIsExpandableToggle){
+        if (sIsExpandableToggle) {
             setAttribute(sDescContainer, ARIA_HIDDEN, 'true');
             sDescContainer.id = expandableDivId;
 
@@ -312,11 +312,11 @@ export const createPreferencesModal = (api, createMainContainer) => {
              */
             ((accordion, section, btn) => {
                 addEvent(sTitle, CLICK_EVENT, () => {
-                    if(!hasClass(section, 'is-expanded')){
+                    if (!hasClass(section, 'is-expanded')) {
                         addClass(section, 'is-expanded');
                         setAttribute(btn, 'aria-expanded', 'true');
                         setAttribute(accordion, ARIA_HIDDEN, 'false');
-                    }else{
+                    } else {
                         removeClass(section, 'is-expanded');
                         setAttribute(btn, 'aria-expanded', 'false');
                         setAttribute(accordion, ARIA_HIDDEN, 'true');
@@ -325,12 +325,12 @@ export const createPreferencesModal = (api, createMainContainer) => {
             })(sDescContainer, s, sTitle);
 
 
-            if(sCreateCookieTable){
+            if (sCreateCookieTable) {
                 const table = createNode('table');
                 const thead = createNode('thead');
                 const tbody = createNode('tbody');
 
-                if(sCookieTableCaption) {
+                if (sCookieTableCaption) {
                     const caption = createNode('caption');
                     addClassPm(caption, 'table-caption');
                     caption.innerHTML = sCookieTableCaption;
@@ -350,7 +350,7 @@ export const createPreferencesModal = (api, createMainContainer) => {
                 const trHeadFragment = dom._document.createDocumentFragment();
                 const trHead = createNode('tr');
 
-                for(const headerKey of tableHeadersKeys){
+                for (const headerKey of tableHeadersKeys) {
                     const headerValue = headerData[headerKey];
                     const th = createNode('th');
 
@@ -370,11 +370,11 @@ export const createPreferencesModal = (api, createMainContainer) => {
                  */
                 const bodyFragment = dom._document.createDocumentFragment();
 
-                for(const bodyItem of sCookieTableBody){
+                for (const bodyItem of sCookieTableBody) {
                     const tr = createNode('tr');
                     addClassPm(tr, 'table-tr');
 
-                    for(const tdKey of tableHeadersKeys){
+                    for (const tdKey of tableHeadersKeys) {
                         const tdHeader = headerData[tdKey];
                         const tdValue = bodyItem[tdKey];
 
@@ -401,18 +401,18 @@ export const createPreferencesModal = (api, createMainContainer) => {
             }
         }
 
-        if(sIsExpandableToggle || sDescriptionData)
+        if (sIsExpandableToggle || sDescriptionData)
             appendChild(s, sDescContainer);
 
         const currentBody = dom._pmNewBody || dom._pmBody;
 
-        if(hasToggle){
-            if(!sectionToggleContainer){
+        if (hasToggle) {
+            if (!sectionToggleContainer) {
                 sectionToggleContainer = createNode(DIV_TAG);
                 addClassPm(sectionToggleContainer, 'section-toggles');
             }
             sectionToggleContainer.appendChild(s);
-        }else{
+        } else {
             sectionToggleContainer = null;
         }
 
@@ -420,8 +420,8 @@ export const createPreferencesModal = (api, createMainContainer) => {
 
     });
 
-    if(acceptAllBtnData){
-        if(!dom._pmAcceptAllBtn){
+    if (acceptAllBtnData) {
+        if (!dom._pmAcceptAllBtn) {
             dom._pmAcceptAllBtn = createNode(BUTTON_TAG);
             addClassPm(dom._pmAcceptAllBtn, 'btn');
             setAttribute(dom._pmAcceptAllBtn, DATA_ROLE, 'all');
@@ -434,8 +434,8 @@ export const createPreferencesModal = (api, createMainContainer) => {
         dom._pmAcceptAllBtn.innerHTML = acceptAllBtnData;
     }
 
-    if(acceptNecessaryBtnData){
-        if(!dom._pmAcceptNecessaryBtn){
+    if (acceptNecessaryBtnData) {
+        if (!dom._pmAcceptNecessaryBtn) {
             dom._pmAcceptNecessaryBtn = createNode(BUTTON_TAG);
             addClassPm(dom._pmAcceptNecessaryBtn, 'btn');
             setAttribute(dom._pmAcceptNecessaryBtn, DATA_ROLE, 'necessary');
@@ -448,8 +448,8 @@ export const createPreferencesModal = (api, createMainContainer) => {
         dom._pmAcceptNecessaryBtn.innerHTML = acceptNecessaryBtnData;
     }
 
-    if(savePreferencesBtnData){
-        if(!dom._pmSavePreferencesBtn){
+    if (savePreferencesBtnData) {
+        if (!dom._pmSavePreferencesBtn) {
             dom._pmSavePreferencesBtn = createNode(BUTTON_TAG);
             addClassPm(dom._pmSavePreferencesBtn, 'btn');
             addClassPm(dom._pmSavePreferencesBtn, 'btn--secondary');
@@ -464,14 +464,14 @@ export const createPreferencesModal = (api, createMainContainer) => {
         dom._pmSavePreferencesBtn.innerHTML = savePreferencesBtnData;
     }
 
-    if(dom._pmNewBody) {
+    if (dom._pmNewBody) {
         dom._pm.replaceChild(dom._pmNewBody, dom._pmBody);
         dom._pmBody = dom._pmNewBody;
     }
 
     guiManager(1);
 
-    if(!state._preferencesModalExists){
+    if (!state._preferencesModalExists) {
         state._preferencesModalExists = true;
 
         _log('CookieConsent [HTML] created', PREFERENCES_MODAL_NAME);
@@ -498,7 +498,7 @@ export const createPreferencesModal = (api, createMainContainer) => {
  * @param {boolean} [isService]
  * @param {string} categoryName
  */
-function createToggleLabel(label, value, sCurrentCategoryObject, isService, categoryName){
+function createToggleLabel(label, value, sCurrentCategoryObject, isService, categoryName) {
     const state = globalObj._state;
     const dom = globalObj._dom;
 
@@ -527,18 +527,18 @@ function createToggleLabel(label, value, sCurrentCategoryObject, isService, cate
 
     setAttribute(toggleIcon, ARIA_HIDDEN, 'true');
 
-    if(isService){
+    if (isService) {
         addClass(toggleLabel, 'toggle-service');
         setAttribute(toggle, SCRIPT_TAG_SELECTOR, categoryName);
 
         // Save reference to toggles to avoid using document.querySelector later on
         dom._serviceCheckboxInputs[categoryName][value] = toggle;
-    }else{
+    } else {
         dom._categoryCheckboxInputs[value] = toggle;
     }
 
-    if(!isService){
-        ((value)=>{
+    if (!isService) {
+        ((value)=> {
             addEvent(toggle, CLICK_EVENT, () => {
                 const categoryServicesToggles = dom._serviceCheckboxInputs[value];
                 const checked = toggle.checked;
@@ -547,13 +547,13 @@ function createToggleLabel(label, value, sCurrentCategoryObject, isService, cate
                 /**
                  * Enable/disable all services
                  */
-                for(let serviceName in categoryServicesToggles){
+                for (let serviceName in categoryServicesToggles) {
                     categoryServicesToggles[serviceName].checked = checked;
                     checked && state._enabledServices[value].push(serviceName);
                 }
             });
         })(value);
-    }else{
+    } else {
         ((categoryName) => {
             addEvent(toggle, 'change', () => {
                 const categoryServicesToggles = dom._serviceCheckboxInputs[categoryName];
@@ -561,10 +561,10 @@ function createToggleLabel(label, value, sCurrentCategoryObject, isService, cate
 
                 state._enabledServices[categoryName] = [];
 
-                for(let serviceName in categoryServicesToggles){
+                for (let serviceName in categoryServicesToggles) {
                     const serviceInput = categoryServicesToggles[serviceName];
 
-                    if(serviceInput.checked){
+                    if (serviceInput.checked) {
                         state._enabledServices[categoryName].push(serviceInput.value);
                     }
                 }
@@ -586,21 +586,21 @@ function createToggleLabel(label, value, sCurrentCategoryObject, isService, cate
      * If consent is valid => retrieve category states from cookie
      * Otherwise use states defined in the userConfig. object
      */
-    if(!state._invalidConsent){
-        if(isService){
+    if (!state._invalidConsent) {
+        if (isService) {
             const enabledServices = state._acceptedServices[categoryName];
             toggle.checked = sCurrentCategoryObject.readOnly || elContains(enabledServices, value);
-        }else if(elContains(state._acceptedCategories, value)){
+        }else if (elContains(state._acceptedCategories, value)) {
             toggle.checked = true;
         }
-    }else if(sCurrentCategoryObject.readOnly || sCurrentCategoryObject.enabled){
+    }else if (sCurrentCategoryObject.readOnly || sCurrentCategoryObject.enabled) {
         toggle.checked = true;
     }
 
     /**
      * Set toggle as readonly if true (disable checkbox)
      */
-    if(sCurrentCategoryObject.readOnly){
+    if (sCurrentCategoryObject.readOnly) {
         toggle.disabled = true;
     }
 

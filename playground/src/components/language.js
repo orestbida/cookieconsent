@@ -32,7 +32,7 @@ onEvent(customEvents._PLAYGROUND_READY, () => {
         ? detectedLanguage
         : language.default;
 
-    if(autoDetect) {
+    if (autoDetect) {
         setAutoDetectMode(autoDetectMode);
         updateDetectedLanguage(detectedLanguage, state);
     } else {
@@ -46,23 +46,21 @@ onEvent(customEvents._PLAYGROUND_READY, () => {
 });
 
 addEvent(autoDetectCheckbox, 'change', () => {
-
     const state = getState();
     const language = state._cookieConsentConfig.language;
     const enable = autoDetectCheckbox.checked;
 
-    if(enable){
+    if (enable) {
 
         language.autoDetect = language.autoDetect || defaultConfig.language.autoDetect;
         const detectedLang = detectLanguage(language.autoDetect);
         updateDetectedLanguage(detectedLang, state);
 
-        if(enabledTranslation(detectedLang, state)){
+        if (enabledTranslation(detectedLang, state)) {
             updateCurrentLanguage(detectedLang, state);
         }
 
         setAutoDetectMode(language.autoDetect);
-
     }else {
         language.autoDetect = undefined;
         updateDetectedLanguage('', state);
@@ -76,14 +74,14 @@ addEvent(autoDetectCheckbox, 'change', () => {
 addEvent(autoDetectModeSelect, 'change', () => {
     const mode = autoDetectModeSelect.value;
 
-    if(autoDetectEnabled(mode)) {
+    if (autoDetectEnabled(mode)) {
         const state = getState();
         state._cookieConsentConfig.language.autoDetect = mode;
 
         const detectedLanguage = detectLanguage(mode);
         updateDetectedLanguage(detectedLanguage);
 
-        if(enabledTranslation(detectedLanguage, state)){
+        if (enabledTranslation(detectedLanguage, state)) {
             updateCurrentLanguage(detectedLanguage, state);
         }
 
@@ -96,11 +94,11 @@ addEvent(defaultLanguageSelect, 'change', () => {
     const state = getState();
     const language = state._cookieConsentConfig.language;
 
-    if(enabledTranslation(lang, state)){
+    if (enabledTranslation(lang, state)) {
         language.default = lang;
         const autoDetect = autoDetectEnabled(language.autoDetect);
 
-        if(!autoDetect || !enabledTranslation(detectLanguage(language.autoDetect), state)) {
+        if (!autoDetect || !enabledTranslation(detectLanguage(language.autoDetect), state)) {
             updateCurrentLanguage(lang, state);
         }
 
@@ -120,11 +118,11 @@ onEvent(customEvents._RESET, () => {
 });
 
 
-function getBrowserLanguage(){
+function getBrowserLanguage() {
     return navigator.language.slice(0,2);
 }
 
-function getDocumentLanguage(){
+function getDocumentLanguage() {
     return document.documentElement.lang.slice(0,2);
 }
 
@@ -132,10 +130,10 @@ function getDocumentLanguage(){
  * @param {string} mode
  */
 export function detectLanguage(mode) {
-
-    if(mode === 'browser')
+    if (mode === 'browser')
         return getBrowserLanguage();
-    else if(mode === 'document')
+
+    if (mode === 'document')
         return getDocumentLanguage();
 
     return '';
@@ -144,25 +142,23 @@ export function detectLanguage(mode) {
 /**
  * @param {string} languageCode
  */
-export function updateCurrentLanguage(languageCode, newState){
-
+export function updateCurrentLanguage(languageCode, newState) {
     const state = newState || getState();
-
     const currLanguage = enabledTranslation(languageCode, state)
         ? languageCode
         : '-';
 
     currentActiveLanguageSpan.textContent = currLanguage;
 
-    if(currLanguage === '-') {
+    if (currLanguage === '-') {
         window.CookieConsent && window.CookieConsent.reset();
         return;
     }
 
-    if(newState === false)
+    if (newState === false)
         return;
 
-    if(!getById('cc-main')) {
+    if (!getById('cc-main')) {
         setTimeout(() => {
             reRunPlugin(state, 1);
         }, 100);
@@ -175,16 +171,11 @@ export function updateCurrentLanguage(languageCode, newState){
  * @param {string|boolean} languageCode
  * @param {typeof defaultState} [state]
  */
-function updateDetectedLanguage(languageCode, state){
-
-    if(languageCode && typeof languageCode === 'string'){
-
+function updateDetectedLanguage(languageCode, state) {
+    if (languageCode && typeof languageCode === 'string') {
         const validLanguage = enabledTranslation(languageCode, state || getState());
-
         updateTranslationFound(validLanguage);
-
         detectedLanguageSpan.textContent = languageCode;
-
         return;
     }
 
@@ -203,13 +194,8 @@ function toggleAutoDetectCheckbox(enable) {
  * @param {string} mode
  */
 function setAutoDetectMode(mode) {
-
     const validMode = autoDetectEnabled(mode);
-
-    if(validMode) {
-        autoDetectModeSelect.value = mode;
-    }
-
+    validMode && (autoDetectModeSelect.value = mode);
     autoDetectModeSelect.disabled = !validMode;
 }
 
@@ -218,10 +204,10 @@ function setAutoDetectMode(mode) {
  */
 export function updateDefaultLanguage(lang) {
 
-    if(!lang)
+    if (!lang)
         defaultLanguageSelect.value = 'disabled';
 
-    if(allLanguages.includes(lang))
+    if (allLanguages.includes(lang))
         defaultLanguageSelect.value = lang;
 }
 
@@ -229,14 +215,12 @@ export function updateDefaultLanguage(lang) {
  * @param {string[]} languages
  */
 export function updateDefaultLanguageOptions(languages) {
-
     /**
      * @type {HTMLOptionElement[]}
      */
     const options = defaultLanguageSelect.children;
 
-    for(const option of options) {
-
+    for (const option of options) {
         option.style.display = languages.includes(option.value)
             ? ''
             : 'none';

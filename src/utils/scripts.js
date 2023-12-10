@@ -27,40 +27,40 @@ export const manageExistingScripts = (defaultEnabledCategories) => {
     /**
      * Automatically Enable/Disable internal services
      */
-    for(const categoryName of _allCategoryNames){
+    for (const categoryName of _allCategoryNames) {
         const lastChangedServices = _lastChangedServices[categoryName]
             || _acceptedServices[categoryName]
             || [];
 
-        for(const serviceName of lastChangedServices){
+        for (const serviceName of lastChangedServices) {
             const service = _allDefinedServices[categoryName][serviceName];
 
-            if(!service)
+            if (!service)
                 continue;
 
             const {onAccept, onReject} = service;
 
-            if(
+            if (
                 !service._enabled
                 && elContains(_acceptedServices[categoryName], serviceName)
                 && isFunction(onAccept)
-            ){
+            ) {
                 service._enabled = true;
                 onAccept();
             }
 
-            else if(
+            else if (
                 service._enabled
                 && !elContains(_acceptedServices[categoryName], serviceName)
                 && isFunction(onReject)
-            ){
+            ) {
                 service._enabled = false;
                 onReject();
             }
         }
     }
 
-    if(!globalObj._config.manageScriptTags)
+    if (!globalObj._config.manageScriptTags)
         return;
 
     const scripts = _allScriptTags;
@@ -75,7 +75,7 @@ export const manageExistingScripts = (defaultEnabledCategories) => {
      * @param {number} index current script to load
      */
     const loadScriptsHelper = (scripts, index) => {
-        if(index >= scripts.length)
+        if (index >= scripts.length)
             return;
 
         const currScriptInfo = _allScriptTags[index];
@@ -83,7 +83,7 @@ export const manageExistingScripts = (defaultEnabledCategories) => {
         /**
          * Skip script if it was already executed
          */
-        if(currScriptInfo._executed)
+        if (currScriptInfo._executed)
             return loadScriptsHelper(scripts, index+1);
 
         const currScript = currScriptInfo._script;
@@ -118,7 +118,7 @@ export const manageExistingScripts = (defaultEnabledCategories) => {
             || serviceWasJustEnabled()
             || serviceWasJustDisabled();
 
-        if(shouldRunScript){
+        if (shouldRunScript) {
             currScriptInfo._executed = true;
             const dataType = getAttribute(currScript, 'type', true);
 
@@ -140,7 +140,7 @@ export const manageExistingScripts = (defaultEnabledCategories) => {
             freshScript.textContent = currScript.innerHTML;
 
             //Copy attributes over to the new "revived" script
-            for(const {nodeName} of currScript.attributes){
+            for (const {nodeName} of currScript.attributes) {
                 setAttribute(
                     freshScript,
                     nodeName,
@@ -162,7 +162,7 @@ export const manageExistingScripts = (defaultEnabledCategories) => {
 
             // If script has valid "src" attribute
             // try loading it sequentially
-            if(externalScript){
+            if (externalScript) {
                 // load script sequentially => the next script will not be loaded
                 // until the current's script onload event triggers
                 freshScript.onload = freshScript.onerror = () => {
@@ -177,7 +177,7 @@ export const manageExistingScripts = (defaultEnabledCategories) => {
              * If we managed to get here and src is still set, it means that
              * the script is loading/loaded sequentially so don't go any further
              */
-            if(externalScript)
+            if (externalScript)
                 return;
         }
 
@@ -195,15 +195,14 @@ export const manageExistingScripts = (defaultEnabledCategories) => {
 export const retrieveEnabledCategoriesAndServices = () => {
     const state = globalObj._state;
 
-    for(const categoryName of state._allCategoryNames){
+    for (const categoryName of state._allCategoryNames) {
         const category = state._allDefinedCategories[categoryName];
 
-        if(category.readOnly || (category.enabled && state._userConfig.mode === OPT_OUT_MODE)){
+        if (category.readOnly || (category.enabled && state._userConfig.mode === OPT_OUT_MODE)) {
             state._defaultEnabledCategories.push(categoryName);
-
             const services = state._allDefinedServices[categoryName] || {};
 
-            for(let serviceName in services){
+            for (let serviceName in services) {
                 state._acceptedServices[categoryName].push(serviceName);
             }
         }

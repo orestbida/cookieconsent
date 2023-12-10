@@ -38,7 +38,7 @@ import { createPreferencesModal } from './preferencesModal';
 const createFocusSpan = () => {
     const span = createNode('span');
 
-    if(!globalObj._dom._focusSpan)
+    if (!globalObj._dom._focusSpan)
         globalObj._dom._focusSpan = span;
 
     return span;
@@ -59,7 +59,7 @@ export const createConsentModal = (api, createMainContainer) => {
      */
     const consentModalData = state._currentTranslation && state._currentTranslation.consentModal;
 
-    if(!consentModalData)
+    if (!consentModalData)
         return;
 
     const acceptAllBtnData = consentModalData.acceptAllBtn,
@@ -79,7 +79,7 @@ export const createConsentModal = (api, createMainContainer) => {
     };
 
     // Create modal if it doesn't exist
-    if(!dom._cmContainer){
+    if (!dom._cmContainer) {
         dom._cmContainer = createNode(DIV_TAG);
         dom._cm = createNode(DIV_TAG);
         dom._cmBody = createNode(DIV_TAG);
@@ -97,9 +97,9 @@ export const createConsentModal = (api, createMainContainer) => {
         setAttribute(dom._cm, ARIA_HIDDEN, 'false');
         setAttribute(dom._cm, 'aria-describedby', 'cm__desc');
 
-        if(consentModalLabelValue)
+        if (consentModalLabelValue)
             setAttribute(dom._cm, 'aria-label', consentModalLabelValue);
-        else if(consentModalTitleValue)
+        else if (consentModalTitleValue)
             setAttribute(dom._cm, 'aria-labelledby', 'cm__title');
 
         const
@@ -112,8 +112,8 @@ export const createConsentModal = (api, createMainContainer) => {
         /**
          * Close icon-button (visible only in the 'box' layout)
          */
-        if(consentModalTitleValue && closeIconLabelData && isBoxLayout){
-            if(!dom._cmCloseIconBtn){
+        if (consentModalTitleValue && closeIconLabelData && isBoxLayout) {
+            if (!dom._cmCloseIconBtn) {
                 dom._cmCloseIconBtn = createNode(BUTTON_TAG);
                 dom._cmCloseIconBtn.innerHTML = getSvgIcon();
                 addClassCm(dom._cmCloseIconBtn, 'btn');
@@ -130,7 +130,7 @@ export const createConsentModal = (api, createMainContainer) => {
 
         appendChild(dom._cmBody, dom._cmTexts);
 
-        if(acceptAllBtnData || acceptNecessaryBtnData || showPreferencesBtnData)
+        if (acceptAllBtnData || acceptNecessaryBtnData || showPreferencesBtnData)
             appendChild(dom._cmBody, dom._cmBtns);
 
         dom._cmDivTabindex = createNode(DIV_TAG);
@@ -141,8 +141,8 @@ export const createConsentModal = (api, createMainContainer) => {
         appendChild(dom._cmContainer, dom._cm);
     }
 
-    if(consentModalTitleValue){
-        if(!dom._cmTitle){
+    if (consentModalTitleValue) {
+        if (!dom._cmTitle) {
             dom._cmTitle = createNode('h2');
             dom._cmTitle.className = dom._cmTitle.id = 'cm__title';
             appendChild(dom._cmTexts, dom._cmTitle);
@@ -153,8 +153,8 @@ export const createConsentModal = (api, createMainContainer) => {
 
     let description = consentModalData.description;
 
-    if(description){
-        if(state._revisionEnabled){
+    if (description) {
+        if (state._revisionEnabled) {
             description = description.replace(
                 '{{revisionMessage}}',
                 state._validRevision
@@ -163,7 +163,7 @@ export const createConsentModal = (api, createMainContainer) => {
             );
         }
 
-        if(!dom._cmDescription){
+        if (!dom._cmDescription) {
             dom._cmDescription = createNode('p');
             dom._cmDescription.className = dom._cmDescription.id = 'cm__desc';
             appendChild(dom._cmTexts, dom._cmDescription);
@@ -172,8 +172,8 @@ export const createConsentModal = (api, createMainContainer) => {
         dom._cmDescription.innerHTML = description;
     }
 
-    if(acceptAllBtnData){
-        if(!dom._cmAcceptAllBtn){
+    if (acceptAllBtnData) {
+        if (!dom._cmAcceptAllBtn) {
             dom._cmAcceptAllBtn = createNode(BUTTON_TAG);
             appendChild(dom._cmAcceptAllBtn, createFocusSpan());
             addClassCm(dom._cmAcceptAllBtn, 'btn');
@@ -188,8 +188,8 @@ export const createConsentModal = (api, createMainContainer) => {
         dom._cmAcceptAllBtn.firstElementChild.innerHTML = acceptAllBtnData;
     }
 
-    if(acceptNecessaryBtnData){
-        if(!dom._cmAcceptNecessaryBtn){
+    if (acceptNecessaryBtnData) {
+        if (!dom._cmAcceptNecessaryBtn) {
             dom._cmAcceptNecessaryBtn = createNode(BUTTON_TAG);
             appendChild(dom._cmAcceptNecessaryBtn, createFocusSpan());
             addClassCm(dom._cmAcceptNecessaryBtn, 'btn');
@@ -204,8 +204,8 @@ export const createConsentModal = (api, createMainContainer) => {
         dom._cmAcceptNecessaryBtn.firstElementChild.innerHTML = acceptNecessaryBtnData;
     }
 
-    if(showPreferencesBtnData){
-        if(!dom._cmShowPreferencesBtn){
+    if (showPreferencesBtnData) {
+        if (!dom._cmShowPreferencesBtn) {
             dom._cmShowPreferencesBtn = createNode(BUTTON_TAG);
             appendChild(dom._cmShowPreferencesBtn, createFocusSpan());
             addClassCm(dom._cmShowPreferencesBtn, 'btn');
@@ -213,7 +213,7 @@ export const createConsentModal = (api, createMainContainer) => {
             setAttribute(dom._cmShowPreferencesBtn, DATA_ROLE, 'show');
 
             addEvent(dom._cmShowPreferencesBtn, 'mouseenter', () => {
-                if(!state._preferencesModalExists)
+                if (!state._preferencesModalExists)
                     createPreferencesModal(api, createMainContainer);
             });
             addEvent(dom._cmShowPreferencesBtn, CLICK_EVENT, showPreferences);
@@ -222,7 +222,7 @@ export const createConsentModal = (api, createMainContainer) => {
         dom._cmShowPreferencesBtn.firstElementChild.innerHTML = showPreferencesBtnData;
     }
 
-    if(!dom._cmBtnGroup){
+    if (!dom._cmBtnGroup) {
         dom._cmBtnGroup = createNode(DIV_TAG);
         addClassCm(dom._cmBtnGroup, BTN_GROUP_CLASS);
 
@@ -233,10 +233,10 @@ export const createConsentModal = (api, createMainContainer) => {
         appendChild(dom._cmBtns, dom._cmBtnGroup);
     }
 
-    if(dom._cmShowPreferencesBtn && !dom._cmBtnGroup2){
+    if (dom._cmShowPreferencesBtn && !dom._cmBtnGroup2) {
         dom._cmBtnGroup2 = createNode(DIV_TAG);
 
-        if((!dom._cmAcceptNecessaryBtn || !dom._cmAcceptAllBtn)){
+        if ((!dom._cmAcceptNecessaryBtn || !dom._cmAcceptAllBtn)) {
             appendChild(dom._cmBtnGroup, dom._cmShowPreferencesBtn);
             addClassCm(dom._cmBtnGroup, BTN_GROUP_CLASS + '--uneven');
         }else {
@@ -246,8 +246,8 @@ export const createConsentModal = (api, createMainContainer) => {
         }
     }
 
-    if(footerData){
-        if(!dom._cmFooterLinksGroup){
+    if (footerData) {
+        if (!dom._cmFooterLinksGroup) {
             let _consentModalFooter = createNode(DIV_TAG);
             let _consentModalFooterLinks = createNode(DIV_TAG);
             dom._cmFooterLinksGroup = createNode(DIV_TAG);
@@ -266,7 +266,7 @@ export const createConsentModal = (api, createMainContainer) => {
 
     guiManager(0);
 
-    if(!state._consentModalExists){
+    if (!state._consentModalExists) {
         state._consentModalExists = true;
 
         _log('CookieConsent [HTML] created', CONSENT_MODAL_NAME);

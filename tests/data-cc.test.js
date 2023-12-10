@@ -8,7 +8,7 @@ import { fireClickEvent, htmlHasClass } from "./config/mocks-utils";
  */
 let api;
 
-describe("Test data-cc attributes", () =>{
+describe("Test data-cc attributes", () => {
 
     beforeAll(() => {
         api = CookieConsent;

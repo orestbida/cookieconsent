@@ -4,7 +4,7 @@ const updateFields = () => {
 
     const modal = document.querySelector('#cc-main .pm');
 
-    if(!window.CookieConsent.validConsent() || !modal)
+    if (!window.CookieConsent.validConsent() || !modal)
         return;
 
     const {
@@ -31,6 +31,6 @@ onEvent(customEvents._ON_CONSENT, () => {
 });
 
 onEvent(customEvents._ON_MODAL_SHOW, ({detail}) => {
-    if(detail.modalName === 'preferencesModal')
+    if (detail.modalName === 'preferencesModal')
         updateFields();
 });

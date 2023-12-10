@@ -8,7 +8,7 @@ import { handleRtlLanguage } from '../../utils/language';
 export const createMainContainer = () => {
     const dom = globalObj._dom;
 
-    if(dom._ccMain) return;
+    if (dom._ccMain) return;
 
     dom._ccMain = createNode(DIV_TAG);
     dom._ccMain.id = 'cc-main';
@@ -18,7 +18,7 @@ export const createMainContainer = () => {
 
     let root = globalObj._state._userConfig.root;
 
-    if(root && isString(root))
+    if (root && isString(root))
         root = document.querySelector(root);
 
     // Append main container to dom
@@ -31,10 +31,10 @@ export const createMainContainer = () => {
 export const generateHtml = (api) => {
     addDataButtonListeners(null, api, createPreferencesModal, createMainContainer);
 
-    if(globalObj._state._invalidConsent)
+    if (globalObj._state._invalidConsent)
         createConsentModal(api, createMainContainer);
 
-    if(!globalObj._config.lazyHtmlGeneration)
+    if (!globalObj._config.lazyHtmlGeneration)
         createPreferencesModal(api, createMainContainer);
 };
 

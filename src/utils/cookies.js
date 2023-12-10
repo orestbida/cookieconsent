@@ -41,9 +41,9 @@ const getCategoriesWithCookies = (isFirstConsent) => {
  * @param {string} cookieName
  */
 const findMatchingCookies = (allCookies, cookieName) => {
-    if(cookieName instanceof RegExp) {
+    if (cookieName instanceof RegExp) {
         return allCookies.filter(cookie => cookieName.test(cookie));
-    }else{
+    } else {
         const cookieIndex = indexOf(allCookies, cookieName);
         return cookieIndex > -1
             ? [allCookies[cookieIndex]]
@@ -63,22 +63,22 @@ export const autoclearCookiesHelper = (isFirstConsent) => {
     /**
      * Clear cookies for each disabled service
      */
-    for(const categoryName in state._lastChangedServices) {
-        for(const serviceName of state._lastChangedServices[categoryName]) {
+    for (const categoryName in state._lastChangedServices) {
+        for (const serviceName of state._lastChangedServices[categoryName]) {
             const serviceCookies = state._allDefinedServices[categoryName][serviceName].cookies;
             const serviceIsDisabled = !elContains(state._acceptedServices[categoryName], serviceName);
 
-            if(!serviceIsDisabled || !serviceCookies)
+            if (!serviceIsDisabled || !serviceCookies)
                 continue;
 
-            for(const cookieItem of serviceCookies) {
+            for (const cookieItem of serviceCookies) {
                 const foundCookies = findMatchingCookies(allCookiesArray, cookieItem.name);
                 eraseCookiesHelper(foundCookies, cookieItem.path, cookieItem.domain);
             }
         }
     }
 
-    for(const currentCategoryName of categoriesToClear){
+    for (const currentCategoryName of categoriesToClear) {
         const category = state._allDefinedCategories[currentCategoryName];
         const autoClear = category.autoClear;
         const autoClearCookies = autoClear && autoClear.cookies || [];
@@ -91,13 +91,13 @@ export const autoclearCookiesHelper = (isFirstConsent) => {
             ? categoryIsDisabled
             : categoryWasJustDisabled;
 
-        if(!shouldClearCookies)
+        if (!shouldClearCookies)
             continue;
 
-        if(autoClear.reloadPage && categoryWasJustDisabled)
+        if (autoClear.reloadPage && categoryWasJustDisabled)
             state._reloadPage = true;
 
-        for(const cookieItem of autoClearCookies){
+        for (const cookieItem of autoClearCookies) {
             const foundCookies = findMatchingCookies(allCookiesArray, cookieItem.name);
             eraseCookiesHelper(foundCookies, cookieItem.path, cookieItem.domain);
         }
@@ -120,13 +120,13 @@ export const saveCookiePreferences = () => {
     /**
      * Determine if services were changed from last state
      */
-    for(const categoryName of state._allCategoryNames){
+    for (const categoryName of state._allCategoryNames) {
         state._lastChangedServices[categoryName] = arrayDiff(
             state._acceptedServices[categoryName],
             state._lastEnabledServices[categoryName]
         );
 
-        if(state._lastChangedServices[categoryName].length > 0)
+        if (state._lastChangedServices[categoryName].length > 0)
             servicesWereChanged = true;
     }
 
@@ -137,25 +137,25 @@ export const saveCookiePreferences = () => {
      * If the category is accepted check checkbox,
      * otherwise uncheck it
      */
-    for(const categoryName in categoryToggles){
+    for (const categoryName in categoryToggles) {
         categoryToggles[categoryName].checked = elContains(state._acceptedCategories, categoryName);
     }
 
-    for(const categoryName of state._allCategoryNames){
+    for (const categoryName of state._allCategoryNames) {
         const servicesToggles = globalObj._dom._serviceCheckboxInputs[categoryName];
         const enabledServices = state._acceptedServices[categoryName];
 
-        for(const serviceName in servicesToggles){
+        for (const serviceName in servicesToggles) {
             const serviceInput = servicesToggles[serviceName];
             serviceInput.checked = elContains(enabledServices, serviceName);
         }
     }
     //{{END: GUI}}
 
-    if(!state._consentTimestamp)
+    if (!state._consentTimestamp)
         state._consentTimestamp = new Date();
 
-    if(!state._consentId)
+    if (!state._consentId)
         state._consentId = uuidv4();
 
     state._savedCookieContent = {
@@ -170,11 +170,11 @@ export const saveCookiePreferences = () => {
     let isFirstConsent = false;
     const stateChanged = categoriesWereChanged || servicesWereChanged;
 
-    if(state._invalidConsent || stateChanged){
+    if (state._invalidConsent || stateChanged) {
         /**
          * Set consent as valid
          */
-        if(state._invalidConsent) {
+        if (state._invalidConsent) {
             state._invalidConsent = false;
             isFirstConsent = true;
         }
@@ -190,27 +190,27 @@ export const saveCookiePreferences = () => {
         const isAutoClearEnabled = globalObj._config.autoClearCookies;
         const shouldClearCookies = isFirstConsent || stateChanged;
 
-        if(isAutoClearEnabled && shouldClearCookies)
+        if (isAutoClearEnabled && shouldClearCookies)
             autoclearCookiesHelper(isFirstConsent);
 
         manageExistingScripts();
     }
 
-    if(isFirstConsent){
+    if (isFirstConsent) {
         fireEvent(globalObj._customEvents._onFirstConsent);
         fireEvent(globalObj._customEvents._onConsent);
 
-        if(globalObj._config.mode === OPT_IN_MODE)
+        if (globalObj._config.mode === OPT_IN_MODE)
             return;
     }
 
-    if(stateChanged)
+    if (stateChanged)
         fireEvent(globalObj._customEvents._onChange);
 
     /**
      * Reload page if needed
      */
-    if(state._reloadPage) {
+    if (state._reloadPage) {
         state._reloadPage = false;
         location.reload();
     }
@@ -221,7 +221,6 @@ export const saveCookiePreferences = () => {
  * @param {boolean} [useRemainingExpirationTime]
  */
 export const setCookie = (useRemainingExpirationTime) => {
-
     const { hostname, protocol } = location;
     const { name, path, domain, sameSite } = globalObj._config.cookie;
 
@@ -250,10 +249,10 @@ export const setCookie = (useRemainingExpirationTime) => {
      * Set "domain" only if hostname contains a dot (e.g domain.com)
      * to ensure that cookie works with 'localhost'
      */
-    if(elContains(hostname, '.'))
+    if (elContains(hostname, '.'))
         cookieStr += '; Domain=' + domain;
 
-    if(protocol === 'https:')
+    if (protocol === 'https:')
         cookieStr += '; Secure';
 
     document.cookie = cookieStr;
@@ -268,9 +267,9 @@ export const setCookie = (useRemainingExpirationTime) => {
 export const parseCookie = (value) => {
     let parsedValue;
 
-    try{
+    try {
         parsedValue = JSON.parse(decodeURIComponent(value));
-    }catch(e){
+    } catch (e) {
         parsedValue = {}; // Cookie value is not valid
     }
 
@@ -284,7 +283,7 @@ export const parseCookie = (value) => {
  * @param {string} [customDomain]
  */
 export const eraseCookiesHelper = (cookies, customPath, customDomain) => {
-    if(cookies.length === 0)
+    if (cookies.length === 0)
         return;
 
     const domain = customDomain || globalObj._config.cookie.domain;
@@ -304,7 +303,7 @@ export const eraseCookiesHelper = (cookies, customPath, customDomain) => {
             + '; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
     };
 
-    for(const cookieName of cookies){
+    for (const cookieName of cookies) {
 
         /**
          * 2 attempts to erase the cookie:
@@ -319,7 +318,7 @@ export const eraseCookiesHelper = (cookies, customPath, customDomain) => {
          * also erase the cookie for the
          * main domain (without www)
          */
-        if(isWwwSubdomain)
+        if (isWwwSubdomain)
             erase(cookieName, mainDomain);
 
         _log('CookieConsent [AUTOCLEAR]: deleting cookie: "' + cookieName + '" path: "' + path + '" domain:', domain);
@@ -365,15 +364,15 @@ export const getAllCookies = (regex) => {
     /**
      * Save only the cookie names
      */
-    for(const cookie of allCookies){
+    for (const cookie of allCookies) {
         let name = cookie.split('=')[0];
 
-        if(regex){
-            try{
+        if (regex) {
+            try {
                 regex.test(name) && cookieNames.push(name);
             // eslint-disable-next-line no-empty
-            }catch(e){}
-        }else{
+            } catch (e) {}
+        } else {
             cookieNames.push(name);
         }
     }

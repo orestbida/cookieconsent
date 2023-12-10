@@ -75,7 +75,7 @@ describe("Test add/remove/toggle classes", () => {
     })
 })
 
-describe("Array/Object tests", () =>{
+describe("Array/Object tests", () => {
 
     const arr1 = [1];
     const arr2 = [1, 2]

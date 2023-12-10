@@ -17,7 +17,7 @@ global.fetch = jest.fn(() =>
     })
 );
 
-describe("API tests", () =>{
+describe("API tests", () => {
     let testConfig;
 
     beforeAll(async () => {

@@ -45,7 +45,7 @@ let state = null;
  * Show dialog on click
  */
 addEvent(editBtn, 'click', () => {
-    if(editBtn.disabled)
+    if (editBtn.disabled)
         return;
 
     /**
@@ -53,7 +53,7 @@ addEvent(editBtn, 'click', () => {
      */
     state = getState();
 
-    if(updateEditor() !== false) {
+    if (updateEditor() !== false) {
         dialog.show();
         refreshHighlighting();
         currentLanguage = selectEditorTranslation.value;
@@ -79,7 +79,6 @@ addEvent(saveTranslationBtn, 'click', () => {
 });
 
 addEvent(selectEditorTranslation, 'focus', () => {
-
     const currentTranslation = retrieveCurrentTranslationFromEditor();
     const previousTranslation = getCurrentUserConfig(getState()).language.translations[currentLanguage];
 
@@ -90,9 +89,8 @@ addEvent(selectEditorTranslation, 'focus', () => {
 });
 
 addEvent(selectEditorTranslation, 'change', (event) => {
-
-    if(!equalEditorData) {
-        if(!confirm('You have unsaved changes. Are you sure you want to change the language without saving the current config.?')) {
+    if (!equalEditorData) {
+        if (!confirm('You have unsaved changes. Are you sure you want to change the language without saving the current config.?')) {
             event.preventDefault();
             selectEditorTranslation.value = currentLanguage;
             return false;
@@ -112,26 +110,25 @@ addEvent(selectEditorTranslation, 'change', (event) => {
 function updateEditor(enabledTranslations) {
 
     const state = getState();
-
     enabledTranslations = enabledTranslations || state._enabledTranslations;
 
     /**
      * Make sure there is at least one translation
      */
-    if(enabledTranslations.length === 0)
+    if (enabledTranslations.length === 0)
         return false;
 
     /**
      * If there are no changes, don't recreate buttons
      */
-    if(equalArrays(lastEnabledTranslations, enabledTranslations))
+    if (equalArrays(lastEnabledTranslations, enabledTranslations))
         return;
 
     /**
      * Mark the first translation as the one that
      * should be opened in the editor by default
      */
-    if(!enabledTranslations.includes(currentLanguage)) {
+    if (!enabledTranslations.includes(currentLanguage)) {
         currentLanguage = enabledTranslations[0];
         setActiveTranslation(currentLanguage);
     }
@@ -146,7 +143,6 @@ function updateEditor(enabledTranslations) {
 function updateEditorFields(_state) {
 
     const state = _state || getState();
-
     const config = state._cookieConsentConfig;
 
     /**
@@ -183,8 +179,7 @@ function updateEditorFields(_state) {
     const sections = preferencesModal.sections || [];
     const newSections = [];
 
-    for(const section of sections) {
-
+    for (const section of sections) {
         const shouldCreateSection =
             !section.linkedCategory
             || state._enabledCategories.includes(section.linkedCategory);
@@ -203,10 +198,9 @@ function updateEditorFields(_state) {
  * @param {typeof defaultState} state
  */
 function updateAvailableTranslations(enabledTranslations) {
-
     const options = [];
 
-    for(const translation of enabledTranslations) {
+    for (const translation of enabledTranslations) {
         const option = document.createElement('option');
         option.value = translation;
         option.textContent = translation;
@@ -251,7 +245,6 @@ function appendSection(sectionDiv) {
  * @returns {HTMLLIElement}
  */
 function createSection(sectionData) {
-
     const section = document.createElement('li');
     section.className = 'pm-section';
 
@@ -285,15 +278,15 @@ function createSection(sectionData) {
     const linkedCategory = sectionData?.linkedCategory;
     const categories = ['', ...state._enabledCategories];
 
-    for(const category of categories) {
+    for (const category of categories) {
         const option = document.createElement('option');
         option.value = category;
         option.textContent = category;
 
-        if(category === linkedCategory && state._enabledCategories.includes(linkedCategory)){
+        if (category === linkedCategory && state._enabledCategories.includes(linkedCategory)) {
             option.selected = true;
             option.textContent = linkedCategory;
-        } else if(!category){
+        } else if (!category) {
             option.selected = true;
             option.textContent = '—';
         }
@@ -358,8 +351,7 @@ function retrieveCurrentTranslationFromEditor() {
 
     preferencesModal.sections = [];
 
-    for(const sectionElement of pmSections.children) {
-
+    for (const sectionElement of pmSections.children) {
         const title = sectionElement.querySelector('.pm-section-title').value;
         const description = sectionElement.querySelector('.pm-section-description').value;
         const linkedCategory = sectionElement.querySelector('.pm-section-linked-category').value;

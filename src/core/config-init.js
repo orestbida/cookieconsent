@@ -69,37 +69,37 @@ export const setConfig = (userConfig) => {
         hideFromBots,
     } = userConfig;
 
-    if(mode === OPT_OUT_MODE)
+    if (mode === OPT_OUT_MODE)
         config.mode = mode;
 
-    if(typeof autoClearCookies === 'boolean')
+    if (typeof autoClearCookies === 'boolean')
         config.autoClearCookies = autoClearCookies;
 
-    if(typeof manageScriptTags === 'boolean')
+    if (typeof manageScriptTags === 'boolean')
         config.manageScriptTags = manageScriptTags;
 
-    if(typeof revision === 'number' && revision >= 0){
+    if (typeof revision === 'number' && revision >= 0) {
         config.revision = revision;
         state._revisionEnabled = true;
     }
 
     //{{START: GUI}}
 
-    if(typeof autoShow === 'boolean')
+    if (typeof autoShow === 'boolean')
         config.autoShow = autoShow;
 
-    if(typeof lazyHtmlGeneration === 'boolean')
+    if (typeof lazyHtmlGeneration === 'boolean')
         config.lazyHtmlGeneration = lazyHtmlGeneration;
 
     //{{END: GUI}}
 
-    if(hideFromBots === false)
+    if (hideFromBots === false)
         config.hideFromBots = false;
 
-    if(config.hideFromBots === true && nav)
+    if (config.hideFromBots === true && nav)
         state._botAgentDetected = (nav.userAgent && /bot|crawl|spider|slurp|teoma/i.test(nav.userAgent)) || nav.webdriver;
 
-    if(isObject(userCookieConfig))
+    if (isObject(userCookieConfig))
         config.cookie = {...cookie, ...userCookieConfig};
 
     _log('CookieConsent [CONFIG]: configuration:', userConfig);

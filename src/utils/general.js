@@ -70,7 +70,7 @@ export const dispatchInputChangeEvent = (input) => input.dispatchEvent(new Event
 export const createNode = (type) => {
     const el = document.createElement(type);
 
-    if(type === BUTTON_TAG){
+    if (type === BUTTON_TAG) {
         el.type = type;
     }
 
@@ -145,7 +145,6 @@ export const removeClass = (el, className) => el.classList.remove(className);
 export const hasClass = (el, className) => el.classList.contains(className);
 
 export const deepCopy = (el) => {
-
     if (typeof el !== 'object' )
         return el;
 
@@ -156,7 +155,6 @@ export const deepCopy = (el) => {
 
     for (let key in el) {
         let value = el[key];
-
         clone[key] = deepCopy(value);
     }
 
@@ -168,7 +166,6 @@ export const deepCopy = (el) => {
  * @param {string[]} allCategoryNames
  */
 export const fetchCategoriesAndServices = (allCategoryNames) => {
-
     const {
         _allDefinedCategories,
         _allDefinedServices,
@@ -177,7 +174,7 @@ export const fetchCategoriesAndServices = (allCategoryNames) => {
         _readOnlyCategories
     } = globalObj._state;
 
-    for(let categoryName of allCategoryNames){
+    for (let categoryName of allCategoryNames) {
 
         const currCategory = _allDefinedCategories[categoryName];
         const services = currCategory.services || {};
@@ -190,14 +187,14 @@ export const fetchCategoriesAndServices = (allCategoryNames) => {
         /**
          * Keep track of readOnly categories
          */
-        if(currCategory.readOnly){
+        if (currCategory.readOnly) {
             _readOnlyCategories.push(categoryName);
             _acceptedServices[categoryName] = serviceNames;
         }
 
         globalObj._dom._serviceCheckboxInputs[categoryName] = {};
 
-        for(let serviceName of serviceNames){
+        for (let serviceName of serviceNames) {
             const service = services[serviceName];
             service._enabled = false;
             _allDefinedServices[categoryName][serviceName] = service;
@@ -210,8 +207,7 @@ export const fetchCategoriesAndServices = (allCategoryNames) => {
  * and save the following attributes: category-name and service
  */
 export const retrieveScriptElements = () => {
-
-    if(!globalObj._config.manageScriptTags)
+    if (!globalObj._config.manageScriptTags)
         return;
 
     const state = globalObj._state;
@@ -221,8 +217,7 @@ export const retrieveScriptElements = () => {
      */
     const scripts = querySelectorAll(document, 'script[' + SCRIPT_TAG_SELECTOR +']');
 
-    for(const scriptTag of scripts){
-
+    for (const scriptTag of scripts) {
         let scriptCategoryName = getAttribute(scriptTag, SCRIPT_TAG_SELECTOR);
         let scriptServiceName = scriptTag.dataset.service || '';
         let runOnDisable = false;
@@ -230,18 +225,17 @@ export const retrieveScriptElements = () => {
         /**
          * Remove the '!' char if it is present
          */
-        if(scriptCategoryName && scriptCategoryName.charAt(0) === '!'){
+        if (scriptCategoryName && scriptCategoryName.charAt(0) === '!') {
             scriptCategoryName = scriptCategoryName.slice(1);
             runOnDisable = true;
         }
 
-        if(scriptServiceName.charAt(0) === '!'){
+        if (scriptServiceName.charAt(0) === '!') {
             scriptServiceName = scriptServiceName.slice(1);
             runOnDisable = true;
         }
 
-        if(elContains(state._allCategoryNames, scriptCategoryName)){
-
+        if (elContains(state._allCategoryNames, scriptCategoryName)) {
             state._allScriptTags.push({
                 _script: scriptTag,
                 _executed: false,
@@ -250,9 +244,9 @@ export const retrieveScriptElements = () => {
                 _serviceName: scriptServiceName
             });
 
-            if(scriptServiceName){
+            if (scriptServiceName) {
                 const categoryServices = state._allDefinedServices[scriptCategoryName];
-                if(!categoryServices[scriptServiceName]){
+                if (!categoryServices[scriptServiceName]) {
                     categoryServices[scriptServiceName] = {
                         _enabled: false
                     };
@@ -275,7 +269,7 @@ export const retrieveRejectedServices = () => {
         _acceptedServices
     } = globalObj._state;
 
-    for(const categoryName of _allCategoryNames){
+    for (const categoryName of _allCategoryNames) {
         rejectedServices[categoryName] = arrayDiff(
             _acceptedServices[categoryName],
             getKeys(_allDefinedServices[categoryName])
@@ -288,13 +282,13 @@ export const retrieveRejectedServices = () => {
 export const retrieveCategoriesFromModal = () => {
     const toggles = globalObj._dom._categoryCheckboxInputs;
 
-    if(!toggles)
+    if (!toggles)
         return [];
 
     let enabledCategories = [];
 
-    for(let categoryName in toggles){
-        if(toggles[categoryName].checked){
+    for (let categoryName in toggles) {
+        if (toggles[categoryName].checked) {
             enabledCategories.push(categoryName);
         }
     }
@@ -307,7 +301,6 @@ export const retrieveCategoriesFromModal = () => {
  * @param {string[]} [excludedCategories]
  */
 export const resolveEnabledCategories = (categories, excludedCategories) => {
-
     const {
         _allCategoryNames,
         _acceptedCategories,
@@ -322,16 +315,16 @@ export const resolveEnabledCategories = (categories, excludedCategories) => {
      */
     let enabledCategories = [];
 
-    if(!categories){
+    if (!categories) {
         enabledCategories = _acceptedCategories;
         //{{START: GUI}}
-        enabledCategories = _preferencesModalExists && retrieveCategoriesFromModal();
+        _preferencesModalExists && (enabledCategories = retrieveCategoriesFromModal());
         //{{END: GUI}}
-    }else{
+    } else {
 
-        if(isArray(categories)){
+        if (isArray(categories)) {
             enabledCategories.push(...categories);
-        }else if(isString(categories)){
+        }else if (isString(categories)) {
             enabledCategories = categories === 'all'
                 ? _allCategoryNames
                 : [categories];
@@ -340,11 +333,13 @@ export const resolveEnabledCategories = (categories, excludedCategories) => {
         /**
          * If there are services, turn them all on or off
          */
-        for(const categoryName of _allCategoryNames){
+        for (const categoryName of _allCategoryNames) {
             _enabledServices[categoryName] = elContains(enabledCategories, categoryName)
                 ? getKeys(_allDefinedServices[categoryName])
                 : [];
         }
+
+        console.log('enabled categories2:', enabledCategories);
     }
 
     // Remove invalid and excluded categories
@@ -363,7 +358,6 @@ export const resolveEnabledCategories = (categories, excludedCategories) => {
  * @param {string} [relativeCategory]
  */
 export const resolveEnabledServices = (relativeCategory) => {
-
     const state = globalObj._state;
 
     const {
@@ -383,8 +377,7 @@ export const resolveEnabledServices = (relativeCategory) => {
      */
     state._lastEnabledServices = deepCopy(_acceptedServices);
 
-    for(const categoryName of categoriesToConsider) {
-
+    for (const categoryName of categoriesToConsider) {
         const services = _allDefinedServices[categoryName];
         const serviceNames = getKeys(services);
         const customServicesSelection = _enabledServices[categoryName] && _enabledServices[categoryName].length > 0;
@@ -393,21 +386,20 @@ export const resolveEnabledServices = (relativeCategory) => {
         /**
          * Stop here if there are no services
          */
-        if(serviceNames.length === 0)
+        if (serviceNames.length === 0)
             continue;
 
         // Empty (previously) enabled services
         _acceptedServices[categoryName] = [];
 
         // If category is marked as readOnly enable all its services
-        if(readOnlyCategory){
+        if (readOnlyCategory) {
             _acceptedServices[categoryName].push(...serviceNames);
-        }else{
-
-            if(customServicesSelection){
+        } else {
+            if (customServicesSelection) {
                 const selectedServices = _enabledServices[categoryName];
                 _acceptedServices[categoryName].push(...selectedServices);
-            }else{
+            } else {
                 _acceptedServices[categoryName] = [];
             }
         }
@@ -430,7 +422,6 @@ const dispatchPluginEvent = (eventName, data) => dispatchEvent(new CustomEvent(e
  * @param {string} category
  */
 export const updateModalToggles = (service, category) => {
-
     const state = globalObj._state;
     const {
         _allDefinedServices,
@@ -445,39 +436,38 @@ export const updateModalToggles = (service, category) => {
     // Clear previously enabled services
     _enabledServices[category] = [];
 
-    if(isString(service)){
-        if(service === 'all'){
+    if (isString(service)) {
+        if (service === 'all') {
 
             // Enable all services
             _enabledServices[category].push(...allServiceNames);
 
-            if(_preferencesModalExists){
-                for(let serviceName in servicesInputs){
+            if (_preferencesModalExists) {
+                for (let serviceName in servicesInputs) {
                     servicesInputs[serviceName].checked = true;
                     dispatchInputChangeEvent(servicesInputs[serviceName]);
                 }
             }
 
-        }else{
+        } else {
 
             // Enable only one service (if valid) and disable all the others
-            if(elContains(allServiceNames, service))
+            if (elContains(allServiceNames, service))
                 _enabledServices[category].push(service);
 
-            if(_preferencesModalExists){
-                for(let serviceName in servicesInputs){
+            if (_preferencesModalExists) {
+                for (let serviceName in servicesInputs) {
                     servicesInputs[serviceName].checked = service === serviceName;
                     dispatchInputChangeEvent(servicesInputs[serviceName]);
                 }
             }
         }
-    }else if(isArray(service)){
-
-        for(let serviceName of allServiceNames){
+    }else if (isArray(service)) {
+        for (let serviceName of allServiceNames) {
             const validService = elContains(service, serviceName);
             validService && _enabledServices[category].push(serviceName);
 
-            if(_preferencesModalExists){
+            if (_preferencesModalExists) {
                 servicesInputs[serviceName].checked = validService;
                 dispatchInputChangeEvent(servicesInputs[serviceName]);
             }
@@ -497,7 +487,7 @@ export const updateModalToggles = (service, category) => {
      * If there are no services enabled in the
      * current category, uncheck the category
      */
-    if(_preferencesModalExists){
+    if (_preferencesModalExists) {
         categoryInput.checked = !uncheckCategory;
         dispatchInputChangeEvent(categoryInput);
     }
@@ -528,7 +518,7 @@ export const addEvent = (elem, event, fn, saveListener) => {
      * Keep track of specific event listeners
      * that must be removed on `.reset()`
      */
-    if(saveListener){
+    if (saveListener) {
         globalObj._state._dataEventListeners.push({
             _element: elem,
             _event: event,
@@ -556,15 +546,14 @@ export const getRemainingExpirationTimeMS = () => {
  * @returns {Promise<import('../core/global').Translation | boolean>}
  */
 export const fetchJson = async (url) => {
-    try{
-
+    try {
         const response = await fetch(url);
 
         return response && response.ok
             ? await response.json()
             : false;
 
-    }catch(e){
+    } catch (e) {
         return false;
     }
 };
@@ -600,15 +589,14 @@ export const arrayDiff = (arr1, arr2) => {
  * @returns {'all'|'custom'|'necessary'} accept type
  */
 export const resolveAcceptType = () => {
-
     let type = 'custom';
 
     const { _acceptedCategories, _allCategoryNames, _readOnlyCategories } = globalObj._state;
     const nAcceptedCategories = _acceptedCategories.length;
 
-    if(nAcceptedCategories === _allCategoryNames.length)
+    if (nAcceptedCategories === _allCategoryNames.length)
         type = 'all';
-    else if(nAcceptedCategories === _readOnlyCategories.length)
+    else if (nAcceptedCategories === _readOnlyCategories.length)
         type = 'necessary';
 
     return type;
@@ -671,28 +659,28 @@ export const addDataButtonListeners = (elem, api, createPreferencesModal, create
         createPreferencesModalOnHover = globalObj._config.lazyHtmlGeneration;
 
     //{{START: GUI}}
-    for(const el of showPreferencesModalElements){
+    for (const el of showPreferencesModalElements) {
         setAttribute(el, 'aria-haspopup', 'dialog');
         addEvent(el, CLICK_EVENT, (event) => {
             preventDefault(event);
             showPreferences();
         });
 
-        if(createPreferencesModalOnHover){
+        if (createPreferencesModalOnHover) {
             addEvent(el, 'mouseenter', (event) => {
                 preventDefault(event);
-                if(!globalObj._state._preferencesModalExists)
+                if (!globalObj._state._preferencesModalExists)
                     createPreferencesModal(api, createMainContainer);
             }, true);
 
             addEvent(el, 'focus', () => {
-                if(!globalObj._state._preferencesModalExists)
+                if (!globalObj._state._preferencesModalExists)
                     createPreferencesModal(api, createMainContainer);
             });
         }
     }
 
-    for(let el of showConsentModalElements){
+    for (let el of showConsentModalElements) {
         setAttribute(el, 'aria-haspopup', 'dialog');
         addEvent(el, CLICK_EVENT, (event) => {
             preventDefault(event);
@@ -701,19 +689,19 @@ export const addDataButtonListeners = (elem, api, createPreferencesModal, create
     }
     //{{END: GUI}}
 
-    for(let el of acceptAllElements){
+    for (let el of acceptAllElements) {
         addEvent(el, CLICK_EVENT, (event) => {
             acceptAction(event, 'all');
         }, true);
     }
 
-    for(let el of acceptCustomElements){
+    for (let el of acceptCustomElements) {
         addEvent(el, CLICK_EVENT, (event) => {
             acceptAction(event);
         }, true);
     }
 
-    for(let el of acceptNecessaryElements){
+    for (let el of acceptNecessaryElements) {
         addEvent(el, CLICK_EVENT, (event) => {
             acceptAction(event, []);
         }, true);
@@ -725,8 +713,7 @@ export const addDataButtonListeners = (elem, api, createPreferencesModal, create
  * @param {boolean} [toggleTabIndex]
  */
 export const focus = (el, toggleTabIndex) => {
-
-    if(!el) return;
+    if (!el) return;
 
     /**
      * Momentarily add the `tabindex` attribute to fix
@@ -767,7 +754,6 @@ export const focusAfterTransition = (element, modalId) => {
  * @returns {{accepted: string[], rejected: string[]}}
  */
 export const getCurrentCategoriesState = () => {
-
     const {
         _invalidConsent,
         _acceptedCategories,
@@ -792,7 +778,7 @@ let disableInteractionTimeout;
 export const toggleDisableInteraction = (enable) => {
     clearTimeout(disableInteractionTimeout);
 
-    if(enable){
+    if (enable) {
         addClass(globalObj._dom._htmlDom, TOGGLE_DISABLE_INTERACTION_CLASS);
     }else {
         disableInteractionTimeout = setTimeout(() => {
@@ -853,7 +839,7 @@ export const handleFocusTrap = (modal) => {
             const currentActiveElement = getActiveElement();
             const focusableElements = getFocusableElements();
 
-            if(focusableElements.length === 0)
+            if (focusableElements.length === 0)
                 return;
 
             /**
@@ -909,10 +895,10 @@ export const getModalFocusableData = (modalId) => {
         array[1] = focusableElements[focusableElements.length - 1];
     };
 
-    if(modalId === 1 && _state._consentModalExists)
+    if (modalId === 1 && _state._consentModalExists)
         saveAllFocusableElements(_dom._cm, _state._cmFocusableElements);
 
-    if(modalId === 2 && _state._preferencesModalExists)
+    if (modalId === 2 && _state._preferencesModalExists)
         saveAllFocusableElements(_dom._pm, _state._pmFocusableElements);
 };
 
@@ -935,31 +921,29 @@ export const fireEvent = (eventName, modalName, modal) => {
     const events = globalObj._customEvents;
 
     //{{START: GUI}}
-
-    if(modalName){
+    if (modalName) {
         const modalParams = { modalName };
 
-        if(eventName === events._onModalShow){
+        if (eventName === events._onModalShow) {
             isFunction(_onModalShow) && _onModalShow(modalParams);
-        }else if(eventName === events._onModalHide){
+        }else if (eventName === events._onModalHide) {
             isFunction(_onModalHide) && _onModalHide(modalParams);
-        }else{
+        } else {
             modalParams.modal = modal;
             isFunction(_onModalReady) && _onModalReady(modalParams);
         }
 
         return dispatchPluginEvent(eventName, modalParams);
     }
-
     //{{END: GUI}}
 
     const params = {
         cookie: globalObj._state._savedCookieContent
     };
 
-    if(eventName === events._onFirstConsent){
+    if (eventName === events._onFirstConsent) {
         isFunction(_onFirstConsent) && _onFirstConsent(deepCopy(params));
-    }else if(eventName === events._onConsent){
+    }else if (eventName === events._onConsent) {
         isFunction(_onConsent) && _onConsent(deepCopy(params));
     }else {
         params.changedCategories = globalObj._state._lastChangedCategoryNames;

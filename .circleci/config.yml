@@ -15,7 +15,7 @@ jobs:
           name: Check changed files or skip
           command: |
             changed_files=$(git diff --name-only $CIRCLE_SHA1...$CIRCLE_BRANCH)
-            
+
             if [[ -n $(echo "$changed_files" | grep -E "src/|tests/") ]]; then
               echo "Detected changes in src or tests directory. Running tests..."
             else

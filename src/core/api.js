@@ -101,10 +101,9 @@ export const acceptedCategory = (category) => {
  * @param {string} category
  */
 export const acceptService = (service, category) => {
-
     const { _allCategoryNames, _allDefinedServices,  } = globalObj._state;
 
-    if(
+    if (
         !service
         || !category
         || !isString(category)
@@ -155,19 +154,19 @@ export const eraseCookies = (cookies, path, domain) => {
      * @param {string | RegExp} cookieName
      */
     const addCookieIfExists = (cookieName) => {
-        if(isString(cookieName)){
+        if (isString(cookieName)) {
             let name = getSingleCookie(cookieName);
             name !== '' && allCookies.push(name);
-        }else{
+        } else {
             allCookies.push(...getAllCookies(cookieName));
         }
     };
 
-    if(isArray(cookies)){
-        for(let cookie of cookies){
+    if (isArray(cookies)) {
+        for (let cookie of cookies) {
             addCookieIfExists(cookie);
         }
-    }else{
+    } else {
         addCookieIfExists(cookies);
     }
 
@@ -181,14 +180,13 @@ export const eraseCookies = (cookies, path, domain) => {
  * @param {boolean} [createModal] create modal if it doesn't exist
  */
 export const show = (createModal) => {
-
     const { _dom, _state } = globalObj;
 
-    if(_state._consentModalVisible)
+    if (_state._consentModalVisible)
         return;
 
-    if(!_state._consentModalExists) {
-        if(createModal) {
+    if (!_state._consentModalExists) {
+        if (createModal) {
             createConsentModal(miniAPI, createMainContainer);
         } else {
             return;
@@ -198,7 +196,7 @@ export const show = (createModal) => {
     _state._consentModalVisible = true;
     _state._lastFocusedElemBeforeModal = getActiveElement();
 
-    if(_state._disablePageInteraction)
+    if (_state._disablePageInteraction)
         toggleDisableInteraction(true);
 
     focusAfterTransition(_dom._cm, 1);
@@ -222,15 +220,14 @@ export const show = (createModal) => {
  * Hide consent modal
  */
 export const hide = () => {
-
     const { _dom, _state, _customEvents } = globalObj;
 
-    if(!_state._consentModalVisible)
+    if (!_state._consentModalVisible)
         return;
 
     _state._consentModalVisible = false;
 
-    if(_state._disablePageInteraction)
+    if (_state._disablePageInteraction)
         toggleDisableInteraction();
 
     /**
@@ -258,18 +255,18 @@ export const hide = () => {
 export const showPreferences = () => {
     const state = globalObj._state;
 
-    if(state._preferencesModalVisible)
+    if (state._preferencesModalVisible)
         return;
 
-    if(!state._preferencesModalExists)
+    if (!state._preferencesModalExists)
         createPreferencesModal(miniAPI, createMainContainer);
 
     state._preferencesModalVisible = true;
 
     // If there is no consent-modal, keep track of the last focused elem.
-    if(!state._consentModalVisible){
+    if (!state._consentModalVisible) {
         state._lastFocusedElemBeforeModal = getActiveElement();
-    }else{
+    } else {
         state._lastFocusedModalElement = getActiveElement();
     }
 
@@ -294,7 +291,6 @@ export const showPreferences = () => {
  * https://github.com/orestbida/cookieconsent/issues/481
  */
 const discardUnsavedPreferences = () => {
-
     const consentIsValid = validConsent();
     const allDefinedCategories = globalObj._state._allDefinedCategories;
     const categoryInputs = globalObj._dom._categoryCheckboxInputs;
@@ -305,7 +301,7 @@ const discardUnsavedPreferences = () => {
      */
     const categoryEnabledByDefault = (category) => elContains(globalObj._state._defaultEnabledCategories, category);
 
-    for(const category in categoryInputs) {
+    for (const category in categoryInputs) {
         const isReadOnly = !!allDefinedCategories[category].readOnly;
 
         categoryInputs[category].checked = isReadOnly || (consentIsValid
@@ -313,7 +309,7 @@ const discardUnsavedPreferences = () => {
             : categoryEnabledByDefault(category)
         );
 
-        for(const service in serviceInputs[category]) {
+        for (const service in serviceInputs[category]) {
             serviceInputs[category][service].checked = isReadOnly || (consentIsValid
                 ? acceptedService(service, category)
                 : categoryEnabledByDefault(category)
@@ -328,7 +324,7 @@ const discardUnsavedPreferences = () => {
 export const hidePreferences = () => {
     const state = globalObj._state;
 
-    if(!state._preferencesModalVisible)
+    if (!state._preferencesModalVisible)
         return;
 
     state._preferencesModalVisible = false;
@@ -346,10 +342,10 @@ export const hidePreferences = () => {
     /**
      * If consent modal is visible, focus him (instead of page document)
      */
-    if(state._consentModalVisible){
+    if (state._consentModalVisible) {
         focus(state._lastFocusedModalElement);
         state._lastFocusedModalElement = null;
-    }else{
+    } else {
         /**
          * Restore focus to last page element which had focus before modal opening
          */
@@ -377,8 +373,7 @@ var miniAPI = {
  * @returns {Promise<boolean>}
  */
 export const setLanguage = async (newLanguageCode, forceUpdate) => {
-
-    if(!getAvailableLanguage(newLanguageCode))
+    if (!getAvailableLanguage(newLanguageCode))
         return false;
 
     const state = globalObj._state;
@@ -386,19 +381,19 @@ export const setLanguage = async (newLanguageCode, forceUpdate) => {
     /**
      * Set language only if it differs from current
      */
-    if(newLanguageCode !== getCurrentLanguageCode() || forceUpdate === true){
+    if (newLanguageCode !== getCurrentLanguageCode() || forceUpdate === true) {
 
         const loaded = await loadTranslationData(newLanguageCode);
 
-        if(!loaded)
+        if (!loaded)
             return false;
 
         setCurrentLanguageCode(newLanguageCode);
 
-        if(state._consentModalExists)
+        if (state._consentModalExists)
             createConsentModal(miniAPI, createMainContainer);
 
-        if(state._preferencesModalExists)
+        if (state._preferencesModalExists)
             createPreferencesModal(miniAPI, createMainContainer);
 
         handleRtlLanguage();
@@ -416,7 +411,6 @@ export const setLanguage = async (newLanguageCode, forceUpdate) => {
  * @returns {import("./global").UserPreferences}
  */
 export const getUserPreferences = () => {
-
     const { _acceptType, _acceptedServices } = globalObj._state;
     const { accepted, rejected } = getCurrentCategoriesState();
 
@@ -436,15 +430,13 @@ export const getUserPreferences = () => {
  * @returns {Promise<boolean>} promise
  */
 export const loadScript = (src, attrs) => {
-
     /**
      * @type {HTMLScriptElement}
      */
     let script = document.querySelector('script[src="' + src + '"]');
 
     return new Promise((resolve) => {
-
-        if(script)
+        if (script)
             return resolve(true);
 
         script = createNode('script');
@@ -452,8 +444,8 @@ export const loadScript = (src, attrs) => {
         /**
          * Add custom attributes
          */
-        if(isObject(attrs)){
-            for(const key in attrs){
+        if (isObject(attrs)) {
+            for (const key in attrs) {
                 setAttribute(script, key, attrs[key]);
             }
         }
@@ -482,7 +474,6 @@ export const loadScript = (src, attrs) => {
  * @returns {boolean}
  */
 export const setCookieData = (props) => {
-
     let newData = props.value,
         mode = props.mode,
         set = false,
@@ -494,29 +485,29 @@ export const setCookieData = (props) => {
      * If mode is 'update':
      * add/update only the specified props.
      */
-    if(mode === 'update'){
+    if (mode === 'update') {
         state._cookieData = cookieData = getCookie('data');
         const sameType = typeof cookieData === typeof newData;
 
-        if(sameType && typeof cookieData === 'object'){
+        if (sameType && typeof cookieData === 'object') {
             !cookieData && (cookieData = {});
 
-            for(let prop in newData){
-                if(cookieData[prop] !== newData[prop]){
+            for (let prop in newData) {
+                if (cookieData[prop] !== newData[prop]) {
                     cookieData[prop] = newData[prop];
                     set = true;
                 }
             }
-        }else if((sameType || !cookieData) && cookieData !== newData){
+        }else if ((sameType || !cookieData) && cookieData !== newData) {
             cookieData = newData;
             set = true;
         }
-    }else{
+    } else {
         cookieData = newData;
         set = true;
     }
 
-    if(set){
+    if (set) {
         state._cookieData = cookieData;
         state._savedCookieContent.data = cookieData;
         setCookie(true);
@@ -545,7 +536,6 @@ export const getCookie = (field, cookieName) => {
  * @returns {any}
  */
 export const getConfig = (field) => {
-
     const config = globalObj._config;
     const userConfig = globalObj._state._userConfig;
 
@@ -561,7 +551,6 @@ export const getConfig = (field) => {
 export const validConsent = () => !globalObj._state._invalidConsent;
 
 const retrieveState = () => {
-
     const state = globalObj._state;
     const config = globalObj._config;
 
@@ -602,7 +591,7 @@ const retrieveState = () => {
         : null;
 
     // If revision is enabled and current value !== saved value inside the cookie => revision is not valid
-    if(state._revisionEnabled && validConsentId && revision !== config.revision)
+    if (state._revisionEnabled && validConsentId && revision !== config.revision)
         state._validRevision = false;
 
     // If consent is not valid => create consent modal
@@ -619,8 +608,7 @@ const retrieveState = () => {
      * Retrieve last accepted categories from cookie
      * and calculate acceptType
      */
-    if(!state._invalidConsent){
-
+    if (!state._invalidConsent) {
         state._acceptedServices = {
             ...state._acceptedServices,
             ...services
@@ -630,8 +618,8 @@ const retrieveState = () => {
             ...state._readOnlyCategories,
             ...categories
         ]);
-    }else{
-        if(config.mode === OPT_OUT_MODE) {
+    } else {
+        if (config.mode === OPT_OUT_MODE) {
             state._acceptedCategories = [
                 ...state._defaultEnabledCategories
             ];
@@ -646,7 +634,6 @@ const retrieveState = () => {
  * @param {import("./global").UserConfig} userConfig
  */
 export const run = async (userConfig) => {
-
     const {
         _state,
         _config,
@@ -655,12 +642,12 @@ export const run = async (userConfig) => {
 
     const win = window;
 
-    if(!win._ccRun){
+    if (!win._ccRun) {
         win._ccRun = true;
 
         setConfig(userConfig);
 
-        if(_state._botAgentDetected)
+        if (_state._botAgentDetected)
             return;
 
         retrieveState(userConfig);
@@ -668,25 +655,23 @@ export const run = async (userConfig) => {
         const consentIsValid = validConsent();
 
         //{{START: GUI}}
-
         const translationLoaded = await loadTranslationData();
 
-        if(!translationLoaded)
+        if (!translationLoaded)
             return false;
 
         generateHtml(miniAPI);
 
-        if(_config.autoShow && !consentIsValid)
+        if (_config.autoShow && !consentIsValid)
             show(true);
-
         //{{END: GUI}}
 
-        if(consentIsValid){
+        if (consentIsValid) {
             manageExistingScripts();
             return fireEvent(_customEvents._onConsent);
         }
 
-        if(_config.mode === OPT_OUT_MODE)
+        if (_config.mode === OPT_OUT_MODE)
             manageExistingScripts(_state._defaultEnabledCategories);
     }
 };
@@ -696,7 +681,6 @@ export const run = async (userConfig) => {
  * @param {boolean} [deleteCookie] Delete plugin's cookie
  */
 export const reset = (deleteCookie) => {
-
     //{{START: GUI}}
     const { _ccMain, _htmlDom } = globalObj._dom;
     //{{END: GUI}}
@@ -708,12 +692,11 @@ export const reset = (deleteCookie) => {
     /**
      * Remove data-cc event listeners
      */
-    for(const {_element, _event, _listener} of globalObj._state._dataEventListeners){
+    for (const {_element, _event, _listener} of globalObj._state._dataEventListeners) {
         _element.removeEventListener(_event, _listener);
     }
 
     //{{START: GUI}}
-
     /**
      * Remove main container from DOM
      */
@@ -727,7 +710,6 @@ export const reset = (deleteCookie) => {
         TOGGLE_PREFERENCES_MODAL_CLASS,
         TOGGLE_CONSENT_MODAL_CLASS
     );
-
     //{{END: GUI}}
 
     const newGlobal = new GlobalState();
@@ -735,7 +717,7 @@ export const reset = (deleteCookie) => {
     /**
      * Reset all global state props.
      */
-    for(const key in globalObj){
+    for (const key in globalObj) {
         globalObj[key] = newGlobal[key];
     }
 

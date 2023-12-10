@@ -13,7 +13,7 @@ onEvent(customEvents._PLAYGROUND_READY, async () => {
  */
 export async function fetchLatestRelease() {
 
-    if(latest)
+    if (latest)
         return latest;
 
     const res = await fetch('https://api.github.com/repos/orestbida/cookieconsent/tags');
@@ -28,10 +28,9 @@ export async function fetchLatestRelease() {
  * Update all elements with "data-latest-release" attribute
  */
 export async function updateReleaseSpans() {
-
     latest = latest || await fetchLatestRelease();
 
-    for(const el of releaseSpans) {
+    for (const el of releaseSpans) {
         el.textContent = latest;
     }
 }
@@ -40,10 +39,9 @@ export async function updateReleaseSpans() {
 * @param {string} release
 */
 function validRelease(release) {
-
     const isV3 = /^(v3.|3.)/.test(release);
 
-    if(!isV3)
+    if (!isV3)
         return false;
 
     /**

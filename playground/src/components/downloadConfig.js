@@ -19,7 +19,7 @@ const configAsString = async ({minify=false} = {}) => {
     const config = getCurrentUserConfig(state);
     const darkModeEnabled = state._theme === 'cc--darkmode';
 
-    if(darkModeEnabled) {
+    if (darkModeEnabled) {
         scriptStr += '// Enable dark mode\n';
         scriptStr += 'document.documentElement.classList.add(\'cc--darkmode\');\n\n';
     }
@@ -43,9 +43,7 @@ const configAsString = async ({minify=false} = {}) => {
 };
 
 addEvent(downloadBtn, 'click', async () => {
-
     const config = await configAsString();
-
     const blob = new Blob([config], {type: 'text/javascript;charset=utf-8'});
     saveAs(blob, 'cookieconsent-config.js');
 });

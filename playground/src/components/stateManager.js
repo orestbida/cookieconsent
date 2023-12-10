@@ -46,10 +46,10 @@ export const defaultState = {
 export const getState = () => {
     const savedState = localStorage.getItem(DEMO_ITEM_NAME);
 
-    if(savedState){
-        try{
+    if (savedState) {
+        try {
             return JSON.parse(savedState);
-        }catch(e){
+        } catch (e) {
             //invalid state
         }
     }
@@ -63,7 +63,7 @@ export const getState = () => {
 export const resetCookies = () => {
     const cc = window.CookieConsent;
 
-    if(cc.validConsent())
+    if (cc.validConsent())
         cc.acceptCategory([]);
 
     cc.eraseCookies(cc.getConfig('cookie').name);
@@ -73,7 +73,6 @@ export const resetCookies = () => {
  * Clear localstorage, cookies and re-run plugin
  */
 export const resetState = () => {
-
     resetCookies();
     localStorage.removeItem(DEMO_ITEM_NAME);
 
@@ -91,36 +90,35 @@ export const resetState = () => {
  * @param {typeof defaultState} newState
  */
 export const saveState = (newState) => {
-    try{
+    try {
         newState && localStorage.setItem(
             DEMO_ITEM_NAME,
             JSON.stringify(newState)
         );
-    }catch(e){
+    } catch (e) {
         console.error('Failed to save state:', e);
     }
 };
 
 export function clearInvalidDemoState() {
-
     /**
      * @type {typeof defaultState}
      */
     let savedState = localStorage.getItem(DEMO_ITEM_NAME);
 
-    if(savedState){
-        try{
+    if (savedState) {
+        try {
             savedState = JSON.parse(savedState);
 
-            for(let key in defaultState){
-                if(typeof savedState[key] !== typeof defaultState[key])
+            for (let key in defaultState) {
+                if (typeof savedState[key] !== typeof defaultState[key])
                     return resetState();
             }
 
-            if(savedState._demoRevision !== defaultState._demoRevision)
+            if (savedState._demoRevision !== defaultState._demoRevision)
                 return resetState();
 
-        }catch(e){
+        } catch (e) {
             return resetState();
         }
     }
@@ -130,7 +128,6 @@ export function clearInvalidDemoState() {
  * @param {typeof defaultState} state
  */
 export const getCurrentUserConfig = (state) => {
-
     /**
      * @type {import('../../../types').CookieConsentConfig}
      */
@@ -143,15 +140,15 @@ export const getCurrentUserConfig = (state) => {
     delete config.root;
     delete config.cookie;
 
-    if(!config.disablePageInteraction)
+    if (!config.disablePageInteraction)
         delete config.disablePageInteraction;
 
     /**
      * Remove unselected translations
      */
-    for(const languageCode in allTranslations) {
+    for (const languageCode in allTranslations) {
 
-        if(!state._enabledTranslations.includes(languageCode)) {
+        if (!state._enabledTranslations.includes(languageCode)) {
             delete allTranslations[languageCode];
         } else {
 
@@ -168,19 +165,19 @@ export const getCurrentUserConfig = (state) => {
             /**
              * Remove closeIcon
              */
-            if(!state._enableCloseIcon)
+            if (!state._enableCloseIcon)
                 delete translation.consentModal.closeIconLabel;
 
-            if(state._removeAcceptNecessaryBtn)
+            if (state._removeAcceptNecessaryBtn)
                 delete translation.consentModal.acceptNecessaryBtn;
 
-            if(state._removeShowPrefrencesBtn)
+            if (state._removeShowPrefrencesBtn)
                 delete translation.consentModal.showPreferencesBtn;
 
-            if(state._removeTitle)
+            if (state._removeTitle)
                 delete translation.consentModal.title;
 
-            if(state._removeFooter)
+            if (state._removeFooter)
                 delete translation.consentModal.footer;
 
             const preferencesModal = translation.preferencesModal;
@@ -189,7 +186,6 @@ export const getCurrentUserConfig = (state) => {
              * Remove all sections with a 'linkedCategory' that is not selected by the user
              */
             const filteredSections = preferencesModal.sections.filter(section => {
-
                 /**
                  * TODO: Remove this when label is implemented
                  */
@@ -203,14 +199,14 @@ export const getCurrentUserConfig = (state) => {
         }
     }
 
-    if(!('ar' in allTranslations))
+    if (!('ar' in allTranslations))
         delete config.language.rtl;
 
     /**
      * Remove unselected categories
      */
-    for(const category in config.categories) {
-        if(!state._enabledCategories.includes(category)) {
+    for (const category in config.categories) {
+        if (!state._enabledCategories.includes(category)) {
             delete config.categories[category];
         }
     }

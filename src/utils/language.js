@@ -72,7 +72,7 @@ export const getDocumentLanguageCode = () => document.documentElement.lang;
 export const resolveCurrentLanguageCode = () =>  {
     const autoDetect = globalObj._state._userConfig.language.autoDetect;
 
-    if(autoDetect){
+    if (autoDetect) {
         _log('CookieConsent [LANG]: autoDetect strategy: "' + autoDetect + '"');
 
         const detectionStrategies = {
@@ -111,17 +111,17 @@ export const loadTranslationData = async (desiredLanguageCode) => {
 
     let currentTranslation = state._allTranslations[currentLanguageCode];
 
-    if(!currentTranslation)
+    if (!currentTranslation)
         return false;
 
     /**
      * If translation is a string, fetch the external json file and replace
      * the string (path to json file) with the parsed object
      */
-    if(isString(currentTranslation)){
+    if (isString(currentTranslation)) {
         const fetchedTranslation = await fetchJson(currentTranslation);
 
-        if(!fetchedTranslation)
+        if (!fetchedTranslation)
             return false;
 
         currentTranslation = fetchedTranslation;
@@ -139,18 +139,15 @@ export const loadTranslationData = async (desiredLanguageCode) => {
  * Toggle RTL class on/off based on current language
  */
 export const handleRtlLanguage = () => {
-
     let rtlLanguages = globalObj._state._userConfig.language.rtl;
     let ccMain = globalObj._dom._ccMain;
 
-    if(rtlLanguages && ccMain){
-
-        if(!isArray(rtlLanguages))
+    if (rtlLanguages && ccMain) {
+        if (!isArray(rtlLanguages))
             rtlLanguages = [rtlLanguages];
 
-        if(elContains(rtlLanguages, globalObj._state._currentLanguageCode))
-            addClass(ccMain, 'cc--rtl');
-        else
-            removeClass(ccMain, 'cc--rtl');
+        elContains(rtlLanguages, globalObj._state._currentLanguageCode)
+            ? addClass(ccMain, 'cc--rtl')
+            : removeClass(ccMain, 'cc--rtl');
     }
 };

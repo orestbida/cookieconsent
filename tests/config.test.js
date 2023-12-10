@@ -8,8 +8,7 @@ import { htmlHasClass, setUserAgent, botUserAgent } from "./config/mocks-utils";
  */
 let api;
 
-describe("Check modals' html generation under different settings", () =>{
-
+describe("Check modals' html generation under different settings", () => {
 
     beforeAll(() => {
         api = CookieConsent;

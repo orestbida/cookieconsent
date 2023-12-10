@@ -18,7 +18,7 @@ onEvent(customEvents._PLAYGROUND_READY, () => {
     // toggleRemoveTitle(state._removeTitle);
 });
 
-addEvent(enableXIconCheckbox, 'change', function(){
+addEvent(enableXIconCheckbox, 'change', function() {
 
     /**
      * @type {boolean}
@@ -152,10 +152,10 @@ function toggleRemoveTitle(remove) {
  * @param {keyof import('../../../types').ConsentModalOptions} elementName
  * @param {boolean} remove
  */
-function toggleConsentModalElement(state, elementName, remove){
+function toggleConsentModalElement(state, elementName, remove) {
     const translations = state._cookieConsentConfig.language.translations;
 
-    for(let lang in translations){
+    for (let lang in translations) {
 
         /**
          * @type {import('../../../types').Translation}

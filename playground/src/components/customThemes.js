@@ -20,7 +20,7 @@ onEvent(customEvents._PLAYGROUND_READY, () => {
     theme = getState()._theme;
     toggleTheme(theme);
 
-    for(const input of inputs) {
+    for (const input of inputs) {
         addEvent(input, 'change', () => {
 
             const state = getState();
