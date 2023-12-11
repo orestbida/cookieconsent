@@ -426,7 +426,7 @@ You should now see the consent modal pop up!
 You can also define [external translation files](/advanced/language-configuration.html#external-translations).
 :::
 
-If you're having trouble setting up the plugin, you can check out a few [demo examples](https://github.com/orestbida/cookieconsent/tree/v3.0-beta/demo) on github.
+If you're having trouble setting up the plugin, you can check out a few [demo examples](https://github.com/orestbida/cookieconsent/tree/v3/demo) on github.
 
 <br>
 
