@@ -44,7 +44,6 @@ const cssComponents = [
 ];
 
 const cssComponentsRollup = cssComponents.map(component => {
-
     const src = `${srcDir}/scss/${component[0]}`;
     const dst = `${cssComponentsDir}/${component[1]}`
 

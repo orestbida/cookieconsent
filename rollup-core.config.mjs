@@ -10,7 +10,6 @@ const replacePattern = /\/\/{{START: GUI}}[\s\S]*?\/\/{{END: GUI}}/g;
  * @param {string} dstFilePath
  */
 const copyCleanedFile = async (srcFilePath, dstFilePath) => {
-
     if(path.extname(srcFilePath) === '.js'){
         const content = await fs.readFile(srcFilePath, 'utf8');
         const strippedFileContent = content.replaceAll(replacePattern, '');
@@ -26,7 +25,6 @@ const copyCleanedFile = async (srcFilePath, dstFilePath) => {
  * @param {string} dest
  */
 const copyDirectory = async (src, dest) => {
-
     const [entries] = await Promise.all([
         fs.readdir(src, { withFileTypes: true }),
         fs.mkdir(dest, { recursive: true }),
@@ -70,6 +68,5 @@ export default defineConfig(
                 terserPlugin
             ]
         },
-
     ]
 );
