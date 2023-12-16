@@ -87,9 +87,8 @@ export const terserPlugin = terser({
         }
     },
     compress: {
-        drop_console: true,
         passes: 3,
-        pure_funcs: [ '_log']
+        pure_funcs: [ '_log', 'console.log']
     }
 });
 
