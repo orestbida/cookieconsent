@@ -546,16 +546,8 @@ export const getRemainingExpirationTimeMS = () => {
  * @returns {Promise<import('../core/global').Translation | boolean>}
  */
 export const fetchJson = async (url) => {
-    try {
-        const response = await fetch(url);
-
-        return response && response.ok
-            ? await response.json()
-            : false;
-
-    } catch (e) {
-        return false;
-    }
+    const response = await fetch(url);
+    return response.json();
 };
 
 /**
