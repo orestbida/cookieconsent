@@ -179,6 +179,11 @@ declare namespace CookieConsent {
          * All enabled services.
          */
         services: {[key: string]: string[]}
+
+        /**
+         * Expiration time of the cookie (in case localstorage is used)
+         */
+        expirationTime: number
     }
 
     interface CookieOptions {
@@ -216,6 +221,13 @@ declare namespace CookieConsent {
          * @default 182
          */
         expiresAfterDays?: number | ((acceptType: AcceptType) => number)
+
+        /**
+         * Store the content of the cookie in localstorage
+         *
+         * @default false
+         */
+        useLocalStorage?: boolean
     }
 
     interface GuiOptions {

@@ -13,6 +13,7 @@ import {
     fireEvent,
     arrayDiff
 } from './general';
+import { localStorageManager } from './localstorage';
 
 /**
  * @param {boolean} [isFirstConsent]
@@ -222,12 +223,7 @@ export const saveCookiePreferences = () => {
  */
 export const setCookie = (useRemainingExpirationTime) => {
     const { hostname, protocol } = location;
-    const { name, path, domain, sameSite } = globalObj._config.cookie;
-
-    /**
-     * Encode value (RFC compliant)
-     */
-    const cookieValue = encodeURIComponent(JSON.stringify(globalObj._state._savedCookieContent));
+    const { name, path, domain, sameSite, useLocalStorage } = globalObj._config.cookie;
 
     const expiresAfterMs = useRemainingExpirationTime
         ? getRemainingExpirationTimeMS()
@@ -238,6 +234,19 @@ export const setCookie = (useRemainingExpirationTime) => {
      */
     const date = new Date();
     date.setTime(date.getTime() + expiresAfterMs);
+
+    /**
+     * Store the expiration date in the cookie (in case localstorage is used)
+     */
+
+    globalObj._state._savedCookieContent.expirationTime = date.getTime();
+
+    const value = JSON.stringify(globalObj._state._savedCookieContent);
+
+    /**
+     * Encode value (RFC compliant)
+     */
+    const cookieValue = encodeURIComponent(value);
 
     let cookieStr = name + '='
         + cookieValue
@@ -255,7 +264,9 @@ export const setCookie = (useRemainingExpirationTime) => {
     if (protocol === 'https:')
         cookieStr += '; Secure';
 
-    document.cookie = cookieStr;
+    useLocalStorage
+        ? localStorageManager._setItem(name, value)
+        : document.cookie = cookieStr;
 
     _log('CookieConsent [SET_COOKIE]: ' + name + ':', globalObj._state._savedCookieContent);
 };
@@ -264,11 +275,17 @@ export const setCookie = (useRemainingExpirationTime) => {
  * Parse cookie value using JSON.parse
  * @param {string} value
  */
-export const parseCookie = (value) => {
+export const parseCookie = (value, skipDecode) => {
+    /**
+     * @type {import('../../types').CookieValue}
+     */
     let parsedValue;
 
     try {
-        parsedValue = JSON.parse(decodeURIComponent(value));
+        parsedValue = JSON.parse(skipDecode
+            ? value
+            : decodeURIComponent(value)
+        );
     } catch (e) {
         parsedValue = {}; // Cookie value is not valid
     }
@@ -328,10 +345,14 @@ export const eraseCookiesHelper = (cookies, customPath, customDomain) => {
 /**
  * Get plugin cookie
  * @param {string} [customName]
- * @returns {string} cookie value
  */
 export const getPluginCookie = (customName) => {
-    return parseCookie(getSingleCookie(customName || globalObj._config.cookie.name, true));
+    const name = customName || globalObj._config.cookie.name;
+    const useLocalStorage = globalObj._config.cookie.useLocalStorage;
+    const valueStr = useLocalStorage
+        ? localStorageManager._getItem(name)
+        : getSingleCookie(name, true);
+    return parseCookie(valueStr, useLocalStorage);
 };
 
 /**

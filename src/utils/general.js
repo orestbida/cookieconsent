@@ -338,8 +338,6 @@ export const resolveEnabledCategories = (categories, excludedCategories) => {
                 ? getKeys(_allDefinedServices[categoryName])
                 : [];
         }
-
-        console.log('enabled categories2:', enabledCategories);
     }
 
     // Remove invalid and excluded categories

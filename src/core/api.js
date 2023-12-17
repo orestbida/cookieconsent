@@ -70,6 +70,7 @@ import {
     ARIA_HIDDEN,
     PREFERENCES_MODAL_NAME
 } from '../utils/constants';
+import { localStorageManager } from '../utils/localstorage';
 
 /**
  * Accept API
@@ -554,9 +555,6 @@ const retrieveState = () => {
     const state = globalObj._state;
     const config = globalObj._config;
 
-    /**
-     * @type {import('./global').CookieValue}
-     */
     const cookieValue = getPluginCookie();
 
     const {
@@ -594,12 +592,19 @@ const retrieveState = () => {
     if (state._revisionEnabled && validConsentId && revision !== config.revision)
         state._validRevision = false;
 
-    // If consent is not valid => create consent modal
     state._invalidConsent = !validConsentId
         || !state._validRevision
         || !state._consentTimestamp
         || !state._lastConsentTimestamp
         || !validCategories;
+
+    /**
+     * If localStorage is enabled, also check the stored `expirationTime`
+     */
+    if (config.cookie.useLocalStorage && !state._invalidConsent) {
+        state._invalidConsent = new Date().getTime() > (cookieValue.expirationTime || 0);
+        state._invalidConsent && (localStorageManager._removeItem(config.cookie.name));
+    }
 
     _log('CookieConsent [STATUS] valid consent:', !state._invalidConsent);
     retrieveEnabledCategoriesAndServices();
@@ -685,9 +690,13 @@ export const reset = (deleteCookie) => {
     const { _ccMain, _htmlDom } = globalObj._dom;
     //{{END: GUI}}
 
-    const { name, path, domain } = globalObj._config.cookie;
+    const { name, path, domain, useLocalStorage } = globalObj._config.cookie;
 
-    deleteCookie && eraseCookies(name, path, domain);
+    if (deleteCookie) {
+        useLocalStorage
+            ? localStorageManager._removeItem(name)
+            : eraseCookies(name, path, domain);
+    }
 
     /**
      * Remove data-cc event listeners
