@@ -129,11 +129,12 @@ Customize the plugin's cookie.
 - **Type**:
     ```javascript
     {
-        name: string,
-        domain: string,
-        path: string,
-        expiresAfterDays: number | (acceptType: string) => number,
-        sameSite: string
+        name?: string,
+        domain?: string,
+        path?: string,
+        expiresAfterDays?: number | (acceptType: string) => number,
+        sameSite?: string,
+        useLocalStorage?: boolean
     }
     ```
 - **Default**:
@@ -143,7 +144,8 @@ Customize the plugin's cookie.
         domain: window.location.hostname,
         path: '/',
         expiresAfterDays: 182,
-        sameSite: 'Lax'
+        sameSite: 'Lax',
+        useLocalStorage: false
     }
     ```
 ::: info
@@ -204,6 +206,15 @@ Number of days before the cookie expires.
 - **Values**: `'Lax'`, `'Strict'`, `'None'`
 - **Default**: `'Lax'`
 
+### cookie.useLocalStorage
+
+Store the value of the cookie in localStorage.
+
+- **Type**: `boolean`
+- **Default**: `false`
+- **Details**:
+
+    When enabled, the following fields are ignored: `domain`, `path`, `sameSite`
 
 ## onFirstConsent
 
@@ -606,7 +617,7 @@ Define individually togglable services.
             label?: string,
             onAccept?: () => void,
             onReject?: () => void,
-            cookies: CookieItem[]
+            cookies?: CookieItem[]
         }
     }
     ```
