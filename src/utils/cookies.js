@@ -11,7 +11,8 @@ import {
     elContains,
     deepCopy,
     fireEvent,
-    arrayDiff
+    arrayDiff,
+    safeRun
 } from './general';
 import { localStorageManager } from './localstorage';
 
@@ -281,14 +282,10 @@ export const parseCookie = (value, skipDecode) => {
      */
     let parsedValue;
 
-    try {
-        parsedValue = JSON.parse(skipDecode
-            ? value
-            : decodeURIComponent(value)
-        );
-    } catch (e) {
-        parsedValue = {}; // Cookie value is not valid
-    }
+    parsedValue = safeRun(() => JSON.parse(skipDecode
+        ? value
+        : decodeURIComponent(value)
+    ), true) || {};
 
     return parsedValue;
 };
@@ -389,10 +386,9 @@ export const getAllCookies = (regex) => {
         let name = cookie.split('=')[0];
 
         if (regex) {
-            try {
+            safeRun(() => {
                 regex.test(name) && cookieNames.push(name);
-            // eslint-disable-next-line no-empty
-            } catch (e) {}
+            });
         } else {
             cookieNames.push(name);
         }
