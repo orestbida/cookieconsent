@@ -6,8 +6,10 @@
 
 A __lightweight__ & __gdpr compliant__ cookie consent plugin written in plain javascript.
 
+![CookieConsent v3 cover](demo/assets/cover.png "Cover")
+
 ## Demo
-You can check out the dedicated [playground](https://playground.cookieconsent.orestbida.com).
+Check out the [playground](https://playground.cookieconsent.orestbida.com).
 
 There are also a few examples available on [Stackblitz](https://stackblitz.com/@orestbida/collections/cookieconsent-v3).
 
