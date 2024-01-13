@@ -3,7 +3,7 @@
         "label": "Consentement aux cookies",
         "title": "Bonjour voyageur, c'est l'heure des cookies!",
         "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip.",
-        "acceptAllBtn": "Accepter tout",
+        "acceptAllBtn": "Tout accepter",
         "acceptNecessaryBtn": "Tout rejeter",
         "showPreferencesBtn": "Gérer les préférences",
         "closeIconLabel": "Tout rejeter et fermer",
@@ -11,14 +11,14 @@
     },
     "preferencesModal": {
         "title": "Préférences de cookies",
-        "acceptAllBtn": "Accepter tout",
+        "acceptAllBtn": "Tout accepter",
         "acceptNecessaryBtn": "Tout rejeter",
-        "savePreferencesBtn": "Sauver les préférences",
+        "savePreferencesBtn": "Sauvegarder les préférences",
         "closeIconLabel": "Fermer la modale",
         "serviceCounterLabel":"Services",
         "sections": [
             {
-                "title": "Utilisation de Cookies",
+                "title": "Utilisation des Cookies",
                 "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
             },
             {
@@ -27,7 +27,7 @@
                 "linkedCategory": "necessary"
             },
             {
-                "title": "Cookies de Fonctionnalité",
+                "title": "Cookies de Fonctionnalités",
                 "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
                 "linkedCategory": "functionality"
             },
