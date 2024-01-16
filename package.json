@@ -37,8 +37,8 @@
     "author": "Orest Bida",
     "license": "MIT",
     "devDependencies": {
-        "@babel/core": "^7.23.6",
-        "@babel/preset-env": "^7.23.6",
+        "@babel/core": "^7.23.7",
+        "@babel/preset-env": "^7.23.7",
         "@rollup/plugin-eslint": "^9.0.5",
         "@rollup/plugin-terser": "^0.4.4",
         "@types/jest": "^29.5.11",
@@ -49,11 +49,11 @@
         "jest": "^29.7.0",
         "jest-environment-jsdom": "^29.7.0",
         "postcss-combine-duplicated-selectors": "^10.0.3",
-        "rollup": "^4.9.0",
+        "rollup": "^4.9.2",
         "rollup-plugin-postcss": "^4.0.2",
-        "sass": "^1.69.5",
+        "sass": "^1.69.6",
         "sitemap": "^7.1.1",
-        "vitepress": "1.0.0-rc.32"
+        "vitepress": "1.0.0-rc.34"
     },
     "jest": {
         "transform": {
