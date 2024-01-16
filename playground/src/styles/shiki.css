@@ -1,0 +1,141 @@
+.hl {
+    position: relative;
+    border: .0625rem solid #1d1f21;
+    border-radius: .375rem;
+    margin-bottom: 1.625em;
+    margin-top: .5rem;
+}
+
+.hl__title {
+    padding: 0.625rem 1.25rem;
+    font-size: .9rem;
+    color: #b0c4d4;
+    border-bottom: .0625rem solid #1f252c;
+}
+
+.hl .hl__shiki {
+    margin: 0;
+    border-radius: 0;
+    border: none;
+}
+
+.hl pre {
+    margin: 0;
+    background: transparent!important;
+}
+
+.hl code {
+    background-color: transparent;
+    line-height: 1.6;
+    display: block;
+    color: #b0b8c6;
+    -moz-tab-size: 4;
+    -o-tab-size: 4;
+    tab-size: 4;
+    padding: 1rem 1.3rem;
+    overflow-x: auto;
+    font-size: .875rem;
+    scrollbar-width: thin;
+    border: none;
+}
+
+.hl .hl__numbers {
+    border-right: .0625rem solid #1f252c;
+}
+
+.hl__numbers {
+    width: 3.75rem;
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    line-height: 1.6;
+    padding: 1rem 0;
+    font-size: .875rem;
+    font-family: monospace;
+    color: #55646f;
+    counter-reset: line;
+    pointer-events: none;
+}
+
+.hl__numbers span {
+    padding-left: 1.4rem;
+    width: 3.75rem;
+    padding-right: 1.4rem;
+    text-align: right;
+    display: inline-block;
+    counter-increment: line;
+    position: relative;
+}
+
+.hl__numbers span::before {
+    font-size: .875rem;
+    content: counter(line);
+}
+
+.line--highlight::after {
+    content: "";
+    background-color: rgba(212,236,255,.08);
+    border-left: .125rem solid #40a9d3;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100vw;
+}
+
+.hl__content {
+    position: relative;
+}
+
+.hl--line-numbers .hl__content {
+    padding-left: 3.75rem;
+}
+
+.hl--details summary {
+    padding: 0.75rem 1.25rem;
+    color: #4ebdff;
+    cursor: pointer;
+    transition: color .25s;
+    font-weight: 600;
+    display: block;
+    border-bottom: none;
+    padding: 0.75rem 1.25rem;
+    transition: color .15s ease,
+                background-color .15s ease;
+}
+
+.hl--details[open] summary {
+    border-bottom: .0625rem solid #1f252c;
+}
+
+.hl--details summary::before {
+    border-style: solid;
+    border-width: 0 0.125rem 0.125rem 0;
+    padding: 0.2em;
+    display: inline-block;
+    top: 0.0625rem;
+    position: relative;
+    content: "";
+    margin-right: 1em;
+    transform: translateY(-50%) rotate(45deg);
+}
+
+.hl--details[open] > summary::before {
+    transform: translateY(-10%) rotate(225deg);
+}
+
+.hl--line-focus .hl__numbers span:not(.line--focus),
+.hl--line-focus .line:not(.line--focus) {
+    filter: blur(0.095rem);
+    opacity: .5;
+    transition: filter .35s ease, opacity .35s ease;
+}
+
+.hl--line-focus .hl__content:focus .hl__numbers span:not(.line--focus),
+.hl--line-focus .hl__content:hover .hl__numbers span:not(.line--focus),
+.hl--line-focus .hl__content:focus .line:not(.line--focus),
+.hl--line-focus .hl__content:hover .line:not(.line--focus) {
+    filter: blur(0);
+    opacity: 1;
+}

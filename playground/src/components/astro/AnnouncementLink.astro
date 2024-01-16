@@ -1,0 +1,8 @@
+---
+import type { AnnouncementProps } from "./Announcement.astro";
+const { title, description, href, type }: AnnouncementProps = Astro.props;
+---
+<a class={type} href={href} target="_blank">
+    <p class={`${type}-title`}>{title}</p>
+    <p class={`${type}-description`}>{description}</p>
+</a>

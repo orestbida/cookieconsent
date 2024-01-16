@@ -1,0 +1,13 @@
+---
+import '../../styles/shiki.css';
+import { highlight } from '../js/shikiBlock';
+
+interface Props {
+    code: string;
+}
+
+const { code }: Props = Astro.props;
+const highlightedCode = highlight(code);
+---
+
+<div set:html={highlightedCode} />

@@ -1,0 +1,47 @@
+---
+import '../../../styles/installationSection.scss'
+import ShikiHighlight from "../ShikiHighlight.astro"
+import DocsLink from '../DocsLink.astro'
+---
+<section class="installation">
+    <div class="section__header">
+        <div class="section-title">
+            <h3>
+                Installation
+                <DocsLink docSection='essential/getting-started.html#installation' label='Installation documentation'/>
+            </h3>
+        </div>
+        <div class="section-description"></div>
+    </div>
+    <div class="section__body">
+        <ol>
+            <li>
+                <p>Download the
+                    <code class="highlight--green">cookieconsent-config.js</code> javascript file:
+                </p>
+                <button type="button" class="styled-btn" id="downloadConfigBtn">
+                    <span>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><g fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M3 12v7a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="m8 12 4 4 4-4" data-name="Right"/><path d="M12 3v11"/></g></svg>
+                    </span>
+                    cookieconsent-config.js
+                </button>
+            </li>
+            <li>
+                <p>Add the script in the <code>&lt;body&gt;</code> tag:</p>
+                <ShikiHighlight code={`
+                    <!--SHIKI language="html"
+                    <script type="module" src="cookieconsent-config.js"></script>
+                    -->`
+                }/>
+            </li>
+            <li>
+                <p>Add the stylesheet in the <code>&lt;head&gt;</code> tag:</p>
+                <ShikiHighlight code={`
+                    <!--SHIKI language="html" fetchRelease
+                    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@{{latest_release}}/dist/cookieconsent.css">
+                    -->`
+                }/>
+            </li>
+        </ol>
+    </div>
+</section>

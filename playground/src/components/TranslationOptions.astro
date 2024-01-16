@@ -1,0 +1,11 @@
+---
+import { readdirSync } from 'fs';
+
+const translations = readdirSync('src/translations');
+---
+{
+    translations.map(t => {
+        const locale = t.split('.')[0];
+        return <option value={locale}>{locale}</option>
+    })
+}

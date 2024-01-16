@@ -1,0 +1,24 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/astro/sections/Header.astro';
+import Footer from '../components/astro/sections/Footer.astro';
+import Announcements from '../components/astro/sections/Announcements.astro';
+import CategoriesAndTranslations from '../components/astro/sections/CategoriesAndTranslations.astro';
+import GuiOptions from '../components/astro/sections/GuiOptions.astro';
+import Themes from '../components/astro/sections/Themes.astro';
+import Installation from '../components/astro/sections/Installation.astro';
+---
+<Layout>
+    <Header/>
+    <main>
+        <Announcements/>
+        <CategoriesAndTranslations/>
+        <GuiOptions/>
+        <Themes/>
+        <Installation/>
+    </main>
+    <Footer/>
+</Layout>
+<script>
+    import '../components/js/index'
+</script>

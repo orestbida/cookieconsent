@@ -1,0 +1,36 @@
+#downloadConfigBtn {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: transparent;
+    color: #8be6b1;
+    border-color: rgb(45, 56, 49);
+    padding: .7rem 1rem;
+    border-radius: .35rem;
+
+    span {
+        margin-right: .6rem;
+    }
+
+    svg {
+        display: block;
+
+        > g {
+            stroke: currentColor;
+        }
+    }
+
+    &:hover,
+    &:focus {
+        background: #85ffb8;
+        border-color: #85ffb8;
+        color: #000;
+    }
+
+    &:active {
+        transition: none;
+        background: #68bd8c;
+        border-color: #68bd8c;
+        color: #000;
+    }
+}

@@ -1,0 +1,129 @@
+---
+import '../../../styles/guiOptions.scss';
+import DocsLink from '../DocsLink.astro';
+---
+<section>
+    <div class="section__header">
+        <div class="section-title">
+            <h3>
+                GUI Options
+                <DocsLink docSection='reference/configuration-reference.html#guioptions' label='GUI options documentation'/>
+            </h3>
+        </div>
+        <div class="section-description"></div>
+    </div>
+    <div class="section__body grid">
+        <div class="sub-section consent-modal">
+            <h4>Consent Modal</h4>
+
+            <label class="select-label" for="cm-layout">
+                <span>Layout</span><span class="select-input">
+                    <select name="layout" id="cm-layout">
+                        <option value="box">box</option>
+                        <option value="box inline">box inline</option>
+                        <option value="box wide">box wide</option>
+                        <option value="cloud">cloud</option>
+                        <option value="cloud inline">cloud inline</option>
+                        <option value="bar">bar</option>
+                        <option value="bar inline">bar inline</option>
+                    </select>
+                    <span class="arrow-icon"></span>
+                </span>
+            </label>
+
+            <label class="select-label" for="cm-position">
+                <span>Position</span><span class="select-input">
+                    <select name="vertical" id="cm-position">
+
+                    </select>
+                    <span class="arrow-icon"></span>
+                </span>
+            </label>
+
+            <div class="checkbox-group">
+                <div class="flip checkbox-div">
+                    <input type="checkbox" id="cm-flip" name="flip"/>
+                    <label for="cm-flip">Flip buttons</label>
+                </div>
+                <div class="weight checkbox-div">
+                    <input type="checkbox" id="cm-weight" name="weight"/>
+                    <label for="cm-weight">Equal weight buttons</label>
+                </div>
+            </div>
+        </div>
+        <div class="sub-section preferences-modal">
+            <h4>Preferences Modal</h4>
+
+            <label class="select-label" for="pm-layout">
+                <span>Layout</span><span class="select-input">
+                    <select name="layout" id="pm-layout">
+                        <option value="box">box</option>
+                        <option value="bar">bar</option>
+                        <option value="bar wide">bar wide</option>
+                    </select>
+                    <span class="arrow-icon"></span>
+                </span>
+            </label>
+
+            <label class="select-label" for="pm-position">
+                <span>Position</span><span class="select-input">
+                    <select name="position" id="pm-position">
+                        <option data-excludedLayout="box" value="left">left</option>
+                        <option data-excludedLayout="box" value="right">right</option>
+                    </select>
+                    <span class="arrow-icon"></span>
+                </span>
+            </label>
+
+            <div class="checkbox-group">
+                <div class="flip checkbox-div">
+                    <input type="checkbox" id="pm-flip" name="flip"/>
+                    <label for="pm-flip">Flip buttons</label>
+                </div>
+                <div class="weight checkbox-div">
+                    <input type="checkbox" id="pm-weight" name="weight"/>
+                    <label for="pm-weight">Equal weight buttons</label>
+                </div>
+            </div>
+
+            <button type="button" class="styled-btn" data-cc="show-preferencesModal">Open Preferences Modal</button>
+        </div>
+        <div class="sub-section misc">
+            <h4>Misc</h4>
+            <div class="checkbox-group">
+                <div class="checkbox-div">
+                    <input
+                        type="checkbox"
+                        name="closeIcon"
+                        id="close-icon-checkbox"
+                    />
+                    <label for="close-icon-checkbox">Add <b>X/Reject icon</b></label>
+                </div>
+
+                <div class="checkbox-div">
+                    <input
+                        type="checkbox"
+                        name="darkmode"
+                        id="darkmode-checkbox"
+                    />
+                    <label for="darkmode-checkbox">Enable dark-mode</label>
+                </div>
+
+                <div class="checkbox-div">
+                    <input
+                        type="checkbox"
+                        name="disablePageInteraction"
+                        id="disablePageInteraction-checkbox"
+                    />
+                    <label for="disablePageInteraction">Disable page interaction</label>
+                </div>
+            </div>
+
+            <button
+                type="button"
+                class="styled-btn"
+                id="reset-btn"
+            >Reset demo/config</button>
+        </div>
+    </div>
+</section>

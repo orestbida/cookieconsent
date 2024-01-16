@@ -1,0 +1,20 @@
+---
+export type AnnouncementType = 'warning' | 'info'
+
+export interface AnnouncementProps {
+    title?: string;
+    description?: string;
+    href?: string;
+    type?: AnnouncementType
+}
+
+import AnnouncementLink from "./AnnouncementLink.astro";
+import AnnouncementDiv from "./AnnouncementDiv.astro";
+
+const props: AnnouncementProps = Astro.props;
+---
+{
+    props.href
+        ? <AnnouncementLink {...props}/>
+        : <AnnouncementDiv {...props}/>
+}

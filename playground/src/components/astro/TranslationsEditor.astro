@@ -1,0 +1,69 @@
+---
+import '../../styles/a11yDialog.scss';
+import '../../styles/translationsEditor.scss';
+---
+<div
+    class="dialog-container"
+    id="edit-translations-dialog"
+    aria-labelledby="dialog-title"
+    aria-hidden="true"
+>
+    <div class="dialog-overlay"></div>
+    <div class="dialog-content" role="document">
+        <div class="dialog-header">
+            <div class="dialog-header--left">
+                <h1 id="dialog-title" class="dialog-title">Edit translation</h1>
+                <label class="select-translation" for="editor-language-codes">
+                    <select id="editor-language-codes"></select>
+                    <span class="arrow-icon"></span>
+                </label>
+            </div>
+            <button type="button" class="styled-btn dialog-close-btn" data-a11y-dialog-hide aria-label="Close dialog">
+                &times;
+            </button>
+        </div>
+
+        <div class="dialog-body">
+            <div id="editor-container" class="translations-editor">
+                <div class="translation-editor" id="translation-editor">
+                    <div class="editor editor--cm">
+                        <h4>Consent modal</h4>
+                        <textarea id="consent-modal-title" placeholder="Title" class="small-textarea"></textarea>
+
+                        <div class="footer-textarea" id="textarea-cm-description">
+                            <textarea id="consent-modal-description" placeholder="Description" spellcheck="false"></textarea>
+                        </div>
+
+                        <input type="text" id="consent-modal-accept-btn" placeholder="Accept all button"/>
+                        <input type="text" id="consent-modal-reject-btn" placeholder="Reject all button"/>
+                        <input type="text" id="consent-modal-manage-btn" placeholder="Manage preferences button"/>
+
+                        <div class="footer-textarea" id="textarea-cm-footer">
+                            <textarea id="editing" placeholder="Footer" spellcheck="false"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="editor editor--pm">
+                        <h4>Preferences modal</h4>
+                        <textarea id="pm-title" placeholder="Title" class="small-textarea"></textarea>
+                        <input type="text" id="pm-close-icon-label" placeholder="Close icon label"/>
+                        <input type="text" id="pm-accept-btn" placeholder="Accept all button"/>
+                        <input type="text" id="pm-reject-btn" placeholder="Reject all button"/>
+                        <input type="text" id="pm-save-btn" placeholder="Save preferences button"/>
+                        <input type="text" id="pm-service-counter-label" placeholder="Service counter label"/>
+
+                        <div class="pm-sections">
+                            <h3 class="pm-sections-title">Sections <span id="sections-counter"></span></h3>
+                            <ol id="pm-sections"></ol>
+                            <button type="button" class="styled-btn" id="add-section-btn">Add section</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="dialog-footer">
+            <button type="button" class="styled-btn" id="save-translation-config-btn">Save & Preview</button>
+        </div>
+    </div>
+</div>

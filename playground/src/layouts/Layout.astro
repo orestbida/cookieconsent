@@ -1,0 +1,22 @@
+---
+import '../styles/global.scss';
+import '../../../dist/cookieconsent.css';
+
+import {
+    title,
+    description,
+} from '../data/metadata'
+---
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="description" content={description} />
+        <meta name="viewport" content="width=device-width" />
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <title>{title}</title>
+    </head>
+    <body>
+        <slot />
+    </body>
+</html>

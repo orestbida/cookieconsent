@@ -1,0 +1,22 @@
+---
+import Announcement from "../Announcement.astro";
+import type { AnnouncementProps } from "../Announcement.astro";
+
+const announcements: AnnouncementProps[] = [
+    {
+        title: 'New Google requirements 🚨',
+        description: 'Google ads related product will no longer work with CookieConsent!',
+        href: 'https://github.com/orestbida/cookieconsent/discussions/523',
+        type: 'warning',
+    }
+];
+---
+<section class="announcements">
+    <div class="section__body grid">
+        {
+            announcements.map(a => (
+                <Announcement {...a}/>
+            ))
+        }
+    </div>
+</section>

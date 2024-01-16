@@ -1,0 +1,149 @@
+.translations-editor {
+    height: 100%;
+    overflow: auto;
+    scrollbar-width: thin;
+}
+
+[data-current-translation="ar"] .translation-btn--ar,
+[data-current-translation="en"] .translation-btn--en,
+[data-current-translation="de"] .translation-btn--de,
+[data-current-translation="es"] .translation-btn--es,
+[data-current-translation="fr"] .translation-btn--fr,
+[data-current-translation="it"] .translation-btn--it {
+    background-color: #396af9;
+    border-color: #4b76f5;
+    color: #fff;
+}
+
+.translation-editor {
+    overflow: auto;
+    padding: 0 1rem 1rem 1rem;
+}
+
+.editor {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+
+    & > * + * {
+        margin-top: .3rem;
+    }
+
+    input,
+    textarea {
+        color: inherit;
+        font-family: inherit;
+        background: #272829;
+        border: 1px solid #323335;
+        padding: 0.7rem 1rem;
+        border-radius: 0.4rem;
+        font-size: 14px;
+    }
+
+    textarea {
+        min-height: 6rem;
+        max-height: 20rem;
+        resize: vertical;
+        width: 100%!important;
+        scrollbar-width: thin;
+    }
+
+    .small-textarea {
+        min-height: 2.7rem;
+        height: 2.7rem;
+    }
+
+    h2 {
+        margin-bottom: .5rem;
+    }
+
+    + .editor {
+        margin-top: 1.5rem;
+    }
+
+    textarea {
+        border: 1px solid #323335;
+    }
+}
+
+#editor-language-codes {
+    width: 100%;
+    max-width: 100px;
+}
+
+.pm-section {
+    gap: .3rem;
+
+    & > * {
+        display: block;
+        width: 100%;
+
+        & + * {
+            margin-top: .3rem;
+        }
+    }
+}
+
+.pm-section__delete-btn {
+    background-color: #e77373;
+    color: black;
+    border-color: #f69393;
+}
+
+.pm-section-label-btn-container {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    justify-content: space-between;
+}
+
+.pm-section-label-btn-container .select-label {
+    margin-bottom: 0;
+}
+
+.pm-section label {
+    display: flex;
+}
+
+.pm-sections {
+    border-radius: 0.4rem;
+    border: 1px solid #424242;
+}
+
+#pm-sections {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    border-top: 1px solid #424242;
+}
+
+.pm-section {
+    border-bottom: 1px solid #424242;
+    padding: 0.5rem;
+    margin-bottom: 0;
+}
+
+.pm-sections-title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1rem;
+    margin: 0;
+    padding: 0.6rem 0.8rem;
+}
+
+#sections-counter {
+    background: #474747;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 100%;
+    font-size: .7rem;
+    border: 1px solid #5a5a5a;
+}
+
+#add-section-btn {
+    margin: .5rem;
+}
