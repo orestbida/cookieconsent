@@ -29,3 +29,4 @@ coverage
 docs/.vitepress
 
 src_tmp
+playground/src/translations/translations.js
