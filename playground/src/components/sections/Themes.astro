@@ -1,0 +1,90 @@
+---
+import '../../styles/custom-themes/dark-turquoise.scss'
+import '../../styles/custom-themes/light-funky.scss'
+import '../../styles/custom-themes/elegant-black.scss'
+
+import ShikiBlock from '../ShikiBlock.astro'
+import DocsLink from '../DocsLink.astro'
+---
+<section class="themes-section">
+    <div class="section__header">
+        <div class="section-title">
+            <h3>
+                Themes
+                <DocsLink docSection="advanced/ui-customization.html#color-schemes" label='Themes documentation'/>
+            </h3>
+        </div>
+        <div class="section-description"></div>
+    </div>
+    <div class="section__body">
+        <div class="themes grid">
+            <label for="default-light">
+                <input type="radio" id="default-light" name="theme" checked/>
+                <span class="input-label">
+                    <span class="theme-type">(built-in)</span>
+                    <span class="theme-name">Light theme</span>
+
+                </span>
+            </label>
+
+            <label for="cc--darkmode">
+                <input type="radio" id="cc--darkmode" name="theme"/>
+                <span class="input-label">
+                    <span class="theme-type">(built-in)</span>
+                    <span class="theme-name">Dark theme</span>
+                </span>
+            </label>
+
+            <label for="cc--dark-turquoise" aria-label="Dark Turquoise">
+                <input type="radio" id="cc--dark-turquoise" name="theme"/>
+                <span class="input-label">
+                    <span class="theme-type">(custom)</span>
+                    <span class="theme-name">Dark Turquoise</span>
+                </span>
+            </label>
+
+            <label for="cc--light-funky">
+                <input type="radio" id="cc--light-funky" name="theme"/>
+                <span class="input-label">
+                    <span class="theme-type">(custom)</span>
+                    <span class="theme-name">Light Funky</span>
+                </span>
+            </label>
+
+            <label for="cc--elegant-black">
+                <input type="radio" id="cc--elegant-black" name="theme"/>
+                <span class="input-label">
+                    <span class="theme-type">(custom)</span>
+                    <span class="theme-name">Elegant Black</span>
+                </span>
+            </label>
+        </div>
+        <div class="css-variables">
+            <div class="custom-themes">
+                <ShikiBlock
+                    lang="css"
+                    filePath="src/styles/custom-themes/light-funky.scss"
+                    title="Light Funky (CSS)"
+                    isDetails={true}
+                    showLineNumbers={true}
+                />
+
+                <ShikiBlock
+                    lang="css"
+                    filePath="src/styles/custom-themes/dark-turquoise.scss"
+                    title="Dark Turquoise (CSS)"
+                    isDetails={true}
+                    showLineNumbers={true}
+                />
+
+                <ShikiBlock
+                    lang="css"
+                    filePath="src/styles/custom-themes/elegant-black.scss"
+                    title="Elegant Black (CSS)"
+                    isDetails={true}
+                    showLineNumbers={true}
+                />
+            </div>
+        </div>
+    </div>
+</section>

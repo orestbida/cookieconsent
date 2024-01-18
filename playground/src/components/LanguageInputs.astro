@@ -1,0 +1,14 @@
+---
+import { getTranslationLocales, localeToLang } from "../modules/serverUtils";
+
+const locales = getTranslationLocales();
+---
+{
+    locales.map(locale => {
+        const language = localeToLang(locale);
+        return <label>
+            <input class="custom-input" type="checkbox" name="language-code" value={locale}/>
+            <span class="label">{language} <span class="tick"></span></span>
+        </label>
+    })
+}

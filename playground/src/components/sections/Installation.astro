@@ -1,6 +1,6 @@
 ---
-import '../../../styles/installationSection.scss'
-import ShikiHighlight from "../ShikiHighlight.astro"
+import '../../styles/installationSection.scss'
+import ShikiBlock from "../ShikiBlock.astro"
 import DocsLink from '../DocsLink.astro'
 ---
 <section class="installation">
@@ -28,18 +28,18 @@ import DocsLink from '../DocsLink.astro'
             </li>
             <li>
                 <p>Add the script in the <code>&lt;body&gt;</code> tag:</p>
-                <ShikiHighlight code={`
-                    <!--SHIKI language="html"
-                    <script type="module" src="cookieconsent-config.js"></script>
-                    -->`
+                <ShikiBlock lang="html" code={
+                `
+                <script type="module" src="cookieconsent-config.js"></script>
+                `
                 }/>
             </li>
             <li>
                 <p>Add the stylesheet in the <code>&lt;head&gt;</code> tag:</p>
-                <ShikiHighlight code={`
-                    <!--SHIKI language="html" fetchRelease
-                    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@{{latest_release}}/dist/cookieconsent.css">
-                    -->`
+                <ShikiBlock lang="html" code={
+                `
+                <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@{{latest_release}}/dist/cookieconsent.css">
+                `
                 }/>
             </li>
         </ol>

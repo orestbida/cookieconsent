@@ -1,0 +1,28 @@
+---
+import Announcement from "../Announcement.astro";
+import type { AnnouncementProps } from "../Announcement.astro";
+import { repoUrl } from "../../data/metadata";
+
+const announcements: AnnouncementProps[] = [
+    {
+        title: 'Welcome to the playground!',
+        description: 'This page allows you to <span class="underline">create a starter config.</span> for CookieConsent v3 and also see it in action.',
+        type: 'info',
+    },
+    {
+        title: 'New Google requirements 🚨',
+        description: 'Google AdSense, Ad Manager and AdMob will no longer work with CookieConsent ...',
+        href: `${repoUrl}/discussions/523`,
+        type: 'warning',
+    }
+];
+---
+<section class="announcements-section">
+    <div class="section__body grid">
+        {
+            announcements.map(a => (
+                <Announcement {...a}/>
+            ))
+        }
+    </div>
+</section>

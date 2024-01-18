@@ -17,6 +17,8 @@ export const defaultState = {
     _removeTitle: false,
     _latestRelease: '',
 
+    _disableTransitions: false,
+
     /**
      * @type {'default-light' | 'cc--darkmode' | 'dark-turquoise' | 'light-funky' | 'elegant-black'}
      */
@@ -35,7 +37,7 @@ export const defaultState = {
     /**
      * Increase on every new playground update
      */
-    _demoRevision: 31
+    _demoRevision: 32
 };
 
 /**

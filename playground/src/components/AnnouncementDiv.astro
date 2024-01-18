@@ -3,6 +3,6 @@ import type { AnnouncementProps } from "./Announcement.astro";
 const { title, description, type }: AnnouncementProps = Astro.props;
 ---
 <div class={type}>
-    <p class={`${type}-title`}>{title}</p>
-    <p class={`${type}-description`}>{description}</p>
+    <p class={`${type}-title`} set:html={title}></p>
+    <p class={`${type}-description`} set:html={description}></p>
 </div>

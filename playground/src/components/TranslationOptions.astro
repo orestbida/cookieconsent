@@ -1,11 +1,10 @@
 ---
-import { readdirSync } from 'fs';
+import { getTranslationLocales } from "../modules/serverUtils";
 
-const translations = readdirSync('src/translations');
+const locales = getTranslationLocales();
 ---
 {
-    translations.map(t => {
-        const locale = t.split('.')[0];
+    locales.map(locale => {
         return <option value={locale}>{locale}</option>
     })
 }

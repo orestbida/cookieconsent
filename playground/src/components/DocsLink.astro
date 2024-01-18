@@ -1,4 +1,6 @@
 ---
+import { docsUrl } from '../data/metadata';
+
 interface Props {
     docSection?: string,
     label?: string
@@ -7,7 +9,7 @@ interface Props {
 const { docSection, label }: Props = Astro.props;
 ---
 <a
-    href={`https://cookieconsent.orestbida.com/${docSection}`}
+    href={`${docsUrl}/${docSection}`}
     target="_blank"
     rel="noopener noreferrer"
     title="Docs"

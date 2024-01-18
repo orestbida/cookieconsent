@@ -1,0 +1,23 @@
+---
+import { docsUrl, repoUrl } from '../../data/metadata'
+---
+<section class="help-section">
+    <div class="section__header">
+        <div class="section-title">
+            <h3>
+               Need help?
+            </h3>
+        </div>
+        <div class="section-description"></div>
+    </div>
+    <div class="section__body">
+        <p>
+            Check out the <a href={docsUrl} target="_blank" rel="noopener noreferrer">documentation</a>!
+            </br>
+            </br>
+            If you can't find what you're looking for, feel free to
+            open an <a href={`${repoUrl}/issues`} target="_blank" rel="noopener noreferrer">issue</a>
+            or a <a href={`${repoUrl}/discussions`} target="_blank" rel="noopener noreferrer">discussion</a> on github.
+        </p>
+    </div>
+</section>

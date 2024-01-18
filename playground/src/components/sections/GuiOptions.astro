@@ -1,8 +1,8 @@
 ---
-import '../../../styles/guiOptions.scss';
+import '../../styles/guiOptions.scss';
 import DocsLink from '../DocsLink.astro';
 ---
-<section>
+<section class="gui-options-section">
     <div class="section__header">
         <div class="section-title">
             <h3>
@@ -97,7 +97,10 @@ import DocsLink from '../DocsLink.astro';
                         name="closeIcon"
                         id="close-icon-checkbox"
                     />
-                    <label for="close-icon-checkbox">Add <b>X/Reject icon</b></label>
+                    <label for="close-icon-checkbox">
+                        Add X/Reject icon
+                        <DocsLink docSection='reference/configuration-reference.html#translation-consentmodal' label='X/Reject icon documentation'/>
+                    </label>
                 </div>
 
                 <div class="checkbox-div">
@@ -115,7 +118,22 @@ import DocsLink from '../DocsLink.astro';
                         name="disablePageInteraction"
                         id="disablePageInteraction-checkbox"
                     />
-                    <label for="disablePageInteraction">Disable page interaction</label>
+                    <label for="disablePageInteraction-checkbox">
+                        Disable page interaction
+                        <DocsLink docSection='reference/configuration-reference.html#disablepageinteractionn' label='Disable page interaction documentation'/>
+                    </label>
+                </div>
+
+                <div class="checkbox-div">
+                    <input
+                        type="checkbox"
+                        name="disableTransitions"
+                        id="disableTransitions-checkbox"
+                    />
+                    <label for="disableTransitions-checkbox">
+                        Disable transitions
+                        <DocsLink docSection='advanced/ui-customization.html#disable-transitions' label='Disable transitions documentation'/>
+                    </label>
                 </div>
             </div>
 
@@ -123,7 +141,7 @@ import DocsLink from '../DocsLink.astro';
                 type="button"
                 class="styled-btn"
                 id="reset-btn"
-            >Reset demo/config</button>
+            >🗑️ Reset demo/config</button>
         </div>
     </div>
 </section>

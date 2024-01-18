@@ -1,7 +1,8 @@
 ---
 import TranslationsEditor from "../TranslationsEditor.astro"
-import TranslationOptions from "../../TranslationOptions.astro"
+import TranslationOptions from "../TranslationOptions.astro"
 import DocsLink from "../DocsLink.astro"
+import LanguageInputs from "../LanguageInputs.astro"
 ---
 <section class="categories-section">
     <div class="section__body grid">
@@ -15,9 +16,11 @@ import DocsLink from "../DocsLink.astro"
             <div class="custom-inputs custom-inputs--categories">
                 <label>
                     <input class="category-input custom-input" type="checkbox" value="necessary" checked disabled/>
-                    <span class="label">Necessary <span class="tick">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><g fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><rect width="16" height="10" x="4" y="11" rx="2" ry="2"/><path d="M16.5 11V8h0c0-2.8-.5-5-4.5-5S7.5 5.2 7.5 8h0v3"/></g></svg>
-                    </span></span>
+                    <span class="label">Necessary
+                        <span class="tick">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><g fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><rect width="16" height="10" x="4" y="11" rx="2" ry="2"/><path d="M16.5 11V8h0c0-2.8-.5-5-4.5-5S7.5 5.2 7.5 8h0v3"/></g></svg>
+                        </span>
+                    </span>
                 </label>
 
                 <label>
@@ -44,36 +47,7 @@ import DocsLink from "../DocsLink.astro"
             <p class="translations-description">Select the translations to include in your configuration.</p>
 
             <div class="custom-inputs">
-                <label for="language-en">
-                    <input class="custom-input" type="checkbox" id="language-en" name="language-code" value="en"/>
-                    <span class="label">English <span class="tick"></span></span>
-                </label>
-
-                <label for="language-it">
-                    <input class="custom-input" type="checkbox" id="language-it" name="language-code" value="it"/>
-                    <span class="label">Italian <span class="tick"></span></span>
-                </label>
-
-                <label for="language-de">
-                    <input class="custom-input" type="checkbox" id="language-de" name="language-code" value="de"/>
-                    <span class="label">German <span class="tick"></span></span>
-                </label>
-
-                <label for="language-es">
-                    <input class="custom-input" type="checkbox" id="language-es" name="language-code" value="es"/>
-                    <span class="label">Spanish <span class="tick"></span></span>
-                </label>
-
-                <label for="language-fr">
-                    <input class="custom-input" type="checkbox" id="language-fr" name="language-code" value="fr"/>
-                    <span class="label">French <span class="tick"></span></span>
-                </label>
-
-                <label for="language-ar">
-                    <input class="custom-input" type="checkbox" id="language-ar" name="language-code" value="ar"/>
-                    <span class="label">Arabic <span class="tick"></span></span>
-                </label>
-
+                <LanguageInputs/>
             </div>
 
             <button

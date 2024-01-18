@@ -1,4 +1,4 @@
-import * as CookieConsent from '../../../../dist/cookieconsent.esm'
+import * as CookieConsent from '../../../dist/cookieconsent.esm'
 import { fireEvent, customEvents } from './utils';
 import { getCurrentUserConfig, getState, clearInvalidDemoState } from './stateManager';
 

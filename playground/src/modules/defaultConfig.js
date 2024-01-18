@@ -1,9 +1,4 @@
-import en from '../../translations/en.json';
-import de from '../../translations/de.json';
-import it from '../../translations/it.json';
-import es from '../../translations/es.json';
-import fr from '../../translations/fr.json';
-import ar from '../../translations/ar.json';
+import * as translations from '../translations/translations'
 
 /**
  * WARNING: this object will be
@@ -13,7 +8,7 @@ import ar from '../../translations/ar.json';
  */
 
 /**
- * @type {import("../../../../types").CookieConsentConfig}
+ * @type {import("../../../types").CookieConsentConfig}
  */
 export const defaultFullConfig = {
     root: 'main',
@@ -51,14 +46,7 @@ export const defaultFullConfig = {
         autoDetect: 'browser',
         rtl: 'ar',
 
-        translations: {
-            en: en,
-            it: it,
-            de: de,
-            es: es,
-            fr: fr,
-            ar: ar
-        }
+        translations: {...translations}
     }
 };
 

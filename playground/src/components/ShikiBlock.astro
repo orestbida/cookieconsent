@@ -1,0 +1,26 @@
+---
+import '../styles/shiki.css';
+import { highlight } from '../modules/shikiHighlight';
+import { readFileSync } from 'fs';
+
+interface Props {
+    lang: string
+    code?: string
+    filePath?: string
+    showLineNumbers?: boolean
+    isDetails?: boolean
+    title?: string
+    focus?: string
+    highlight?: string
+}
+
+const props: Props = Astro.props;
+
+const str = props.filePath
+    ? readFileSync(props.filePath, 'utf-8').toString()
+    : props.code;
+
+const highlightedCode = highlight(str, {...props, code: str});
+---
+
+<div set:html={highlightedCode} />
