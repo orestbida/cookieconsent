@@ -11,7 +11,7 @@ Overview of the main cons/drawbacks you should be aware of: <br><br>
 <CheckListItem title='CookieConsent does not implement the IAB Framework - TCF' type="x"/>
 
 :::warning Google Ads related products
-Google AdSense/Ad Manager will no longer work with CookieConsent starting from January 2024. [Read more.](https://github.com/orestbida/cookieconsent/issues/562)
+Google Ad Sense, Ad Manager and Ad Mob will no longer work with CookieConsent starting from January 2024. [Read more.](https://github.com/orestbida/cookieconsent/issues/562)
 :::
 
 ## CookieConsent v2 or v3?

@@ -58,7 +58,9 @@ More css variables:
 You can disable all transitions simply by setting the transition duration to 0:
 
 ```css
-#cc-main {
+#cc-main,
+#cc-main .cm,
+#cc-main .pm {
     --cc-modal-transition-duration: 0;
 }
 ```
