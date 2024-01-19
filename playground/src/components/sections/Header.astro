@@ -1,4 +1,5 @@
 ---
+import '../../styles/header.scss';
 import { docsUrl, stackblitzUrl, repoUrl } from "../../data/metadata";
 import { GithubIcon } from '../../../../docs/components/icons'
 ---
@@ -12,60 +13,3 @@ import { GithubIcon } from '../../../../docs/components/icons'
         <a href={repoUrl} class="styled-link styled-link__2 github-icon" target="_blank" set:html={GithubIcon} aria-label="Github repository"></a>
     </div>
 </header>
-
-<style scoped>
-    .main-links {
-        display: flex;
-        gap: .7rem;
-        margin: 2rem 0;
-    }
-
-    .styled-link {
-        padding: .7rem 1rem;
-        background-color: #ffffff;
-        color: #000000;
-        text-decoration: none;
-        border-radius: .4rem;
-        border: 1px solid rgb(39, 39, 41);
-        font-size: .9rem;
-        font-weight: 600;
-        transition: color .15s ease,
-                    background-color .15s ease,
-                    border-color .15s ease;
-        }
-
-        .styled-link:hover {
-            background-color: #c8cbcd;
-            color: #000;
-        }
-
-        .styled-link__2 {
-            background-color: transparent;
-            color: #d4d9db;
-            border-color: #222425;
-        }
-
-        .styled-link__2:hover {
-            background-color: #111213;
-            color: #fff;
-        }
-
-        .github-icon {
-            padding: 0;
-            width: 43px;
-            height: auto;
-            align-items: center;
-            display: flex;
-            padding: 0;
-            justify-content: center;
-        }
-
-        .github-icon svg {
-            fill: #d4d9db;
-            transition: fill .15s ease;
-        }
-
-        .github-icon:hover svg {
-            fill: #fff;
-        }
-</style>
