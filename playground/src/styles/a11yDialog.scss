@@ -37,9 +37,9 @@
     left: 0.5rem;
     right: 0.5rem;
     overflow: hidden;
-    background-color: #171819;
+    background-color: #000000;
     border-radius: 0.4rem;
-    border: 0.0625rem solid rgba(248, 252, 255, 0.034);
+    border: 1px solid #3b3d3e;
 
     h1,
     h2 {
@@ -96,4 +96,23 @@
     justify-content: flex-end;
     padding: 0 1rem;
     border-top: 1px solid #2b2b2b;
+}
+
+@media screen and (max-width: 640px){
+    .dialog-content {
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        border-radius: 0;
+    }
+
+    .dialog-container {
+        .translation-editor,
+        .dialog-footer,
+        .dialog-header {
+            padding-left: .9rem;
+            padding-right: .9rem;
+        }
+    }
 }

@@ -1,7 +1,6 @@
 import A11yDialog from 'a11y-dialog';
 import { getById, addEvent } from './utils';
-import { getState, defaultState, saveState, reRunPlugin, getCurrentUserConfig } from './stateManager';
-import deepEqual from 'deep-equal';
+import { getState, defaultState, saveState, reRunPlugin } from './stateManager';
 
 const container = getById('edit-translations-dialog');
 const dialog = new A11yDialog(container);
@@ -11,6 +10,8 @@ const dialog = new A11yDialog(container);
 /** @type {HTMLInputElement} **/    const cmTitle = getById('consent-modal-title');
 /** @type {HTMLTextAreaElement} **/ const cmDescription = getById('consent-modal-description');
 /** @type {HTMLInputElement} **/    const cmAcceptBtn = getById('consent-modal-accept-btn');
+/** @type {HTMLInputElement} **/    const cmCloseIconLabel = getById('close-icon-label');
+
 /** @type {HTMLInputElement} **/    const cmRejectBtn = getById('consent-modal-reject-btn');
 /** @type {HTMLInputElement} **/    const cmManageBtn = getById('consent-modal-manage-btn');
 /** @type {HTMLTextAreaElement} **/ const cmFooter = getById('editing');
@@ -35,7 +36,6 @@ const dialog = new A11yDialog(container);
 let lastEnabledTranslations = [];
 let currentLanguage = '';
 let sectionsCounter = 0;
-let equalEditorData = true;
 
 /**
  * @type {typeof defaultState}
@@ -77,36 +77,22 @@ addEvent(saveTranslationBtn, 'click', () => {
     window.CookieConsent.setLanguage(currentLanguage);
 });
 
-addEvent(selectEditorTranslation, 'focus', () => {
-    const currentTranslation = retrieveCurrentTranslationFromEditor();
-    const previousTranslation = getCurrentUserConfig(getState()).language.translations[currentLanguage];
-
-    equalEditorData = deepEqual(
-        currentTranslation,
-        previousTranslation
-    );
-});
-
-addEvent(selectEditorTranslation, 'change', (event) => {
-    if (!equalEditorData) {
-        if (!confirm('You have unsaved changes. Are you sure you want to change the language without saving the current config.?')) {
-            event.preventDefault();
-            selectEditorTranslation.value = currentLanguage;
-            return false;
-        }
-    }
-
+addEvent(selectEditorTranslation, 'change', () => {
     currentLanguage = selectEditorTranslation.value;
     setActiveTranslation(currentLanguage);
     updateEditorFields();
-    equalEditorData = true;
+
+    if (isConsentModalVisible()) {
+        window.CookieConsent.setLanguage(currentLanguage);
+    }
 });
+
+const isConsentModalVisible = () => document.documentElement.classList.contains('show--consent');
 
 /**
  * @param {string[]} [enabledTranslations]
  */
 function updateEditor(enabledTranslations) {
-
     const state = getState();
     enabledTranslations = enabledTranslations || state._enabledTranslations;
 
@@ -155,6 +141,7 @@ function updateEditorFields(_state) {
     cmTitle.value = consentModal.title || '';
     cmDescription.value = consentModal.description || '';
     cmAcceptBtn.value = consentModal.acceptAllBtn || '';
+    cmCloseIconLabel.value = consentModal.closeIconLabel || '';
     cmRejectBtn.value = consentModal.acceptNecessaryBtn || '';
     cmManageBtn.value = consentModal.showPreferencesBtn || '';
     cmFooter.value = consentModal.footer || '';
@@ -168,7 +155,6 @@ function updateEditorFields(_state) {
     pmRejectBtn.value = preferencesModal.acceptNecessaryBtn || '';
     pmSaveBtn.value = preferencesModal.savePreferencesBtn || '';
     pmServiceCounterLabel.value = preferencesModal.serviceCounterLabel || '';
-
 
     /**
      * Update sections
@@ -330,6 +316,7 @@ function retrieveCurrentTranslationFromEditor() {
     const consentModal = {};
     consentModal.title = cmTitle.value;
     consentModal.description = cmDescription.value;
+    consentModal.closeIconLabel = cmCloseIconLabel.value;
     consentModal.acceptAllBtn = cmAcceptBtn.value;
     consentModal.acceptNecessaryBtn = cmRejectBtn.value;
     consentModal.showPreferencesBtn = cmManageBtn.value;

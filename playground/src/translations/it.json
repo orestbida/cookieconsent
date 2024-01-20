@@ -6,7 +6,6 @@
         "acceptAllBtn": "Accetta tutto",
         "acceptNecessaryBtn": "Rifiuta tutto",
         "showPreferencesBtn": "Gestisci preferenze",
-        "closeIconLabel": "Rifiuta tutto e chiudi",
         "footer": "<a href=\"#link\">Informativa sulla privacy</a>\n<a href=\"#link\">Termini e condizioni</a>"
     },
     "preferencesModal": {

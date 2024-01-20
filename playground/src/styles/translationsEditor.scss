@@ -33,11 +33,15 @@
     textarea {
         color: inherit;
         font-family: inherit;
-        background: #272829;
-        border: 1px solid #323335;
+        background: transparent;
+        border: 1px solid #3f4043;
         padding: 0.7rem 1rem;
         border-radius: 0.4rem;
         font-size: 14px;
+
+        &:focus {
+            color: #fff;
+        }
     }
 
     textarea {
@@ -59,10 +63,6 @@
 
     + .editor {
         margin-top: 1.5rem;
-    }
-
-    textarea {
-        border: 1px solid #323335;
     }
 }
 

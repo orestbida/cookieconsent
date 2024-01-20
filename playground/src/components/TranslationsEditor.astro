@@ -12,7 +12,7 @@ import '../styles/translationsEditor.scss';
     <div class="dialog-content" role="document">
         <div class="dialog-header">
             <div class="dialog-header--left">
-                <h1 id="dialog-title" class="dialog-title">Edit translation</h1>
+                <h1 id="dialog-title" class="dialog-title">Current translation</h1>
                 <label class="select-translation" for="editor-language-codes">
                     <select id="editor-language-codes"></select>
                     <span class="arrow-icon"></span>
@@ -28,15 +28,12 @@ import '../styles/translationsEditor.scss';
                 <div class="translation-editor" id="translation-editor">
                     <div class="editor editor--cm">
                         <h4>Consent modal</h4>
-                        <textarea id="consent-modal-title" placeholder="Title" class="small-textarea"></textarea>
-
-                        <div class="footer-textarea" id="textarea-cm-description">
-                            <textarea id="consent-modal-description" placeholder="Description" spellcheck="false"></textarea>
-                        </div>
-
-                        <input type="text" id="consent-modal-accept-btn" placeholder="Accept all button"/>
-                        <input type="text" id="consent-modal-reject-btn" placeholder="Reject all button"/>
-                        <input type="text" id="consent-modal-manage-btn" placeholder="Manage preferences button"/>
+                        <textarea id="consent-modal-title" placeholder="Title" class="small-textarea" spellcheck="false"></textarea>
+                        <textarea id="consent-modal-description" placeholder="Description" spellcheck="false"></textarea>
+                        <input type="text" id="close-icon-label" placeholder="X/Close icon label" spellcheck="false"/>
+                        <input type="text" id="consent-modal-accept-btn" placeholder="Accept all button" spellcheck="false"/>
+                        <input type="text" id="consent-modal-reject-btn" placeholder="Reject all button" spellcheck="false"/>
+                        <input type="text" id="consent-modal-manage-btn" placeholder="Manage preferences button" spellcheck="false"/>
 
                         <div class="footer-textarea" id="textarea-cm-footer">
                             <textarea id="editing" placeholder="Footer" spellcheck="false"></textarea>
@@ -45,12 +42,12 @@ import '../styles/translationsEditor.scss';
 
                     <div class="editor editor--pm">
                         <h4>Preferences modal</h4>
-                        <textarea id="pm-title" placeholder="Title" class="small-textarea"></textarea>
-                        <input type="text" id="pm-close-icon-label" placeholder="Close icon label"/>
-                        <input type="text" id="pm-accept-btn" placeholder="Accept all button"/>
-                        <input type="text" id="pm-reject-btn" placeholder="Reject all button"/>
-                        <input type="text" id="pm-save-btn" placeholder="Save preferences button"/>
-                        <input type="text" id="pm-service-counter-label" placeholder="Service counter label"/>
+                        <textarea id="pm-title" placeholder="Title" class="small-textarea" spellcheck="false"></textarea>
+                        <input type="text" id="pm-close-icon-label" placeholder="Close icon label" spellcheck="false"/>
+                        <input type="text" id="pm-accept-btn" placeholder="Accept all button" spellcheck="false"/>
+                        <input type="text" id="pm-reject-btn" placeholder="Reject all button" spellcheck="false"/>
+                        <input type="text" id="pm-save-btn" placeholder="Save preferences button" spellcheck="false"/>
+                        <input type="text" id="pm-service-counter-label" placeholder="Service counter label" spellcheck="false"/>
 
                         <div class="pm-sections">
                             <h3 class="pm-sections-title">Sections <span id="sections-counter"></span></h3>

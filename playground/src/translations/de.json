@@ -6,7 +6,6 @@
         "acceptAllBtn": "Alle akzeptieren",
         "acceptNecessaryBtn": "Alle ablehnen",
         "showPreferencesBtn": "Einstellungen verwalten",
-        "closeIconLabel": "Alle ablehnen und schließen",
         "footer": "<a href=\"#link\">Datenschutz</a>\n<a href=\"#link\">Bedingungen und Konditionen</a>"
     },
     "preferencesModal": {

@@ -9,13 +9,6 @@ export const defaultState = {
 
     _enabledTranslations: ['en'],
     _enabledCategories: ['necessary', 'analytics'],
-    _enableCloseIcon: false,
-
-    _removeAcceptNecessaryBtn: false,
-    _removeShowPrefrencesBtn: false,
-    _removeFooter: false,
-    _removeTitle: false,
-    _latestRelease: '',
 
     _disableTransitions: false,
 
@@ -37,7 +30,7 @@ export const defaultState = {
     /**
      * Increase on every new playground update
      */
-    _demoRevision: 33
+    _demoRevision: 34
 };
 
 /**
@@ -159,27 +152,9 @@ export const getCurrentUserConfig = (state) => {
             const translation = allTranslations[languageCode];
 
             /**
-             * TODO: Remove this when label is implemented
+             * TODO: label not implemented
              */
             delete translation.consentModal.label;
-
-            /**
-             * Remove closeIcon
-             */
-            if (!state._enableCloseIcon)
-                delete translation.consentModal.closeIconLabel;
-
-            if (state._removeAcceptNecessaryBtn)
-                delete translation.consentModal.acceptNecessaryBtn;
-
-            if (state._removeShowPrefrencesBtn)
-                delete translation.consentModal.showPreferencesBtn;
-
-            if (state._removeTitle)
-                delete translation.consentModal.title;
-
-            if (state._removeFooter)
-                delete translation.consentModal.footer;
 
             const preferencesModal = translation.preferencesModal;
 
@@ -188,7 +163,7 @@ export const getCurrentUserConfig = (state) => {
              */
             const filteredSections = preferencesModal.sections.filter(section => {
                 /**
-                 * TODO: Remove this when label is implemented
+                 * TODO: cookieTable not implemented
                  */
                 delete section.cookieTable;
 

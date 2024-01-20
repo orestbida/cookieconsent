@@ -6,7 +6,6 @@
         "acceptAllBtn": "Aceptar todo",
         "acceptNecessaryBtn": "Rechazar todo",
         "showPreferencesBtn": "Gestionar preferencias",
-        "closeIconLabel": "Rechazar todo y cerrar",
         "footer": "<a href=\"#link\">Política de privacidad</a>\n<a href=\"#link\">Términos y condiciones</a>"
     },
     "preferencesModal": {
