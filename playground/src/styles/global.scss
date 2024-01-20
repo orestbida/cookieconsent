@@ -22,6 +22,9 @@ html{
     --d-border-radius: .375rem;
     --d-select-height: 2.25rem;
     --d-checkbox-width: 1.1875rem;
+    --link-color: #4ebdff;
+    --link-color-hover: #2d8dc4;
+    --link-color-active: #a2dcff;
 }
 
 body{
@@ -79,11 +82,25 @@ section {
 
 p {
     margin: 0;
-    font-size: .9rem;
 }
 
 b {
     font-weight: 600;
+}
+
+a {
+    color: var(--link-color);
+    transition: color .15s ease;
+    text-decoration: none;
+    border-bottom: 1px solid rgba(241, 251, 255, 0.267);
+
+    &:hover {
+        color: var(--link-color-hover);
+    }
+
+    &:active {
+        color: var(--link-color-active);
+    }
 }
 
 label {
@@ -383,6 +400,7 @@ a.info:focus {
 .translations-description,
 .categories-description {
     margin-bottom: 1rem;
+    font-size: .9rem;
 }
 
 .checkbox-group {

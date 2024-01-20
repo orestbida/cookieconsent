@@ -1,0 +1,27 @@
+---
+import { docsUrl } from '../../data/metadata'
+---
+<section class="help-section">
+    <div class="section__header">
+        <div class="section-title">
+            <h3>Next steps</h3>
+        </div>
+        <div class="section-description"></div>
+    </div>
+    <div class="section__body">
+        <ul class="next-steps__links">
+            <li>
+                <a href={`${docsUrl}/advanced/manage-scripts.html`} target="_blank">How to block third party scripts</a>
+            </li>
+            <li>
+                <a href={`${docsUrl}/advanced/custom-attribute.html#show-preferencesmodal`} target="_blank">How to open preferences modal</a>
+            </li>
+        </ul>
+    </div>
+</section>
+
+<style scoped>
+    .next-steps__links li {
+        margin: 0.5rem;
+    }
+</style>
