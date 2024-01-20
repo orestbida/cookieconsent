@@ -12,15 +12,15 @@ You can download/import the plugin using one of the following methods:
     ::: code-group
 
     ```sh [npm]
-    npm i vanilla-cookieconsent@next
+    npm i vanilla-cookieconsent@v3.0.0
     ```
 
     ```sh [pnpm]
-    pnpm add vanilla-cookieconsent@next
+    pnpm add vanilla-cookieconsent@v3.0.0
     ```
 
     ```sh [yarn]
-    yarn add vanilla-cookieconsent@next
+    yarn add vanilla-cookieconsent@v3.0.0
     ```
 
     :::
@@ -426,7 +426,7 @@ You should now see the consent modal pop up!
 You can also define [external translation files](/advanced/language-configuration.html#external-translations).
 :::
 
-If you're having trouble setting up the plugin, you can check out a few [demo examples](https://github.com/orestbida/cookieconsent/tree/v3/demo) on github.
+If you're having trouble setting up the plugin, you can check out a few [demo examples](https://github.com/orestbida/cookieconsent/demo) on github.
 
 <br>
 

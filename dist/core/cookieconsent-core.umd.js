@@ -1,6 +1,6 @@
 /*!
 * CookieConsent 3.0.0
-* https://github.com/orestbida/cookieconsent/tree/v3
+* https://github.com/orestbida/cookieconsent
 * Author Orest Bida
 * Released under the MIT License
 */
