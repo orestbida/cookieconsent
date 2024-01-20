@@ -1,15 +1,15 @@
 @import "../global";
 
-$sections-padding-y: 1em;
-$sections-padding-x: 1.3em;
-$footer-links-gap: 1.3em;
+$sections-padding-y: 1rem;
+$sections-padding-x: 1.3rem;
+$footer-links-gap: 1.3rem;
 
 #cc-main{
 
     .cm{
         opacity: 0;
         position: fixed;
-        max-width: 24em;
+        max-width: 24rem;
         display: flex;
         flex-direction: column;
         background: var(--cc-bg);
@@ -255,7 +255,7 @@ $footer-links-gap: 1.3em;
 
             & + .cm__texts{
                 .cm__title {
-                    padding-right: 2em;
+                    padding-right: 3rem;
                 }
             }
         }
@@ -609,7 +609,7 @@ $footer-links-gap: 1.3em;
 
         & + .cm__texts .cm__title {
             padding-right: $sections-padding-x;
-            padding-left: 2em;
+            padding-left: 3rem!important;
         }
     }
 
@@ -656,7 +656,6 @@ $footer-links-gap: 1.3em;
 
 @media screen and (max-width: 640px){
 	#cc-main   {
-
         --cc-modal-margin: .5em;
 
         .cm{
@@ -673,8 +672,8 @@ $footer-links-gap: 1.3em;
         .cm__desc,
         .cm__btns,
         .cm__links{
-            padding-left: 1.1em!important;
-            padding-right: 1.1em!important;
+            padding-left: 1.1rem!important;
+            padding-right: 1.1rem!important;
         }
 
         .cm__btns{
