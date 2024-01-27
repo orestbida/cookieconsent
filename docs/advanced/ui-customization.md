@@ -39,7 +39,7 @@ document.documentElement.classList.add('cc--darkmode');
 ```
 
 ## Available css variables
-You can develop your own theme by modifying/overriding the available css variables in [/src/scss/abstracts](https://github.com/orestbida/cookieconsent/src/scss/abstracts/).
+You can develop your own theme by modifying/overriding the available css variables in [/src/scss/abstracts](https://github.com/orestbida/cookieconsent/tree/master/src/scss/abstracts).
 
 More css variables:
 
