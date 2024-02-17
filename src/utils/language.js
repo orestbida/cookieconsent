@@ -6,7 +6,8 @@ import {
     addClass,
     removeClass,
     isString,
-    isArray
+    isArray,
+    isFunction
 } from './general';
 
 /**
@@ -109,25 +110,22 @@ export const loadTranslationData = async (desiredLanguageCode) => {
         ? desiredLanguageCode
         : getCurrentLanguageCode();
 
-    let currentTranslation = state._allTranslations[currentLanguageCode];
-
-    if (!currentTranslation)
-        return false;
+    let translationData = state._allTranslations[currentLanguageCode];
 
     /**
-     * If translation is a string, fetch the external json file and replace
-     * the string (path to json file) with the parsed object
+     * Fetch translation if a string or function is provided
      */
-    if (isString(currentTranslation)) {
-        const fetchedTranslation = await fetchJson(currentTranslation);
-
-        if (!fetchedTranslation)
-            return false;
-
-        currentTranslation = fetchedTranslation;
+    if (isString(translationData)) {
+        translationData = await fetchJson(translationData);
+    } else if (isFunction(translationData)) {
+        translationData = await translationData();
     }
 
-    state._currentTranslation = currentTranslation;
+    if (!translationData) {
+        return false;
+    }
+
+    state._currentTranslation = translationData;
     setCurrentLanguageCode(currentLanguageCode);
 
     _log('CookieConsent [LANG]: set language: "' + currentLanguageCode + '"');

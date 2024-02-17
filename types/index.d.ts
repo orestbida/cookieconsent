@@ -528,7 +528,12 @@ declare namespace CookieConsent {
              */
             autoDetect?: 'document' | 'browser'
 
-            translations: {[key: string]: Translation | string}
+            translations: {
+                [locale: string]: Translation
+                | string
+                | (() => Translation)
+                | (() => Promise<Translation>)
+            }
         }
     }
 

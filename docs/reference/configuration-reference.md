@@ -675,12 +675,18 @@ If one or more services are enabled, then the entire category will be treated as
 Define your language settings and the translation(s).
 
 - **Type**:
-    ```javascript
-    {
+    ```typescript
+    interface Language {
         default: string
         autoDetect?: string
         rtl?: string | string[]
-        translations: Translations
+        translations: {
+            [locale: string]:
+                Translation
+                | string
+                | (() => Translation)
+                | (() => Promise<Translation>)
+        }
     }
     ```
 
@@ -718,7 +724,7 @@ List of languages that should use the RTL layout.
 
 - **Type**: `string | string[]`
 - **Example**: <br>
-    ```javascript
+    ```javascript {4}
     CookieConsent.run({
         language: {
             default: 'en',
@@ -738,12 +744,13 @@ List of languages that should use the RTL layout.
 Define the translation(s) content.
 
 - **Type**:
-    ```javascript
-    {
-        [language: string]: string | {
-            consentModal: ConsentModal,
-            preferencesModal: PreferencesModal
-        }
+    ```typescript
+    interface Translations {
+        [locale: string]:
+            Translation
+            | string
+            | (() => Translation)
+            | (() => Promise<Translation>)
     }
     ```
 - **Details**:
@@ -777,6 +784,21 @@ Define the translation(s) content.
                     preferencesModal: {
                         // ...
                     }
+                }
+            }
+        }
+    })
+    ```
+
+    You can also fetch a translation asynchronously:
+    ```javascript {5-8}
+    CookieConsent.run({
+        language: {
+            default: 'en',
+            translations: {
+                en: async () => {
+                    const res = fetch('path-to-json-translation');
+                    return await res.json();
                 }
             }
         }
