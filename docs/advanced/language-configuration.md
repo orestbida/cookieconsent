@@ -92,6 +92,21 @@ The cleanest solution is to separate the translations from the plugin's configur
     });
     ```
 
+    You can also use asynchronous functions to fetch the translation:
+    ```javascript
+    CookieConsent.run({
+        language: {
+            default: 'en',
+            translations: {
+                en: async () => {
+                    const res = await fetch('path-to-json');
+                    return await res.json();
+                }
+            }
+        }
+    });
+    ```
+
 You can set up multiple languages by following the same steps!
 
 ## Inline translations

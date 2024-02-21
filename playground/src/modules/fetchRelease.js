@@ -12,15 +12,18 @@ onEvent(customEvents._PLAYGROUND_READY, async () => {
  * Get last published v3 release
  */
 export async function fetchLatestRelease() {
-    if (latest)
+    if (latest) {
         return latest;
+    }
 
-    const res = await fetch('https://api.github.com/repos/orestbida/cookieconsent/tags');
-    const tags = await res.json();
+    const res = await fetch('https://raw.githubusercontent.com/orestbida/cookieconsent/master/package.json');
 
-    latest = tags.filter(tag => validRelease(tag.name))[0].name;
+    /**
+     * @type {import('../../package.json')}
+     */
+    const pkg = await res.json();
 
-    return latest;
+    return pkg.version;
 }
 
 /**

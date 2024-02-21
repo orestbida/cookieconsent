@@ -127,8 +127,8 @@ You can detect when a modal is ready/created via the [`onModalReady`](/advanced/
 Customize the plugin's cookie.
 
 - **Type**:
-    ```javascript
-    {
+    ```typescript
+    interface Cookie {
         name?: string,
         domain?: string,
         path?: string,
@@ -383,8 +383,8 @@ Callback function executed when one of the modals is created and appended to the
 Tweak main UI settings.
 
 - **Type**:
-    ```javascript
-    {
+    ```typescript
+    interface GuiOptions {
         consentModal?: ConsentModalOptions
         preferencesModal?: PreferencesModalOptions
     }
@@ -394,8 +394,8 @@ Tweak main UI settings.
 
 - **Type**:
 
-    ```javascript
-    {
+    ```typescript
+    interface ConsentModalOptions {
         layout?: string
         position?: string
         flipButtons?: boolean
@@ -444,8 +444,8 @@ Tweak main UI settings.
 
 - **Type**:
 
-    ```javascript
-    {
+    ```typescript
+    interface PreferencesModalOptions {
         layout?: string
         position?: string
         flipButtons?: boolean
@@ -559,8 +559,8 @@ Treat the category as read-only/necessary (always enabled).
 Clear cookies when the user rejects the cookie category.
 
 - **Type**:
-    ```javascript
-    {
+    ```typescript
+    interface AutoClear {
         cookies: Cookie[]
         reloadPage: boolean
     }
@@ -611,12 +611,12 @@ If you've installed CookieConsent in a subdomain, and the cookie you're trying t
 Define individually togglable services.
 
 - **Type**:
-    ```javascript
+    ```typescript
     {
         [service: string]: {
-            label?: string,
-            onAccept?: () => void,
-            onReject?: () => void,
+            label?: string
+            onAccept?: () => void
+            onReject?: () => void
             cookies?: CookieItem[]
         }
     }
@@ -675,12 +675,18 @@ If one or more services are enabled, then the entire category will be treated as
 Define your language settings and the translation(s).
 
 - **Type**:
-    ```javascript
-    {
+    ```typescript
+    interface Language {
         default: string
         autoDetect?: string
         rtl?: string | string[]
-        translations: Translations
+        translations: {
+            [locale: string]:
+                Translation
+                | string
+                | (() => Translation)
+                | (() => Promise<Translation>)
+        }
     }
     ```
 
@@ -718,7 +724,7 @@ List of languages that should use the RTL layout.
 
 - **Type**: `string | string[]`
 - **Example**: <br>
-    ```javascript
+    ```javascript {4}
     CookieConsent.run({
         language: {
             default: 'en',
@@ -738,12 +744,13 @@ List of languages that should use the RTL layout.
 Define the translation(s) content.
 
 - **Type**:
-    ```javascript
-    {
-        [language: string]: string | {
-            consentModal: ConsentModal,
-            preferencesModal: PreferencesModal
-        }
+    ```typescript
+    interface Translations {
+        [locale: string]:
+            Translation
+            | string
+            | (() => Translation)
+            | (() => Promise<Translation>)
     }
     ```
 - **Details**:
@@ -783,11 +790,26 @@ Define the translation(s) content.
     })
     ```
 
+    You can also fetch a translation asynchronously:
+    ```javascript {5-8}
+    CookieConsent.run({
+        language: {
+            default: 'en',
+            translations: {
+                en: async () => {
+                    const res = fetch('path-to-json-translation');
+                    return await res.json();
+                }
+            }
+        }
+    })
+    ```
+
 ### <span style="opacity: .6">[translation]</span>.consentModal<span class="required" data-label="required"></span>
 
 - **Type**:
-    ```javascript
-    {
+    ```typescript
+    interface ConsentModal {
         label?: string
         title?: string
         description?: string
@@ -834,8 +856,8 @@ Define the translation(s) content.
 ### <span style="opacity: .6">[translation]</span>.preferencesModal<span class="required" data-label="required"></span>
 
 - **Type**:
-    ```javascript
-    {
+    ```typescript
+    interface PreferencesModal {
         title?: string
         acceptAllBtn?: string
         acceptNecessaryBtn?: string
@@ -870,8 +892,8 @@ Define the translation(s) content.
 ### <span style="opacity: .6">[translation]</span>.preferencesModal.sections<span class="required" data-label="required"></span>
 
 - **Type**:
-    ```javascript
-    {
+    ```typescript
+    interface Section {
         title?: string
         description?: string
         linkedCategory?: string
@@ -886,7 +908,7 @@ Define the translation(s) content.
 
     `CookieTable` type:
     ```javascript
-    {
+    interface CookieTable {
         caption?: string
         headers: {[key: string]: string}
         body: {[key: string]: string}[]
