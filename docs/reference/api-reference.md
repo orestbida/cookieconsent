@@ -197,7 +197,7 @@ Returns `true` if the service inside the category is accepted, otherwise `false`
 
 - **Examples**
     ```javascript
-    if(CookieConsent.acceptedService('Google Analytics', 'analytics')){
+    if(CookieConsent.acceptedService('ga', 'analytics')){
         // great
     }else{
         // not so great
