@@ -3,7 +3,7 @@ import { OPT_OUT_MODE, OPT_IN_MODE } from './constants';
 import { manageExistingScripts } from './scripts';
 
 import {
-    _log,
+    debug,
     indexOf,
     uuidv4,
     getRemainingExpirationTimeMS,
@@ -269,7 +269,7 @@ export const setCookie = (useRemainingExpirationTime) => {
         ? localStorageManager._setItem(name, value)
         : document.cookie = cookieStr;
 
-    _log('CookieConsent [SET_COOKIE]: ' + name + ':', globalObj._state._savedCookieContent);
+    debug('CookieConsent [SET_COOKIE]: ' + name + ':', globalObj._state._savedCookieContent);
 };
 
 /**
@@ -335,7 +335,7 @@ export const eraseCookiesHelper = (cookies, customPath, customDomain) => {
         if (isWwwSubdomain)
             erase(cookieName, mainDomain);
 
-        _log('CookieConsent [AUTOCLEAR]: deleting cookie: "' + cookieName + '" path: "' + path + '" domain:', domain);
+        debug('CookieConsent [AUTOCLEAR]: deleting cookie: "' + cookieName + '" path: "' + path + '" domain:', domain);
     }
 };
 

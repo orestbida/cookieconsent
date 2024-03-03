@@ -4,7 +4,7 @@ import {
     appendChild,
     addClass,
     removeClass,
-    _log,
+    debug,
     getCurrentCategoriesState,
     elContains,
     setAcceptedCategories,
@@ -212,7 +212,7 @@ export const show = (createModal) => {
         focus(globalObj._dom._cmDivTabindex);
     }, 100);
 
-    _log('CookieConsent [TOGGLE]: show consentModal');
+    debug('CookieConsent [TOGGLE]: show consentModal');
 
     fireEvent(globalObj._customEvents._onModalShow, CONSENT_MODAL_NAME);
 };
@@ -245,7 +245,7 @@ export const hide = () => {
     focus(_state._lastFocusedElemBeforeModal);
     _state._lastFocusedElemBeforeModal = null;
 
-    _log('CookieConsent [TOGGLE]: hide consentModal');
+    debug('CookieConsent [TOGGLE]: hide consentModal');
 
     fireEvent(_customEvents._onModalHide, CONSENT_MODAL_NAME);
 };
@@ -283,7 +283,7 @@ export const showPreferences = () => {
         focus(globalObj._dom._pmDivTabindex);
     }, 100);
 
-    _log('CookieConsent [TOGGLE]: show preferencesModal');
+    debug('CookieConsent [TOGGLE]: show preferencesModal');
 
     fireEvent(globalObj._customEvents._onModalShow, PREFERENCES_MODAL_NAME);
 };
@@ -354,7 +354,7 @@ export const hidePreferences = () => {
         state._lastFocusedElemBeforeModal = null;
     }
 
-    _log('CookieConsent [TOGGLE]: hide preferencesModal');
+    debug('CookieConsent [TOGGLE]: hide preferencesModal');
 
     fireEvent(globalObj._customEvents._onModalHide, PREFERENCES_MODAL_NAME);
 };
@@ -499,7 +499,7 @@ export const setCookieData = (props) => {
                     set = true;
                 }
             }
-        }else if ((sameType || !cookieData) && cookieData !== newData) {
+        } else if ((sameType || !cookieData) && cookieData !== newData) {
             cookieData = newData;
             set = true;
         }
@@ -606,7 +606,7 @@ const retrieveState = () => {
         state._invalidConsent && (localStorageManager._removeItem(config.cookie.name));
     }
 
-    _log('CookieConsent [STATUS] valid consent:', !state._invalidConsent);
+    debug('CookieConsent [STATUS] valid consent:', !state._invalidConsent);
     retrieveEnabledCategoriesAndServices();
 
     /**

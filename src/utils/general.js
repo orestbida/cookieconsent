@@ -7,14 +7,10 @@ import {
 
 /**
  * Helper console.log function
- * @param {Object} printMsg
- * @param {Object} [optionalParam]
+ * @param {any} [params]
  */
-export const _log = (printMsg, optionalParam) => {
-    console.log(printMsg, optionalParam !== undefined
-        ? optionalParam
-        : ' '
-    );
+export const debug = (...params) => {
+    console.log(...params);
 };
 
 /**
@@ -324,7 +320,7 @@ export const resolveEnabledCategories = (categories, excludedCategories) => {
 
         if (isArray(categories)) {
             enabledCategories.push(...categories);
-        }else if (isString(categories)) {
+        } else if (isString(categories)) {
             enabledCategories = categories === 'all'
                 ? _allCategoryNames
                 : [categories];
@@ -460,7 +456,7 @@ export const updateModalToggles = (service, category) => {
                 }
             }
         }
-    }else if (isArray(service)) {
+    } else if (isArray(service)) {
         for (let serviceName of allServiceNames) {
             const validService = elContains(service, serviceName);
             validService && _enabledServices[category].push(serviceName);
@@ -921,7 +917,7 @@ export const fireEvent = (eventName, modalName, modal) => {
 
         if (eventName === events._onModalShow) {
             isFunction(_onModalShow) && _onModalShow(modalParams);
-        }else if (eventName === events._onModalHide) {
+        } else if (eventName === events._onModalHide) {
             isFunction(_onModalHide) && _onModalHide(modalParams);
         } else {
             modalParams.modal = modal;
@@ -938,9 +934,9 @@ export const fireEvent = (eventName, modalName, modal) => {
 
     if (eventName === events._onFirstConsent) {
         isFunction(_onFirstConsent) && _onFirstConsent(deepCopy(params));
-    }else if (eventName === events._onConsent) {
+    } else if (eventName === events._onConsent) {
         isFunction(_onConsent) && _onConsent(deepCopy(params));
-    }else {
+    } else {
         params.changedCategories = globalObj._state._lastChangedCategoryNames;
         params.changedServices = globalObj._state._lastChangedServices;
         isFunction(_onChange) && _onChange(deepCopy(params));

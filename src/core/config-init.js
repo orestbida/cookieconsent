@@ -1,5 +1,5 @@
 import { globalObj } from './global';
-import { _log, getKeys, isObject, retrieveScriptElements, fetchCategoriesAndServices } from '../utils/general';
+import { debug, getKeys, isObject, retrieveScriptElements, fetchCategoriesAndServices } from '../utils/general';
 import { OPT_OUT_MODE } from '../utils/constants';
 import { resolveCurrentLanguageCode, setCurrentLanguageCode } from '../utils/language';
 
@@ -102,10 +102,10 @@ export const setConfig = (userConfig) => {
     if (isObject(userCookieConfig))
         config.cookie = {...cookie, ...userCookieConfig};
 
-    _log('CookieConsent [CONFIG]: configuration:', userConfig);
-    _log('CookieConsent [CONFIG]: autoClearCookies:', config.autoClearCookies);
-    _log('CookieConsent [CONFIG]: revision enabled:', state._revisionEnabled);
-    _log('CookieConsent [CONFIG]: manageScriptTags:', config.manageScriptTags);
+    debug('CookieConsent [CONFIG]: configuration:', userConfig);
+    debug('CookieConsent [CONFIG]: autoClearCookies:', config.autoClearCookies);
+    debug('CookieConsent [CONFIG]: revision enabled:', state._revisionEnabled);
+    debug('CookieConsent [CONFIG]: manageScriptTags:', config.manageScriptTags);
 
     fetchCategoriesAndServices(allCategoryNames);
     retrieveScriptElements();

@@ -16,7 +16,7 @@ import {
     fireEvent,
     getSvgIcon,
     handleFocusTrap,
-    _log
+    debug
 } from '../../utils/general';
 
 import { guiManager } from '../../utils/gui-manager';
@@ -474,7 +474,7 @@ export const createPreferencesModal = (api, createMainContainer) => {
     if (!state._preferencesModalExists) {
         state._preferencesModalExists = true;
 
-        _log('CookieConsent [HTML] created', PREFERENCES_MODAL_NAME);
+        debug('CookieConsent [HTML] created', PREFERENCES_MODAL_NAME);
 
         fireEvent(globalObj._customEvents._onModalReady, PREFERENCES_MODAL_NAME, dom._pm);
         createMainContainer(api);
@@ -590,10 +590,10 @@ function createToggleLabel(label, value, sCurrentCategoryObject, isService, cate
         if (isService) {
             const enabledServices = state._acceptedServices[categoryName];
             toggle.checked = sCurrentCategoryObject.readOnly || elContains(enabledServices, value);
-        }else if (elContains(state._acceptedCategories, value)) {
+        } else if (elContains(state._acceptedCategories, value)) {
             toggle.checked = true;
         }
-    }else if (sCurrentCategoryObject.readOnly || sCurrentCategoryObject.enabled) {
+    } else if (sCurrentCategoryObject.readOnly || sCurrentCategoryObject.enabled) {
         toggle.checked = true;
     }
 
