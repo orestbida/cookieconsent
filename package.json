@@ -3,6 +3,7 @@
     "version": "3.0.0",
     "description": "🍪 Simple cross-browser cookie-consent plugin written in vanilla js.",
     "main": "dist/cookieconsent.umd.js",
+    "type": "module",
     "module": "dist/cookieconsent.esm.js",
     "files": [
         "dist",
