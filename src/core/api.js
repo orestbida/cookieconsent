@@ -129,7 +129,7 @@ export const acceptService = (service, category) => {
  */
 export const acceptedService = (service, category) => {
     const acceptedServices = !globalObj._state._invalidConsent
-        ? globalObj._state._acceptedServices[category]
+        ? (globalObj._state._acceptedServices[category] || [])
         : [];
 
     return elContains(acceptedServices, service);
