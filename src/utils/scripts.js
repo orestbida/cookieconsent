@@ -196,12 +196,15 @@ export const retrieveEnabledCategoriesAndServices = () => {
     for (const categoryName of state._allCategoryNames) {
         const category = state._allDefinedCategories[categoryName];
 
-        if (category.readOnly || (category.enabled && state._userConfig.mode === OPT_OUT_MODE)) {
+        if (category.readOnly || category.enabled) {
             state._defaultEnabledCategories.push(categoryName);
             const services = state._allDefinedServices[categoryName] || {};
 
             for (let serviceName in services) {
-                state._acceptedServices[categoryName].push(serviceName);
+                state._enabledServices[categoryName].push(serviceName);
+                if (state._userConfig.mode === OPT_OUT_MODE) {
+                    state._acceptedServices[categoryName].push(serviceName);
+                }
             }
         }
     }

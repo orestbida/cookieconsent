@@ -303,6 +303,7 @@ export const resolveEnabledCategories = (categories, excludedCategories) => {
         _readOnlyCategories,
         _preferencesModalExists,
         _enabledServices,
+        _defaultEnabledCategories,
         _allDefinedServices
     } = globalObj._state;
 
@@ -312,12 +313,13 @@ export const resolveEnabledCategories = (categories, excludedCategories) => {
     let enabledCategories = [];
 
     if (!categories) {
-        enabledCategories = _acceptedCategories;
+        enabledCategories = [..._acceptedCategories, ..._defaultEnabledCategories];
         //{{START: GUI}}
-        _preferencesModalExists && (enabledCategories = retrieveCategoriesFromModal());
+        if (_preferencesModalExists) {
+            enabledCategories = retrieveCategoriesFromModal();
+        }
         //{{END: GUI}}
     } else {
-
         if (isArray(categories)) {
             enabledCategories.push(...categories);
         } else if (isString(categories)) {
@@ -394,7 +396,7 @@ export const resolveEnabledServices = (relativeCategory) => {
                 const selectedServices = _enabledServices[categoryName];
                 _acceptedServices[categoryName].push(...selectedServices);
             } else {
-                _acceptedServices[categoryName] = [];
+                _acceptedServices[categoryName] = state._enabledServices[categoryName];
             }
         }
 
