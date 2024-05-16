@@ -1,0 +1,74 @@
+{
+  "root": true,
+  "extends": [
+    "next/core-web-vitals",
+    "plugin:import/recommended",
+    "plugin:import/typescript"
+  ],
+  "plugins": ["@typescript-eslint"],
+  "overrides": [
+    {
+      "files": ["*.ts", "*.tsx", "*.js"],
+      "parser": "@typescript-eslint/parser"
+    }
+  ],
+  "rules": {
+    "no-trailing-spaces": "error",
+    "react/function-component-definition": [
+      2,
+      {
+        "namedComponents": "function-declaration"
+      }
+    ],
+    "react/jsx-max-props-per-line": [
+      "error",
+      {
+        "maximum": {
+          "single": 2,
+          "multi": 1
+        }
+      }
+    ],
+    "react/jsx-props-no-multi-spaces": "error",
+    "react/jsx-wrap-multilines": "error",
+    "semi": [2, "always"],
+    "indent": ["error", 2],
+    "quotes": ["error", "single"],
+    "jsx-quotes": ["error", "prefer-double"],
+    "comma-dangle": ["error", "never"],
+    "no-var": "error",
+    "prefer-const": "error",
+    "@typescript-eslint/no-extra-semi": "error",
+    "@typescript-eslint/no-unused-vars": "error",
+    "import/no-unresolved": "error",
+    "import/no-absolute-path": "error",
+    "import/order": [
+      "warn",
+      {
+        "groups": [
+          "builtin",
+          "external",
+          "internal",
+          [
+            "parent",
+            "sibling"
+          ],
+          "index",
+          "unknown"
+        ],
+        "newlines-between": "always",
+        "alphabetize": {
+          "order": "desc",
+          "caseInsensitive": true
+        }
+      }
+    ],
+		"react/jsx-curly-spacing": [
+			2,
+			{
+				"when": "never",
+				"children": true
+			}
+		]
+  }
+}

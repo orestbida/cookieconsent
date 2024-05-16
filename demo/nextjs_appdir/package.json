@@ -1,0 +1,35 @@
+{
+  "name": "nextjs_appdir",
+  "description": "Demo showing the Cookie Consent usage in a Next.js app directory application",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "check-types": "tsc --noEmit",
+    "lint": "pnpm check-types && next lint"
+  },
+  "dependencies": {
+    "next": "14.2.3",
+    "react": "^18",
+    "react-dom": "^18"
+  },
+  "devDependencies": {
+    "@total-typescript/ts-reset": "^0.5.1",
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "@typescript-eslint/eslint-plugin": "^7.9.0",
+    "@typescript-eslint/parser": "^7.9.0",
+    "clsx": "^2.1.1",
+    "eslint": "^8",
+    "eslint-config-next": "14.2.3",
+    "eslint-import-resolver-typescript": "^3.6.1",
+    "eslint-plugin-import": "^2.29.1",
+    "postcss": "^8",
+    "tailwind-merge": "^2.3.0",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5"
+  }
+}

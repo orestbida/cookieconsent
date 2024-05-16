@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" class="cc--darkmode">
+<head>
+    <meta charset="UTF-8">
+    <title>CookieConsent demo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../assets/demo.css">
+    <script src="../assets/demo.js" defer></script>
+
+    <!-- Load plugin css -->
+    <link rel="stylesheet" href="../../dist/cookieconsent.css">
+
+    <!-- Load iframemanager css -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orestbida/iframemanager@1.2.5/dist/iframemanager.css">
+</head>
+<body>
+
+    <h1><a href="https://orestbida.com/demo-projects/cookieconsent/" target="_blank" class="demo-title">CookieConsent 🡥</a></h1>
+    <h2>Example configuration with <a href="https://github.com/orestbida/iframemanager" target="_blank">iframemanager 🡥</a> (iframe blocking)</h2>
+    <br>
+    <p>Check your <a href="https://developer.chrome.com/docs/devtools/shortcuts/#open" target="_blank">browser's console 🡥</a> to see what's happening!</p>
+    <button class="btn" type="button" data-cc="show-preferencesModal">Cookie preferences</button>
+    <br>
+    <br>
+
+    <!-- youtube iframe -->
+    <div
+        data-service="youtube"
+        data-id="Zya4bDgVU9k"
+        data-autoscale>
+    </div>
+
+    <br>
+
+    <div
+        data-service="vimeo"
+        data-id="776749483"
+        data-title="Apple “Escape From The Office”"
+        data-autoscale
+    ></div>
+
+    <!-- Load plugin scripts -->
+    <script type="module" src="cookieconsent-init.js"></script>
+
+    <script type="text/plain" data-category="analytics">
+        console.log('enabled analytics');
+    </script>
+
+    <script type="text/plain" data-category="!analytics">
+        console.log('disabled analytics');
+    </script>
+
+    <!-- Service example -->
+    <script type="text/plain" data-category="analytics" data-service="Inline Service #1">
+        console.log('enabled analytics/service #1');
+    </script>
+
+    <script type="text/plain" data-category="analytics" data-service="!Inline Service #1">
+        console.log('disabled analytics/service #1');
+    </script>
+</body>
+</html>
