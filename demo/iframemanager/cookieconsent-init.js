@@ -64,7 +64,7 @@ im.run({
 
 /**
  * Enable suggestions
- * @type {import('../../types')}
+ * @type {import('../../types/index.js')}
  */
 CookieConsent.run({
 

@@ -2,7 +2,7 @@ import "../../dist/cookieconsent.umd.js";
 
 /**
  * Enable suggestions
- * @type {import('../../types')}
+ * @type {import('../../types/index.js')}
  */
 CookieConsent.run({
 
