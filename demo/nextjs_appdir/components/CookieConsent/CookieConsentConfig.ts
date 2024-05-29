@@ -10,6 +10,10 @@ const config: CookieConsentConfig = {
   // hideFromBots: true,
   // mode: 'opt-in',
   // revision: 0,
+  isTcfCompliant: true,
+  tcfComplianceConfig: {
+    disclosedVendorIds: [755, 12, 32, 416]
+  },
 
   cookie: {
     // name: 'cc_cookie',
@@ -97,16 +101,15 @@ const config: CookieConsentConfig = {
 
   language: {
     default: 'en',
+    autoDetect: 'document',
     translations: {
       en: {
         consentModal: {
-          title: 'We use cookies',
-          description:
-            'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua',
+          title: 'We Care About Your Privacy',
+          description: 'We and our partners ({{count}}) store and/or access information on a device, such as unique IDs in cookies to process personal data. You may find out more about the purposes for which we and our partners use cookies or exercise your preferences by clicking the ‘Cookie settings’ button below. You can revisit your consent choices or withdraw consent at any time by clicking the link to your cookie settings in our Cookie Policy. These choices will be signaled to our partners and will not affect browsing data.',
           acceptAllBtn: 'Accept all',
-          acceptNecessaryBtn: 'Reject all',
-          showPreferencesBtn: 'Manage Individual preferences',
-          // closeIconLabel: 'Reject all and close modal',
+          acceptNecessaryBtn: 'Accept necessary',
+          showPreferencesBtn: 'Cookie settings',
           footer: `
                       <a href="#path-to-impressum.html" target="_blank">Impressum</a>
                       <a href="#path-to-privacy-policy.html" target="_blank">Privacy Policy</a>
@@ -115,7 +118,7 @@ const config: CookieConsentConfig = {
         preferencesModal: {
           title: 'Manage cookie preferences',
           acceptAllBtn: 'Accept all',
-          acceptNecessaryBtn: 'Reject all',
+          acceptNecessaryBtn: 'Accept necessary',
           savePreferencesBtn: 'Accept current selection',
           closeIconLabel: 'Close modal',
           serviceCounterLabel: 'Service|Services',
@@ -170,6 +173,14 @@ const config: CookieConsentConfig = {
                 'For any queries in relation to my policy on cookies and your choices, please <a href="#contact-page">contact us</a>'
             }
           ]
+        }
+      },
+      hr: {
+        consentModal: {
+          description: 'We and our partners ({{count}}) store and/or access information on a device, such as unique IDs in cookies to process personal data. You may find out more about the purposes for which we and our partners use cookies or exercise your preferences by clicking the ‘Cookie settings’ button below. You can revisit your consent choices or withdraw consent at any time by clicking the link to your cookie settings in our Cookie Policy. These choices will be signaled to our partners and will not affect browsing data.'
+        },
+        preferencesModal: {
+          sections: []
         }
       }
     }

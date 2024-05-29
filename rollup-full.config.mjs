@@ -34,6 +34,10 @@ const cssComponents = [
         'preferences-modal.css'
     ],
     [
+        'core/components/_vendors-modal.scss',
+        'vendors-modal.css'
+    ],
+    [
         'abstracts/_dark-color-scheme.scss',
         'dark-scheme.css'
     ],

@@ -2,7 +2,6 @@ export = CookieConsent
 export as namespace CookieConsent
 
 declare namespace CookieConsent {
-
     type AcceptType =
         'all'
         | 'custom'
@@ -38,7 +37,11 @@ declare namespace CookieConsent {
 
     type PreferencesModalPosition = 'left' | 'right'
 
-    type ModalName = 'consentModal' | 'preferencesModal'
+    type VendorsModalLayout = 'box' | 'bar'
+
+    type VendorsModalPosition = 'left' | 'right'
+
+    type ModalName = 'consentModal' | 'preferencesModal' | 'vendorsModal'
 
     /**
      * Cookie to clear
@@ -231,6 +234,11 @@ declare namespace CookieConsent {
     }
 
     interface GuiOptions {
+        /**
+         * Configuration object for tweaking the consent modal UI. 
+         * 
+         * *Note: By enabling TCF compliance consent modal layout is fixed to bar-bottom and these settings will not be applied.*
+         */
         consentModal?: {
             /**
              * Change consentModal layout.
@@ -283,10 +291,21 @@ declare namespace CookieConsent {
              */
             equalWeightButtons?: boolean
         }
+        vendorsModal?: {
+
+            /**
+             * Change vendorsModal layout.
+             */
+            layout?: VendorsModalLayout
+
+            /**
+             * This options is valid only if layout=bar.
+             */
+            position?: VendorsModalPosition
+        }
     }
 
     interface ConsentModalOptions {
-
         /**
          * Accessibility label. Especially useful if no title is provided.
          */
@@ -294,9 +313,36 @@ declare namespace CookieConsent {
 
         title?: string
         description?: string
+        /**
+         * Specifies what is the vendor count placeholder in the description text that should be replaced with the
+         * appropriate count.
+         * 
+         * *NOTE: This is only used if the `isTcfCompliant` is set to `true`.*
+         * 
+         * @default "{{count}}"
+         */
+        descriptionCountPlaceholder?: string;
         acceptAllBtn?: string
         acceptNecessaryBtn?: string
         showPreferencesBtn?: string
+
+        /**
+         * Set the title displayed above the vendors section in the consent modal.
+         *
+         * *NOTE: This is only used if the `isTcfCompliant` is set to `true`.*
+         *
+         * @default "We and our partners perform the following based on your settings"
+         */
+        vendorTitle?: string;
+
+        /**
+         * Set the label for a vendors button.
+         *
+         * *NOTE: This is only used if the `isTcfCompliant` is set to `true`.*
+         * 
+         * @default "List of partners (vendors)"
+         */
+        showVendorsBtn?: string;
 
         /**
          * Specify to generate a big "X" (accept necessary) button. Visible in the `box` layout only.
@@ -374,9 +420,174 @@ declare namespace CookieConsent {
         sections: Section[]
     }
 
+    interface VendorsModalOptions {
+      /**
+       * Set the vendors modal title.
+       *
+       * @default "IAB Vendors List"
+       */
+      title?: string;
+
+      /**
+       * Accessibility label for the close icon.
+       */
+      closeIconLabel?: string;
+
+      /**
+       * Accessibility label for the back icon.
+       */
+      backIconLabel?: string;
+
+      /**
+       * Label for the button allowing all vendor consents.
+       * 
+       * @default "Allow all"
+       */
+      allowAllConsentBtn?: string;
+
+      /**
+       * Label for the button rejecting all vendor consents.
+       *
+       * @default "Reject all"
+       */
+      rejectAllConsentBtn?: string;
+
+      /**
+       * Label for the button allowing selected vendor consents.
+       *
+       * @default "Allow current selection"
+       */
+      allowSelectionBtn?: string;
+
+      /**
+       * Label for the vendor privacy policy link.
+       *
+       * @default "View Privacy Policy"
+       */
+      viewPrivacyPolicyLabel?: string;
+
+      /**
+       * Label for the vendor view legitimate interest claim link.
+       *
+       * @default "View Legitimate Interest Claim"
+       */
+      viewLegitimateInterestClaimLabel?: string;
+
+      /**
+       * Label for the vendor view device storage disclosure link.
+       *
+       * @default "View Device Storage Disclosure"
+       */
+      viewDeviceStorageDisclosureLabel?: string;
+
+      /**
+       * Label for the cookie lifespan header in the information list.
+       *
+       * @default "Cookie Lifespan"
+       */
+      cookieLifespanLabel?: string;
+
+      /**
+       * Translation label for the cookie lifespan information.
+       *
+       * @default "Months"
+       */
+      cookieLifespanMonthsLabel?: string;
+
+      /**
+       * Label if the vendor uses other methods of storage in addition to cookies.
+       *
+       * @default "This vendor utilizes other methods of storage or accessing information in addition to cookies"
+       */
+      usesNonCookieAccessLabel?: string;
+
+      /**
+       * Label for the data declaration header in the information list.
+       *
+       * @default "Data Declaration"
+       */
+      dataDeclarationLabel?: string;
+
+      /**
+       * Label for the data retention header in the information list.
+       *
+       * @default "Data Retention"
+       */
+      dataRetentionLabel?: string;
+
+      /**
+       * Label for the standard data retention information.
+       *
+       * @default "Standard Retention"
+       */
+      standardRetentionLabel?: string;
+
+      /**
+       * Translation label for the data retention days information.
+       *
+       * @default "Days"
+       */
+      dataRetentionDaysLabel?: string;
+
+      /**
+       * Label for the consent purposes header in the information list.
+       *
+       * @default "Consent Purposes"
+       */
+      consentPurposesLabel?: string;
+
+      /**
+       * Label for the legitimate interest purposes header in the information list.
+       *
+       * @default "Legitimate Interest Purposes"
+       */
+      legitimateInterestPurposesLabel?: string;
+
+      /**
+       * Label for the special purposes header in the information list.
+       *
+       * @default "Special Purposes"
+       */
+      specialPurposesLabel?: string;
+
+      /**
+       * Label for the features header in the information list.
+       *
+       * @default "Features"
+       */
+      featuresLabel?: string;
+
+      /**
+       * Label for the special features header in the information list.
+       *
+       * @default "Special Features"
+       */
+      specialFeaturesLabel?: string;
+    }
+
     interface Translation {
-        consentModal: ConsentModalOptions
-        preferencesModal: PreferencesModalOptions
+        consentModal: ConsentModalOptions;
+        preferencesModal: PreferencesModalOptions;
+
+        /**
+         * Translation information for vendors modal.
+         *
+         * *NOTE: Only used if the `isTcfCompliant` is set to `true`.*
+         */
+        vendorsModal?: VendorsModalOptions;
+    }
+
+    interface TcfComplianceConfig {
+      /**
+       * Number IDs of disclosed third party vendors you work with.
+       * 
+       * Leaving this undefined or empty will disclose all possible vendors registered in the IAB TCF.
+       * https://vendor-list.consensu.org/v2/additional-vendor-information-list.json
+       * 
+       * *Note: An inappropriately large number of vendors may affect the ability of users to make informed decisions and
+       * may increase legal risks for both publishers and vendors.*
+       */
+      disclosedVendorIds?: number[];
     }
 
     interface CookieConsentConfig {
@@ -393,6 +604,20 @@ declare namespace CookieConsent {
          * @default 'opt-in'
          */
         mode?: 'opt-in' | 'opt-out'
+
+        /**
+         * Should the consent modal be TCF compliant and use the `tcfComplianceConfig` for more detailed configuration.
+         * 
+         * *Note: By enabling TCF compliance the `disablePageInteraction` config value is set to `true` and consent modal layout is fixed to bar-bottom.*
+         *
+         * @default false
+         */
+        isTcfCompliant?: boolean;
+
+        /**
+         * Detailed configuration to use if the `isTcfCompliant` configuration option is set to `true`.
+         */
+        tcfComplianceConfig?: TcfComplianceConfig;
 
         /**
          * Automatically show the consentModal if consent is not valid.
@@ -537,7 +762,6 @@ declare namespace CookieConsent {
         }
     }
 
-
     /**
      * Configure and run the plugin.
      */
@@ -566,7 +790,18 @@ declare namespace CookieConsent {
     function hidePreferences(): void
 
     /**
+     * Shows the vendors modal.
+     */
+    function showVendors(): void;
+
+    /**
+     * Hides the vendors modal.
+     */
+    function hideVendors(): void;
+
+    /**
      * Accept/Reject categories.
+     *
      * @param categories Categories to accept
      * @param excludedCategories Categories to exclude
      */
@@ -672,6 +907,7 @@ declare namespace CookieConsent {
 
     /**
      * Reset cookieconsent.
+     *
      * @param eraseCookie delete plugin's cookie
      */
     function reset(eraseCookie?: boolean): void

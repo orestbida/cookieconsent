@@ -2,12 +2,14 @@ import { globalObj } from './global';
 import { debug, getKeys, isObject, retrieveScriptElements, fetchCategoriesAndServices } from '../utils/general';
 import { OPT_OUT_MODE } from '../utils/constants';
 import { resolveCurrentLanguageCode, setCurrentLanguageCode } from '../utils/language';
+import { mapGvlData } from '../utils/gvl';
 
 /**
- * Configure CookieConsent
+ * Configure CookieConsent.
+ * 
  * @param {import("./global").UserConfig} userConfig
  */
-export const setConfig = (userConfig) => {
+export const setConfig = async (userConfig) => {
     const { _dom, _config, _state } = globalObj;
 
     const
@@ -42,6 +44,14 @@ export const setConfig = (userConfig) => {
     //{{START: GUI}}
     state._allTranslations = userConfig.language.translations;
     state._disablePageInteraction = !!userConfig.disablePageInteraction;
+
+    // If the modal should be TCF compliant, page interaction needs to be disabled until the user makes a choice
+    if (userConfig.isTcfCompliant) {
+        state._disablePageInteraction = true;
+
+        // TODO: See if this can be moved somewhere else to cache it
+        state._gvlData = mapGvlData(userConfig.tcfComplianceConfig?.disclosedVendorIds);
+    }
     //{{END: GUI}}
 
     /**
@@ -62,6 +72,8 @@ export const setConfig = (userConfig) => {
         //{{START: GUI}}
         autoShow,
         lazyHtmlGeneration,
+        isTcfCompliant,
+        tcfComplianceConfig,
         //{{END: GUI}}
         autoClearCookies,
         revision,
@@ -88,6 +100,14 @@ export const setConfig = (userConfig) => {
     if (typeof autoShow === 'boolean')
         config.autoShow = autoShow;
 
+    if (typeof isTcfCompliant === 'boolean') {
+        config.isTcfCompliant = isTcfCompliant;
+    }
+
+    if (typeof tcfComplianceConfig === 'object') {
+        config.tcfComplianceConfig = tcfComplianceConfig;
+    }
+
     if (typeof lazyHtmlGeneration === 'boolean')
         config.lazyHtmlGeneration = lazyHtmlGeneration;
 
@@ -106,6 +126,8 @@ export const setConfig = (userConfig) => {
     debug('CookieConsent [CONFIG]: autoClearCookies:', config.autoClearCookies);
     debug('CookieConsent [CONFIG]: revision enabled:', state._revisionEnabled);
     debug('CookieConsent [CONFIG]: manageScriptTags:', config.manageScriptTags);
+    debug('CookieConsent [CONFIG]: isTcfCompliant:', config.isTcfCompliant);
+    debug('CookieConsent [CONFIG]: tcfComplianceConfig:', config.tcfComplianceConfig);
 
     fetchCategoriesAndServices(allCategoryNames);
     retrieveScriptElements();

@@ -1,1 +1,147 @@
-#cc-main{background:transparent;color:var(--cc-primary-color);font-family:var(--cc-font-family);font-size:16px;font-weight:400;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;line-height:1.15;position:relative;text-rendering:optimizeLegibility;-webkit-text-size-adjust:100%;position:fixed;z-index:var(--cc-z-index)}#cc-main :after,#cc-main :before,#cc-main a,#cc-main button,#cc-main div,#cc-main h2,#cc-main input,#cc-main p,#cc-main span{all:unset;box-sizing:border-box}#cc-main .pm__badge,#cc-main button{all:initial;box-sizing:border-box;color:unset;visibility:unset}#cc-main .pm__badge,#cc-main a,#cc-main button,#cc-main input{-webkit-appearance:none;appearance:none;cursor:pointer;font-family:inherit;font-size:100%;line-height:normal;margin:0;outline:revert;outline-offset:2px;overflow:hidden}#cc-main table,#cc-main tbody,#cc-main td,#cc-main th,#cc-main thead,#cc-main tr{all:revert;color:inherit;font-family:inherit;font-size:inherit;font-weight:inherit}:root{--cc-font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";--cc-modal-border-radius:.5rem;--cc-btn-border-radius:.4rem;--cc-modal-transition-duration:.25s;--cc-link-color:var(--cc-btn-primary-bg);--cc-modal-margin:1rem;--cc-z-index:2147483647}#cc-main.cc--rtl{direction:rtl}#cc-main .cm__title,#cc-main a,#cc-main b,#cc-main em,#cc-main strong{font-weight:600}#cc-main button>span{pointer-events:none}#cc-main .cc__link,#cc-main a{background-image:linear-gradient(currentColor,currentColor);background-position:0 100%;background-repeat:no-repeat;background-size:0 1px;font-weight:600;position:relative;transition:background-size .25s,color .25s ease}#cc-main .cc__link:hover,#cc-main a:hover{background-size:100% 1px;color:var(--cc-primary-color)}#cc-main .cc__link{color:var(--cc-link-color)}#cc-main .cm__desc,#cc-main .pm__body{overscroll-behavior:auto contain;scrollbar-width:thin}@media screen and (min-width:640px){#cc-main ::-webkit-scrollbar,#cc-main ::-webkit-scrollbar-thumb,#cc-main ::-webkit-scrollbar-track{all:revert}#cc-main ::-webkit-scrollbar-thumb{-webkit-background-clip:padding-box;background-clip:padding-box;background:var(--cc-toggle-readonly-bg);border:.25rem solid var(--cc-bg);border-radius:1rem}#cc-main ::-webkit-scrollbar-thumb:hover{background:var(--cc-toggle-off-bg)}#cc-main ::-webkit-scrollbar{background:transparent;width:12px}}html.disable--interaction.show--consent,html.disable--interaction.show--consent body{height:auto!important;overflow:hidden!important}@media (prefers-reduced-motion){#cc-main{--cc-modal-transition-duration:0s}}
+#cc-main {
+  /* Reset only specific elements */
+  /* Restore outline and cursor*/
+  background: transparent;
+  color: var(--cc-primary-color);
+  font-family: var(--cc-font-family);
+  font-size: 16px;
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  position: relative;
+  line-height: 1.15;
+  -webkit-text-size-adjust: 100%;
+  z-index: var(--cc-z-index);
+  position: fixed
+  /* Use Firefox's thin style scrollbar */
+  /* Show webkit's "cool" scrollbar only on non mobile screens */
+}
+#cc-main div,
+#cc-main span,
+#cc-main a,
+#cc-main h2,
+#cc-main p,
+#cc-main button,
+#cc-main input,
+#cc-main ::before,
+#cc-main ::after {
+  all: unset;
+  box-sizing: border-box;
+}
+#cc-main button,
+#cc-main .pm__badge {
+  all: initial;
+  box-sizing: border-box;
+  color: unset;
+  visibility: unset;
+}
+#cc-main a,
+#cc-main button,
+#cc-main input,
+#cc-main .pm__badge {
+  font-family: inherit;
+  font-size: 100%;
+  line-height: normal;
+  margin: 0;
+  outline: revert;
+  outline-offset: 2px;
+  cursor: pointer;
+  overflow: hidden;
+  -webkit-appearance: none;
+  appearance: none;
+}
+#cc-main table,
+#cc-main thead,
+#cc-main tbody,
+#cc-main tr,
+#cc-main th,
+#cc-main td {
+  all: revert;
+  font-family: inherit;
+  font-weight: inherit;
+  color: inherit;
+  font-size: inherit;
+}
+
+/**
+ * Global styles/variables
+ */
+:root {
+  --cc-font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+  --cc-modal-border-radius: .5rem;
+  --cc-btn-border-radius: .4rem;
+  --cc-modal-transition-duration: .25s;
+  --cc-link-color: var(--cc-btn-primary-bg);
+  --cc-modal-margin: 1rem;
+  --cc-z-index: 2147483647;
+}
+#cc-main.cc--rtl {
+  direction: rtl;
+}
+#cc-main b,
+#cc-main em,
+#cc-main strong,
+#cc-main a,
+#cc-main .cm__title {
+  font-weight: 600;
+}
+#cc-main button > span {
+  pointer-events: none;
+}
+#cc-main a,
+#cc-main .cc__link {
+  font-weight: 600;
+  position: relative;
+  background-image: linear-gradient(currentColor, currentColor);
+  background-position: 0% 100%;
+  background-repeat: no-repeat;
+  background-size: 0% 1px;
+  transition: background-size 0.25s, color 0.25s ease;
+}
+#cc-main a:hover,
+#cc-main .cc__link:hover {
+  color: var(--cc-primary-color);
+  background-size: 100% 1px;
+}
+#cc-main .cc__link {
+  color: var(--cc-link-color);
+}
+#cc-main .cm__desc,
+#cc-main .pm__body {
+  scrollbar-width: thin;
+  overscroll-behavior: auto contain;
+}
+@media screen and (min-width: 640px) {
+  #cc-main ::-webkit-scrollbar,
+  #cc-main ::-webkit-scrollbar-track,
+  #cc-main ::-webkit-scrollbar-thumb {
+    all: revert;
+  }
+  #cc-main ::-webkit-scrollbar-thumb {
+    border: 0.25rem solid var(--cc-bg);
+    -webkit-background-clip: padding-box;
+    background-clip: padding-box;
+    border-radius: 1rem;
+    background: var(--cc-toggle-readonly-bg);
+  }
+  #cc-main ::-webkit-scrollbar-thumb:hover {
+    background: var(--cc-toggle-off-bg);
+  }
+  #cc-main ::-webkit-scrollbar {
+    background: transparent;
+    width: 12px;
+  }
+}
+
+/** Disable page scroll **/
+html.disable--interaction.show--consent, html.disable--interaction.show--consent body {
+  height: auto !important;
+  overflow: hidden !important;
+}
+
+@media (prefers-reduced-motion) {
+  #cc-main {
+    --cc-modal-transition-duration: 0s;
+  }
+}

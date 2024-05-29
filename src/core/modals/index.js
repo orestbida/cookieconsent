@@ -4,6 +4,7 @@ import { createConsentModal } from './consentModal';
 import { createPreferencesModal } from './preferencesModal';
 import { DIV_TAG } from '../../utils/constants';
 import { handleRtlLanguage } from '../../utils/language';
+import { createVendorsModal } from './vendorsModal';
 
 export const createMainContainer = () => {
     const dom = globalObj._dom;
@@ -34,9 +35,12 @@ export const generateHtml = (api) => {
     if (globalObj._state._invalidConsent)
         createConsentModal(api, createMainContainer);
 
-    if (!globalObj._config.lazyHtmlGeneration)
+    if (!globalObj._config.lazyHtmlGeneration) {
         createPreferencesModal(api, createMainContainer);
+        createVendorsModal(api, createMainContainer);
+    }
 };
 
 export * from './consentModal';
 export * from './preferencesModal';
+export * from './vendorsModal';

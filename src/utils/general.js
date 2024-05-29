@@ -2,7 +2,14 @@ import { globalObj } from '../core/global';
 import {
     SCRIPT_TAG_SELECTOR,
     BUTTON_TAG, CLICK_EVENT,
-    TOGGLE_DISABLE_INTERACTION_CLASS
+    TOGGLE_DISABLE_INTERACTION_CLASS,
+    CUSTOM_ATTRIBUTE_SELECTOR,
+    CUSTOM_ATTRIBUTE_SHOW_VENDORS_MODAL,
+    CUSTOM_ATTRIBUTE_SHOW_PREFERENCES_MODAL,
+    CUSTOM_ATTRIBUTE_SHOW_CONSENT_MODAL,
+    CUSTOM_ATTRIBUTE_ACCEPT_ALL,
+    CUSTOM_ATTRIBUTE_ACCEPT_NECESSARY,
+    CUSTOM_ATTRIBUTE_ACCEPT_CUSTOM
 } from './constants';
 
 /**
@@ -127,6 +134,11 @@ export const addClassCm = (elem, className) => addClass(elem, 'cm__' + className
  * @param {string} className
  */
 export const addClassPm = (elem, className) => addClass(elem, 'pm__' + className);
+/**
+ * @param {HTMLElement} elem
+ * @param {string} className
+ */
+export const addClassVm = (elem, className) => addClass(elem, 'vm__' + className);
 
 /**
  * @param {HTMLElement} elem
@@ -612,46 +624,75 @@ export const setAcceptedCategories = (acceptedCategories) => {
  */
 
 /**
- * Add an onClick listeners to all html elements with data-cc attribute
+ * Add an onClick listeners to all html elements with data-cc attribute.
+ *
  * @param {HTMLElement} [elem]
  * @param {import('../core/global').Api} api
  * @param {createModal} [createPreferencesModal]
+ * @param {createModal} [createVendorsModal]
  */
-export const addDataButtonListeners = (elem, api, createPreferencesModal, createMainContainer) => {
-    const ACCEPT_PREFIX = 'accept-';
-
+export const addDataButtonListeners = (elem, api, createPreferencesModal, createVendorsModal, createMainContainer) => {
     const {
         show,
-        showPreferences,
         hide,
+        showPreferences,
         hidePreferences,
+        showVendors,
+        hideVendors,
         acceptCategory
     } = api;
 
     const rootEl = elem || document;
-    const getElements = dataRole => querySelectorAll(rootEl, `[data-cc="${dataRole}"]`);
+    const getElements = dataRole => querySelectorAll(rootEl, `[${CUSTOM_ATTRIBUTE_SELECTOR}="${dataRole}"]`);
+
+    // TODO: Ovdje ćeš vjerojatno morati napraviti neku logiku da na odabir vendor ovlasti, ne gasiš odmah sve, a možda i ne? Provjeri
 
     /**
-     * Helper function: accept and then hide modals
+     * Helper function: accept and then hide modals.
+     * 
      * @param {Event} event source event
      * @param {string|string[]} [acceptType]
      */
     const acceptAction = (event, acceptType) => {
         preventDefault(event);
         acceptCategory(acceptType);
+        hideVendors();
         hidePreferences();
         hide();
     };
 
-    const
-        showPreferencesModalElements = getElements('show-preferencesModal'),
-        showConsentModalElements = getElements('show-consentModal'),
-        acceptAllElements = getElements(ACCEPT_PREFIX + 'all'),
-        acceptNecessaryElements = getElements(ACCEPT_PREFIX + 'necessary'),
-        acceptCustomElements = getElements(ACCEPT_PREFIX + 'custom'),
-        createPreferencesModalOnHover = globalObj._config.lazyHtmlGeneration;
+    const showVendorsModalElements = getElements(CUSTOM_ATTRIBUTE_SHOW_VENDORS_MODAL);
+    const showPreferencesModalElements = getElements(CUSTOM_ATTRIBUTE_SHOW_PREFERENCES_MODAL);
+    const showConsentModalElements = getElements(CUSTOM_ATTRIBUTE_SHOW_CONSENT_MODAL);
+    const acceptAllElements = getElements(CUSTOM_ATTRIBUTE_ACCEPT_ALL);
+    const acceptNecessaryElements = getElements(CUSTOM_ATTRIBUTE_ACCEPT_NECESSARY);
+    const acceptCustomElements = getElements(CUSTOM_ATTRIBUTE_ACCEPT_CUSTOM);
+    const createModalsOnHover = globalObj._config.lazyHtmlGeneration;
 
     //{{START: GUI}}
+    for (const el of showVendorsModalElements) {
+        setAttribute(el, 'aria-haspopup', 'dialog');
+        addEvent(el, CLICK_EVENT, (event) => {
+            preventDefault(event);
+            showVendors();
+        });
+
+        if (createModalsOnHover) {
+            addEvent(el, 'mouseenter', (event) => {
+                preventDefault(event);
+                if (!globalObj._state._vendorsModalExists) {
+                    createVendorsModal(api, createMainContainer);
+                }
+            }, true);
+
+            addEvent(el, 'focus', () => {
+                if (!globalObj._state._vendorsModalExists) {
+                    createVendorsModal(api, createMainContainer);
+                }
+            });
+        }
+    }
+
     for (const el of showPreferencesModalElements) {
         setAttribute(el, 'aria-haspopup', 'dialog');
         addEvent(el, CLICK_EVENT, (event) => {
@@ -659,7 +700,7 @@ export const addDataButtonListeners = (elem, api, createPreferencesModal, create
             showPreferences();
         });
 
-        if (createPreferencesModalOnHover) {
+        if (createModalsOnHover) {
             addEvent(el, 'mouseenter', (event) => {
                 preventDefault(event);
                 if (!globalObj._state._preferencesModalExists)
@@ -725,17 +766,29 @@ export const focus = (el, toggleTabIndex) => {
 
 /**
  * @param {HTMLDivElement} element
- * @param {1 | 2} modalId
+ * @param {'consent' | 'preferences' | 'vendors'} modalName
  */
-export const focusAfterTransition = (element, modalId) => {
-    const getVisibleDiv = (modalId) => modalId === 1
-        ? globalObj._dom._cmDivTabindex
-        : globalObj._dom._pmDivTabindex;
+export const focusAfterTransition = (element, modalName) => {
+    let visibleDiv;
+
+    switch(modalName) {
+    case 'consent':
+        visibleDiv = globalObj._dom._cmDivTabindex;
+        break;
+    case 'preferences':
+        visibleDiv = globalObj._dom._pmDivTabIndex;
+        break;
+    case 'vendors':
+        visibleDiv = globalObj._dom._vmDivTabIndex;
+        break;
+    }
+
+    console.log('focus after transition modalName', modalName, 'visiblediv', visibleDiv);
 
     const setFocus = (event) => {
         event.target.removeEventListener('transitionend', setFocus);
         if (event.propertyName === 'opacity' && getComputedStyle(element).opacity === '1') {
-            focus(getVisibleDiv(modalId));
+            focus(visibleDiv);
         }
     };
 
@@ -780,19 +833,18 @@ export const toggleDisableInteraction = (enable) => {
     }
 };
 
-const iconStrokes = [
-    'M 19.5 4.5 L 4.5 19.5 M 4.5 4.501 L 19.5 19.5',    // X
-    'M 3.572 13.406 L 8.281 18.115 L 20.428 5.885',     // TICK
-    'M 21.999 6.94 L 11.639 17.18 L 2.001 6.82 '        // ARROW
-];
+const iconStrokes = {
+    x: 'M 19.5 4.5 L 4.5 19.5 M 4.5 4.501 L 19.5 19.5',
+    tick: 'M 3.572 13.406 L 8.281 18.115 L 20.428 5.885',
+    arrow: 'M 21.999 6.94 L 11.639 17.18 L 2.001 6.82'
+};
 
 /**
- * [0: x, 1: tick, 2: arrow]
- * @param {0 | 1 | 2} [iconIndex]
+ * @param {'x' | 'tick' | 'arrow'} [icon]
  * @param {number} [strokeWidth]
  */
-export const getSvgIcon = (iconIndex = 0, strokeWidth = 1.5) => {
-    return `<svg viewBox="0 0 24 24" stroke-width="${strokeWidth}"><path d="${iconStrokes[iconIndex]}"/></svg>`;
+export const getSvgIcon = (icon = 'x', strokeWidth = 1.5) => {
+    return `<svg viewBox="0 0 24 24" stroke-width="${strokeWidth}"><path d="${iconStrokes[icon]}"/></svg>`;
 };
 
 /**
@@ -868,13 +920,15 @@ export const getFocusableElements = (root) => querySelectorAll(root, focusableTy
 /**
  * Save reference to first and last focusable elements inside each modal
  * to prevent losing focus while navigating with TAB
- * @param {1 | 2} [modalId]
+ *
+ * @param {'consent' | 'preferences' | 'vendors'} modalName
  */
-export const getModalFocusableData = (modalId) => {
+export const getModalFocusableData = (modalName) => {
     const { _state, _dom } = globalObj;
 
     /**
      * Saves all focusable elements inside modal, into the array
+     *
      * @param {HTMLElement} modal
      * @param {Element[]} array
      */
@@ -888,11 +942,14 @@ export const getModalFocusableData = (modalId) => {
         array[1] = focusableElements[focusableElements.length - 1];
     };
 
-    if (modalId === 1 && _state._consentModalExists)
+    if (modalName === 'consent' && _state._consentModalExists)
         saveAllFocusableElements(_dom._cm, _state._cmFocusableElements);
 
-    if (modalId === 2 && _state._preferencesModalExists)
+    if (modalName === 'preferences' && _state._preferencesModalExists)
         saveAllFocusableElements(_dom._pm, _state._pmFocusableElements);
+
+    if (modalName === 'vendors' && _state._vendorsModalExists)
+        saveAllFocusableElements(_dom._vm, _state._vmFocusableElements);
 };
 
 /**

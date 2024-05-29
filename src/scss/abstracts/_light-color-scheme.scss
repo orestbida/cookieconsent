@@ -32,14 +32,21 @@
     --cc-toggle-readonly-knob-bg: #fff;
     --cc-toggle-readonly-knob-icon-color: var(--cc-toggle-readonly-bg);
 
-    --cc-section-category-border: var(--cc-cookie-category-block-bg);
-
     --cc-cookie-category-block-bg: #f0f4f7;
     --cc-cookie-category-block-border: #f0f4f7;
     --cc-cookie-category-block-hover-bg: #e9eff4;
     --cc-cookie-category-block-hover-border: #e9eff4;
     --cc-cookie-category-expanded-block-bg: transparent;
     --cc-cookie-category-expanded-block-hover-bg: #dee4e9;
+    --cc-section-category-border: var(--cc-cookie-category-block-bg);
+
+    --cc-vendor-block-bg: #f0f4f7;
+    --cc-vendor-block-border: #f0f4f7;
+    --cc-vendor-block-hover-bg: #e9eff4;
+    --cc-vendor-block-hover-border: #e9eff4;
+    --cc-vendor-expanded-block-bg: transparent;
+    --cc-vendor-expanded-block-hover-bg: #dee4e9;
+    --cc-vendor-border: var(--cc-vendor-block-bg);
 
     --cc-overlay-bg: rgba(0, 0, 0, 0.65);
     --cc-webkit-scrollbar-bg: var(--cc-section-category-border);

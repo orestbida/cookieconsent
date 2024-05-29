@@ -15,6 +15,7 @@ import { COOKIE_NAME, OPT_IN_MODE } from '../utils/constants';
  * @typedef {CookieConsent.Translation} Translation
  * @typedef {CookieConsent.ConsentModalOptions} ConsentModalOptions
  * @typedef {CookieConsent.PreferencesModalOptions} PreferencesModalOptions
+ * @typedef {CookieConsent.VendorsModalOptions} VendorsModalOptions
  * @typedef {CookieConsent.CookieTable} CookieTable
  * @typedef {CookieConsent.Section} Section
  * @typedef {CookieConsent.CookieValue} CookieValue
@@ -40,18 +41,27 @@ import { COOKIE_NAME, OPT_IN_MODE } from '../utils/constants';
  * @property {HTMLElement} _ccMain
  * @property {HTMLElement} _cmContainer
  * @property {HTMLElement} _pmContainer
+ * @property {HTMLElement} _vmContainer
  *
  * @property {HTMLElement} _cm
  * @property {HTMLElement} _cmBody
+ * @property {HTMLElement} _cmBodyRow
+ * @property {HTMLElement} _cmVendorBody
+ * @property {HTMLElement} _cmVendorCount
+ * @property {HTMLElement} _cmVendorText
+ * @property {HTMLElement} _cmVendorTitle
+ * @property {HTMLElement} _cmVendorDescription
  * @property {HTMLElement} _cmTexts
  * @property {HTMLElement} _cmTitle
  * @property {HTMLElement} _cmDescription
  * @property {HTMLElement} _cmBtns
+ * @property {HTMLElement} _cmVendorBtns
  * @property {HTMLElement} _cmBtnGroup
  * @property {HTMLElement} _cmBtnGroup2
  * @property {HTMLElement} _cmAcceptAllBtn
  * @property {HTMLElement} _cmAcceptNecessaryBtn
  * @property {HTMLElement} _cmShowPreferencesBtn
+ * @property {HTMLElement} _cmShowVendorsBtn
  * @property {HTMLElement} _cmFooterLinksGroup
  * @property {HTMLElement} _cmCloseIconBtn
  *
@@ -66,6 +76,16 @@ import { COOKIE_NAME, OPT_IN_MODE } from '../utils/constants';
  * @property {HTMLElement} _pmAcceptAllBtn
  * @property {HTMLElement} _pmAcceptNecessaryBtn
  * @property {HTMLElement} _pmSavePreferencesBtn
+ * 
+ * @property {HTMLElement} _vm
+ * @property {HTMLElement} _vmHeader
+ * @property {HTMLElement} _vmTitle
+ * @property {HTMLElement} _vmCloseBtn
+ * @property {HTMLElement} _vmBody
+ * @property {HTMLElement} _vmFooter
+ * @property {HTMLElement} _vmAllowAllBtn
+ * @property {HTMLElement} _vmRejectAllBtn
+ * @property {HTMLElement} _vmAllowSelectionBtn
  *
  * @property {Object.<string, HTMLInputElement>} _categoryCheckboxInputs
  * @property {Object.<string, ServiceToggle>} _serviceCheckboxInputs
@@ -73,6 +93,7 @@ import { COOKIE_NAME, OPT_IN_MODE } from '../utils/constants';
  * // Used to properly restore focus when modal is closed
  * @property {HTMLSpanElement} _focusSpan
  * @property {HTMLSpanElement} _pmFocusSpan
+ * @property {HTMLSpanElement} _vmFocusSpan
  */
 
 /**
@@ -92,7 +113,6 @@ import { COOKIE_NAME, OPT_IN_MODE } from '../utils/constants';
 
 export class GlobalState {
     constructor() {
-
         /**
          * Default config. options
          * @type {CookieConsent.CookieConsentConfig}
@@ -104,6 +124,8 @@ export class GlobalState {
             //{{START: GUI}}
             autoShow: true,
             lazyHtmlGeneration: true,
+            isTcfCompliant: false,
+            tcfComplianceConfig: undefined,
             //{{END: GUI}}
 
             autoClearCookies: true,
@@ -142,6 +164,13 @@ export class GlobalState {
             * @type {CookieValue}
             */
             _savedCookieContent : {},
+
+            /**
+             * Mapped GVL data.
+             * 
+             * @type {ReturnType<typeof import("../utils/gvl").mapGvlData>}
+             */
+            _gvlData: null,
 
             /**
              * Store all event data-cc event listeners
@@ -185,6 +214,9 @@ export class GlobalState {
 
             _preferencesModalVisible : false,
             _preferencesModalExists: false,
+
+            _vendorsModalVisible: false,
+            _vendorsModalExists: false,
 
             /**
             * @type {HTMLElement[]}
@@ -262,6 +294,7 @@ export class GlobalState {
 
             /** @type {HTMLElement[]} **/ _cmFocusableElements : [],
             /** @type {HTMLElement[]} **/ _pmFocusableElements : [],
+            /** @type {HTMLElement[]} **/ _vmFocusableElements : [],
 
             /**
             * Keep track of enabled/disabled categories

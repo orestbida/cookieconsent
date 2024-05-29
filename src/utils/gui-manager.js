@@ -23,8 +23,12 @@ const CLASS_CONSTANTS = {
     _right: 'right',
     _inline: 'inline',
     _wide: 'wide',
+    _pm: 'pm',
+    _cm: 'cm',
+    _vm: 'vm',
     _pmPrefix: 'pm--',
     _cmPrefix: 'cm--',
+    _vmPrefix: 'vm--',
     _box: 'box'
 };
 
@@ -81,34 +85,79 @@ const ALL_PM_LAYOUTS = {
     }
 };
 
+const ALL_VM_LAYOUTS = {
+    box: {
+        _variants: [],
+        _alignV: [],
+        _alignH: [],
+        _defaultAlignV: '',
+        _defaultAlignH: ''
+    },
+    bar: {
+        _variants: [],
+        _alignV: [],
+        _alignH: [CLASS_CONSTANTS._left, CLASS_CONSTANTS._right],
+        _defaultAlignV: '',
+        _defaultAlignH: CLASS_CONSTANTS._left
+    }
+};
+
 /**
- * Add appropriate classes to modals and buttons
- * @param {0 | 1} applyToModal
+ * Add appropriate classes to modals and buttons.
+ *
+ * @param {'consent' | 'preferences' | 'vendors'} applyToModal
  */
 export const guiManager = (applyToModal) => {
     const guiOptions = globalObj._state._userConfig.guiOptions;
-    const consentModalOptions = guiOptions && guiOptions.consentModal;
-    const preferencesModalOptions = guiOptions && guiOptions.preferencesModal;
+    const isTcfCompliant = !!globalObj._config.isTcfCompliant;
 
-    if (applyToModal === 0) {
+    let consentModalOptions = guiOptions && guiOptions.consentModal;
+    const preferencesModalOptions = guiOptions && guiOptions.preferencesModal;
+    const vendorsModalOptions = guiOptions && guiOptions.vendorsModal;
+
+    // If the modal should be TCF compliant, override consent modal layout to bar-bottom
+    if (isTcfCompliant) {
+        consentModalOptions = {
+            layout: 'bar',
+            equalWeightButtons: true,
+            flipButtons: false,
+            position: 'bottom'
+        };
+    }
+
+    if (applyToModal === 'consent') {
         setLayout(
             globalObj._dom._cm,
             ALL_CM_LAYOUTS,
             consentModalOptions,
             CLASS_CONSTANTS._cmPrefix,
             CLASS_CONSTANTS._box,
-            'cm'
+            CLASS_CONSTANTS._cm,
+            isTcfCompliant
         );
     }
 
-    if (applyToModal === 1) {
+    if (applyToModal === 'preferences') {
         setLayout(
             globalObj._dom._pm,
             ALL_PM_LAYOUTS,
             preferencesModalOptions,
             CLASS_CONSTANTS._pmPrefix,
             CLASS_CONSTANTS._box,
-            'pm'
+            CLASS_CONSTANTS._pm,
+            isTcfCompliant
+        );
+    }
+
+    if(applyToModal === 'vendors') {
+        setLayout(
+            globalObj._dom._vm,
+            ALL_VM_LAYOUTS,
+            vendorsModalOptions,
+            CLASS_CONSTANTS._vmPrefix,
+            CLASS_CONSTANTS._box,
+            CLASS_CONSTANTS._vm,
+            isTcfCompliant
         );
     }
 };
@@ -118,11 +167,12 @@ export const guiManager = (applyToModal) => {
  * @param {HTMLElement} modal
  * @param {Layouts} allowedLayoutsObj
  * @param {import("../core/global").GuiModalOption} userGuiOptions
- * @param {'cm--' | 'pm--'} modalClassPrefix
+ * @param {'cm--' | 'pm--' | 'vm--'} modalClassPrefix
  * @param {string} defaultLayoutName
- * @param {'cm' | 'pm'} modalClassName
+ * @param {'cm' | 'pm' | 'vm'} modalClassName
+ * @param {boolean} isTcfCompliant
  */
-const setLayout = (modal, allowedLayoutsObj, userGuiOptions, modalClassPrefix, defaultLayoutName, modalClassName) => {
+const setLayout = (modal, allowedLayoutsObj, userGuiOptions, modalClassPrefix, defaultLayoutName, modalClassName, isTcfCompliant) => {
     /**
      * Reset modal classes to default
      */
@@ -143,12 +193,12 @@ const setLayout = (modal, allowedLayoutsObj, userGuiOptions, modalClassPrefix, d
         : defaultLayoutName;
 
     const currentLayout = allowedLayoutsObj[currentLayoutName];
-    const currentLayoutVariant = elContains(currentLayout._variants, layoutVariant) && layoutVariant;
+    let currentLayoutVariant = elContains(currentLayout._variants, layoutVariant) && layoutVariant;
 
     const positionSplit = position && position.split(' ') || [];
     const positionV = positionSplit[0];
 
-    const positionH = modalClassPrefix === CLASS_CONSTANTS._pmPrefix
+    const positionH = (modalClassPrefix === CLASS_CONSTANTS._pmPrefix || modalClassPrefix === CLASS_CONSTANTS._vmPrefix)
         ? positionSplit[0]
         : positionSplit[1];
 
@@ -160,6 +210,11 @@ const setLayout = (modal, allowedLayoutsObj, userGuiOptions, modalClassPrefix, d
         ? positionH
         : currentLayout._defaultAlignH;
 
+    // Make the vendors modal wide if the layout is bar
+    if (modalClassName === CLASS_CONSTANTS._vm && layoutName === 'bar') {
+        currentLayoutVariant = 'wide';
+    }
+
     const addModalClass = className => {
         className && addClass(modal, modalClassPrefix + className);
     };
@@ -169,6 +224,7 @@ const setLayout = (modal, allowedLayoutsObj, userGuiOptions, modalClassPrefix, d
     addModalClass(currentPositionV);
     addModalClass(currentPositionH);
     flipButtons && addModalClass('flip');
+    isTcfCompliant && addModalClass('tcf');
 
     const secondaryBtnClass = 'btn--secondary';
     const btnClassPrefix = modalClassName + '__';
@@ -177,8 +233,8 @@ const setLayout = (modal, allowedLayoutsObj, userGuiOptions, modalClassPrefix, d
     /**
      * Add classes to buttons
      */
-    if (modalClassName === 'cm') {
-        const {_cmAcceptNecessaryBtn, _cmCloseIconBtn} = globalObj._dom;
+    if (modalClassName === CLASS_CONSTANTS._cm) {
+        const { _cmAcceptNecessaryBtn, _cmCloseIconBtn } = globalObj._dom;
 
         if (_cmAcceptNecessaryBtn) {
             equalWeightButtons

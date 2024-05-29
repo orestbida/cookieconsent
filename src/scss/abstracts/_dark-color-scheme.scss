@@ -34,7 +34,6 @@
     --cc-toggle-readonly-knob-icon-color: var(--cc-toggle-readonly-bg);
 
     --cc-section-category-border: #1e2428;
-
     --cc-cookie-category-block-bg: #1e2428;
     --cc-cookie-category-block-border: var(--cc-section-category-border);
     --cc-cookie-category-block-hover-bg: #242c31;
@@ -42,6 +41,14 @@
     --cc-cookie-category-expanded-block-bg: transparent;
     --cc-cookie-category-expanded-block-hover-bg: var(--cc-toggle-readonly-bg);
 
+    --cc-vendor-border: #1e2428;
+    --cc-vendor-block-bg: #1e2428;
+    --cc-vendor-block-border: var(--cc-vendor-border);
+    --cc-vendor-block-hover-bg: #242c31;
+    --cc-vendor-block-hover-border: #232a2f;
+    --cc-vendor-expanded-block-bg: transparent;
+    --cc-vendor-expanded-block-hover-bg: var(--cc-toggle-readonly-bg);
+    
     --cc-overlay-bg: rgba(0, 0, 0, 0.65);
     --cc-webkit-scrollbar-bg: var(--cc-section-category-border);
     --cc-webkit-scrollbar-hover-bg: var(--cc-btn-primary-hover-bg);

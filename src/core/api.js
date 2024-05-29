@@ -37,7 +37,8 @@ import {
     createConsentModal,
     createPreferencesModal,
     generateHtml,
-    createMainContainer
+    createMainContainer,
+    createVendorsModal
 } from './modals/index';
 
 import {
@@ -68,7 +69,9 @@ import {
     OPT_OUT_MODE,
     CONSENT_MODAL_NAME,
     ARIA_HIDDEN,
-    PREFERENCES_MODAL_NAME
+    PREFERENCES_MODAL_NAME,
+    TOGGLE_VENDORS_MODAL_CLASS,
+    VENDORS_MODAL_NAME
 } from '../utils/constants';
 import { localStorageManager } from '../utils/localstorage';
 
@@ -200,7 +203,7 @@ export const show = (createModal) => {
     if (_state._disablePageInteraction)
         toggleDisableInteraction(true);
 
-    focusAfterTransition(_dom._cm, 1);
+    focusAfterTransition(_dom._cm, 'consent');
 
     addClass(_dom._htmlDom, TOGGLE_CONSENT_MODAL_CLASS);
     setAttribute(_dom._cm, ARIA_HIDDEN, 'false');
@@ -271,7 +274,7 @@ export const showPreferences = () => {
         state._lastFocusedModalElement = getActiveElement();
     }
 
-    focusAfterTransition(globalObj._dom._pm, 2);
+    focusAfterTransition(globalObj._dom._pm, 'preferences');
 
     addClass(globalObj._dom._htmlDom, TOGGLE_PREFERENCES_MODAL_CLASS);
     setAttribute(globalObj._dom._pm, ARIA_HIDDEN, 'false');
@@ -359,11 +362,113 @@ export const hidePreferences = () => {
     fireEvent(globalObj._customEvents._onModalHide, PREFERENCES_MODAL_NAME);
 };
 
+/**
+ * Show the vendors modal.
+ */
+export const showVendors = () => {
+    const state = globalObj._state;
+    const dom = globalObj._dom;
+
+    if (state._vendorsModalVisible) return;
+
+    if (!state._vendorsModalExists) {
+        createVendorsModal(miniAPI, createMainContainer);
+    }
+
+    state._vendorsModalVisible = true;
+
+    // If there is no consent-modal, keep track of the last focused elem.
+    if (!state._consentModalVisible) {
+        state._lastFocusedElemBeforeModal = getActiveElement();
+    } else {
+        state._lastFocusedModalElement = getActiveElement();
+    }
+
+    focusAfterTransition(dom._vm, 'vendors');
+
+    addClass(dom._htmlDom, TOGGLE_VENDORS_MODAL_CLASS);
+    setAttribute(dom._vm, ARIA_HIDDEN, false);
+
+    // Set focus to vendorsModal
+    setTimeout(() => focus(dom._vmDivTabIndex), 100);
+
+    debug('CookieConsent [TOGGLE]: show vendorsModal');
+
+    fireEvent(globalObj._customEvents._onModalShow, VENDORS_MODAL_NAME);
+};
+
+/**
+ * Hide the vendors modal.
+ */
+export const hideVendors = () => {
+    const state = globalObj._state;
+    const dom = globalObj._dom;
+
+    if (!state._vendorsModalVisible) return;
+
+    state._vendorsModalVisible = false;
+
+    discardUnsavedVendorsConsent();
+
+    // Fix focus restoration to body with Chrome
+    focus(dom._vmFocusSpan, true);
+
+    removeClass(dom._htmlDom, TOGGLE_VENDORS_MODAL_CLASS);
+    setAttribute(dom._vm, ARIA_HIDDEN, true);
+
+    // If consent modal is visible, focus him (instead of page document)
+    if(state._consentModalVisible) {
+        focus(state._lastFocusedModalElement);
+        state._lastFocusedModalElement = null;
+    } else {
+        // Restore focus to last page element which had focus before modal opening
+        focus(state._lastFocusedElemBeforeModal);
+        state._lastFocusedElemBeforeModal = null;
+    }
+
+    debug('CookieConsent [TOGGLE]: hide vendorsModal');
+
+    fireEvent(globalObj._customEvents._onModalHide, VENDORS_MODAL_NAME);
+};
+
+/**
+ * Discard unsaved vendors consent.
+ */
+const discardUnsavedVendorsConsent = () => {
+    // const consentIsValid = validConsent();
+    // const allDefinedCategories = globalObj._state._allDefinedCategories;
+    // const categoryInputs = globalObj._dom._categoryCheckboxInputs;
+    // const serviceInputs = globalObj._dom._serviceCheckboxInputs;
+
+    // /**
+    //  * @param {string} category
+    //  */
+    // const categoryEnabledByDefault = (category) => elContains(globalObj._state._defaultEnabledCategories, category);
+
+    // for (const category in categoryInputs) {
+    //     const isReadOnly = !!allDefinedCategories[category].readOnly;
+
+    //     categoryInputs[category].checked = isReadOnly || (consentIsValid
+    //         ? acceptedCategory(category)
+    //         : categoryEnabledByDefault(category)
+    //     );
+
+    //     for (const service in serviceInputs[category]) {
+    //         serviceInputs[category][service].checked = isReadOnly || (consentIsValid
+    //             ? acceptedService(service, category)
+    //             : categoryEnabledByDefault(category)
+    //         );
+    //     }
+    // }
+};
+
 var miniAPI = {
     show,
     hide,
     showPreferences,
     hidePreferences,
+    showVendors,
+    hideVendors,
     acceptCategory
 };
 
@@ -396,6 +501,9 @@ export const setLanguage = async (newLanguageCode, forceUpdate) => {
 
         if (state._preferencesModalExists)
             createPreferencesModal(miniAPI, createMainContainer);
+
+        if (state._vendorsModalExists)
+            createVendorsModal(miniAPI, createMainContainer);
 
         handleRtlLanguage();
 
@@ -650,7 +758,7 @@ export const run = async (userConfig) => {
     if (!win._ccRun) {
         win._ccRun = true;
 
-        setConfig(userConfig);
+        await setConfig(userConfig);
 
         if (_state._botAgentDetected)
             return;
@@ -716,6 +824,7 @@ export const reset = (deleteCookie) => {
      */
     _htmlDom && _htmlDom.classList.remove(
         TOGGLE_DISABLE_INTERACTION_CLASS,
+        TOGGLE_VENDORS_MODAL_CLASS,
         TOGGLE_PREFERENCES_MODAL_CLASS,
         TOGGLE_CONSENT_MODAL_CLASS
     );

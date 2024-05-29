@@ -28,7 +28,9 @@ import {
     BUTTON_TAG,
     BTN_GROUP_CLASS,
     CLICK_EVENT,
-    DATA_ROLE
+    DATA_ROLE,
+    H2_TAG,
+    SPAN_TAG
 } from '../../utils/constants';
 
 /**
@@ -37,13 +39,14 @@ import {
 
 /**
  * Generates preferences modal and appends it to "cc-main" el.
+ *
  * @param {import("../global").Api} api
  * @param {CreateMainContainer} createMainContainer
  */
 export const createPreferencesModal = (api, createMainContainer) => {
     const state = globalObj._state;
     const dom = globalObj._dom;
-    const {hide, hidePreferences, acceptCategory} = api;
+    const { hide, hidePreferences, acceptCategory } = api;
 
     /**
      * @param {string|string[]} [categories]
@@ -73,17 +76,16 @@ export const createPreferencesModal = (api, createMainContainer) => {
             || acceptNecessaryBtnData
             || savePreferencesBtnData;
 
+    // Create modal if it doesn't exist
     if (!dom._pmContainer) {
         dom._pmContainer = createNode(DIV_TAG);
         addClass(dom._pmContainer, 'pm-wrapper');
 
-        const pmOverlay = createNode('div');
+        const pmOverlay = createNode(DIV_TAG);
         addClass(pmOverlay, 'pm-overlay');
         appendChild(dom._pmContainer, pmOverlay);
 
-        /**
-         * Hide modal when overlay is clicked
-         */
+        // Hide modal when overlay / backdrop is clicked
         addEvent(pmOverlay, CLICK_EVENT, hidePreferences);
 
         // Preferences modal
@@ -104,7 +106,7 @@ export const createPreferencesModal = (api, createMainContainer) => {
         dom._pmHeader = createNode(DIV_TAG);
         addClassPm(dom._pmHeader, 'header');
 
-        dom._pmTitle = createNode('h2');
+        dom._pmTitle = createNode(H2_TAG);
         addClassPm(dom._pmTitle, 'title');
         dom._pmTitle.id = 'pm__title';
 
@@ -112,20 +114,17 @@ export const createPreferencesModal = (api, createMainContainer) => {
         addClassPm(dom._pmCloseBtn, 'close-btn');
         setAttribute(dom._pmCloseBtn, 'aria-label', modalData.closeIconLabel || '');
         addEvent(dom._pmCloseBtn, CLICK_EVENT, hidePreferences);
-
-        dom._pmFocusSpan = createNode('span');
-        dom._pmFocusSpan.innerHTML = getSvgIcon();
+        
+        dom._pmFocusSpan = createNode(SPAN_TAG);
+        dom._pmFocusSpan.innerHTML = getSvgIcon('x');
         appendChild(dom._pmCloseBtn, dom._pmFocusSpan);
-
+        
         dom._pmBody = createNode(DIV_TAG);
         addClassPm(dom._pmBody, 'body');
-
+        
         dom._pmFooter = createNode(DIV_TAG);
         addClassPm(dom._pmFooter, 'footer');
-
-        var _pmBtnContainer = createNode(DIV_TAG);
-        addClass(_pmBtnContainer, 'btns');
-
+        
         var _pmBtnGroup1 = createNode(DIV_TAG);
         var _pmBtnGroup2 = createNode(DIV_TAG);
         addClassPm(_pmBtnGroup1, BTN_GROUP_CLASS);
@@ -136,11 +135,11 @@ export const createPreferencesModal = (api, createMainContainer) => {
 
         appendChild(dom._pmHeader, dom._pmTitle);
         appendChild(dom._pmHeader, dom._pmCloseBtn);
-
+        
         dom._pmDivTabindex = createNode(DIV_TAG);
         setAttribute(dom._pmDivTabindex, 'tabIndex', -1);
         appendChild(dom._pm, dom._pmDivTabindex);
-
+        
         appendChild(dom._pm, dom._pmHeader);
         appendChild(dom._pm, dom._pmBody);
 
@@ -178,6 +177,7 @@ export const createPreferencesModal = (api, createMainContainer) => {
             sServiceNames = isObject(sServices) && getKeys(sServices) || [],
             sIsExpandableToggle = hasToggle && (!!sDescriptionData || !!sCreateCookieTable || getKeys(sServices).length>0);
 
+        console.log('[sectionData] title', sTitleData, 'hasToggle', hasToggle);
 
         // section
         var s = createNode(DIV_TAG);
@@ -242,8 +242,8 @@ export const createPreferencesModal = (api, createMainContainer) => {
                 /**
                  * Arrow icon span
                  */
-                const sTitleIcon = createNode('span');
-                sTitleIcon.innerHTML = getSvgIcon(2, 3.5);
+                const sTitleIcon = createNode(SPAN_TAG);
+                sTitleIcon.innerHTML = getSvgIcon('arrow', 3.5);
                 addClassPm(sTitleIcon, 'section-arrow');
                 appendChild(sTitleContainer, sTitleIcon);
 
@@ -323,7 +323,6 @@ export const createPreferencesModal = (api, createMainContainer) => {
                     }
                 });
             })(sDescContainer, s, sTitle);
-
 
             if (sCreateCookieTable) {
                 const table = createNode('table');
@@ -469,7 +468,8 @@ export const createPreferencesModal = (api, createMainContainer) => {
         dom._pmBody = dom._pmNewBody;
     }
 
-    guiManager(1);
+    // Set the modal's layout
+    guiManager('preferences');
 
     if (!state._preferencesModalExists) {
         state._preferencesModalExists = true;
@@ -487,7 +487,7 @@ export const createPreferencesModal = (api, createMainContainer) => {
         setTimeout(() => addClass(dom._pmContainer, 'cc--anim'), 100);
     }
 
-    getModalFocusableData(2);
+    getModalFocusableData('preferences');
 };
 
 /**
@@ -512,8 +512,8 @@ function createToggleLabel(label, value, sCurrentCategoryObject, isService, cate
     /** @type {HTMLSpanElement} */  const toggleOnIcon = createNode('span');
     /** @type {HTMLSpanElement} */  const toggleOffIcon = createNode('span');
 
-    toggleOnIcon.innerHTML = getSvgIcon(1, 3);
-    toggleOffIcon.innerHTML = getSvgIcon(0, 3);
+    toggleOnIcon.innerHTML = getSvgIcon('tick', 3);
+    toggleOffIcon.innerHTML = getSvgIcon('x', 3);
 
     toggle.type = 'checkbox';
 
@@ -526,6 +526,8 @@ function createToggleLabel(label, value, sCurrentCategoryObject, isService, cate
     addClass(toggleLabelSpan, 'toggle__label');
 
     setAttribute(toggleIcon, ARIA_HIDDEN, 'true');
+
+    console.log('[createToggleLabel] label', label, 'value', value, 'currentCategoryObject', sCurrentCategoryObject, 'isService', isService, 'categoryName', categoryName);
 
     if (isService) {
         addClass(toggleLabel, 'toggle-service');
@@ -581,6 +583,9 @@ function createToggleLabel(label, value, sCurrentCategoryObject, isService, cate
     appendChild(toggleIconCircle, toggleOffIcon);
     appendChild(toggleIconCircle, toggleOnIcon);
     appendChild(toggleIcon, toggleIconCircle);
+
+    console.log('[createToggleLabel] acceptedCategories', state._acceptedCategories);
+    console.log('[createToggleLabel] acceptedServices', state._acceptedServices);
 
     /**
      * If consent is valid => retrieve category states from cookie

@@ -26,11 +26,19 @@ export default function CookieConsentCmp() {
 
   return (
     <div className="flex gap-x-3">
-      <button type="button" className="border p-2" onClick={CookieConsent.showPreferences}>
-        Manage cookie preferences  
+      <button
+        type="button"
+        className="border p-2"
+        onClick={CookieConsent.showPreferences}
+      >
+        Manage cookie preferences
       </button>
 
-      <button type="button" className="border p-2" onClick={handleCookieConsentReset}>
+      <button
+        type="button"
+        className="border p-2"
+        onClick={handleCookieConsentReset}
+      >
         Reset cookie consent
       </button>
     </div>

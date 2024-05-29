@@ -17,6 +17,9 @@ import {
 
 import {
     CONSENT_MODAL_NAME,
+    H2_TAG,
+    H3_TAG,
+    SPAN_TAG,
     DIV_TAG,
     ARIA_HIDDEN,
     BUTTON_TAG,
@@ -27,6 +30,8 @@ import {
 
 import { guiManager } from '../../utils/gui-manager';
 import { createPreferencesModal } from './preferencesModal';
+import { createVendorsModal } from './vendorsModal';
+import { generateVendorDescription } from '../../utils/gvl';
 
 /**
  * @callback CreateMainContainer
@@ -46,29 +51,43 @@ const createFocusSpan = () => {
 
 /**
  * Create consent modal and append it to "cc-main" el.
+ *
  * @param {import("../global").Api} api
  * @param {CreateMainContainer} createMainContainer
  */
 export const createConsentModal = (api, createMainContainer) => {
+    const config = globalObj._config;
     const state = globalObj._state;
     const dom = globalObj._dom;
-    const {hide, showPreferences, acceptCategory} = api;
+    const { hide, showPreferences, showVendors, acceptCategory } = api;
+
+    const isTcfCompliant = config.isTcfCompliant;
 
     /**
      * @type {import("../global").ConsentModalOptions}
      */
-    const consentModalData = state._currentTranslation && state._currentTranslation.consentModal;
+    const modalData = state._currentTranslation && state._currentTranslation.consentModal;
 
-    if (!consentModalData)
+    console.log('[createConsentModal] config', config);
+    console.log('[createConsentModal] state', state);
+    console.log('[createConsentModal] dom', dom);
+    console.log('[createConsentModal] modalData', modalData);
+
+    if (!modalData)
         return;
 
-    const acceptAllBtnData = consentModalData.acceptAllBtn,
-        acceptNecessaryBtnData = consentModalData.acceptNecessaryBtn,
-        showPreferencesBtnData = consentModalData.showPreferencesBtn,
-        closeIconLabelData = consentModalData.closeIconLabel,
-        footerData = consentModalData.footer,
-        consentModalLabelValue = consentModalData.label,
-        consentModalTitleValue = consentModalData.title;
+    const {
+        acceptAllBtn,
+        acceptNecessaryBtn,
+        showPreferencesBtn,
+        closeIconLabel,
+        footer,
+        label,
+        title,
+        vendorTitle = 'We and our partners perform the following based on your settings',
+        showVendorsBtn = 'List of partners (vendors)',
+        descriptionCountPlaceholder = '{{count}}'
+    } = modalData;
 
     /**
      * @param {string|string[]} [categories]
@@ -97,25 +116,22 @@ export const createConsentModal = (api, createMainContainer) => {
         setAttribute(dom._cm, ARIA_HIDDEN, 'false');
         setAttribute(dom._cm, 'aria-describedby', 'cm__desc');
 
-        if (consentModalLabelValue)
-            setAttribute(dom._cm, 'aria-label', consentModalLabelValue);
-        else if (consentModalTitleValue)
+        if (label)
+            setAttribute(dom._cm, 'aria-label', label);
+        else if (title)
             setAttribute(dom._cm, 'aria-labelledby', 'cm__title');
 
-        const
-            boxLayout = 'box',
-            guiOptions = state._userConfig.guiOptions,
-            consentModalOptions = guiOptions && guiOptions.consentModal,
-            consentModalLayout = consentModalOptions && consentModalOptions.layout || boxLayout,
-            isBoxLayout = consentModalLayout.split(' ')[0] === boxLayout;
+        const boxLayout = 'box';
+        const guiOptions = state._userConfig.guiOptions;
+        const consentModalOptions = guiOptions && guiOptions.consentModal;
+        const consentModalLayout = consentModalOptions && consentModalOptions.layout || boxLayout;
+        const isBoxLayout = consentModalLayout.split(' ')[0] === boxLayout;
 
-        /**
-         * Close icon-button (visible only in the 'box' layout)
-         */
-        if (consentModalTitleValue && closeIconLabelData && isBoxLayout) {
+        // Create a close icon-button (visible only in the 'box' layout)
+        if (title && closeIconLabel && isBoxLayout) {
             if (!dom._cmCloseIconBtn) {
                 dom._cmCloseIconBtn = createNode(BUTTON_TAG);
-                dom._cmCloseIconBtn.innerHTML = getSvgIcon();
+                dom._cmCloseIconBtn.innerHTML = getSvgIcon('x');
                 addClassCm(dom._cmCloseIconBtn, 'btn');
                 addClassCm(dom._cmCloseIconBtn, 'btn--close');
                 addEvent(dom._cmCloseIconBtn, CLICK_EVENT, () => {
@@ -125,41 +141,57 @@ export const createConsentModal = (api, createMainContainer) => {
                 appendChild(dom._cmBody, dom._cmCloseIconBtn);
             }
 
-            setAttribute(dom._cmCloseIconBtn, 'aria-label', closeIconLabelData);
+            setAttribute(dom._cmCloseIconBtn, 'aria-label', closeIconLabel);
         }
 
         appendChild(dom._cmBody, dom._cmTexts);
 
-        if (acceptAllBtnData || acceptNecessaryBtnData || showPreferencesBtnData)
+        // If there are any button labels, append the button div to the consent modal body
+        if (acceptAllBtn || acceptNecessaryBtn || showPreferencesBtn) {
             appendChild(dom._cmBody, dom._cmBtns);
+        }
 
         dom._cmDivTabindex = createNode(DIV_TAG);
         setAttribute(dom._cmDivTabindex, 'tabIndex', -1);
         appendChild(dom._cm, dom._cmDivTabindex);
 
-        appendChild(dom._cm, dom._cmBody);
+        // Properly nest the rest of the modal body structure
+        if (isTcfCompliant) {
+            dom._cmBodyRow = createNode(DIV_TAG);
+            addClassCm(dom._cmBodyRow, 'row');
+
+            dom._cmVendorBody = createNode(DIV_TAG);
+            addClassCm(dom._cmVendorBody, 'vendor-body');
+
+            appendChild(dom._cmBodyRow, dom._cmBody);
+            appendChild(dom._cmBodyRow, dom._cmVendorBody);
+            appendChild(dom._cm, dom._cmBodyRow);
+        } else {
+            appendChild(dom._cm, dom._cmBody);
+        }
         appendChild(dom._cmContainer, dom._cm);
     }
 
-    if (consentModalTitleValue) {
+    // Append the consent modal title
+    if (title) {
         if (!dom._cmTitle) {
-            dom._cmTitle = createNode('h2');
+            dom._cmTitle = createNode(H2_TAG);
             dom._cmTitle.className = dom._cmTitle.id = 'cm__title';
             appendChild(dom._cmTexts, dom._cmTitle);
         }
 
-        dom._cmTitle.innerHTML = consentModalTitleValue;
+        dom._cmTitle.innerHTML = title;
     }
 
-    let description = consentModalData.description;
-
+    // Append the modal description
+    let description = modalData.description;
     if (description) {
         if (state._revisionEnabled) {
             description = description.replace(
                 '{{revisionMessage}}',
                 state._validRevision
                     ? ''
-                    : consentModalData.revisionMessage || ''
+                    : modalData.revisionMessage || ''
             );
         }
 
@@ -171,8 +203,8 @@ export const createConsentModal = (api, createMainContainer) => {
 
         dom._cmDescription.innerHTML = description;
     }
-
-    if (acceptAllBtnData) {
+    
+    if (acceptAllBtn) {
         if (!dom._cmAcceptAllBtn) {
             dom._cmAcceptAllBtn = createNode(BUTTON_TAG);
             appendChild(dom._cmAcceptAllBtn, createFocusSpan());
@@ -185,10 +217,10 @@ export const createConsentModal = (api, createMainContainer) => {
             });
         }
 
-        dom._cmAcceptAllBtn.firstElementChild.innerHTML = acceptAllBtnData;
+        dom._cmAcceptAllBtn.firstElementChild.innerHTML = acceptAllBtn;
     }
 
-    if (acceptNecessaryBtnData) {
+    if (acceptNecessaryBtn) {
         if (!dom._cmAcceptNecessaryBtn) {
             dom._cmAcceptNecessaryBtn = createNode(BUTTON_TAG);
             appendChild(dom._cmAcceptNecessaryBtn, createFocusSpan());
@@ -201,10 +233,10 @@ export const createConsentModal = (api, createMainContainer) => {
             });
         }
 
-        dom._cmAcceptNecessaryBtn.firstElementChild.innerHTML = acceptNecessaryBtnData;
+        dom._cmAcceptNecessaryBtn.firstElementChild.innerHTML = acceptNecessaryBtn;
     }
 
-    if (showPreferencesBtnData) {
+    if (showPreferencesBtn) {
         if (!dom._cmShowPreferencesBtn) {
             dom._cmShowPreferencesBtn = createNode(BUTTON_TAG);
             appendChild(dom._cmShowPreferencesBtn, createFocusSpan());
@@ -219,17 +251,17 @@ export const createConsentModal = (api, createMainContainer) => {
             addEvent(dom._cmShowPreferencesBtn, CLICK_EVENT, showPreferences);
         }
 
-        dom._cmShowPreferencesBtn.firstElementChild.innerHTML = showPreferencesBtnData;
+        dom._cmShowPreferencesBtn.firstElementChild.innerHTML = showPreferencesBtn;
     }
 
     if (!dom._cmBtnGroup) {
         dom._cmBtnGroup = createNode(DIV_TAG);
         addClassCm(dom._cmBtnGroup, BTN_GROUP_CLASS);
 
-        acceptAllBtnData && appendChild(dom._cmBtnGroup, dom._cmAcceptAllBtn);
-        acceptNecessaryBtnData && appendChild(dom._cmBtnGroup, dom._cmAcceptNecessaryBtn);
+        acceptAllBtn && appendChild(dom._cmBtnGroup, dom._cmAcceptAllBtn);
+        acceptNecessaryBtn && appendChild(dom._cmBtnGroup, dom._cmAcceptNecessaryBtn);
 
-        (acceptAllBtnData || acceptNecessaryBtnData) && appendChild(dom._cmBody, dom._cmBtnGroup);
+        (acceptAllBtn || acceptNecessaryBtn) && appendChild(dom._cmBody, dom._cmBtnGroup);
         appendChild(dom._cmBtns, dom._cmBtnGroup);
     }
 
@@ -246,7 +278,7 @@ export const createConsentModal = (api, createMainContainer) => {
         }
     }
 
-    if (footerData) {
+    if (footer) {
         if (!dom._cmFooterLinksGroup) {
             let _consentModalFooter = createNode(DIV_TAG);
             let _consentModalFooterLinks = createNode(DIV_TAG);
@@ -261,10 +293,77 @@ export const createConsentModal = (api, createMainContainer) => {
             appendChild(dom._cm, _consentModalFooter);
         }
 
-        dom._cmFooterLinksGroup.innerHTML = footerData;
+        dom._cmFooterLinksGroup.innerHTML = footer;
     }
 
-    guiManager(0);
+    // Configure the consent modal to be TCF compliant
+    if (isTcfCompliant) {
+        // Step 1: Display the vendor count in the consent description
+        const { vendorCount } = state._gvlData;
+
+        if (!dom._cmVendorCount) {
+            dom._cmVendorCount = createNode(SPAN_TAG);
+            addClassCm(dom._cmVendorCount, 'vendor-count');
+            dom._cmVendorCount.innerHTML = vendorCount;
+        }
+
+        dom._cmDescription.innerHTML = dom._cmDescription.innerHTML.replace(descriptionCountPlaceholder, dom._cmVendorCount.outerHTML);
+
+        // Step 2: Append the consent modal vendor title
+        if (!dom._cmVendorText) {
+            dom._cmVendorText = createNode(DIV_TAG);
+            addClassCm(dom._cmVendorText, 'texts');
+            appendChild(dom._cmVendorBody, dom._cmVendorText);
+        }
+
+        if (vendorTitle) {
+            if (!dom._cmVendorTitle) {
+                dom._cmVendorTitle = createNode(H3_TAG);
+                dom._cmVendorTitle.className = dom._cmVendorTitle.id = 'cm__vendor-title';
+                addClassCm(dom._cmVendorTitle, 'title');
+                appendChild(dom._cmVendorText, dom._cmVendorTitle);
+            }
+
+            dom._cmVendorTitle.innerHTML = `${vendorTitle}:`;
+        }
+
+        // Step 3: Append the consent modal vendor description
+        if (!dom._cmVendorDescription) {
+            dom._cmVendorDescription = createNode('p');
+            dom._cmVendorDescription.className = dom._cmVendorDescription.id = 'cm__desc';
+            appendChild(dom._cmVendorText, dom._cmVendorDescription);
+        }
+
+        dom._cmVendorDescription.innerHTML = generateVendorDescription();
+
+        // Step 4: Append the show vendors button
+        if (showVendorsBtn) {
+            dom._cmVendorBtns = createNode(DIV_TAG);
+            addClassCm(dom._cmVendorBtns, 'btns');
+            appendChild(dom._cmVendorBody, dom._cmVendorBtns);
+
+            if (!dom._cmShowVendorsBtn) {
+                dom._cmShowVendorsBtn = createNode(BUTTON_TAG);
+                appendChild(dom._cmShowVendorsBtn, createFocusSpan());
+                addClassCm(dom._cmShowVendorsBtn, 'btn');
+                addClassCm(dom._cmShowVendorsBtn, 'btn--secondary');
+                setAttribute(dom._cmShowVendorsBtn, DATA_ROLE, 'show-vendors');
+  
+                addEvent(dom._cmShowVendorsBtn, 'mouseenter', () => {
+                    if (!state._vendorsModalExists) {
+                        createVendorsModal(api, createMainContainer);
+                    }
+                });
+                addEvent(dom._cmShowVendorsBtn, CLICK_EVENT, showVendors);
+  
+                dom._cmShowVendorsBtn.firstElementChild.innerHTML = showVendorsBtn;
+                appendChild(dom._cmVendorBtns, dom._cmShowVendorsBtn);
+            }
+        }
+    }
+
+    // Set the modal's layout
+    guiManager('consent');
 
     if (!state._consentModalExists) {
         state._consentModalExists = true;
@@ -282,7 +381,7 @@ export const createConsentModal = (api, createMainContainer) => {
         setTimeout(() => addClass(dom._cmContainer, 'cc--anim'), 100);
     }
 
-    getModalFocusableData(1);
+    getModalFocusableData('consent');
 
-    addDataButtonListeners(dom._cmBody, api, createPreferencesModal, createMainContainer);
+    addDataButtonListeners(dom._cmBody, api, createPreferencesModal, createVendorsModal, createMainContainer);
 };
