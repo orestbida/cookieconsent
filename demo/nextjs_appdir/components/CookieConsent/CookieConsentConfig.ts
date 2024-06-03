@@ -20,7 +20,7 @@ const config: CookieConsentConfig = {
     // domain: location.hostname,
     // path: '/',
     // sameSite: "Lax",
-    // expiresAfterDays: 365,
+    // expiresAfterDays: 365
   },
 
   /**
@@ -34,8 +34,8 @@ const config: CookieConsentConfig = {
     console.log('onConsent fired!', cookie);
   },
 
-  onChange: ({ changedCategories, changedServices }) => {
-    console.log('onChange fired!', changedCategories, changedServices);
+  onChange: ({ changedCategories, changedServices, changedPurposeIds, changedSpecialFeatureIds, changedVendorIds }) => {
+    console.log('onChange fired!', changedCategories, changedServices, changedPurposeIds, changedSpecialFeatureIds, changedVendorIds);
   },
 
   onModalReady: ({ modalName }) => {

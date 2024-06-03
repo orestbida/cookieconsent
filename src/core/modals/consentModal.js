@@ -59,7 +59,12 @@ export const createConsentModal = (api, createMainContainer) => {
     const config = globalObj._config;
     const state = globalObj._state;
     const dom = globalObj._dom;
-    const { hide, showPreferences, showVendors, acceptCategory } = api;
+    const {
+        hide,
+        showPreferences,
+        showVendors,
+        acceptMultiple
+    } = api;
 
     const isTcfCompliant = config.isTcfCompliant;
 
@@ -67,11 +72,6 @@ export const createConsentModal = (api, createMainContainer) => {
      * @type {import("../global").ConsentModalOptions}
      */
     const modalData = state._currentTranslation && state._currentTranslation.consentModal;
-
-    console.log('[createConsentModal] config', config);
-    console.log('[createConsentModal] state', state);
-    console.log('[createConsentModal] dom', dom);
-    console.log('[createConsentModal] modalData', modalData);
 
     if (!modalData)
         return;
@@ -91,10 +91,13 @@ export const createConsentModal = (api, createMainContainer) => {
 
     /**
      * @param {string|string[]} [categories]
+     * @param {'all' | number[]} purposesToAccept
+     * @param {'all' | number[]} specialFeaturesToAccept
+     * @param {'all' | number[]} vendorsToAllow
      */
-    const acceptAndHide = (categories) => {
+    const acceptAndHide = (categories, purposesToAccept = 'all', specialFeaturesToAccept = 'all', vendorsToAllow = 'all') => {
+        acceptMultiple(categories, [], purposesToAccept, specialFeaturesToAccept, vendorsToAllow);
         hide();
-        acceptCategory(categories);
     };
 
     // Create modal if it doesn't exist
@@ -136,7 +139,7 @@ export const createConsentModal = (api, createMainContainer) => {
                 addClassCm(dom._cmCloseIconBtn, 'btn--close');
                 addEvent(dom._cmCloseIconBtn, CLICK_EVENT, () => {
                     debug('CookieConsent [ACCEPT]: necessary');
-                    acceptAndHide([]);
+                    acceptAndHide([], [], [], []);
                 });
                 appendChild(dom._cmBody, dom._cmCloseIconBtn);
             }
@@ -229,7 +232,7 @@ export const createConsentModal = (api, createMainContainer) => {
 
             addEvent(dom._cmAcceptNecessaryBtn, CLICK_EVENT, () => {
                 debug('CookieConsent [ACCEPT]: necessary');
-                acceptAndHide([]);
+                acceptAndHide([], [], [], []);
             });
         }
 

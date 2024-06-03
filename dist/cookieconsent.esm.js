@@ -229,6 +229,13 @@ class GlobalState {
             _acceptedPurposeIds: [],
 
             /**
+             * Keeping track of the latest purpose IDs change.
+             *
+             * @type {number[]}
+             */
+            _lastChangedPurposeIds: [],
+
+            /**
              * Keeping track of accepted special feature IDs.
              *
              * @type {number[]}
@@ -236,11 +243,25 @@ class GlobalState {
             _acceptedSpecialFeatureIds: [],
 
             /**
+             * Keeping track of the latest special feature IDs change.
+             *
+             * @type {number[]}
+             */
+            _lastChangedSpecialFeatureIds: [],
+
+            /**
              * Keeping track of allowed vendor IDs.
              *
              * @type {number[]}
              */
             _allowedVendorIds: [],
+
+            /**
+             * Keeping track of the latest vendor IDs change.
+             *
+             * @type {number[]}
+             */
+            _lastChangedVendorIds: [],
 
             /**
              * Store all event data-cc event listeners
@@ -864,6 +885,63 @@ const resolveEnabledServices = (relativeCategory) => {
 };
 
 /**
+ * Helper for accepting the purposes and special features.
+ *
+ * @param {'all' | number[]} purposesToAccept
+ * @param {'all' | number[]} specialFeaturesToAccept
+ */
+const resolvePurposesAndSpecFeaturesToAccept = (purposesToAccept, specialFeaturesToAccept) => {
+    const { vendors } = globalObj._state._gvlData;
+
+    let vendorPurposeIds = [];
+    let vendorSpecialFeatureIds = [];
+
+    if (isArray(purposesToAccept)) {
+        vendorPurposeIds = purposesToAccept;
+    }
+
+    if (isArray(specialFeaturesToAccept)) {
+        vendorSpecialFeatureIds = specialFeaturesToAccept;
+    }
+
+    if (purposesToAccept === 'all' || specialFeaturesToAccept === 'all') {
+        for (const vendor of vendors) {
+            if (purposesToAccept === 'all') {
+                vendorPurposeIds.push(...vendor.purposes);
+            }
+            if (specialFeaturesToAccept === 'all') {
+                vendorSpecialFeatureIds.push(...vendor.specialFeatures);
+            }
+        }
+    }
+
+    vendorPurposeIds = unique(vendorPurposeIds);
+    vendorSpecialFeatureIds = unique(vendorSpecialFeatureIds);
+
+    globalObj._state._acceptedPurposeIds = vendorPurposeIds;
+    globalObj._state._acceptedSpecialFeatureIds = vendorSpecialFeatureIds;
+};
+
+/**
+ * Helper for allowing the vendors.
+ *
+ * @param {'all' | number[]} vendorsToAllow 
+ */
+const resolveVendorsToAllow = (vendorsToAllow) => {
+    const { vendors } = globalObj._state._gvlData;
+
+    let vendorIds = [];
+
+    if (vendorsToAllow === 'all') {
+        vendorIds = vendors.map((vendor) => vendor.id);
+    } else if (isArray(vendorsToAllow)) {
+        vendorIds = vendorsToAllow;
+    }
+
+    globalObj._state._allowedVendorIds = vendorIds;
+};
+
+/**
  * @param {string} eventName
  */
 const dispatchPluginEvent = (eventName, data) => dispatchEvent(new CustomEvent(eventName, {detail: data}));
@@ -1089,8 +1167,6 @@ const addDataButtonListeners = (elem, api, createPreferencesModal, createVendors
     const rootEl = elem || document;
     const getElements = dataRole => querySelectorAll(rootEl, `[${CUSTOM_ATTRIBUTE_SELECTOR}="${dataRole}"]`);
 
-    // TODO: Ovdje ćeš vjerojatno morati napraviti neku logiku da na odabir vendor ovlasti, ne gasiš odmah sve, a možda i ne? Provjeri
-
     /**
      * Helper function: accept and then hide modals.
      * 
@@ -1226,8 +1302,6 @@ const focusAfterTransition = (element, modalName) => {
         visibleDiv = globalObj._dom._vmDivTabIndex;
         break;
     }
-
-    console.log('focus after transition modalName', modalName, 'visiblediv', visibleDiv);
 
     const setFocus = (event) => {
         event.target.removeEventListener('transitionend', setFocus);
@@ -1413,6 +1487,7 @@ const fireEvent = (eventName, modalName, modal) => {
     } = globalObj._callbacks;
 
     const events = globalObj._customEvents;
+    const isTcfCompliant = globalObj._config.isTcfCompliant;
 
     //{{START: GUI}}
     if (modalName) {
@@ -1442,6 +1517,14 @@ const fireEvent = (eventName, modalName, modal) => {
     } else {
         params.changedCategories = globalObj._state._lastChangedCategoryNames;
         params.changedServices = globalObj._state._lastChangedServices;
+
+        // Add the additional properties to the data sent only if the consent is configured to be TCF compliant
+        if (isTcfCompliant) {
+            params.changedPurposeIds = globalObj._state._lastChangedPurposeIds;
+            params.changedSpecialFeatureIds = globalObj._state._lastChangedSpecialFeatureIds;
+            params.changedVendorIds = globalObj._state._lastChangedVendorIds;
+        }
+
         isFunction(_onChange) && _onChange(deepCopy(params));
     }
 
@@ -32490,30 +32573,13 @@ const mapGvlData = (disclosedVendorIds) => {
     const vendorsToShow = disclosedVendorIds?.filter((id) => id in gvl.vendors) || Object.keys(gvl.vendors);
 
     const originalPurposes = gvl.purposes;
-    Object.values(originalPurposes);
-
     const originalSpecialPurposes = gvl.specialPurposes;
-    Object.values(gvl.specialPurposes);
-
     const originalFeatures = gvl.features;
-    Object.values(gvl.features);
-
     const originalSpecialFeatures = gvl.specialFeatures;
-    Object.values(gvl.specialFeatures);
 
     const originalStacks = gvl.stacks;
     const stacks = Object.values(gvl.stacks);
-    Object.values(gvl.stacks).map((stack) => {
-        const mappedPurposes = stack.purposes.map((purposeId) => gvl.purposes[purposeId]);
-        const mappedSpecialFeatures = stack.specialFeatures.map((specialFeatureId) => gvl.specialFeatures[specialFeatureId]);
-
-        return {
-            ...stack,
-            purposes: mappedPurposes,
-            specialFeatures: mappedSpecialFeatures
-        };
-    });
-
+    
     const vendors = vendorsToShow.map((vendorId) => gvl.vendors[vendorId]);
     const extendedVendors = vendors.map((vendor) => {
         const mappedPurposes = vendor.purposes.map((id) => gvl.purposes[id]);
@@ -32566,19 +32632,14 @@ const generateVendorDescription = () => {
         vendorPurposes.push(...vendor.legIntPurposes);
     }
 
-    vendorSpecialFeatures = [...new Set(vendorSpecialFeatures)];
-    vendorPurposes = [...new Set(vendorPurposes)];
+    vendorSpecialFeatures = unique(vendorSpecialFeatures);
+    vendorPurposes = unique(vendorPurposes);
 
     const vendorSpecialFeaturesText = vendorSpecialFeatures.reduce((acc, curr) => `${acc} ${originalSpecialFeatures[curr].name}.`, '');
     const vendorPurposeText = vendorPurposes.reduce((acc, curr) =>  `${acc} ${originalPurposes[curr].name}.`, '');
-
+    
     return `${vendorSpecialFeaturesText} ${vendorPurposeText}`;
-
-    // console.log('[generateVendorDescription] vendorSpecialFeatures', vendorSpecialFeatures);
-    // console.log('[generateVendorDescription] vendorPurposes', vendorPurposes);
-    // console.log('[generateVendorDescription] vendorPurposeText', vendorPurposeText);
-    // console.log('[generateVendorDescription] vendorSpecialFeaturesText', vendorSpecialFeaturesText);
-
+    
     // let vendorDescription = '';
 
     // const vendorWithPurpose1 = vendors.find((v) => v.purposes.includes(1) || v.legIntPurposes.includes(1));
@@ -32665,19 +32726,13 @@ const generateVendorPreferenceModalData = () => {
         vendorSpecialFeatureIds.push(...vendor.specialFeatures);
     }
   
-    // console.log('[generateVendorPreferenceModalData] vendors', vendors);
-    // console.log('[generateVendorPreferenceModalData] vendorSpecialPurposeIds', vendorSpecialPurposeIds);
-    // console.log('[generateVendorPreferenceModalData] vendorFeatureIds', vendorFeatureIds);
-    // console.log('[generateVendorPreferenceModalData] vendorPurposeIds', vendorPurposeIds);
-    // console.log('[generateVendorPreferenceModalData] vendorSpecialFeatureIds', vendorSpecialFeatureIds);
-
     const specialPurposes = Object.values(createCountObject(vendorSpecialPurposeIds, originalSpecialPurposes));
     const features = Object.values(createCountObject(vendorFeatureIds, originalFeatures));
     const purposes = createCountObject(vendorPurposeIds, originalPurposes);
     const specialFeatures = createCountObject(vendorSpecialFeatureIds, originalSpecialFeatures);
 
-    let uniqueVendorPurposeIds = [...new Set(vendorPurposeIds)];
-    let uniqueVendorSpecialFeatureIds = [...new Set(vendorSpecialFeatureIds)];
+    let uniqueVendorPurposeIds = unique(vendorPurposeIds);
+    let uniqueVendorSpecialFeatureIds = unique(vendorSpecialFeatureIds);
 
     const sortedStacks = stacks.sort((s1, s2) => {
         const purposesDiff = s2.purposes.length - s1.purposes.length;
@@ -32688,15 +32743,6 @@ const generateVendorPreferenceModalData = () => {
 
         return s2.specialFeatures.length - s1.specialFeatures.length;
     });
-
-    // console.log('[generateVendorPreferenceModalData] specialPurposes', specialPurposes);
-    // console.log('[generateVendorPreferenceModalData] features', features);
-    // console.log('[generateVendorPreferenceModalData] purposes', purposes);
-    // console.log('[generateVendorPreferenceModalData] specialFeatures', specialFeatures);
-    // console.log('[generateVendorPreferenceModalData] uniqueVendorPurposeIds', uniqueVendorPurposeIds);
-    // console.log('[generateVendorPreferenceModalData] uniqueVendorSpecialFeatureIds', uniqueVendorSpecialFeatureIds);
-    // console.log('[generateVendorPreferenceModalData] stacks', stacks);
-    // console.log('[generateVendorPreferenceModalData] sortedStacks', sortedStacks);
 
     let stacksToShow = [];
     for (const stack of sortedStacks) {
@@ -32730,8 +32776,6 @@ const generateVendorPreferenceModalData = () => {
             stacksToShow.push(stackToShow);
         }
     }
-
-    // console.log('[generateVendorPreferenceModalData] stacksToShow', stacksToShow);
 
     return {
         stacksToShow,
@@ -32796,35 +32840,19 @@ const createVendorsModal = (api, createMainContainer) => {
      */
     const modalData = state._currentTranslation?.vendorsModal ?? {};
 
-    console.log('[createVendorsModal] config', config);
-    console.log('[createVendorsModal] state', state);
-    console.log('[createVendorsModal] dom', dom);
-    console.log('[createVendorsModal] modalData', modalData);
-
     const { extendedVendors } = state._gvlData;
-
-    console.log('[createVendorsModal] gvlData', state._gvlData);
 
     const {
         title = 'IAB Vendors List',
         closeIconLabel = '',
         backIconLabel = '',
         allowAllConsentBtn = 'Allow all',
-        rejectAllConsentBtn = 'Reject all',
+        denyAllConsentBtn = 'Deny all',
         allowSelectionBtn = 'Allow current selection',
         viewPrivacyPolicyLabel = 'View Privacy Policy',
         viewLegitimateInterestClaimLabel = 'View Legitimate Interest Claim',
         viewDeviceStorageDisclosureLabel = 'View Device Storage Disclosure'
     } = modalData;
-
-    console.log('[createVendorsModal] title', title);
-    console.log('[createVendorsModal] closeIconLabel', closeIconLabel);
-    console.log('[createVendorsModal] allowAllConsentBtn', allowAllConsentBtn);
-    console.log('[createVendorsModal] rejectAllConsentBtn', rejectAllConsentBtn);
-    console.log('[createVendorsModal] allowSelectionBtn', allowSelectionBtn);
-    console.log('[createVendorsModal] viewPrivacyPolicyLabel', viewPrivacyPolicyLabel);
-    console.log('[createVendorsModal] viewLegitimateInterestClaimLabel', viewLegitimateInterestClaimLabel);
-    console.log('[createVendorsModal] viewDeviceStorageDisclosureLabel', viewDeviceStorageDisclosureLabel);
 
     // Create modal if it doesn't exist
     if (!dom._vmContainer) {
@@ -33032,7 +33060,8 @@ const createVendorsModal = (api, createMainContainer) => {
         appendChild(_vmBtnGroup1, dom._vmAllowAllBtn);
 
         addEvent(dom._vmAllowAllBtn, CLICK_EVENT, () => {
-            console.log('ALLOW ALL CONSENTS');
+            allowVendors('all');
+            hideVendors();
         });
 
         dom._vmAllowAllBtn.innerHTML = allowAllConsentBtn;
@@ -33045,10 +33074,11 @@ const createVendorsModal = (api, createMainContainer) => {
         appendChild(_vmBtnGroup1, dom._vmRejectAllBtn);
 
         addEvent(dom._vmRejectAllBtn, CLICK_EVENT, () => {
-            console.log('REJECT ALL CONSENTS');
+            allowVendors([]);
+            hideVendors();
         });
 
-        dom._vmRejectAllBtn.innerHTML = rejectAllConsentBtn;
+        dom._vmRejectAllBtn.innerHTML = denyAllConsentBtn;
     }
 
     if (!dom._vmAllowSelectionBtn) {
@@ -33059,7 +33089,12 @@ const createVendorsModal = (api, createMainContainer) => {
         appendChild(_vmBtnGroup2, dom._vmAllowSelectionBtn);
 
         addEvent(dom._vmAllowSelectionBtn, CLICK_EVENT, () => {
-            console.log('ALLOW SELECTED CONSENTS');
+            const checkedVendorIds = Object.keys(dom._vendorCheckboxInputs)
+                .filter((id) => dom._vendorCheckboxInputs[id].checked)
+                .map((id) => parseInt(id, 10));
+
+            allowVendors(checkedVendorIds);
+            hideVendors();
         });
 
         dom._vmAllowSelectionBtn.innerHTML = allowSelectionBtn;
@@ -33125,15 +33160,6 @@ function createToggle(label, value) {
     // Save references for the input and create appropriate event
     dom._vendorCheckboxInputs[value] = toggle;
 
-    addEvent(toggle, CLICK_EVENT, () => {
-        // Allow / disallow the vendor
-        if (state._allowedVendorIds.includes((value))) {
-            state._allowedVendorIds = state._allowedVendorIds.filter((id) => id !== value);
-        } else {
-            state._allowedVendorIds.push(value);
-        }
-    });
-
     toggle.value = value;
     toggleLabelSpan.textContent = label.replace(/<.*>.*<\/.*>/gm, '');
 
@@ -33143,7 +33169,9 @@ function createToggle(label, value) {
 
     // If the consent is valid, retrieve checked states from a cookie
     // Otherwise set it to false
-    if (!state._invalidConsent) ; else {
+    if (!state._invalidConsent) {
+        toggle.checked = allowedVendor(value);
+    } else {
         toggle.checked = false;
     }
 
@@ -33383,15 +33411,22 @@ const createPreferencesModal = (api, createMainContainer) => {
     const config = globalObj._config;
     const state = globalObj._state;
     const dom = globalObj._dom;
-    const { hide, hidePreferences, acceptCategory } = api;
+    const {
+        hide,
+        hidePreferences,
+        acceptMultiple
+    } = api;
 
     const isTcfCompliant = config.isTcfCompliant;
 
     /**
      * @param {string|string[]} [categories]
+     * @param {'all' | number[]} purposesToAccept
+     * @param {'all' | number[]} specialFeaturesToAccept
+     * @param {'all' | number[]} vendorsToAllow
      */
-    const acceptHelper = (categories) => {
-        acceptCategory(categories);
+    const acceptAndHide = (categories, purposesToAccept = 'all', specialFeaturesToAccept = 'all', vendorsToAllow = 'all') => {
+        acceptMultiple(categories, [], purposesToAccept, specialFeaturesToAccept, vendorsToAllow);
         hidePreferences();
         hide();
     };
@@ -33403,12 +33438,6 @@ const createPreferencesModal = (api, createMainContainer) => {
 
     if (!modalData)
         return;
-
-    console.log('[createPreferencesModal] config', config);
-    console.log('[createPreferencesModal] state', state);
-    console.log('[createPreferencesModal] dom', dom);
-    console.log('[createPreferencesModal] modalData', modalData);
-    console.log('[createPreferencesModal] isTcfCompliant', isTcfCompliant);
 
     const {
         title,
@@ -33772,9 +33801,6 @@ const createPreferencesModal = (api, createMainContainer) => {
             features
         } = generateVendorPreferenceModalData();
 
-        console.log('[specialPurposes]', specialPurposes);
-        console.log('[features]', features);
-
         // Step 1: Show purposes that did not fit in any stack
         for (const purposeId of purposeIdsToShow) {
             const {
@@ -33838,7 +33864,7 @@ const createPreferencesModal = (api, createMainContainer) => {
             setAttribute(dom._pmAcceptAllBtn, DATA_ROLE, 'all');
             appendChild(_pmBtnGroup1, dom._pmAcceptAllBtn);
             addEvent(dom._pmAcceptAllBtn, CLICK_EVENT, () =>
-                acceptHelper('all')
+                acceptAndHide('all')
             );
         }
 
@@ -33852,7 +33878,7 @@ const createPreferencesModal = (api, createMainContainer) => {
             setAttribute(dom._pmAcceptNecessaryBtn, DATA_ROLE, 'necessary');
             appendChild(_pmBtnGroup1, dom._pmAcceptNecessaryBtn);
             addEvent(dom._pmAcceptNecessaryBtn, CLICK_EVENT, () =>
-                acceptHelper([])
+                acceptAndHide([], [], [], [])
             );
         }
 
@@ -33867,9 +33893,17 @@ const createPreferencesModal = (api, createMainContainer) => {
             setAttribute(dom._pmSavePreferencesBtn, DATA_ROLE, 'save');
             appendChild(_pmBtnGroup2, dom._pmSavePreferencesBtn);
 
-            addEvent(dom._pmSavePreferencesBtn, CLICK_EVENT, () =>
-                acceptHelper()
-            );
+            addEvent(dom._pmSavePreferencesBtn, CLICK_EVENT, () => {
+                const checkedPurposeIds = Object.keys(dom._purposeCheckboxInputs)
+                    .filter((id) => dom._purposeCheckboxInputs[id].checked)
+                    .map((id) => parseInt(id, 10));
+
+                const checkedSpecialFeatureIds = Object.keys(dom._specialFeatureCheckboxInputs)
+                    .filter((id) => dom._specialFeatureCheckboxInputs[id].checked)
+                    .map((id) => parseInt(id, 10));
+
+                acceptAndHide(undefined, checkedPurposeIds, checkedSpecialFeatureIds, []);
+            });
         }
 
         dom._pmSavePreferencesBtn.innerHTML = savePreferencesBtn;
@@ -33939,9 +33973,6 @@ function createToggleLabel(label, value, sCurrentCategoryObject, isService, cate
 
     setAttribute(toggleIcon, ARIA_HIDDEN, 'true');
 
-    console.log('[createToggleLabel] categoryCheckboxInputs', dom._categoryCheckboxInputs);
-    console.log('[createToggleLabel] serviceCheckboxInputs', dom._serviceCheckboxInputs);
-
     if (isService) {
         addClass(toggleLabel, 'toggle-service');
         setAttribute(toggle, SCRIPT_TAG_SELECTOR, categoryName);
@@ -33996,9 +34027,6 @@ function createToggleLabel(label, value, sCurrentCategoryObject, isService, cate
     appendChild(toggleIconCircle, toggleOffIcon);
     appendChild(toggleIconCircle, toggleOnIcon);
     appendChild(toggleIcon, toggleIconCircle);
-
-    console.log('[createToggleLabel] acceptedCategories', state._acceptedCategories);
-    console.log('[createToggleLabel] acceptedServices', state._acceptedServices);
 
     /**
      * If consent is valid => retrieve category states from cookie
@@ -34074,8 +34102,6 @@ function createPurposeToggleContainer(data, count, isReadonly, modalData, api, c
         hidePreferences();
         showVendors();
     };
-
-    console.log('[createPurposeToggleContainer] data', data, 'count', count, 'isreadonly', isReadonly, 'isStack', isStack);
 
     // Main toggle container
     var purposeToggle = createNode(DIV_TAG);
@@ -34301,8 +34327,6 @@ function createPurposeToggle(label, value, isReadonly = false, isSpecialFeature 
         originalStacks
     } = state._gvlData;
 
-    console.log('[createPurposeToggle] label', label, 'value', value, 'isReadonly', isReadonly, 'isSpecialFeature', isSpecialFeature, 'isStack', isStack, 'parentStackValue', parentStackValue);
-
     const toggleLabel = createNode('label');
     const toggle = createNode('input');
     const toggleIcon = createNode(SPAN_TAG);
@@ -34337,70 +34361,47 @@ function createPurposeToggle(label, value, isReadonly = false, isSpecialFeature 
             const stackPurposeIds = originalStacks[value].purposes;
             const stackSpecialFeatureIds = originalStacks[value].specialFeatures;
 
-            // Enable / disable all purposes in the current stack
-            for (const purposeId of stackPurposeIds) {
-                const purposeInput = dom._purposeCheckboxInputs[purposeId];
-                purposeInput.checked = isChecked;
+            const purposeInputs = dom._purposeCheckboxInputs;
+            const specialFeatureInputs = dom._specialFeatureCheckboxInputs;
 
-                if (state._acceptedPurposeIds.includes((purposeId))) {
-                    state._acceptedPurposeIds = state._acceptedPurposeIds.filter((id) => id !== purposeId);
-                } else {
-                    state._acceptedPurposeIds.push(purposeId);
-                }
+            // Toggle all purposes in the current stack
+            for (const purposeId of stackPurposeIds) {
+                purposeInputs[purposeId].checked = isChecked;
             }
 
-            // Enable / disable all special features in the current stack
+            // Toggle all special features in the current stack
             for (const specialFeatureId of stackSpecialFeatureIds) {
-                const specialFeatureInput = dom._specialFeatureCheckboxInputs[specialFeatureId];
-                specialFeatureInput.checked = isChecked;
-
-                if (state._acceptedSpecialFeatureIds.includes((specialFeatureId))) {
-                    state._acceptedSpecialFeatureIds = state._acceptedSpecialFeatureIds.filter((id) => id !== specialFeatureId);
-                } else {
-                    state._acceptedSpecialFeatureIds.push(specialFeatureId);
-                }
+                specialFeatureInputs[specialFeatureId].checked = isChecked;
             }
         });
     } else if (isSpecialFeature) {
         dom._specialFeatureCheckboxInputs[value] = toggle;
 
         addEvent(toggle, CLICK_EVENT, () => {
-            // Enable / disable the special feature
-            if (state._acceptedSpecialFeatureIds.includes((value))) {
-                state._acceptedSpecialFeatureIds = state._acceptedSpecialFeatureIds.filter((id) => id !== value);
-            } else {
-                state._acceptedSpecialFeatureIds.push(value);
-            }
-
             // Toggle the parent stack toggle if any child is checked and untoggle if nothing is checked
             if (parentStackValue) {
                 const stackToggle = dom._stackCheckboxInputs[parentStackValue];
 
                 const stackSpecialFeatureIds = originalStacks[parentStackValue].specialFeatures;
-                stackToggle.checked = stackSpecialFeatureIds.some((id) => state._acceptedSpecialFeatureIds.includes(id));
+                const specialFeatureInputs = dom._specialFeatureCheckboxInputs;
+                
+                stackToggle.checked = stackSpecialFeatureIds.some((id) => specialFeatureInputs[id].checked);
             }
         });
-    } else {
-        if (!isReadonly) {
-            dom._purposeCheckboxInputs[value] = toggle;
+    } else if (!isReadonly) {
+        dom._purposeCheckboxInputs[value] = toggle;
 
-            addEvent(toggle, CLICK_EVENT, () => {
-                // Enable / disable the purpose
-                if (state._acceptedPurposeIds.includes((value))) {
-                    state._acceptedPurposeIds = state._acceptedPurposeIds.filter((id) => id !== value);
-                } else {
-                    state._acceptedPurposeIds.push(value);
-                }
-
-                // Toggle the parent stack toggle if any child is checked and untoggle if nothing is checked
-                if (parentStackValue) {
-                    const stackToggle = dom._stackCheckboxInputs[parentStackValue];
+        addEvent(toggle, CLICK_EVENT, () => {
+            // Toggle the parent stack toggle if any child is checked and untoggle if nothing is checked
+            if (parentStackValue) {
+                const stackToggle = dom._stackCheckboxInputs[parentStackValue];
   
-                    const stackPurposeIds = originalStacks[parentStackValue].purposes;
-                    stackToggle.checked = stackPurposeIds.some((id) => state._acceptedPurposeIds.includes(id));
-                }
-            });
-        }
+                const stackPurposeIds = originalStacks[parentStackValue].purposes;
+                const purposeInputs = dom._purposeCheckboxInputs;
+
+                stackToggle.checked = stackPurposeIds.some((id) => purposeInputs[id].checked);
+            }
+        });
     }
 
     toggle.value = value;
@@ -34410,9 +34411,20 @@ function createPurposeToggle(label, value, isReadonly = false, isSpecialFeature 
     appendChild(toggleIconCircle, toggleOnIcon);
     appendChild(toggleIcon, toggleIconCircle);
 
-    // If the consent is valid, retrieve checked states from a cookie
+    // If the consent is valid, retrieve checked states from a state
     // Otherwise set it to false
-    if (!state._invalidConsent) ; else {
+    if (!state._invalidConsent) {
+        if (isStack) {
+            const stackPurposeIds = originalStacks[value].purposes;
+            const stackSpecialFeatureIds = originalStacks[value].specialFeatures;
+
+            toggle.checked = stackPurposeIds.some((id) => acceptedPurpose(id)) || stackSpecialFeatureIds.some((id) => acceptedSpecialFeature(id));
+        } else if (isSpecialFeature) {
+            toggle.checked = acceptedSpecialFeature(value);
+        } else {
+            toggle.checked = acceptedPurpose(value);
+        }
+    } else {
         toggle.checked = false;
     }
 
@@ -34541,7 +34553,12 @@ const createConsentModal = (api, createMainContainer) => {
     const config = globalObj._config;
     const state = globalObj._state;
     const dom = globalObj._dom;
-    const { hide, showPreferences, showVendors, acceptCategory } = api;
+    const {
+        hide,
+        showPreferences,
+        showVendors,
+        acceptMultiple
+    } = api;
 
     const isTcfCompliant = config.isTcfCompliant;
 
@@ -34549,11 +34566,6 @@ const createConsentModal = (api, createMainContainer) => {
      * @type {import("../global").ConsentModalOptions}
      */
     const modalData = state._currentTranslation && state._currentTranslation.consentModal;
-
-    console.log('[createConsentModal] config', config);
-    console.log('[createConsentModal] state', state);
-    console.log('[createConsentModal] dom', dom);
-    console.log('[createConsentModal] modalData', modalData);
 
     if (!modalData)
         return;
@@ -34573,10 +34585,13 @@ const createConsentModal = (api, createMainContainer) => {
 
     /**
      * @param {string|string[]} [categories]
+     * @param {'all' | number[]} purposesToAccept
+     * @param {'all' | number[]} specialFeaturesToAccept
+     * @param {'all' | number[]} vendorsToAllow
      */
-    const acceptAndHide = (categories) => {
+    const acceptAndHide = (categories, purposesToAccept = 'all', specialFeaturesToAccept = 'all', vendorsToAllow = 'all') => {
+        acceptMultiple(categories, [], purposesToAccept, specialFeaturesToAccept, vendorsToAllow);
         hide();
-        acceptCategory(categories);
     };
 
     // Create modal if it doesn't exist
@@ -34618,7 +34633,7 @@ const createConsentModal = (api, createMainContainer) => {
                 addClassCm(dom._cmCloseIconBtn, 'btn--close');
                 addEvent(dom._cmCloseIconBtn, CLICK_EVENT, () => {
                     debug('CookieConsent [ACCEPT]: necessary');
-                    acceptAndHide([]);
+                    acceptAndHide([], [], [], []);
                 });
                 appendChild(dom._cmBody, dom._cmCloseIconBtn);
             }
@@ -34711,7 +34726,7 @@ const createConsentModal = (api, createMainContainer) => {
 
             addEvent(dom._cmAcceptNecessaryBtn, CLICK_EVENT, () => {
                 debug('CookieConsent [ACCEPT]: necessary');
-                acceptAndHide([]);
+                acceptAndHide([], [], [], []);
             });
         }
 
@@ -35179,6 +35194,19 @@ const saveCookiePreferences = () => {
             servicesWereChanged = true;
     }
 
+    // Determine if purposes, specialFeatures or vendors were changed from last state
+    const purposesFromLastState = state._savedCookieContent.purposeIds ?? [];
+    const specialFeaturesFromLastState = state._savedCookieContent.specialFeatureIds ?? [];
+    const vendorsFromLastState = state._savedCookieContent.vendorIds ?? [];
+
+    state._lastChangedPurposeIds = arrayDiff(purposesFromLastState, state._acceptedPurposeIds);
+    state._lastChangedSpecialFeatureIds = arrayDiff(specialFeaturesFromLastState, state._acceptedSpecialFeatureIds);
+    state._lastChangedVendorIds = arrayDiff(vendorsFromLastState, state._allowedVendorIds);
+
+    const purposesWereChanged = state._lastChangedPurposeIds.length > 0;
+    const specialFeaturesWereChanged = state._lastChangedSpecialFeatureIds.length > 0;
+    const vendorsWereChanged = state._lastChangedVendorIds.length > 0;
+
     //{{START: GUI}}
     const categoryToggles = globalObj._dom._categoryCheckboxInputs;
 
@@ -35213,11 +35241,18 @@ const saveCookiePreferences = () => {
         data: state._cookieData,
         consentTimestamp: state._consentTimestamp.toISOString(),
         consentId: state._consentId,
-        services: deepCopy(state._acceptedServices)
+        services: deepCopy(state._acceptedServices),
+        purposeIds: deepCopy(state._acceptedPurposeIds),
+        specialFeatureIds: deepCopy(state._acceptedSpecialFeatureIds),
+        vendorIds: deepCopy(state._allowedVendorIds)
     };
 
     let isFirstConsent = false;
-    const stateChanged = categoriesWereChanged || servicesWereChanged;
+    const stateChanged = categoriesWereChanged
+      || servicesWereChanged
+      || purposesWereChanged
+      || specialFeaturesWereChanged
+      || vendorsWereChanged;
 
     if (state._invalidConsent || stateChanged) {
         /**
@@ -35253,8 +35288,9 @@ const saveCookiePreferences = () => {
             return;
     }
 
-    if (stateChanged)
+    if (stateChanged) {
         fireEvent(globalObj._customEvents._onChange);
+    }
 
     /**
      * Reload page if needed
@@ -35579,7 +35615,25 @@ const setConfig = async (userConfig) => {
 };
 
 /**
- * Accept API
+ * Accept multiple API.
+ *
+ * @param {string[]|string} categories - Categories to accept
+ * @param {string[]} [excludedCategories]
+ * @param {'all' | number[]} purposesToAccept
+ * @param {'all' | number[]} specialFeaturesToAccept
+ * @param {'all' | number[]} vendorsToAllow
+ */
+const acceptMultiple = (categories, excludedCategories = [], purposesToAccept = 'all', specialFeaturesToAccept = 'all', vendorsToAllow = 'all') => {
+    resolveEnabledCategories(categories, excludedCategories);
+    resolveEnabledServices();
+    resolvePurposesAndSpecFeaturesToAccept(purposesToAccept, specialFeaturesToAccept);
+    resolveVendorsToAllow(vendorsToAllow);
+    saveCookiePreferences();
+};
+
+/**
+ * Accept category API.
+ *
  * @param {string[]|string} categories - Categories to accept
  * @param {string[]} [excludedCategories]
  */
@@ -35590,16 +35644,65 @@ const acceptCategory = (categories, excludedCategories = []) => {
 };
 
 /**
- * Returns true if cookie category is accepted
+ * Allow vendors API.
+ *
+ * @param {'all' | number[]} vendorsToAllow
+ */
+const allowVendors = (vendorsToAllow) => {
+    resolveVendorsToAllow(vendorsToAllow);
+    saveCookiePreferences();
+};
+
+/**
+ * Returns true if cookie category is accepted.
+ *
  * @param {string} category
  */
 const acceptedCategory = (category) => {
-
     const acceptedCategories = !globalObj._state._invalidConsent
         ? globalObj._state._acceptedCategories
         : [];
 
     return elContains(acceptedCategories, category);
+};
+
+/**
+ * Returns true if purpose is accepted.
+ *
+ * @param {number} purposeId 
+ */
+const acceptedPurpose = (purposeId) => {
+    const acceptedPurposeIds = !globalObj._state._invalidConsent
+        ? globalObj._state._acceptedPurposeIds
+        : [];
+
+    return elContains(acceptedPurposeIds, purposeId);
+};
+
+/**
+ * Returns true if special feature is accepted.
+ *
+ * @param {number} specialFeatureId 
+ */
+const acceptedSpecialFeature = (specialFeatureId) => {
+    const acceptedSpecialFeatureIds = !globalObj._state._invalidConsent
+        ? globalObj._state._acceptedSpecialFeatureIds
+        : [];
+
+    return elContains(acceptedSpecialFeatureIds, specialFeatureId);
+};
+
+/**
+ * Returns true if vendor is allowed.
+ *
+ * @param {number} vendorId 
+ */
+const allowedVendor = (vendorId) => {
+    const allowedVendorIds = !globalObj._state._invalidConsent
+        ? globalObj._state._allowedVendorIds
+        : [];
+
+    return elContains(allowedVendorIds, vendorId);
 };
 
 /**
@@ -35798,15 +35901,24 @@ const showPreferences = () => {
  * https://github.com/orestbida/cookieconsent/issues/481
  */
 const discardUnsavedPreferences = () => {
+    const dom = globalObj._dom;
+    const state = globalObj._state;
+
     const consentIsValid = validConsent();
-    const allDefinedCategories = globalObj._state._allDefinedCategories;
-    const categoryInputs = globalObj._dom._categoryCheckboxInputs;
-    const serviceInputs = globalObj._dom._serviceCheckboxInputs;
+
+    const allDefinedCategories = state._allDefinedCategories;
+    const categoryInputs = dom._categoryCheckboxInputs;
+    const serviceInputs = dom._serviceCheckboxInputs;
+    const stackInputs = dom._stackCheckboxInputs;
+    const purposeInputs = dom._purposeCheckboxInputs;
+    const specialFeatureInputs = dom._specialFeatureCheckboxInputs;
+
+    const { originalStacks } = state._gvlData;
 
     /**
      * @param {string} category
      */
-    const categoryEnabledByDefault = (category) => elContains(globalObj._state._defaultEnabledCategories, category);
+    const categoryEnabledByDefault = (category) => elContains(state._defaultEnabledCategories, category);
 
     for (const category in categoryInputs) {
         const isReadOnly = !!allDefinedCategories[category].readOnly;
@@ -35822,6 +35934,21 @@ const discardUnsavedPreferences = () => {
                 : categoryEnabledByDefault(category)
             );
         }
+    }
+
+    for (const purposeId in purposeInputs) {
+        purposeInputs[purposeId].checked = acceptedPurpose(parseInt(purposeId, 10));
+    }
+
+    for (const specialFeatureId in specialFeatureInputs) {
+        specialFeatureInputs[specialFeatureId].checked = acceptedSpecialFeature(parseInt(specialFeatureId, 10));
+    }
+
+    for (const stackId in stackInputs) {
+        const stackPurposeIds = originalStacks[stackId].purposes;
+        const stackSpecialFeatureIds = originalStacks[stackId].specialFeatures;
+
+        stackInputs[stackId].checked = stackPurposeIds.some((id) => acceptedPurpose(id)) || stackSpecialFeatureIds.some((id) => acceptedSpecialFeature(id));
     }
 };
 
@@ -35911,6 +36038,8 @@ const hideVendors = () => {
 
     state._vendorsModalVisible = false;
 
+    discardUnsavedVendorsConsent();
+
     // Fix focus restoration to body with Chrome
     focus(dom._vmFocusSpan, true);
 
@@ -35932,6 +36061,17 @@ const hideVendors = () => {
     fireEvent(globalObj._customEvents._onModalHide, VENDORS_MODAL_NAME);
 };
 
+/**
+ * Discard unsaved vendors consent.
+ */
+const discardUnsavedVendorsConsent = () => {
+    const vendorInputs = globalObj._dom._vendorCheckboxInputs;
+
+    for (const vendorId in vendorInputs) {
+        vendorInputs[vendorId].checked = allowedVendor(parseInt(vendorId, 10));
+    }
+};
+
 var miniAPI = {
     show,
     hide,
@@ -35939,7 +36079,7 @@ var miniAPI = {
     hidePreferences,
     showVendors,
     hideVendors,
-    acceptCategory
+    acceptMultiple
 };
 
 /**
@@ -36138,6 +36278,9 @@ const retrieveState = () => {
     const {
         categories,
         services,
+        purposeIds,
+        specialFeatureIds,
+        vendorIds,
         consentId,
         consentTimestamp,
         lastConsentTimestamp,
@@ -36146,6 +36289,9 @@ const retrieveState = () => {
     } = cookieValue;
 
     const validCategories = isArray(categories);
+    const validPurposeIds = isArray(purposeIds);
+    const validSpecialFeatureIds = isArray(specialFeatureIds);
+    const validVendorIds = isArray(vendorIds);
 
     state._savedCookieContent = cookieValue;
     state._consentId = consentId;
@@ -36174,7 +36320,10 @@ const retrieveState = () => {
         || !state._validRevision
         || !state._consentTimestamp
         || !state._lastConsentTimestamp
-        || !validCategories;
+        || !validCategories
+        || !validPurposeIds
+        || !validSpecialFeatureIds
+        || !validVendorIds;
 
     /**
      * If localStorage is enabled, also check the stored `expirationTime`
@@ -36198,6 +36347,10 @@ const retrieveState = () => {
             ...state._acceptedServices,
             ...services
         };
+
+        state._acceptedPurposeIds = purposeIds;
+        state._acceptedSpecialFeatureIds = specialFeatureIds;
+        state._allowedVendorIds = vendorIds;
 
         setAcceptedCategories([
             ...state._readOnlyCategories,
@@ -36312,4 +36465,4 @@ const reset = (deleteCookie) => {
     window._ccRun = false;
 };
 
-export { acceptCategory, acceptService, acceptedCategory, acceptedService, eraseCookies, getConfig, getCookie, getUserPreferences, hide, hidePreferences, hideVendors, loadScript, reset, run, setCookieData, setLanguage, show, showPreferences, showVendors, validConsent, validCookie };
+export { acceptCategory, acceptMultiple, acceptService, acceptedCategory, acceptedPurpose, acceptedService, acceptedSpecialFeature, allowVendors, allowedVendor, eraseCookies, getConfig, getCookie, getUserPreferences, hide, hidePreferences, hideVendors, loadScript, reset, run, setCookieData, setLanguage, show, showPreferences, showVendors, validConsent, validCookie };

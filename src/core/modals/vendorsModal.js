@@ -32,6 +32,7 @@ import { guiManager } from '../../utils/gui-manager';
 import { convertSecondsIntoMonths } from '../../utils/time';
 import { replaceTextSpacesWithSymbol } from '../../utils/text';
 import { createPreferencesModal } from './preferencesModal';
+import { allowVendors, allowedVendor } from '../api';
 
 /**
  * @callback CreateMainContainer
@@ -65,35 +66,19 @@ export const createVendorsModal = (api, createMainContainer) => {
      */
     const modalData = state._currentTranslation?.vendorsModal ?? {};
 
-    console.log('[createVendorsModal] config', config);
-    console.log('[createVendorsModal] state', state);
-    console.log('[createVendorsModal] dom', dom);
-    console.log('[createVendorsModal] modalData', modalData);
-
     const { extendedVendors } = state._gvlData;
-
-    console.log('[createVendorsModal] gvlData', state._gvlData);
 
     const {
         title = 'IAB Vendors List',
         closeIconLabel = '',
         backIconLabel = '',
         allowAllConsentBtn = 'Allow all',
-        rejectAllConsentBtn = 'Reject all',
+        denyAllConsentBtn = 'Deny all',
         allowSelectionBtn = 'Allow current selection',
         viewPrivacyPolicyLabel = 'View Privacy Policy',
         viewLegitimateInterestClaimLabel = 'View Legitimate Interest Claim',
         viewDeviceStorageDisclosureLabel = 'View Device Storage Disclosure'
     } = modalData;
-
-    console.log('[createVendorsModal] title', title);
-    console.log('[createVendorsModal] closeIconLabel', closeIconLabel);
-    console.log('[createVendorsModal] allowAllConsentBtn', allowAllConsentBtn);
-    console.log('[createVendorsModal] rejectAllConsentBtn', rejectAllConsentBtn);
-    console.log('[createVendorsModal] allowSelectionBtn', allowSelectionBtn);
-    console.log('[createVendorsModal] viewPrivacyPolicyLabel', viewPrivacyPolicyLabel);
-    console.log('[createVendorsModal] viewLegitimateInterestClaimLabel', viewLegitimateInterestClaimLabel);
-    console.log('[createVendorsModal] viewDeviceStorageDisclosureLabel', viewDeviceStorageDisclosureLabel);
 
     // Create modal if it doesn't exist
     if (!dom._vmContainer) {
@@ -301,7 +286,8 @@ export const createVendorsModal = (api, createMainContainer) => {
         appendChild(_vmBtnGroup1, dom._vmAllowAllBtn);
 
         addEvent(dom._vmAllowAllBtn, CLICK_EVENT, () => {
-            console.log('ALLOW ALL CONSENTS');
+            allowVendors('all');
+            hideVendors();
         });
 
         dom._vmAllowAllBtn.innerHTML = allowAllConsentBtn;
@@ -314,10 +300,11 @@ export const createVendorsModal = (api, createMainContainer) => {
         appendChild(_vmBtnGroup1, dom._vmRejectAllBtn);
 
         addEvent(dom._vmRejectAllBtn, CLICK_EVENT, () => {
-            console.log('REJECT ALL CONSENTS');
+            allowVendors([]);
+            hideVendors();
         });
 
-        dom._vmRejectAllBtn.innerHTML = rejectAllConsentBtn;
+        dom._vmRejectAllBtn.innerHTML = denyAllConsentBtn;
     }
 
     if (!dom._vmAllowSelectionBtn) {
@@ -328,7 +315,12 @@ export const createVendorsModal = (api, createMainContainer) => {
         appendChild(_vmBtnGroup2, dom._vmAllowSelectionBtn);
 
         addEvent(dom._vmAllowSelectionBtn, CLICK_EVENT, () => {
-            console.log('ALLOW SELECTED CONSENTS');
+            const checkedVendorIds = Object.keys(dom._vendorCheckboxInputs)
+                .filter((id) => dom._vendorCheckboxInputs[id].checked)
+                .map((id) => parseInt(id, 10));
+
+            allowVendors(checkedVendorIds);
+            hideVendors();
         });
 
         dom._vmAllowSelectionBtn.innerHTML = allowSelectionBtn;
@@ -394,15 +386,6 @@ function createToggle(label, value) {
     // Save references for the input and create appropriate event
     dom._vendorCheckboxInputs[value] = toggle;
 
-    addEvent(toggle, CLICK_EVENT, () => {
-        // Allow / disallow the vendor
-        if (state._allowedVendorIds.includes((value))) {
-            state._allowedVendorIds = state._allowedVendorIds.filter((id) => id !== value);
-        } else {
-            state._allowedVendorIds.push(value);
-        }
-    });
-
     toggle.value = value;
     toggleLabelSpan.textContent = label.replace(/<.*>.*<\/.*>/gm, '');
 
@@ -413,9 +396,7 @@ function createToggle(label, value) {
     // If the consent is valid, retrieve checked states from a cookie
     // Otherwise set it to false
     if (!state._invalidConsent) {
-        // TODO: Get is true or false from a state of somesorts.
-        // if elContains(state._acceptedVendors, value)
-        // toggle.checked = true;
+        toggle.checked = allowedVendor(value);
     } else {
         toggle.checked = false;
     }

@@ -188,6 +188,13 @@ export class GlobalState {
             _acceptedPurposeIds: [],
 
             /**
+             * Keeping track of the latest purpose IDs change.
+             *
+             * @type {number[]}
+             */
+            _lastChangedPurposeIds: [],
+
+            /**
              * Keeping track of accepted special feature IDs.
              *
              * @type {number[]}
@@ -195,11 +202,25 @@ export class GlobalState {
             _acceptedSpecialFeatureIds: [],
 
             /**
+             * Keeping track of the latest special feature IDs change.
+             *
+             * @type {number[]}
+             */
+            _lastChangedSpecialFeatureIds: [],
+
+            /**
              * Keeping track of allowed vendor IDs.
              *
              * @type {number[]}
              */
             _allowedVendorIds: [],
+
+            /**
+             * Keeping track of the latest vendor IDs change.
+             *
+             * @type {number[]}
+             */
+            _lastChangedVendorIds: [],
 
             /**
              * Store all event data-cc event listeners

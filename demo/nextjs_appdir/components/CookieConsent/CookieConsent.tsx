@@ -37,6 +37,14 @@ export default function CookieConsentCmp() {
       <button
         type="button"
         className="border p-2"
+        onClick={CookieConsent.showVendors}
+      >
+        Show vendors list
+      </button>
+
+      <button
+        type="button"
+        className="border p-2"
         onClick={handleCookieConsentReset}
       >
         Reset cookie consent

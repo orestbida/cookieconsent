@@ -39,6 +39,7 @@ import {
 import { generateVendorPreferenceModalData } from '../../utils/gvl';
 import { replaceTextSpacesWithSymbol } from '../../utils/text';
 import { createVendorsModal } from './vendorsModal';
+import { acceptedPurpose, acceptedSpecialFeature } from '../api';
 
 /**
  * @callback CreateMainContainer
@@ -54,15 +55,22 @@ export const createPreferencesModal = (api, createMainContainer) => {
     const config = globalObj._config;
     const state = globalObj._state;
     const dom = globalObj._dom;
-    const { hide, hidePreferences, acceptCategory } = api;
+    const {
+        hide,
+        hidePreferences,
+        acceptMultiple
+    } = api;
 
     const isTcfCompliant = config.isTcfCompliant;
 
     /**
      * @param {string|string[]} [categories]
+     * @param {'all' | number[]} purposesToAccept
+     * @param {'all' | number[]} specialFeaturesToAccept
+     * @param {'all' | number[]} vendorsToAllow
      */
-    const acceptHelper = (categories) => {
-        acceptCategory(categories);
+    const acceptAndHide = (categories, purposesToAccept = 'all', specialFeaturesToAccept = 'all', vendorsToAllow = 'all') => {
+        acceptMultiple(categories, [], purposesToAccept, specialFeaturesToAccept, vendorsToAllow);
         hidePreferences();
         hide();
     };
@@ -74,12 +82,6 @@ export const createPreferencesModal = (api, createMainContainer) => {
 
     if (!modalData)
         return;
-
-    console.log('[createPreferencesModal] config', config);
-    console.log('[createPreferencesModal] state', state);
-    console.log('[createPreferencesModal] dom', dom);
-    console.log('[createPreferencesModal] modalData', modalData);
-    console.log('[createPreferencesModal] isTcfCompliant', isTcfCompliant);
 
     const {
         title,
@@ -443,9 +445,6 @@ export const createPreferencesModal = (api, createMainContainer) => {
             features
         } = generateVendorPreferenceModalData();
 
-        console.log('[specialPurposes]', specialPurposes);
-        console.log('[features]', features);
-
         // Step 1: Show purposes that did not fit in any stack
         for (const purposeId of purposeIdsToShow) {
             const {
@@ -509,7 +508,7 @@ export const createPreferencesModal = (api, createMainContainer) => {
             setAttribute(dom._pmAcceptAllBtn, DATA_ROLE, 'all');
             appendChild(_pmBtnGroup1, dom._pmAcceptAllBtn);
             addEvent(dom._pmAcceptAllBtn, CLICK_EVENT, () =>
-                acceptHelper('all')
+                acceptAndHide('all')
             );
         }
 
@@ -523,7 +522,7 @@ export const createPreferencesModal = (api, createMainContainer) => {
             setAttribute(dom._pmAcceptNecessaryBtn, DATA_ROLE, 'necessary');
             appendChild(_pmBtnGroup1, dom._pmAcceptNecessaryBtn);
             addEvent(dom._pmAcceptNecessaryBtn, CLICK_EVENT, () =>
-                acceptHelper([])
+                acceptAndHide([], [], [], [])
             );
         }
 
@@ -538,9 +537,17 @@ export const createPreferencesModal = (api, createMainContainer) => {
             setAttribute(dom._pmSavePreferencesBtn, DATA_ROLE, 'save');
             appendChild(_pmBtnGroup2, dom._pmSavePreferencesBtn);
 
-            addEvent(dom._pmSavePreferencesBtn, CLICK_EVENT, () =>
-                acceptHelper()
-            );
+            addEvent(dom._pmSavePreferencesBtn, CLICK_EVENT, () => {
+                const checkedPurposeIds = Object.keys(dom._purposeCheckboxInputs)
+                    .filter((id) => dom._purposeCheckboxInputs[id].checked)
+                    .map((id) => parseInt(id, 10));
+
+                const checkedSpecialFeatureIds = Object.keys(dom._specialFeatureCheckboxInputs)
+                    .filter((id) => dom._specialFeatureCheckboxInputs[id].checked)
+                    .map((id) => parseInt(id, 10));
+
+                acceptAndHide(undefined, checkedPurposeIds, checkedSpecialFeatureIds, []);
+            });
         }
 
         dom._pmSavePreferencesBtn.innerHTML = savePreferencesBtn;
@@ -610,9 +617,6 @@ function createToggleLabel(label, value, sCurrentCategoryObject, isService, cate
 
     setAttribute(toggleIcon, ARIA_HIDDEN, 'true');
 
-    console.log('[createToggleLabel] categoryCheckboxInputs', dom._categoryCheckboxInputs);
-    console.log('[createToggleLabel] serviceCheckboxInputs', dom._serviceCheckboxInputs);
-
     if (isService) {
         addClass(toggleLabel, 'toggle-service');
         setAttribute(toggle, SCRIPT_TAG_SELECTOR, categoryName);
@@ -667,9 +671,6 @@ function createToggleLabel(label, value, sCurrentCategoryObject, isService, cate
     appendChild(toggleIconCircle, toggleOffIcon);
     appendChild(toggleIconCircle, toggleOnIcon);
     appendChild(toggleIcon, toggleIconCircle);
-
-    console.log('[createToggleLabel] acceptedCategories', state._acceptedCategories);
-    console.log('[createToggleLabel] acceptedServices', state._acceptedServices);
 
     /**
      * If consent is valid => retrieve category states from cookie
@@ -745,8 +746,6 @@ function createPurposeToggleContainer(data, count, isReadonly, modalData, api, c
         hidePreferences();
         showVendors();
     };
-
-    console.log('[createPurposeToggleContainer] data', data, 'count', count, 'isreadonly', isReadonly, 'isStack', isStack);
 
     // Main toggle container
     var purposeToggle = createNode(DIV_TAG);
@@ -972,8 +971,6 @@ function createPurposeToggle(label, value, isReadonly = false, isSpecialFeature 
         originalStacks
     } = state._gvlData;
 
-    console.log('[createPurposeToggle] label', label, 'value', value, 'isReadonly', isReadonly, 'isSpecialFeature', isSpecialFeature, 'isStack', isStack, 'parentStackValue', parentStackValue);
-
     const toggleLabel = createNode('label');
     const toggle = createNode('input');
     const toggleIcon = createNode(SPAN_TAG);
@@ -1008,70 +1005,47 @@ function createPurposeToggle(label, value, isReadonly = false, isSpecialFeature 
             const stackPurposeIds = originalStacks[value].purposes;
             const stackSpecialFeatureIds = originalStacks[value].specialFeatures;
 
-            // Enable / disable all purposes in the current stack
-            for (const purposeId of stackPurposeIds) {
-                const purposeInput = dom._purposeCheckboxInputs[purposeId];
-                purposeInput.checked = isChecked;
+            const purposeInputs = dom._purposeCheckboxInputs;
+            const specialFeatureInputs = dom._specialFeatureCheckboxInputs;
 
-                if (state._acceptedPurposeIds.includes((purposeId))) {
-                    state._acceptedPurposeIds = state._acceptedPurposeIds.filter((id) => id !== purposeId);
-                } else {
-                    state._acceptedPurposeIds.push(purposeId);
-                }
+            // Toggle all purposes in the current stack
+            for (const purposeId of stackPurposeIds) {
+                purposeInputs[purposeId].checked = isChecked;
             }
 
-            // Enable / disable all special features in the current stack
+            // Toggle all special features in the current stack
             for (const specialFeatureId of stackSpecialFeatureIds) {
-                const specialFeatureInput = dom._specialFeatureCheckboxInputs[specialFeatureId];
-                specialFeatureInput.checked = isChecked;
-
-                if (state._acceptedSpecialFeatureIds.includes((specialFeatureId))) {
-                    state._acceptedSpecialFeatureIds = state._acceptedSpecialFeatureIds.filter((id) => id !== specialFeatureId);
-                } else {
-                    state._acceptedSpecialFeatureIds.push(specialFeatureId);
-                }
+                specialFeatureInputs[specialFeatureId].checked = isChecked;
             }
         });
     } else if (isSpecialFeature) {
         dom._specialFeatureCheckboxInputs[value] = toggle;
 
         addEvent(toggle, CLICK_EVENT, () => {
-            // Enable / disable the special feature
-            if (state._acceptedSpecialFeatureIds.includes((value))) {
-                state._acceptedSpecialFeatureIds = state._acceptedSpecialFeatureIds.filter((id) => id !== value);
-            } else {
-                state._acceptedSpecialFeatureIds.push(value);
-            }
-
             // Toggle the parent stack toggle if any child is checked and untoggle if nothing is checked
             if (parentStackValue) {
                 const stackToggle = dom._stackCheckboxInputs[parentStackValue];
 
                 const stackSpecialFeatureIds = originalStacks[parentStackValue].specialFeatures;
-                stackToggle.checked = stackSpecialFeatureIds.some((id) => state._acceptedSpecialFeatureIds.includes(id));
+                const specialFeatureInputs = dom._specialFeatureCheckboxInputs;
+                
+                stackToggle.checked = stackSpecialFeatureIds.some((id) => specialFeatureInputs[id].checked);
             }
         });
-    } else {
-        if (!isReadonly) {
-            dom._purposeCheckboxInputs[value] = toggle;
+    } else if (!isReadonly) {
+        dom._purposeCheckboxInputs[value] = toggle;
 
-            addEvent(toggle, CLICK_EVENT, () => {
-                // Enable / disable the purpose
-                if (state._acceptedPurposeIds.includes((value))) {
-                    state._acceptedPurposeIds = state._acceptedPurposeIds.filter((id) => id !== value);
-                } else {
-                    state._acceptedPurposeIds.push(value);
-                }
-
-                // Toggle the parent stack toggle if any child is checked and untoggle if nothing is checked
-                if (parentStackValue) {
-                    const stackToggle = dom._stackCheckboxInputs[parentStackValue];
+        addEvent(toggle, CLICK_EVENT, () => {
+            // Toggle the parent stack toggle if any child is checked and untoggle if nothing is checked
+            if (parentStackValue) {
+                const stackToggle = dom._stackCheckboxInputs[parentStackValue];
   
-                    const stackPurposeIds = originalStacks[parentStackValue].purposes;
-                    stackToggle.checked = stackPurposeIds.some((id) => state._acceptedPurposeIds.includes(id));
-                }
-            });
-        }
+                const stackPurposeIds = originalStacks[parentStackValue].purposes;
+                const purposeInputs = dom._purposeCheckboxInputs;
+
+                stackToggle.checked = stackPurposeIds.some((id) => purposeInputs[id].checked);
+            }
+        });
     }
 
     toggle.value = value;
@@ -1081,12 +1055,19 @@ function createPurposeToggle(label, value, isReadonly = false, isSpecialFeature 
     appendChild(toggleIconCircle, toggleOnIcon);
     appendChild(toggleIcon, toggleIconCircle);
 
-    // If the consent is valid, retrieve checked states from a cookie
+    // If the consent is valid, retrieve checked states from a state
     // Otherwise set it to false
     if (!state._invalidConsent) {
-        // TODO: Get is true or false from a state of somesorts.
-        // if elContains(state._acceptedVendors, value)
-        // toggle.checked = true;
+        if (isStack) {
+            const stackPurposeIds = originalStacks[value].purposes;
+            const stackSpecialFeatureIds = originalStacks[value].specialFeatures;
+
+            toggle.checked = stackPurposeIds.some((id) => acceptedPurpose(id)) || stackSpecialFeatureIds.some((id) => acceptedSpecialFeature(id));
+        } else if (isSpecialFeature) {
+            toggle.checked = acceptedSpecialFeature(value);
+        } else {
+            toggle.checked = acceptedPurpose(value);
+        }
     } else {
         toggle.checked = false;
     }

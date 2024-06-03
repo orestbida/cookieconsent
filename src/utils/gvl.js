@@ -1,4 +1,5 @@
 import { globalObj } from '../core/global';
+import { unique } from './general';
 
 export const gvl = {
     'gvlSpecificationVersion': 3,
@@ -30565,32 +30566,13 @@ export const mapGvlData = (disclosedVendorIds) => {
     const vendorsToShow = disclosedVendorIds?.filter((id) => id in gvl.vendors) || Object.keys(gvl.vendors);
 
     const originalPurposes = gvl.purposes;
-    const purposes = Object.values(originalPurposes);
-
     const originalSpecialPurposes = gvl.specialPurposes;
-    const specialPurposes = Object.values(gvl.specialPurposes);
-
     const originalFeatures = gvl.features;
-    const features = Object.values(gvl.features);
-
     const originalSpecialFeatures = gvl.specialFeatures;
-    const specialFeatures = Object.values(gvl.specialFeatures);
 
     const originalStacks = gvl.stacks;
     const stacks = Object.values(gvl.stacks);
-    const extendedStacks = Object.values(gvl.stacks).map((stack) => {
-        const mappedPurposes = stack.purposes.map((purposeId) => gvl.purposes[purposeId]);
-        const mappedSpecialFeatures = stack.specialFeatures.map((specialFeatureId) => gvl.specialFeatures[specialFeatureId]);
-
-        return {
-            ...stack,
-            purposes: mappedPurposes,
-            specialFeatures: mappedSpecialFeatures
-        };
-    });
-
-    const dataCategories = Object.values(gvl.dataCategories);
-
+    
     const vendors = vendorsToShow.map((vendorId) => gvl.vendors[vendorId]);
     const extendedVendors = vendors.map((vendor) => {
         const mappedPurposes = vendor.purposes.map((id) => gvl.purposes[id]);
@@ -30643,19 +30625,14 @@ export const generateVendorDescription = () => {
         vendorPurposes.push(...vendor.legIntPurposes);
     }
 
-    vendorSpecialFeatures = [...new Set(vendorSpecialFeatures)];
-    vendorPurposes = [...new Set(vendorPurposes)];
+    vendorSpecialFeatures = unique(vendorSpecialFeatures);
+    vendorPurposes = unique(vendorPurposes);
 
     const vendorSpecialFeaturesText = vendorSpecialFeatures.reduce((acc, curr) => `${acc} ${originalSpecialFeatures[curr].name}.`, '');
     const vendorPurposeText = vendorPurposes.reduce((acc, curr) =>  `${acc} ${originalPurposes[curr].name}.`, '');
-
+    
     return `${vendorSpecialFeaturesText} ${vendorPurposeText}`;
-
-    // console.log('[generateVendorDescription] vendorSpecialFeatures', vendorSpecialFeatures);
-    // console.log('[generateVendorDescription] vendorPurposes', vendorPurposes);
-    // console.log('[generateVendorDescription] vendorPurposeText', vendorPurposeText);
-    // console.log('[generateVendorDescription] vendorSpecialFeaturesText', vendorSpecialFeaturesText);
-
+    
     // let vendorDescription = '';
 
     // const vendorWithPurpose1 = vendors.find((v) => v.purposes.includes(1) || v.legIntPurposes.includes(1));
@@ -30742,19 +30719,13 @@ export const generateVendorPreferenceModalData = () => {
         vendorSpecialFeatureIds.push(...vendor.specialFeatures);
     }
   
-    // console.log('[generateVendorPreferenceModalData] vendors', vendors);
-    // console.log('[generateVendorPreferenceModalData] vendorSpecialPurposeIds', vendorSpecialPurposeIds);
-    // console.log('[generateVendorPreferenceModalData] vendorFeatureIds', vendorFeatureIds);
-    // console.log('[generateVendorPreferenceModalData] vendorPurposeIds', vendorPurposeIds);
-    // console.log('[generateVendorPreferenceModalData] vendorSpecialFeatureIds', vendorSpecialFeatureIds);
-
     const specialPurposes = Object.values(createCountObject(vendorSpecialPurposeIds, originalSpecialPurposes));
     const features = Object.values(createCountObject(vendorFeatureIds, originalFeatures));
     const purposes = createCountObject(vendorPurposeIds, originalPurposes);
     const specialFeatures = createCountObject(vendorSpecialFeatureIds, originalSpecialFeatures);
 
-    let uniqueVendorPurposeIds = [...new Set(vendorPurposeIds)];
-    let uniqueVendorSpecialFeatureIds = [...new Set(vendorSpecialFeatureIds)];
+    let uniqueVendorPurposeIds = unique(vendorPurposeIds);
+    let uniqueVendorSpecialFeatureIds = unique(vendorSpecialFeatureIds);
 
     const sortedStacks = stacks.sort((s1, s2) => {
         const purposesDiff = s2.purposes.length - s1.purposes.length;
@@ -30765,15 +30736,6 @@ export const generateVendorPreferenceModalData = () => {
 
         return s2.specialFeatures.length - s1.specialFeatures.length;
     });
-
-    // console.log('[generateVendorPreferenceModalData] specialPurposes', specialPurposes);
-    // console.log('[generateVendorPreferenceModalData] features', features);
-    // console.log('[generateVendorPreferenceModalData] purposes', purposes);
-    // console.log('[generateVendorPreferenceModalData] specialFeatures', specialFeatures);
-    // console.log('[generateVendorPreferenceModalData] uniqueVendorPurposeIds', uniqueVendorPurposeIds);
-    // console.log('[generateVendorPreferenceModalData] uniqueVendorSpecialFeatureIds', uniqueVendorSpecialFeatureIds);
-    // console.log('[generateVendorPreferenceModalData] stacks', stacks);
-    // console.log('[generateVendorPreferenceModalData] sortedStacks', sortedStacks);
 
     let stacksToShow = [];
     for (const stack of sortedStacks) {
@@ -30807,8 +30769,6 @@ export const generateVendorPreferenceModalData = () => {
             stacksToShow.push(stackToShow);
         }
     }
-
-    // console.log('[generateVendorPreferenceModalData] stacksToShow', stacksToShow);
 
     return {
         stacksToShow,

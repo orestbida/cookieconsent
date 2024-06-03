@@ -16,6 +16,8 @@ import {
     getActiveElement,
     resolveEnabledCategories,
     resolveEnabledServices,
+    resolvePurposesAndSpecFeaturesToAccept,
+    resolveVendorsToAllow,
     updateModalToggles,
     toggleDisableInteraction,
     fireEvent,
@@ -76,7 +78,25 @@ import {
 import { localStorageManager } from '../utils/localstorage';
 
 /**
- * Accept API
+ * Accept multiple API.
+ *
+ * @param {string[]|string} categories - Categories to accept
+ * @param {string[]} [excludedCategories]
+ * @param {'all' | number[]} purposesToAccept
+ * @param {'all' | number[]} specialFeaturesToAccept
+ * @param {'all' | number[]} vendorsToAllow
+ */
+export const acceptMultiple = (categories, excludedCategories = [], purposesToAccept = 'all', specialFeaturesToAccept = 'all', vendorsToAllow = 'all') => {
+    resolveEnabledCategories(categories, excludedCategories);
+    resolveEnabledServices();
+    resolvePurposesAndSpecFeaturesToAccept(purposesToAccept, specialFeaturesToAccept);
+    resolveVendorsToAllow(vendorsToAllow);
+    saveCookiePreferences();
+};
+
+/**
+ * Accept category API.
+ *
  * @param {string[]|string} categories - Categories to accept
  * @param {string[]} [excludedCategories]
  */
@@ -87,16 +107,65 @@ export const acceptCategory = (categories, excludedCategories = []) => {
 };
 
 /**
- * Returns true if cookie category is accepted
+ * Allow vendors API.
+ *
+ * @param {'all' | number[]} vendorsToAllow
+ */
+export const allowVendors = (vendorsToAllow) => {
+    resolveVendorsToAllow(vendorsToAllow);
+    saveCookiePreferences();
+};
+
+/**
+ * Returns true if cookie category is accepted.
+ *
  * @param {string} category
  */
 export const acceptedCategory = (category) => {
-
     const acceptedCategories = !globalObj._state._invalidConsent
         ? globalObj._state._acceptedCategories
         : [];
 
     return elContains(acceptedCategories, category);
+};
+
+/**
+ * Returns true if purpose is accepted.
+ *
+ * @param {number} purposeId 
+ */
+export const acceptedPurpose = (purposeId) => {
+    const acceptedPurposeIds = !globalObj._state._invalidConsent
+        ? globalObj._state._acceptedPurposeIds
+        : [];
+
+    return elContains(acceptedPurposeIds, purposeId);
+};
+
+/**
+ * Returns true if special feature is accepted.
+ *
+ * @param {number} specialFeatureId 
+ */
+export const acceptedSpecialFeature = (specialFeatureId) => {
+    const acceptedSpecialFeatureIds = !globalObj._state._invalidConsent
+        ? globalObj._state._acceptedSpecialFeatureIds
+        : [];
+
+    return elContains(acceptedSpecialFeatureIds, specialFeatureId);
+};
+
+/**
+ * Returns true if vendor is allowed.
+ *
+ * @param {number} vendorId 
+ */
+export const allowedVendor = (vendorId) => {
+    const allowedVendorIds = !globalObj._state._invalidConsent
+        ? globalObj._state._allowedVendorIds
+        : [];
+
+    return elContains(allowedVendorIds, vendorId);
 };
 
 /**
@@ -295,15 +364,24 @@ export const showPreferences = () => {
  * https://github.com/orestbida/cookieconsent/issues/481
  */
 const discardUnsavedPreferences = () => {
+    const dom = globalObj._dom;
+    const state = globalObj._state;
+
     const consentIsValid = validConsent();
-    const allDefinedCategories = globalObj._state._allDefinedCategories;
-    const categoryInputs = globalObj._dom._categoryCheckboxInputs;
-    const serviceInputs = globalObj._dom._serviceCheckboxInputs;
+
+    const allDefinedCategories = state._allDefinedCategories;
+    const categoryInputs = dom._categoryCheckboxInputs;
+    const serviceInputs = dom._serviceCheckboxInputs;
+    const stackInputs = dom._stackCheckboxInputs;
+    const purposeInputs = dom._purposeCheckboxInputs;
+    const specialFeatureInputs = dom._specialFeatureCheckboxInputs;
+
+    const { originalStacks } = state._gvlData;
 
     /**
      * @param {string} category
      */
-    const categoryEnabledByDefault = (category) => elContains(globalObj._state._defaultEnabledCategories, category);
+    const categoryEnabledByDefault = (category) => elContains(state._defaultEnabledCategories, category);
 
     for (const category in categoryInputs) {
         const isReadOnly = !!allDefinedCategories[category].readOnly;
@@ -319,6 +397,21 @@ const discardUnsavedPreferences = () => {
                 : categoryEnabledByDefault(category)
             );
         }
+    }
+
+    for (const purposeId in purposeInputs) {
+        purposeInputs[purposeId].checked = acceptedPurpose(parseInt(purposeId, 10));
+    }
+
+    for (const specialFeatureId in specialFeatureInputs) {
+        specialFeatureInputs[specialFeatureId].checked = acceptedSpecialFeature(parseInt(specialFeatureId, 10));
+    }
+
+    for (const stackId in stackInputs) {
+        const stackPurposeIds = originalStacks[stackId].purposes;
+        const stackSpecialFeatureIds = originalStacks[stackId].specialFeatures;
+
+        stackInputs[stackId].checked = stackPurposeIds.some((id) => acceptedPurpose(id)) || stackSpecialFeatureIds.some((id) => acceptedSpecialFeature(id));
     }
 };
 
@@ -435,31 +528,11 @@ export const hideVendors = () => {
  * Discard unsaved vendors consent.
  */
 const discardUnsavedVendorsConsent = () => {
-    // const consentIsValid = validConsent();
-    // const allDefinedCategories = globalObj._state._allDefinedCategories;
-    // const categoryInputs = globalObj._dom._categoryCheckboxInputs;
-    // const serviceInputs = globalObj._dom._serviceCheckboxInputs;
+    const vendorInputs = globalObj._dom._vendorCheckboxInputs;
 
-    // /**
-    //  * @param {string} category
-    //  */
-    // const categoryEnabledByDefault = (category) => elContains(globalObj._state._defaultEnabledCategories, category);
-
-    // for (const category in categoryInputs) {
-    //     const isReadOnly = !!allDefinedCategories[category].readOnly;
-
-    //     categoryInputs[category].checked = isReadOnly || (consentIsValid
-    //         ? acceptedCategory(category)
-    //         : categoryEnabledByDefault(category)
-    //     );
-
-    //     for (const service in serviceInputs[category]) {
-    //         serviceInputs[category][service].checked = isReadOnly || (consentIsValid
-    //             ? acceptedService(service, category)
-    //             : categoryEnabledByDefault(category)
-    //         );
-    //     }
-    // }
+    for (const vendorId in vendorInputs) {
+        vendorInputs[vendorId].checked = allowedVendor(parseInt(vendorId, 10));
+    }
 };
 
 var miniAPI = {
@@ -469,7 +542,7 @@ var miniAPI = {
     hidePreferences,
     showVendors,
     hideVendors,
-    acceptCategory
+    acceptMultiple
 };
 
 /**
@@ -668,6 +741,9 @@ const retrieveState = () => {
     const {
         categories,
         services,
+        purposeIds,
+        specialFeatureIds,
+        vendorIds,
         consentId,
         consentTimestamp,
         lastConsentTimestamp,
@@ -676,6 +752,9 @@ const retrieveState = () => {
     } = cookieValue;
 
     const validCategories = isArray(categories);
+    const validPurposeIds = isArray(purposeIds);
+    const validSpecialFeatureIds = isArray(specialFeatureIds);
+    const validVendorIds = isArray(vendorIds);
 
     state._savedCookieContent = cookieValue;
     state._consentId = consentId;
@@ -704,7 +783,10 @@ const retrieveState = () => {
         || !state._validRevision
         || !state._consentTimestamp
         || !state._lastConsentTimestamp
-        || !validCategories;
+        || !validCategories
+        || !validPurposeIds
+        || !validSpecialFeatureIds
+        || !validVendorIds;
 
     /**
      * If localStorage is enabled, also check the stored `expirationTime`
@@ -728,6 +810,10 @@ const retrieveState = () => {
             ...state._acceptedServices,
             ...services
         };
+
+        state._acceptedPurposeIds = purposeIds;
+        state._acceptedSpecialFeatureIds = specialFeatureIds;
+        state._allowedVendorIds = vendorIds;
 
         setAcceptedCategories([
             ...state._readOnlyCategories,

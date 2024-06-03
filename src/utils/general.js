@@ -430,6 +430,63 @@ export const resolveEnabledServices = (relativeCategory) => {
 };
 
 /**
+ * Helper for accepting the purposes and special features.
+ *
+ * @param {'all' | number[]} purposesToAccept
+ * @param {'all' | number[]} specialFeaturesToAccept
+ */
+export const resolvePurposesAndSpecFeaturesToAccept = (purposesToAccept, specialFeaturesToAccept) => {
+    const { vendors } = globalObj._state._gvlData;
+
+    let vendorPurposeIds = [];
+    let vendorSpecialFeatureIds = [];
+
+    if (isArray(purposesToAccept)) {
+        vendorPurposeIds = purposesToAccept;
+    }
+
+    if (isArray(specialFeaturesToAccept)) {
+        vendorSpecialFeatureIds = specialFeaturesToAccept;
+    }
+
+    if (purposesToAccept === 'all' || specialFeaturesToAccept === 'all') {
+        for (const vendor of vendors) {
+            if (purposesToAccept === 'all') {
+                vendorPurposeIds.push(...vendor.purposes);
+            }
+            if (specialFeaturesToAccept === 'all') {
+                vendorSpecialFeatureIds.push(...vendor.specialFeatures);
+            }
+        }
+    }
+
+    vendorPurposeIds = unique(vendorPurposeIds);
+    vendorSpecialFeatureIds = unique(vendorSpecialFeatureIds);
+
+    globalObj._state._acceptedPurposeIds = vendorPurposeIds;
+    globalObj._state._acceptedSpecialFeatureIds = vendorSpecialFeatureIds;
+};
+
+/**
+ * Helper for allowing the vendors.
+ *
+ * @param {'all' | number[]} vendorsToAllow 
+ */
+export const resolveVendorsToAllow = (vendorsToAllow) => {
+    const { vendors } = globalObj._state._gvlData;
+
+    let vendorIds = [];
+
+    if (vendorsToAllow === 'all') {
+        vendorIds = vendors.map((vendor) => vendor.id);
+    } else if (isArray(vendorsToAllow)) {
+        vendorIds = vendorsToAllow;
+    }
+
+    globalObj._state._allowedVendorIds = vendorIds;
+};
+
+/**
  * @param {string} eventName
  */
 const dispatchPluginEvent = (eventName, data) => dispatchEvent(new CustomEvent(eventName, {detail: data}));
@@ -655,8 +712,6 @@ export const addDataButtonListeners = (elem, api, createPreferencesModal, create
     const rootEl = elem || document;
     const getElements = dataRole => querySelectorAll(rootEl, `[${CUSTOM_ATTRIBUTE_SELECTOR}="${dataRole}"]`);
 
-    // TODO: Ovdje ćeš vjerojatno morati napraviti neku logiku da na odabir vendor ovlasti, ne gasiš odmah sve, a možda i ne? Provjeri
-
     /**
      * Helper function: accept and then hide modals.
      * 
@@ -792,8 +847,6 @@ export const focusAfterTransition = (element, modalName) => {
         visibleDiv = globalObj._dom._vmDivTabIndex;
         break;
     }
-
-    console.log('focus after transition modalName', modalName, 'visiblediv', visibleDiv);
 
     const setFocus = (event) => {
         event.target.removeEventListener('transitionend', setFocus);
@@ -979,6 +1032,7 @@ export const fireEvent = (eventName, modalName, modal) => {
     } = globalObj._callbacks;
 
     const events = globalObj._customEvents;
+    const isTcfCompliant = globalObj._config.isTcfCompliant;
 
     //{{START: GUI}}
     if (modalName) {
@@ -1008,6 +1062,14 @@ export const fireEvent = (eventName, modalName, modal) => {
     } else {
         params.changedCategories = globalObj._state._lastChangedCategoryNames;
         params.changedServices = globalObj._state._lastChangedServices;
+
+        // Add the additional properties to the data sent only if the consent is configured to be TCF compliant
+        if (isTcfCompliant) {
+            params.changedPurposeIds = globalObj._state._lastChangedPurposeIds;
+            params.changedSpecialFeatureIds = globalObj._state._lastChangedSpecialFeatureIds;
+            params.changedVendorIds = globalObj._state._lastChangedVendorIds;
+        }
+
         isFunction(_onChange) && _onChange(deepCopy(params));
     }
 

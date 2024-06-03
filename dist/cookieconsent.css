@@ -1013,8 +1013,7 @@ html.disable--interaction.show--consent, html.disable--interaction.show--consent
   flex-direction: column;
 }
 #cc-main .pm__section--purpose .pm__section-title .pm__section-title-count-wrapper .pm__vendor-count {
-  margin-top: 4px;
-  font-size: 0.7em;
+  font-size: 0.8em;
   font-weight: normal;
 }
 #cc-main .pm__section--purpose .pm__section-desc-wrapper .pm__section-desc {

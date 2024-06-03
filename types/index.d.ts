@@ -184,6 +184,21 @@ declare namespace CookieConsent {
         services: {[key: string]: string[]}
 
         /**
+         * Accepted purpose IDs.
+         */
+        purposeIds: number[];
+
+        /**
+         * Accepted special feature IDs.
+         */
+        specialFeatureIds: number[];
+
+        /**
+         * Allowed vendor IDs.
+         */
+        vendorIds: number[];
+
+        /**
          * Expiration time of the cookie (in case localstorage is used)
          */
         expirationTime: number
@@ -493,11 +508,11 @@ declare namespace CookieConsent {
       allowAllConsentBtn?: string;
 
       /**
-       * Label for the button rejecting all vendor consents.
+       * Label for the button denying all vendor consents.
        *
-       * @default "Reject all"
+       * @default "Deny all"
        */
-      rejectAllConsentBtn?: string;
+      denyAllConsentBtn?: string;
 
       /**
        * Label for the button allowing selected vendor consents.
@@ -744,12 +759,15 @@ declare namespace CookieConsent {
         }) => void
 
         /**
-         * Callback fired when categories or services are changed.
+         * Callback fired when categories, services or TCF data has changed.
          */
         onChange?: (param: {
             cookie: CookieValue
             changedCategories: string[],
-            changedServices: {[key: string]: string[]}
+            changedServices: {[key: string]: string[]},
+            changedPurposeIds?: number[],
+            changedSpecialFeatureIds?: number[],
+            changedVendorIds?: number[]
         }) => void
 
         /**
@@ -847,12 +865,30 @@ declare namespace CookieConsent {
     function hideVendors(): void;
 
     /**
+     * Accept/Reject multiple.
+     *
+     * @param categories Categories to accept
+     * @param excludedCategories Categories to exclude
+     * @param purposesToAccept Purposes to accept
+     * @param specialFeaturesToAccept Special features to accept
+     * @param vendorsToAllow Vendors to allow
+     */
+    function acceptMultiple(categories: string | string[], excludedCategories?: string[], purposesToAccept?: 'all' | number[], specialFeaturesToAccept?: 'all' | number[], vendorsToAllow?: 'all' | number[]): void
+
+    /**
      * Accept/Reject categories.
      *
      * @param categories Categories to accept
      * @param excludedCategories Categories to exclude
      */
     function acceptCategory(categories: string | string[], excludedCategories?: string[]): void
+
+    /**
+     * Allow / Deny vendors.
+     *
+     * @param vendorsToAllow Vendors to allow or an 'all' keyword to allow all disclosed
+     */
+    function allowVendors(vendorsToAllow: 'all' | number[]): void;
 
     /**
      * Accept/Reject services.
@@ -869,6 +905,30 @@ declare namespace CookieConsent {
     function acceptedCategory(categoryName: string): boolean
 
     /**
+     * Returns true if purpose is accepted, otherwise false.
+     *
+     * @param purposeId Identifier of the purpose
+     * @returns True if the purpose is accepted
+     */
+    function acceptedPurpose(purposeId: number): boolean
+
+    /**
+     * Returns true if special feature is accepted, otherwise false.
+     *
+     * @param specialFeatureId Identifier of the special feature
+     * @returns True if the special feature is accepted
+     */
+    function acceptedSpecialFeature(specialFeatureId: number): boolean
+
+    /**
+     * Returns true if vendor is allowed, otherwise false.
+     *
+     * @param vendorId Identifier of the vendor
+     * @returns True if the vendor if allowed
+     */
+    function allowedVendor(vendorId: number): boolean
+
+    /**
      * Check if the service in the specified category is accepted.
      * @param serviceName Name of the service
      * @param categoryName Name of the category
@@ -878,6 +938,7 @@ declare namespace CookieConsent {
 
     /**
      * Returns true if consent is valid, otherwise false.
+     *
      * @returns boolean: true if category is accepted
      */
     function validConsent(): boolean
