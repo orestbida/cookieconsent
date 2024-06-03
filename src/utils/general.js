@@ -51,6 +51,8 @@ export const unique = (arr) => Array.from(new Set(arr));
 
 export const getActiveElement = () => document.activeElement;
 
+export const getElementById = (id) => document.getElementById(id);
+
 /**
  * @param {Event} e
  */
@@ -117,6 +119,14 @@ export const getAttribute = (el, attribute, prependData) => {
  * @param {Node} child
  */
 export const appendChild = (parent, child) => parent.appendChild(child);
+
+/**
+ * 
+ * @param {Node} parent 
+ * @param {Node} oldNode 
+ * @param {Node} newNode 
+ */
+export const replaceChild = (parent, oldNode, newNode) => parent.replaceChild(newNode, oldNode);
 
 /**
  * @param {HTMLElement} elem

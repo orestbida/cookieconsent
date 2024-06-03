@@ -141,6 +141,7 @@ export const createVendorsModal = (api, createMainContainer) => {
 
         dom._vmTitle = createNode(H2_TAG);
         dom._vmTitle.className = dom._vmTitle.id = 'vm__title';
+        dom._vmTitle.innerHTML = title;
         appendChild(vmTitleContainer, dom._vmTitle);
 
         dom._vmCloseBtn = createNode(BUTTON_TAG);
@@ -182,123 +183,116 @@ export const createVendorsModal = (api, createMainContainer) => {
 
     let vendorsContainer;
 
-    extendedVendors.forEach((vendor) => {
-        const {
-            id,
-            name,
-            usesNonCookieAccess,
-            cookieMaxAgeSeconds,
-            urls,
-            deviceStorageDisclosureUrl
-        } = vendor;
+    extendedVendors
+        .sort((a, b) => a.name.localeCompare(b.name))
+        .forEach((vendor) => {
+            const {
+                id,
+                name,
+                urls,
+                deviceStorageDisclosureUrl
+            } = vendor;
 
-
-        // Try to get the additional information links in the correct language
-        let localizedUrls = urls.find((url) => url.langId === state._currentLanguageCode);
-        if (!localizedUrls) {
-            localizedUrls = urls.find((url) => url.langId === 'en');
-        }
-
-        console.log('[vendor] vendor', vendor);
-        console.log('[vendor] id', id);
-        console.log('[vendor] name', name);
-        console.log('[vendor] usesNonCookieAccess', usesNonCookieAccess);
-        console.log('[vendor] cookieMaxAgeSeconds', cookieMaxAgeSeconds);
-        console.log('[vendor] localizedUrls', localizedUrls);
-        console.log('[vendor] deviceStorageDisclosureUrl', deviceStorageDisclosureUrl);
-
-        // Main toggle container
-        var vendorToggle = createNode(DIV_TAG);
-        addClassVm(vendorToggle, 'vendor--toggle');
-        addClassVm(vendorToggle, 'vendor--expandable');
-
-        var vendorTitleContainer = createNode(DIV_TAG);
-        addClassVm(vendorTitleContainer, 'vendor-title-wrapper');
-
-        var vendorTitle = createNode(BUTTON_TAG);
-        addClassVm(vendorTitle, 'vendor-title');
-        vendorTitle.innerHTML = name;
-
-        appendChild(vendorTitleContainer, vendorTitle);
-
-        // Arrow icon
-        const vendorTitleIcon = createNode(SPAN_TAG);
-        vendorTitleIcon.innerHTML = getSvgIcon('arrow', 3.5);
-        addClassVm(vendorTitleIcon, 'vendor-arrow');
-        appendChild(vendorTitleContainer, vendorTitleIcon);
-
-        const toggleLabel = createToggle(name, 'value');
-        appendChild(vendorTitleContainer, toggleLabel);
-
-        var expandableDivId = `${replaceTextSpacesWithSymbol(name, '-').toLowerCase()}-desc`;
-        setAttribute(vendorTitle, 'aria-expanded', false);
-        setAttribute(vendorTitle, 'aria-controls', expandableDivId);
-
-        appendChild(vendorToggle, vendorTitleContainer);
-
-        // Description container
-        var vendorDescription = createNode(DIV_TAG);
-        vendorDescription.id = expandableDivId;
-        addClassVm(vendorDescription, 'vendor-desc-wrapper');
-        setAttribute(vendorDescription, ARIA_HIDDEN, 'true');
-
-        if (localizedUrls.privacy) {
-            var vendorPrivacyPolicyAnchor = createNode('a');
-            vendorPrivacyPolicyAnchor.innerHTML = viewPrivacyPolicyLabel;
-            setAttribute(vendorPrivacyPolicyAnchor, 'href', localizedUrls.privacy);
-            setAttribute(vendorPrivacyPolicyAnchor, 'target', '_blank');
-
-            appendChild(vendorDescription, vendorPrivacyPolicyAnchor);
-        }
-
-        if (localizedUrls.legIntClaim) {
-            var vendorLegitClaimAnchor = createNode('a');
-            vendorLegitClaimAnchor.innerHTML = viewLegitimateInterestClaimLabel;
-            setAttribute(vendorLegitClaimAnchor, 'href', localizedUrls.legIntClaim);
-            setAttribute(vendorLegitClaimAnchor, 'target', '_blank');
-
-            appendChild(vendorDescription, vendorLegitClaimAnchor);
-        }
-
-        if (deviceStorageDisclosureUrl) {
-            var vendorDeviceStorageDisclosureAnchor = createNode('a');
-            vendorDeviceStorageDisclosureAnchor.innerHTML = viewDeviceStorageDisclosureLabel;
-            setAttribute(vendorDeviceStorageDisclosureAnchor, 'href', deviceStorageDisclosureUrl);
-            setAttribute(vendorDeviceStorageDisclosureAnchor, 'target', '_blank');
-
-            appendChild(vendorDescription, vendorDeviceStorageDisclosureAnchor);
-        }
-
-        addEvent(vendorTitle, CLICK_EVENT, () => {
-            if (!hasClass(vendorToggle, 'is-expanded')) {
-                addClass(vendorToggle, 'is-expanded');
-                setAttribute(vendorTitle, 'aria-expanded', 'true');
-                setAttribute(vendorDescription, ARIA_HIDDEN, 'false');
-            } else {
-                removeClass(vendorToggle, 'is-expanded');
-                setAttribute(vendorTitle, 'aria-expanded', 'false');
-                setAttribute(vendorDescription, ARIA_HIDDEN, 'true');
+            // Try to get the additional information links in the correct language
+            let localizedUrls = urls.find((url) => url.langId === state._currentLanguageCode);
+            if (!localizedUrls) {
+                localizedUrls = urls.find((url) => url.langId === 'en');
             }
+            if (!localizedUrls && urls.length) {
+                localizedUrls = urls[0];
+            }
+
+            // Main toggle container
+            var vendorToggle = createNode(DIV_TAG);
+            addClassVm(vendorToggle, 'vendor--toggle');
+            addClassVm(vendorToggle, 'vendor--expandable');
+
+            // Title container
+            var vendorTitleContainer = createNode(DIV_TAG);
+            addClassVm(vendorTitleContainer, 'vendor-title-wrapper');
+
+            var vendorTitle = createNode(BUTTON_TAG);
+            addClassVm(vendorTitle, 'vendor-title');
+            vendorTitle.innerHTML = name;
+
+            appendChild(vendorTitleContainer, vendorTitle);
+
+            // Arrow icon
+            const vendorTitleIcon = createNode(SPAN_TAG);
+            vendorTitleIcon.innerHTML = getSvgIcon('arrow', 3.5);
+            addClassVm(vendorTitleIcon, 'vendor-arrow');
+            appendChild(vendorTitleContainer, vendorTitleIcon);
+
+            // Toggle
+            const toggleLabel = createToggle(name, id);
+            appendChild(vendorTitleContainer, toggleLabel);
+
+            var expandableDivId = `${replaceTextSpacesWithSymbol(name, '-').toLowerCase()}-desc`;
+            setAttribute(vendorTitle, 'aria-expanded', false);
+            setAttribute(vendorTitle, 'aria-controls', expandableDivId);
+
+            appendChild(vendorToggle, vendorTitleContainer);
+
+            // Description container
+            var vendorDescription = createNode(DIV_TAG);
+            vendorDescription.id = expandableDivId;
+            addClassVm(vendorDescription, 'vendor-desc-wrapper');
+            setAttribute(vendorDescription, ARIA_HIDDEN, 'true');
+
+            if (localizedUrls.privacy) {
+                var vendorPrivacyPolicyAnchor = createNode('a');
+                vendorPrivacyPolicyAnchor.innerHTML = viewPrivacyPolicyLabel;
+                setAttribute(vendorPrivacyPolicyAnchor, 'href', localizedUrls.privacy);
+                setAttribute(vendorPrivacyPolicyAnchor, 'target', '_blank');
+
+                appendChild(vendorDescription, vendorPrivacyPolicyAnchor);
+            }
+
+            if (localizedUrls.legIntClaim) {
+                var vendorLegitClaimAnchor = createNode('a');
+                vendorLegitClaimAnchor.innerHTML = viewLegitimateInterestClaimLabel;
+                setAttribute(vendorLegitClaimAnchor, 'href', localizedUrls.legIntClaim);
+                setAttribute(vendorLegitClaimAnchor, 'target', '_blank');
+
+                appendChild(vendorDescription, vendorLegitClaimAnchor);
+            }
+
+            if (deviceStorageDisclosureUrl) {
+                var vendorDeviceStorageDisclosureAnchor = createNode('a');
+                vendorDeviceStorageDisclosureAnchor.innerHTML = viewDeviceStorageDisclosureLabel;
+                setAttribute(vendorDeviceStorageDisclosureAnchor, 'href', deviceStorageDisclosureUrl);
+                setAttribute(vendorDeviceStorageDisclosureAnchor, 'target', '_blank');
+
+                appendChild(vendorDescription, vendorDeviceStorageDisclosureAnchor);
+            }
+
+            // Vendor information list
+            const vendorInformationList = createVendorInformationList(vendor, modalData);
+            appendChild(vendorDescription, vendorInformationList);
+
+            appendChild(vendorToggle, vendorDescription);
+
+            addEvent(vendorTitle, CLICK_EVENT, () => {
+                if (!hasClass(vendorToggle, 'is-expanded')) {
+                    addClass(vendorToggle, 'is-expanded');
+                    setAttribute(vendorTitle, 'aria-expanded', 'true');
+                    setAttribute(vendorDescription, ARIA_HIDDEN, 'false');
+                } else {
+                    removeClass(vendorToggle, 'is-expanded');
+                    setAttribute(vendorTitle, 'aria-expanded', 'false');
+                    setAttribute(vendorDescription, ARIA_HIDDEN, 'true');
+                }
+            });
+
+            if (!vendorsContainer) {
+                vendorsContainer = createNode(DIV_TAG);
+                addClassVm(vendorsContainer, 'vendors-wrapper');
+            }
+
+            appendChild(vendorsContainer, vendorToggle);
+
+            appendChild(dom._vmBody, vendorsContainer);
         });
-
-        const vendorInformationList = createVendorInformationList(vendor, modalData);
-        appendChild(vendorDescription, vendorInformationList);
-
-        appendChild(vendorToggle, vendorDescription);
-
-        if (!vendorsContainer) {
-            vendorsContainer = createNode(DIV_TAG);
-            addClassVm(vendorsContainer, 'vendors-wrapper');
-        }
-
-        appendChild(vendorsContainer, vendorToggle);
-
-        appendChild(dom._vmBody, vendorsContainer);
-    });
-
-    if (title) {
-        dom._vmTitle.innerHTML = title;
-    }
 
     if (!dom._vmAllowAllBtn) {
         dom._vmAllowAllBtn = createNode(BUTTON_TAG);
@@ -375,14 +369,14 @@ function createToggle(label, value) {
 
     const toggleLabel = createNode('label');
     const toggle = createNode('input');
-    const toggleIcon = createNode('span');
-    const toggleIconCircle = createNode('span');
-    const toggleLabelSpan = createNode('span');
+    const toggleIcon = createNode(SPAN_TAG);
+    const toggleIconCircle = createNode(SPAN_TAG);
+    const toggleLabelSpan = createNode(SPAN_TAG);
 
-    const toggleOnIcon = createNode('span');
+    const toggleOnIcon = createNode(SPAN_TAG);
     toggleOnIcon.innerHTML = getSvgIcon('tick', 3);
 
-    const toggleOffIcon = createNode('span');
+    const toggleOffIcon = createNode(SPAN_TAG);
     toggleOffIcon.innerHTML = getSvgIcon('x', 3);
     
     toggle.type = 'checkbox';
@@ -397,12 +391,16 @@ function createToggle(label, value) {
 
     setAttribute(toggleIcon, ARIA_HIDDEN, true);
 
-    // TODO: Postavi ovo u neki state ili dom za kasniji dohvat
-    // dom._categoryCheckboxInputs[value] = toggle;
+    // Save references for the input and create appropriate event
+    dom._vendorCheckboxInputs[value] = toggle;
 
     addEvent(toggle, CLICK_EVENT, () => {
-        // TODO: Implementiraj ovo
-        console.log('JA SAM TOGGLE', label, 'CLICKED');
+        // Allow / disallow the vendor
+        if (state._allowedVendorIds.includes((value))) {
+            state._allowedVendorIds = state._allowedVendorIds.filter((id) => id !== value);
+        } else {
+            state._allowedVendorIds.push(value);
+        }
     });
 
     toggle.value = value;
@@ -413,13 +411,13 @@ function createToggle(label, value) {
     appendChild(toggleIcon, toggleIconCircle);
 
     // If the consent is valid, retrieve checked states from a cookie
-    // Otherwise set it to true
+    // Otherwise set it to false
     if (!state._invalidConsent) {
         // TODO: Get is true or false from a state of somesorts.
         // if elContains(state._acceptedVendors, value)
         // toggle.checked = true;
     } else {
-        toggle.checked = true;
+        toggle.checked = false;
     }
 
     appendChild(toggleLabel, toggle);

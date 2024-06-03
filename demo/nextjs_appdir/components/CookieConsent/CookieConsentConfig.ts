@@ -124,8 +124,8 @@ const config: CookieConsentConfig = {
           serviceCounterLabel: 'Service|Services',
           sections: [
             {
-              title: 'Your Privacy Choices',
-              description: 'In this panel you can express some preferences related to the processing of your personal information. You may review and change expressed choices at any time by resurfacing this panel via the provided link. To deny your consent to the specific processing activities described below, switch the toggles to off or use the “Reject all” button and confirm you want to save your choices.'
+              title: 'About Your Privacy',
+              description: 'We process your data for purposes such as delivering content or advertisements and measuring the delivery of such content or advertisements to extract insights about our website. We may share this information with our partners. Cookies set by us are shown first and do not contain the partners count under the category name; you may exercise your preferences in relation to first party cookies by toggling the switch for each first party cookie category below. The remaining cookies are third party cookies; you may exercise your preferences in relation to each purpose by toggling the relevant switch below or by vendor by clicking “List of IAB Vendors.” These choices will be signaled globally to our vendors participating in the Transparency and Consent Framework.'
             },
             {
               title: 'Strictly Necessary',

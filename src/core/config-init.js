@@ -108,8 +108,9 @@ export const setConfig = async (userConfig) => {
         config.tcfComplianceConfig = tcfComplianceConfig;
     }
 
-    if (typeof lazyHtmlGeneration === 'boolean')
+    if (typeof lazyHtmlGeneration === 'boolean') {
         config.lazyHtmlGeneration = lazyHtmlGeneration;
+    }
 
     //{{END: GUI}}
 

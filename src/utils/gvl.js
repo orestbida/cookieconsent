@@ -30562,17 +30562,21 @@ export const gvl = {
  * @param {number[] | undefined} disclosedVendorIds
  */
 export const mapGvlData = (disclosedVendorIds) => {
-    const vendorsToShow = disclosedVendorIds.filter((id) => id in gvl.vendors) || Object.keys(gvl.vendors);
+    const vendorsToShow = disclosedVendorIds?.filter((id) => id in gvl.vendors) || Object.keys(gvl.vendors);
 
     const originalPurposes = gvl.purposes;
     const purposes = Object.values(originalPurposes);
 
+    const originalSpecialPurposes = gvl.specialPurposes;
     const specialPurposes = Object.values(gvl.specialPurposes);
+
+    const originalFeatures = gvl.features;
     const features = Object.values(gvl.features);
 
     const originalSpecialFeatures = gvl.specialFeatures;
     const specialFeatures = Object.values(gvl.specialFeatures);
 
+    const originalStacks = gvl.stacks;
     const stacks = Object.values(gvl.stacks);
     const extendedStacks = Object.values(gvl.stacks).map((stack) => {
         const mappedPurposes = stack.purposes.map((purposeId) => gvl.purposes[purposeId]);
@@ -30588,9 +30592,7 @@ export const mapGvlData = (disclosedVendorIds) => {
     const dataCategories = Object.values(gvl.dataCategories);
 
     const vendors = vendorsToShow.map((vendorId) => gvl.vendors[vendorId]);
-    const extendedVendors = vendorsToShow.map((vendorId) => {
-        const vendor = gvl.vendors[vendorId];
-
+    const extendedVendors = vendors.map((vendor) => {
         const mappedPurposes = vendor.purposes.map((id) => gvl.purposes[id]);
         const mappedLegIntPurposes = vendor.legIntPurposes.map((id) => gvl.purposes[id]);
         const mappedFlexiblePurposes = vendor.flexiblePurposes.map((id) => gvl.purposes[id]);
@@ -30612,18 +30614,12 @@ export const mapGvlData = (disclosedVendorIds) => {
     });
     const vendorCount = vendorsToShow.length;
 
-    console.log('[mapGvlData] purposes', purposes);
-    console.log('[mapGvlData] specialPurposes', specialPurposes);
-    console.log('[mapGvlData] features', features);
-    console.log('[mapGvlData] specialFeatures', specialFeatures);
-    console.log('[mapGvlData] extendedStacks', extendedStacks);
-    console.log('[mapGvlData] dataCategories', dataCategories);
-    console.log('[mapGvlData] extendedVendors', extendedVendors);
-    console.log('[mapGvlData] vendorCount', vendorCount);
-
     return {
         originalPurposes,
+        originalSpecialPurposes,
+        originalFeatures,
         originalSpecialFeatures,
+        originalStacks,
         stacks,
         vendors,
         extendedVendors,
@@ -30695,4 +30691,132 @@ export const generateVendorDescription = () => {
 
     // const stackNamesForDescription = uniqueStackNames.slice(0, 5);
     // return stackNamesForDescription.reduce((acc, curr) => `${acc} ${curr}.`, vendorDescription);
+};
+
+/**
+ * Helper function for generating preferences modal data based on the disclosed vendors for showing
+ * in the preferences modal.
+ */
+export const generateVendorPreferenceModalData = () => {
+    const {
+        stacks,
+        vendors,
+        originalPurposes,
+        originalFeatures,
+        originalSpecialPurposes,
+        originalSpecialFeatures
+    } = globalObj._state._gvlData;
+
+    /**
+     * Helper function for creating the object with the data and data occurrence count.
+     *
+     * @param {number[]} ids 
+     * @param {any} values
+     */
+    const createCountObject = (ids, values) => ids.reduce((acc, id) => {
+        const occurrence = acc[id];
+
+        if (!occurrence) {
+            acc = {
+                ...acc,
+                [id]: {
+                    data: values[id],
+                    count: 1
+                }
+            };
+        } else {
+            occurrence.count++;
+        }
+
+        return acc;
+    }, {});
+
+    const vendorSpecialPurposeIds = [];
+    const vendorFeatureIds = [];
+    const vendorPurposeIds = [];
+    const vendorSpecialFeatureIds = [];
+    for (const vendor of vendors) {
+        vendorSpecialPurposeIds.push(...vendor.specialPurposes);
+        vendorFeatureIds.push(...vendor.features);
+        vendorPurposeIds.push(...vendor.purposes);
+        vendorSpecialFeatureIds.push(...vendor.specialFeatures);
+    }
+  
+    // console.log('[generateVendorPreferenceModalData] vendors', vendors);
+    // console.log('[generateVendorPreferenceModalData] vendorSpecialPurposeIds', vendorSpecialPurposeIds);
+    // console.log('[generateVendorPreferenceModalData] vendorFeatureIds', vendorFeatureIds);
+    // console.log('[generateVendorPreferenceModalData] vendorPurposeIds', vendorPurposeIds);
+    // console.log('[generateVendorPreferenceModalData] vendorSpecialFeatureIds', vendorSpecialFeatureIds);
+
+    const specialPurposes = Object.values(createCountObject(vendorSpecialPurposeIds, originalSpecialPurposes));
+    const features = Object.values(createCountObject(vendorFeatureIds, originalFeatures));
+    const purposes = createCountObject(vendorPurposeIds, originalPurposes);
+    const specialFeatures = createCountObject(vendorSpecialFeatureIds, originalSpecialFeatures);
+
+    let uniqueVendorPurposeIds = [...new Set(vendorPurposeIds)];
+    let uniqueVendorSpecialFeatureIds = [...new Set(vendorSpecialFeatureIds)];
+
+    const sortedStacks = stacks.sort((s1, s2) => {
+        const purposesDiff = s2.purposes.length - s1.purposes.length;
+
+        if (purposesDiff !== 0) {
+            return purposesDiff;
+        }
+
+        return s2.specialFeatures.length - s1.specialFeatures.length;
+    });
+
+    // console.log('[generateVendorPreferenceModalData] specialPurposes', specialPurposes);
+    // console.log('[generateVendorPreferenceModalData] features', features);
+    // console.log('[generateVendorPreferenceModalData] purposes', purposes);
+    // console.log('[generateVendorPreferenceModalData] specialFeatures', specialFeatures);
+    // console.log('[generateVendorPreferenceModalData] uniqueVendorPurposeIds', uniqueVendorPurposeIds);
+    // console.log('[generateVendorPreferenceModalData] uniqueVendorSpecialFeatureIds', uniqueVendorSpecialFeatureIds);
+    // console.log('[generateVendorPreferenceModalData] stacks', stacks);
+    // console.log('[generateVendorPreferenceModalData] sortedStacks', sortedStacks);
+
+    let stacksToShow = [];
+    for (const stack of sortedStacks) {
+        const purposesUsed = stack.purposes.length && uniqueVendorPurposeIds.length && stack.purposes.every((id) => uniqueVendorPurposeIds.includes(id));
+        const specialFeaturesUsed = stack.specialFeatures.length && uniqueVendorSpecialFeatureIds.length && stack.specialFeatures.every((id) => uniqueVendorSpecialFeatureIds.includes(id));
+        const isStackUsed = purposesUsed || specialFeaturesUsed;
+
+        if (isStackUsed) {
+            uniqueVendorPurposeIds = uniqueVendorPurposeIds.filter((id) => !stack.purposes.includes(id));
+            uniqueVendorSpecialFeatureIds = uniqueVendorSpecialFeatureIds.filter((id) => !stack.specialFeatures.includes(id));
+
+            let stackToShow = {
+                data: {
+                    ...stack,
+                    purposes: stack.purposes.map((pId) => purposes[pId]),
+                    specialFeatures: stack.specialFeatures.map((sfId) => specialFeatures[sfId])
+                },
+                count: 0
+            };
+
+            for (const vendor of vendors) {
+                const vendorUsesPurposes = vendor.purposes.length && stack.purposes.length && vendor.purposes.some((id) => stack.purposes.includes(id));
+                const vendorUsesSpecialFeatures = vendor.specialFeatures.length && stack.specialFeatures.length && vendor.specialFeatures.some((id) => stack.specialFeatures.includes((id)));
+                const isVendorUsingStack = vendorUsesPurposes || vendorUsesSpecialFeatures;
+
+                if (isVendorUsingStack) {
+                    stackToShow.count++;
+                }
+            }
+
+            stacksToShow.push(stackToShow);
+        }
+    }
+
+    // console.log('[generateVendorPreferenceModalData] stacksToShow', stacksToShow);
+
+    return {
+        stacksToShow,
+        purposes,
+        purposeIdsToShow: uniqueVendorPurposeIds,
+        specialPurposes,
+        features,
+        specialFeatures,
+        specialFeatureIdsToShow: uniqueVendorSpecialFeatureIds
+    };
 };

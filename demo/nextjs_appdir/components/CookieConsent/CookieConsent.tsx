@@ -1,9 +1,9 @@
 'use client';
 
 import { useEffect } from 'react';
+import * as CookieConsent from 'dist/cookieconsent.esm';
 
-import * as CookieConsent from '../../../../dist/cookieconsent.esm';
-import '../../../../dist/cookieconsent.css';
+import 'dist/cookieconsent.css';
 import config from './CookieConsentConfig';
 
 /**

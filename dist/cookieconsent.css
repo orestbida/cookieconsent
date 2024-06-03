@@ -825,6 +825,31 @@ html.disable--interaction.show--consent, html.disable--interaction.show--consent
   align-items: center;
   border-bottom: 1px solid var(--cc-separator-border-color);
 }
+#cc-main .pm__header .pm__title-container {
+  display: flex;
+  align-items: center;
+}
+#cc-main .pm__header .pm__title-container .pm__back-arrow {
+  width: 24px;
+  height: 24px;
+  border-radius: 100%;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+#cc-main .pm__header .pm__title-container .pm__back-arrow svg {
+  stroke: var(--cc-btn-secondary-color);
+  transform: scale(0.55) rotate(90deg);
+}
+#cc-main .pm__header .pm__title-container .pm__back-arrow:hover {
+  background: var(--cc-btn-secondary-bg);
+}
+#cc-main .pm__header .pm__title-container .pm__back-arrow:hover svg {
+  stroke: var(--cc-btn-secondary-hover-color);
+}
+#cc-main .pm__header .pm__title-container .pm__title {
+  margin-left: 0.4em;
+  margin-right: 0;
+}
 #cc-main .pm__title {
   display: flex;
   align-items: center;
@@ -863,6 +888,22 @@ html.disable--interaction.show--consent, html.disable--interaction.show--consent
   overflow-y: auto;
   overflow-y: overlay;
 }
+#cc-main .pm__body .pm__ill-purpose-name {
+  font-weight: 600;
+  font-size: 1.1em;
+}
+#cc-main .pm__body .pm__ill-purpose-wrapper {
+  display: flex;
+  flex-direction: column;
+  margin-top: 16px;
+  font-size: 0.9em;
+  line-height: normal;
+}
+#cc-main .pm__body .pm__ill-purpose-wrapper > p:not(:first-child) {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--cc-cookie-category-block-border);
+}
 #cc-main .pm__section,
 #cc-main .pm__section--toggle {
   display: flex;
@@ -892,6 +933,9 @@ html.disable--interaction.show--consent, html.disable--interaction.show--consent
   margin-top: 0;
   border: none;
   margin-bottom: 2em;
+}
+#cc-main .pm__section:not(:first-child) {
+  transition: background-color 0.25s ease;
 }
 #cc-main .pm__section:not(:first-child):hover {
   background: var(--cc-cookie-category-block-bg);
@@ -963,6 +1007,68 @@ html.disable--interaction.show--consent, html.disable--interaction.show--consent
 #cc-main .pm__section--expandable .pm__section-arrow svg {
   stroke: var(--cc-btn-secondary-color);
   transform: scale(0.5);
+}
+#cc-main .pm__section--purpose .pm__section-title .pm__section-title-count-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+#cc-main .pm__section--purpose .pm__section-title .pm__section-title-count-wrapper .pm__vendor-count {
+  margin-top: 4px;
+  font-size: 0.7em;
+  font-weight: normal;
+}
+#cc-main .pm__section--purpose .pm__section-desc-wrapper .pm__section-desc {
+  display: flex;
+  flex-direction: column;
+}
+#cc-main .pm__section--purpose .pm__section-desc-wrapper .pm__section-desc .pm__stack-toggles {
+  display: flex;
+  flex-direction: column;
+  margin-top: 8px;
+  padding-left: 20px;
+}
+#cc-main .pm__section--purpose .pm__section-desc-wrapper .pm__section-desc .pm__stack-toggles .pm__stack-toggle {
+  display: flex;
+  flex-direction: column;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid var(--cc-cookie-category-block-border);
+}
+#cc-main .pm__section--purpose .pm__section-desc-wrapper .pm__section-desc .pm__stack-toggles .pm__stack-toggle-header {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+#cc-main .pm__section--purpose .pm__section-desc-wrapper .pm__section-desc .pm__stack-toggles .pm__stack-toggle-header .pm__stack-toggle-title-wrapper {
+  display: flex;
+  flex-direction: column;
+  width: 80%;
+}
+#cc-main .pm__section--purpose .pm__section-desc-wrapper .pm__section-desc .pm__stack-toggles .pm__stack-toggle-header .pm__stack-toggle-title-wrapper .pm__stack-toggle-title {
+  font-weight: 600;
+}
+#cc-main .pm__section--purpose .pm__section-desc-wrapper .pm__section-desc .pm__stack-toggles .pm__stack-toggle-header .pm__stack-toggle-title-wrapper .pm__vendor-count {
+  font-size: 0.85em;
+  font-weight: normal;
+}
+#cc-main .pm__section--purpose .pm__section-desc-wrapper .pm__section-desc .pm__stack-toggles .pm__stack-toggle-header .section__toggle-wrapper {
+  position: relative;
+  right: 0;
+}
+#cc-main .pm__section--purpose .pm__section-desc-wrapper .pm__section-desc .pm__stack-toggles .pm__stack-toggle-description {
+  margin-top: 8px;
+  font-size: 0.9em;
+}
+#cc-main .pm__section--purpose .pm__section-desc-wrapper .pm__section-desc .pm__purpose-links {
+  margin-top: 8px;
+}
+#cc-main .pm__section--purpose .pm__section-desc-wrapper .pm__section-desc .pm__purpose-links .cc__link {
+  cursor: pointer;
+  width: fit-content;
+}
+#cc-main .pm__section--purpose .pm__section-desc-wrapper .pm__section-desc .pm__purpose-links .cc__link:not(:first-child) {
+  margin-left: 8px;
 }
 #cc-main .pm__section-title-wrapper {
   position: relative;

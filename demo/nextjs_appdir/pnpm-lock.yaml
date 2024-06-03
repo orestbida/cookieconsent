@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      dist:
+        specifier: link:..\..\dist
+        version: link:../../dist
       next:
         specifier: 14.2.3
         version: 14.2.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1)

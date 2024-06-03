@@ -417,7 +417,54 @@ declare namespace CookieConsent {
          */
         serviceCounterLabel?: string
 
-        sections: Section[]
+        sections: Section[];
+
+        /**
+         * Set the label text that will be shown under the purpose title communicating to the user how many vendors can use the
+         * specific purpose.
+         *
+         * *NOTE: This is only used if the `isTcfCompliant` is set to `true`.*
+         *
+         * @default "{{count}} partners can use this purpose"
+         */
+        purposeVendorCountLabel?: string
+
+        /**
+         * Specifies what is the vendor count placeholder in the `purposeVendorCountLabel` that should be replaced with the
+         * appropriate count.
+         * 
+         * *NOTE: This is only used if the `isTcfCompliant` is set to `true`.*
+         * 
+         * @default "{{count}}"
+         */
+        purposeVendorCountPlaceholder?: string;
+
+        /**
+         * Label for the view vendors list link.
+         *
+         * *NOTE: This is only used if the `isTcfCompliant` is set to `true`.*
+         *
+         * @default "List of IAB Vendors"
+         */
+        viewVendorsLabel?: string;
+
+        /**
+         * Label for the view illustrations link.
+         *
+         * *NOTE: This is only used if the `isTcfCompliant` is set to `true`.*
+         *
+         * @default "View Illustrations"
+         */
+        viewIllustrationsLabel?: string;
+
+        /**
+         * Set the illustrations modal title.
+         *
+         * *NOTE: This is only used if the `isTcfCompliant` is set to `true`.*
+         *
+         * @default "Illustrations"
+         */
+        illustrationsTitle?: string;
     }
 
     interface VendorsModalOptions {
@@ -670,7 +717,7 @@ declare namespace CookieConsent {
 
         /**
          * Generates the modals on the fly
-         * and only if needed
+         * and only if needed.
          *
          * @default true
          */

@@ -76,6 +76,10 @@ import { COOKIE_NAME, OPT_IN_MODE } from '../utils/constants';
  * @property {HTMLElement} _pmAcceptAllBtn
  * @property {HTMLElement} _pmAcceptNecessaryBtn
  * @property {HTMLElement} _pmSavePreferencesBtn
+ * @property {HTMLElement} _pmSectionToggleContainer
+ * @property {{ header: HTMLElement, body: HTMLElement, footer: HTMLElement }} _pmBeforeIllustrationsDom
+ * @property {{ header: HTMLElement, body: HTMLElement, footer: HTMLElement }} _pmIllustrationsDom
+ * @property {HTMLElement} _pmIllBackArrow
  * 
  * @property {HTMLElement} _vm
  * @property {HTMLElement} _vmHeader
@@ -89,6 +93,10 @@ import { COOKIE_NAME, OPT_IN_MODE } from '../utils/constants';
  *
  * @property {Object.<string, HTMLInputElement>} _categoryCheckboxInputs
  * @property {Object.<string, ServiceToggle>} _serviceCheckboxInputs
+ * @property {Object.<number, HTMLInputElement>} _stackCheckboxInputs
+ * @property {Object.<number, HTMLInputElement>} _purposeCheckboxInputs
+ * @property {Object.<number, HTMLInputElement>} _specialFeatureCheckboxInputs
+ * @property {Object.<number, HTMLInputElement>} _vendorCheckboxInputs
  *
  * // Used to properly restore focus when modal is closed
  * @property {HTMLSpanElement} _focusSpan
@@ -171,6 +179,27 @@ export class GlobalState {
              * @type {ReturnType<typeof import("../utils/gvl").mapGvlData>}
              */
             _gvlData: null,
+
+            /**
+             * Keeping track of accepted purpose IDs.
+             *
+             * @type {number[]}
+             */
+            _acceptedPurposeIds: [],
+
+            /**
+             * Keeping track of accepted special feature IDs.
+             *
+             * @type {number[]}
+             */
+            _acceptedSpecialFeatureIds: [],
+
+            /**
+             * Keeping track of allowed vendor IDs.
+             *
+             * @type {number[]}
+             */
+            _allowedVendorIds: [],
 
             /**
              * Store all event data-cc event listeners
@@ -346,7 +375,11 @@ export class GlobalState {
          */
         this._dom = {
             _categoryCheckboxInputs: {},
-            _serviceCheckboxInputs: {}
+            _serviceCheckboxInputs: {},
+            _stackCheckboxInputs: {},
+            _purposeCheckboxInputs: {},
+            _specialFeatureCheckboxInputs: {},
+            _vendorCheckboxInputs: {}
         };
 
         //{{END: GUI}}
