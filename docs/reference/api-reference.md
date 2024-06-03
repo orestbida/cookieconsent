@@ -464,30 +464,30 @@ Save custom data into the cookie. Returns `true` if the data was set successfull
 
     ```javascript
     // First set: true
-    CookieConsent.setData({
+    CookieConsent.setCookieData({
         value: {id: 21, lang: 'it'}
     }); //{id: 21, lang: 'it'}
 
     // Change only the 'id' field: true
-    CookieConsent.setData({
+    CookieConsent.setCookieData({
         value: {id: 22},
         mode: 'update'
     }); //{id: 22, lang: 'it'}
 
     // Add a new field: true
-    CookieConsent.setData({
+    CookieConsent.setCookieData({
         value: {newField: 'newValue'},
         mode: 'update'
     }); //{id: 22, lang: 'it', newField: 'newValue'}
 
     // Change 'id' to a string value: FALSE
-    CookieConsent.setData({
+    CookieConsent.setCookieData({
         value: {id: 'hello'},
         mode: 'update'
     }); //{id: 22, lang: 'it', newField: 'newValue'}
 
     // Overwrite: true
-    CookieConsent.setData({
+    CookieConsent.setCookieData({
         value: 'overwriteEverything'
     }); // 'overwriteEverything'
     ```
