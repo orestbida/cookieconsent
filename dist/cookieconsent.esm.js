@@ -5,6 +5,8 @@
 * Released under the MIT License
 */
 
+import * as cmpstub from '@iabtechlabtcf/stub';
+
 const COOKIE_NAME = 'cc_cookie';
 
 const OPT_IN_MODE = 'opt-in';
@@ -36464,5 +36466,8 @@ const reset = (deleteCookie) => {
 
     window._ccRun = false;
 };
+
+// The moment the window loads, fire up the CMP API stub code.
+window.onload = cmpstub;
 
 export { acceptCategory, acceptMultiple, acceptService, acceptedCategory, acceptedPurpose, acceptedService, acceptedSpecialFeature, allowVendors, allowedVendor, eraseCookies, getConfig, getCookie, getUserPreferences, hide, hidePreferences, hideVendors, loadScript, reset, run, setCookieData, setLanguage, show, showPreferences, showVendors, validConsent, validCookie };

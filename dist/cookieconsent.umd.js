@@ -6,10 +6,29 @@
 */
 
 (function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
-    typeof define === 'function' && define.amd ? define(['exports'], factory) :
-    (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.CookieConsent = {}));
-})(this, (function (exports) { 'use strict';
+    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@iabtechlabtcf/stub')) :
+    typeof define === 'function' && define.amd ? define(['exports', '@iabtechlabtcf/stub'], factory) :
+    (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.CookieConsent = {}, global.cmpstub));
+})(this, (function (exports, cmpstub) { 'use strict';
+
+    function _interopNamespaceDefault(e) {
+        var n = Object.create(null);
+        if (e) {
+            Object.keys(e).forEach(function (k) {
+                if (k !== 'default') {
+                    var d = Object.getOwnPropertyDescriptor(e, k);
+                    Object.defineProperty(n, k, d.get ? d : {
+                        enumerable: true,
+                        get: function () { return e[k]; }
+                    });
+                }
+            });
+        }
+        n.default = e;
+        return Object.freeze(n);
+    }
+
+    var cmpstub__namespace = /*#__PURE__*/_interopNamespaceDefault(cmpstub);
 
     const COOKIE_NAME = 'cc_cookie';
 
@@ -36470,6 +36489,9 @@
 
         window._ccRun = false;
     };
+
+    // The moment the window loads, fire up the CMP API stub code.
+    window.onload = cmpstub__namespace;
 
     exports.acceptCategory = acceptCategory;
     exports.acceptMultiple = acceptMultiple;
