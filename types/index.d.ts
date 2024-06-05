@@ -281,8 +281,10 @@ declare namespace CookieConsent {
              */
             equalWeightButtons?: boolean
         }
+        /**
+         * Configuration object for tweaking the preferences modal UI.
+         */
         preferencesModal?: {
-
             /**
              * Change preferencesModal layout.
              */
@@ -306,8 +308,10 @@ declare namespace CookieConsent {
              */
             equalWeightButtons?: boolean
         }
+        /**
+         * Configuration object for tweaking the vendors modal UI.
+         */
         vendorsModal?: {
-
             /**
              * Change vendorsModal layout.
              */
@@ -644,7 +648,7 @@ declare namespace CookieConsent {
        * Number IDs of disclosed third party vendors you work with.
        * 
        * Leaving this undefined or empty will disclose all possible vendors registered in the IAB TCF.
-       * https://vendor-list.consensu.org/v2/additional-vendor-information-list.json
+       * https://vendor-list.consensu.org/v3/vendor-list.json
        * 
        * *Note: An inappropriately large number of vendors may affect the ability of users to make informed decisions and
        * may increase legal risks for both publishers and vendors.*

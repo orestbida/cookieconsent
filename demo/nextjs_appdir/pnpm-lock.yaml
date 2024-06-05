@@ -8,7 +8,7 @@ importers:
 
   .:
     dependencies:
-      dist:
+      cookie-consent:
         specifier: link:..\..\dist
         version: link:../../dist
       next:
