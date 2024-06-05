@@ -1,2 +1,2 @@
+import './core/stub';
 export * from './core/api';
-export * from './core/stub';

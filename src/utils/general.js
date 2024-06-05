@@ -436,6 +436,11 @@ export const resolveEnabledServices = (relativeCategory) => {
  * @param {'all' | number[]} specialFeaturesToAccept
  */
 export const resolvePurposesAndSpecFeaturesToAccept = (purposesToAccept, specialFeaturesToAccept) => {
+    const isTcfCompliant = globalObj._config.isTcfCompliant;
+
+    // Do not proceed if the consent should not be TCF compliant
+    if (!isTcfCompliant) return;
+  
     const { vendors } = globalObj._state._gvlData;
 
     let vendorPurposeIds = [];
@@ -473,6 +478,11 @@ export const resolvePurposesAndSpecFeaturesToAccept = (purposesToAccept, special
  * @param {'all' | number[]} vendorsToAllow 
  */
 export const resolveVendorsToAllow = (vendorsToAllow) => {
+    const isTcfCompliant = globalObj._config.isTcfCompliant;
+
+    // Do not proceed if the consent should not be TCF compliant
+    if (!isTcfCompliant) return;
+
     const { vendors } = globalObj._state._gvlData;
 
     let vendorIds = [];

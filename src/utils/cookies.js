@@ -15,6 +15,7 @@ import {
     safeRun
 } from './general';
 import { localStorageManager } from './localstorage';
+import { updateTCString } from '../core/cmp';
 
 /**
  * @param {boolean} [isFirstConsent]
@@ -107,6 +108,8 @@ export const autoclearCookiesHelper = (isFirstConsent) => {
 };
 
 export const saveCookiePreferences = () => {
+    const isTcfCompliant = globalObj._config.isTcfCompliant;
+
     const state = globalObj._state;
 
     /**
@@ -180,9 +183,11 @@ export const saveCookiePreferences = () => {
         consentTimestamp: state._consentTimestamp.toISOString(),
         consentId: state._consentId,
         services: deepCopy(state._acceptedServices),
-        purposeIds: deepCopy(state._acceptedPurposeIds),
-        specialFeatureIds: deepCopy(state._acceptedSpecialFeatureIds),
-        vendorIds: deepCopy(state._allowedVendorIds)
+        ...isTcfCompliant && {
+            purposeIds: deepCopy(state._acceptedPurposeIds),
+            specialFeatureIds: deepCopy(state._acceptedSpecialFeatureIds),
+            vendorIds: deepCopy(state._allowedVendorIds)
+        }
     };
 
     let isFirstConsent = false;
@@ -216,6 +221,9 @@ export const saveCookiePreferences = () => {
             autoclearCookiesHelper(isFirstConsent);
 
         manageExistingScripts();
+
+        // Update the TC String
+        updateTCString();
     }
 
     if (isFirstConsent) {

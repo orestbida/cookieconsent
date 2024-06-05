@@ -3,9 +3,9 @@ import { unique } from './general';
 
 export const gvl = {
     'gvlSpecificationVersion': 3,
-    'vendorListVersion': 53,
+    'vendorListVersion': 55,
     'tcfPolicyVersion': 4,
-    'lastUpdated': '2024-05-16T16:07:42Z',
+    'lastUpdated': '2024-05-30T16:07:26Z',
     'purposes': {
         '1': {
             'id': 1,
@@ -494,7 +494,7 @@ export const gvl = {
         '4': {
             'id': 4,
             'name': 'Probabilistic identifiers',
-            'description': 'A probabilistic identifier can be created by combining characteristics associated with your device (the type of browser or operating system used) and the IP address of the Internet connection. If you give your agreement, additional characteristics (e.g. the installed font or screen resolution) can also be combined to improve precision of the probabilistic identifier.\nSuch an identifier is considered \'probabilistic\' because several devices can share the same characteristics and Internet connection. It may be used to recognise your device across e.g. web pages from the same site or across multiple sites or apps.'
+            'description': 'A probabilistic identifier can be created by combining characteristics associated with your device (the type of browser or operating system used) and the IP address of the Internet connection. If you give your agreement, additional characteristics (e.g. the installed font or screen resolution) can also be combined to improve precision of the probabilistic identifier.\nSuch an identifier is considered "probabilistic" because several devices can share the same characteristics and Internet connection. It may be used to recognise your device across e.g. web pages from the same site or across multiple sites or apps.'
         },
         '5': {
             'id': 5,
@@ -959,7 +959,7 @@ export const gvl = {
                 {
                     'langId': 'en',
                     'privacy': 'https://n.rich/privacy-notice',
-                    'legIntClaim': 'https://n-rich.atlassian.net/wiki/spaces/NK/pages/56164370/GDPR+Legitimate+Interest+Assessment+Sheet'
+                    'legIntClaim': 'https://n.rich/en/knowledge-base/gdpr-legitimate-interest-assessment-sheet'
                 }
             ],
             'dataDeclaration': [1, 2, 3, 5, 6, 7, 8, 10, 11],
@@ -2018,7 +2018,7 @@ export const gvl = {
             },
             'cookieMaxAgeSeconds': 31536000,
             'usesCookies': true,
-            'cookieRefresh': false,
+            'cookieRefresh': true,
             'usesNonCookieAccess': true,
             'dataRetention': {
                 'stdRetention': 28,
@@ -2546,7 +2546,7 @@ export const gvl = {
             'cookieMaxAgeSeconds': 31536000,
             'usesCookies': true,
             'cookieRefresh': true,
-            'usesNonCookieAccess': false,
+            'usesNonCookieAccess': true,
             'dataRetention': {
                 'stdRetention': 90,
                 'purposes': {
@@ -3437,6 +3437,7 @@ export const gvl = {
             'specialPurposes': [1, 2],
             'features': [1, 2, 3],
             'specialFeatures': [1],
+            'deletedDate': '2024-05-03T00:00:00Z',
             'overflow': {
                 'httpGetLimit': 128
             },
@@ -4556,8 +4557,8 @@ export const gvl = {
             'urls': [
                 {
                     'langId': 'en',
-                    'privacy': 'https://www.inskinmedia.com/privacy-policy.html',
-                    'legIntClaim': 'https://www.inskinmedia.com/privacy-policy.html'
+                    'privacy': 'https://www.azerion.com/wp-content/uploads/2024/05/Website_Privacy_Notice_Inskin-Media_May_2024.pdf',
+                    'legIntClaim': 'https://www.azerion.com/wp-content/uploads/2024/05/Website_Privacy_Notice_Inskin-Media_May_2024.pdf'
                 }
             ],
             'dataDeclaration': [1, 2, 6, 8, 10, 11],
@@ -5426,8 +5427,8 @@ export const gvl = {
             },
             'cookieMaxAgeSeconds': 31556900,
             'usesCookies': true,
-            'cookieRefresh': false,
-            'usesNonCookieAccess': false,
+            'cookieRefresh': true,
+            'usesNonCookieAccess': true,
             'dataRetention': {
                 'stdRetention': 28,
                 'purposes': {
@@ -6747,7 +6748,7 @@ export const gvl = {
             'urls': [
                 {
                     'langId': 'en',
-                    'privacy': 'https://www.marfeel.com/privacy-policy/'
+                    'privacy': 'https://community.marfeel.com/t/marfeel-com-privacy-policy/10383?_gl=1*1xgxg01*_gcl_au*NTk1NDkyOTE5LjE3MTUwMTExOTE.'
                 }
             ],
             'dataDeclaration': [1, 2, 8],
@@ -6799,7 +6800,7 @@ export const gvl = {
             'specialFeatures': [],
             'cookieMaxAgeSeconds': 31556952,
             'usesCookies': true,
-            'cookieRefresh': false,
+            'cookieRefresh': true,
             'usesNonCookieAccess': false,
             'dataRetention': {
                 'stdRetention': 30,
@@ -7212,7 +7213,7 @@ export const gvl = {
         '290': {
             'id': 290,
             'name': 'Readpeak Oy',
-            'purposes': [1, 3, 4],
+            'purposes': [1],
             'legIntPurposes': [2, 7, 10],
             'flexiblePurposes': [2, 7, 10],
             'specialPurposes': [1, 2],
@@ -7223,13 +7224,12 @@ export const gvl = {
             'cookieRefresh': false,
             'usesNonCookieAccess': true,
             'dataRetention': {
-                'stdRetention': 180,
+                'stdRetention': 4320,
                 'purposes': {
-                    '7': 4320,
-                    '10': 4320
+                    '2': 180
                 },
                 'specialPurposes': {
-                    '2': 4320
+                    '1': 180
                 }
             },
             'urls': [
@@ -7254,7 +7254,7 @@ export const gvl = {
             'cookieMaxAgeSeconds': 31449600,
             'usesCookies': true,
             'cookieRefresh': false,
-            'usesNonCookieAccess': false,
+            'usesNonCookieAccess': true,
             'dataRetention': {
                 'stdRetention': 28,
                 'purposes': {
@@ -7267,8 +7267,8 @@ export const gvl = {
             'urls': [
                 {
                     'langId': 'en',
-                    'privacy': 'https://springserve.com/privacy-policy/',
-                    'legIntClaim': 'https://springserve.com/privacy-policy/'
+                    'privacy': 'https://www.magnite.com/legal/advertising-platform-privacy-policy/',
+                    'legIntClaim': 'https://www.magnite.com/legal/advertising-platform-privacy-policy/'
                 }
             ],
             'dataDeclaration': [1, 2, 3, 4, 6, 8, 9, 11],
@@ -9923,7 +9923,7 @@ export const gvl = {
             'specialPurposes': [1, 2],
             'features': [3],
             'specialFeatures': [],
-            'cookieMaxAgeSeconds': 7776000,
+            'cookieMaxAgeSeconds': 31536000,
             'usesCookies': true,
             'cookieRefresh': false,
             'usesNonCookieAccess': true,
@@ -13277,7 +13277,7 @@ export const gvl = {
                 }
             ],
             'dataDeclaration': [1, 3, 8, 9, 10],
-            'deviceStorageDisclosureUrl': 'https://www.programattik.com/deviceStorage.json'
+            'deviceStorageDisclosureUrl': 'https://www.giftaddigital.com/deviceStorage.json'
         },
         '674': {
             'id': 674,
@@ -14032,7 +14032,7 @@ export const gvl = {
             'cookieMaxAgeSeconds': 31536000,
             'usesCookies': true,
             'cookieRefresh': true,
-            'usesNonCookieAccess': false,
+            'usesNonCookieAccess': true,
             'dataRetention': {
                 'stdRetention': 365,
                 'purposes': {
@@ -17314,9 +17314,9 @@ export const gvl = {
             'purposes': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
             'legIntPurposes': [],
             'flexiblePurposes': [],
-            'specialPurposes': [1, 2],
-            'features': [3],
-            'specialFeatures': [1, 2],
+            'specialPurposes': [],
+            'features': [1, 3],
+            'specialFeatures': [2],
             'cookieMaxAgeSeconds': 31536000,
             'usesCookies': true,
             'cookieRefresh': true,
@@ -17342,7 +17342,7 @@ export const gvl = {
                     'legIntClaim': 'https://adrenalead.com/en/data-protection-policy'
                 }
             ],
-            'dataDeclaration': [1, 5, 7, 8],
+            'dataDeclaration': [1, 2, 5, 7, 8, 11],
             'deviceStorageDisclosureUrl': 'https://aleadinfo.com/deviceStorage.json'
         },
         '835': {
@@ -21939,7 +21939,7 @@ export const gvl = {
                     'legIntClaim': 'https://corporate.sparteo.com/privacy-policy'
                 }
             ],
-            'dataDeclaration': [1, 2, 6, 8, 10, 11],
+            'dataDeclaration': [1, 2, 3, 6, 8, 10, 11],
             'deviceStorageDisclosureUrl': 'https://bid.bricks-co.com/.well-known/deviceStorage.json'
         },
         '1029': {
@@ -22169,8 +22169,8 @@ export const gvl = {
             'urls': [
                 {
                     'langId': 'en',
-                    'privacy': 'https://viads.com/privacy_policy',
-                    'legIntClaim': 'https://viads.com/privacy_policy'
+                    'privacy': 'https://viads.com/policy/',
+                    'legIntClaim': 'https://viads.com/policy/'
                 }
             ],
             'dataDeclaration': [1],
@@ -23837,7 +23837,7 @@ export const gvl = {
             },
             'urls': [
                 {
-                    'langId': 'pt',
+                    'langId': 'en',
                     'privacy': 'http://www.bluems.com/privacy/en',
                     'legIntClaim': 'https://www.getblue.io/privacy/en/'
                 }
@@ -24698,6 +24698,7 @@ export const gvl = {
             'specialPurposes': [1, 2],
             'features': [],
             'specialFeatures': [1],
+            'deletedDate': '2024-05-15T00:00:00Z',
             'cookieMaxAgeSeconds': null,
             'usesCookies': false,
             'cookieRefresh': false,
@@ -24955,10 +24956,10 @@ export const gvl = {
             'specialPurposes': [2],
             'features': [3],
             'specialFeatures': [],
-            'cookieMaxAgeSeconds': 129600,
-            'usesCookies': true,
+            'cookieMaxAgeSeconds': null,
+            'usesCookies': false,
             'cookieRefresh': false,
-            'usesNonCookieAccess': false,
+            'usesNonCookieAccess': true,
             'dataRetention': {
                 'purposes': {
                     '2': 90,
@@ -24981,7 +24982,7 @@ export const gvl = {
                     'legIntClaim': 'https://happydemics.com/fr/conditions-generales'
                 }
             ],
-            'dataDeclaration': [1, 2, 3, 8, 11],
+            'dataDeclaration': [1, 2, 3, 4, 5, 8, 11],
             'deviceStorageDisclosureUrl': 'https://files.happydemics.com/iab-tcf/device_storage_disclosure.json'
         },
         '1151': {
@@ -25954,8 +25955,8 @@ export const gvl = {
             'id': 1177,
             'name': 'Holid AB',
             'purposes': [1, 3, 4, 5, 6],
-            'legIntPurposes': [2, 7, 8, 9, 10, 11],
-            'flexiblePurposes': [2, 7, 8, 9, 10, 11],
+            'legIntPurposes': [2, 7, 10],
+            'flexiblePurposes': [2, 7, 10],
             'specialPurposes': [1, 2],
             'features': [2, 3],
             'specialFeatures': [],
@@ -26877,6 +26878,7 @@ export const gvl = {
             'specialPurposes': [1, 2],
             'features': [2],
             'specialFeatures': [],
+            'deletedDate': '2024-05-14T00:00:00Z',
             'cookieMaxAgeSeconds': 315532800,
             'usesCookies': true,
             'cookieRefresh': true,
@@ -27835,8 +27837,8 @@ export const gvl = {
             'urls': [
                 {
                     'langId': 'en',
-                    'privacy': 'https://www.audiencealliance.org/gdpr/privacy-policy',
-                    'legIntClaim': 'https://www.audiencealliance.org/gdpr/privacy-policy'
+                    'privacy': 'https://samhub.io/contact/data-protection/privacy-policy/',
+                    'legIntClaim': 'https://samhub.io/contact/data-protection/privacy-policy/'
                 }
             ],
             'dataDeclaration': [1, 2, 3, 5, 6, 7, 8, 9, 10, 11],
@@ -28043,12 +28045,12 @@ export const gvl = {
         },
         '1233': {
             'id': 1233,
-            'name': 'NEXTCHANCE ASSETS, S.L.',
-            'purposes': [1, 2, 7, 10],
+            'name': 'NEXTCHANCE MULTIMARTKS, S.L.',
+            'purposes': [1, 8, 9, 10, 11],
             'legIntPurposes': [],
             'flexiblePurposes': [],
             'specialPurposes': [1, 2],
-            'features': [2, 3],
+            'features': [],
             'specialFeatures': [],
             'cookieMaxAgeSeconds': 34560000,
             'usesCookies': true,
@@ -28057,7 +28059,7 @@ export const gvl = {
             'dataRetention': {
                 'stdRetention': 4320,
                 'purposes': {
-                    '2': 1
+
                 },
                 'specialPurposes': {
                     '2': 0
@@ -28066,11 +28068,16 @@ export const gvl = {
             'urls': [
                 {
                     'langId': 'es',
-                    'privacy': 'https://multimarkts.com/politica-de-privacidad/',
-                    'legIntClaim': 'https://multimarkts.com/politica-de-privacidad/'
+                    'privacy': 'https://app.multimarkts.com/es/privacy-policy',
+                    'legIntClaim': 'https://app.multimarkts.com/es/legal'
+                },
+                {
+                    'langId': 'en',
+                    'privacy': 'https://app.multimarkts.com/en/privacy-policy',
+                    'legIntClaim': 'https://app.multimarkts.com/en/legal'
                 }
             ],
-            'dataDeclaration': [1, 2, 3, 4, 6, 8],
+            'dataDeclaration': [1, 2, 6, 8],
             'deviceStorageDisclosureUrl': 'https://nextchance.github.io/adsviu-IAB-config/vendor.json'
         },
         '1234': {
@@ -28102,7 +28109,7 @@ export const gvl = {
                 }
             ],
             'dataDeclaration': [1, 8],
-            'deviceStorageDisclosureUrl': 'https://static.zuuvicdn.com/info/tcf.json'
+            'deviceStorageDisclosureUrl': 'https://zuuvi.com/hubfs/iab/tcf.json'
         },
         '1235': {
             'id': 1235,
@@ -28175,9 +28182,9 @@ export const gvl = {
         '1237': {
             'id': 1237,
             'name': 'Aryel s.r.l',
-            'purposes': [2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
-            'legIntPurposes': [],
-            'flexiblePurposes': [],
+            'purposes': [1, 3, 4],
+            'legIntPurposes': [2, 7, 9, 10],
+            'flexiblePurposes': [2, 7, 9, 10],
             'specialPurposes': [1, 2],
             'features': [1, 2, 3],
             'specialFeatures': [],
@@ -28201,7 +28208,7 @@ export const gvl = {
                     'legIntClaim': 'https://www.aryel.io/legitimate-interest-adv'
                 }
             ],
-            'dataDeclaration': [1, 2, 3, 4, 6, 8, 10, 11],
+            'dataDeclaration': [1, 2, 4, 6, 8, 10, 11],
             'deviceStorageDisclosureUrl': 'https://assets.adv.aryel.io/_iab/iab.json'
         },
         '1238': {
@@ -29403,7 +29410,7 @@ export const gvl = {
             'urls': [
                 {
                     'langId': 'en',
-                    'privacy': 'https://www.abcsinsights.com/privacy'
+                    'privacy': 'https://www.abcsinsights.com/privacy/ad-measurement'
                 }
             ],
             'dataDeclaration': [1],
@@ -29868,12 +29875,12 @@ export const gvl = {
                 {
                     'langId': 'fr',
                     'privacy': 'https://datadome.co/fr/politique-confidentialite/',
-                    'legIntClaim': 'https://datadome.co/fr/contact/'
+                    'legIntClaim': 'https://datadome.co/privacy-policy/#claims'
                 },
                 {
                     'langId': 'en',
                     'privacy': 'https://datadome.co/privacy-policy/',
-                    'legIntClaim': 'https://datadome.co/contact/'
+                    'legIntClaim': 'https://datadome.co/fr/politique-confidentialite/#claims'
                 }
             ],
             'dataDeclaration': [1, 6, 8],
@@ -30391,7 +30398,7 @@ export const gvl = {
         },
         '723': {
             'id': 723,
-            'name': 'Adzymic Pte Ltd',
+            'name': 'Adzymic Creavibes',
             'purposes': [1, 2, 3, 4, 7],
             'legIntPurposes': [],
             'flexiblePurposes': [],
@@ -30458,7 +30465,7 @@ export const gvl = {
         },
         '1300': {
             'id': 1300,
-            'name': 'Gesher Software LTD',
+            'name': 'Gesher Software LTD dba bridgeupp',
             'purposes': [],
             'legIntPurposes': [],
             'flexiblePurposes': [],
@@ -30521,7 +30528,7 @@ export const gvl = {
                 }
             ],
             'dataDeclaration': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
-            'deviceStorageDisclosureUrl': 'https://cdn.pubmatic.com/devicestorage.json'
+            'deviceStorageDisclosureUrl': 'https://cdn.metaxads.com/tcf/devicestorage.json'
         },
         '1180': {
             'id': 1180,
@@ -30553,6 +30560,259 @@ export const gvl = {
             ],
             'dataDeclaration': [5, 6, 7, 10],
             'deviceStorageDisclosureUrl': 'https://cdn.raptorstatic.com/tcf/tcf.json'
+        },
+        '1302': {
+            'id': 1302,
+            'name': 'Playdigo Inc',
+            'purposes': [],
+            'legIntPurposes': [],
+            'flexiblePurposes': [],
+            'specialPurposes': [2],
+            'features': [3],
+            'specialFeatures': [],
+            'cookieMaxAgeSeconds': null,
+            'usesCookies': false,
+            'cookieRefresh': false,
+            'usesNonCookieAccess': false,
+            'dataRetention': {
+                'purposes': {
+
+                },
+                'specialPurposes': {
+                    '2': 365
+                }
+            },
+            'urls': [
+                {
+                    'langId': 'en',
+                    'privacy': 'https://playdigo.com/home/privacy-policy/',
+                    'legIntClaim': 'https://playdigo.com/home/privacy-policy/'
+                }
+            ],
+            'dataDeclaration': [1, 2, 3, 5, 7, 8],
+            'deviceStorageDisclosureUrl': 'https://playdigo.com/file.json'
+        },
+        '1303': {
+            'id': 1303,
+            'name': 'NinaData Oy',
+            'purposes': [],
+            'legIntPurposes': [2, 7, 9, 11],
+            'flexiblePurposes': [],
+            'specialPurposes': [2],
+            'features': [],
+            'specialFeatures': [],
+            'cookieMaxAgeSeconds': null,
+            'usesCookies': false,
+            'cookieRefresh': false,
+            'usesNonCookieAccess': false,
+            'dataRetention': {
+                'stdRetention': 120,
+                'purposes': {
+                    '2': 0
+                },
+                'specialPurposes': {
+
+                }
+            },
+            'urls': [
+                {
+                    'langId': 'en',
+                    'privacy': 'https://ninadata.io/privacy-policy/',
+                    'legIntClaim': 'https://ninadata.io/privacy-policy/'
+                }
+            ],
+            'dataDeclaration': [8],
+            'deviceStorageDisclosureUrl': 'https://ninadata.io/wp-content/uploads/2024/05/disclosures.json'
+        },
+        '1304': {
+            'id': 1304,
+            'name': 'yieldbucket GmbH',
+            'purposes': [1, 2, 3, 4, 7, 9, 10],
+            'legIntPurposes': [],
+            'flexiblePurposes': [],
+            'specialPurposes': [],
+            'features': [1, 2, 3],
+            'specialFeatures': [1, 2],
+            'cookieMaxAgeSeconds': 31536000,
+            'usesCookies': true,
+            'cookieRefresh': true,
+            'usesNonCookieAccess': true,
+            'dataRetention': {
+                'stdRetention': 365,
+                'purposes': {
+
+                },
+                'specialPurposes': {
+
+                }
+            },
+            'urls': [
+                {
+                    'langId': 'de',
+                    'privacy': 'https://yieldbucket.com/privacy.html',
+                    'legIntClaim': 'https://yieldbucket.com/privacy.html'
+                }
+            ],
+            'dataDeclaration': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
+            'deviceStorageDisclosureUrl': 'https://s.ybucket.io/tcf.json'
+        },
+        '1305': {
+            'id': 1305,
+            'name': 'TOPON PTE. LTD. ',
+            'purposes': [1, 3, 4],
+            'legIntPurposes': [2, 7, 11],
+            'flexiblePurposes': [],
+            'specialPurposes': [2],
+            'features': [3],
+            'specialFeatures': [2],
+            'cookieMaxAgeSeconds': null,
+            'usesCookies': false,
+            'cookieRefresh': false,
+            'usesNonCookieAccess': true,
+            'dataRetention': {
+                'stdRetention': 60,
+                'purposes': {
+                    '7': 365
+                },
+                'specialPurposes': {
+                    '2': 1
+                }
+            },
+            'urls': [
+                {
+                    'langId': 'en',
+                    'privacy': 'https://www.toponad.com/en/privacy-policy',
+                    'legIntClaim': 'https://www.toponad.com/en/privacy-policy'
+                }
+            ],
+            'dataDeclaration': [1, 3, 6, 8, 11],
+            'deviceStorageDisclosureUrl': 'https://mores.toponad.com/tmp/20240312/toponads_tcf_disclosure.json'
+        },
+        '1306': {
+            'id': 1306,
+            'name': 'Sipo Inc',
+            'purposes': [],
+            'legIntPurposes': [],
+            'flexiblePurposes': [],
+            'specialPurposes': [1, 2],
+            'features': [1, 3],
+            'specialFeatures': [2],
+            'cookieMaxAgeSeconds': null,
+            'usesCookies': false,
+            'cookieRefresh': false,
+            'usesNonCookieAccess': false,
+            'dataRetention': {
+                'stdRetention': 0,
+                'purposes': {
+
+                },
+                'specialPurposes': {
+
+                }
+            },
+            'urls': [
+                {
+                    'langId': 'en',
+                    'privacy': 'https://sipo-inc.com/privacy-policy/',
+                    'legIntClaim': 'https://sipo-inc.com/privacy-policy/'
+                }
+            ],
+            'dataDeclaration': [7, 8],
+            'deviceStorageDisclosureUrl': 'https://devicestorage.json'
+        },
+        '1307': {
+            'id': 1307,
+            'name': 'EliteAppgrade',
+            'purposes': [],
+            'legIntPurposes': [],
+            'flexiblePurposes': [],
+            'specialPurposes': [1, 2],
+            'features': [1, 3],
+            'specialFeatures': [2],
+            'cookieMaxAgeSeconds': null,
+            'usesCookies': false,
+            'cookieRefresh': false,
+            'usesNonCookieAccess': false,
+            'dataRetention': {
+                'stdRetention': 0,
+                'purposes': {
+
+                },
+                'specialPurposes': {
+
+                }
+            },
+            'urls': [
+                {
+                    'langId': 'en',
+                    'privacy': 'https://eliteappgrade.com/privacy-policy',
+                    'legIntClaim': 'https://eliteappgrade.com/privacy-policy'
+                }
+            ],
+            'dataDeclaration': [7, 8],
+            'deviceStorageDisclosureUrl': 'https://eliteappgrade.com/devicestorage.json'
+        },
+        '1308': {
+            'id': 1308,
+            'name': 'SpinX Pte Ltd',
+            'purposes': [],
+            'legIntPurposes': [],
+            'flexiblePurposes': [],
+            'specialPurposes': [2],
+            'features': [],
+            'specialFeatures': [],
+            'cookieMaxAgeSeconds': null,
+            'usesCookies': false,
+            'cookieRefresh': false,
+            'usesNonCookieAccess': false,
+            'dataRetention': {
+                'purposes': {
+
+                },
+                'specialPurposes': {
+                    '2': 7
+                }
+            },
+            'urls': [
+                {
+                    'langId': 'en',
+                    'privacy': 'https://spinx.biz/privacy-policy',
+                    'legIntClaim': 'https://spinx.biz/legitimate-interest-test'
+                }
+            ],
+            'dataDeclaration': [1, 3],
+            'deviceStorageDisclosureUrl': 'https://spinx.biz/tcf-spinx.json'
+        },
+        '551': {
+            'id': 551,
+            'name': 'illuma technology limited',
+            'purposes': [],
+            'legIntPurposes': [2],
+            'flexiblePurposes': [],
+            'specialPurposes': [],
+            'features': [],
+            'specialFeatures': [],
+            'cookieMaxAgeSeconds': null,
+            'usesCookies': false,
+            'cookieRefresh': false,
+            'usesNonCookieAccess': false,
+            'dataRetention': {
+                'purposes': {
+                    '2': 30
+                },
+                'specialPurposes': {
+
+                }
+            },
+            'urls': [
+                {
+                    'langId': 'en',
+                    'privacy': 'https://www.weareilluma.com/end-user-policy/',
+                    'legIntClaim': 'https://www.weareilluma.com/end-user-policy/'
+                }
+            ],
+            'dataDeclaration': [6],
+            'deviceStorageDisclosureUrl': 'https://static.illuma-tech.com/json/tcf.json'
         }
     }
 };
@@ -30563,7 +30823,7 @@ export const gvl = {
  * @param {number[] | undefined} disclosedVendorIds
  */
 export const mapGvlData = (disclosedVendorIds) => {
-    const vendorsToShow = disclosedVendorIds?.filter((id) => id in gvl.vendors) || Object.keys(gvl.vendors);
+    const vendorsToShow = disclosedVendorIds?.length ? disclosedVendorIds.filter((id) => id in gvl.vendors) : Object.keys(gvl.vendors);
 
     const originalPurposes = gvl.purposes;
     const originalSpecialPurposes = gvl.specialPurposes;
@@ -30604,8 +30864,9 @@ export const mapGvlData = (disclosedVendorIds) => {
         originalStacks,
         stacks,
         vendors,
-        extendedVendors,
-        vendorCount
+        vendorCount,
+        vendorIds: vendorsToShow,
+        extendedVendors
     };
 };
 

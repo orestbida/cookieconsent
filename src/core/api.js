@@ -76,6 +76,7 @@ import {
     VENDORS_MODAL_NAME
 } from '../utils/constants';
 import { localStorageManager } from '../utils/localstorage';
+import { configCmpApi } from './cmp';
 
 /**
  * Accept multiple API.
@@ -366,6 +367,7 @@ export const showPreferences = () => {
 const discardUnsavedPreferences = () => {
     const dom = globalObj._dom;
     const state = globalObj._state;
+    const config = globalObj._config;
 
     const consentIsValid = validConsent();
 
@@ -375,8 +377,6 @@ const discardUnsavedPreferences = () => {
     const stackInputs = dom._stackCheckboxInputs;
     const purposeInputs = dom._purposeCheckboxInputs;
     const specialFeatureInputs = dom._specialFeatureCheckboxInputs;
-
-    const { originalStacks } = state._gvlData;
 
     /**
      * @param {string} category
@@ -399,19 +399,23 @@ const discardUnsavedPreferences = () => {
         }
     }
 
-    for (const purposeId in purposeInputs) {
-        purposeInputs[purposeId].checked = acceptedPurpose(parseInt(purposeId, 10));
-    }
+    if (config.isTcfCompliant) {
+        const { originalStacks } = state._gvlData;
 
-    for (const specialFeatureId in specialFeatureInputs) {
-        specialFeatureInputs[specialFeatureId].checked = acceptedSpecialFeature(parseInt(specialFeatureId, 10));
-    }
-
-    for (const stackId in stackInputs) {
-        const stackPurposeIds = originalStacks[stackId].purposes;
-        const stackSpecialFeatureIds = originalStacks[stackId].specialFeatures;
-
-        stackInputs[stackId].checked = stackPurposeIds.some((id) => acceptedPurpose(id)) || stackSpecialFeatureIds.some((id) => acceptedSpecialFeature(id));
+        for (const purposeId in purposeInputs) {
+            purposeInputs[purposeId].checked = acceptedPurpose(parseInt(purposeId, 10));
+        }
+  
+        for (const specialFeatureId in specialFeatureInputs) {
+            specialFeatureInputs[specialFeatureId].checked = acceptedSpecialFeature(parseInt(specialFeatureId, 10));
+        }
+  
+        for (const stackId in stackInputs) {
+            const stackPurposeIds = originalStacks[stackId].purposes;
+            const stackSpecialFeatureIds = originalStacks[stackId].specialFeatures;
+  
+            stackInputs[stackId].checked = stackPurposeIds.some((id) => acceptedPurpose(id)) || stackSpecialFeatureIds.some((id) => acceptedSpecialFeature(id));
+        }
     }
 };
 
@@ -779,14 +783,23 @@ const retrieveState = () => {
     if (state._revisionEnabled && validConsentId && revision !== config.revision)
         state._validRevision = false;
 
-    state._invalidConsent = !validConsentId
-        || !state._validRevision
-        || !state._consentTimestamp
-        || !state._lastConsentTimestamp
-        || !validCategories
-        || !validPurposeIds
-        || !validSpecialFeatureIds
-        || !validVendorIds;
+    // There are different meanings of valid consent based on if the consent should be TCF compliant or not
+    if (config.isTcfCompliant) {
+        state._invalidConsent = !validConsentId
+          || !state._validRevision
+          || !state._consentTimestamp
+          || !state._lastConsentTimestamp
+          || !validCategories
+          || !validPurposeIds
+          || !validSpecialFeatureIds
+          || !validVendorIds;
+    } else {
+        state._invalidConsent = !validConsentId
+          || !state._validRevision
+          || !state._consentTimestamp
+          || !state._lastConsentTimestamp
+          || !validCategories;
+    }
 
     /**
      * If localStorage is enabled, also check the stored `expirationTime`
@@ -811,9 +824,11 @@ const retrieveState = () => {
             ...services
         };
 
-        state._acceptedPurposeIds = purposeIds;
-        state._acceptedSpecialFeatureIds = specialFeatureIds;
-        state._allowedVendorIds = vendorIds;
+        if (config.isTcfCompliant) {
+            state._acceptedPurposeIds = purposeIds;
+            state._acceptedSpecialFeatureIds = specialFeatureIds;
+            state._allowedVendorIds = vendorIds;
+        }
 
         setAcceptedCategories([
             ...state._readOnlyCategories,
@@ -844,12 +859,15 @@ export const run = async (userConfig) => {
     if (!win._ccRun) {
         win._ccRun = true;
 
-        await setConfig(userConfig);
+        setConfig(userConfig);
 
         if (_state._botAgentDetected)
             return;
 
         retrieveState(userConfig);
+
+        // Configure the CMP API once the state is retrieved
+        await configCmpApi();
 
         const consentIsValid = validConsent();
 

@@ -181,6 +181,20 @@ export class GlobalState {
             _gvlData: null,
 
             /**
+             * Is the CMP API stub loaded.
+             *
+             * @type {boolean}
+             */
+            _isCmpApiStubLoaded: false,
+
+            /**
+             * Is the full CMP API loaded.
+             *
+             * @type {boolean}
+             */
+            _isCmpApiLoaded: false,
+
+            /**
              * Keeping track of accepted purpose IDs.
              *
              * @type {number[]}

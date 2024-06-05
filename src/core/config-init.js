@@ -2,14 +2,13 @@ import { globalObj } from './global';
 import { debug, getKeys, isObject, retrieveScriptElements, fetchCategoriesAndServices } from '../utils/general';
 import { OPT_OUT_MODE } from '../utils/constants';
 import { resolveCurrentLanguageCode, setCurrentLanguageCode } from '../utils/language';
-import { mapGvlData } from '../utils/gvl';
 
 /**
  * Configure CookieConsent.
  * 
  * @param {import("./global").UserConfig} userConfig
  */
-export const setConfig = async (userConfig) => {
+export const setConfig = (userConfig) => {
     const { _dom, _config, _state } = globalObj;
 
     const
@@ -48,9 +47,6 @@ export const setConfig = async (userConfig) => {
     // If the modal should be TCF compliant, page interaction needs to be disabled until the user makes a choice
     if (userConfig.isTcfCompliant) {
         state._disablePageInteraction = true;
-
-        // TODO: See if this can be moved somewhere else to cache it
-        state._gvlData = mapGvlData(userConfig.tcfComplianceConfig?.disclosedVendorIds);
     }
     //{{END: GUI}}
 

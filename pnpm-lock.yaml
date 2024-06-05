@@ -8,9 +8,15 @@ importers:
 
   .:
     dependencies:
+      '@iabtechlabtcf/cmpapi':
+        specifier: 1.5.12
+        version: 1.5.12(@iabtechlabtcf/core@1.5.12)
+      '@iabtechlabtcf/core':
+        specifier: ^1.5.12
+        version: 1.5.12
       '@iabtechlabtcf/stub':
-        specifier: ^1.5.11
-        version: 1.5.11
+        specifier: 1.5.12
+        version: 1.5.12
     devDependencies:
       '@babel/core':
         specifier: ^7.24.3
@@ -919,8 +925,16 @@ packages:
   '@humanwhocodes/object-schema@2.0.2':
     resolution: {integrity: sha512-6EwiSjwWYP7pTckG6I5eyFANjPhmPjUX9JRLUSfNPC7FX7zK9gyZAfUEaECL6ALTpGX5AjnBq3C9XmVWPitNpw==}
 
-  '@iabtechlabtcf/stub@1.5.11':
-    resolution: {integrity: sha512-Ycp7Ejs1Bn34WftxF46mLCDssjJ3J8CL50epbw/+0wGcJ+ygXmoxBKrVKAh/Ka9J6dnwjzx+hkLsfHBaFjLSvA==}
+  '@iabtechlabtcf/cmpapi@1.5.12':
+    resolution: {integrity: sha512-QbXfzMmlL4l0LbZ0WWWVlFq2ts4z1ZCK2kJwhdG4g2qhM+4KgRJzhL7SWRZr9lCRhpp6Q6WvwxDzgojRGaa9ng==}
+    peerDependencies:
+      '@iabtechlabtcf/core': '>=1.0.0'
+
+  '@iabtechlabtcf/core@1.5.12':
+    resolution: {integrity: sha512-xm2Q28FXA/1sHY/Xr5YKQ/PEAeEa3BtL5RZLIQ3pk+jtp7dl6YPBpaQokYwXVUijMJPA2q7KLfZRchvV6wmLAg==}
+
+  '@iabtechlabtcf/stub@1.5.12':
+    resolution: {integrity: sha512-pe7+JXGq6yUsBE+a0BVCz5aXsfQPYD6IeyxFKQp379L7JCpLOPpM4zYz/KtXQhFhAjU5jalP0OvXctjafbHaBw==}
 
   '@istanbuljs/load-nyc-config@1.1.0':
     resolution: {integrity: sha512-VjeHSlIzpv/NyD3N0YuHfXOPDIixcA1q2ZV98wsMqcYlPmv2n3Yb2lYP9XMElnaFVXg5A7YLTeLu6V84uQDjmQ==}
@@ -4371,7 +4385,13 @@ snapshots:
 
   '@humanwhocodes/object-schema@2.0.2': {}
 
-  '@iabtechlabtcf/stub@1.5.11': {}
+  '@iabtechlabtcf/cmpapi@1.5.12(@iabtechlabtcf/core@1.5.12)':
+    dependencies:
+      '@iabtechlabtcf/core': 1.5.12
+
+  '@iabtechlabtcf/core@1.5.12': {}
+
+  '@iabtechlabtcf/stub@1.5.12': {}
 
   '@istanbuljs/load-nyc-config@1.1.0':
     dependencies:
