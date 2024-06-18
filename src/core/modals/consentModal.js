@@ -275,11 +275,6 @@ export const createConsentModal = (api, createMainContainer) => {
         createMainContainer(api);
         appendChild(dom._ccMain, dom._cmContainer);
         handleFocusTrap(dom._cm);
-
-        /**
-         * Enable transition
-         */
-        setTimeout(() => addClass(dom._cmContainer, 'cc--anim'), 100);
     }
 
     getModalFocusableData(1);
