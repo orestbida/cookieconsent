@@ -206,9 +206,10 @@ export const show = (createModal) => {
     setAttribute(_dom._cm, ARIA_HIDDEN, 'false');
 
     /**
-     * Set focus to consentModal
+     * Set focus to consentModal and enable transition
      */
     setTimeout(() => {
+        addClass(dom._cmContainer, 'cc--anim');
         focus(globalObj._dom._cmDivTabindex);
     }, 100);
 
@@ -244,6 +245,11 @@ export const hide = () => {
      */
     focus(_state._lastFocusedElemBeforeModal);
     _state._lastFocusedElemBeforeModal = null;
+    
+    /**
+     * Remove transition class after it executed
+     */
+    setTimeout(() => removeClass(dom._cmContainer, 'cc--anim'), 100);
 
     debug('CookieConsent [TOGGLE]: hide consentModal');
 
