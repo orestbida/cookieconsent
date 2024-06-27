@@ -168,6 +168,10 @@ export const saveCookiePreferences = () => {
         consentId: state._consentId,
         services: deepCopy(state._acceptedServices)
     };
+	
+    if (state._lastConsentTimestamp) {
+        state._savedCookieContent.lastConsentTimestamp = state._lastConsentTimestamp.toISOString();
+    }
 
     let isFirstConsent = false;
     const stateChanged = categoriesWereChanged || servicesWereChanged;
