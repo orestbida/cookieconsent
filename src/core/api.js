@@ -614,12 +614,12 @@ const retrieveState = () => {
      * and calculate acceptType
      */
     if (!state._invalidConsent) {
-        state._enabledServices = {...state._acceptedServices};
-
         state._acceptedServices = {
             ...state._acceptedServices,
             ...services
         };
+
+        state._enabledServices = {...state._acceptedServices};
 
         setAcceptedCategories([
             ...state._readOnlyCategories,
