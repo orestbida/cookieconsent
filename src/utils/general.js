@@ -639,7 +639,7 @@ export const addDataButtonListeners = (elem, api, createPreferencesModal, create
     const acceptAction = (event, acceptType) => {
         preventDefault(event);
         acceptCategory(acceptType);
-        hidePreferences();
+        hidePreferences(event);
         hide();
     };
 
@@ -656,7 +656,7 @@ export const addDataButtonListeners = (elem, api, createPreferencesModal, create
         setAttribute(el, 'aria-haspopup', 'dialog');
         addEvent(el, CLICK_EVENT, (event) => {
             preventDefault(event);
-            showPreferences();
+            showPreferences(event);
         });
 
         if (createPreferencesModalOnHover) {
@@ -900,8 +900,9 @@ export const getModalFocusableData = (modalId) => {
  * @param {string} eventName
  * @param {string} [modalName]
  * @param {HTMLElement} [modal]
+ * @param {event} [Event]
  */
-export const fireEvent = (eventName, modalName, modal) => {
+export const fireEvent = (eventName, modalName, modal, event) => {
     const {
         _onChange,
         _onConsent,
@@ -918,9 +919,9 @@ export const fireEvent = (eventName, modalName, modal) => {
         const modalParams = { modalName };
 
         if (eventName === events._onModalShow) {
-            isFunction(_onModalShow) && _onModalShow(modalParams);
+            isFunction(_onModalShow) && _onModalShow(modalParams, event);
         } else if (eventName === events._onModalHide) {
-            isFunction(_onModalHide) && _onModalHide(modalParams);
+            isFunction(_onModalHide) && _onModalHide(modalParams, event);
         } else {
             modalParams.modal = modal;
             isFunction(_onModalReady) && _onModalReady(modalParams);

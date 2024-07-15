@@ -253,7 +253,7 @@ export const hide = () => {
 /**
  * Show preferences modal
  */
-export const showPreferences = () => {
+export const showPreferences = (event) => {
     const state = globalObj._state;
 
     if (state._preferencesModalVisible)
@@ -285,7 +285,7 @@ export const showPreferences = () => {
 
     debug('CookieConsent [TOGGLE]: show preferencesModal');
 
-    fireEvent(globalObj._customEvents._onModalShow, PREFERENCES_MODAL_NAME);
+    fireEvent(globalObj._customEvents._onModalShow, PREFERENCES_MODAL_NAME, undefined, event);
 };
 
 /**
@@ -322,7 +322,7 @@ const discardUnsavedPreferences = () => {
 /**
  * Hide preferences modal
  */
-export const hidePreferences = () => {
+export const hidePreferences = (event) => {
     const state = globalObj._state;
 
     if (!state._preferencesModalVisible)
@@ -356,7 +356,7 @@ export const hidePreferences = () => {
 
     debug('CookieConsent [TOGGLE]: hide preferencesModal');
 
-    fireEvent(globalObj._customEvents._onModalHide, PREFERENCES_MODAL_NAME);
+    fireEvent(globalObj._customEvents._onModalHide, PREFERENCES_MODAL_NAME, undefined, event);
 };
 
 var miniAPI = {
