@@ -52,6 +52,7 @@ import {
 
 import {
     setCookie,
+    autoclearCookiesHelper,
     eraseCookiesHelper,
     saveCookiePreferences,
     getSingleCookie,
@@ -140,6 +141,14 @@ export const acceptedService = (service, category) => {
  * @param {string} cookieName
  */
 export const validCookie = (cookieName) => getSingleCookie(cookieName, true) !== '';
+
+/**
+ * Perform clear of cookies for disabled categories
+ */
+export const clearDisabledCategoryCookies = () => {
+    // Pretend it was our first consent, so the autoclear deletes any disabled category cookies
+    autoclearCookiesHelper(true)
+};
 
 /**
  * Erase cookies API
