@@ -145,7 +145,7 @@ export const validCookie = (cookieName) => getSingleCookie(cookieName, true) !==
 /**
  * Perform clear of cookies for disabled categories
  */
-export const clearDisabledCategoryCookies = () => {
+export const performAutoclearCookies = () => {
     // Pretend it was our first consent, so the autoclear deletes any disabled category cookies
     autoclearCookiesHelper(true)
 };
