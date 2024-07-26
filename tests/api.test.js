@@ -183,6 +183,12 @@ describe("API tests", () => {
         expect(api.validCookie('test_cookie5')).toBe(false);
     });
 
+    it('Should erase cookie by autoClear', () => {
+        document.cookie = 'test_cookie=21; expires=Sun, 1 Jan 2063 00:00:00 UTC; path=/';
+        api.performAutoclearCookies();
+        expect(api.validCookie('test_cookie')).toBe(false);
+    })
+
     it('Should show the consent modal', async () => {
         api.reset(true);
         testConfig.autoShow = false;

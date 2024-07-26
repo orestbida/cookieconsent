@@ -143,7 +143,7 @@ export const acceptedService = (service, category) => {
 export const validCookie = (cookieName) => getSingleCookie(cookieName, true) !== '';
 
 /**
- * Perform clear of cookies for disabled categories
+ * Perform clear of cookies for disabled categories and services using the autoClear configuration
  */
 export const performAutoclearCookies = () => {
     // Pretend it was our first consent, so the autoclear deletes any disabled category cookies

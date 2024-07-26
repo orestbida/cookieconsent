@@ -616,6 +616,11 @@ declare namespace CookieConsent {
     function eraseCookies(cookies: string | RegExp | (string|RegExp)[], path?: string, domain?: string): void
 
     /**
+     * Perform clear of cookies for disabled categories and services using the autoClear configuration
+     */
+    function performAutoclearCookies(): void
+
+    /**
      * Load '.js' files.
      * @param src Path pointing to the js file
      * @param attributes Attributes added to the script
