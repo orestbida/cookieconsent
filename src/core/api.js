@@ -144,10 +144,8 @@ export const validCookie = (cookieName) => getSingleCookie(cookieName, true) !==
 /**
  * Erase cookies API
  * @param {(string|RegExp|(string|RegExp)[])} cookies
- * @param {string} [path]
- * @param {string} [domain]
  */
-export const eraseCookies = (cookies, path, domain) => {
+export const eraseCookies = (cookies) => {
     let allCookies = [];
 
     /**
@@ -171,7 +169,7 @@ export const eraseCookies = (cookies, path, domain) => {
         addCookieIfExists(cookies);
     }
 
-    eraseCookiesHelper(allCookies, path, domain);
+    eraseCookiesHelper(allCookies);
 };
 
 //{{START: GUI}}

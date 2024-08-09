@@ -177,12 +177,6 @@ describe("API tests", () => {
         expect(api.validCookie('new_cookie')).toBe(false);
     })
 
-    it('Should erase cookie with specific path and domain', () => {
-        document.cookie = 'test_cookie5=21; expires=Sun, 1 Jan 2063 00:00:00 UTC; path=/ciao; domain='+location.host;
-        api.eraseCookies('test_cookie5', '/', location.host);
-        expect(api.validCookie('test_cookie5')).toBe(false);
-    });
-
     it('Should show the consent modal', async () => {
         api.reset(true);
         testConfig.autoShow = false;
