@@ -267,8 +267,7 @@ Removes one or multiple cookies.
 
 - **Examples** <br>
 
-    Delete the plugin's own cookie
-
+    Delete the plugin's own cookie:
     ```javascript
     CookieConsent.eraseCookies('cc_cookie');
     ```
@@ -278,7 +277,10 @@ Removes one or multiple cookies.
     CookieConsent.eraseCookies(['_gid', /^_ga/]);
     ```
 
-
+    Delete all cookies except the plugin's own cookie:
+    ```javascript
+    CookieConsent.eraseCookies(/^(?!cc\_cookie$)/);
+    ```
 
 ## loadScript
 
