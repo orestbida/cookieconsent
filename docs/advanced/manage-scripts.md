@@ -49,7 +49,7 @@ You can also run **scripts when a category is disabled** (if it was previously e
 <script
     type="text/plain"
     data-category="!analytics">
-    // Executed when the "analytics category is disabled
+    // Executed when the "analytics" category is disabled
 </script>
 ```
 
