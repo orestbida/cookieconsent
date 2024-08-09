@@ -610,10 +610,8 @@ declare namespace CookieConsent {
     /**
      * Erase one or multiple cookies.
      * @param cookies Names of the cookies to erase
-     * @param path Expected path
-     * @param domain Expected domain
      */
-    function eraseCookies(cookies: string | RegExp | (string|RegExp)[], path?: string, domain?: string): void
+    function eraseCookies(cookies: string | RegExp | (string|RegExp)[]): void
 
     /**
      * Load '.js' files.

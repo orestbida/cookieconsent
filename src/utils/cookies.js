@@ -75,7 +75,7 @@ export const autoclearCookiesHelper = (isFirstConsent) => {
 
             for (const cookieItem of serviceCookies) {
                 const foundCookies = findMatchingCookies(allCookiesArray, cookieItem.name);
-                eraseCookiesHelper(foundCookies, cookieItem.path, cookieItem.domain);
+                eraseCookiesHelper(foundCookies);
             }
         }
     }
@@ -101,7 +101,7 @@ export const autoclearCookiesHelper = (isFirstConsent) => {
 
         for (const cookieItem of autoClearCookies) {
             const foundCookies = findMatchingCookies(allCookiesArray, cookieItem.name);
-            eraseCookiesHelper(foundCookies, cookieItem.path, cookieItem.domain);
+            eraseCookiesHelper(foundCookies);
         }
     }
 };
@@ -297,49 +297,14 @@ export const parseCookie = (value, skipDecode) => {
 /**
  * Delete cookie by name & path
  * @param {string[]} cookies Array of cookie names
- * @param {string} [customPath]
- * @param {string} [customDomain]
  */
-export const eraseCookiesHelper = (cookies, customPath, customDomain) => {
+export const eraseCookiesHelper = (cookies) => {
     if (cookies.length === 0)
         return;
 
-    const domain = customDomain || globalObj._config.cookie.domain;
-    const path = customPath || globalObj._config.cookie.path;
-    const isWwwSubdomain = domain.slice(0, 4) === 'www.';
-    const mainDomain = isWwwSubdomain && domain.substring(4);
-
-    /**
-     * Helper function to erase cookie
-     * @param {string} cookie
-     * @param {string} [domain]
-     */
-    const erase = (cookie, domain) => {
-        document.cookie = cookie + '='
-            + '; path=' + path
-            + (domain ? '; domain=.' + domain : '')
-            + '; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
-    };
-
     for (const cookieName of cookies) {
-
-        /**
-         * 2 attempts to erase the cookie:
-         * - without domain
-         * - with domain
-         */
-        erase(cookieName);
-        erase(cookieName, domain);
-
-        /**
-         * If domain starts with 'www.',
-         * also erase the cookie for the
-         * main domain (without www)
-         */
-        if (isWwwSubdomain)
-            erase(cookieName, mainDomain);
-
-        debug('CookieConsent [AUTOCLEAR]: deleting cookie: "' + cookieName + '" path: "' + path + '" domain:', domain);
+        document.cookie = cookieName + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+        debug('CookieConsent [AUTOCLEAR]: deleting cookie: "' + cookieName + '"');
     }
 };
 

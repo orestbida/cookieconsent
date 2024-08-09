@@ -262,11 +262,7 @@ Removes one or multiple cookies.
 - **Type**
 
     ```javascript
-    function(
-        cookies: string | RegExp | (string | RegExp)[],
-        path?: string,
-        domain?: string
-    ): void
+    function(cookies: string | RegExp | (string | RegExp)[]): void
     ```
 
 - **Examples** <br>
@@ -279,7 +275,7 @@ Removes one or multiple cookies.
 
     Delete the `_gid` and all cookies starting with `_ga`:
     ```javascript
-    CookieConsent.eraseCookies(['_gid', /^_ga/], '/', location.hostname);
+    CookieConsent.eraseCookies(['_gid', /^_ga/]);
     ```
 
 
