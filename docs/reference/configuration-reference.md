@@ -824,7 +824,7 @@ Define the translation(s) content.
 - **Details**:
     - `closeIconLabel`: if specified, a big `X` button will be generated (visible only in the `box` layout). It acts the same as `acceptNecessaryBtn`.
     - `revisionMessage`: check out the dedicated [revision section](/advanced/revision-management.html#revision-message).
-    - `footer`: a small area where you can place your links (impressum, privacy policy ...)
+    - `footer`: a small area where you can place your links (impressum, privacy policy, ...)
 
     <br>
 
