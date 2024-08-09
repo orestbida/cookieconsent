@@ -42,9 +42,16 @@ describe("Cookie should be created successfully", () => {
 
     it('Should erase cookie', () => {
         setCookie('test_cookie', '{"ciao": 21}');
-        eraseCookiesHelper(['test_cookie'], '/', [location.host]);
+        eraseCookiesHelper(['test_cookie'], '/');
         const ccCookie = getSingleCookie('test_cookie');
         expect(ccCookie).toBeFalsy();
+    });
+
+    it('Should not erase cookie from different domain', () => {
+        setCookie('test_cookie', '{"ciao": 21}', 1, "domain1.com");
+        eraseCookiesHelper(['test_cookie'], '/', "domain2.org");
+        const ccCookie = getSingleCookie('test_cookie');
+        expect(ccCookie).toBeTruthy();
     });
 
     it('Should set the cookie', () => {
