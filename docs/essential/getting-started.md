@@ -7,7 +7,7 @@ This section will help you install CookieConsent in your app/website.
 You can download/import the plugin using one of the following methods:
 <br>
 
-1. Install via [NPM](https://www.npmjs.com/package/vanilla-cookieconsent).
+1. Install via [NPM](https://www.npmjs.com/package/vanilla-cookieconsent) or [Yarn](https://yarnpkg.com/package?name=vanilla-cookieconsent).
 
     ::: code-group
 
