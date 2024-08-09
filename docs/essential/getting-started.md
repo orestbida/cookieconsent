@@ -39,7 +39,7 @@ You can download/import the plugin using one of the following methods:
     https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@3.0.1/dist/cookieconsent.umd.js
     ```
 
-3. Download the [latest release](https://github.com/orestbida/cookieconsent/releases?q=cookieconsent+v3) from github and use the optimized files located in the `dist` folder.
+3. Download the [latest release](https://github.com/orestbida/cookieconsent/releases?q=cookieconsent+v3) from GitHub and use the optimized files located in the `dist` folder.
 
 
 ## Usage
@@ -426,7 +426,7 @@ You should now see the consent modal pop up!
 You can also define [external translation files](/advanced/language-configuration.html#external-translations).
 :::
 
-If you're having trouble setting up the plugin, you can check out a few [demo examples](https://github.com/orestbida/cookieconsent/tree/master/demo) on github.
+If you're having trouble setting up the plugin, you can check out a few [demo examples](https://github.com/orestbida/cookieconsent/tree/master/demo) on GitHub.
 
 <br>
 
