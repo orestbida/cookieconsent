@@ -22,7 +22,7 @@ Example usage:
 
 ## How to block/manage a script tag
 
-You can manage any script tag. by adding the following 2 attributes (both required):
+You can manage any script tag by adding the following 2 attributes (both required):
 
 - `type="text/plain"`
 - `data-category="your-category-name"`
