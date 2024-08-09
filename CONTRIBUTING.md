@@ -43,7 +43,7 @@ If you encountered a problem, [search if an issue already exists](https://github
         pnpm dev
         ```
 
-        Note: If you're making changes to the documentation, use `pnpm dev:docs`.
+        Note: If you're making changes to the documentation, use `pnpm docs:dev`.
 
     5. Once you've finished, generate the bundled version via:
 
