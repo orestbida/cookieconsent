@@ -279,7 +279,7 @@ Removes one or multiple cookies.
 
     Delete all cookies except the plugin's own cookie:
     ```javascript
-    CookieConsent.eraseCookies(/^(?!cc\_cookie$)/);
+    CookieConsent.eraseCookies(/^(?!cc_cookie$)/);
     ```
 
 ## loadScript
