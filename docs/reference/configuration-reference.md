@@ -755,7 +755,7 @@ Define the translation(s) content.
     ```
 - **Details**:
 
-    You can define an `inline` translation object, or specify the path to an `external .json` translation file.
+    You can define an `inline` translation object, or specify the path to an external `.json` translation file.
 
 - **Examples**:
 
