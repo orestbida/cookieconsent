@@ -122,7 +122,7 @@ export const loadTranslationData = async (desiredLanguageCode) => {
     }
 
     if (!translationData) {
-        return false;
+        throw `Could not load translation for the '${currentLanguageCode}' language`;
     }
 
     state._currentTranslation = translationData;
