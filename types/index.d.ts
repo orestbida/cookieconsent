@@ -214,6 +214,13 @@ declare namespace CookieConsent {
          * @default 'Lax'
          */
         sameSite?: 'Lax' | 'Strict' | 'None'
+        
+        /**
+         * Cookie secure flag.
+         * 
+         * @default true
+         */
+        secure?: boolean
 
         /**
          * Cookie duration.
