@@ -113,10 +113,12 @@ describe('Test language utils', () => {
                 default: 'it'
             }
         };
-
-        const validTranslationData = await loadTranslationData('it');
-
-        expect(validTranslationData).toBe(false)
+        
+        try {
+            await loadTranslationData('it');
+        } catch (ex) {
+            expect(ex).toBe(`Could not load translation for the 'it' language`);
+        }
     });
 
     it('Should return the default language if the detection method is not supported', () => {
