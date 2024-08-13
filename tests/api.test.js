@@ -155,6 +155,7 @@ describe("API tests", () => {
 
     it('Should erase cookie by string', () => {
         document.cookie = 'test_cookie=21; expires=Sun, 1 Jan 2063 00:00:00 UTC; path=/';
+        expect(api.validCookie('test_cookie')).toBe(true);
         api.eraseCookies('test_cookie');
         expect(api.validCookie('test_cookie')).toBe(false);
     })
@@ -162,6 +163,8 @@ describe("API tests", () => {
     it('Should erase cookie by regex', () => {
         document.cookie = 'test_cookie1=21; expires=Sun, 1 Jan 2063 00:00:00 UTC; path=/';
         document.cookie = 'test_cookie2=21; expires=Sun, 1 Jan 2063 00:00:00 UTC; path=/';
+        expect(api.validCookie('test_cookie1')).toBe(true);
+        expect(api.validCookie('test_cookie2')).toBe(true);
         api.eraseCookies(/^test_cookie/);
         expect(api.validCookie('test_cookie1')).toBe(false);
         expect(api.validCookie('test_cookie2')).toBe(false);
@@ -171,6 +174,9 @@ describe("API tests", () => {
         document.cookie = 'test_cookie1=21; expires=Sun, 1 Jan 2063 00:00:00 UTC; path=/';
         document.cookie = 'test_cookie2=21; expires=Sun, 1 Jan 2063 00:00:00 UTC; path=/';
         document.cookie = 'new_cookie=21; expires=Sun, 1 Jan 2063 00:00:00 UTC; path=/';
+        expect(api.validCookie('test_cookie1')).toBe(true);
+        expect(api.validCookie('test_cookie2')).toBe(true);
+        expect(api.validCookie('new_cookie')).toBe(true);
         api.eraseCookies([/^test_cookie/, 'new_cookie']);
         expect(api.validCookie('test_cookie1')).toBe(false);
         expect(api.validCookie('test_cookie2')).toBe(false);
@@ -178,20 +184,23 @@ describe("API tests", () => {
     })
 
     it('Should erase cookie with specific path and domain', () => {
-        document.cookie = 'test_cookie5=21; expires=Sun, 1 Jan 2063 00:00:00 UTC; path=/ciao; domain='+location.host;
-        api.eraseCookies('test_cookie5', '/ciao', location.host);
+        document.cookie = 'test_cookie5=21; expires=Sun, 1 Jan 2063 00:00:00 UTC; path=/; domain='+location.host;
+        expect(api.validCookie('test_cookie5')).toBe(true);
+        api.eraseCookies('test_cookie5', '/', location.host);
         expect(api.validCookie('test_cookie5')).toBe(false);
     });
 
     it('Should not erase cookie with wrong path', () => {
-        document.cookie = 'test_cookie6=28; expires=Mon, 1 Jan 2064 00:00:00 UTC; path=/ciao; domain='+location.host;
-        api.eraseCookies('test_cookie6', '/aloha', location.host);
+        document.cookie = 'test_cookie6=28; expires=Mon, 1 Jan 2064 00:00:00 UTC; path=/; domain='+location.host;
+        expect(api.validCookie('test_cookie6')).toBe(true);
+        api.eraseCookies('test_cookie6', '/other', location.host);
         expect(api.validCookie('test_cookie6')).toBe(true);
     });
 
     it('Should not erase cookie with wrong domain', () => {
-        document.cookie = 'test_cookie7=35; expires=Wed, 1 Jan 2065 00:00:00 UTC; path=/ciao; domain='+location.host;
-        api.eraseCookies('test_cookie7', '/ciao', '.wrong.domain');
+        document.cookie = 'test_cookie7=35; expires=Wed, 1 Jan 2065 00:00:00 UTC; path=/; domain='+location.host;
+        expect(api.validCookie('test_cookie7')).toBe(true);
+        api.eraseCookies('test_cookie7', '/', '.wrong.domain');
         expect(api.validCookie('test_cookie7')).toBe(true);
     });
 
