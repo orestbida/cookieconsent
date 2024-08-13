@@ -322,13 +322,6 @@ export const eraseCookiesHelper = (cookies, customPath, customDomain) => {
     };
 
     for (const cookieName of cookies) {
-
-        /**
-         * 2 attempts to erase the cookie:
-         * - without domain
-         * - with domain
-         */
-        erase(cookieName);
         erase(cookieName, domain);
 
         /**
