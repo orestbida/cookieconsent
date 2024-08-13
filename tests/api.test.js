@@ -179,8 +179,20 @@ describe("API tests", () => {
 
     it('Should erase cookie with specific path and domain', () => {
         document.cookie = 'test_cookie5=21; expires=Sun, 1 Jan 2063 00:00:00 UTC; path=/ciao; domain='+location.host;
-        api.eraseCookies('test_cookie5', '/', location.host);
+        api.eraseCookies('test_cookie5', '/ciao', location.host);
         expect(api.validCookie('test_cookie5')).toBe(false);
+    });
+
+    it('Should not erase cookie with wrong path', () => {
+        document.cookie = 'test_cookie6=28; expires=Mon, 1 Jan 2064 00:00:00 UTC; path=/ciao; domain='+location.host;
+        api.eraseCookies('test_cookie6', '/aloha', location.host);
+        expect(api.validCookie('test_cookie6')).toBe(true);
+    });
+
+    it('Should not erase cookie with wrong domain', () => {
+        document.cookie = 'test_cookie7=35; expires=Wed, 1 Jan 2065 00:00:00 UTC; path=/ciao; domain='+location.host;
+        api.eraseCookies('test_cookie7', '/ciao', '.wrong.domain');
+        expect(api.validCookie('test_cookie7')).toBe(true);
     });
 
     it('Should show the consent modal', async () => {
