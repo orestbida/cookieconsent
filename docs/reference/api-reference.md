@@ -269,7 +269,14 @@ Removes one or multiple cookies.
     ): void
     ```
 
-- **Examples** <br>
+- **Details**
+
+    This function uses `document.cookie` to delete cookies.
+    According to the [MDN Web Doc](https://developer.mozilla.org/en-US/docs/Web/API/Document/cookie#write_a_new_cookie):
+    "The domain _must_ match the domain of the JavaScript origin.
+    Setting cookies to foreign domains will be silently ignored."
+
+- **Examples**
 
     Delete the plugin's own cookie:
     ```javascript
