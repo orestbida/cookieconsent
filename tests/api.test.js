@@ -200,7 +200,7 @@ describe("API tests", () => {
     it('Should not erase cookie with wrong domain', () => {
         document.cookie = 'test_cookie7=35; expires=Wed, 1 Jan 2065 00:00:00 UTC; path=/; domain='+location.host;
         expect(api.validCookie('test_cookie7')).toBe(true);
-        api.eraseCookies('test_cookie7', '/', '.wrong.domain');
+        api.eraseCookies('test_cookie7', '/', 'wrong.domain');
         expect(api.validCookie('test_cookie7')).toBe(true);
     });
 
