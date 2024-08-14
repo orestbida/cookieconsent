@@ -322,7 +322,15 @@ export const eraseCookiesHelper = (cookies, customPath, customDomain) => {
     };
 
     for (const cookieName of cookies) {
-        erase(cookieName, domain);
+        erase(cookieName, customDomain);
+
+        /**
+         * If custom domain not specified,
+         * also erase config domain
+         */
+        if (!customDomain) {
+            erase(cookieName, domain);
+        }
 
         /**
          * If domain starts with 'www.',
