@@ -303,6 +303,7 @@ export const parseCookie = (value, skipDecode) => {
 export const eraseCookiesHelper = (cookies, customPath, customDomain) => {
     if (cookies.length === 0)
         return;
+
     const domain = customDomain || globalObj._config.cookie.domain;
     const path = customPath || globalObj._config.cookie.path;
     const isWwwSubdomain = domain.slice(0, 4) === 'www.';
@@ -315,7 +316,7 @@ export const eraseCookiesHelper = (cookies, customPath, customDomain) => {
      */
     const erase = (cookie, domain) => {
         if (domain && domain.slice(0, 1) !== '.')
-            domain += '.';
+            domain = '.' + domain;
         document.cookie = cookie + '='
             + '; path=' + path
             + (domain ? '; domain=' + domain : '')
