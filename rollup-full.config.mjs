@@ -4,7 +4,7 @@ import postcssCombineDuplicatedSelectors from 'postcss-combine-duplicated-select
 import cssnanoPlugin from 'cssnano';
 import postcss from 'rollup-plugin-postcss';
 import eslint from '@rollup/plugin-eslint';
-import pkg from './package.json' assert { type: "json"};
+import pkg from './package.json' with { type: "json"};
 
 const srcDir = './src';
 const distDir = './dist';

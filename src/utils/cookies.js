@@ -228,7 +228,7 @@ export const saveCookiePreferences = () => {
  */
 export const setCookie = (useRemainingExpirationTime) => {
     const { hostname, protocol } = location;
-    const { name, path, domain, sameSite, useLocalStorage } = globalObj._config.cookie;
+    const { name, path, domain, sameSite, useLocalStorage, secure } = globalObj._config.cookie;
 
     const expiresAfterMs = useRemainingExpirationTime
         ? getRemainingExpirationTimeMS()
@@ -266,7 +266,7 @@ export const setCookie = (useRemainingExpirationTime) => {
     if (elContains(hostname, '.'))
         cookieStr += '; Domain=' + domain;
 
-    if (protocol === 'https:')
+    if (secure && protocol === 'https:')
         cookieStr += '; Secure';
 
     useLocalStorage

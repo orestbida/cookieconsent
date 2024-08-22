@@ -132,6 +132,7 @@ Customize the plugin's cookie.
         name?: string,
         domain?: string,
         path?: string,
+        secure?: boolean,
         expiresAfterDays?: number | (acceptType: string) => number,
         sameSite?: string,
         useLocalStorage?: boolean
@@ -143,14 +144,12 @@ Customize the plugin's cookie.
         name: 'cc_cookie',
         domain: window.location.hostname,
         path: '/',
+        secure: true,
         expiresAfterDays: 182,
         sameSite: 'Lax',
         useLocalStorage: false
     }
     ```
-::: info
-The cookie is automatically set with the `secure` flag if `https` is detected.
-:::
 
 ### cookie<span></span>.name
 
@@ -168,6 +167,16 @@ Current domain/subdomain's name, retrieved automatically.
 
 - **Type**: `string`
 - **Default**: `'/'`
+
+### cookie.secure
+
+Toggle the *secure* flag.
+
+- **Type**: `boolean`
+- **Default**: `true`
+- **Details**:
+
+    The *secure* flag won't be set if there is no *https* connection.
 
 ### cookie.expiresAfterDays
 

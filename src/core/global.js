@@ -115,6 +115,7 @@ export class GlobalState {
                 expiresAfterDays: 182,
                 domain: '',
                 path: '/',
+                secure: true,
                 sameSite: 'Lax'
             }
         };

@@ -284,19 +284,27 @@ describe("API tests", () => {
         expect(globalObj._state._currentLanguageCode).toBe('it');
     })
 
-    it('Should fail when language does not exists the language to "it"', async () => {
+    it('Should throw error when desired language is not defined', async () => {
         fetch.mockReturnValueOnce(false);
-        const set = await api.setLanguage('en-IT', true);
-        expect(set).toBe(false);
+        try {
+            await api.setLanguage('en-IT', true);
+        } catch (ex) {
+            expect(ex).toBe(`Could not load translation for the 'en-IT' language`);
+        }
         expect(globalObj._state._currentLanguageCode).not.toBe('en-IT');
     })
 
-    it('Should fail when fetch fails', async () => {
+    it('Should throw error when fetch fails', async () => {
         fetch.mockImplementationOnce(() => Promise.reject("json file not found"));
         api.getConfig('language').translations.it = './it.json';
         await api.setLanguage('en');
-        const set = await api.setLanguage('it');
-        expect(set).toBe(false);
+
+        try {
+            await api.setLanguage('it');
+        } catch (ex) {
+            expect(ex).toBe(`Could not load translation for the 'it' language`);
+        }
+        
         expect(globalObj._state._currentLanguageCode).not.toBe('it');
     })
 
