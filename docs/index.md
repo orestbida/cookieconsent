@@ -21,7 +21,7 @@ hero:
 
 features:
   - title: Lightweight
-    details: Small footprint with a minimal impact on your website's performance
+    details: Small footprint with a minimal impact on your website's performance.
   - title: Versatile
     details: A wide range of options and API to handle many different types of configurations.
   - title: Accessible

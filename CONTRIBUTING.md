@@ -23,7 +23,7 @@ If you encountered a problem, [search if an issue already exists](https://github
         npm i -g pnpm
         ```
 
-    3. Follow the [Getting started with Github Desktop](https://docs.github.com/en/desktop/installing-and-configuring-github-desktop/overview/getting-started-with-github-desktop) guide.
+    3. Follow the [Getting started with GitHub Desktop](https://docs.github.com/en/desktop/installing-and-configuring-github-desktop/overview/getting-started-with-github-desktop) guide.
 
 1. #### Make changes locally
 
@@ -43,7 +43,7 @@ If you encountered a problem, [search if an issue already exists](https://github
         pnpm dev
         ```
 
-        Note: If you're making changes to the documentation, use `pnpm dev:docs`.
+        Note: If you're making changes to the documentation, use `pnpm docs:dev`.
 
     5. Once you've finished, generate the bundled version via:
 
