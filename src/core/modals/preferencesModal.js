@@ -569,7 +569,7 @@ function createToggleLabel(label, value, sCurrentCategoryObject, isService, cate
                     }
                 }
 
-                categoryToggle.checked = state._enabledServices[categoryName].length > 0;
+                categoryToggle.checked = state._enabledServices[categoryName].length >= Object.keys(categoryServicesToggles).length;
             });
         })(categoryName);
 
