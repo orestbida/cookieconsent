@@ -470,7 +470,7 @@ export const updateModalToggles = (service, category) => {
         }
     }
 
-    const uncheckCategory = _enabledServices[category].length === 0;
+    const uncheckCategory = _enabledServices[category].length < allServiceNames.length;
 
     /**
      * Remove/add the category from acceptedCategories
