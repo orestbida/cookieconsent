@@ -38,24 +38,22 @@ export const manageExistingScripts = (defaultEnabledCategories) => {
             if (!service)
                 continue;
 
-            const {onAccept, onReject} = service;
+            const { onAccept, onReject } = service;
 
             if (
                 !service._enabled
                 && elContains(_acceptedServices[categoryName], serviceName)
-                && isFunction(onAccept)
             ) {
                 service._enabled = true;
-                onAccept();
+                isFunction(onAccept) && onAccept();
             }
 
             else if (
                 service._enabled
                 && !elContains(_acceptedServices[categoryName], serviceName)
-                && isFunction(onReject)
             ) {
                 service._enabled = false;
-                onReject();
+                isFunction(onReject) && onReject();
             }
         }
     }
@@ -198,12 +196,15 @@ export const retrieveEnabledCategoriesAndServices = () => {
     for (const categoryName of state._allCategoryNames) {
         const category = state._allDefinedCategories[categoryName];
 
-        if (category.readOnly || (category.enabled && state._userConfig.mode === OPT_OUT_MODE)) {
+        if (category.readOnly || category.enabled) {
             state._defaultEnabledCategories.push(categoryName);
             const services = state._allDefinedServices[categoryName] || {};
 
             for (let serviceName in services) {
-                state._acceptedServices[categoryName].push(serviceName);
+                state._enabledServices[categoryName].push(serviceName);
+                if (state._userConfig.mode === OPT_OUT_MODE) {
+                    state._acceptedServices[categoryName].push(serviceName);
+                }
             }
         }
     }

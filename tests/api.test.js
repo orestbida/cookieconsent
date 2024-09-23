@@ -284,19 +284,27 @@ describe("API tests", () => {
         expect(globalObj._state._currentLanguageCode).toBe('it');
     })
 
-    it('Should fail when language does not exists the language to "it"', async () => {
+    it('Should throw error when desired language is not defined', async () => {
         fetch.mockReturnValueOnce(false);
-        const set = await api.setLanguage('en-IT', true);
-        expect(set).toBe(false);
+        try {
+            await api.setLanguage('en-IT', true);
+        } catch (ex) {
+            expect(ex).toBe(`Could not load translation for the 'en-IT' language`);
+        }
         expect(globalObj._state._currentLanguageCode).not.toBe('en-IT');
     })
 
-    it('Should fail when fetch fails', async () => {
+    it('Should throw error when fetch fails', async () => {
         fetch.mockImplementationOnce(() => Promise.reject("json file not found"));
         api.getConfig('language').translations.it = './it.json';
         await api.setLanguage('en');
-        const set = await api.setLanguage('it');
-        expect(set).toBe(false);
+
+        try {
+            await api.setLanguage('it');
+        } catch (ex) {
+            expect(ex).toBe(`Could not load translation for the 'it' language`);
+        }
+        
         expect(globalObj._state._currentLanguageCode).not.toBe('it');
     })
 
@@ -346,54 +354,55 @@ describe("API tests", () => {
         expect(api.validCookie('service1Cookie2')).toBe(false);
     })
 
-    it('Should call service onAccept and onReject when both defined', async () => {
+    it('Should mark service as accepted regardless of callback/script', async () => {
+        api.reset(true);
+        testConfig.categories.analytics.services.service2.label = 'service2';
+        testConfig.categories.analytics.services.service2.onReject = undefined;
+        testConfig.categories.analytics.services.service2.onReject = undefined;
+        await api.run(testConfig);
+
+        api.acceptService('service2', 'analytics');
+        expect(api.acceptedService('service2', 'analytics')).toBe(true);
+    })
+
+    it('Should mark service as rejected regardless of callback/script', async () => {
+        api.reset(true);
+        testConfig.categories.analytics.services.service2.label = 'service2';
+        testConfig.categories.analytics.services.service2.onReject = undefined;
+        testConfig.categories.analytics.services.service2.onReject = undefined;
+        await api.run(testConfig);
+
+        api.acceptService('service2', 'analytics');
+        expect(api.acceptedService('service2', 'analytics')).toBe(true);
+        api.acceptService([], 'analytics');
+        expect(api.acceptedService('service2', 'analytics')).toBe(false);
+    })
+
+    it('Should call service onAccept once', async () => {
         api.reset(true);
         const onAccept = jest.fn();
-        const onReject = jest.fn();
         testConfig.categories.analytics.services.service2.onAccept = onAccept;
+        await api.run(testConfig);
+
+        api.acceptService('service2', 'analytics');
+        api.acceptService('service2', 'analytics');
+        api.acceptCategory('analytics');
+        expect(onAccept).toHaveBeenCalledTimes(1);
+    })
+
+    it('Should call service onReject once, if previously accepted', async () => {
+        api.reset(true);
+        const onReject = jest.fn();
+        testConfig.categories.analytics.services.service2.onAccept = undefined;
         testConfig.categories.analytics.services.service2.onReject = onReject;
         await api.run(testConfig);
 
-        api.acceptService('service2', 'analytics');
-        api.acceptService([], 'analytics');
-        expect(onAccept).toHaveBeenCalledTimes(1);
-        expect(onReject).toHaveBeenCalledTimes(1);
-
-        api.acceptService('service2', 'analytics');
-        api.acceptService([], 'analytics');
-        expect(onAccept).toHaveBeenCalledTimes(2);
-        expect(onReject).toHaveBeenCalledTimes(2);
-    })
-
-    it('Should call service onAccept once when onReject not defined', async () => {
-        api.reset(true);
-        const onAccept = jest.fn();
-        testConfig.categories.analytics.services.service2.onAccept = onAccept;
-        testConfig.categories.analytics.services.service2.onReject = null;
-        await api.run(testConfig);
-
-        api.acceptService('service2', 'analytics');
-        api.acceptService([], 'analytics');
-        expect(onAccept).toHaveBeenCalledTimes(1);
-
-        api.acceptService('service2', 'analytics');
-        api.acceptService([], 'analytics');
-        expect(onAccept).toHaveBeenCalledTimes(1);
-    })
-
-    it('Should not call service onReject when onAccept not defined', async () => {
-        api.reset(true);
-        const onReject = jest.fn();
-        testConfig.categories.analytics.services.service2.onAccept = null;
-        testConfig.categories.analytics.services.service2.onReject = onReject;
-        await api.run(testConfig);
-
-        api.acceptService('service2', 'analytics');
         api.acceptService([], 'analytics');
         expect(onReject).toHaveBeenCalledTimes(0)
 
-        api.acceptService('service2', 'analytics');
+        api.acceptCategory('all');
         api.acceptService([], 'analytics');
-        expect(onReject).toHaveBeenCalledTimes(0)
+        api.acceptCategory([]);
+        expect(onReject).toHaveBeenCalledTimes(1)
     })
 })

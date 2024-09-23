@@ -3,7 +3,7 @@ import { OPT_OUT_MODE, OPT_IN_MODE } from './constants';
 import { manageExistingScripts } from './scripts';
 
 import {
-    _log,
+    debug,
     indexOf,
     uuidv4,
     getRemainingExpirationTimeMS,
@@ -168,6 +168,10 @@ export const saveCookiePreferences = () => {
         consentId: state._consentId,
         services: deepCopy(state._acceptedServices)
     };
+	
+    if (state._lastConsentTimestamp) {
+        state._savedCookieContent.lastConsentTimestamp = state._lastConsentTimestamp.toISOString();
+    }
 
     let isFirstConsent = false;
     const stateChanged = categoriesWereChanged || servicesWereChanged;
@@ -224,7 +228,7 @@ export const saveCookiePreferences = () => {
  */
 export const setCookie = (useRemainingExpirationTime) => {
     const { hostname, protocol } = location;
-    const { name, path, domain, sameSite, useLocalStorage } = globalObj._config.cookie;
+    const { name, path, domain, sameSite, useLocalStorage, secure } = globalObj._config.cookie;
 
     const expiresAfterMs = useRemainingExpirationTime
         ? getRemainingExpirationTimeMS()
@@ -262,14 +266,14 @@ export const setCookie = (useRemainingExpirationTime) => {
     if (elContains(hostname, '.'))
         cookieStr += '; Domain=' + domain;
 
-    if (protocol === 'https:')
+    if (secure && protocol === 'https:')
         cookieStr += '; Secure';
 
     useLocalStorage
         ? localStorageManager._setItem(name, value)
         : document.cookie = cookieStr;
 
-    _log('CookieConsent [SET_COOKIE]: ' + name + ':', globalObj._state._savedCookieContent);
+    debug('CookieConsent [SET_COOKIE]: ' + name + ':', globalObj._state._savedCookieContent);
 };
 
 /**
@@ -335,7 +339,7 @@ export const eraseCookiesHelper = (cookies, customPath, customDomain) => {
         if (isWwwSubdomain)
             erase(cookieName, mainDomain);
 
-        _log('CookieConsent [AUTOCLEAR]: deleting cookie: "' + cookieName + '" path: "' + path + '" domain:', domain);
+        debug('CookieConsent [AUTOCLEAR]: deleting cookie: "' + cookieName + '" path: "' + path + '" domain:', domain);
     }
 };
 

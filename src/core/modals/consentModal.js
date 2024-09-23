@@ -1,7 +1,7 @@
 import { globalObj } from '../global';
 
 import {
-    _log,
+    debug,
     createNode,
     addClass,
     addClassCm,
@@ -119,7 +119,7 @@ export const createConsentModal = (api, createMainContainer) => {
                 addClassCm(dom._cmCloseIconBtn, 'btn');
                 addClassCm(dom._cmCloseIconBtn, 'btn--close');
                 addEvent(dom._cmCloseIconBtn, CLICK_EVENT, () => {
-                    _log('CookieConsent [ACCEPT]: necessary');
+                    debug('CookieConsent [ACCEPT]: necessary');
                     acceptAndHide([]);
                 });
                 appendChild(dom._cmBody, dom._cmCloseIconBtn);
@@ -180,7 +180,7 @@ export const createConsentModal = (api, createMainContainer) => {
             setAttribute(dom._cmAcceptAllBtn, DATA_ROLE, 'all');
 
             addEvent(dom._cmAcceptAllBtn, CLICK_EVENT, () => {
-                _log('CookieConsent [ACCEPT]: all');
+                debug('CookieConsent [ACCEPT]: all');
                 acceptAndHide('all');
             });
         }
@@ -196,7 +196,7 @@ export const createConsentModal = (api, createMainContainer) => {
             setAttribute(dom._cmAcceptNecessaryBtn, DATA_ROLE, 'necessary');
 
             addEvent(dom._cmAcceptNecessaryBtn, CLICK_EVENT, () => {
-                _log('CookieConsent [ACCEPT]: necessary');
+                debug('CookieConsent [ACCEPT]: necessary');
                 acceptAndHide([]);
             });
         }
@@ -269,7 +269,7 @@ export const createConsentModal = (api, createMainContainer) => {
     if (!state._consentModalExists) {
         state._consentModalExists = true;
 
-        _log('CookieConsent [HTML] created', CONSENT_MODAL_NAME);
+        debug('CookieConsent [HTML] created', CONSENT_MODAL_NAME);
 
         fireEvent(globalObj._customEvents._onModalReady, CONSENT_MODAL_NAME, dom._cm);
         createMainContainer(api);

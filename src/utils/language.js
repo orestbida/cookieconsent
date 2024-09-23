@@ -1,6 +1,6 @@
 import { globalObj } from '../core/global';
 import {
-    _log,
+    debug,
     elContains,
     fetchJson,
     addClass,
@@ -74,7 +74,7 @@ export const resolveCurrentLanguageCode = () =>  {
     const autoDetect = globalObj._state._userConfig.language.autoDetect;
 
     if (autoDetect) {
-        _log('CookieConsent [LANG]: autoDetect strategy: "' + autoDetect + '"');
+        debug('CookieConsent [LANG]: autoDetect strategy: "' + autoDetect + '"');
 
         const detectionStrategies = {
             browser: getBrowserLanguageCode(),
@@ -122,13 +122,13 @@ export const loadTranslationData = async (desiredLanguageCode) => {
     }
 
     if (!translationData) {
-        return false;
+        throw `Could not load translation for the '${currentLanguageCode}' language`;
     }
 
     state._currentTranslation = translationData;
     setCurrentLanguageCode(currentLanguageCode);
 
-    _log('CookieConsent [LANG]: set language: "' + currentLanguageCode + '"');
+    debug('CookieConsent [LANG]: set language: "' + currentLanguageCode + '"');
 
     return true;
 };
