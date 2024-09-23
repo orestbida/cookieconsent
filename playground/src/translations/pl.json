@@ -1,0 +1,63 @@
+{
+    "consentModal": {
+        "label": "Zgoda na ciasteczka",
+        "title": "Witaj, przybyszu! Czas na ciastka!",
+        "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip.",
+        "acceptAllBtn": "Zaakceptuj wszystkie",
+        "acceptNecessaryBtn": "Odrzuć wszystkie",
+        "showPreferencesBtn": "Zarządzaj preferencjami",
+        "footer": "<a href=\"#link\">Polityka prywatności</a>\n<a href=\"#link\">Regulamin</a>"
+    },
+    "preferencesModal": {
+        "title": "Centrum zarządzania zgodami",
+        "acceptAllBtn": "Zaakceptuj wszystkie",
+        "acceptNecessaryBtn": "Odrzuć wszystkie",
+        "savePreferencesBtn": "Zapisz preferencje",
+        "closeIconLabel": "Zamknij okienko",
+        "serviceCounterLabel": "Serwis|Serwisy",
+        "sections": [
+            {
+                "title": "Użytkowanie ciasteczek",
+                "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+            },
+            {
+                "title": "Niezbędne ciasteczka <span class=\"pm__badge\">zawsze włączone</span>",
+                "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+                "linkedCategory": "necessary"
+            },
+            {
+                "title": "Ciasteczka funkcyjne",
+                "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+                "linkedCategory": "functionality"
+            },
+            {
+                "title": "Ciasteczka analityczne",
+                "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+                "linkedCategory": "analytics",
+                "cookieTable": {
+                    "headers": {
+                        "name": "Nazwa",
+                        "description": "Opis",
+                        "Service": "Serwis"
+                    },
+                    "body": [
+                        {
+                            "name": "_ga_*, _gid",
+                            "description": "Used to track you ...",
+                            "Service": "Google Analytics"
+                        }
+                    ]
+                }
+            },
+            {
+                "title": "Ciasteczka marketingowe",
+                "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+                "linkedCategory": "marketing"
+            },
+            {
+                "title": "Więcej informacji",
+                "description": "Aby uzyskać więcej informacji na temat polityki ciasteczek i swoich wyborów, prosimy <a class=\"cc__link\" href=\"#yourdomain.com\">o skontaktowanie się z nami</a>."
+            }
+        ]
+    }
+}
