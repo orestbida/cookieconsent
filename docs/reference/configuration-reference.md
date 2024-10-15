@@ -431,7 +431,7 @@ Tweak main UI settings.
     | ------- | ---------------- | ------------------------- | ------------------------- |
     | `box`   | `wide`, `inline` | `top`, `middle`, `bottom` | `left`, `center`, `right` |
     | `cloud` | `inline`         | `top`, `middle`, `bottom` | `left`, `center`, `right` |
-    | `bar `  | `inline`         | `bottom`                  | -                         |
+    | `bar `  | `inline`         | `top`, `bottom`           | -                         |
 
     ::: warning Note
     Valid `layout` syntax: `<layoutName> <layoutVariant>`. <br>
