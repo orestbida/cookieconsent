@@ -264,6 +264,13 @@ declare namespace CookieConsent {
              * @default true
              */
             equalWeightButtons?: boolean
+
+            /**
+             * HTML element to use for the title
+             *
+             * @default 'h2'
+             */
+            titleTag?: keyof HTMLElementTagNameMap
         }
         preferencesModal?: {
 
@@ -289,6 +296,13 @@ declare namespace CookieConsent {
              * @default true
              */
             equalWeightButtons?: boolean
+
+            /**
+             * HTML element to use for the title
+             *
+             * @default 'h2'
+             */
+            titleTag?: keyof HTMLElementTagNameMap
         }
     }
 

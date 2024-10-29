@@ -28,7 +28,8 @@ import {
     BUTTON_TAG,
     BTN_GROUP_CLASS,
     CLICK_EVENT,
-    DATA_ROLE
+    DATA_ROLE,
+    TITLE_TAG
 } from '../../utils/constants';
 
 /**
@@ -73,6 +74,8 @@ export const createPreferencesModal = (api, createMainContainer) => {
             || acceptNecessaryBtnData
             || savePreferencesBtnData;
 
+    const titleTag = state._userConfig.guiOptions.preferencesModal.titleTag || TITLE_TAG;
+
     if (!dom._pmContainer) {
         dom._pmContainer = createNode(DIV_TAG);
         addClass(dom._pmContainer, 'pm-wrapper');
@@ -104,7 +107,7 @@ export const createPreferencesModal = (api, createMainContainer) => {
         dom._pmHeader = createNode(DIV_TAG);
         addClassPm(dom._pmHeader, 'header');
 
-        dom._pmTitle = createNode('h2');
+        dom._pmTitle = createNode(titleTag);
         addClassPm(dom._pmTitle, 'title');
         dom._pmTitle.id = 'pm__title';
 

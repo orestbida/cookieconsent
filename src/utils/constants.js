@@ -11,6 +11,7 @@ export const SCRIPT_TAG_SELECTOR = 'data-category';
 
 export const DIV_TAG = 'div';
 export const BUTTON_TAG = 'button';
+export const TITLE_TAG = 'h2';
 
 export const ARIA_HIDDEN = 'aria-hidden';
 export const BTN_GROUP_CLASS = 'btn-group';
