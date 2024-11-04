@@ -178,6 +178,9 @@ export const createConsentModal = (api, createMainContainer) => {
             appendChild(dom._cmAcceptAllBtn, createFocusSpan());
             addClassCm(dom._cmAcceptAllBtn, 'btn');
             setAttribute(dom._cmAcceptAllBtn, DATA_ROLE, 'all');
+            if (description) {
+                setAttribute(dom._cmAcceptAllBtn, 'aria-describedby', dom._cmDescription.id);
+            }
 
             addEvent(dom._cmAcceptAllBtn, CLICK_EVENT, () => {
                 debug('CookieConsent [ACCEPT]: all');
