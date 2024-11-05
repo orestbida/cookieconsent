@@ -13,7 +13,7 @@
         "acceptAllBtn": "Tout accepter",
         "acceptNecessaryBtn": "Tout rejeter",
         "savePreferencesBtn": "Sauvegarder les préférences",
-        "closeIconLabel": "Fermer la modale",
+        "closeIconLabel": "Fermer",
         "serviceCounterLabel":"Services",
         "sections": [
             {
@@ -21,7 +21,7 @@
                 "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
             },
             {
-                "title": "Cookies Strictement Nécessaires <span class=\"pm__badge\">Toujours Activé</span>",
+                "title": "Cookies Strictement Nécessaires <span class=\"pm__badge\">Toujours activés</span>",
                 "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
                 "linkedCategory": "necessary"
             },
@@ -43,7 +43,7 @@
                     "body": [
                         {
                             "name": "_ga_*, _gid",
-                            "description": "Used to track you ...",
+                            "description": "Utilisé pour ...",
                             "Service": "Google Analytics"
                         }
                     ]
@@ -56,7 +56,7 @@
             },
             {
                 "title": "Plus d'informations",
-                "description": "For any query in relation to my policy on cookies and your choices, please <a class=\"cc__link\" href=\"#yourdomain.com\">contact me</a>."
+                "description": "Pour toute question concernant notre politique sur les cookies et vos choix, n'hésitez pas à <a class=\"cc__link\" href=\"#yourdomain.com\">nous contacter</a>."
             }
         ]
     }
