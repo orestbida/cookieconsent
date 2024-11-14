@@ -34,15 +34,15 @@ const SERVICE_SECURITY_STORAGE = 'security_storage'
 window.dataLayer = window.dataLayer || [];
 function gtag(){dataLayer.push(arguments);}
 
-// Set default consent to 'denied'
+// Set default consent to 'denied' (this should happen before changing any other dataLayer)
 gtag('consent', 'default', {
-    SERVICE_AD_STORAGE: 'denied',
-    SERVICE_AD_USER_DATA: 'denied',
-    SERVICE_AD_PERSONALIZATION: 'denied',
-    SERVICE_ANALYTICS_STORAGE: 'denied',
-    SERVICE_FUNCTIONALITY_STORAGE: 'denied',
-    SERVICE_PERSONALIZATION_STORAGE: 'denied',
-    SERVICE_SECURITY_STORAGE: 'denied',
+    [SERVICE_AD_STORAGE]: 'denied',
+    [SERVICE_AD_USER_DATA]: 'denied',
+    [SERVICE_AD_PERSONALIZATION]: 'denied',
+    [SERVICE_ANALYTICS_STORAGE]: 'denied',
+    [SERVICE_FUNCTIONALITY_STORAGE]: 'denied',
+    [SERVICE_PERSONALIZATION_STORAGE]: 'denied',
+    [SERVICE_SECURITY_STORAGE]: 'denied',
 });
 
 /** 
