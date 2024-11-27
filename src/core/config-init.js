@@ -97,7 +97,7 @@ export const setConfig = (userConfig) => {
         config.hideFromBots = false;
 
     if (config.hideFromBots === true && nav)
-        state._botAgentDetected = (nav.userAgent && /bot|crawl|spider|slurp|teoma/i.test(nav.userAgent)) || nav.webdriver;
+        state._botAgentDetected = (nav.userAgent && /bot|crawl|spider|slurp|teoma|Google-InspectionTool|GoogleOther|Google-Extended|Chrome-Lighthouse/i.test(nav.userAgent)) || nav.webdriver;
 
     if (isObject(userCookieConfig))
         config.cookie = {...cookie, ...userCookieConfig};
