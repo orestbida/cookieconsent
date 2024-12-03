@@ -408,7 +408,8 @@ Tweak main UI settings.
         layout?: string
         position?: string
         flipButtons?: boolean
-        equalWeightButtons?: boolean
+        equalWeightButtons?: boolean,
+        titleTag?: keyof HTMLElementTagNameMap
     }
     ```
 
@@ -419,7 +420,8 @@ Tweak main UI settings.
         layout: 'box',
         position: 'bottom right',
         flipButtons: false,
-        equalWeightButtons: true
+        equalWeightButtons: true,
+        titleTag: 'h2'
     }
     ```
 
@@ -458,7 +460,8 @@ Tweak main UI settings.
         layout?: string
         position?: string
         flipButtons?: boolean
-        equalWeightButtons?: boolean
+        equalWeightButtons?: boolean,
+        titleTag?: keyof HTMLElementTagNameMap
     }
     ```
 
@@ -469,7 +472,8 @@ Tweak main UI settings.
         layout: 'box',
         position: 'right',
         flipButtons: false,
-        equalWeightButtons: true
+        equalWeightButtons: true,
+        titleTag: 'h2'
     }
     ```
 

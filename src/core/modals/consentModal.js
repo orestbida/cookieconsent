@@ -22,7 +22,8 @@ import {
     BUTTON_TAG,
     BTN_GROUP_CLASS,
     CLICK_EVENT,
-    DATA_ROLE
+    DATA_ROLE,
+    TITLE_TAG
 } from '../../utils/constants';
 
 import { guiManager } from '../../utils/gui-manager';
@@ -68,7 +69,10 @@ export const createConsentModal = (api, createMainContainer) => {
         closeIconLabelData = consentModalData.closeIconLabel,
         footerData = consentModalData.footer,
         consentModalLabelValue = consentModalData.label,
-        consentModalTitleValue = consentModalData.title;
+        consentModalTitleValue = consentModalData.title
+    ;
+
+    const titleTag = state._userConfig.guiOptions.consentModal.titleTag || TITLE_TAG;
 
     /**
      * @param {string|string[]} [categories]
@@ -143,7 +147,7 @@ export const createConsentModal = (api, createMainContainer) => {
 
     if (consentModalTitleValue) {
         if (!dom._cmTitle) {
-            dom._cmTitle = createNode('h2');
+            dom._cmTitle = createNode(titleTag);
             dom._cmTitle.className = dom._cmTitle.id = 'cm__title';
             appendChild(dom._cmTexts, dom._cmTitle);
         }

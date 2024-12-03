@@ -22,13 +22,15 @@ export const defaultFullConfig = {
             layout: 'box',
             position: 'bottom left',
             equalWeightButtons: true,
-            flipButtons: false
+            flipButtons: false,
+            titleTag: 'h2'
         },
         preferencesModal: {
             layout: 'box',
             position: 'right',
             equalWeightButtons: true,
-            flipButtons: false
+            flipButtons: false,
+            titleTag: 'h2'
         }
     },
 

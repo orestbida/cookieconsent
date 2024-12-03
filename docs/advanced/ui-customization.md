@@ -17,13 +17,15 @@ guiOptions: {
         layout: 'box',
         position: 'bottom right',
         flipButtons: false,
-        equalWeightButtons: true
+        equalWeightButtons: true,
+        titleTag: 'h2'
     },
     preferencesModal: {
         layout: 'box',
         // position: 'left right',
         flipButtons: false,
-        equalWeightButtons: true
+        equalWeightButtons: true,
+        titleTag: 'h2'
     }
 }
 ```
