@@ -22,7 +22,7 @@ Example usage:
 
 ## How to block/manage a script tag
 
-You can manage any script tag. by adding the following 2 attributes (both required):
+You can manage any script tag by adding the following 2 attributes (both required):
 
 - `type="text/plain"`
 - `data-category="your-category-name"`
@@ -49,7 +49,7 @@ You can also run **scripts when a category is disabled** (if it was previously e
 <script
     type="text/plain"
     data-category="!analytics">
-    // Executed when the "analytics category is disabled
+    // Executed when the "analytics" category is disabled
 </script>
 ```
 

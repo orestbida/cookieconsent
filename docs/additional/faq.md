@@ -1,5 +1,5 @@
 # Frequently Asked Questions
-Couldn't find the answer in the documentation? Feel free to open a [discussion](https://github.com/orestbida/cookieconsent/discussions) on github.
+Couldn't find the answer in the documentation? Feel free to open a [discussion](https://github.com/orestbida/cookieconsent/discussions) on GitHub.
 
 [[toc]]
 

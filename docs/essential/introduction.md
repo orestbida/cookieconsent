@@ -30,7 +30,7 @@ Both versions are very similar but there a few key differences:
 <CheckListItem title="Supports modern browsers only" type="i"/>
 
 ## More questions?
-Check the [FAQ](/additional/faq.html) section or open a [new discussion](https://github.com/orestbida/cookieconsent/discussions/new) on github.
+Check the [FAQ](/additional/faq.html) section or open a [new discussion](https://github.com/orestbida/cookieconsent/discussions/new) on GitHub.
 
 <script setup>
 import CheckListItem from "../components/CheckListItem.vue"
