@@ -269,20 +269,28 @@ Removes one or multiple cookies.
     ): void
     ```
 
-- **Examples** <br>
+- **Details**
 
-    Delete the plugin's own cookie
+    This function uses `document.cookie` to expire cookies.
+    According to the [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/API/Document/cookie#write_a_new_cookie):
+    "The domain _must_ match the domain of the JavaScript origin. Setting cookies to foreign domains will be silently ignored."
 
+- **Examples**
+
+    Delete the plugin's own cookie:
     ```javascript
     CookieConsent.eraseCookies('cc_cookie');
     ```
 
     Delete the `_gid` and all cookies starting with `_ga`:
     ```javascript
-    CookieConsent.eraseCookies(['_gid', /^_ga/], '/', location.hostname);
+    CookieConsent.eraseCookies(['_gid', /^_ga/]);
     ```
 
-
+    Delete all cookies except the plugin's own cookie:
+    ```javascript
+    CookieConsent.eraseCookies(/^(?!cc_cookie$)/);
+    ```
 
 ## loadScript
 
