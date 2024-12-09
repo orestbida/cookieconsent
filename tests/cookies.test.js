@@ -32,6 +32,7 @@ describe("Cookie should be created successfully", () => {
         expect(typeof ccCookie.consentId).toBe('string');
         expect(ccCookie.consentTimestamp).toBeDefined();
         expect(ccCookie.lastConsentTimestamp).toBeDefined();
+        expect(ccCookie.languageCode).toEqual('en');
         expect(ccCookie.categories).toEqual(['necessary', 'analytics', 'ads']);
         expect(ccCookie.services).toMatchObject({
             necessary: ['service1'],
