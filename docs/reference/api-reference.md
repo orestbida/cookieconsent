@@ -343,6 +343,7 @@ Returns the plugin's own cookie, or just one of the fields.
         consentId: string
         consentTimestamp: string,
         lastConsentTimestamp: string,
+        languageCode: string,
         services: {[key: string]: string[]}
     }
     ```

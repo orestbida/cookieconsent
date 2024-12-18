@@ -176,6 +176,11 @@ declare namespace CookieConsent {
         lastConsentTimestamp: string
 
         /**
+         * Language code of the consent.
+         */
+        languageCode: string
+
+        /**
          * All enabled services.
          */
         services: {[key: string]: string[]}
@@ -214,10 +219,10 @@ declare namespace CookieConsent {
          * @default 'Lax'
          */
         sameSite?: 'Lax' | 'Strict' | 'None'
-        
+
         /**
          * Cookie secure flag.
-         * 
+         *
          * @default true
          */
         secure?: boolean
