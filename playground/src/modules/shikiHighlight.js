@@ -1,11 +1,11 @@
-import { getHighlighter } from 'shikiji';
+import { getSingletonHighlighter } from 'shiki';
 
 /**
  * @type {import('shikiji').BuiltinTheme}
  */
 const SHIKI_THEME = 'nord';
 
-const shiki = await getHighlighter({
+const shiki = await getSingletonHighlighter({
     themes: [SHIKI_THEME],
     langs: ['js', 'ts', 'html', 'css', 'json', 'bash', 'yaml'],
 });
@@ -33,7 +33,7 @@ export const highlight = (_html, props) => {
 
 /**
  * @param {string} html
- * @param {import('shikiji').Highlighter} shiki
+ * @param {import('shiki').Highlighter} shiki
  * @param {ShikiBlockProps} props
  */
 function shikiHighlightBlock(html, shiki, props) {
