@@ -1,5 +1,5 @@
-@import "./reset";
-@import "./global";
+@use "./reset";
+@use "./global" as *;
 
 /**
  * Global styles/variables
