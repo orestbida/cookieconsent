@@ -7,7 +7,7 @@ This section will help you install CookieConsent in your app/website.
 You can download/import the plugin using one of the following methods:
 <br>
 
-1. Install via [NPM](https://www.npmjs.com/package/vanilla-cookieconsent).
+1. Install via [NPM](https://www.npmjs.com/package/vanilla-cookieconsent) or [Yarn](https://yarnpkg.com/package?name=vanilla-cookieconsent).
 
     ::: code-group
 
@@ -39,7 +39,7 @@ You can download/import the plugin using one of the following methods:
     https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@3.0.1/dist/cookieconsent.umd.js
     ```
 
-3. Download the [latest release](https://github.com/orestbida/cookieconsent/releases?q=cookieconsent+v3) from github and use the optimized files located in the `dist` folder.
+3. Download the [latest release](https://github.com/orestbida/cookieconsent/releases?q=cookieconsent+v3) from GitHub and use the optimized files located in the `dist` folder.
 
 
 ## Usage
@@ -266,7 +266,7 @@ CookieConsent.run({
         // domain: location.hostname,
         // path: '/',
         // sameSite: "Lax",
-        // expiresAfterDays: 365,
+        // expiresAfterDays: 182,
     },
 
     // https://cookieconsent.orestbida.com/reference/configuration-reference.html#guioptions
@@ -426,7 +426,7 @@ You should now see the consent modal pop up!
 You can also define [external translation files](/advanced/language-configuration.html#external-translations).
 :::
 
-If you're having trouble setting up the plugin, you can check out a few [demo examples](https://github.com/orestbida/cookieconsent/tree/master/demo) on github.
+If you're having trouble setting up the plugin, you can check out a few [demo examples](https://github.com/orestbida/cookieconsent/tree/master/demo) on GitHub.
 
 <br>
 
