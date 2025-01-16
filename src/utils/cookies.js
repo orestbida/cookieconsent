@@ -316,21 +316,24 @@ export const eraseCookiesHelper = (cookies, customPath, customDomain) => {
      * @param {string} [domain]
      */
     const erase = (cookie, domain) => {
+        if (domain && domain.slice(0, 1) !== '.')
+            domain = '.' + domain;
         document.cookie = cookie + '='
             + '; path=' + path
-            + (domain ? '; domain=.' + domain : '')
+            + (domain ? '; domain=' + domain : '')
             + '; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
     };
 
     for (const cookieName of cookies) {
+        erase(cookieName, customDomain);
 
         /**
-         * 2 attempts to erase the cookie:
-         * - without domain
-         * - with domain
+         * If custom domain not specified,
+         * also erase config domain
          */
-        erase(cookieName);
-        erase(cookieName, domain);
+        if (!customDomain) {
+            erase(cookieName, domain);
+        }
 
         /**
          * If domain starts with 'www.',
