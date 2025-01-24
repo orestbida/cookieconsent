@@ -44,12 +44,12 @@ $footer-links-gap: 1.3rem;
 
         &--left{
             left: var(--cc-modal-margin);
-            margin-right: var(--cc-modal-margin);
+            margin-inline-end: var(--cc-modal-margin);
         }
 
         &--right{
             right: var(--cc-modal-margin);
-            margin-left: var(--cc-modal-margin);
+            margin-inline-start: var(--cc-modal-margin);
         }
         /* END: Horizontal align modal */
     }
@@ -128,19 +128,19 @@ $footer-links-gap: 1.3rem;
 
         .cm__btn + .cm__btn {
             margin-top: 0;
-            margin-left: $cc-btn-gap;
+            margin-inline-start: $cc-btn-gap;
         }
 
         &.cm--flip {
 
             .cm__btn + .cm__btn {
                 margin-bottom: 0;
-                margin-left: 0;
-                margin-right: $cc-btn-gap;
+                margin-inline-start: 0;
+                margin-inline-end: $cc-btn-gap;
             }
 
             .cm__btn-group + .cm__btn-group {
-                margin-right: 0;
+                margin-inline-end: 0;
 
                 margin-bottom: $cc-btn-gap;
             }
@@ -151,14 +151,14 @@ $footer-links-gap: 1.3rem;
         .cm__btn + .cm__btn,
         .cm__btn-group + .cm__btn-group {
             margin-top: 0;
-            margin-left: $cc-btn-gap;
+            margin-inline-start: $cc-btn-gap;
         }
 
         &.cm--flip {
             .cm__btn + .cm__btn,
             .cm__btn-group + .cm__btn-group {
                 margin-bottom: 0;
-                margin-right: $cc-btn-gap;
+                margin-inline-end: $cc-btn-gap;
             }
         }
     }
@@ -289,7 +289,7 @@ $footer-links-gap: 1.3rem;
         width: 100%;
 
         & > * + * {
-            margin-left: $footer-links-gap;
+            margin-inline-start: $footer-links-gap;
         }
     }
 
@@ -464,7 +464,7 @@ $footer-links-gap: 1.3rem;
             .cm__btn + .cm__btn,
             .cm__btn-group + .cm__btn-group {
                 margin-top: 0;
-                margin-left: $cc-btn-gap;
+                margin-inline-start: $cc-btn-gap;
             }
         }
 
@@ -480,8 +480,8 @@ $footer-links-gap: 1.3rem;
                 .cm__btn + .cm__btn,
                 .cm__btn-group + .cm__btn-group {
                     margin-bottom: 0;
-                    margin-left: 0;
-                    margin-right: $cc-btn-gap;
+                    margin-inline-start: 0;
+                    margin-inline-end: $cc-btn-gap;
                 }
             }
 
@@ -615,14 +615,14 @@ $footer-links-gap: 1.3rem;
 
     .cm--inline {
         .cm__btn + .cm__btn {
-            margin-left: 0;
-            margin-right: $cc-btn-gap;
+            margin-inline-start: 0;
+            margin-inline-end: $cc-btn-gap;
         }
 
         &.cm--flip {
             .cm__btn + .cm__btn {
-                margin-left: $cc-btn-gap;
-                margin-right: 0;
+                margin-inline-start: $cc-btn-gap;
+                margin-inline-end: 0;
             }
         }
     }
@@ -633,22 +633,22 @@ $footer-links-gap: 1.3rem;
 
             .cm__btn + .cm__btn,
             .cm__btn-group + .cm__btn-group {
-                margin-left: 0;
-                margin-right: $cc-btn-gap;
+                margin-inline-start: 0;
+                margin-inline-end: $cc-btn-gap;
             }
 
             &.cm--flip {
                 .cm__btn + .cm__btn {
-                    margin-left: $cc-btn-gap;
-                    margin-right: 0;
+                    margin-inline-start: $cc-btn-gap;
+                    margin-inline-end: 0;
                 }
             }
         }
     }
 
     .cm__link-group > * + * {
-        margin-left: 0;
-        margin-right: $footer-links-gap;
+        margin-inline-start: 0;
+        margin-inline-end: $footer-links-gap;
     }
 
 }
