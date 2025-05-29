@@ -209,7 +209,7 @@ export const show = (createModal) => {
      * Set focus to consentModal and enable transition
      */
     setTimeout(() => {
-        addClass(dom._cmContainer, 'cc--anim');
+        addClass(_dom._cmContainer, 'cc--anim');
         focus(globalObj._dom._cmDivTabindex);
     }, 100);
 
