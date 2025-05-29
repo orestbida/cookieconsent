@@ -219,14 +219,14 @@ $service-toggle-knob-icon-width: 1.7px;
                 height: 20px;
                 position: absolute;
                 left: 18px;
-                background: var(--cc-toggle-readonly-bg);
+                background: var(--cc-toggle-arrow-bg);
                 display: flex;
                 justify-content: center;
                 border-radius: 100%;
                 pointer-events: none;
 
                 svg {
-                    stroke: var(--cc-btn-secondary-color);
+                    stroke: var(--cc-toggle-arrow-color);
                     transform: scale(.5);
                 }
             }
