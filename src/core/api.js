@@ -249,7 +249,7 @@ export const hide = () => {
     /**
      * Remove transition class after it executed
      */
-    setTimeout(() => removeClass(dom._cmContainer, 'cc--anim'), 100);
+    setTimeout(() => removeClass(_dom._cmContainer, 'cc--anim'), 100);
 
     debug('CookieConsent [TOGGLE]: hide consentModal');
 
