@@ -138,9 +138,8 @@ export const createPreferencesModal = (api, createMainContainer) => {
         appendChild(dom._pmHeader, dom._pmTitle);
         appendChild(dom._pmHeader, dom._pmCloseBtn);
 
-        dom._pmDivTabindex = createNode(DIV_TAG);
+        dom._pmDivTabindex = dom._pmTitle;
         setAttribute(dom._pmDivTabindex, 'tabIndex', -1);
-        appendChild(dom._pm, dom._pmDivTabindex);
 
         appendChild(dom._pm, dom._pmHeader);
         appendChild(dom._pm, dom._pmBody);

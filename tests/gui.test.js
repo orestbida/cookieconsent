@@ -139,8 +139,9 @@ describe("Test UI options", () => {
         api.show();
         await new Promise(r => setTimeout(r, 300));
         const currActiveElement = getActiveElement();
+        const expectedElement = document.querySelector('.cm[tabindex="-1"]');
         expect(currActiveElement).not.toBe(prevActiveElement);
-        expect(document.querySelector('.cm > div[tabIndex="-1"]')).toBe(currActiveElement);
+        expect(currActiveElement).toBe(expectedElement);
     });
 
     it('preferencesModal should receive focus when it is shown', async () => {
@@ -149,8 +150,10 @@ describe("Test UI options", () => {
         api.showPreferences();
         await new Promise(r => setTimeout(r, 300));
         const currActiveElement = getActiveElement();
+        const expectedElement = document.querySelector('.pm__title[tabindex="-1"]');
         expect(currActiveElement).not.toBe(prevActiveElement);
-        expect(document.querySelector('.pm > div[tabIndex="-1"]')).toBe(currActiveElement);
+        expect(currActiveElement).toBe(expectedElement);
+
     });
 })
 

@@ -723,24 +723,6 @@ export const focus = (el, toggleTabIndex) => {
     toggleTabIndex && el.removeAttribute('tabindex');
 };
 
-/**
- * @param {HTMLDivElement} element
- * @param {1 | 2} modalId
- */
-export const focusAfterTransition = (element, modalId) => {
-    const getVisibleDiv = (modalId) => modalId === 1
-        ? globalObj._dom._cmDivTabindex
-        : globalObj._dom._pmDivTabindex;
-
-    const setFocus = (event) => {
-        event.target.removeEventListener('transitionend', setFocus);
-        if (event.propertyName === 'opacity' && getComputedStyle(element).opacity === '1') {
-            focus(getVisibleDiv(modalId));
-        }
-    };
-
-    addEvent(element, 'transitionend', setFocus);
-};
 
 /**
  * Obtain accepted and rejected categories
@@ -792,7 +774,7 @@ const iconStrokes = [
  * @param {number} [strokeWidth]
  */
 export const getSvgIcon = (iconIndex = 0, strokeWidth = 1.5) => {
-    return `<svg viewBox="0 0 24 24" stroke-width="${strokeWidth}"><path d="${iconStrokes[iconIndex]}"/></svg>`;
+    return `<svg aria-hidden="true" viewBox="0 0 24 24" stroke-width="${strokeWidth}"><path d="${iconStrokes[iconIndex]}"/></svg>`;
 };
 
 /**
