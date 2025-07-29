@@ -21,7 +21,6 @@ import {
     toggleDisableInteraction,
     fireEvent,
     getKeys,
-    focusAfterTransition,
     deepCopy
 } from '../utils/general';
 
@@ -201,17 +200,17 @@ export const show = (createModal) => {
     if (_state._disablePageInteraction)
         toggleDisableInteraction(true);
 
-    focusAfterTransition(_dom._cm, 1);
-
     addClass(_dom._rootEl, TOGGLE_CONSENT_MODAL_CLASS);
     removeAttribute(_dom._cm, ARIA_HIDDEN);
     /**
      * Set focus to consentModal and enable transition
      */
     setTimeout(() => {
-        addClass(_dom._cmContainer, 'cc--anim');
-        focus(globalObj._dom._cmDivTabindex);
+        addClass(globalObj._dom._cmContainer, 'cc--anim');
     }, 100);
+    setTimeout(() => {
+        focus(globalObj._dom._cmDivTabindex);
+    }, 200);
 
     debug('CookieConsent [TOGGLE]: show consentModal');
 
@@ -276,8 +275,6 @@ export const showPreferences = () => {
     } else {
         state._lastFocusedModalElement = getActiveElement();
     }
-
-    focusAfterTransition(globalObj._dom._pm, 2);
 
     addClass(globalObj._dom._rootEl, TOGGLE_PREFERENCES_MODAL_CLASS);
     removeAttribute(globalObj._dom._pm, ARIA_HIDDEN);

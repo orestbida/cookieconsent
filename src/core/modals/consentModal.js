@@ -91,15 +91,19 @@ export const createConsentModal = (api, createMainContainer) => {
         addClassCm(dom._cmTexts, 'texts');
         addClassCm(dom._cmBtns, 'btns');
 
-        setAttribute(dom._cm, 'role', 'dialog');
-        setAttribute(dom._cm, 'aria-modal', 'true');
-        setAttribute(dom._cm, 'aria-describedby', 'cm__desc');
+        if (state._disablePageInteraction) {
+            setAttribute(dom._cm, 'role', 'dialog');
+            setAttribute(dom._cm, 'aria-modal', 'true');
+        } else {
+            setAttribute(dom._cm, 'role', 'region');
+        }
 
-        if (consentModalLabelValue)
+        if (consentModalLabelValue) {
             setAttribute(dom._cm, 'aria-label', consentModalLabelValue);
-        else if (consentModalTitleValue)
+        } else if (consentModalTitleValue) {
             setAttribute(dom._cm, 'aria-labelledby', 'cm__title');
-
+            setAttribute(dom._cm, 'aria-describedby', 'cm__desc');
+        }
         const
             boxLayout = 'box',
             guiOptions = state._userConfig.guiOptions,
@@ -131,12 +135,11 @@ export const createConsentModal = (api, createMainContainer) => {
         if (acceptAllBtnData || acceptNecessaryBtnData || showPreferencesBtnData)
             appendChild(dom._cmBody, dom._cmBtns);
 
-        dom._cmDivTabindex = createNode(DIV_TAG);
-        setAttribute(dom._cmDivTabindex, 'tabIndex', -1);
-        appendChild(dom._cm, dom._cmDivTabindex);
-
         appendChild(dom._cm, dom._cmBody);
         appendChild(dom._cmContainer, dom._cm);
+
+        dom._cmDivTabindex = dom._cm;
+        setAttribute(dom._cmDivTabindex, 'tabIndex', -1);
     }
 
     if (consentModalTitleValue) {
@@ -272,7 +275,9 @@ export const createConsentModal = (api, createMainContainer) => {
         fireEvent(globalObj._customEvents._onModalReady, CONSENT_MODAL_NAME, dom._cm);
         createMainContainer(api);
         appendChild(dom._ccMain, dom._cmContainer);
-        handleFocusTrap(dom._cm);
+        if (state._disablePageInteraction) {
+            handleFocusTrap(dom._cm);
+        }
     }
 
     getModalFocusableData(1);
