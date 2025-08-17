@@ -94,7 +94,7 @@ export const createConsentModal = (api, createMainContainer) => {
 
         setAttribute(dom._cm, 'role', 'dialog');
         setAttribute(dom._cm, 'aria-modal', 'true');
-        setAttribute(dom._cm, ARIA_HIDDEN, 'false');
+        setAttribute(dom._cm, ARIA_HIDDEN, undefined);
         setAttribute(dom._cm, 'aria-describedby', 'cm__desc');
 
         if (consentModalLabelValue)
