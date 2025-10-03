@@ -315,7 +315,7 @@ export const createPreferencesModal = (api, createMainContainer) => {
                     if (!hasClass(section, 'is-expanded')) {
                         addClass(section, 'is-expanded');
                         setAttribute(btn, 'aria-expanded', 'true');
-                        setAttribute(accordion, ARIA_HIDDEN, 'false');
+                        setAttribute(accordion, ARIA_HIDDEN, undefined);
                     } else {
                         removeClass(section, 'is-expanded');
                         setAttribute(btn, 'aria-expanded', 'false');
