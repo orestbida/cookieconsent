@@ -1,5 +1,5 @@
 import { globalObj } from './global';
-import { debug, getKeys, isObject, retrieveScriptElements, fetchCategoriesAndServices } from '../utils/general';
+import { debug, getKeys, isObject, isString, retrieveScriptElements, fetchCategoriesAndServices } from '../utils/general';
 import { OPT_OUT_MODE } from '../utils/constants';
 import { resolveCurrentLanguageCode, setCurrentLanguageCode } from '../utils/language';
 
@@ -29,6 +29,8 @@ export const setConfig = (userConfig) => {
     _dom._document = doc;
     //{{START: GUI}}
     _dom._htmlDom = doc.documentElement;
+    const _root = userConfig.root;
+    _dom._rootEl = (_root && isString(_root) ? doc.querySelector(_root) : _root) || doc.documentElement;
     //{{END: GUI}}
     cookie.domain = location.hostname;
 

@@ -203,7 +203,7 @@ export const show = (createModal) => {
 
     focusAfterTransition(_dom._cm, 1);
 
-    addClass(_dom._htmlDom, TOGGLE_CONSENT_MODAL_CLASS);
+    addClass(_dom._rootEl, TOGGLE_CONSENT_MODAL_CLASS);
     removeAttribute(_dom._cm, ARIA_HIDDEN);
     /**
      * Set focus to consentModal and enable transition
@@ -237,7 +237,7 @@ export const hide = () => {
      */
     focus(_dom._focusSpan, true);
 
-    removeClass(_dom._htmlDom, TOGGLE_CONSENT_MODAL_CLASS);
+    removeClass(_dom._rootEl, TOGGLE_CONSENT_MODAL_CLASS);
     setAttribute(_dom._cm, ARIA_HIDDEN, 'true');
 
     /**
@@ -245,7 +245,7 @@ export const hide = () => {
      */
     focus(_state._lastFocusedElemBeforeModal);
     _state._lastFocusedElemBeforeModal = null;
-    
+
     /**
      * Remove transition class after it executed
      */
@@ -279,7 +279,7 @@ export const showPreferences = () => {
 
     focusAfterTransition(globalObj._dom._pm, 2);
 
-    addClass(globalObj._dom._htmlDom, TOGGLE_PREFERENCES_MODAL_CLASS);
+    addClass(globalObj._dom._rootEl, TOGGLE_PREFERENCES_MODAL_CLASS);
     removeAttribute(globalObj._dom._pm, ARIA_HIDDEN);
 
     /**
@@ -343,7 +343,7 @@ export const hidePreferences = () => {
      */
     focus(globalObj._dom._pmFocusSpan, true);
 
-    removeClass(globalObj._dom._htmlDom, TOGGLE_PREFERENCES_MODAL_CLASS);
+    removeClass(globalObj._dom._rootEl, TOGGLE_PREFERENCES_MODAL_CLASS);
     setAttribute(globalObj._dom._pm, ARIA_HIDDEN, 'true');
 
     /**
@@ -693,7 +693,7 @@ export const run = async (userConfig) => {
  */
 export const reset = (deleteCookie) => {
     //{{START: GUI}}
-    const { _ccMain, _htmlDom } = globalObj._dom;
+    const { _ccMain } = globalObj._dom;
     //{{END: GUI}}
 
     const { name, path, domain, useLocalStorage } = globalObj._config.cookie;
@@ -720,7 +720,8 @@ export const reset = (deleteCookie) => {
     /**
      * Remove any remaining classes
      */
-    _htmlDom && _htmlDom.classList.remove(
+    const parentEl = globalObj._dom._rootEl;
+    parentEl && parentEl.classList.remove(
         TOGGLE_DISABLE_INTERACTION_CLASS,
         TOGGLE_PREFERENCES_MODAL_CLASS,
         TOGGLE_CONSENT_MODAL_CLASS

@@ -772,10 +772,10 @@ export const toggleDisableInteraction = (enable) => {
     clearTimeout(disableInteractionTimeout);
 
     if (enable) {
-        addClass(globalObj._dom._htmlDom, TOGGLE_DISABLE_INTERACTION_CLASS);
+        addClass(globalObj._dom._rootEl, TOGGLE_DISABLE_INTERACTION_CLASS);
     }else {
         disableInteractionTimeout = setTimeout(() => {
-            removeClass(globalObj._dom._htmlDom, TOGGLE_DISABLE_INTERACTION_CLASS);
+            removeClass(globalObj._dom._rootEl, TOGGLE_DISABLE_INTERACTION_CLASS);
         }, 500);
     }
 };
