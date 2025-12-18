@@ -11,7 +11,7 @@ $service-toggle-knob-height: 19px;
 $service-toggle-knob-width: 42px;
 $service-toggle-knob-icon-width: 1.7px;
 
-:root{
+:root, :host {
     --cc-pm-toggle-border-radius: 4em;
 }
 
