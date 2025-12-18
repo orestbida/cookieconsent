@@ -17,7 +17,7 @@ html{
     text-size-adjust: none;
 }
 
-:root{
+:root, :host {
     --d-gap: .625rem;
     --d-border-radius: .375rem;
     --d-select-height: 2.25rem;
