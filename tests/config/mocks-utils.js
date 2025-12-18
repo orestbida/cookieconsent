@@ -1,3 +1,5 @@
+import { globalObj } from '../../src/core/global';
+
 export const botUserAgent = 'Mozilla/5.0 (Linux; Android 5.0; SM-G920A) AppleWebKit (KHTML, like Gecko) Chrome Mobile Safari (compatible; AdsBot-Google-Mobile; +http://www.google.com/mobile/adsbot.html)';
 
 export const setCookie = (name, value, days = 1) => {
@@ -8,7 +10,7 @@ export const setCookie = (name, value, days = 1) => {
 }
 
 export function htmlHasClass(className) {
-    return document.documentElement.className.includes(className);
+    return globalObj._dom._rootEl.className.includes(className);
 }
 
 export function setUserAgent(userAgent) {

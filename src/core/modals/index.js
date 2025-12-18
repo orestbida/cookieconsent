@@ -1,5 +1,5 @@
 import { globalObj } from '../global';
-import { createNode, isString, addDataButtonListeners } from '../../utils/general';
+import { createNode, addDataButtonListeners } from '../../utils/general';
 import { createConsentModal } from './consentModal';
 import { createPreferencesModal } from './preferencesModal';
 import { DIV_TAG } from '../../utils/constants';
@@ -16,13 +16,8 @@ export const createMainContainer = () => {
 
     handleRtlLanguage();
 
-    let root = globalObj._state._userConfig.root;
-
-    if (root && isString(root))
-        root = document.querySelector(root);
-
     // Append main container to dom
-    (root || dom._document.body).appendChild(dom._ccMain);
+    dom._rootEl.appendChild(dom._ccMain);
 };
 
 /**
