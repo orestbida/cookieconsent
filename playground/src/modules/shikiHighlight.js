@@ -1,7 +1,7 @@
 import { getSingletonHighlighter } from 'shiki';
 
 /**
- * @type {import('shikiji').BuiltinTheme}
+ * @type {import('shiki').BuiltinTheme}
  */
 const SHIKI_THEME = 'nord';
 

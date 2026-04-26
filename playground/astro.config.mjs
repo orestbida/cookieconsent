@@ -5,6 +5,7 @@ import { buildTranslationsExportFile } from './src/modules/serverUtils';
 buildTranslationsExportFile();
 
 export default defineConfig({
+  devToolbar: { enabled: false },
   integrations: [compress(), {
     name: 'build-languages',
     hooks: {
