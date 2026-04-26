@@ -210,7 +210,7 @@ describe("API tests", () => {
         await api.run(testConfig)
         api.show();
         expect(htmlHasClass(consentModalClassToggle)).toBe(true);
-        expect(globalObj._dom._cm.getAttribute('aria-hidden')).toBe('false');
+        expect(globalObj._dom._cm.getAttribute('aria-hidden')).toBeNull();
     })
 
     it('Should hide the consent modal', async () => {
@@ -325,7 +325,7 @@ describe("API tests", () => {
         } catch (ex) {
             expect(ex).toBe(`Could not load translation for the 'it' language`);
         }
-        
+
         expect(globalObj._state._currentLanguageCode).not.toBe('it');
     })
 

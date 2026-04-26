@@ -1,6 +1,7 @@
 import {
     createNode,
     setAttribute,
+    removeAttribute,
     appendChild,
     addClass,
     removeClass,
@@ -203,8 +204,7 @@ export const show = (createModal) => {
     focusAfterTransition(_dom._cm, 1);
 
     addClass(_dom._htmlDom, TOGGLE_CONSENT_MODAL_CLASS);
-    setAttribute(_dom._cm, ARIA_HIDDEN, 'false');
-
+    removeAttribute(_dom._cm, ARIA_HIDDEN);
     /**
      * Set focus to consentModal and enable transition
      */
@@ -280,7 +280,7 @@ export const showPreferences = () => {
     focusAfterTransition(globalObj._dom._pm, 2);
 
     addClass(globalObj._dom._htmlDom, TOGGLE_PREFERENCES_MODAL_CLASS);
-    setAttribute(globalObj._dom._pm, ARIA_HIDDEN, 'false');
+    removeAttribute(globalObj._dom._pm, ARIA_HIDDEN);
 
     /**
      * Set focus to preferencesModal

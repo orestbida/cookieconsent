@@ -4,6 +4,7 @@ import {
     addClass,
     addClassPm,
     setAttribute,
+    removeAttribute,
     removeClass,
     addEvent,
     appendChild,
@@ -315,7 +316,7 @@ export const createPreferencesModal = (api, createMainContainer) => {
                     if (!hasClass(section, 'is-expanded')) {
                         addClass(section, 'is-expanded');
                         setAttribute(btn, 'aria-expanded', 'true');
-                        setAttribute(accordion, ARIA_HIDDEN, 'false');
+                        removeAttribute(accordion, ARIA_HIDDEN);
                     } else {
                         removeClass(section, 'is-expanded');
                         setAttribute(btn, 'aria-expanded', 'false');

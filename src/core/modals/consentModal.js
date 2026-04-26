@@ -18,7 +18,6 @@ import {
 import {
     CONSENT_MODAL_NAME,
     DIV_TAG,
-    ARIA_HIDDEN,
     BUTTON_TAG,
     BTN_GROUP_CLASS,
     CLICK_EVENT,
@@ -94,7 +93,6 @@ export const createConsentModal = (api, createMainContainer) => {
 
         setAttribute(dom._cm, 'role', 'dialog');
         setAttribute(dom._cm, 'aria-modal', 'true');
-        setAttribute(dom._cm, ARIA_HIDDEN, 'false');
         setAttribute(dom._cm, 'aria-describedby', 'cm__desc');
 
         if (consentModalLabelValue)
