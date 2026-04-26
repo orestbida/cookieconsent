@@ -1,9 +1,11 @@
+import path from 'path';
 import { defineConfig } from 'rollup';
 import terser from "@rollup/plugin-terser";
 import postcssCombineDuplicatedSelectors from 'postcss-combine-duplicated-selectors';
 import cssnanoPlugin from 'cssnano';
-import postcss from 'rollup-plugin-postcss';
+import postcss from 'postcss';
 import eslint from '@rollup/plugin-eslint';
+import * as sass from 'sass';
 import pkg from './package.json' with { type: "json"};
 
 const srcDir = './src';
@@ -19,6 +21,36 @@ export const banner = `/*!
 * Released under the ${pkg.license} License
 */
 `;
+
+function scssPlugin(postcssPlugins) {
+    const cssMap = new Map();
+
+    return {
+        name: 'scss',
+        transform(code, id) {
+            if (!/\.(scss|sass)$/.test(id)) return null;
+            const { css } = sass.compile(id);
+            cssMap.set(id, css);
+            return { code: 'export default "";', map: { mappings: '' } };
+        },
+        async generateBundle(outputOptions, bundle) {
+            if (!cssMap.size) return;
+
+            const css = [...cssMap.values()].join('\n');
+            const processed = await postcss(postcssPlugins.filter(Boolean)).process(css, { from: undefined });
+
+            const outFile = outputOptions.file;
+            const fileName = path.basename(outFile);
+
+            for (const key of Object.keys(bundle)) {
+                delete bundle[key];
+            }
+
+            this.emitFile({ type: 'asset', fileName, source: processed.css });
+            cssMap.clear();
+        }
+    };
+}
 
 const cssComponents = [
     [
@@ -43,35 +75,29 @@ const cssComponents = [
     ]
 ];
 
+const postcssPlugins = [
+    postcssCombineDuplicatedSelectors(),
+    productionMode && cssnanoPlugin({
+        preset: ["default", {
+            discardComments: {
+                removeAll: true,
+            }
+        }]
+    })
+];
+
 const cssComponentsRollup = cssComponents.map(component => {
     const src = `${srcDir}/scss/${component[0]}`;
-    const dst = `${cssComponentsDir}/${component[1]}`
+    const dst = `${cssComponentsDir}/${component[1]}`;
 
     return {
         input: src,
         output: {
             file: dst,
         },
-        plugins: postcss({
-            extract: true,
-            plugins: [
-                postcssCombineDuplicatedSelectors(),
-                productionMode && cssnanoPlugin({
-                    preset: ["default", {
-                        discardComments: {
-                            removeAll: true,
-                        }
-                    }]
-                })
-            ]
-        }),
-        onwarn(warning, warn) {
-            if(warning.code === 'FILE_NAME_CONFLICT')
-                return;
-            warn(warning);
-        }
-    }
-})
+        plugins: scssPlugin(postcssPlugins)
+    };
+});
 
 export const terserPlugin = terser({
     toplevel: true,
@@ -124,23 +150,7 @@ export default defineConfig(
             output: {
                 file: `${distDir}/cookieconsent.css`,
             },
-            plugins: postcss({
-                extract: true,
-                plugins: [
-                    postcssCombineDuplicatedSelectors(),
-                    productionMode && cssnanoPlugin({
-                        preset: ["default", {
-                            discardComments: {
-                                removeAll: true,
-                            }
-                        }]
-                    })
-                ]
-            }),
-            onwarn(warning, warn) {
-                if(warning.code === 'FILE_NAME_CONFLICT') return;
-                warn(warning);
-            }
+            plugins: scssPlugin(postcssPlugins)
         },
         ...cssComponentsRollup
     ]
