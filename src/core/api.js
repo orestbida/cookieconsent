@@ -44,7 +44,6 @@ import {
     getCurrentLanguageCode,
     handleRtlLanguage,
     loadTranslationData,
-    setCurrentLanguageCode,
     getAvailableLanguage
 } from '../utils/language';
 
@@ -391,8 +390,6 @@ export const setLanguage = async (newLanguageCode, forceUpdate) => {
 
         if (!loaded)
             return false;
-
-        setCurrentLanguageCode(newLanguageCode);
 
         if (state._consentModalExists)
             createConsentModal(miniAPI, createMainContainer);

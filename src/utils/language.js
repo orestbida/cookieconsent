@@ -106,9 +106,7 @@ export const loadTranslationData = async (desiredLanguageCode) => {
     /**
      * @type {string}
      */
-    let currentLanguageCode = getAvailableLanguage(desiredLanguageCode)
-        ? desiredLanguageCode
-        : getCurrentLanguageCode();
+    let currentLanguageCode = getAvailableLanguage(desiredLanguageCode) ?? getCurrentLanguageCode();
 
     let translationData = state._allTranslations[currentLanguageCode];
 

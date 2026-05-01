@@ -305,14 +305,10 @@ describe("API tests", () => {
         expect(globalObj._state._currentLanguageCode).toBe('it');
     })
 
-    it('Should throw error when desired language is not defined', async () => {
-        fetch.mockReturnValueOnce(false);
-        try {
-            await api.setLanguage('en-IT', true);
-        } catch (ex) {
-            expect(ex).toBe(`Could not load translation for the 'en-IT' language`);
-        }
-        expect(globalObj._state._currentLanguageCode).not.toBe('en-IT');
+    it('Should return false when desired language is not defined', async () => {
+        const result = await api.setLanguage('fr');
+        expect(result).toBe(false);
+        expect(globalObj._state._currentLanguageCode).not.toBe('fr');
     })
 
     it('Should throw error when fetch fails', async () => {
