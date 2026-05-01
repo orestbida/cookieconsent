@@ -212,6 +212,7 @@ export const createConsentModal = (api, createMainContainer) => {
             addClassCm(dom._cmShowPreferencesBtn, 'btn');
             addClassCm(dom._cmShowPreferencesBtn, 'btn--secondary');
             setAttribute(dom._cmShowPreferencesBtn, DATA_ROLE, 'show');
+            setAttribute(dom._cmShowPreferencesBtn, 'aria-haspopup', 'dialog');
 
             addEvent(dom._cmShowPreferencesBtn, 'mouseenter', () => {
                 if (!state._preferencesModalExists)
