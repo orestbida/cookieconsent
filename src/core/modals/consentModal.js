@@ -275,9 +275,7 @@ export const createConsentModal = (api, createMainContainer) => {
         fireEvent(globalObj._customEvents._onModalReady, CONSENT_MODAL_NAME, dom._cm);
         createMainContainer(api);
         appendChild(dom._ccMain, dom._cmContainer);
-        if (state._disablePageInteraction) {
-            handleFocusTrap(dom._cm);
-        }
+        handleFocusTrap(dom._cm);
     }
 
     getModalFocusableData(1);
