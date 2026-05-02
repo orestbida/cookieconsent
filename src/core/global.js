@@ -26,6 +26,7 @@ import { COOKIE_NAME, OPT_IN_MODE } from '../utils/constants';
  * @typedef {Object} ScriptInfo
  * @property {HTMLScriptElement} _script
  * @property {string} _categoryName
+ * @property {string | null} _description
  * @property {string} [_serviceName]
  * @property {boolean} _executed
  * @property {boolean} _runOnDisable

@@ -23,7 +23,7 @@ import {
 import { guiManager } from '../../utils/gui-manager';
 import {
     PREFERENCES_MODAL_NAME,
-    SCRIPT_TAG_SELECTOR,
+    SCRIPT_CATEGORY_TAG_SELECTOR,
     DIV_TAG,
     ARIA_HIDDEN,
     BUTTON_TAG,
@@ -197,24 +197,32 @@ export const createPreferencesModal = (api, createMainContainer) => {
                 addClassPm(servicesContainer, 'section-services');
 
                 for (const serviceName of sServiceNames) {
+                    const scriptInfo = globalObj._state._allScriptTags.find((s) => s._serviceName === serviceName);
+                    const description = scriptInfo?._description;
                     const service = sServices[serviceName];
                     const serviceLabel = service && service.label || serviceName;
                     const serviceDiv = createNode(DIV_TAG);
+                    const serviceDescription = createNode(DIV_TAG);
                     const serviceHeader = createNode(DIV_TAG);
                     const serviceIconContainer = createNode(DIV_TAG);
                     const serviceTitle = createNode(DIV_TAG);
 
                     addClassPm(serviceDiv, 'service');
                     addClassPm(serviceTitle, 'service-title');
+                    addClassPm(serviceDescription, 'service-description');
                     addClassPm(serviceHeader, 'service-header');
                     addClassPm(serviceIconContainer, 'service-icon');
 
                     const toggleLabel = createToggleLabel(serviceLabel, serviceName, sCurrentCategoryObject, true, sLinkedCategory);
 
                     serviceTitle.innerHTML = serviceLabel;
+                    serviceDescription.innerHTML += description;
 
                     appendChild(serviceHeader, serviceIconContainer);
                     appendChild(serviceHeader, serviceTitle);
+                    if (description) {
+                        appendChild(serviceTitle, serviceDescription);
+                    }
                     appendChild(serviceDiv, serviceHeader);
                     appendChild(serviceDiv, toggleLabel);
                     appendChild(servicesContainer, serviceDiv);
@@ -529,7 +537,7 @@ function createToggleLabel(label, value, sCurrentCategoryObject, isService, cate
 
     if (isService) {
         addClass(toggleLabel, 'toggle-service');
-        setAttribute(toggle, SCRIPT_TAG_SELECTOR, categoryName);
+        setAttribute(toggle, SCRIPT_CATEGORY_TAG_SELECTOR, categoryName);
 
         // Save reference to toggles to avoid using document.querySelector later on
         dom._serviceCheckboxInputs[categoryName][value] = toggle;

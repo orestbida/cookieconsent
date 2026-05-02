@@ -8,6 +8,7 @@ There are two ways to manage your scripts:
 
 * `data-category`: name of the category
 * `data-service` (optional): if specified, a toggle will be generated in the `preferencesModal`
+* `data-description` (optional): if specified, a description will be added to toggle in the `preferencesModal`
 * `data-type` (optional): custom type (e.g. `"module"`)
 * `data-src` (optional): can be used instead of `src` to avoid validation issues
 
@@ -17,6 +18,7 @@ Example usage:
     type="text/plain"
     data-category="analytics"
     data-service="Google Analytics"
+    data-description="Google Analytics is used to analyze the usage and improve the service."
 >/*...code*/</script>
 ```
 

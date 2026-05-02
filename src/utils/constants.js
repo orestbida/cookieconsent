@@ -7,7 +7,8 @@ export const TOGGLE_CONSENT_MODAL_CLASS = 'show--consent';
 export const TOGGLE_PREFERENCES_MODAL_CLASS = 'show--preferences';
 export const TOGGLE_DISABLE_INTERACTION_CLASS = 'disable--interaction';
 
-export const SCRIPT_TAG_SELECTOR = 'data-category';
+export const SCRIPT_CATEGORY_TAG_SELECTOR = 'data-category';
+export const SCRIPT_DESCRIPTION_TAG_SELECTOR = 'data-description';
 
 export const DIV_TAG = 'div';
 export const BUTTON_TAG = 'button';

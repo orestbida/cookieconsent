@@ -1,6 +1,6 @@
 import { globalObj } from '../core/global';
 import { createNode, setAttribute, elContains, getAttribute, removeAttribute, isFunction } from './general';
-import { SCRIPT_TAG_SELECTOR, OPT_OUT_MODE } from './constants';
+import { SCRIPT_CATEGORY_TAG_SELECTOR, OPT_OUT_MODE } from './constants';
 
 /**
  * @param {string} type
@@ -121,7 +121,7 @@ export const manageExistingScripts = (defaultEnabledCategories) => {
             const dataType = getAttribute(currScript, 'type', true);
 
             removeAttribute(currScript, 'type', !!dataType);
-            removeAttribute(currScript, SCRIPT_TAG_SELECTOR);
+            removeAttribute(currScript, SCRIPT_CATEGORY_TAG_SELECTOR);
 
             // Get current script data-src (if there is one)
             let src = getAttribute(currScript, 'src', true);

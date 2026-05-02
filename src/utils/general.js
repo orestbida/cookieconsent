@@ -1,6 +1,7 @@
 import { globalObj } from '../core/global';
 import {
-    SCRIPT_TAG_SELECTOR,
+    SCRIPT_CATEGORY_TAG_SELECTOR,
+    SCRIPT_DESCRIPTION_TAG_SELECTOR,
     BUTTON_TAG, CLICK_EVENT,
     TOGGLE_DISABLE_INTERACTION_CLASS
 } from './constants';
@@ -211,10 +212,11 @@ export const retrieveScriptElements = () => {
     /**
      * @type {NodeListOf<HTMLScriptElement>}
      */
-    const scripts = querySelectorAll(document, 'script[' + SCRIPT_TAG_SELECTOR +']');
+    const scripts = querySelectorAll(document, 'script[' + SCRIPT_CATEGORY_TAG_SELECTOR +']');
 
     for (const scriptTag of scripts) {
-        let scriptCategoryName = getAttribute(scriptTag, SCRIPT_TAG_SELECTOR);
+        let scriptCategoryName = getAttribute(scriptTag, SCRIPT_CATEGORY_TAG_SELECTOR);
+        let scriptDescription = getAttribute(scriptTag, SCRIPT_DESCRIPTION_TAG_SELECTOR) || null;
         let scriptServiceName = scriptTag.dataset.service || '';
         let runOnDisable = false;
 
@@ -237,6 +239,7 @@ export const retrieveScriptElements = () => {
                 _executed: false,
                 _runOnDisable: runOnDisable,
                 _categoryName: scriptCategoryName,
+                _description: scriptDescription,
                 _serviceName: scriptServiceName
             });
 
