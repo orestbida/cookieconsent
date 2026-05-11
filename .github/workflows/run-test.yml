@@ -1,0 +1,37 @@
+name: Run tests on push
+on: push
+jobs:
+  run-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - name: Check changed files
+        id: changes
+        run: |
+          changed_files=$(git diff --name-only ${{ github.sha }}...${{ github.ref_name }})
+
+          if [[ -n $(echo "$changed_files" | grep -E "src/|tests/") ]]; then
+            echo "Detected changes in src or tests directory. Running tests..."
+            echo "run_tests=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "No changes in src or tests directory. Skipping tests."
+            echo "run_tests=false" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Install pnpm package manager
+        if: steps.changes.outputs.run_tests == 'true'
+        uses: pnpm/action-setup@v6
+      - name: Install node
+        if: steps.changes.outputs.run_tests == 'true'
+        uses: actions/setup-node@v6
+        with:
+          node-version: "lts/*"
+          cache: "pnpm"
+      - name: Install dependencies
+        if: steps.changes.outputs.run_tests == 'true'
+        run: pnpm install
+      - name: Run tests
+        if: steps.changes.outputs.run_tests == 'true'
+        run: npm test
