@@ -25,6 +25,9 @@
     --cc-toggle-on-knob-bg: #ffffff;
     --cc-toggle-off-knob-bg: var(--cc-toggle-on-knob-bg);
 
+    --cc-toggle-arrow-bg: var(--cc-btn-secondary-bg);
+    --cc-toggle-arrow-color: var(--cc-btn-secondary-color);
+
     --cc-toggle-enabled-icon-color: var(--cc-bg);   // yes (v tick)
     --cc-toggle-disabled-icon-color: var(--cc-bg);  // no (x tick)
 
