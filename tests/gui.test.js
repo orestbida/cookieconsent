@@ -155,6 +155,25 @@ describe("Test UI options", () => {
         expect(currActiveElement).toBe(expectedElement);
 
     });
+
+    it('Shift+Tab from the auto-focused (non-tabbable) pm title should wrap to the last focusable element', async () => {
+        await api.run(testConfig);
+        api.showPreferences();
+        await new Promise(r => setTimeout(r, 300));
+
+        const titleEl = document.querySelector('.pm__title[tabindex="-1"]');
+        expect(getActiveElement()).toBe(titleEl);
+
+        document.documentElement.dispatchEvent(new KeyboardEvent('keydown', {
+            key: 'Tab',
+            shiftKey: true,
+            cancelable: true
+        }));
+
+        const lastFocusable = globalObj._state._pmFocusableElements[1];
+        expect(getActiveElement()).toBe(lastFocusable);
+        expect(getActiveElement()).not.toBe(titleEl);
+    });
 })
 
 function getModalClassList(selector) {

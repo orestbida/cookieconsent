@@ -834,16 +834,23 @@ export const handleFocusTrap = (modal) => {
                 return;
 
             /**
+             * True when focus is on a non-tabbable element inside the modal,
+             * e.g. the tabindex="-1" element the library focuses on open
+             */
+            const isUntrackedFocus = modal.contains(currentActiveElement) && currentActiveElement.tabIndex < 0;
+
+            /**
              * If reached natural end of the tab sequence => restart
-             * If current focused element is not inside modal => focus modal
+             * If current focused element is not inside modal, or is inside
+             * but isn't one of the tracked focusable elements => focus modal
              */
             if (e.shiftKey) {
-                if (currentActiveElement === focusableElements[0] || !modal.contains(currentActiveElement)) {
+                if (currentActiveElement === focusableElements[0] || !modal.contains(currentActiveElement) || isUntrackedFocus) {
                     preventDefault(e);
                     focus(focusableElements[1]);
                 }
             } else {
-                if (currentActiveElement === focusableElements[1] || !modal.contains(currentActiveElement)) {
+                if (currentActiveElement === focusableElements[1] || !modal.contains(currentActiveElement) || isUntrackedFocus) {
                     preventDefault(e);
                     focus(focusableElements[0]);
                 }
