@@ -455,6 +455,18 @@ declare namespace CookieConsent {
         hideFromBots?: boolean
 
         /**
+         * Honor the browser's Global Privacy Control (`navigator.globalPrivacyControl`)
+         * signal: until an explicit consent decision is made (i.e. no valid cookie yet),
+         * treat it as an opt-out of every category not marked `readOnly`, and suppress
+         * the automatic `autoShow` of the consent modal. Does not set any cookie and
+         * does not fire `onFirstConsent`/`onConsent`/`onChange`. A previously saved
+         * consent decision always takes precedence over the GPC signal.
+         *
+         * @default false
+         */
+        respectGpc?: boolean
+
+        /**
          * Tweak some UI options.
          */
         guiOptions?: GuiOptions

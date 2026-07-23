@@ -23,6 +23,19 @@ export function setUserAgent(userAgent) {
 }
 
 /**
+ * Simulate (or clear) the browser's Global Privacy Control signal
+ * @param {boolean} [value]
+ */
+export function setGpcSignal(value) {
+    Object.defineProperty(global.navigator, 'globalPrivacyControl', {
+        get: function () {
+            return value;
+        },
+        configurable: true
+    });
+}
+
+/**
  * Simulate user click
  * @param {HTMLElement} el
  */

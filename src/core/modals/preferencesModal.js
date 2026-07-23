@@ -17,7 +17,8 @@ import {
     fireEvent,
     getSvgIcon,
     handleFocusTrap,
-    debug
+    debug,
+    isGpcOptOutActive
 } from '../../utils/general';
 
 import { guiManager } from '../../utils/gui-manager';
@@ -593,7 +594,7 @@ function createToggleLabel(label, value, sCurrentCategoryObject, isService, cate
         } else if (elContains(state._acceptedCategories, value)) {
             toggle.checked = true;
         }
-    } else if (sCurrentCategoryObject.readOnly || sCurrentCategoryObject.enabled) {
+    } else if (sCurrentCategoryObject.readOnly || (sCurrentCategoryObject.enabled && !isGpcOptOutActive())) {
         toggle.checked = true;
     }
 

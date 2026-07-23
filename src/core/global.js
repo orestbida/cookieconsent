@@ -109,6 +109,7 @@ export class GlobalState {
             autoClearCookies: true,
             manageScriptTags: true,
             hideFromBots: true,
+            respectGpc: false,
 
             cookie: {
                 name: COOKIE_NAME,
@@ -244,6 +245,12 @@ export class GlobalState {
             * (to avoid indexing its text content)
             */
             _botAgentDetected : false,
+
+            /**
+            * True when `respectGpc` is enabled and the browser
+            * sends the Global Privacy Control (GPC) signal
+            */
+            _gpcSignalDetected : false,
 
             /**
             * Save reference to the last focused element on the page

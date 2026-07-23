@@ -21,7 +21,8 @@ import {
     toggleDisableInteraction,
     fireEvent,
     getKeys,
-    deepCopy
+    deepCopy,
+    isGpcOptOutActive
 } from '../utils/general';
 
 import { manageExistingScripts, retrieveEnabledCategoriesAndServices } from '../utils/scripts';
@@ -667,7 +668,7 @@ export const run = async (userConfig) => {
 
         generateHtml(miniAPI);
 
-        if (_config.autoShow && !consentIsValid)
+        if (_config.autoShow && !consentIsValid && !isGpcOptOutActive())
             show(true);
         //{{END: GUI}}
 

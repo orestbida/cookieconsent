@@ -69,6 +69,7 @@ export const setConfig = (userConfig) => {
         revision,
         manageScriptTags,
         hideFromBots,
+        respectGpc,
     } = userConfig;
 
     if (mode === OPT_OUT_MODE)
@@ -101,6 +102,16 @@ export const setConfig = (userConfig) => {
     if (config.hideFromBots === true && nav)
         state._botAgentDetected = (nav.userAgent && /bot|crawl|spider|slurp|teoma/i.test(nav.userAgent)) || nav.webdriver;
 
+    if (typeof respectGpc === 'boolean')
+        config.respectGpc = respectGpc;
+
+    /**
+     * A GPC opt-out only matters until an explicit decision is
+     * made, at which point `state._invalidConsent` becomes false
+     * and `isGpcOptOutActive()` stops applying on its own.
+     */
+    state._gpcSignalDetected = config.respectGpc && !!nav && nav.globalPrivacyControl === true;
+
     if (isObject(userCookieConfig))
         config.cookie = {...cookie, ...userCookieConfig};
 
@@ -108,6 +119,7 @@ export const setConfig = (userConfig) => {
     debug('CookieConsent [CONFIG]: autoClearCookies:', config.autoClearCookies);
     debug('CookieConsent [CONFIG]: revision enabled:', state._revisionEnabled);
     debug('CookieConsent [CONFIG]: manageScriptTags:', config.manageScriptTags);
+    debug('CookieConsent [CONFIG]: gpc signal detected:', state._gpcSignalDetected);
 
     fetchCategoriesAndServices(allCategoryNames);
     retrieveScriptElements();

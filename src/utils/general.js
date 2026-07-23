@@ -596,6 +596,17 @@ export const resolveAcceptType = () => {
 };
 
 /**
+ * True when a Global Privacy Control opt-out signal must be enforced:
+ * the feature is enabled, the browser sent the signal, and there is
+ * no explicit consent decision (cookie) yet to override it.
+ * @returns {boolean}
+ */
+export const isGpcOptOutActive = () => {
+    const state = globalObj._state;
+    return state._gpcSignalDetected && state._invalidConsent;
+};
+
+/**
  * Note: getUserPreferences() depends on "acceptType"
  * @param {string[]} acceptedCategories
  */
