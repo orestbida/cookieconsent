@@ -532,10 +532,12 @@ function createToggleLabel(label, value, sCurrentCategoryObject, isService, cate
     if (isService) {
         addClass(toggleLabel, 'toggle-service');
         setAttribute(toggle, SCRIPT_TAG_SELECTOR, categoryName);
+        toggle.name = 'cc-' + categoryName + '-' + value;
 
         // Save reference to toggles to avoid using document.querySelector later on
         dom._serviceCheckboxInputs[categoryName][value] = toggle;
     } else {
+        toggle.name = 'cc-' + value;
         dom._categoryCheckboxInputs[value] = toggle;
     }
 

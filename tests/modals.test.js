@@ -26,6 +26,16 @@ describe("Consent Modal buttons test", () => {
         expect(pm).toBeInstanceOf(HTMLElement);
     })
 
+    it('All toggle checkboxes should have a unique name attribute', async () => {
+        await api.run(testConfig);
+
+        const names = Array.from(document.querySelectorAll('.section__toggle'))
+            .map(toggle => toggle.name);
+
+        expect(names.every(name => !!name)).toBe(true);
+        expect(new Set(names).size).toBe(names.length);
+    })
+
     it('Modal accept necessary btn onClick', async () => {
         await api.run(testConfig);
         fireClickEvent(globalObj._dom._cmAcceptNecessaryBtn);
