@@ -548,7 +548,7 @@ Mark the category as enabled by default.
 
 ### <span style="opacity: .6">[category]</span>.readOnly
 
-Treat the category as read-only/necessary (always enabled).
+Make the category non-toggleable.
 
 - **Type**: `boolean`
 - **Default**: `false`
