@@ -18,7 +18,8 @@ import {
     getSvgIcon,
     handleFocusTrap,
     debug,
-    isGpcOptOutActive
+    isGpcOptOutActive,
+    isCategoryAlwaysEnabled
 } from '../../utils/general';
 
 import { guiManager } from '../../utils/gui-manager';
@@ -590,11 +591,11 @@ function createToggleLabel(label, value, sCurrentCategoryObject, isService, cate
     if (!state._invalidConsent) {
         if (isService) {
             const enabledServices = state._acceptedServices[categoryName];
-            toggle.checked = sCurrentCategoryObject.readOnly || elContains(enabledServices, value);
+            toggle.checked = isCategoryAlwaysEnabled(sCurrentCategoryObject) || elContains(enabledServices, value);
         } else if (elContains(state._acceptedCategories, value)) {
             toggle.checked = true;
         }
-    } else if (sCurrentCategoryObject.readOnly || (sCurrentCategoryObject.enabled && !isGpcOptOutActive())) {
+    } else if (isCategoryAlwaysEnabled(sCurrentCategoryObject) || (sCurrentCategoryObject.enabled && !isGpcOptOutActive())) {
         toggle.checked = true;
     }
 

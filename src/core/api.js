@@ -22,7 +22,8 @@ import {
     fireEvent,
     getKeys,
     deepCopy,
-    isGpcOptOutActive
+    isGpcOptOutActive,
+    isCategoryAlwaysEnabled
 } from '../utils/general';
 
 import { manageExistingScripts, retrieveEnabledCategoriesAndServices } from '../utils/scripts';
@@ -306,15 +307,15 @@ const discardUnsavedPreferences = () => {
     const categoryEnabledByDefault = (category) => elContains(globalObj._state._defaultEnabledCategories, category);
 
     for (const category in categoryInputs) {
-        const isReadOnly = !!allDefinedCategories[category].readOnly;
+        const alwaysEnabled = isCategoryAlwaysEnabled(allDefinedCategories[category]);
 
-        categoryInputs[category].checked = isReadOnly || (consentIsValid
+        categoryInputs[category].checked = alwaysEnabled || (consentIsValid
             ? acceptedCategory(category)
             : categoryEnabledByDefault(category)
         );
 
         for (const service in serviceInputs[category]) {
-            serviceInputs[category][service].checked = isReadOnly || (consentIsValid
+            serviceInputs[category][service].checked = alwaysEnabled || (consentIsValid
                 ? acceptedService(service, category)
                 : categoryEnabledByDefault(category)
             );

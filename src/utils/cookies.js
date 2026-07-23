@@ -12,7 +12,8 @@ import {
     deepCopy,
     fireEvent,
     arrayDiff,
-    safeRun
+    safeRun,
+    isCategoryAlwaysEnabled
 } from './general';
 import { localStorageManager } from './localstorage';
 
@@ -33,7 +34,7 @@ const getCategoriesWithCookies = (isFirstConsent) => {
         const currentCategoryObject = state._allDefinedCategories[categoryName];
 
         return !!currentCategoryObject
-            && !currentCategoryObject.readOnly
+            && !isCategoryAlwaysEnabled(currentCategoryObject)
             && !!currentCategoryObject.autoClear;
     });
 };

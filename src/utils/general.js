@@ -158,6 +158,18 @@ export const deepCopy = (el) => {
 };
 
 /**
+ * True if category is readOnly and not explicitly disabled
+ * @param {import('../core/global').Category} category
+ */
+export const isCategoryAlwaysEnabled = (category) => !!category && !!category.readOnly && category.enabled !== false;
+
+/**
+ * True if category is readOnly and explicitly disabled (locked off)
+ * @param {import('../core/global').Category} category
+ */
+export const isCategoryLockedOff = (category) => !!category && !!category.readOnly && category.enabled === false;
+
+/**
  * Store categories and services' config. details
  * @param {string[]} allCategoryNames
  */
@@ -183,7 +195,7 @@ export const fetchCategoriesAndServices = (allCategoryNames) => {
         /**
          * Keep track of readOnly categories
          */
-        if (currCategory.readOnly) {
+        if (isCategoryAlwaysEnabled(currCategory)) {
             _readOnlyCategories.push(categoryName);
             _acceptedServices[categoryName] = serviceNames;
         }
@@ -304,7 +316,8 @@ export const resolveEnabledCategories = (categories, excludedCategories) => {
         _preferencesModalExists,
         _enabledServices,
         _defaultEnabledCategories,
-        _allDefinedServices
+        _allDefinedServices,
+        _allDefinedCategories
     } = globalObj._state;
 
     /**
@@ -312,8 +325,10 @@ export const resolveEnabledCategories = (categories, excludedCategories) => {
      */
     let enabledCategories = [];
 
+    const excludeLockedOff = (categoryName) => !isCategoryLockedOff(_allDefinedCategories[categoryName]);
+
     if (!categories) {
-        enabledCategories = [..._acceptedCategories, ..._defaultEnabledCategories];
+        enabledCategories = [..._acceptedCategories, ..._defaultEnabledCategories].filter(excludeLockedOff);
         //{{START: GUI}}
         if (_preferencesModalExists) {
             enabledCategories = retrieveCategoriesFromModal();
@@ -327,6 +342,9 @@ export const resolveEnabledCategories = (categories, excludedCategories) => {
                 ? _allCategoryNames
                 : [categories];
         }
+
+        // Locked off categories can never be turned on
+        enabledCategories = enabledCategories.filter(excludeLockedOff);
 
         /**
          * If there are services, turn them all on or off

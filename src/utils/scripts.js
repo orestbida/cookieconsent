@@ -1,5 +1,5 @@
 import { globalObj } from '../core/global';
-import { createNode, setAttribute, elContains, getAttribute, removeAttribute, isFunction, isGpcOptOutActive } from './general';
+import { createNode, setAttribute, elContains, getAttribute, removeAttribute, isFunction, isGpcOptOutActive, isCategoryAlwaysEnabled } from './general';
 import { SCRIPT_TAG_SELECTOR, OPT_OUT_MODE } from './constants';
 
 /**
@@ -196,7 +196,7 @@ export const retrieveEnabledCategoriesAndServices = () => {
     for (const categoryName of state._allCategoryNames) {
         const category = state._allDefinedCategories[categoryName];
 
-        if (category.readOnly || (category.enabled && !isGpcOptOutActive())) {
+        if (isCategoryAlwaysEnabled(category) || (category.enabled && !isGpcOptOutActive())) {
             state._defaultEnabledCategories.push(categoryName);
             const services = state._allDefinedServices[categoryName] || {};
 

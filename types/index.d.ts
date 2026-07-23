@@ -120,12 +120,15 @@ declare namespace CookieConsent {
          * If mode is set to `'opt-out'` and consent has not yet been expressed, the category
          * is automatically enabled (and scripts under this category will be executed).
          *
+         * Combined with `readOnly: true` and set to `false`, locks the category off instead of on.
+         *
          * @default false
          */
         enabled?: boolean
 
         /**
-         * Treat the category as necessary. The user won't be able to disable the category.
+         * Treat the category as necessary. The user won't be able to disable the category,
+         * unless `enabled: false` is also set, which locks it off instead.
          *
          * @default false
          */
