@@ -8,6 +8,15 @@ import { SCRIPT_TAG_SELECTOR, OPT_OUT_MODE } from './constants';
 const validMimeType = type => ['text/javascript', 'module'].includes(type);
 
 /**
+ * Resolve once the script's onload/onerror event fires
+ * @param {HTMLScriptElement} script
+ * @returns {Promise<void>}
+ */
+const waitForScriptLoad = (script) => new Promise((resolve) => {
+    script.onload = script.onerror = () => resolve();
+});
+
+/**
  * This function handles the loading/activation logic of the already
  * existing scripts based on the current accepted cookie categories
  *
@@ -61,62 +70,57 @@ export const manageExistingScripts = (defaultEnabledCategories) => {
     if (!globalObj._config.manageScriptTags)
         return;
 
-    const scripts = _allScriptTags;
     const acceptedCategories = defaultEnabledCategories
         || _savedCookieContent.categories
         || [];
 
     /**
-     * Load scripts (sequentially), using a recursive function
-     * which loops through the scripts array
-     * @param {import('../core/global').ScriptInfo[]} scripts scripts to load
-     * @param {number} index current script to load
+     * Load scripts sequentially: the next script only starts
+     * loading once the current one's onload/onerror event fires
      */
-    const loadScriptsHelper = (scripts, index) => {
-        if (index >= scripts.length)
-            return;
+    const loadScriptsSequentially = async () => {
+        for (const currScriptInfo of _allScriptTags) {
+            /**
+             * Skip script if it was already executed
+             */
+            if (currScriptInfo._executed)
+                continue;
 
-        const currScriptInfo = _allScriptTags[index];
+            const currScript = currScriptInfo._script;
+            const currScriptCategory = currScriptInfo._categoryName;
+            const currScriptService = currScriptInfo._serviceName;
+            const categoryAccepted = elContains(acceptedCategories, currScriptCategory);
+            const serviceAccepted = currScriptService
+                ? elContains(_acceptedServices[currScriptCategory], currScriptService)
+                : false;
 
-        /**
-         * Skip script if it was already executed
-         */
-        if (currScriptInfo._executed)
-            return loadScriptsHelper(scripts, index+1);
+            const categoryWasJustEnabled = () => !currScriptService
+                && !currScriptInfo._runOnDisable
+                && categoryAccepted;
 
-        const currScript = currScriptInfo._script;
-        const currScriptCategory = currScriptInfo._categoryName;
-        const currScriptService = currScriptInfo._serviceName;
-        const categoryAccepted = elContains(acceptedCategories, currScriptCategory);
-        const serviceAccepted = currScriptService
-            ? elContains(_acceptedServices[currScriptCategory], currScriptService)
-            : false;
+            const serviceWasJustEnabled = () => currScriptService
+                && !currScriptInfo._runOnDisable
+                && serviceAccepted;
 
-        const categoryWasJustEnabled = () => !currScriptService
-            && !currScriptInfo._runOnDisable
-            && categoryAccepted;
+            const categoryWasJustDisabled = () => !currScriptService
+                && currScriptInfo._runOnDisable
+                && !categoryAccepted
+                && elContains(_lastChangedCategoryNames, currScriptCategory);
 
-        const serviceWasJustEnabled = () => currScriptService
-            && !currScriptInfo._runOnDisable
-            && serviceAccepted;
+            const serviceWasJustDisabled = () => currScriptService
+                && currScriptInfo._runOnDisable
+                && !serviceAccepted
+                && elContains(_lastChangedServices[currScriptCategory] || [], currScriptService);
 
-        const categoryWasJustDisabled = () => !currScriptService
-            && currScriptInfo._runOnDisable
-            && !categoryAccepted
-            && elContains(_lastChangedCategoryNames, currScriptCategory);
+            const shouldRunScript =
+                categoryWasJustEnabled()
+                || categoryWasJustDisabled()
+                || serviceWasJustEnabled()
+                || serviceWasJustDisabled();
 
-        const serviceWasJustDisabled = () => currScriptService
-            && currScriptInfo._runOnDisable
-            && !serviceAccepted
-            && elContains(_lastChangedServices[currScriptCategory] || [], currScriptService);
+            if (!shouldRunScript)
+                continue;
 
-        const shouldRunScript =
-            categoryWasJustEnabled()
-            || categoryWasJustDisabled()
-            || serviceWasJustEnabled()
-            || serviceWasJustDisabled();
-
-        if (shouldRunScript) {
             currScriptInfo._executed = true;
             const dataType = getAttribute(currScript, 'type', true);
 
@@ -158,33 +162,21 @@ export const manageExistingScripts = (defaultEnabledCategories) => {
 
             const externalScript = !!src && (dataType ? validMimeType(dataType) : true);
 
-            // If script has valid "src" attribute
-            // try loading it sequentially
-            if (externalScript) {
-                // load script sequentially => the next script will not be loaded
-                // until the current's script onload event triggers
-                freshScript.onload = freshScript.onerror = () => {
-                    loadScriptsHelper(scripts, ++index);
-                };
-            }
+            // If script has a valid "src" attribute, wait for it to
+            // load/error out before moving on to the next script
+            const scriptLoaded = externalScript
+                ? waitForScriptLoad(freshScript)
+                : null;
 
             // Replace current "sleeping" script with the new "revived" one
             currScript.replaceWith(freshScript);
 
-            /**
-             * If we managed to get here and src is still set, it means that
-             * the script is loading/loaded sequentially so don't go any further
-             */
-            if (externalScript)
-                return;
+            if (scriptLoaded)
+                await scriptLoaded;
         }
-
-
-        // Go to next script right away
-        loadScriptsHelper(scripts, ++index);
     };
 
-    loadScriptsHelper(scripts, 0);
+    loadScriptsSequentially();
 };
 
 /**

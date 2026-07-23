@@ -58,6 +58,7 @@ describe("Script management", () => {
         expect(document.querySelector('script[data-category][src="https://example.com/b.js"]')).not.toBeNull();
 
         firstScript.onload();
+        await new Promise((resolve) => setTimeout(resolve));
 
         const secondScript = document.querySelector('script[src="https://example.com/b.js"]');
         expect(secondScript.hasAttribute('data-category')).toBe(false);
@@ -73,6 +74,7 @@ describe("Script management", () => {
 
         const firstScript = document.querySelector('script[src="https://example.com/a.js"]');
         firstScript.onerror();
+        await new Promise((resolve) => setTimeout(resolve));
 
         const secondScript = document.querySelector('script[src="https://example.com/b.js"]');
         expect(secondScript.hasAttribute('data-category')).toBe(false);
