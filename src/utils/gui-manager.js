@@ -1,5 +1,6 @@
 import { globalObj } from '../core/global';
-import { addClass, elContains, removeClass } from './general';
+import { addClass, removeClass } from './dom';
+import { elContains } from './collections';
 
 /**
  * @typedef {Object} Layout

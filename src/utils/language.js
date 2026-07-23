@@ -1,14 +1,23 @@
 import { globalObj } from '../core/global';
-import {
-    debug,
-    elContains,
-    fetchJson,
-    addClass,
-    removeClass,
-    isString,
-    isArray,
-    isFunction
-} from './general';
+import { debug } from './debug';
+import { elContains } from './collections';
+import { addClass, removeClass } from './dom';
+import { isString, isArray, isFunction } from './type-guards';
+
+/**
+ * Used to fetch external language files (.json)
+ * @param {string} url
+ * @returns {Promise<import('../core/global').Translation | boolean>}
+ */
+const fetchJson = async (url) => {
+    try {
+        const response = await fetch(url);
+        return await response.json();
+    } catch (e) {
+        console.error(e);
+        return false;
+    }
+};
 
 /**
  * Detect the available language. The language autodetection process prioritizes finding translations

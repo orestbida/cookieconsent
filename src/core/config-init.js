@@ -1,5 +1,9 @@
 import { globalObj } from './global';
-import { debug, getKeys, isObject, isString, retrieveScriptElements, fetchCategoriesAndServices } from '../utils/general';
+import { debug } from '../utils/debug';
+import { getKeys } from '../utils/collections';
+import { isObject, isString } from '../utils/type-guards';
+import { retrieveScriptElements } from '../utils/scripts';
+import { fetchCategoriesAndServices } from '../utils/category-service-logic';
 import { OPT_OUT_MODE } from '../utils/constants';
 import { resolveCurrentLanguageCode, setCurrentLanguageCode } from '../utils/language';
 

@@ -2,20 +2,49 @@ import { globalObj } from '../core/global';
 import { OPT_OUT_MODE, OPT_IN_MODE } from './constants';
 import { manageExistingScripts } from './scripts';
 
-import {
-    debug,
-    indexOf,
-    uuidv4,
-    getRemainingExpirationTimeMS,
-    getExpiresAfterDaysValue,
-    elContains,
-    deepCopy,
-    fireEvent,
-    arrayDiff,
-    safeRun,
-    isCategoryAlwaysEnabled
-} from './general';
+import { debug } from './debug';
+import { safeRun } from './safe-run';
+import { isFunction } from './type-guards';
+import { indexOf, elContains, deepCopy, arrayDiff } from './collections';
+import { fireEvent } from './events';
+import { isCategoryAlwaysEnabled } from './category-service-logic';
 import { localStorageManager } from './localstorage';
+
+/**
+ * Generate RFC4122-compliant UUIDs.
+ * https://stackoverflow.com/questions/105034/how-to-create-a-guid-uuid?page=1&tab=votes#tab-top
+ * @returns {string} unique uuid string
+ */
+export const uuidv4 = () => {
+    return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, (c) => {
+        return (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16);
+    });
+};
+
+/**
+ * Calculate the existing cookie's remaining time until expiration (in milliseconds)
+ */
+const getRemainingExpirationTimeMS = () => {
+    const lastTimestamp = globalObj._state._lastConsentTimestamp;
+
+    const elapsedTimeMilliseconds = lastTimestamp
+        ? new Date() - lastTimestamp
+        : 0;
+
+    return getExpiresAfterDaysValue()*86400000 - elapsedTimeMilliseconds;
+};
+
+/**
+ * Helper function to retrieve cookie duration
+ * @returns {number}
+ */
+const getExpiresAfterDaysValue = () => {
+    const expiresAfterDays = globalObj._config.cookie.expiresAfterDays;
+
+    return isFunction(expiresAfterDays)
+        ? expiresAfterDays(globalObj._state._acceptType)
+        : expiresAfterDays;
+};
 
 /**
  * @param {boolean} [isFirstConsent]

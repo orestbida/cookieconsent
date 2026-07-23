@@ -1,5 +1,6 @@
 import { globalObj } from '../global';
-import { createNode, addDataButtonListeners } from '../../utils/general';
+import { createNode } from '../../utils/dom';
+import { addDataButtonListeners } from '../../utils/data-buttons';
 import { createConsentModal } from './consentModal';
 import { createPreferencesModal } from './preferencesModal';
 import { DIV_TAG } from '../../utils/constants';

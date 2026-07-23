@@ -1,26 +1,12 @@
 import { globalObj } from '../global';
-import {
-    createNode,
-    addClass,
-    addClassPm,
-    setAttribute,
-    removeAttribute,
-    removeClass,
-    addEvent,
-    appendChild,
-    getKeys,
-    hasClass,
-    elContains,
-    getModalFocusableData,
-    isString,
-    isObject,
-    fireEvent,
-    getSvgIcon,
-    handleFocusTrap,
-    debug,
-    isGpcOptOutActive,
-    isCategoryAlwaysEnabled
-} from '../../utils/general';
+import { createNode, addClass, addClassPm, setAttribute, removeAttribute, removeClass, addEvent, appendChild, hasClass } from '../../utils/dom';
+import { getKeys, elContains } from '../../utils/collections';
+import { getModalFocusableData, handleFocusTrap } from '../../utils/focus-trap';
+import { isString, isObject } from '../../utils/type-guards';
+import { fireEvent } from '../../utils/events';
+import { getSvgIcon } from '../../utils/svg-icons';
+import { debug } from '../../utils/debug';
+import { isGpcOptOutActive, isCategoryAlwaysEnabled } from '../../utils/category-service-logic';
 
 import { guiManager } from '../../utils/gui-manager';
 import {
