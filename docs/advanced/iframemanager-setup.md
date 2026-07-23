@@ -25,7 +25,7 @@ im.run({
                 ...changedServices
             ];
 
-            CookieConsent.acceptService(servicesToAccept, 'analytics');
+            CookieConsent.setAcceptedServices(servicesToAccept, 'analytics');
         }
     },
 

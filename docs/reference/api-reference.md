@@ -156,7 +156,35 @@ Returns `true` if the specified category was accepted, otherwise `false`.
 
 ## acceptService
 
-Accepts or rejects services.
+Accepts one or multiple services under a category, without changing the state
+of the category's other services. To replace the whole selection (and reject
+anything not listed), use [`setAcceptedServices`](#setacceptedservices) instead.
+
+- **Type**
+
+    ```javascript
+    function(
+        services: string | string[],
+        category: string
+    ): void
+    ```
+- **Details**
+
+    Special value for the `services` argument:
+
+    - `'all'`: accept all services
+
+- **Examples**
+    ```javascript
+    CookieConsent.acceptService('all', 'analytics');   // accept all services (in the 'analytics' category)
+
+    CookieConsent.acceptService('service1', 'analytics');   // accept this service, others are left untouched
+    CookieConsent.acceptService(['service1', 'service2'], 'analytics');   // accept these 2 services, others are left untouched
+    ```
+
+## setAcceptedServices
+
+Sets the exact list of accepted services under a category, rejecting any service not included.
 
 - **Type**
 
@@ -175,11 +203,11 @@ Accepts or rejects services.
 
 - **Examples**
     ```javascript
-    CookieConsent.acceptService('all', 'analytics');   // accept all services (in the 'analytics' category)
-    CookieConsent.acceptService([], 'analytics');      // reject all services
+    CookieConsent.setAcceptedServices('all', 'analytics');   // accept all services (in the 'analytics' category)
+    CookieConsent.setAcceptedServices([], 'analytics');      // reject all services
 
-    CookieConsent.acceptService('service1', 'analytics');     // accept only this specific service (reject all the others)
-    CookieConsent.acceptService(['service1', 'service2'], 'analytics');   // accept only these 2 services (reject all the others)
+    CookieConsent.setAcceptedServices('service1', 'analytics');     // accept only this specific service (reject all the others)
+    CookieConsent.setAcceptedServices(['service1', 'service2'], 'analytics');   // accept only these 2 services (reject all the others)
     ```
 
 ## acceptedService

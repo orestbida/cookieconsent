@@ -23,7 +23,9 @@ import {
     getKeys,
     deepCopy,
     isGpcOptOutActive,
-    isCategoryAlwaysEnabled
+    isCategoryAlwaysEnabled,
+    resolveServiceNames,
+    unique
 } from '../utils/general';
 
 import { manageExistingScripts, retrieveEnabledCategoriesAndServices } from '../utils/scripts';
@@ -98,25 +100,50 @@ export const acceptedCategory = (category) => {
 };
 
 /**
- * Accept one or multiple services under a specific category
+ * @param {string} service
+ * @param {string} category
+ */
+const isValidServiceCall = (service, category) => {
+    const { _allCategoryNames, _allDefinedServices } = globalObj._state;
+
+    return !!service
+        && !!category
+        && isString(category)
+        && elContains(_allCategoryNames, category)
+        && getKeys(_allDefinedServices[category]).length > 0;
+};
+
+/**
+ * Accept one or multiple services under a specific category,
+ * without changing the state of the category's other services
  * @param {string|string[]} service
  * @param {string} category
  */
 export const acceptService = (service, category) => {
-    const { _allCategoryNames, _allDefinedServices,  } = globalObj._state;
-
-    if (
-        !service
-        || !category
-        || !isString(category)
-        || !elContains(_allCategoryNames, category)
-        || getKeys(_allDefinedServices[category]).length === 0
-    ) {
+    if (!isValidServiceCall(service, category))
         return false;
-    }
 
     //{{START: GUI}}
-    updateModalToggles(service, category);
+    const servicesToAdd = resolveServiceNames(service, category);
+    const currentlyEnabled = globalObj._state._acceptedServices[category] || [];
+    updateModalToggles(unique([...currentlyEnabled, ...servicesToAdd]), category);
+    //{{END: GUI}}
+
+    acceptCategory();
+};
+
+/**
+ * Set the exact list of accepted services under a specific category,
+ * rejecting any service not included (replaces the current selection)
+ * @param {string|string[]} service
+ * @param {string} category
+ */
+export const setAcceptedServices = (service, category) => {
+    if (!isValidServiceCall(service, category))
+        return false;
+
+    //{{START: GUI}}
+    updateModalToggles(resolveServiceNames(service, category), category);
     //{{END: GUI}}
 
     acceptCategory();

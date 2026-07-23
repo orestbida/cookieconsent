@@ -431,64 +431,51 @@ export const resolveEnabledServices = (relativeCategory) => {
 const dispatchPluginEvent = (eventName, data) => dispatchEvent(new CustomEvent(eventName, {detail: data}));
 
 /**
- * Update services state internally and tick/untick checkboxes
+ * Resolve the `service` argument (accepted by both `acceptService` and
+ * `setAcceptedServices`) into the list of valid service names it refers to
  * @param {string|string[]} service
  * @param {string} category
+ * @returns {string[]}
  */
-export const updateModalToggles = (service, category) => {
+export const resolveServiceNames = (service, category) => {
+    const allServiceNames = getKeys(globalObj._state._allDefinedServices[category]);
+
+    if (isString(service)) {
+        return service === 'all'
+            ? [...allServiceNames]
+            : allServiceNames.filter(name => name === service);
+    }
+
+    if (isArray(service))
+        return allServiceNames.filter(name => elContains(service, name));
+
+    return [];
+};
+
+/**
+ * Set the exact list of enabled services for a category (tick/untick
+ * checkboxes to match) and keep the category itself in sync
+ * @param {string[]} enabledServiceNames
+ * @param {string} category
+ */
+export const updateModalToggles = (enabledServiceNames, category) => {
     const state = globalObj._state;
-    const {
-        _allDefinedServices,
-        _enabledServices,
-        _preferencesModalExists
-    } = state;
+    const { _enabledServices, _preferencesModalExists } = state;
 
     const servicesInputs = globalObj._dom._serviceCheckboxInputs[category] || {};
     const categoryInput = globalObj._dom._categoryCheckboxInputs[category] || {};
-    const allServiceNames = getKeys(_allDefinedServices[category]);
 
-    // Clear previously enabled services
-    _enabledServices[category] = [];
+    _enabledServices[category] = [...enabledServiceNames];
 
-    if (isString(service)) {
-        if (service === 'all') {
-
-            // Enable all services
-            _enabledServices[category].push(...allServiceNames);
-
-            if (_preferencesModalExists) {
-                for (let serviceName in servicesInputs) {
-                    servicesInputs[serviceName].checked = true;
-                    dispatchInputChangeEvent(servicesInputs[serviceName]);
-                }
-            }
-
-        } else {
-
-            // Enable only one service (if valid) and disable all the others
-            if (elContains(allServiceNames, service))
-                _enabledServices[category].push(service);
-
-            if (_preferencesModalExists) {
-                for (let serviceName in servicesInputs) {
-                    servicesInputs[serviceName].checked = service === serviceName;
-                    dispatchInputChangeEvent(servicesInputs[serviceName]);
-                }
-            }
-        }
-    } else if (isArray(service)) {
-        for (let serviceName of allServiceNames) {
-            const validService = elContains(service, serviceName);
-            validService && _enabledServices[category].push(serviceName);
-
-            if (_preferencesModalExists) {
-                servicesInputs[serviceName].checked = validService;
-                dispatchInputChangeEvent(servicesInputs[serviceName]);
-            }
+    if (_preferencesModalExists) {
+        for (let serviceName in servicesInputs) {
+            const checked = elContains(enabledServiceNames, serviceName);
+            servicesInputs[serviceName].checked = checked;
+            dispatchInputChangeEvent(servicesInputs[serviceName]);
         }
     }
 
-    const uncheckCategory = _enabledServices[category].length === 0;
+    const uncheckCategory = enabledServiceNames.length === 0;
 
     /**
      * Remove/add the category from acceptedCategories

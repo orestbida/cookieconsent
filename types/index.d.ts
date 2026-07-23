@@ -604,11 +604,20 @@ declare namespace CookieConsent {
     function acceptCategory(categories: string | string[], excludedCategories?: string[]): void
 
     /**
-     * Accept/Reject services.
+     * Accept one or multiple services under a category, without
+     * changing the state of the category's other services.
      * @param services Services to accept
      * @param category Category where the service is defined
      */
     function acceptService(services: string | string[], category: string): void
+
+    /**
+     * Set the exact list of accepted services under a category,
+     * rejecting any service not included.
+     * @param services Services to accept ('all' or [] are also valid)
+     * @param category Category where the services are defined
+     */
+    function setAcceptedServices(services: string | string[], category: string): void
 
     /**
      * Returns true if category is accepted, otherwise false.

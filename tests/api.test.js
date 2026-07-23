@@ -263,7 +263,7 @@ describe("API tests", () => {
     })
 
     it('Should reject all services', () => {
-        api.acceptService([], 'analytics');
+        api.setAcceptedServices([], 'analytics');
         const numAcceptedServices = api.getUserPreferences().acceptedServices['analytics'].length;
         expect(numAcceptedServices).toBe(0);
     })
@@ -274,8 +274,8 @@ describe("API tests", () => {
         expect(numAcceptedServices).toBe(1);
     })
 
-    it('Accepting a non existing service should reject all services', async () => {
-        api.acceptService('does_not_exist', 'analytics');
+    it('Setting a non existing service should reject all services', async () => {
+        api.setAcceptedServices('does_not_exist', 'analytics');
         const numAcceptedServices = api.getUserPreferences().acceptedServices['analytics'].length;
         expect(numAcceptedServices).toBe(0);
     });
@@ -366,9 +366,29 @@ describe("API tests", () => {
         api.acceptService('service1', 'analytics');
         expect(api.validCookie('service1Cookie1')).toBe(true);
         expect(api.validCookie('service1Cookie2')).toBe(true);
-        api.acceptService([], 'analytics');
+        api.setAcceptedServices([], 'analytics');
         expect(api.validCookie('service1Cookie1')).toBe(false);
         expect(api.validCookie('service1Cookie2')).toBe(false);
+    })
+
+    it('acceptService should not affect the state of the category\'s other services', () => {
+        api.acceptService(['service1', 'service2'], 'analytics');
+        expect(api.acceptedService('service1', 'analytics')).toBe(true);
+        expect(api.acceptedService('service2', 'analytics')).toBe(true);
+
+        api.acceptService('service1', 'analytics');
+        expect(api.acceptedService('service1', 'analytics')).toBe(true);
+        expect(api.acceptedService('service2', 'analytics')).toBe(true);
+    })
+
+    it('setAcceptedServices should reject any service not included', () => {
+        api.setAcceptedServices(['service1', 'service2'], 'analytics');
+        expect(api.acceptedService('service1', 'analytics')).toBe(true);
+        expect(api.acceptedService('service2', 'analytics')).toBe(true);
+
+        api.setAcceptedServices('service1', 'analytics');
+        expect(api.acceptedService('service1', 'analytics')).toBe(true);
+        expect(api.acceptedService('service2', 'analytics')).toBe(false);
     })
 
     it('Should mark service as accepted regardless of callback/script', async () => {
@@ -391,7 +411,7 @@ describe("API tests", () => {
 
         api.acceptService('service2', 'analytics');
         expect(api.acceptedService('service2', 'analytics')).toBe(true);
-        api.acceptService([], 'analytics');
+        api.setAcceptedServices([], 'analytics');
         expect(api.acceptedService('service2', 'analytics')).toBe(false);
     })
 
@@ -414,11 +434,11 @@ describe("API tests", () => {
         testConfig.categories.analytics.services.service2.onReject = onReject;
         await api.run(testConfig);
 
-        api.acceptService([], 'analytics');
+        api.setAcceptedServices([], 'analytics');
         expect(onReject).toHaveBeenCalledTimes(0)
 
         api.acceptCategory('all');
-        api.acceptService([], 'analytics');
+        api.setAcceptedServices([], 'analytics');
         api.acceptCategory([]);
         expect(onReject).toHaveBeenCalledTimes(1)
     })
