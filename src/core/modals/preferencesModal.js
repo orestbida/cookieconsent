@@ -312,19 +312,17 @@ export const createPreferencesModal = (api, createMainContainer) => {
             /**
              * On button click handle the following :=> aria-expanded, aria-hidden and act class for current section
              */
-            ((accordion, section, btn) => {
-                addEvent(sTitle, CLICK_EVENT, () => {
-                    if (!hasClass(section, 'is-expanded')) {
-                        addClass(section, 'is-expanded');
-                        setAttribute(btn, 'aria-expanded', 'true');
-                        removeAttribute(accordion, ARIA_HIDDEN);
-                    } else {
-                        removeClass(section, 'is-expanded');
-                        setAttribute(btn, 'aria-expanded', 'false');
-                        setAttribute(accordion, ARIA_HIDDEN, 'true');
-                    }
-                });
-            })(sDescContainer, s, sTitle);
+            addEvent(sTitle, CLICK_EVENT, () => {
+                if (!hasClass(s, 'is-expanded')) {
+                    addClass(s, 'is-expanded');
+                    setAttribute(sTitle, 'aria-expanded', 'true');
+                    removeAttribute(sDescContainer, ARIA_HIDDEN);
+                } else {
+                    removeClass(s, 'is-expanded');
+                    setAttribute(sTitle, 'aria-expanded', 'false');
+                    setAttribute(sDescContainer, ARIA_HIDDEN, 'true');
+                }
+            });
 
 
             if (sCreateCookieTable) {
@@ -542,41 +540,36 @@ function createToggleLabel(label, value, sCurrentCategoryObject, isService, cate
     }
 
     if (!isService) {
-        ((value)=> {
-            addEvent(toggle, CLICK_EVENT, () => {
-                const categoryServicesToggles = dom._serviceCheckboxInputs[value];
-                const checked = toggle.checked;
-                state._enabledServices[value] = [];
+        addEvent(toggle, CLICK_EVENT, () => {
+            const categoryServicesToggles = dom._serviceCheckboxInputs[value];
+            const checked = toggle.checked;
+            state._enabledServices[value] = [];
 
-                /**
-                 * Enable/disable all services
-                 */
-                for (let serviceName in categoryServicesToggles) {
-                    categoryServicesToggles[serviceName].checked = checked;
-                    checked && state._enabledServices[value].push(serviceName);
-                }
-            });
-        })(value);
+            /**
+             * Enable/disable all services
+             */
+            for (let serviceName in categoryServicesToggles) {
+                categoryServicesToggles[serviceName].checked = checked;
+                checked && state._enabledServices[value].push(serviceName);
+            }
+        });
     } else {
-        ((categoryName) => {
-            addEvent(toggle, 'change', () => {
-                const categoryServicesToggles = dom._serviceCheckboxInputs[categoryName];
-                const categoryToggle = dom._categoryCheckboxInputs[categoryName];
+        addEvent(toggle, 'change', () => {
+            const categoryServicesToggles = dom._serviceCheckboxInputs[categoryName];
+            const categoryToggle = dom._categoryCheckboxInputs[categoryName];
 
-                state._enabledServices[categoryName] = [];
+            state._enabledServices[categoryName] = [];
 
-                for (let serviceName in categoryServicesToggles) {
-                    const serviceInput = categoryServicesToggles[serviceName];
+            for (let serviceName in categoryServicesToggles) {
+                const serviceInput = categoryServicesToggles[serviceName];
 
-                    if (serviceInput.checked) {
-                        state._enabledServices[categoryName].push(serviceInput.value);
-                    }
+                if (serviceInput.checked) {
+                    state._enabledServices[categoryName].push(serviceInput.value);
                 }
+            }
 
-                categoryToggle.checked = state._enabledServices[categoryName].length > 0;
-            });
-        })(categoryName);
-
+            categoryToggle.checked = state._enabledServices[categoryName].length > 0;
+        });
     }
 
     toggle.value = value;
