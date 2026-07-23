@@ -442,4 +442,98 @@ describe("API tests", () => {
         api.acceptCategory([]);
         expect(onReject).toHaveBeenCalledTimes(1)
     })
+
+    it('Should do nothing when the consent modal is already visible', async () => {
+        api.reset(true);
+        testConfig.autoShow = false;
+        await api.run(testConfig);
+        api.show();
+        expect(htmlHasClass(consentModalClassToggle)).toBe(true);
+
+        // second call while already visible must be a no-op (early return)
+        api.show();
+        expect(htmlHasClass(consentModalClassToggle)).toBe(true);
+    })
+
+    it('Should not create/show the consent modal when it does not exist and createModal is not set', async () => {
+        api.acceptCategory();
+        api.reset();
+        await api.run(testConfig);
+
+        expect(document.querySelector('#cc-main .cm')).toBeNull();
+
+        api.show();
+        expect(document.querySelector('#cc-main .cm')).toBeNull();
+        expect(htmlHasClass(consentModalClassToggle)).toBe(false);
+    })
+
+    it('Should do nothing when the preferences modal is already visible', () => {
+        api.showPreferences();
+        expect(htmlHasClass(preferencesModalClassToggle)).toBe(true);
+
+        api.showPreferences();
+        expect(htmlHasClass(preferencesModalClassToggle)).toBe(true);
+    })
+
+    it('Should reject acceptService/setAcceptedServices calls for a category with no services', () => {
+        expect(api.acceptService('all', 'ads')).toBe(false);
+        expect(api.setAcceptedServices('all', 'ads')).toBe(false);
+    })
+
+    it('Should reject acceptService/setAcceptedServices calls for a non-existing category', () => {
+        expect(api.acceptService('all', 'does-not-exist')).toBe(false);
+        expect(api.setAcceptedServices('all', 'does-not-exist')).toBe(false);
+    })
+
+    it('Should set cookie data in "update" mode when there is no existing data yet', () => {
+        const result = api.setCookieData({ value: 'hello', mode: 'update' });
+        expect(result).toBe(true);
+        expect(api.getCookie('data')).toBe('hello');
+    })
+
+    it('Should replace (not merge) cookie data in "update" mode when both values are non-object primitives', () => {
+        api.setCookieData({ value: 'old value' });
+        expect(api.getCookie('data')).toBe('old value');
+
+        const result = api.setCookieData({ value: 'new value', mode: 'update' });
+        expect(result).toBe(true);
+        expect(api.getCookie('data')).toBe('new value');
+    })
+
+    describe('loadScript', () => {
+        const src = 'https://example.com/loadscript-test.js';
+
+        afterEach(() => {
+            document.querySelector(`script[src="${src}"]`)?.remove();
+        })
+
+        it('Should resolve true immediately if a script with the same src already exists', async () => {
+            const existing = document.createElement('script');
+            existing.src = src;
+            document.head.appendChild(existing);
+
+            await expect(api.loadScript(src)).resolves.toBe(true);
+        })
+
+        it('Should append the script, apply custom attributes, and resolve true on load', async () => {
+            const promise = api.loadScript(src, { id: 'my-script', 'data-test': 'x' });
+
+            const script = document.querySelector(`script[src="${src}"]`);
+            expect(script).not.toBeNull();
+            expect(script.id).toBe('my-script');
+            expect(script.getAttribute('data-test')).toBe('x');
+
+            script.onload();
+            await expect(promise).resolves.toBe(true);
+        })
+
+        it('Should remove the script and resolve false on error', async () => {
+            const promise = api.loadScript(src);
+            const script = document.querySelector(`script[src="${src}"]`);
+
+            script.onerror();
+            await expect(promise).resolves.toBe(false);
+            expect(document.querySelector(`script[src="${src}"]`)).toBeNull();
+        })
+    })
 })

@@ -27,6 +27,19 @@ describe("Modal generation orchestration (modals/index.js)", () => {
         testConfig.lazyHtmlGeneration = false;
     })
 
+    it('Should create the preferences modal on-demand the first time showPreferences() is called', async () => {
+        testConfig.lazyHtmlGeneration = true;
+        await api.run(testConfig);
+        expect(globalObj._state._preferencesModalExists).toBe(false);
+
+        api.showPreferences();
+
+        expect(globalObj._state._preferencesModalExists).toBe(true);
+        expect(document.querySelector('.pm')).not.toBeNull();
+
+        testConfig.lazyHtmlGeneration = false;
+    })
+
     it('Should create the preferences modal eagerly when lazyHtmlGeneration=false', async () => {
         testConfig.lazyHtmlGeneration = false;
         await api.run(testConfig);

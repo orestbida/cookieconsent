@@ -34,6 +34,20 @@ describe("Check modals' html generation under different settings", () => {
         expect(api.validConsent()).toBe(false);
     })
 
+    it('Revision mismatch against a previously accepted (valid) consent should invalidate it', async () => {
+        testConfig.revision = 1;
+        await api.run(testConfig);
+        api.acceptCategory('all');
+        expect(api.validConsent()).toBe(true);
+
+        // keep the cookie, only reset in-memory state, then re-run with a different revision
+        api.reset();
+        testConfig.revision = 2;
+        await api.run(testConfig);
+
+        expect(api.validConsent()).toBe(false);
+    })
+
     it('Consent modal should not appear if autoShow=false', async () => {
         api.eraseCookies('cc_cookie');
         testConfig.autoShow = false;
