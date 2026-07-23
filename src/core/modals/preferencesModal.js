@@ -1,5 +1,5 @@
 import { globalObj } from '../global';
-import { createNode, addClass, addClassPm, setAttribute, removeAttribute, removeClass, addEvent, appendChild, hasClass } from '../../utils/dom';
+import { createNode, addClass, addClassPm, setAttribute, removeAttribute, removeClass, addEvent, appendChild, hasClass, getOrCreateNode } from '../../utils/dom';
 import { getKeys, elContains } from '../../utils/collections';
 import { getModalFocusableData, handleFocusTrap } from '../../utils/focus-trap';
 import { isString, isObject } from '../../utils/type-guards';
@@ -407,47 +407,44 @@ export const createPreferencesModal = (api, createMainContainer) => {
     });
 
     if (acceptAllBtnData) {
-        if (!dom._pmAcceptAllBtn) {
-            dom._pmAcceptAllBtn = createNode(BUTTON_TAG);
-            addClassPm(dom._pmAcceptAllBtn, 'btn');
-            setAttribute(dom._pmAcceptAllBtn, DATA_ROLE, 'all');
-            appendChild(_pmBtnGroup1, dom._pmAcceptAllBtn);
-            addEvent(dom._pmAcceptAllBtn, CLICK_EVENT, () =>
+        const acceptAllBtn = getOrCreateNode(() => dom._pmAcceptAllBtn, (el) => dom._pmAcceptAllBtn = el, BUTTON_TAG, (el) => {
+            addClassPm(el, 'btn');
+            setAttribute(el, DATA_ROLE, 'all');
+            appendChild(_pmBtnGroup1, el);
+            addEvent(el, CLICK_EVENT, () =>
                 acceptHelper('all')
             );
-        }
+        });
 
-        dom._pmAcceptAllBtn.innerHTML = acceptAllBtnData;
+        acceptAllBtn.innerHTML = acceptAllBtnData;
     }
 
     if (acceptNecessaryBtnData) {
-        if (!dom._pmAcceptNecessaryBtn) {
-            dom._pmAcceptNecessaryBtn = createNode(BUTTON_TAG);
-            addClassPm(dom._pmAcceptNecessaryBtn, 'btn');
-            setAttribute(dom._pmAcceptNecessaryBtn, DATA_ROLE, 'necessary');
-            appendChild(_pmBtnGroup1, dom._pmAcceptNecessaryBtn);
-            addEvent(dom._pmAcceptNecessaryBtn, CLICK_EVENT, () =>
+        const acceptNecessaryBtn = getOrCreateNode(() => dom._pmAcceptNecessaryBtn, (el) => dom._pmAcceptNecessaryBtn = el, BUTTON_TAG, (el) => {
+            addClassPm(el, 'btn');
+            setAttribute(el, DATA_ROLE, 'necessary');
+            appendChild(_pmBtnGroup1, el);
+            addEvent(el, CLICK_EVENT, () =>
                 acceptHelper([])
             );
-        }
+        });
 
-        dom._pmAcceptNecessaryBtn.innerHTML = acceptNecessaryBtnData;
+        acceptNecessaryBtn.innerHTML = acceptNecessaryBtnData;
     }
 
     if (savePreferencesBtnData) {
-        if (!dom._pmSavePreferencesBtn) {
-            dom._pmSavePreferencesBtn = createNode(BUTTON_TAG);
-            addClassPm(dom._pmSavePreferencesBtn, 'btn');
-            addClassPm(dom._pmSavePreferencesBtn, 'btn--secondary');
-            setAttribute(dom._pmSavePreferencesBtn, DATA_ROLE, 'save');
-            appendChild(_pmBtnGroup2, dom._pmSavePreferencesBtn);
+        const savePreferencesBtn = getOrCreateNode(() => dom._pmSavePreferencesBtn, (el) => dom._pmSavePreferencesBtn = el, BUTTON_TAG, (el) => {
+            addClassPm(el, 'btn');
+            addClassPm(el, 'btn--secondary');
+            setAttribute(el, DATA_ROLE, 'save');
+            appendChild(_pmBtnGroup2, el);
 
-            addEvent(dom._pmSavePreferencesBtn, CLICK_EVENT, () =>
+            addEvent(el, CLICK_EVENT, () =>
                 acceptHelper()
             );
-        }
+        });
 
-        dom._pmSavePreferencesBtn.innerHTML = savePreferencesBtnData;
+        savePreferencesBtn.innerHTML = savePreferencesBtnData;
     }
 
     if (dom._pmNewBody) {

@@ -33,6 +33,35 @@ export const createNode = (type) => {
 };
 
 /**
+ * Idempotent create-once helper: modals are re-created every time
+ * `run()`/`setLanguage()` regenerates the html, so most nodes are cached
+ * on `dom` and only created (+ wired up via `setup`) the first time.
+ *
+ * `getEl`/`setEl` must use plain static `dom._prop` access rather than a
+ * computed/string key: production builds mangle `_`-prefixed property names
+ * (see `mangle.properties` in rollup-full.config.mjs), and that mangling
+ * only rewrites literal `.prop` access it can see at build time - a string
+ * key passed at runtime would silently point at an unmangled, disconnected
+ * property instead.
+ * @param {() => HTMLElement} getEl
+ * @param {(el: HTMLElement) => void} setEl
+ * @param {keyof HTMLElementTagNameMap} type
+ * @param {(el: HTMLElement) => void} [setup]
+ * @returns {HTMLElement}
+ */
+export const getOrCreateNode = (getEl, setEl, type, setup) => {
+    let el = getEl();
+
+    if (!el) {
+        el = createNode(type);
+        setEl(el);
+        setup && setup(el);
+    }
+
+    return el;
+};
+
+/**
  * @param {HTMLElement} el
  * @param {string} attribute
  * @param {string} value

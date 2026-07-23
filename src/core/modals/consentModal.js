@@ -1,7 +1,7 @@
 import { globalObj } from '../global';
 
 import { debug } from '../../utils/debug';
-import { createNode, addClass, addClassCm, setAttribute, appendChild, addEvent } from '../../utils/dom';
+import { createNode, addClass, addClassCm, setAttribute, appendChild, addEvent, getOrCreateNode } from '../../utils/dom';
 import { getModalFocusableData, handleFocusTrap } from '../../utils/focus-trap';
 import { addDataButtonListeners } from '../../utils/data-buttons';
 import { getSvgIcon } from '../../utils/svg-icons';
@@ -107,19 +107,18 @@ export const createConsentModal = (api, createMainContainer) => {
          * Close icon-button (visible only in the 'box' layout)
          */
         if (consentModalTitleValue && closeIconLabelData && isBoxLayout) {
-            if (!dom._cmCloseIconBtn) {
-                dom._cmCloseIconBtn = createNode(BUTTON_TAG);
-                dom._cmCloseIconBtn.innerHTML = getSvgIcon();
-                addClassCm(dom._cmCloseIconBtn, 'btn');
-                addClassCm(dom._cmCloseIconBtn, 'btn--close');
-                addEvent(dom._cmCloseIconBtn, CLICK_EVENT, () => {
+            const closeIconBtn = getOrCreateNode(() => dom._cmCloseIconBtn, (el) => dom._cmCloseIconBtn = el, BUTTON_TAG, (el) => {
+                el.innerHTML = getSvgIcon();
+                addClassCm(el, 'btn');
+                addClassCm(el, 'btn--close');
+                addEvent(el, CLICK_EVENT, () => {
                     debug('CookieConsent [ACCEPT]: necessary');
                     acceptAndHide([]);
                 });
-                appendChild(dom._cmBody, dom._cmCloseIconBtn);
-            }
+                appendChild(dom._cmBody, el);
+            });
 
-            setAttribute(dom._cmCloseIconBtn, 'aria-label', closeIconLabelData);
+            setAttribute(closeIconBtn, 'aria-label', closeIconLabelData);
         }
 
         appendChild(dom._cmBody, dom._cmTexts);
@@ -135,13 +134,12 @@ export const createConsentModal = (api, createMainContainer) => {
     }
 
     if (consentModalTitleValue) {
-        if (!dom._cmTitle) {
-            dom._cmTitle = createNode('h2');
-            dom._cmTitle.className = dom._cmTitle.id = 'cm__title';
-            appendChild(dom._cmTexts, dom._cmTitle);
-        }
+        const title = getOrCreateNode(() => dom._cmTitle, (el) => dom._cmTitle = el, 'h2', (el) => {
+            el.className = el.id = 'cm__title';
+            appendChild(dom._cmTexts, el);
+        });
 
-        dom._cmTitle.innerHTML = consentModalTitleValue;
+        title.innerHTML = consentModalTitleValue;
     }
 
     let description = consentModalData.description;
@@ -156,64 +154,60 @@ export const createConsentModal = (api, createMainContainer) => {
             );
         }
 
-        if (!dom._cmDescription) {
-            dom._cmDescription = createNode('p');
-            dom._cmDescription.className = dom._cmDescription.id = 'cm__desc';
-            appendChild(dom._cmTexts, dom._cmDescription);
-        }
+        const descriptionEl = getOrCreateNode(() => dom._cmDescription, (el) => dom._cmDescription = el, 'p', (el) => {
+            el.className = el.id = 'cm__desc';
+            appendChild(dom._cmTexts, el);
+        });
 
-        dom._cmDescription.innerHTML = description;
+        descriptionEl.innerHTML = description;
     }
 
     if (acceptAllBtnData) {
-        if (!dom._cmAcceptAllBtn) {
-            dom._cmAcceptAllBtn = createNode(BUTTON_TAG);
-            appendChild(dom._cmAcceptAllBtn, createFocusSpan());
-            addClassCm(dom._cmAcceptAllBtn, 'btn');
-            setAttribute(dom._cmAcceptAllBtn, DATA_ROLE, 'all');
+        const acceptAllBtn = getOrCreateNode(() => dom._cmAcceptAllBtn, (el) => dom._cmAcceptAllBtn = el, BUTTON_TAG, (el) => {
+            appendChild(el, createFocusSpan());
+            addClassCm(el, 'btn');
+            setAttribute(el, DATA_ROLE, 'all');
 
-            addEvent(dom._cmAcceptAllBtn, CLICK_EVENT, () => {
+            addEvent(el, CLICK_EVENT, () => {
                 debug('CookieConsent [ACCEPT]: all');
                 acceptAndHide('all');
             });
-        }
+        });
 
-        dom._cmAcceptAllBtn.firstElementChild.innerHTML = acceptAllBtnData;
+        acceptAllBtn.firstElementChild.innerHTML = acceptAllBtnData;
     }
 
     if (acceptNecessaryBtnData) {
-        if (!dom._cmAcceptNecessaryBtn) {
-            dom._cmAcceptNecessaryBtn = createNode(BUTTON_TAG);
-            appendChild(dom._cmAcceptNecessaryBtn, createFocusSpan());
-            addClassCm(dom._cmAcceptNecessaryBtn, 'btn');
-            setAttribute(dom._cmAcceptNecessaryBtn, DATA_ROLE, 'necessary');
+        const acceptNecessaryBtn = getOrCreateNode(() => dom._cmAcceptNecessaryBtn, (el) => dom._cmAcceptNecessaryBtn = el, BUTTON_TAG, (el) => {
+            appendChild(el, createFocusSpan());
+            addClassCm(el, 'btn');
+            setAttribute(el, DATA_ROLE, 'necessary');
 
-            addEvent(dom._cmAcceptNecessaryBtn, CLICK_EVENT, () => {
+            addEvent(el, CLICK_EVENT, () => {
                 debug('CookieConsent [ACCEPT]: necessary');
                 acceptAndHide([]);
             });
-        }
+        });
 
-        dom._cmAcceptNecessaryBtn.firstElementChild.innerHTML = acceptNecessaryBtnData;
+        acceptNecessaryBtn.firstElementChild.innerHTML = acceptNecessaryBtnData;
     }
 
     if (showPreferencesBtnData) {
-        if (!dom._cmShowPreferencesBtn) {
-            dom._cmShowPreferencesBtn = createNode(BUTTON_TAG);
-            appendChild(dom._cmShowPreferencesBtn, createFocusSpan());
-            addClassCm(dom._cmShowPreferencesBtn, 'btn');
-            addClassCm(dom._cmShowPreferencesBtn, 'btn--secondary');
-            setAttribute(dom._cmShowPreferencesBtn, DATA_ROLE, 'show');
-            setAttribute(dom._cmShowPreferencesBtn, 'aria-haspopup', 'dialog');
+        const showPreferencesBtn = getOrCreateNode(() => dom._cmShowPreferencesBtn, (el) => dom._cmShowPreferencesBtn = el, BUTTON_TAG, (el) => {
+            appendChild(el, createFocusSpan());
+            addClassCm(el, 'btn');
+            addClassCm(el, 'btn--secondary');
+            setAttribute(el, DATA_ROLE, 'show');
+            setAttribute(el, 'aria-haspopup', 'dialog');
 
-            addEvent(dom._cmShowPreferencesBtn, 'mouseenter', () => {
+            addEvent(el, 'mouseenter', () => {
                 if (!state._preferencesModalExists)
                     createPreferencesModal(api, createMainContainer);
             });
-            addEvent(dom._cmShowPreferencesBtn, CLICK_EVENT, showPreferences);
-        }
+            addEvent(el, CLICK_EVENT, showPreferences);
+        });
 
-        dom._cmShowPreferencesBtn.firstElementChild.innerHTML = showPreferencesBtnData;
+        showPreferencesBtn.firstElementChild.innerHTML = showPreferencesBtnData;
     }
 
     if (!dom._cmBtnGroup) {
@@ -241,21 +235,20 @@ export const createConsentModal = (api, createMainContainer) => {
     }
 
     if (footerData) {
-        if (!dom._cmFooterLinksGroup) {
-            let _consentModalFooter = createNode(DIV_TAG);
-            let _consentModalFooterLinks = createNode(DIV_TAG);
-            dom._cmFooterLinksGroup = createNode(DIV_TAG);
+        const footerLinksGroup = getOrCreateNode(() => dom._cmFooterLinksGroup, (el) => dom._cmFooterLinksGroup = el, DIV_TAG, (el) => {
+            const footer = createNode(DIV_TAG);
+            const footerLinks = createNode(DIV_TAG);
 
-            addClassCm(_consentModalFooter, 'footer');
-            addClassCm(_consentModalFooterLinks, 'links');
-            addClassCm(dom._cmFooterLinksGroup, 'link-group');
+            addClassCm(footer, 'footer');
+            addClassCm(footerLinks, 'links');
+            addClassCm(el, 'link-group');
 
-            appendChild(_consentModalFooterLinks, dom._cmFooterLinksGroup);
-            appendChild(_consentModalFooter, _consentModalFooterLinks);
-            appendChild(dom._cm, _consentModalFooter);
-        }
+            appendChild(footerLinks, el);
+            appendChild(footer, footerLinks);
+            appendChild(dom._cm, footer);
+        });
 
-        dom._cmFooterLinksGroup.innerHTML = footerData;
+        footerLinksGroup.innerHTML = footerData;
     }
 
     guiManager(0);
