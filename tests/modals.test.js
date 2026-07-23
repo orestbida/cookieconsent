@@ -105,4 +105,34 @@ describe('Preferences Modal buttons test', () => {
         fireClickEvent(globalObj._dom._pmCloseBtn);
         expect(htmlHasClass('show--preferences')).toBe(false)
     })
+
+    const withPreferencesModal = (preferencesModal) => ({
+        ...testConfig,
+        language: {
+            ...testConfig.language,
+            translations: {
+                ...testConfig.language.translations,
+                en: {
+                    ...testConfig.language.translations.en,
+                    preferencesModal
+                }
+            }
+        }
+    });
+
+    it('Preferences close button should fall back to the title when closeIconLabel is missing', async () => {
+        api.reset(true);
+        const { closeIconLabel, ...pmWithoutCloseLabel } = testConfig.language.translations.en.preferencesModal;
+        await api.run(withPreferencesModal(pmWithoutCloseLabel));
+
+        expect(globalObj._dom._pmCloseBtn.getAttribute('aria-label')).toBe(pmWithoutCloseLabel.title);
+    })
+
+    it('Preferences close button should never have an empty/missing aria-label', async () => {
+        api.reset(true);
+        const { closeIconLabel, title, ...pmWithoutLabels } = testConfig.language.translations.en.preferencesModal;
+        await api.run(withPreferencesModal(pmWithoutLabels));
+
+        expect(globalObj._dom._pmCloseBtn.getAttribute('aria-label')).toBeTruthy();
+    })
 })

@@ -113,7 +113,7 @@ export const createPreferencesModal = (api, createMainContainer) => {
 
         dom._pmCloseBtn = createNode(BUTTON_TAG);
         addClassPm(dom._pmCloseBtn, 'close-btn');
-        setAttribute(dom._pmCloseBtn, 'aria-label', modalData.closeIconLabel || '');
+        setAttribute(dom._pmCloseBtn, 'aria-label', closeIconLabelData || titleData || 'Close');
         addEvent(dom._pmCloseBtn, CLICK_EVENT, hidePreferences);
 
         dom._pmFocusSpan = createNode('span');
@@ -156,7 +156,7 @@ export const createPreferencesModal = (api, createMainContainer) => {
 
     if (titleData) {
         dom._pmTitle.innerHTML = titleData;
-        closeIconLabelData && setAttribute(dom._pmCloseBtn, 'aria-label', closeIconLabelData);
+        setAttribute(dom._pmCloseBtn, 'aria-label', closeIconLabelData || titleData);
     }
 
     let sectionToggleContainer;
