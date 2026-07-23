@@ -1,3 +1,8 @@
+/**
+ * @jest-environment jsdom
+ * @jest-environment-options {"url": "http://example.com"}
+ */
+
 import * as CookieConsent from "../src/index"
 import testConfig from "./config/full-config";
 import { setCookie } from "./config/mocks-utils";
@@ -6,7 +11,8 @@ import {
     eraseCookiesHelper,
     getAllCookies,
     getSingleCookie,
-    parseCookie
+    parseCookie,
+    setCookie as setPluginCookie
 }from '../src/utils/cookies';
 
 /**
@@ -70,4 +76,94 @@ describe("Cookie should be created successfully", () => {
         expect(allCookies.length).toBe(2);
         expect(allCookies).toContain('service1Cookie1', 'service1Cookie2');
     })
+})
+
+/**
+ * Intercepts raw strings written to document.cookie.
+ * @returns {{ written: string[], restore: () => void }}
+ */
+const spyOnCookieSetter = () => {
+    const written = [];
+    const proto = Object.getPrototypeOf(document); // Document.prototype
+    const descriptor = Object.getOwnPropertyDescriptor(proto, 'cookie');
+    Object.defineProperty(proto, 'cookie', {
+        set(val) { written.push(val); descriptor.set.call(this, val); },
+        get() { return descriptor.get.call(this); },
+        configurable: true
+    });
+    return {
+        written,
+        restore() { Object.defineProperty(proto, 'cookie', descriptor); }
+    };
+};
+
+describe("Cookie domain attribute", () => {
+    afterEach(() => {
+        CookieConsent.reset(true);
+    });
+
+    it('Should include "; Domain=" when domain is set to a non-empty string', async () => {
+        await CookieConsent.run({
+            ...testConfig,
+            cookie: { ...testConfig.cookie, domain: 'example.com' }
+        });
+
+        const spy = spyOnCookieSetter();
+        try {
+            setPluginCookie();
+            expect(spy.written.some(s => s.includes('; Domain=example.com'))).toBe(true);
+        } finally {
+            spy.restore();
+        }
+    });
+
+    it('Should omit "; Domain=" when domain is empty string', async () => {
+        await CookieConsent.run({
+            ...testConfig,
+            cookie: { ...testConfig.cookie, domain: '' }
+        });
+
+        const spy = spyOnCookieSetter();
+        try {
+            setPluginCookie();
+            expect(spy.written.some(s => s.includes('; Domain='))).toBe(false);
+        } finally {
+            spy.restore();
+        }
+    });
+
+    it('Should omit "; Domain=" when domain is null', async () => {
+        await CookieConsent.run({
+            ...testConfig,
+            cookie: { ...testConfig.cookie, domain: null }
+        });
+
+        const spy = spyOnCookieSetter();
+        try {
+            setPluginCookie();
+            expect(spy.written.some(s => s.includes('; Domain='))).toBe(false);
+        } finally {
+            spy.restore();
+        }
+    });
+
+    it('Should not throw when erasing cookies and domain is empty string', async () => {
+        await CookieConsent.run({
+            ...testConfig,
+            cookie: { ...testConfig.cookie, domain: '' }
+        });
+        setCookie('erase_test', 'val');
+        expect(() => eraseCookiesHelper(['erase_test'])).not.toThrow();
+        expect(getSingleCookie('erase_test')).toBeFalsy();
+    });
+
+    it('Should not throw when erasing cookies and domain is null', async () => {
+        await CookieConsent.run({
+            ...testConfig,
+            cookie: { ...testConfig.cookie, domain: null }
+        });
+        setCookie('erase_test_null', 'val');
+        expect(() => eraseCookiesHelper(['erase_test_null'])).not.toThrow();
+        expect(getSingleCookie('erase_test_null')).toBeFalsy();
+    });
 })

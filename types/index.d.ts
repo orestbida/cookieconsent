@@ -202,9 +202,13 @@ declare namespace CookieConsent {
         /**
          * Cookie domain.
          *
+         * Set to a falsy value (e.g. `''` or `null`) to omit the
+         * `;Domain=...` attribute entirely, so the cookie is scoped
+         * to the exact hostname and is NOT shared with subdomains.
+         *
          * @default location.hostname
          */
-        domain?: string
+        domain?: string | null | false
 
         /**
          * Cookie path.

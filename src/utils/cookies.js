@@ -262,9 +262,12 @@ export const setCookie = (useRemainingExpirationTime) => {
 
     /**
      * Set "domain" only if hostname contains a dot (e.g domain.com)
-     * to ensure that cookie works with 'localhost'
+     * to ensure that cookie works with 'localhost'.
+     * Skip if domain is explicitly set to a falsy value to prevent
+     * the ';Domain=...' attribute from being added (cookie will then
+     * only be available on the exact hostname, not subdomains).
      */
-    if (elContains(hostname, '.'))
+    if (elContains(hostname, '.') && domain)
         cookieStr += '; Domain=' + domain;
 
     if (secure && protocol === 'https:')
@@ -307,7 +310,7 @@ export const eraseCookiesHelper = (cookies, customPath, customDomain) => {
 
     const domain = customDomain || globalObj._config.cookie.domain;
     const path = customPath || globalObj._config.cookie.path;
-    const isWwwSubdomain = domain.slice(0, 4) === 'www.';
+    const isWwwSubdomain = !!domain && domain.slice(0, 4) === 'www.';
     const mainDomain = isWwwSubdomain && domain.substring(4);
 
     /**
