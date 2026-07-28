@@ -306,18 +306,19 @@ export class GlobalState {
             _allScriptTags: []
         };
 
-        //{{START: GUI}}
-
         /**
-         * Pointers to main dom elements
+         * Pointers to main dom elements.
+         *
+         * Not inside a `{{GUI}}` block: the core build strips those, but
+         * `config-init.js` and `utils/general.js` write `_dom._document` and
+         * `_dom._serviceCheckboxInputs[category]` unconditionally, so the
+         * object and these two maps must exist in both builds.
          * @type {DomElements}
          */
         this._dom = {
             _categoryCheckboxInputs: {},
             _serviceCheckboxInputs: {}
         };
-
-        //{{END: GUI}}
 
         /**
          * Callback functions
