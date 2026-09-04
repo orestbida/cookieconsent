@@ -42,6 +42,30 @@ describe("Check modals' html generation under different settings", () => {
         expect(htmlHasClass('show--consent')).toBe(false);
     })
 
+    it('Should not generate consent modal markup when autoShow=false and lazyHtmlGeneration=true', async () => {
+        const prevAutoShow = testConfig.autoShow;
+        const prevLazyHtmlGeneration = testConfig.lazyHtmlGeneration;
+
+        try {
+            api.eraseCookies('cc_cookie');
+            testConfig.autoShow = false;
+            testConfig.lazyHtmlGeneration = true;
+            await api.run(testConfig);
+
+            expect(api.validConsent()).toBe(false);
+            expect(htmlHasClass('show--consent')).toBe(false);
+            expect(document.querySelector('#cc-main .cm')).toBeNull();
+
+            api.show();
+
+            expect(document.querySelector('#cc-main .cm')).toBeInstanceOf(HTMLElement);
+            expect(htmlHasClass('show--consent')).toBe(true);
+        } finally {
+            testConfig.autoShow = prevAutoShow;
+            testConfig.lazyHtmlGeneration = prevLazyHtmlGeneration;
+        }
+    })
+
     it('Plugin should stop if bot is detected', async () => {
         setUserAgent(botUserAgent);
         testConfig.hideFromBots = true;
