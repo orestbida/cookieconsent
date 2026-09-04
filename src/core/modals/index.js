@@ -26,7 +26,7 @@ export const createMainContainer = () => {
 export const generateHtml = (api) => {
     addDataButtonListeners(null, api, createPreferencesModal, createMainContainer);
 
-    if (globalObj._state._invalidConsent)
+    if (globalObj._state._invalidConsent && !globalObj._config.lazyHtmlGeneration)
         createConsentModal(api, createMainContainer);
 
     if (!globalObj._config.lazyHtmlGeneration)

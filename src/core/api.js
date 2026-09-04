@@ -186,7 +186,7 @@ export const show = (createModal) => {
         return;
 
     if (!_state._consentModalExists) {
-        if (createModal) {
+        if (createModal || _state._invalidConsent) {
             createConsentModal(miniAPI, createMainContainer);
         } else {
             return;
