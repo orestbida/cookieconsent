@@ -714,7 +714,17 @@ export const focus = (el, toggleTabIndex) => {
      */
     toggleTabIndex && (el.tabIndex = -1);
 
-    el.focus();
+    // Internal modal elements can scroll the host page before the modal CSS loads.
+    if (el.closest && el.closest('#cc-main')) {
+        try {
+            el.focus({preventScroll: true});
+        } catch {
+            // Older browsers may not support focus options.
+            el.focus();
+        }
+    } else {
+        el.focus();
+    }
 
     /**
      * Remove the `tabindex` attribute so
