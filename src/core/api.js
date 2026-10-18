@@ -312,12 +312,21 @@ const discardUnsavedPreferences = () => {
             : categoryEnabledByDefault(category)
         );
 
+        /**
+         * Keep the enabled services draft in sync with the restored checkboxes
+         */
+        const enabledServices = [];
+
         for (const service in serviceInputs[category]) {
-            serviceInputs[category][service].checked = isReadOnly || (consentIsValid
+            const checked = serviceInputs[category][service].checked = isReadOnly || (consentIsValid
                 ? acceptedService(service, category)
                 : categoryEnabledByDefault(category)
             );
+
+            checked && enabledServices.push(service);
         }
+
+        globalObj._state._enabledServices[category] = enabledServices;
     }
 };
 
