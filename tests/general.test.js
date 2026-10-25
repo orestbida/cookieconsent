@@ -75,6 +75,104 @@ describe("Test add/remove/toggle classes", () => {
     })
 })
 
+describe('Modal focus trap', () => {
+
+    beforeEach(async () => {
+        CookieConsent.reset(true);
+        jest.useFakeTimers();
+        await CookieConsent.run({ ...testConfig, autoShow: false });
+        CookieConsent.showPreferences();
+        jest.advanceTimersByTime(100);
+    });
+
+    afterEach(() => {
+        CookieConsent.reset(true);
+        jest.runOnlyPendingTimers();
+        jest.useRealTimers();
+    });
+
+    it('Should wrap Shift+Tab from the initial focus target to the last control', () => {
+        expect(document.activeElement).toBe(globalObj._dom._pmDivTabindex);
+        const event = new KeyboardEvent('keydown', { key: 'Tab', shiftKey: true, bubbles: true, cancelable: true });
+
+        document.activeElement.dispatchEvent(event);
+
+        expect(event.defaultPrevented).toBe(true);
+        expect(document.activeElement).toBe(globalObj._state._pmFocusableElements[1]);
+    });
+
+    it.each([
+        ['backwards from the first control', true, 0, 1],
+        ['forwards from the last control', false, 1, 0]
+    ])('Should wrap %s', (description, shiftKey, start, end) => {
+        const controls = globalObj._state._pmFocusableElements;
+        controls[start].focus();
+        const event = new KeyboardEvent('keydown', { key: 'Tab', shiftKey, bubbles: true, cancelable: true });
+
+        document.activeElement.dispatchEvent(event);
+
+        expect(event.defaultPrevented).toBe(true);
+        expect(document.activeElement).toBe(controls[end]);
+    });
+
+    it.each([
+        ['backwards', true, 1],
+        ['forwards', false, 0]
+    ])('Should redirect focus from outside the preferences modal %s', (description, shiftKey, end) => {
+        globalObj._dom._cmAcceptAllBtn.focus();
+        const event = new KeyboardEvent('keydown', { key: 'Tab', shiftKey, bubbles: true, cancelable: true });
+
+        document.activeElement.dispatchEvent(event);
+
+        expect(event.defaultPrevented).toBe(true);
+        expect(document.activeElement).toBe(globalObj._state._pmFocusableElements[end]);
+    });
+
+    it('Should allow forward Tab from the initial focus target', () => {
+        const event = new KeyboardEvent('keydown', { key: 'Tab', bubbles: true, cancelable: true });
+
+        document.activeElement.dispatchEvent(event);
+
+        expect(event.defaultPrevented).toBe(false);
+        expect(document.activeElement).toBe(globalObj._dom._pmDivTabindex);
+    });
+
+    it('Should wrap Shift+Tab from the consent modal initial focus target', () => {
+        CookieConsent.hidePreferences();
+        CookieConsent.show();
+        jest.advanceTimersByTime(200);
+        expect(document.activeElement).toBe(globalObj._dom._cmDivTabindex);
+        const event = new KeyboardEvent('keydown', { key: 'Tab', shiftKey: true, bubbles: true, cancelable: true });
+
+        document.activeElement.dispatchEvent(event);
+
+        expect(event.defaultPrevented).toBe(true);
+        expect(document.activeElement).toBe(globalObj._state._cmFocusableElements[1]);
+    });
+
+    it('Should allow backward Tab from an interior control', () => {
+        const control = globalObj._dom._pmAcceptAllBtn;
+        expect(globalObj._state._pmFocusableElements).not.toContain(control);
+        control.focus();
+        const event = new KeyboardEvent('keydown', { key: 'Tab', shiftKey: true, bubbles: true, cancelable: true });
+
+        document.activeElement.dispatchEvent(event);
+
+        expect(event.defaultPrevented).toBe(false);
+        expect(document.activeElement).toBe(control);
+    });
+
+    it('Should not trap focus when the preferences modal is hidden', () => {
+        CookieConsent.hidePreferences();
+        globalObj._dom._pmDivTabindex.focus();
+        const event = new KeyboardEvent('keydown', { key: 'Tab', shiftKey: true, bubbles: true, cancelable: true });
+
+        document.activeElement.dispatchEvent(event);
+
+        expect(event.defaultPrevented).toBe(false);
+    });
+});
+
 describe("Array/Object tests", () => {
 
     const arr1 = [1];
