@@ -200,7 +200,8 @@ declare namespace CookieConsent {
         name?: string
 
         /**
-         * Cookie domain.
+         * Cookie domain. Set to an empty string to leave out
+         * the `Domain` attribute (cookie not shared with subdomains).
          *
          * @default location.hostname
          */

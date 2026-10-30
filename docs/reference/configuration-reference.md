@@ -160,6 +160,8 @@ Customize the plugin's cookie.
 
 Current domain/subdomain's name, retrieved automatically.
 
+Set it to an empty string to leave out the `Domain` attribute, so that the cookie is only available on the current host and not on its subdomains.
+
 - **Type**: `string`
 - **Default**: `window.location.hostname`
 
