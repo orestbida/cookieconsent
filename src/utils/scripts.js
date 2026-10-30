@@ -212,7 +212,10 @@ export const retrieveEnabledCategoriesAndServices = () => {
 
             for (let serviceName in services) {
                 state._enabledServices[categoryName].push(serviceName);
-                if (state._userConfig.mode === OPT_OUT_MODE) {
+                if (
+                    state._userConfig.mode === OPT_OUT_MODE
+                    && !elContains(state._acceptedServices[categoryName], serviceName)
+                ) {
                     state._acceptedServices[categoryName].push(serviceName);
                 }
             }

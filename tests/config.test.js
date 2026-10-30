@@ -107,6 +107,13 @@ describe("Check modals' html generation under different settings", () => {
         expect(window.__service1Enabled).toBe(true);
     })
 
+    it('Should not duplicate the services of a readOnly category when mode="opt-out"', async () => {
+        testConfig.mode = 'opt-out';
+        api.eraseCookies('cc_cookie');
+        await api.run(testConfig);
+        expect(api.getUserPreferences().acceptedServices.necessary).toEqual(['service1']);
+    })
+
     it('equalWeightButtons option should be enabled by default', async () => {
         delete testConfig.guiOptions;
         await api.run(testConfig);
