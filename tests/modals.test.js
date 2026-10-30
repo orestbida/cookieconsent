@@ -258,3 +258,43 @@ describe('Modals language switch test', () => {
         expect(_pmAcceptNecessaryBtn.parentNode).toBe(_pmBtnGroup1);
     })
 })
+
+describe('Consent modal labels language switch test', () => {
+
+    const translation = (label, closeIconLabel) => ({
+        consentModal: {
+            label,
+            closeIconLabel,
+            title: 'title',
+            acceptAllBtn: 'accept all'
+        }
+    });
+
+    beforeAll(() => {
+        api = CookieConsent;
+    })
+
+    afterEach(() => {
+        api.reset(true);
+    })
+
+    it('Should update aria labels on language change', async () => {
+        await api.run({
+            categories: {
+                necessary: { readOnly: true }
+            },
+            language: {
+                default: 'en',
+                translations: {
+                    en: translation('Cookie consent', 'Reject all'),
+                    de: translation('Cookie-Einwilligung', 'Alle ablehnen')
+                }
+            }
+        });
+
+        await api.setLanguage('de');
+
+        expect(globalObj._dom._cm.getAttribute('aria-label')).toBe('Cookie-Einwilligung');
+        expect(globalObj._dom._cmCloseIconBtn.getAttribute('aria-label')).toBe('Alle ablehnen');
+    })
+})

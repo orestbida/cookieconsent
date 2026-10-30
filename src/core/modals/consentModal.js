@@ -102,9 +102,7 @@ export const createConsentModal = (api, createMainContainer) => {
             setAttribute(dom._cm, 'role', 'region');
         }
 
-        if (consentModalLabelValue) {
-            setAttribute(dom._cm, 'aria-label', consentModalLabelValue);
-        } else if (consentModalTitleValue) {
+        if (!consentModalLabelValue && consentModalTitleValue) {
             setAttribute(dom._cm, 'aria-labelledby', 'cm__title');
             setAttribute(dom._cm, 'aria-describedby', 'cm__desc');
         }
@@ -130,8 +128,6 @@ export const createConsentModal = (api, createMainContainer) => {
                 });
                 appendChild(dom._cmBody, dom._cmCloseIconBtn);
             }
-
-            setAttribute(dom._cmCloseIconBtn, 'aria-label', closeIconLabelData);
         }
 
         appendChild(dom._cmBody, dom._cmTexts);
@@ -142,6 +138,11 @@ export const createConsentModal = (api, createMainContainer) => {
         dom._cmDivTabindex = dom._cm;
         setAttribute(dom._cmDivTabindex, 'tabIndex', -1);
     }
+
+    consentModalLabelValue && setAttribute(dom._cm, 'aria-label', consentModalLabelValue);
+
+    if (dom._cmCloseIconBtn && closeIconLabelData)
+        setAttribute(dom._cmCloseIconBtn, 'aria-label', closeIconLabelData);
 
     if (consentModalTitleValue) {
         if (!dom._cmTitle) {
