@@ -60,6 +60,16 @@ describe("Cookie should be created successfully", () => {
         eraseCookiesHelper(['test_cookie']);
     })
 
+    it('Should match the cookie name literally', () => {
+        setCookie('axb', '1');
+        expect(getSingleCookie('a.b', true)).toBe('');
+        expect(() => getSingleCookie('a(b', true)).not.toThrow();
+
+        setCookie('a.b', '2');
+        expect(getSingleCookie('a.b', true)).toBe('2');
+        eraseCookiesHelper(['axb', 'a.b']);
+    })
+
     it('Should return all cookies', () => {
         const allCookies = getAllCookies();
         expect(allCookies.length).toBe(4);  // 3 service cookies + cc_cookie

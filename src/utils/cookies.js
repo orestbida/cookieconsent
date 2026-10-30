@@ -367,7 +367,8 @@ export const getPluginCookie = (customName) => {
  * @returns {string}
  */
 export const getSingleCookie = (name, getValue) => {
-    const found = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
+    const escapedName = name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const found = document.cookie.match('(^|;)\\s*' + escapedName + '\\s*=\\s*([^;]+)');
 
     return found
         ? (getValue ? found.pop() : name)
