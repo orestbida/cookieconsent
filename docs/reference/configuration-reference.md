@@ -740,7 +740,7 @@ Set the current language dynamically.
 - **Values**: `'document'`, `'browser'`
 - **Details**: <br>
     - `'document'`: retrieve language from the `lang` attribute (e.g. `<html lang="en-US">`)
-    - `'browser'`: retrieve the user's browser language via `navigator.language`
+    - `'browser'`: use the first of the user's preferred browser languages (`navigator.languages`) that has a translation
 
     ::: info
     The detected language will be used only if a valid translation is defined, otherwise the plugin will fallback to the `default` language.

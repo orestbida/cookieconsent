@@ -1,6 +1,7 @@
 import { globalObj } from '../src/core/global';
 import {
     getBrowserLanguageCode,
+    getBrowserLanguageCodes,
     resolveCurrentLanguageCode,
     getCurrentLanguageCode,
     getDocumentLanguageCode,
@@ -12,7 +13,26 @@ describe('Test language utils', () => {
 
     beforeAll(() => {
         Object.defineProperty(global.navigator, 'language', {value: 'it-IT', configurable: true});
+        Object.defineProperty(global.navigator, 'languages', {value: ['it-IT'], configurable: true});
     })
+
+    const setBrowserLanguages = (languages) => {
+        Object.defineProperty(global.navigator, 'language', {value: languages[0], configurable: true});
+        Object.defineProperty(global.navigator, 'languages', {value: languages, configurable: true});
+    };
+
+    const resolveBrowserLanguage = (translations, defaultLanguage = 'en') => {
+        globalObj._state._allTranslations = translations;
+        globalObj._state._currentLanguageCode = '';
+        globalObj._state._userConfig = {
+            language: {
+                default: defaultLanguage,
+                autoDetect: 'browser'
+            }
+        };
+
+        return resolveCurrentLanguageCode();
+    };
 
     it("Should return the language when the exact translation is defined", () => {
         globalObj._state._allTranslations = {
@@ -60,6 +80,34 @@ describe('Test language utils', () => {
     it("Should return the browser's language code", () => {
         const language = getBrowserLanguageCode();
         expect(language).toBe('it-IT');
+    });
+
+    it("Should return the browser's preferred languages", () => {
+        expect(getBrowserLanguageCodes()).toEqual(['it-IT']);
+    });
+
+    it("Should fall back to navigator.language when navigator.languages is empty", () => {
+        Object.defineProperty(global.navigator, 'languages', {value: [], configurable: true});
+        expect(getBrowserLanguageCodes()).toEqual(['it-IT']);
+        setBrowserLanguages(['it-IT']);
+    });
+
+    it("Should use the next preferred browser language when the first one has no translation", () => {
+        setBrowserLanguages(['fr-CH', 'de-CH', 'en']);
+        expect(resolveBrowserLanguage({it: {}, de: {}, en: {}})).toBe('de');
+        setBrowserLanguages(['it-IT']);
+    });
+
+    it("Should respect the order of the preferred browser languages", () => {
+        setBrowserLanguages(['de-CH', 'en-US']);
+        expect(resolveBrowserLanguage({'en-US': {}, de: {}}, 'en-US')).toBe('de');
+        setBrowserLanguages(['it-IT']);
+    });
+
+    it("Should use the default language when no preferred browser language has a translation", () => {
+        setBrowserLanguages(['fr-FR', 'es']);
+        expect(resolveBrowserLanguage({de: {}, en: {}})).toBe('en');
+        setBrowserLanguages(['it-IT']);
     });
 
     it("Should return the document's 'lang' attribute", () => {

@@ -58,6 +58,14 @@ export const setCurrentLanguageCode = (newLanguageCode) => {
 export const getBrowserLanguageCode = () => navigator.language;
 
 /**
+ * Get the user's preferred languages, in order of preference
+ * @returns {readonly string[]}
+ */
+export const getBrowserLanguageCodes = () => navigator.languages && navigator.languages.length
+    ? navigator.languages
+    : [getBrowserLanguageCode()];
+
+/**
  * Get the lang attribute
  * @returns lang attribute
  */
@@ -74,17 +82,20 @@ export const resolveCurrentLanguageCode = () =>  {
         debug('CookieConsent [LANG]: autoDetect strategy: "' + autoDetect + '"');
 
         const detectionStrategies = {
-            browser: getBrowserLanguageCode(),
-            document: getDocumentLanguageCode()
+            browser: getBrowserLanguageCodes(),
+            document: [getDocumentLanguageCode()]
         };
 
-        /**
-         * @type {string}
-         */
-        const newLanguageCode = getAvailableLanguage(detectionStrategies[autoDetect]);
+        const languageCodes = detectionStrategies[autoDetect];
 
-        if (newLanguageCode)
-            return newLanguageCode;
+        if (isArray(languageCodes)) {
+            for (const languageCode of languageCodes) {
+                const newLanguageCode = getAvailableLanguage(languageCode);
+
+                if (newLanguageCode)
+                    return newLanguageCode;
+            }
+        }
     }
 
     /**
