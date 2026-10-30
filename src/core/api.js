@@ -671,7 +671,7 @@ export const run = async (userConfig) => {
         }
 
         if (_config.mode === OPT_OUT_MODE)
-            manageExistingScripts(_state._defaultEnabledCategories);
+            manageExistingScripts();
     }
 };
 

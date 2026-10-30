@@ -19,17 +19,15 @@ const validMimeType = type => ['text/javascript', 'module'].includes(type);
 /**
  * This function handles the loading/activation logic of the already
  * existing scripts based on the current accepted cookie categories
- *
- * @param {string[]} [defaultEnabledCategories]
  */
-export const manageExistingScripts = (defaultEnabledCategories) => {
+export const manageExistingScripts = () => {
     const {
+        _acceptedCategories,
         _acceptedServices,
         _lastChangedServices,
         _allCategoryNames,
         _allDefinedServices,
         _allScriptTags,
-        _savedCookieContent,
         _lastChangedCategoryNames,
     } = globalObj._state;
 
@@ -75,9 +73,6 @@ export const manageExistingScripts = (defaultEnabledCategories) => {
         return;
 
     const scripts = _allScriptTags;
-    const acceptedCategories = defaultEnabledCategories
-        || _savedCookieContent.categories
-        || [];
 
     /**
      * Load scripts (sequentially), using a recursive function
@@ -100,7 +95,7 @@ export const manageExistingScripts = (defaultEnabledCategories) => {
         const currScript = currScriptInfo._script;
         const currScriptCategory = currScriptInfo._categoryName;
         const currScriptService = currScriptInfo._serviceName;
-        const categoryAccepted = elContains(acceptedCategories, currScriptCategory);
+        const categoryAccepted = elContains(_acceptedCategories, currScriptCategory);
         const serviceAccepted = currScriptService
             ? elContains(_acceptedServices[currScriptCategory], currScriptService)
             : false;

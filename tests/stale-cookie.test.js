@@ -83,4 +83,17 @@ describe('Cookie with categories and services removed from the config', () => {
         expect(api.getUserPreferences().rejectedServices.necessary).toEqual([]);
         expect(onAccept).toHaveBeenCalledTimes(1);
     });
+
+    it('Should run the scripts of a readOnly category missing from the cookie', async () => {
+        api.reset();
+        const cookie = { ...staleCookie, categories: ['analytics', 'ads'] };
+        setCookie('cc_cookie', encodeURIComponent(JSON.stringify(cookie)));
+        document.body.innerHTML = '<script type="text/plain" data-category="necessary">window.__necessaryScript = true</script>';
+        window.__necessaryScript = false;
+        await api.run(testConfig);
+
+        expect(api.validConsent()).toBe(true);
+        expect(api.acceptedCategory('necessary')).toBe(true);
+        expect(window.__necessaryScript).toBe(true);
+    });
 });
