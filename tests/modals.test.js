@@ -298,3 +298,58 @@ describe('Consent modal labels language switch test', () => {
         expect(globalObj._dom._cmCloseIconBtn.getAttribute('aria-label')).toBe('Alle ablehnen');
     })
 })
+
+describe('Preferences modal cookie table test', () => {
+
+    beforeAll(() => {
+        api = CookieConsent;
+    })
+
+    afterEach(() => {
+        api.reset(true);
+    })
+
+    it('Should link each cell to its column header', async () => {
+        await api.run({
+            lazyHtmlGeneration: false,
+            categories: {
+                analytics: {}
+            },
+            language: {
+                default: 'en',
+                translations: {
+                    en: {
+                        consentModal: {},
+                        preferencesModal: {
+                            sections: [{
+                                title: 'Analytics',
+                                linkedCategory: 'analytics',
+                                cookieTable: {
+                                    headers: {
+                                        name: 'Name',
+                                        expiration: 'Expiration <b>date</b>'
+                                    },
+                                    body: [
+                                        { name: '_ga', expiration: '2 years' }
+                                    ]
+                                }
+                            }]
+                        }
+                    }
+                }
+            }
+        });
+
+        const cells = document.querySelectorAll('.pm__table-td');
+        expect(cells.length).toBe(2);
+
+        for (const td of cells) {
+            const headerIds = td.getAttribute('headers').split(/\s+/);
+            expect(headerIds.length).toBe(1);
+
+            const th = document.getElementById(headerIds[0]);
+            expect(th).toBeInstanceOf(HTMLTableCellElement);
+            expect(th.innerHTML).toBe(td.getAttribute('data-column'));
+        }
+    })
+})

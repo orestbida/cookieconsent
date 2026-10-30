@@ -351,7 +351,7 @@ export const createPreferencesModal = (api, createMainContainer) => {
                     const headerValue = headerData[headerKey];
                     const th = createNode('th');
 
-                    th.id = 'cc__row-' + headerValue + sectionIndex;
+                    th.id = 'cc__row-' + headerKey + sectionIndex;
                     setAttribute(th, 'scope', 'col');
                     addClassPm(th, 'table-th');
 
@@ -380,7 +380,7 @@ export const createPreferencesModal = (api, createMainContainer) => {
 
                         addClassPm(td, 'table-td');
                         setAttribute(td, 'data-column', tdHeader);
-                        setAttribute(td, 'headers', 'cc__row-' + tdHeader + sectionIndex);
+                        setAttribute(td, 'headers', 'cc__row-' + tdKey + sectionIndex);
 
                         tdInner.insertAdjacentHTML('beforeend', tdValue);
 
