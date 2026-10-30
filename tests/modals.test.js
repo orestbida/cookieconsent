@@ -393,3 +393,38 @@ describe('Preferences modal cookie table test', () => {
         }
     })
 })
+
+describe('Missing modal translation test', () => {
+    let testConfig;
+
+    beforeEach(async () => {
+        await jest.isolateModulesAsync(async () => {
+            const mod = await import('./config/full-config');
+            testConfig = mod.default;
+        });
+    })
+
+    afterEach(() => {
+        api.reset(true);
+    })
+
+    it('Should not throw when showing a preferences modal without translation', async () => {
+        delete testConfig.language.translations.en.preferencesModal;
+        await api.run(testConfig);
+
+        expect(() => api.showPreferences()).not.toThrow();
+        expect(htmlHasClass('show--preferences')).toBe(false);
+        expect(() => fireClickEvent(globalObj._dom._cmShowPreferencesBtn)).not.toThrow();
+    })
+
+    it('Should not throw when showing a consent modal without translation', async () => {
+        delete testConfig.language.translations.en.consentModal;
+        testConfig.autoShow = true;
+        await expect(api.run(testConfig)).resolves.not.toThrow();
+
+        expect(() => api.show(true)).not.toThrow();
+        expect(htmlHasClass('show--consent')).toBe(false);
+        expect(() => api.showPreferences()).not.toThrow();
+        expect(htmlHasClass('show--preferences')).toBe(true);
+    })
+})

@@ -190,13 +190,11 @@ export const show = (createModal) => {
     if (_state._consentModalVisible)
         return;
 
-    if (!_state._consentModalExists) {
-        if (createModal || _state._invalidConsent) {
-            createConsentModal(miniAPI, createMainContainer);
-        } else {
-            return;
-        }
-    }
+    if (!_state._consentModalExists && (createModal || _state._invalidConsent))
+        createConsentModal(miniAPI, createMainContainer);
+
+    if (!_state._consentModalExists)
+        return;
 
     _state._consentModalVisible = true;
     _state._lastFocusedElemBeforeModal = getActiveElement();
@@ -263,13 +261,16 @@ export const hide = () => {
  * Show preferences modal
  */
 export const showPreferences = () => {
-    const state = globalObj._state;
+    const { _dom, _state: state } = globalObj;
 
     if (state._preferencesModalVisible)
         return;
 
     if (!state._preferencesModalExists)
         createPreferencesModal(miniAPI, createMainContainer);
+
+    if (!state._preferencesModalExists)
+        return;
 
     state._preferencesModalVisible = true;
 
@@ -280,8 +281,8 @@ export const showPreferences = () => {
         state._lastFocusedModalElement = getActiveElement();
     }
 
-    addClass(globalObj._dom._rootEl, TOGGLE_PREFERENCES_MODAL_CLASS);
-    removeAttribute(globalObj._dom._pm, ARIA_HIDDEN);
+    addClass(_dom._rootEl, TOGGLE_PREFERENCES_MODAL_CLASS);
+    removeAttribute(_dom._pm, ARIA_HIDDEN);
 
     /**
      * Set focus to preferencesModal
