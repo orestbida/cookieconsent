@@ -17,10 +17,12 @@ import {
     focus,
     getActiveElement,
     getAttribute,
+    getStateClassElements,
     removeAttribute,
     removeClass,
     setAttribute,
-    toggleDisableInteraction
+    toggleDisableInteraction,
+    toggleStateClass
 } from '../utils/dom';
 import { fireEvent } from '../utils/events';
 import { isArray, isObject, isString } from '../utils/type-guards';
@@ -208,7 +210,7 @@ export const show = (createModal) => {
     if (_state._disablePageInteraction)
         toggleDisableInteraction(true);
 
-    addClass(_dom._rootEl, TOGGLE_CONSENT_MODAL_CLASS);
+    toggleStateClass(TOGGLE_CONSENT_MODAL_CLASS, true);
     removeAttribute(_dom._cm, ARIA_HIDDEN);
     /**
      * Set focus to consentModal and enable transition
@@ -244,7 +246,7 @@ export const hide = () => {
      */
     focus(_dom._focusSpan, true, true);
 
-    removeClass(_dom._rootEl, TOGGLE_CONSENT_MODAL_CLASS);
+    toggleStateClass(TOGGLE_CONSENT_MODAL_CLASS);
     setAttribute(_dom._cm, ARIA_HIDDEN, 'true');
 
     /**
@@ -287,7 +289,7 @@ export const showPreferences = () => {
         state._lastFocusedModalElement = getActiveElement();
     }
 
-    addClass(_dom._rootEl, TOGGLE_PREFERENCES_MODAL_CLASS);
+    toggleStateClass(TOGGLE_PREFERENCES_MODAL_CLASS, true);
     removeAttribute(_dom._pm, ARIA_HIDDEN);
 
     /**
@@ -325,7 +327,7 @@ export const hidePreferences = () => {
      */
     focus(globalObj._dom._pmFocusSpan, true, true);
 
-    removeClass(globalObj._dom._rootEl, TOGGLE_PREFERENCES_MODAL_CLASS);
+    toggleStateClass(TOGGLE_PREFERENCES_MODAL_CLASS);
     setAttribute(globalObj._dom._pm, ARIA_HIDDEN, 'true');
 
     /**
@@ -733,12 +735,13 @@ export const reset = (deleteCookie) => {
     /**
      * Remove any remaining classes
      */
-    const parentEl = globalObj._dom._rootEl;
-    parentEl && parentEl.classList.remove(
-        TOGGLE_DISABLE_INTERACTION_CLASS,
-        TOGGLE_PREFERENCES_MODAL_CLASS,
-        TOGGLE_CONSENT_MODAL_CLASS
-    );
+    for (const el of getStateClassElements()) {
+        el.classList.remove(
+            TOGGLE_DISABLE_INTERACTION_CLASS,
+            TOGGLE_PREFERENCES_MODAL_CLASS,
+            TOGGLE_CONSENT_MODAL_CLASS
+        );
+    }
     //{{END: GUI}}
 
     const newGlobal = new GlobalState();

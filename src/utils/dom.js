@@ -155,6 +155,27 @@ export const focus = (el, toggleTabIndex, preventScroll) => {
  */
 export const afterPaint = (fn) => requestAnimationFrame(() => setTimeout(fn));
 
+/**
+ * Elements that get the modal state classes: <html> (page styles, e.g. the
+ * scroll lock) and the root element (styles inside a shadow root)
+ * @returns {HTMLElement[]}
+ */
+export const getStateClassElements = () => {
+    const { _htmlDom, _rootEl } = globalObj._dom;
+
+    return [...new Set([_htmlDom, _rootEl])].filter(el => el);
+};
+
+/**
+ * @param {string} className
+ * @param {boolean} [enable]
+ * @param {HTMLElement[]} [elements]
+ */
+export const toggleStateClass = (className, enable, elements = getStateClassElements()) => {
+    for (const el of elements)
+        el.classList.toggle(className, !!enable);
+};
+
 let disableInteractionTimeout;
 
 /**
@@ -163,13 +184,13 @@ let disableInteractionTimeout;
 export const toggleDisableInteraction = (enable) => {
     clearTimeout(disableInteractionTimeout);
 
-    const rootEl = globalObj._dom._rootEl;
+    const elements = getStateClassElements();
 
     if (enable) {
-        addClass(rootEl, TOGGLE_DISABLE_INTERACTION_CLASS);
+        toggleStateClass(TOGGLE_DISABLE_INTERACTION_CLASS, true, elements);
     }else {
         disableInteractionTimeout = setTimeout(() => {
-            removeClass(rootEl, TOGGLE_DISABLE_INTERACTION_CLASS);
+            toggleStateClass(TOGGLE_DISABLE_INTERACTION_CLASS, false, elements);
         }, 500);
     }
 };

@@ -100,6 +100,37 @@ describe("Check modals' html generation under different settings", () => {
         expect(ccMain.parentElement).toBe(app);
     })
 
+    it('Should toggle the modal classes on both <html> and the "#app" root element', async () => {
+        document.body.innerHTML = '<div id="app"></div>';
+        testConfig.root = '#app';
+        testConfig.disablePageInteraction = true;
+        await api.run(testConfig);
+
+        const html = document.documentElement;
+        const app = document.getElementById('app');
+        const classes = ['show--consent', 'show--preferences', 'disable--interaction'];
+
+        api.show(true);
+        api.showPreferences();
+        for (const el of [html, app])
+            expect([...el.classList]).toEqual(expect.arrayContaining(classes));
+
+        api.hidePreferences();
+        api.hide();
+        for (const el of [html, app]) {
+            expect(el.classList.contains('show--consent')).toBe(false);
+            expect(el.classList.contains('show--preferences')).toBe(false);
+        }
+
+        api.show(true);
+        api.reset(true);
+        for (const el of [html, app])
+            expect(classes.some(className => el.classList.contains(className))).toBe(false);
+
+        delete testConfig.disablePageInteraction;
+        delete testConfig.root;
+    })
+
     it('Should automatically enable & execute scripts when mode="opt-out"', async () => {
         testConfig.mode = 'opt-out';
         api.eraseCookies('cc_cookie');
