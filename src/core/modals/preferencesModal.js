@@ -127,13 +127,13 @@ export const createPreferencesModal = (api, createMainContainer) => {
         var _pmBtnContainer = createNode(DIV_TAG);
         addClass(_pmBtnContainer, 'btns');
 
-        var _pmBtnGroup1 = createNode(DIV_TAG);
-        var _pmBtnGroup2 = createNode(DIV_TAG);
-        addClassPm(_pmBtnGroup1, BTN_GROUP_CLASS);
-        addClassPm(_pmBtnGroup2, BTN_GROUP_CLASS);
+        dom._pmBtnGroup1 = createNode(DIV_TAG);
+        dom._pmBtnGroup2 = createNode(DIV_TAG);
+        addClassPm(dom._pmBtnGroup1, BTN_GROUP_CLASS);
+        addClassPm(dom._pmBtnGroup2, BTN_GROUP_CLASS);
 
-        appendChild(dom._pmFooter, _pmBtnGroup1);
-        appendChild(dom._pmFooter, _pmBtnGroup2);
+        appendChild(dom._pmFooter, dom._pmBtnGroup1);
+        appendChild(dom._pmFooter, dom._pmBtnGroup2);
 
         appendChild(dom._pmHeader, dom._pmTitle);
         appendChild(dom._pmHeader, dom._pmCloseBtn);
@@ -143,9 +143,6 @@ export const createPreferencesModal = (api, createMainContainer) => {
 
         appendChild(dom._pm, dom._pmHeader);
         appendChild(dom._pm, dom._pmBody);
-
-        createFooter && appendChild(dom._pm, dom._pmFooter);
-
         appendChild(dom._pmContainer, dom._pm);
     } else {
         dom._pmNewBody = createNode(DIV_TAG);
@@ -425,7 +422,7 @@ export const createPreferencesModal = (api, createMainContainer) => {
             dom._pmAcceptAllBtn = createNode(BUTTON_TAG);
             addClassPm(dom._pmAcceptAllBtn, 'btn');
             setAttribute(dom._pmAcceptAllBtn, DATA_ROLE, 'all');
-            appendChild(_pmBtnGroup1, dom._pmAcceptAllBtn);
+            appendChild(dom._pmBtnGroup1, dom._pmAcceptAllBtn);
             addEvent(dom._pmAcceptAllBtn, CLICK_EVENT, () =>
                 acceptHelper('all')
             );
@@ -439,7 +436,7 @@ export const createPreferencesModal = (api, createMainContainer) => {
             dom._pmAcceptNecessaryBtn = createNode(BUTTON_TAG);
             addClassPm(dom._pmAcceptNecessaryBtn, 'btn');
             setAttribute(dom._pmAcceptNecessaryBtn, DATA_ROLE, 'necessary');
-            appendChild(_pmBtnGroup1, dom._pmAcceptNecessaryBtn);
+            appendChild(dom._pmBtnGroup1, dom._pmAcceptNecessaryBtn);
             addEvent(dom._pmAcceptNecessaryBtn, CLICK_EVENT, () =>
                 acceptHelper([])
             );
@@ -454,7 +451,7 @@ export const createPreferencesModal = (api, createMainContainer) => {
             addClassPm(dom._pmSavePreferencesBtn, 'btn');
             addClassPm(dom._pmSavePreferencesBtn, 'btn--secondary');
             setAttribute(dom._pmSavePreferencesBtn, DATA_ROLE, 'save');
-            appendChild(_pmBtnGroup2, dom._pmSavePreferencesBtn);
+            appendChild(dom._pmBtnGroup2, dom._pmSavePreferencesBtn);
 
             addEvent(dom._pmSavePreferencesBtn, CLICK_EVENT, () =>
                 acceptHelper()
@@ -468,6 +465,8 @@ export const createPreferencesModal = (api, createMainContainer) => {
         dom._pm.replaceChild(dom._pmNewBody, dom._pmBody);
         dom._pmBody = dom._pmNewBody;
     }
+
+    createFooter && appendChild(dom._pm, dom._pmFooter);
 
     guiManager(1);
 

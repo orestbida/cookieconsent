@@ -206,3 +206,55 @@ describe('Preferences modal toggle labels test', () => {
         expect(labels).toEqual(['Necessary ', 'Analytics  and stats ', 'Adscookies']);
     })
 })
+
+describe('Modals language switch test', () => {
+
+    const translation = (extraButtons) => ({
+        consentModal: {
+            title: 'title',
+            acceptAllBtn: 'accept all',
+            showPreferencesBtn: 'show preferences',
+            ...extraButtons
+        },
+        preferencesModal: {
+            title: 'title',
+            savePreferencesBtn: 'save',
+            ...extraButtons,
+            sections: []
+        }
+    });
+
+    const config = {
+        lazyHtmlGeneration: false,
+        categories: {
+            necessary: { readOnly: true }
+        },
+        language: {
+            default: 'en',
+            translations: {
+                en: translation(),
+                de: translation({ acceptNecessaryBtn: 'accept necessary' })
+            }
+        }
+    };
+
+    beforeAll(() => {
+        api = CookieConsent;
+    })
+
+    afterEach(() => {
+        api.reset(true);
+    })
+
+    it('Should add buttons missing in the previous language', async () => {
+        await api.run(config);
+        expect(await api.setLanguage('de')).toBe(true);
+
+        const { _cmBtnGroup, _cmBtnGroup2, _cmAcceptNecessaryBtn, _cmShowPreferencesBtn, _pmBtnGroup1, _pmAcceptNecessaryBtn } = globalObj._dom;
+
+        expect(_cmAcceptNecessaryBtn.parentNode).toBe(_cmBtnGroup);
+        expect(_cmShowPreferencesBtn.parentNode).toBe(_cmBtnGroup2);
+        expect(_cmBtnGroup.classList.contains('cm__btn-group--uneven')).toBe(false);
+        expect(_pmAcceptNecessaryBtn.parentNode).toBe(_pmBtnGroup1);
+    })
+})
