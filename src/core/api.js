@@ -280,7 +280,7 @@ export const showPreferences = () => {
      */
     setTimeout(() => {
         focus(globalObj._dom._pmDivTabindex);
-    }, 100);
+    }, 200);
 
     debug('CookieConsent [TOGGLE]: show preferencesModal');
 

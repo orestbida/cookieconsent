@@ -82,7 +82,7 @@ describe('Modal focus trap', () => {
         jest.useFakeTimers();
         await CookieConsent.run({ ...testConfig, autoShow: false });
         CookieConsent.showPreferences();
-        jest.advanceTimersByTime(100);
+        jest.advanceTimersByTime(200);
     });
 
     afterEach(() => {
@@ -160,6 +160,27 @@ describe('Modal focus trap', () => {
 
         expect(event.defaultPrevented).toBe(false);
         expect(document.activeElement).toBe(control);
+    });
+
+    it('Should focus the preferences modal after its transition is enabled', async () => {
+        CookieConsent.reset(true);
+        await CookieConsent.run({ ...testConfig, autoShow: false });
+        CookieConsent.showPreferences();
+
+        const { _pmContainer, _pmDivTabindex } = globalObj._dom;
+        const addClass = _pmContainer.classList.add.bind(_pmContainer.classList);
+        let animEnabledAt, focusedAt;
+
+        _pmContainer.classList.add = (className) => {
+            className === 'cc--anim' && (animEnabledAt = Date.now());
+            addClass(className);
+        };
+        _pmDivTabindex.addEventListener('focus', () => focusedAt = Date.now());
+
+        jest.advanceTimersByTime(200);
+
+        expect(document.activeElement).toBe(_pmDivTabindex);
+        expect(focusedAt).toBeGreaterThan(animEnabledAt);
     });
 
     it('Should not trap focus when the preferences modal is hidden', () => {
