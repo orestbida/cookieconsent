@@ -1,3 +1,5 @@
+# Only mark issues as stale, never pull requests
+only: issues
 # Number of days of inactivity before an issue becomes stale
 daysUntilStale: 30
 # Number of days of inactivity before a stale issue is closed
