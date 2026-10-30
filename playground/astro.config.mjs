@@ -6,6 +6,7 @@ buildTranslationsExportFile();
 
 export default defineConfig({
   devToolbar: { enabled: false },
+  compressHTML: false,
   integrations: [compress(), {
     name: 'build-languages',
     hooks: {
