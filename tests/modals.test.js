@@ -200,6 +200,23 @@ describe("Discarded service selection", () => {
         expect(api.acceptedService('serviceA', 'external')).toBe(false);
         expect(api.acceptedService('serviceB', 'external')).toBe(false);
     })
+
+    it('Should not accept a discarded service when saving after a language switch', async () => {
+        const { en } = optInConfig.language.translations;
+        await CookieConsent.run({ ...optInConfig, language: { default: 'en', translations: { en, de: en } } });
+        api = CookieConsent;
+
+        api.showPreferences();
+        serviceToggle('serviceA').checked = true;
+        serviceToggle('serviceA').dispatchEvent(new Event('change'));
+        await api.setLanguage('de');
+
+        expect(serviceToggle('serviceA').checked).toBe(false);
+        fireClickEvent(globalObj._dom._pmSavePreferencesBtn);
+
+        expect(api.acceptedCategory('external')).toBe(false);
+        expect(api.acceptedService('serviceA', 'external')).toBe(false);
+    })
 })
 
 describe('Preferences modal toggle labels test', () => {

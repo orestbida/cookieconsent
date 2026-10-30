@@ -379,8 +379,11 @@ export const setLanguage = async (newLanguageCode, forceUpdate) => {
         if (state._consentModalExists)
             createConsentModal(miniAPI, createMainContainer);
 
-        if (state._preferencesModalExists)
+        if (state._preferencesModalExists) {
+            // The new toggles show the saved state
+            discardUnsavedPreferences();
             createPreferencesModal(miniAPI, createMainContainer);
+        }
 
         handleRtlLanguage();
 
