@@ -50,4 +50,25 @@ describe('Cookie with categories and services removed from the config', () => {
         expect(() => api.acceptCategory('all')).not.toThrow();
         expect(api.acceptedService('service1', 'analytics')).toBe(true);
     });
+
+    it('Should ignore the removed category', () => {
+        expect(api.acceptedCategory('oldCategory')).toBe(false);
+        expect(api.getUserPreferences().acceptType).toBe('all');
+        expect(api.getUserPreferences().acceptedCategories).toEqual(['necessary', 'analytics', 'ads']);
+    });
+
+    it('Should ignore the removed service', () => {
+        const { acceptedServices, rejectedServices } = api.getUserPreferences();
+        expect(acceptedServices.analytics).toEqual(['service1']);
+        expect(rejectedServices.analytics).toEqual(['service2']);
+        expect(acceptedServices.oldCategory).toBeUndefined();
+    });
+
+    it('Should not save the removed category and service again', () => {
+        api.acceptCategory('all');
+        const cookie = api.getCookie();
+        expect(cookie.categories).toEqual(['necessary', 'analytics', 'ads']);
+        expect(cookie.services.analytics).toEqual(['service1', 'service2']);
+        expect(cookie.services.oldCategory).toBeUndefined();
+    });
 });

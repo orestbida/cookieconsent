@@ -598,16 +598,22 @@ const retrieveState = () => {
      * and calculate acceptType
      */
     if (!state._invalidConsent) {
-        state._acceptedServices = {
-            ...state._acceptedServices,
-            ...services
-        };
+        /**
+         * Ignore categories and services that are no longer in the config
+         */
+        for (const categoryName of state._allCategoryNames) {
+            const savedServices = services && services[categoryName];
+            const definedServices = getKeys(state._allDefinedServices[categoryName]);
+
+            if (isArray(savedServices))
+                state._acceptedServices[categoryName] = savedServices.filter(service => elContains(definedServices, service));
+        }
 
         state._enabledServices = {...state._acceptedServices};
 
         setAcceptedCategories([
             ...state._readOnlyCategories,
-            ...categories
+            ...categories.filter(category => elContains(state._allCategoryNames, category))
         ]);
     } else {
         if (config.mode === OPT_OUT_MODE) {
