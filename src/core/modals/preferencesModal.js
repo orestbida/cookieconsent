@@ -157,7 +157,7 @@ export const createPreferencesModal = (api, createMainContainer) => {
              */
             sServices = hasToggle && state._allDefinedServices[sLinkedCategory],
             sServiceNames = isObject(sServices) && getKeys(sServices) || [],
-            sIsExpandableToggle = hasToggle && (!!sDescriptionData || !!sCreateCookieTable || getKeys(sServices).length>0),
+            sIsExpandableToggle = hasToggle && !!sTitleData && (!!sDescriptionData || !!sCreateCookieTable || getKeys(sServices).length>0),
             nServices = sServiceNames.length,
             expandableDivId = sLinkedCategory + '-desc';
 

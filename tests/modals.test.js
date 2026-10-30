@@ -444,6 +444,15 @@ describe('Missing modal translation test', () => {
         expect(() => api.showPreferences()).not.toThrow();
         expect(htmlHasClass('show--preferences')).toBe(true);
     })
+
+    it('Should not throw for a section with a linked category but no title', async () => {
+        testConfig.language.translations.en.preferencesModal.sections = [
+            { description: 'no title', linkedCategory: 'analytics' }
+        ];
+
+        await expect(api.run(testConfig)).resolves.not.toThrow();
+        expect(document.querySelector('.pm__section-desc').innerHTML).toBe('no title');
+    })
 })
 
 describe('Modal timers after reset', () => {
