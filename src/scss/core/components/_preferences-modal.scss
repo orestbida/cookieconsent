@@ -340,8 +340,10 @@ $service-toggle-knob-icon-width: 1.7px;
         position: absolute;
         cursor: pointer;
         display: block;
-        top: 0;
+        top: 50%;
         left: 0;
+        min-height: 24px;
+        translate: 0 -50%;
         margin: 0;
         border: 0;
 
