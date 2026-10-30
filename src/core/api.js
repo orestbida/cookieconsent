@@ -659,24 +659,32 @@ export const run = async (userConfig) => {
         const consentIsValid = validConsent();
 
         //{{START: GUI}}
-        const translationLoaded = await loadTranslationData();
+        let translationError;
 
-        if (!translationLoaded)
-            return false;
+        // The scripts must run even if the translation can't be loaded
+        const translationLoaded = await loadTranslationData().catch((error) => {
+            translationError = error;
+        });
 
-        generateHtml(miniAPI);
+        if (translationLoaded) {
+            generateHtml(miniAPI);
 
-        if (_config.autoShow && !consentIsValid && !isGpcOptOutActive())
-            show(true);
+            if (_config.autoShow && !consentIsValid && !isGpcOptOutActive())
+                show(true);
+        }
         //{{END: GUI}}
 
         if (consentIsValid) {
             manageExistingScripts();
-            return fireEvent(_customEvents._onConsent);
+            fireEvent(_customEvents._onConsent);
+        } else if (_config.mode === OPT_OUT_MODE) {
+            manageExistingScripts();
         }
 
-        if (_config.mode === OPT_OUT_MODE)
-            manageExistingScripts();
+        //{{START: GUI}}
+        if (translationError)
+            throw translationError;
+        //{{END: GUI}}
     }
 };
 

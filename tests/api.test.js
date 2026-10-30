@@ -531,4 +531,22 @@ describe("API tests", () => {
         api.acceptCategory([]);
         expect(window.__service1Enabled).toBe(true);
     })
+
+    it('Should run the scripts of a valid consent when the translation fails to load', async () => {
+        api.acceptCategory('all');
+        api.reset();
+
+        const onConsent = jest.fn();
+        window.addEventListener('cc:onConsent', onConsent);
+        window.__service1Enabled = false;
+        testConfig.language.translations.en = './en.json';
+        fetch.mockImplementationOnce(() => Promise.resolve({ ok: false }));
+
+        await expect(api.run(testConfig)).rejects.toBe(`Could not load translation for the 'en' language`);
+        expect(api.validConsent()).toBe(true);
+        expect(window.__service1Enabled).toBe(true);
+        expect(onConsent).toHaveBeenCalledTimes(1);
+
+        window.removeEventListener('cc:onConsent', onConsent);
+    })
 })
