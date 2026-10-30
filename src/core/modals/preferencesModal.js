@@ -124,9 +124,6 @@ export const createPreferencesModal = (api, createMainContainer) => {
         dom._pmFooter = createNode(DIV_TAG);
         addClassPm(dom._pmFooter, 'footer');
 
-        var _pmBtnContainer = createNode(DIV_TAG);
-        addClass(_pmBtnContainer, 'btns');
-
         dom._pmBtnGroup1 = createNode(DIV_TAG);
         dom._pmBtnGroup2 = createNode(DIV_TAG);
         addClassPm(dom._pmBtnGroup1, BTN_GROUP_CLASS);
@@ -476,7 +473,7 @@ export const createPreferencesModal = (api, createMainContainer) => {
         debug('CookieConsent [HTML] created', PREFERENCES_MODAL_NAME);
 
         fireEvent(globalObj._customEvents._onModalReady, PREFERENCES_MODAL_NAME, dom._pm);
-        createMainContainer(api);
+        createMainContainer();
         appendChild(dom._ccMain, dom._pmContainer);
         handleFocusTrap(dom._pm);
 

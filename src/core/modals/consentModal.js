@@ -280,7 +280,7 @@ export const createConsentModal = (api, createMainContainer) => {
         debug('CookieConsent [HTML] created', CONSENT_MODAL_NAME);
 
         fireEvent(globalObj._customEvents._onModalReady, CONSENT_MODAL_NAME, dom._cm);
-        createMainContainer(api);
+        createMainContainer();
         appendChild(dom._ccMain, dom._cmContainer);
         handleFocusTrap(dom._cm);
     }

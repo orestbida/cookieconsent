@@ -334,7 +334,7 @@ export const hidePreferences = () => {
     fireEvent(globalObj._customEvents._onModalHide, PREFERENCES_MODAL_NAME);
 };
 
-var miniAPI = {
+const miniAPI = {
     show,
     hide,
     showPreferences,
@@ -628,7 +628,7 @@ export const run = async (userConfig) => {
         if (_state._botAgentDetected)
             return;
 
-        retrieveState(userConfig);
+        retrieveState();
 
         const consentIsValid = validConsent();
 
