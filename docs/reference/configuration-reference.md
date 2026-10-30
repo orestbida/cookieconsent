@@ -531,6 +531,11 @@ Mark the category as enabled by default.
 
 - **Type**: `boolean`
 - **Default**: `false`
+- **Details**:
+
+    The category's toggle is pre-selected in the preferences modal, but the category is not accepted until the user makes a choice: [acceptedCategory](/reference/api-reference.html#acceptedcategory) returns `false` until then.
+
+    In `opt-in` mode (default), its scripts only run after the user accepts the category. In `opt-out` mode, they run right away. See [mode](#mode).
 - **Example**: <br>
     ```javascript
     CookieConsent.run({
