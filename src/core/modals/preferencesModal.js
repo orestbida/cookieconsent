@@ -491,6 +491,23 @@ export const createPreferencesModal = (api, createMainContainer) => {
 };
 
 /**
+ * Strip html elements (and their content) and return the remaining text
+ * @param {string} html
+ * @returns {string}
+ */
+const getTextWithoutElements = (html) => {
+    const template = createNode('template');
+    template.innerHTML = html;
+
+    let text = '';
+
+    for (const node of template.content.childNodes)
+        node.nodeType === Node.TEXT_NODE && (text += node.textContent);
+
+    return text;
+};
+
+/**
  * Generate toggle
  * @param {string} label block title
  * @param {string} value category/service
@@ -576,7 +593,7 @@ function createToggleLabel(label, value, sCurrentCategoryObject, isService, cate
     }
 
     toggle.value = value;
-    toggleLabelSpan.textContent = label.replace(/<.*>.*<\/.*>/gm, '');
+    toggleLabelSpan.textContent = getTextWithoutElements(label);
 
     appendChild(toggleIconCircle, toggleOffIcon);
     appendChild(toggleIconCircle, toggleOnIcon);

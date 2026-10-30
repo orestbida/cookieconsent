@@ -161,3 +161,48 @@ describe("Discarded service selection", () => {
         expect(api.acceptedService('serviceB', 'external')).toBe(false);
     })
 })
+
+describe('Preferences modal toggle labels test', () => {
+
+    beforeAll(() => {
+        api = CookieConsent;
+    })
+
+    afterEach(() => {
+        api.reset(true);
+    })
+
+    it('Should strip html elements from the toggle labels', async () => {
+        const titles = {
+            necessary: 'Necessary <span class="pm__badge">Always Enabled</span>',
+            analytics: 'Analytics <b>x</b> and stats <i>y</i>',
+            ads: 'Ads<br>cookies'
+        };
+
+        await api.run({
+            lazyHtmlGeneration: false,
+            categories: {
+                necessary: { readOnly: true },
+                analytics: {},
+                ads: {}
+            },
+            language: {
+                default: 'en',
+                translations: {
+                    en: {
+                        consentModal: {},
+                        preferencesModal: {
+                            sections: Object.keys(titles).map(category => ({
+                                title: titles[category],
+                                linkedCategory: category
+                            }))
+                        }
+                    }
+                }
+            }
+        });
+
+        const labels = [...document.querySelectorAll('.pm .toggle__label')].map(label => label.textContent);
+        expect(labels).toEqual(['Necessary ', 'Analytics  and stats ', 'Adscookies']);
+    })
+})
