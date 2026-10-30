@@ -77,7 +77,7 @@ function shikiHighlightBlock(html, shiki, props) {
 
         return (!emptyRow && row.slice(0, indentationSpaces).trim() === ''
             ? row.slice(indentationSpaces)
-            : row).replace('\r', '');
+            : row).replaceAll('\r', '');
 
     }).join('\n');
 
@@ -203,7 +203,7 @@ function createCustomBlock(html) {
 
             return (!emptyRow && row.slice(0, indentationSpaces).trim() === ''
                 ? row.slice(indentationSpaces)
-                : row).replace('\r', '');
+                : row).replaceAll('\r', '');
 
         }).join('\n');
 
