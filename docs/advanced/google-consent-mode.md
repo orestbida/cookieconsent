@@ -11,6 +11,10 @@ Example result:
 
 Include a script module as described in the [getting-started guide](../essential/getting-started.md).
 
+::: info
+`acceptedCategory()` and `acceptedService()` return `false` until `CookieConsent.run()` has read the user's consent. That's why the script below updates the consent state from the `onFirstConsent`, `onConsent` and `onChange` callbacks, instead of reading it right away.
+:::
+
 ```javascript
 // cookieconsent-config.js
 
