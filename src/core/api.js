@@ -208,10 +208,10 @@ export const show = (createModal) => {
      * Set focus to consentModal and enable transition
      */
     setTimeout(() => {
-        addClass(globalObj._dom._cmContainer, 'cc--anim');
+        addClass(_dom._cmContainer, 'cc--anim');
     }, 100);
     setTimeout(() => {
-        focus(globalObj._dom._cmDivTabindex, false, true);
+        focus(_dom._cmDivTabindex, false, true);
     }, 200);
 
     debug('CookieConsent [TOGGLE]: show consentModal');
@@ -288,7 +288,7 @@ export const showPreferences = () => {
      * Set focus to preferencesModal
      */
     setTimeout(() => {
-        focus(globalObj._dom._pmDivTabindex, false, true);
+        focus(_dom._pmDivTabindex, false, true);
     }, 200);
 
     debug('CookieConsent [TOGGLE]: show preferencesModal');

@@ -445,3 +445,25 @@ describe('Missing modal translation test', () => {
         expect(htmlHasClass('show--preferences')).toBe(true);
     })
 })
+
+describe('Modal timers after reset', () => {
+    afterEach(() => {
+        api.reset(true);
+    })
+
+    it('Should not throw when reset() runs before the show/hide timers', async () => {
+        const errors = [];
+        const onError = (event) => errors.push(event.error);
+        window.addEventListener('error', onError);
+
+        await api.run({ ...basicConfig, disablePageInteraction: true });
+        api.show(true);
+        api.showPreferences();
+        api.hide();
+        api.reset(true);
+        await new Promise(resolve => setTimeout(resolve, 600));
+
+        window.removeEventListener('error', onError);
+        expect(errors).toEqual([]);
+    })
+})
