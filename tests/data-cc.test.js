@@ -1,5 +1,5 @@
 import * as CookieConsent from "../src/index"
-import { getKeys } from "../src/utils/general";
+import { getKeys } from "../src/utils/collections";
 import testConfig from "./config/full-config";
 import { fireClickEvent, htmlHasClass } from "./config/mocks-utils";
 

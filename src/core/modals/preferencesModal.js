@@ -1,24 +1,22 @@
 import { globalObj } from '../global';
+import { isToggleChecked } from '../../utils/categories';
+import { getKeys } from '../../utils/collections';
+import { debug } from '../../utils/debug';
 import {
-    createNode,
     addClass,
     addClassPm,
-    setAttribute,
-    removeAttribute,
-    removeClass,
     addEvent,
     appendChild,
-    getKeys,
+    createNode,
     hasClass,
-    getModalFocusableData,
-    isString,
-    isObject,
-    fireEvent,
-    getSvgIcon,
-    handleFocusTrap,
-    debug,
-    isToggleChecked
-} from '../../utils/general';
+    removeAttribute,
+    removeClass,
+    setAttribute
+} from '../../utils/dom';
+import { fireEvent } from '../../utils/events';
+import { getModalFocusableData, handleFocusTrap } from '../../utils/focus-trap';
+import { getSvgIcon } from '../../utils/svg-icons';
+import { isObject, isString } from '../../utils/type-guards';
 
 import { guiManager } from '../../utils/gui-manager';
 import {

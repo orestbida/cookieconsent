@@ -1,4 +1,4 @@
-import { safeRun } from './general';
+import { safeRun } from './safe-run';
 
 export const localStorageManager = {
     /**

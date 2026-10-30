@@ -1,30 +1,28 @@
 import {
-    createNode,
-    setAttribute,
-    getAttribute,
-    removeAttribute,
-    appendChild,
-    addClass,
-    removeClass,
-    debug,
     getCurrentCategoriesState,
-    elContains,
-    setAcceptedCategories,
-    isString,
-    retrieveRejectedServices,
-    isArray,
-    isObject,
-    focus,
-    getActiveElement,
     resolveEnabledCategories,
     resolveEnabledServices,
-    updateModalToggles,
+    retrieveRejectedServices,
+    setAcceptedCategories,
     syncModalToggles,
-    toggleDisableInteraction,
-    fireEvent,
-    getKeys,
-    deepCopy
-} from '../utils/general';
+    updateModalToggles
+} from '../utils/categories';
+import { deepCopy, elContains, getKeys } from '../utils/collections';
+import { debug } from '../utils/debug';
+import {
+    addClass,
+    appendChild,
+    createNode,
+    focus,
+    getActiveElement,
+    getAttribute,
+    removeAttribute,
+    removeClass,
+    setAttribute,
+    toggleDisableInteraction
+} from '../utils/dom';
+import { fireEvent } from '../utils/events';
+import { isArray, isObject, isString } from '../utils/type-guards';
 
 import { manageExistingScripts, retrieveEnabledCategoriesAndServices } from '../utils/scripts';
 

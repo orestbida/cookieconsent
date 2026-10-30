@@ -1,5 +1,5 @@
 import { globalObj } from "../src/core/global";
-import { getActiveElement } from "../src/utils/general";
+import { getActiveElement } from "../src/utils/dom";
 import * as CookieConsent from "../src/index"
 import testConfig from "./config/full-config";
 

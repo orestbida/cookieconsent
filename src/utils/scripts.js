@@ -1,5 +1,13 @@
 import { globalObj } from '../core/global';
-import { createNode, setAttribute, elContains, getAttribute, removeAttribute, isFunction } from './general';
+import { elContains } from './collections';
+import {
+    createNode,
+    getAttribute,
+    querySelectorAll,
+    removeAttribute,
+    setAttribute
+} from './dom';
+import { isFunction } from './type-guards';
 import { SCRIPT_TAG_SELECTOR, OPT_OUT_MODE } from './constants';
 
 /**
@@ -205,6 +213,60 @@ export const retrieveEnabledCategoriesAndServices = () => {
                 state._enabledServices[categoryName].push(serviceName);
                 if (state._userConfig.mode === OPT_OUT_MODE) {
                     state._acceptedServices[categoryName].push(serviceName);
+                }
+            }
+        }
+    }
+};
+
+/**
+ * Retrieves all script elements with 'data-category' attribute
+ * and save the following attributes: category-name and service
+ */
+export const retrieveScriptElements = () => {
+    if (!globalObj._config.manageScriptTags)
+        return;
+
+    const state = globalObj._state;
+
+    /**
+     * @type {NodeListOf<HTMLScriptElement>}
+     */
+    const scripts = querySelectorAll(document, 'script[' + SCRIPT_TAG_SELECTOR +']');
+
+    for (const scriptTag of scripts) {
+        let scriptCategoryName = getAttribute(scriptTag, SCRIPT_TAG_SELECTOR);
+        let scriptServiceName = scriptTag.dataset.service || '';
+        let runOnDisable = false;
+
+        /**
+         * Remove the '!' char if it is present
+         */
+        if (scriptCategoryName && scriptCategoryName.charAt(0) === '!') {
+            scriptCategoryName = scriptCategoryName.slice(1);
+            runOnDisable = true;
+        }
+
+        if (scriptServiceName.charAt(0) === '!') {
+            scriptServiceName = scriptServiceName.slice(1);
+            runOnDisable = true;
+        }
+
+        if (elContains(state._allCategoryNames, scriptCategoryName)) {
+            state._allScriptTags.push({
+                _script: scriptTag,
+                _executed: false,
+                _runOnDisable: runOnDisable,
+                _categoryName: scriptCategoryName,
+                _serviceName: scriptServiceName
+            });
+
+            if (scriptServiceName) {
+                const categoryServices = state._allDefinedServices[scriptCategoryName];
+                if (!categoryServices[scriptServiceName]) {
+                    categoryServices[scriptServiceName] = {
+                        _enabled: false
+                    };
                 }
             }
         }

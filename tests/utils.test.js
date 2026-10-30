@@ -1,18 +1,20 @@
 import {
-    addClass,
-    removeClass,
-    createNode,
-    isObject,
-    setAttribute,
-    hasClass,
-    indexOf,
-    getKeys,
-    appendChild,
-    elContains,
     arrayDiff,
     deepCopy,
-    uuidv4
-} from '../src/utils/general';
+    elContains,
+    getKeys,
+    indexOf
+} from '../src/utils/collections';
+import { uuidv4 } from '../src/utils/cookies';
+import {
+    addClass,
+    appendChild,
+    createNode,
+    hasClass,
+    removeClass,
+    setAttribute
+} from '../src/utils/dom';
+import { isObject } from '../src/utils/type-guards';
 
 import * as CookieConsent from "../src/index"
 import testConfig from "./config/basic-config"

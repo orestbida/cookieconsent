@@ -1,20 +1,19 @@
 import { globalObj } from '../global';
 
+import { addDataButtonListeners } from '../../utils/data-buttons';
+import { debug } from '../../utils/debug';
 import {
-    debug,
-    createNode,
     addClass,
     addClassCm,
-    removeClass,
-    setAttribute,
-    appendChild,
     addEvent,
-    getModalFocusableData,
-    addDataButtonListeners,
-    getSvgIcon,
-    handleFocusTrap,
-    fireEvent
-} from '../../utils/general';
+    appendChild,
+    createNode,
+    removeClass,
+    setAttribute
+} from '../../utils/dom';
+import { fireEvent } from '../../utils/events';
+import { getModalFocusableData, handleFocusTrap } from '../../utils/focus-trap';
+import { getSvgIcon } from '../../utils/svg-icons';
 
 import {
     CONSENT_MODAL_NAME,

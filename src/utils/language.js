@@ -1,14 +1,8 @@
 import { globalObj } from '../core/global';
-import {
-    debug,
-    elContains,
-    fetchJson,
-    addClass,
-    removeClass,
-    isString,
-    isArray,
-    isFunction
-} from './general';
+import { elContains } from './collections';
+import { debug } from './debug';
+import { addClass, removeClass } from './dom';
+import { isArray, isFunction, isString } from './type-guards';
 
 /**
  * Detect the available language. The language autodetection process prioritizes finding translations
@@ -148,5 +142,20 @@ export const handleRtlLanguage = () => {
         elContains(rtlLanguages, globalObj._state._currentLanguageCode)
             ? addClass(ccMain, 'cc--rtl')
             : removeClass(ccMain, 'cc--rtl');
+    }
+};
+
+/**
+ * Used to fetch external language files (.json)
+ * @param {string} url
+ * @returns {Promise<import('../core/global').Translation | boolean>}
+ */
+export const fetchJson = async (url) => {
+    try {
+        const response = await fetch(url);
+        return response.ok && await response.json();
+    } catch (e) {
+        console.error(e);
+        return false;
     }
 };
