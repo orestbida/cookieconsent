@@ -1,6 +1,7 @@
 import {
     createNode,
     setAttribute,
+    getAttribute,
     removeAttribute,
     appendChild,
     addClass,
@@ -440,7 +441,7 @@ export const loadScript = (src, attrs) => {
     /**
      * @type {HTMLScriptElement}
      */
-    let script = document.querySelector('script[src="' + src + '"]');
+    let script = [...document.scripts].find(el => getAttribute(el, 'src') === src);
 
     return new Promise((resolve) => {
         if (script)

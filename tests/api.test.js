@@ -421,6 +421,17 @@ describe("API tests", () => {
         expect(onAccept).toHaveBeenCalledTimes(1);
     })
 
+    it('Should not throw when loading a script whose src contains quotes', async () => {
+        const src = 'https://example.com/script.js?a="b"';
+        const existingScript = document.createElement('script');
+        existingScript.setAttribute('src', src);
+        document.head.appendChild(existingScript);
+
+        await expect(api.loadScript(src)).resolves.toBe(true);
+        expect(document.querySelectorAll('script[src]').length).toBe(1);
+        existingScript.remove();
+    })
+
     it('Should call service onReject once, if previously accepted', async () => {
         api.reset(true);
         const onReject = jest.fn();
