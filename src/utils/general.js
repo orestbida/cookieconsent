@@ -822,7 +822,9 @@ export const handleFocusTrap = (modal) => {
              * If current focused element is not inside modal => focus modal
              */
             if (e.shiftKey) {
-                if (currentActiveElement === focusableElements[0] || !modal.contains(currentActiveElement)) {
+                // Include the initial focus target, which is outside the tab sequence.
+                const initialFocusElement = isConsentModal ? dom._cmDivTabindex : dom._pmDivTabindex;
+                if (currentActiveElement === focusableElements[0] || currentActiveElement === initialFocusElement || !modal.contains(currentActiveElement)) {
                     preventDefault(e);
                     focus(focusableElements[1]);
                 }
