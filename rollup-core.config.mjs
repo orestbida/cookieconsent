@@ -13,9 +13,9 @@ const copyCleanedFile = async (srcFilePath, dstFilePath) => {
     if(path.extname(srcFilePath) === '.js'){
         const content = await fs.readFile(srcFilePath, 'utf8');
         const strippedFileContent = content.replaceAll(replacePattern, '');
-        fs.writeFile(dstFilePath, strippedFileContent, 'utf8');
+        await fs.writeFile(dstFilePath, strippedFileContent, 'utf8');
     } else {
-        fs.copyFile(srcFilePath, dstFilePath);
+        await fs.copyFile(srcFilePath, dstFilePath);
     }
 }
 
