@@ -536,6 +536,16 @@ export const getConfig = (field) => {
  */
 export const validConsent = () => !globalObj._state._invalidConsent;
 
+/**
+ * Date from a value saved in the cookie, undefined if missing or invalid
+ * @param {string} [value]
+ * @returns {Date|undefined}
+ */
+const parseDate = (value) => {
+    const date = value && new Date(value);
+    return date && !isNaN(date) ? date : undefined;
+};
+
 const retrieveState = () => {
     const state = globalObj._state;
     const config = globalObj._config;
@@ -560,13 +570,8 @@ const retrieveState = () => {
     // If "_consentId" is present => assume that consent was previously given
     const validConsentId = !!consentId && isString(consentId);
 
-    // Retrieve "_consentTimestamp"
-    state._consentTimestamp = consentTimestamp;
-    state._consentTimestamp && (state._consentTimestamp = new Date(consentTimestamp));
-
-    // Retrieve "_lastConsentTimestamp"
-    state._lastConsentTimestamp = lastConsentTimestamp;
-    state._lastConsentTimestamp && (state._lastConsentTimestamp = new Date(lastConsentTimestamp));
+    state._consentTimestamp = parseDate(consentTimestamp);
+    state._lastConsentTimestamp = parseDate(lastConsentTimestamp);
 
     // Retrieve "data"
     state._cookieData = typeof data !== 'undefined'

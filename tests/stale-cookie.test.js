@@ -96,4 +96,17 @@ describe('Cookie with categories and services removed from the config', () => {
         expect(api.acceptedCategory('necessary')).toBe(true);
         expect(window.__necessaryScript).toBe(true);
     });
+
+    it('Should treat a cookie with a corrupted timestamp as invalid consent', async () => {
+        for (const field of ['consentTimestamp', 'lastConsentTimestamp']) {
+            api.reset();
+            setCookie('cc_cookie', encodeURIComponent(JSON.stringify({ ...staleCookie, [field]: 'garbage' })));
+            await api.run(testConfig);
+
+            expect(api.validConsent()).toBe(false);
+            expect(() => api.acceptCategory('all')).not.toThrow();
+            expect(api.validConsent()).toBe(true);
+            expect(new Date(api.getCookie(field)).toString()).not.toBe('Invalid Date');
+        }
+    });
 });
