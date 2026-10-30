@@ -257,7 +257,7 @@ export const updateModalToggles = (service, category) => {
     } = state;
 
     const servicesInputs = globalObj._dom._serviceCheckboxInputs[category] || {};
-    const categoryInput = globalObj._dom._categoryCheckboxInputs[category] || {};
+    const categoryInput = globalObj._dom._categoryCheckboxInputs[category];
     const allServiceNames = getKeys(_allDefinedServices[category]);
 
     // Clear previously enabled services
@@ -292,11 +292,12 @@ export const updateModalToggles = (service, category) => {
     } else if (isArray(service)) {
         for (let serviceName of allServiceNames) {
             const validService = elContains(service, serviceName);
+            const serviceInput = servicesInputs[serviceName];
             validService && _enabledServices[category].push(serviceName);
 
-            if (_preferencesModalExists) {
-                servicesInputs[serviceName].checked = validService;
-                dispatchInputChangeEvent(servicesInputs[serviceName]);
+            if (serviceInput) {
+                serviceInput.checked = validService;
+                dispatchInputChangeEvent(serviceInput);
             }
         }
     }
@@ -314,7 +315,7 @@ export const updateModalToggles = (service, category) => {
      * If there are no services enabled in the
      * current category, uncheck the category
      */
-    if (_preferencesModalExists) {
+    if (categoryInput) {
         categoryInput.checked = !uncheckCategory;
         dispatchInputChangeEvent(categoryInput);
     }

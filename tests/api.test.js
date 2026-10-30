@@ -447,4 +447,27 @@ describe("API tests", () => {
         api.acceptCategory([]);
         expect(onReject).toHaveBeenCalledTimes(1)
     })
+
+    it('Should accept the services of a category without a section in the preferences modal', async () => {
+        api.reset(true);
+        testConfig.categories.hidden = {
+            services: {
+                h1: {},
+                h2: {}
+            }
+        };
+        await api.run(testConfig);
+        api.showPreferences();
+
+        expect(() => api.acceptService('h1', 'hidden')).not.toThrow();
+        expect(api.acceptedService('h1', 'hidden')).toBe(true);
+        expect(api.acceptedService('h2', 'hidden')).toBe(false);
+
+        expect(() => api.acceptService(['h2'], 'hidden')).not.toThrow();
+        expect(api.acceptedService('h1', 'hidden')).toBe(false);
+        expect(api.acceptedService('h2', 'hidden')).toBe(true);
+
+        expect(() => api.acceptService([], 'hidden')).not.toThrow();
+        expect(api.acceptedCategory('hidden')).toBe(false);
+    })
 })
