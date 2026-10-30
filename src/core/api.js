@@ -674,7 +674,8 @@ export const run = async (userConfig) => {
         if (translationLoaded) {
             generateHtml(miniAPI);
 
-            if (_config.autoShow && !consentIsValid && !isGpcOptOutActive())
+            // The consent may have been given while the translation was loading
+            if (_config.autoShow && !validConsent() && !isGpcOptOutActive())
                 show(true);
         }
         //{{END: GUI}}

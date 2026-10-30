@@ -549,4 +549,19 @@ describe("API tests", () => {
 
         window.removeEventListener('cc:onConsent', onConsent);
     })
+
+    it('Should not show the consent modal if the consent is given while the translation loads', async () => {
+        api.reset(true);
+
+        const translation = testConfig.language.translations.en;
+        testConfig.autoShow = true;
+        testConfig.language.translations.en = () => Promise.resolve(translation);
+
+        const running = api.run(testConfig);
+        api.acceptCategory('all');
+        await running;
+
+        expect(api.validConsent()).toBe(true);
+        expect(htmlHasClass(consentModalClassToggle)).toBe(false);
+    })
 })
