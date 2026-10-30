@@ -71,4 +71,16 @@ describe('Cookie with categories and services removed from the config', () => {
         expect(cookie.services.analytics).toEqual(['service1', 'service2']);
         expect(cookie.services.oldCategory).toBeUndefined();
     });
+
+    it('Should accept a service added to a readOnly category after the consent', async () => {
+        api.reset();
+        const onAccept = jest.fn();
+        testConfig.categories.necessary.services.service2 = { onAccept };
+        await api.run(testConfig);
+
+        expect(api.validConsent()).toBe(true);
+        expect(api.acceptedService('service2', 'necessary')).toBe(true);
+        expect(api.getUserPreferences().rejectedServices.necessary).toEqual([]);
+        expect(onAccept).toHaveBeenCalledTimes(1);
+    });
 });

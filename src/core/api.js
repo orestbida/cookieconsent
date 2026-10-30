@@ -600,13 +600,16 @@ const retrieveState = () => {
      */
     if (!state._invalidConsent) {
         /**
-         * Ignore categories and services that are no longer in the config
+         * Ignore categories and services that are no longer in the config;
+         * readOnly categories always have all their services accepted
          */
         for (const categoryName of state._allCategoryNames) {
             const savedServices = services && services[categoryName];
             const definedServices = getKeys(state._allDefinedServices[categoryName]);
 
-            if (isArray(savedServices))
+            if (elContains(state._readOnlyCategories, categoryName))
+                state._acceptedServices[categoryName] = definedServices;
+            else if (isArray(savedServices))
                 state._acceptedServices[categoryName] = savedServices.filter(service => elContains(definedServices, service));
         }
 
