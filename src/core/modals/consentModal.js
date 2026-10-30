@@ -18,6 +18,7 @@ import {
 
 import {
     CONSENT_MODAL_NAME,
+    ARIA_HIDDEN,
     DIV_TAG,
     BUTTON_TAG,
     BTN_GROUP_CLASS,
@@ -91,6 +92,8 @@ export const createConsentModal = (api, createMainContainer) => {
         addClassCm(dom._cmBody, 'body');
         addClassCm(dom._cmTexts, 'texts');
         addClassCm(dom._cmBtns, 'btns');
+
+        setAttribute(dom._cm, ARIA_HIDDEN, 'true');
 
         if (state._disablePageInteraction) {
             setAttribute(dom._cm, 'role', 'dialog');

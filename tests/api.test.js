@@ -61,6 +61,7 @@ describe("API tests", () => {
         testConfig.autoShow = false;
         await api.run(testConfig)
         expect(htmlHasClass(consentModalClassToggle)).toBe(false);
+        expect(globalObj._dom._cm.getAttribute('aria-hidden')).toBe('true');
     })
 
     it('Should return config.', () => {
