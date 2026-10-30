@@ -546,7 +546,7 @@ export const getRemainingExpirationTimeMS = () => {
 export const fetchJson = async (url) => {
     try {
         const response = await fetch(url);
-        return await response.json();
+        return response.ok && await response.json();
     } catch (e) {
         console.error(e);
         return false;

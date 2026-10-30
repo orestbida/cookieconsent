@@ -130,6 +130,28 @@ describe('Test language utils', () => {
         }
     });
 
+    it('Should throw if the translation file responds with an error status', async () => {
+        global.fetch = jest.fn(() =>
+            Promise.resolve({
+                ok: false,
+                json: () => Promise.resolve({}),
+            })
+        );
+
+        globalObj._state._allTranslations = {
+            it: './it.json'
+        }
+        globalObj._state._currentLanguageCode = '';
+        globalObj._state._userConfig = {
+            language: {
+                default: 'it'
+            }
+        };
+
+        await expect(loadTranslationData('it')).rejects.toBe(`Could not load translation for the 'it' language`);
+        delete global.fetch;
+    });
+
     it('Should return the default language if the detection method is not supported', () => {
         globalObj._state._allTranslations = {
             it: {}
