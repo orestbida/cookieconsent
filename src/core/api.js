@@ -550,7 +550,15 @@ const retrieveState = () => {
     const state = globalObj._state;
     const config = globalObj._config;
 
-    const cookieValue = getPluginCookie();
+    let cookieValue = getPluginCookie();
+
+    /**
+     * An expired localStorage item counts as no consent, like an expired cookie
+     */
+    if (config.cookie.useLocalStorage && new Date().getTime() > (cookieValue.expirationTime || 0)) {
+        localStorageManager._removeItem(config.cookie.name);
+        cookieValue = {};
+    }
 
     const {
         categories,
@@ -587,14 +595,6 @@ const retrieveState = () => {
         || !state._consentTimestamp
         || !state._lastConsentTimestamp
         || !validCategories;
-
-    /**
-     * If localStorage is enabled, also check the stored `expirationTime`
-     */
-    if (config.cookie.useLocalStorage && !state._invalidConsent) {
-        state._invalidConsent = new Date().getTime() > (cookieValue.expirationTime || 0);
-        state._invalidConsent && (localStorageManager._removeItem(config.cookie.name));
-    }
 
     debug('CookieConsent [STATUS] valid consent:', !state._invalidConsent);
     retrieveEnabledCategoriesAndServices();

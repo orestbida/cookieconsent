@@ -64,4 +64,19 @@ describe("Cookie should be created successfully", () => {
         api.reset(true);
         expect(getPluginCookie()).toEqual({})
     });
+
+    it('Should not reuse the consent id of an expired localstorage item', async () => {
+        api.acceptCategory('all');
+        const { name } = api.getConfig('cookie');
+        const expired = { ...getPluginCookie(), expirationTime: Date.now() - 1 };
+        api.reset();
+        localStorageManager._setItem(name, JSON.stringify(expired));
+
+        await api.run(testConfig);
+        expect(api.validConsent()).toBe(false);
+        expect(localStorageManager._getItem(name)).toBe('');
+
+        api.acceptCategory('all');
+        expect(api.getCookie('consentId')).not.toBe(expired.consentId);
+    });
 })
