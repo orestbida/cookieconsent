@@ -522,4 +522,13 @@ describe("API tests", () => {
         expect(api.acceptedCategory('analytics')).toBe(true);
         expect(api.acceptedCategory('ads')).toBe(false);
     })
+
+    it('Should run the onAccept callback of a readOnly service on the first consent', async () => {
+        api.reset(true);
+        window.__service1Enabled = false;
+        await api.run(testConfig);
+
+        api.acceptCategory([]);
+        expect(window.__service1Enabled).toBe(true);
+    })
 })

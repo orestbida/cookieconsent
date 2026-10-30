@@ -37,9 +37,13 @@ export const manageExistingScripts = (defaultEnabledCategories) => {
      * Automatically Enable/Disable internal services
      */
     for (const categoryName of _allCategoryNames) {
-        const lastChangedServices = _lastChangedServices[categoryName]
-            || _acceptedServices[categoryName]
-            || [];
+        const changedServices = _lastChangedServices[categoryName];
+
+        // Nothing changed (e.g. readOnly services on the first consent):
+        // check the accepted services that are not enabled yet
+        const lastChangedServices = changedServices && changedServices.length > 0
+            ? changedServices
+            : _acceptedServices[categoryName] || [];
 
         for (const serviceName of lastChangedServices) {
             const service = _allDefinedServices[categoryName][serviceName];
