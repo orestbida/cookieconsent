@@ -89,4 +89,15 @@ describe("Check modals' html generation under different settings", () => {
         const necessaryBtnClasses = [...document.querySelector('.cm__btn[data-role="necessary"]').classList];
         expect(necessaryBtnClasses).not.toContain('cm__btn--secondary');
     })
+
+    it('Should run when no categories are defined', async () => {
+        const configWithoutCategories = { ...testConfig };
+        delete configWithoutCategories.categories;
+
+        await api.run(configWithoutCategories);
+        api.showPreferences();
+        api.acceptCategory('all');
+        expect(api.validConsent()).toBe(true);
+        expect(api.getUserPreferences().acceptedCategories).toEqual([]);
+    })
 })

@@ -16,8 +16,8 @@ export const setConfig = (userConfig) => {
         { cookie } = config,
         callbacks = globalObj._callbacks,
         userCookieConfig = userConfig.cookie,
-        userCategories = userConfig.categories,
-        allCategoryNames = getKeys(userCategories) || [],
+        userCategories = userConfig.categories || {},
+        allCategoryNames = getKeys(userCategories),
         nav = navigator,
         doc = document;
 

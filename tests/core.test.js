@@ -63,6 +63,12 @@ describe('Core version (without GUI)', () => {
         expect(api.acceptedService('ga', 'analytics')).toBe(true);
     })
 
+    it('Should run when no categories are defined', async () => {
+        await api.run({});
+        api.acceptCategory('all');
+        expect(api.validConsent()).toBe(true);
+    })
+
     it('Should accept and reject services', async () => {
         await api.run({
             categories: {
