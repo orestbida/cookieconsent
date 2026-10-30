@@ -98,7 +98,7 @@ export const createPreferencesModal = (api, createMainContainer) => {
 
         // Hide preferences on 'esc' key press
         addEvent(dom._htmlDom, 'keydown', (event) => {
-            if (event.keyCode === 27)
+            if (event.key === 'Escape')
                 hidePreferences();
         }, true);
 

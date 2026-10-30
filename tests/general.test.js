@@ -69,7 +69,7 @@ describe("Test add/remove/toggle classes", () => {
     it("Should hide the preferences modal when esc key is pressed", () => {
         api.showPreferences();
         expect(globalObj._state._preferencesModalVisible).toBe(true);
-        document.documentElement.dispatchEvent(new KeyboardEvent("keydown", {keyCode: 27}));
+        document.documentElement.dispatchEvent(new KeyboardEvent("keydown", {key: "Escape"}));
         expect(globalObj._state._preferencesModalVisible).toBe(false);
         expect(htmlHasClass('show--preferences')).toBe(false);
     })
