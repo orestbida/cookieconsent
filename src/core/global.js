@@ -308,8 +308,6 @@ export class GlobalState {
             _allScriptTags: []
         };
 
-        //{{START: GUI}}
-
         /**
          * Pointers to main dom elements
          * @type {DomElements}
@@ -318,8 +316,6 @@ export class GlobalState {
             _categoryCheckboxInputs: {},
             _serviceCheckboxInputs: {}
         };
-
-        //{{END: GUI}}
 
         /**
          * Callback functions
