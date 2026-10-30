@@ -1,6 +1,7 @@
 import { globalObj } from "../src/core/global";
 import * as CookieConsent from "../src/index"
 import testConfig from "./config/full-config";
+import basicConfig from "./config/basic-config";
 import { fireClickEvent, htmlHasClass } from "./config/mocks-utils";
 
 /**
@@ -94,5 +95,69 @@ describe('Preferences Modal buttons test', () => {
         expect(htmlHasClass('show--preferences')).toBe(true)
         fireClickEvent(globalObj._dom._pmCloseBtn);
         expect(htmlHasClass('show--preferences')).toBe(false)
+    })
+})
+
+describe("Discarded service selection", () => {
+
+    const optInConfig = {
+        ...basicConfig,
+        mode: 'opt-in',
+        language: {
+            default: 'en',
+            translations: {
+                en: {
+                    consentModal: {
+                        title: 'Title',
+                        acceptAllBtn: 'Accept all',
+                        acceptNecessaryBtn: 'Reject all',
+                        showPreferencesBtn: 'Manage'
+                    },
+                    preferencesModal: {
+                        title: 'Preferences',
+                        acceptAllBtn: 'Accept all',
+                        acceptNecessaryBtn: 'Reject all',
+                        savePreferencesBtn: 'Save',
+                        closeIconLabel: 'Close',
+                        sections: [
+                            { title: 'Necessary', linkedCategory: 'necessary' },
+                            { title: 'External', linkedCategory: 'external' }
+                        ]
+                    }
+                }
+            }
+        },
+        categories: {
+            necessary: { enabled: true, readOnly: true },
+            external: {
+                services: {
+                    serviceA: { label: 'Service A' },
+                    serviceB: { label: 'Service B' }
+                }
+            }
+        }
+    };
+
+    const serviceToggle = (name) => globalObj._dom._serviceCheckboxInputs['external'][name];
+
+    afterEach(() => {
+        api.reset(true);
+    })
+
+    it('Should not accept a discarded service when unchanged preferences are saved', async () => {
+        await CookieConsent.run(optInConfig);
+        api = CookieConsent;
+
+        api.showPreferences();
+        serviceToggle('serviceA').checked = true;
+        serviceToggle('serviceA').dispatchEvent(new Event('change'));
+        fireClickEvent(globalObj._dom._pmCloseBtn);
+
+        api.showPreferences();
+        expect(serviceToggle('serviceA').checked).toBe(false);
+        fireClickEvent(globalObj._dom._pmSavePreferencesBtn);
+
+        expect(api.acceptedService('serviceA', 'external')).toBe(false);
+        expect(api.acceptedService('serviceB', 'external')).toBe(false);
     })
 })
