@@ -91,12 +91,18 @@ const acceptAndSave = (categories, excludedCategories, afterNextPaint) => {
 export const acceptCategory = (categories, excludedCategories = []) => acceptAndSave(categories, excludedCategories);
 
 /**
+ * True if the accepted categories/services apply:
+ * the consent is valid, or the defaults are enabled (opt-out)
+ */
+const acceptedStateApplies = () => !globalObj._state._invalidConsent || globalObj._config.mode === OPT_OUT_MODE;
+
+/**
  * Returns true if cookie category is accepted
  * @param {string} category
  */
 export const acceptedCategory = (category) => {
 
-    const acceptedCategories = !globalObj._state._invalidConsent
+    const acceptedCategories = acceptedStateApplies()
         ? globalObj._state._acceptedCategories
         : [];
 
@@ -132,7 +138,7 @@ export const acceptService = (service, category) => {
  * @param {string} category
  */
 export const acceptedService = (service, category) => {
-    const acceptedServices = !globalObj._state._invalidConsent
+    const acceptedServices = acceptedStateApplies()
         ? (globalObj._state._acceptedServices[category] || [])
         : [];
 

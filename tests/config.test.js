@@ -128,6 +128,29 @@ describe("Check modals' html generation under different settings", () => {
         });
     })
 
+    it('Should report the default categories and services as accepted before the consent when mode="opt-out"', async () => {
+        testConfig.mode = 'opt-out';
+        testConfig.categories.analytics.enabled = true;
+        api.eraseCookies('cc_cookie');
+        await api.run(testConfig);
+
+        expect(api.validConsent()).toBe(false);
+        expect(api.acceptedCategory('necessary')).toBe(true);
+        expect(api.acceptedCategory('analytics')).toBe(true);
+        expect(api.acceptedCategory('ads')).toBe(false);
+        expect(api.acceptedService('service1', 'analytics')).toBe(true);
+    })
+
+    it('Should not report any category as accepted before the consent when mode="opt-in"', async () => {
+        testConfig.mode = 'opt-in';
+        api.eraseCookies('cc_cookie');
+        await api.run(testConfig);
+
+        expect(api.acceptedCategory('necessary')).toBe(false);
+        expect(api.acceptedCategory('analytics')).toBe(false);
+        expect(api.acceptedService('service1', 'analytics')).toBe(false);
+    })
+
     it('equalWeightButtons option should be enabled by default', async () => {
         delete testConfig.guiOptions;
         await api.run(testConfig);

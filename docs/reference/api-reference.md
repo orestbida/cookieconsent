@@ -143,6 +143,10 @@ Returns `true` if the specified category was accepted, otherwise `false`.
     function(categoryName: string): boolean
     ```
 
+- **Details**
+
+    In `opt-out` mode, before the user makes a choice, it returns `true` for the categories that are enabled by default.
+
 - **Examples**
     ```javascript
     if(CookieConsent.acceptedCategory('analytics')){
