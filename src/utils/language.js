@@ -23,7 +23,10 @@ export const getAvailableLanguage = (languageCode) => {
     if (!isString(languageCode))
         return null;
 
-    if (languageCode in globalObj._state._allTranslations)
+    const translations = globalObj._state._allTranslations;
+    const hasTranslation = (code) => Object.prototype.hasOwnProperty.call(translations, code);
+
+    if (hasTranslation(languageCode))
         return languageCode;
 
     /**
@@ -31,7 +34,7 @@ export const getAvailableLanguage = (languageCode) => {
      */
     let language = languageCode.slice(0, 2);
 
-    if (language in globalObj._state._allTranslations)
+    if (hasTranslation(language))
         return language;
 
     return null;

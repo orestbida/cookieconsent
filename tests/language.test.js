@@ -43,6 +43,15 @@ describe('Test language utils', () => {
         expect(getAvailableLanguage('it')).toBe(null);
     });
 
+    it("Should return null for inherited object properties", () => {
+        globalObj._state._allTranslations = {
+            en: {}
+        }
+        expect(getAvailableLanguage('constructor')).toBe(null);
+        expect(getAvailableLanguage('toString')).toBe(null);
+        expect(getAvailableLanguage('hasOwnProperty')).toBe(null);
+    });
+
     it("Should return current language", () => {
         globalObj._state._currentLanguageCode = 'de';
         expect(getCurrentLanguageCode()).toBe('de');
