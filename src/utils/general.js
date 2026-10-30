@@ -327,15 +327,6 @@ export const resolveEnabledCategories = (categories, excludedCategories) => {
                 ? _allCategoryNames
                 : [categories];
         }
-
-        /**
-         * If there are services, turn them all on or off
-         */
-        for (const categoryName of _allCategoryNames) {
-            _enabledServices[categoryName] = elContains(enabledCategories, categoryName)
-                ? getKeys(_allDefinedServices[categoryName])
-                : [];
-        }
     }
 
     // Remove invalid and excluded categories
@@ -343,6 +334,17 @@ export const resolveEnabledCategories = (categories, excludedCategories) => {
         !elContains(_allCategoryNames, category) ||
         !elContains(excludedCategories, category)
     );
+
+    /**
+     * If there are services, turn them all on or off
+     */
+    if (categories) {
+        for (const categoryName of _allCategoryNames) {
+            _enabledServices[categoryName] = elContains(enabledCategories, categoryName)
+                ? getKeys(_allDefinedServices[categoryName])
+                : [];
+        }
+    }
 
     // Add back all the categories set as "readonly/required"
     enabledCategories.push(..._readOnlyCategories);

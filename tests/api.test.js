@@ -118,6 +118,12 @@ describe("API tests", () => {
         expect(api.acceptedCategory('analytics')).toBe(false)
     })
 
+    it('Should reject the services of an excluded category', () => {
+        api.acceptCategory('all', ['analytics']);
+        expect(api.acceptedService('service1', 'analytics')).toBe(false)
+        expect(api.acceptedService('service2', 'analytics')).toBe(false)
+    })
+
     it("Should return the plugin's cookie", () => {
         api.acceptCategory();
         const cookie = api.getCookie();
