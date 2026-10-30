@@ -3,37 +3,31 @@ name: NPM Registry
 on:
   release:
     types: [published]
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: Release tag to publish (e.g. v3.2.1)
+        required: true
+      tag:
+        description: npm dist-tag
+        default: latest
 
 permissions:
   contents: read
+  id-token: write
 
 jobs:
-  push-to-npm-registry-as-latest:
-    if: "!github.event.release.prerelease"
+  push-to-npm-registry:
     runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v7
+      with:
+        ref: ${{ inputs.ref || github.ref }}
     - uses: actions/setup-node@v7
       with:
         node-version: lts/*
-    - uses: JS-DevTools/npm-publish@v4
-      with:
-        token: ${{ secrets.NPM_TOKEN }}
-        access: public
-        tag: latest
-
-  push-to-npm-registry-as-next:
-    if: "github.event.release.prerelease"
-    runs-on: ubuntu-latest
-
-    steps:
-    - uses: actions/checkout@v7
-    - uses: actions/setup-node@v7
-      with:
-        node-version: lts/*
-    - uses: JS-DevTools/npm-publish@v4
-      with:
-        token: ${{ secrets.NPM_TOKEN }}
-        access: public
-        tag: next
+        registry-url: https://registry.npmjs.org
+    # Trusted publishing (OIDC) needs npm >= 11.5.1
+    - run: npm install -g npm@^11.5.1
+    - run: npm publish --access public --tag ${{ inputs.tag || (github.event.release.prerelease && 'next' || 'latest') }}
