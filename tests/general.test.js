@@ -211,6 +211,7 @@ describe("Array/Object tests", () => {
         expect(deepCopy(false)).toBe(false);
         expect(deepCopy('ciao')).toBe('ciao');
         expect(deepCopy({})).toEqual({});
+        expect(deepCopy(null)).toBe(null);
 
         const date = new Date();
         expect(deepCopy(date)).toEqual(date);
@@ -220,6 +221,7 @@ describe("Array/Object tests", () => {
             bool: false,
             date: new Date(),
             str: 'test',
+            empty: null,
             arr: ['a', 'b', 'c'],
             obj: {
                 id: 21,

@@ -141,7 +141,7 @@ export const removeClass = (el, className) => el.classList.remove(className);
 export const hasClass = (el, className) => el.classList.contains(className);
 
 export const deepCopy = (el) => {
-    if (typeof el !== 'object' )
+    if (typeof el !== 'object' || el === null)
         return el;
 
     if (el instanceof Date)
