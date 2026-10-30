@@ -137,7 +137,8 @@ export const manageExistingScripts = (defaultEnabledCategories) => {
 
             freshScript.textContent = currScript.innerHTML;
 
-            //Copy attributes over to the new "revived" script
+            // Copy attributes over to the new "revived" script; properties are
+            // preferred since some values (e.g. `nonce`) are hidden from attributes
             for (const {nodeName} of currScript.attributes) {
                 setAttribute(
                     freshScript,
