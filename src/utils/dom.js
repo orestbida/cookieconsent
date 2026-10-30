@@ -21,13 +21,16 @@ export const dispatchInputChangeEvent = (input) => input.dispatchEvent(new Event
 
 /**
  * @param {keyof HTMLElementTagNameMap} type
+ * @param {string} [className]
  */
-export const createNode = (type) => {
+export const createNode = (type, className) => {
     const el = document.createElement(type);
 
     if (type === BUTTON_TAG) {
         el.type = type;
     }
+
+    className && addClass(el, className);
 
     return el;
 };

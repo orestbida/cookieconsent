@@ -73,11 +73,9 @@ export const createPreferencesModal = (api, createMainContainer) => {
             || savePreferencesBtnData;
 
     if (!dom._pmContainer) {
-        dom._pmContainer = createNode(DIV_TAG);
-        addClass(dom._pmContainer, 'pm-wrapper');
+        dom._pmContainer = createNode(DIV_TAG, 'pm-wrapper');
 
-        const pmOverlay = createNode('div');
-        addClass(pmOverlay, 'pm-overlay');
+        const pmOverlay = createNode('div', 'pm-overlay');
         appendChild(dom._pmContainer, pmOverlay);
 
         /**
@@ -86,9 +84,7 @@ export const createPreferencesModal = (api, createMainContainer) => {
         addEvent(pmOverlay, CLICK_EVENT, hidePreferences);
 
         // Preferences modal
-        dom._pm = createNode(DIV_TAG);
-
-        addClass(dom._pm, 'pm');
+        dom._pm = createNode(DIV_TAG, 'pm');
         setAttribute(dom._pm, 'role', 'dialog');
         setAttribute(dom._pm, ARIA_HIDDEN, true);
         setAttribute(dom._pm, 'aria-modal', true);
@@ -100,15 +96,12 @@ export const createPreferencesModal = (api, createMainContainer) => {
                 hidePreferences();
         }, true);
 
-        dom._pmHeader = createNode(DIV_TAG);
-        addClassPm(dom._pmHeader, 'header');
+        dom._pmHeader = createNode(DIV_TAG, 'pm__header');
 
-        dom._pmTitle = createNode('h2');
-        addClassPm(dom._pmTitle, 'title');
+        dom._pmTitle = createNode('h2', 'pm__title');
         dom._pmTitle.id = 'pm__title';
 
-        dom._pmCloseBtn = createNode(BUTTON_TAG);
-        addClassPm(dom._pmCloseBtn, 'close-btn');
+        dom._pmCloseBtn = createNode(BUTTON_TAG, 'pm__close-btn');
         setAttribute(dom._pmCloseBtn, 'aria-label', modalData.closeIconLabel || '');
         addEvent(dom._pmCloseBtn, CLICK_EVENT, hidePreferences);
 
@@ -116,11 +109,9 @@ export const createPreferencesModal = (api, createMainContainer) => {
         dom._pmFocusSpan.innerHTML = getSvgIcon();
         appendChild(dom._pmCloseBtn, dom._pmFocusSpan);
 
-        dom._pmBody = createNode(DIV_TAG);
-        addClassPm(dom._pmBody, 'body');
+        dom._pmBody = createNode(DIV_TAG, 'pm__body');
 
-        dom._pmFooter = createNode(DIV_TAG);
-        addClassPm(dom._pmFooter, 'footer');
+        dom._pmFooter = createNode(DIV_TAG, 'pm__footer');
 
         dom._pmBtnGroup1 = createNode(DIV_TAG);
         dom._pmBtnGroup2 = createNode(DIV_TAG);
@@ -140,8 +131,7 @@ export const createPreferencesModal = (api, createMainContainer) => {
         appendChild(dom._pm, dom._pmBody);
         appendChild(dom._pmContainer, dom._pm);
     } else {
-        dom._pmNewBody = createNode(DIV_TAG);
-        addClassPm(dom._pmNewBody, 'body');
+        dom._pmNewBody = createNode(DIV_TAG, 'pm__body');
     }
 
     if (titleData) {
@@ -172,14 +162,12 @@ export const createPreferencesModal = (api, createMainContainer) => {
             expandableDivId = sLinkedCategory + '-desc';
 
         // section
-        const s = createNode(DIV_TAG);
-        addClassPm(s, 'section');
+        const s = createNode(DIV_TAG, 'pm__section');
 
         let sDescContainer, sTitle;
 
         if (sIsExpandableToggle || sDescriptionData) {
-            sDescContainer = createNode(DIV_TAG);
-            addClassPm(sDescContainer, 'section-desc-wrapper');
+            sDescContainer = createNode(DIV_TAG, 'pm__section-desc-wrapper');
         }
 
         if (sIsExpandableToggle && nServices > 0)
@@ -230,8 +218,7 @@ export const createPreferencesModal = (api, createMainContainer) => {
         }
 
         if (sDescriptionData) {
-            const sDesc = createNode('p');
-            addClassPm(sDesc, 'section-desc');
+            const sDesc = createNode('p', 'pm__section-desc');
             sDesc.innerHTML = sDescriptionData;
             appendChild(sDescContainer, sDesc);
         }
@@ -253,8 +240,7 @@ export const createPreferencesModal = (api, createMainContainer) => {
 
         if (hasToggle) {
             if (!sectionToggleContainer) {
-                sectionToggleContainer = createNode(DIV_TAG);
-                addClassPm(sectionToggleContainer, 'section-toggles');
+                sectionToggleContainer = createNode(DIV_TAG, 'pm__section-toggles');
             }
             sectionToggleContainer.appendChild(s);
         } else {
@@ -267,8 +253,7 @@ export const createPreferencesModal = (api, createMainContainer) => {
 
     if (acceptAllBtnData) {
         if (!dom._pmAcceptAllBtn) {
-            dom._pmAcceptAllBtn = createNode(BUTTON_TAG);
-            addClassPm(dom._pmAcceptAllBtn, 'btn');
+            dom._pmAcceptAllBtn = createNode(BUTTON_TAG, 'pm__btn');
             setAttribute(dom._pmAcceptAllBtn, DATA_ROLE, 'all');
             appendChild(dom._pmBtnGroup1, dom._pmAcceptAllBtn);
             addEvent(dom._pmAcceptAllBtn, CLICK_EVENT, () =>
@@ -281,8 +266,7 @@ export const createPreferencesModal = (api, createMainContainer) => {
 
     if (acceptNecessaryBtnData) {
         if (!dom._pmAcceptNecessaryBtn) {
-            dom._pmAcceptNecessaryBtn = createNode(BUTTON_TAG);
-            addClassPm(dom._pmAcceptNecessaryBtn, 'btn');
+            dom._pmAcceptNecessaryBtn = createNode(BUTTON_TAG, 'pm__btn');
             setAttribute(dom._pmAcceptNecessaryBtn, DATA_ROLE, 'necessary');
             appendChild(dom._pmBtnGroup1, dom._pmAcceptNecessaryBtn);
             addEvent(dom._pmAcceptNecessaryBtn, CLICK_EVENT, () =>
@@ -295,8 +279,7 @@ export const createPreferencesModal = (api, createMainContainer) => {
 
     if (savePreferencesBtnData) {
         if (!dom._pmSavePreferencesBtn) {
-            dom._pmSavePreferencesBtn = createNode(BUTTON_TAG);
-            addClassPm(dom._pmSavePreferencesBtn, 'btn');
+            dom._pmSavePreferencesBtn = createNode(BUTTON_TAG, 'pm__btn');
             addClassPm(dom._pmSavePreferencesBtn, 'btn--secondary');
             setAttribute(dom._pmSavePreferencesBtn, DATA_ROLE, 'save');
             appendChild(dom._pmBtnGroup2, dom._pmSavePreferencesBtn);
@@ -345,8 +328,7 @@ export const createPreferencesModal = (api, createMainContainer) => {
  * @param {string} categoryName
  */
 const createServices = (services, serviceNames, categoryObject, categoryName) => {
-    const servicesContainer = createNode(DIV_TAG);
-    addClassPm(servicesContainer, 'section-services');
+    const servicesContainer = createNode(DIV_TAG, 'pm__section-services');
 
     for (const serviceName of serviceNames) {
         const service = services[serviceName];
@@ -381,9 +363,7 @@ const createServices = (services, serviceNames, categoryObject, categoryName) =>
  * @param {string} counterLabel singular and plural form, separated by "|"
  */
 const createServiceCounter = (nServices, counterLabel) => {
-    const serviceCounter = createNode('span');
-
-    addClassPm(serviceCounter, 'badge');
+    const serviceCounter = createNode('span', 'pm__badge');
     addClassPm(serviceCounter, 'service-counter');
     setAttribute(serviceCounter, ARIA_HIDDEN, true);
     setAttribute(serviceCounter, 'data-servicecounter', nServices);
@@ -437,8 +417,7 @@ const createCookieTable = (cookieTableData, sectionIndex) => {
     const caption = cookieTableData.caption;
 
     if (caption) {
-        const captionEl = createNode('caption');
-        addClassPm(captionEl, 'table-caption');
+        const captionEl = createNode('caption', 'pm__table-caption');
         captionEl.innerHTML = caption;
         table.appendChild(captionEl);
     }
@@ -477,8 +456,7 @@ const createCookieTable = (cookieTableData, sectionIndex) => {
     const bodyFragment = globalObj._dom._document.createDocumentFragment();
 
     for (const bodyItem of cookieTableData.body) {
-        const tr = createNode('tr');
-        addClassPm(tr, 'table-tr');
+        const tr = createNode('tr', 'pm__table-tr');
 
         for (const tdKey of tableHeadersKeys) {
             const tdHeader = headerData[tdKey];

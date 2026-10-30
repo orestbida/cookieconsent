@@ -226,8 +226,7 @@ export const createConsentModal = (api, createMainContainer) => {
     }
 
     if (!dom._cmBtnGroup) {
-        dom._cmBtnGroup = createNode(DIV_TAG);
-        addClassCm(dom._cmBtnGroup, BTN_GROUP_CLASS);
+        dom._cmBtnGroup = createNode(DIV_TAG, 'cm__' + BTN_GROUP_CLASS);
         appendChild(dom._cmBtns, dom._cmBtnGroup);
     }
 
@@ -240,8 +239,7 @@ export const createConsentModal = (api, createMainContainer) => {
             addClassCm(dom._cmBtnGroup, BTN_GROUP_CLASS + '--uneven');
         } else {
             if (!dom._cmBtnGroup2) {
-                dom._cmBtnGroup2 = createNode(DIV_TAG);
-                addClassCm(dom._cmBtnGroup2, BTN_GROUP_CLASS);
+                dom._cmBtnGroup2 = createNode(DIV_TAG, 'cm__' + BTN_GROUP_CLASS);
                 appendChild(dom._cmBtns, dom._cmBtnGroup2);
             }
 
