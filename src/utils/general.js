@@ -659,7 +659,7 @@ export const addDataButtonListeners = (elem, api, createPreferencesModal, create
         addEvent(el, CLICK_EVENT, (event) => {
             preventDefault(event);
             showPreferences();
-        });
+        }, true);
 
         if (createPreferencesModalOnHover) {
             addEvent(el, 'mouseenter', (event) => {
@@ -671,7 +671,7 @@ export const addDataButtonListeners = (elem, api, createPreferencesModal, create
             addEvent(el, 'focus', () => {
                 if (!globalObj._state._preferencesModalExists)
                     createPreferencesModal(api, createMainContainer);
-            });
+            }, true);
         }
     }
 

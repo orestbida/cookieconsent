@@ -45,6 +45,17 @@ describe("Test data-cc attributes", () => {
         expect(htmlHasClass('show--preferences')).toBe(true);
     })
 
+    it('Should remove the show preferences modal listeners on reset', async () => {
+        const showPreferencesBtn = document.querySelector('button[data-cc="show-preferencesModal"]');
+
+        api.reset(true);
+        fireClickEvent(showPreferencesBtn);
+
+        await api.run(testConfig);
+        fireClickEvent(showPreferencesBtn);
+        expect(htmlHasClass('show--preferences')).toBe(true);
+    })
+
     it('Should show the consent modal onClick', () => {
         const showConsentModal = document.querySelector('button[data-cc="show-consentModal"]');
         fireClickEvent(showConsentModal)
