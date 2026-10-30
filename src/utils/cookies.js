@@ -12,7 +12,8 @@ import {
     deepCopy,
     fireEvent,
     arrayDiff,
-    safeRun
+    safeRun,
+    syncModalToggles
 } from './general';
 import { localStorageManager } from './localstorage';
 
@@ -133,25 +134,7 @@ export const saveCookiePreferences = () => {
     }
 
     //{{START: GUI}}
-    const categoryToggles = globalObj._dom._categoryCheckboxInputs;
-
-    /**
-     * If the category is accepted check checkbox,
-     * otherwise uncheck it
-     */
-    for (const categoryName in categoryToggles) {
-        categoryToggles[categoryName].checked = elContains(state._acceptedCategories, categoryName);
-    }
-
-    for (const categoryName of state._allCategoryNames) {
-        const servicesToggles = globalObj._dom._serviceCheckboxInputs[categoryName];
-        const enabledServices = state._acceptedServices[categoryName];
-
-        for (const serviceName in servicesToggles) {
-            const serviceInput = servicesToggles[serviceName];
-            serviceInput.checked = elContains(enabledServices, serviceName);
-        }
-    }
+    syncModalToggles(true);
     //{{END: GUI}}
 
     if (!state._consentTimestamp)

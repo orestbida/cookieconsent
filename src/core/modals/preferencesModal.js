@@ -10,14 +10,14 @@ import {
     appendChild,
     getKeys,
     hasClass,
-    elContains,
     getModalFocusableData,
     isString,
     isObject,
     fireEvent,
     getSvgIcon,
     handleFocusTrap,
-    debug
+    debug,
+    isToggleChecked
 } from '../../utils/general';
 
 import { guiManager } from '../../utils/gui-manager';
@@ -600,20 +600,9 @@ function createToggleLabel(label, value, sCurrentCategoryObject, isService, cate
     appendChild(toggleIconCircle, toggleOnIcon);
     appendChild(toggleIcon, toggleIconCircle);
 
-    /**
-     * If consent is valid => retrieve category states from cookie
-     * Otherwise use states defined in the userConfig. object
-     */
-    if (!state._invalidConsent) {
-        if (isService) {
-            const enabledServices = state._acceptedServices[categoryName];
-            toggle.checked = sCurrentCategoryObject.readOnly || elContains(enabledServices, value);
-        } else if (elContains(state._acceptedCategories, value)) {
-            toggle.checked = true;
-        }
-    } else if (sCurrentCategoryObject.readOnly || sCurrentCategoryObject.enabled) {
-        toggle.checked = true;
-    }
+    toggle.checked = isService
+        ? isToggleChecked(categoryName, value, !state._invalidConsent)
+        : isToggleChecked(value, '', !state._invalidConsent);
 
     /**
      * Set toggle as readonly if true (disable checkbox)

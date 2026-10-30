@@ -19,6 +19,7 @@ import {
     resolveEnabledCategories,
     resolveEnabledServices,
     updateModalToggles,
+    syncModalToggles,
     toggleDisableInteraction,
     fireEvent,
     getKeys,
@@ -291,42 +292,7 @@ export const showPreferences = () => {
 /**
  * https://github.com/orestbida/cookieconsent/issues/481
  */
-const discardUnsavedPreferences = () => {
-    const consentIsValid = validConsent();
-    const allDefinedCategories = globalObj._state._allDefinedCategories;
-    const categoryInputs = globalObj._dom._categoryCheckboxInputs;
-    const serviceInputs = globalObj._dom._serviceCheckboxInputs;
-
-    /**
-     * @param {string} category
-     */
-    const categoryEnabledByDefault = (category) => elContains(globalObj._state._defaultEnabledCategories, category);
-
-    for (const category in categoryInputs) {
-        const isReadOnly = !!allDefinedCategories[category].readOnly;
-
-        categoryInputs[category].checked = isReadOnly || (consentIsValid
-            ? acceptedCategory(category)
-            : categoryEnabledByDefault(category)
-        );
-
-        /**
-         * Keep the enabled services draft in sync with the restored checkboxes
-         */
-        const enabledServices = [];
-
-        for (const service in serviceInputs[category]) {
-            const checked = serviceInputs[category][service].checked = isReadOnly || (consentIsValid
-                ? acceptedService(service, category)
-                : categoryEnabledByDefault(category)
-            );
-
-            checked && enabledServices.push(service);
-        }
-
-        globalObj._state._enabledServices[category] = enabledServices;
-    }
-};
+const discardUnsavedPreferences = () => syncModalToggles(validConsent());
 
 /**
  * Hide preferences modal

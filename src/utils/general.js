@@ -415,6 +415,50 @@ export const resolveEnabledServices = (relativeCategory) => {
 const dispatchPluginEvent = (eventName, data) => dispatchEvent(new CustomEvent(eventName, {detail: data}));
 
 /**
+ * True if the toggle of the category (or of one of its services) should be checked.
+ * Without `useAcceptedState`, the defaults are used.
+ * @param {string} categoryName
+ * @param {string} [serviceName]
+ * @param {boolean} [useAcceptedState]
+ */
+export const isToggleChecked = (categoryName, serviceName, useAcceptedState) => {
+    const state = globalObj._state;
+
+    if (state._allDefinedCategories[categoryName].readOnly)
+        return true;
+
+    if (!useAcceptedState)
+        return elContains(state._defaultEnabledCategories, categoryName);
+
+    return serviceName
+        ? elContains(state._acceptedServices[categoryName], serviceName)
+        : elContains(state._acceptedCategories, categoryName);
+};
+
+/**
+ * Tick/untick all the modal's toggles and reset the enabled services to match
+ * @param {boolean} [useAcceptedState]
+ */
+export const syncModalToggles = (useAcceptedState) => {
+    const { _categoryCheckboxInputs, _serviceCheckboxInputs } = globalObj._dom;
+
+    for (const categoryName in _categoryCheckboxInputs) {
+        const enabledServices = [];
+
+        _categoryCheckboxInputs[categoryName].checked = isToggleChecked(categoryName, '', useAcceptedState);
+
+        for (const serviceName in _serviceCheckboxInputs[categoryName]) {
+            const serviceInput = _serviceCheckboxInputs[categoryName][serviceName];
+
+            serviceInput.checked = isToggleChecked(categoryName, serviceName, useAcceptedState);
+            serviceInput.checked && enabledServices.push(serviceName);
+        }
+
+        globalObj._state._enabledServices[categoryName] = enabledServices;
+    }
+};
+
+/**
  * Update services state internally and tick/untick checkboxes
  * @param {string|string[]} service
  * @param {string} category
