@@ -706,8 +706,9 @@ export const addDataButtonListeners = (elem, api, createPreferencesModal, create
 /**
  * @param {HTMLElement} el
  * @param {boolean} [toggleTabIndex]
+ * @param {boolean} [preventScroll]
  */
-export const focus = (el, toggleTabIndex) => {
+export const focus = (el, toggleTabIndex, preventScroll) => {
     if (!el) return;
 
     /**
@@ -716,7 +717,7 @@ export const focus = (el, toggleTabIndex) => {
      */
     toggleTabIndex && (el.tabIndex = -1);
 
-    el.focus();
+    el.focus({ preventScroll });
 
     /**
      * Remove the `tabindex` attribute so

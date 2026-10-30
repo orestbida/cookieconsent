@@ -205,7 +205,7 @@ export const show = (createModal) => {
         addClass(globalObj._dom._cmContainer, 'cc--anim');
     }, 100);
     setTimeout(() => {
-        focus(globalObj._dom._cmDivTabindex);
+        focus(globalObj._dom._cmDivTabindex, false, true);
     }, 200);
 
     debug('CookieConsent [TOGGLE]: show consentModal');
@@ -230,7 +230,7 @@ export const hide = () => {
     /**
      * Fix focus restoration to body with Chrome
      */
-    focus(_dom._focusSpan, true);
+    focus(_dom._focusSpan, true, true);
 
     removeClass(_dom._rootEl, TOGGLE_CONSENT_MODAL_CLASS);
     setAttribute(_dom._cm, ARIA_HIDDEN, 'true');
@@ -279,7 +279,7 @@ export const showPreferences = () => {
      * Set focus to preferencesModal
      */
     setTimeout(() => {
-        focus(globalObj._dom._pmDivTabindex);
+        focus(globalObj._dom._pmDivTabindex, false, true);
     }, 200);
 
     debug('CookieConsent [TOGGLE]: show preferencesModal');
@@ -343,7 +343,7 @@ export const hidePreferences = () => {
     /**
      * Fix focus restoration to body with Chrome
      */
-    focus(globalObj._dom._pmFocusSpan, true);
+    focus(globalObj._dom._pmFocusSpan, true, true);
 
     removeClass(globalObj._dom._rootEl, TOGGLE_PREFERENCES_MODAL_CLASS);
     setAttribute(globalObj._dom._pm, ARIA_HIDDEN, 'true');
@@ -352,7 +352,7 @@ export const hidePreferences = () => {
      * If consent modal is visible, focus him (instead of page document)
      */
     if (state._consentModalVisible) {
-        focus(state._lastFocusedModalElement);
+        focus(state._lastFocusedModalElement, false, true);
         state._lastFocusedModalElement = null;
     } else {
         /**

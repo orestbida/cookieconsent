@@ -183,6 +183,36 @@ describe('Modal focus trap', () => {
         expect(focusedAt).toBeGreaterThan(animEnabledAt);
     });
 
+    it('Should not scroll the page when focusing the modals', async () => {
+        CookieConsent.reset(true);
+
+        const hostBtn = document.createElement('button');
+        document.body.appendChild(hostBtn);
+        hostBtn.focus();
+
+        await CookieConsent.run({ ...testConfig, autoShow: false });
+        const focusSpy = jest.spyOn(HTMLElement.prototype, 'focus');
+        const focusOptions = (el) => focusSpy.mock.calls[focusSpy.mock.contexts.lastIndexOf(el)][0];
+
+        CookieConsent.show(true);
+        jest.advanceTimersByTime(200);
+        expect(focusOptions(globalObj._dom._cmDivTabindex)).toEqual({ preventScroll: true });
+
+        CookieConsent.showPreferences();
+        jest.advanceTimersByTime(200);
+        expect(focusOptions(globalObj._dom._pmDivTabindex)).toEqual({ preventScroll: true });
+
+        CookieConsent.hidePreferences();
+        expect(focusOptions(globalObj._dom._pmFocusSpan)).toEqual({ preventScroll: true });
+
+        CookieConsent.hide();
+        expect(focusOptions(globalObj._dom._focusSpan)).toEqual({ preventScroll: true });
+        expect(focusOptions(hostBtn)).toEqual({ preventScroll: undefined });
+
+        focusSpy.mockRestore();
+        hostBtn.remove();
+    });
+
     it('Should not trap focus when the preferences modal is hidden', () => {
         CookieConsent.hidePreferences();
         globalObj._dom._pmDivTabindex.focus();
