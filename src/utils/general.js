@@ -331,7 +331,7 @@ export const resolveEnabledCategories = (categories, excludedCategories) => {
 
     // Remove invalid and excluded categories
     enabledCategories = enabledCategories.filter(category =>
-        !elContains(_allCategoryNames, category) ||
+        elContains(_allCategoryNames, category) &&
         !elContains(excludedCategories, category)
     );
 

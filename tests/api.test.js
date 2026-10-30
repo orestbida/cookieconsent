@@ -118,6 +118,13 @@ describe("API tests", () => {
         expect(api.acceptedCategory('analytics')).toBe(false)
     })
 
+    it('Should ignore categories that do not exist', () => {
+        api.acceptCategory(['analytics', 'does_not_exist']);
+        expect(api.acceptedCategory('analytics')).toBe(true)
+        expect(api.acceptedCategory('does_not_exist')).toBe(false)
+        expect(api.getCookie('categories')).not.toContain('does_not_exist')
+    })
+
     it('Should reject the services of an excluded category', () => {
         api.acceptCategory('all', ['analytics']);
         expect(api.acceptedService('service1', 'analytics')).toBe(false)
