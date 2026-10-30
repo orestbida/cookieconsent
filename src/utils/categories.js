@@ -114,7 +114,13 @@ export const resolveEnabledCategories = (categories, excludedCategories) => {
         enabledCategories = [..._acceptedCategories, ..._defaultEnabledCategories];
         //{{START: GUI}}
         if (_preferencesModalExists) {
-            enabledCategories = retrieveCategoriesFromModal();
+            const toggles = globalObj._dom._categoryCheckboxInputs;
+
+            // Categories without a toggle keep their current state
+            enabledCategories = [
+                ...retrieveCategoriesFromModal(),
+                ...enabledCategories.filter(categoryName => !toggles[categoryName])
+            ];
         }
         //{{END: GUI}}
     } else {

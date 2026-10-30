@@ -1,6 +1,6 @@
 import * as CookieConsent from "../src/index"
 import { globalObj } from "../src/core/global";
-import { htmlHasClass } from "./config/mocks-utils";
+import { fireClickEvent, htmlHasClass } from "./config/mocks-utils";
 
 /**
  * @type {import("../src/core/global").Api}
@@ -468,6 +468,31 @@ describe("API tests", () => {
         expect(api.acceptedService('h2', 'hidden')).toBe(true);
 
         expect(() => api.acceptService([], 'hidden')).not.toThrow();
+        expect(api.acceptedCategory('hidden')).toBe(false);
+    })
+
+    it('Should keep the state of a category without a section when the preferences modal exists', async () => {
+        api.reset(true);
+        testConfig.categories.hidden = {
+            services: {
+                h1: {},
+                h2: {}
+            }
+        };
+        await api.run(testConfig);
+        api.showPreferences();
+
+        api.acceptService('h1', 'hidden');
+        expect(api.acceptedCategory('hidden')).toBe(true);
+        expect(api.getCookie('categories')).toContain('hidden');
+
+        fireClickEvent(globalObj._dom._pmSavePreferencesBtn);
+        expect(api.acceptedCategory('hidden')).toBe(true);
+        expect(api.acceptedService('h1', 'hidden')).toBe(true);
+
+        api.acceptCategory([]);
+        api.showPreferences();
+        fireClickEvent(globalObj._dom._pmSavePreferencesBtn);
         expect(api.acceptedCategory('hidden')).toBe(false);
     })
 })
