@@ -378,8 +378,6 @@ export const resolveEnabledServices = (relativeCategory) => {
     for (const categoryName of categoriesToConsider) {
         const services = _allDefinedServices[categoryName];
         const serviceNames = getKeys(services);
-        const customServicesSelection = _enabledServices[categoryName] && _enabledServices[categoryName].length > 0;
-        const readOnlyCategory = elContains(_readOnlyCategories, categoryName);
 
         /**
          * Stop here if there are no services
@@ -387,25 +385,11 @@ export const resolveEnabledServices = (relativeCategory) => {
         if (serviceNames.length === 0)
             continue;
 
-        // Empty (previously) enabled services
-        _acceptedServices[categoryName] = [];
-
         // If category is marked as readOnly enable all its services
-        if (readOnlyCategory) {
-            _acceptedServices[categoryName].push(...serviceNames);
-        } else {
-            if (customServicesSelection) {
-                const selectedServices = _enabledServices[categoryName];
-                _acceptedServices[categoryName].push(...selectedServices);
-            } else {
-                _acceptedServices[categoryName] = state._enabledServices[categoryName];
-            }
-        }
-
-        /**
-         * Make sure there are no duplicates inside array
-         */
-        _acceptedServices[categoryName] = unique(_acceptedServices[categoryName]);
+        _acceptedServices[categoryName] = unique(elContains(_readOnlyCategories, categoryName)
+            ? serviceNames
+            : _enabledServices[categoryName] || []
+        );
     }
 };
 
