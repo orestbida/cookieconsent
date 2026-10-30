@@ -77,6 +77,14 @@ addEvent(saveTranslationBtn, 'click', () => {
     window.CookieConsent.setLanguage(currentLanguage);
 });
 
+/**
+ * The preview shows the consent modal, which moves the focus out of the open dialog
+ */
+addEvent(document, 'focusin', ({ target }) => {
+    if (dialog.shown && target.matches('#cc-main .cm'))
+        saveTranslationBtn.focus();
+});
+
 addEvent(selectEditorTranslation, 'change', () => {
     currentLanguage = selectEditorTranslation.value;
     setActiveTranslation(currentLanguage);

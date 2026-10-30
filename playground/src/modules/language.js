@@ -25,7 +25,7 @@ onEvent(customEvents._PLAYGROUND_READY, () => {
 
     const autoDetectMode = language.autoDetect;
     const autoDetect = autoDetectEnabled(autoDetectMode);
-    const detectedLanguage = detectLanguage(autoDetectMode);
+    const detectedLanguage = detectLanguage(autoDetectMode, state);
 
     const currLang = autoDetect && enabledTranslation(detectedLanguage, state)
         ? detectedLanguage
@@ -49,7 +49,7 @@ onEvent(customEvents._RESET, () => {
     const defaultLang = defaultConfig.language.default;
     updateDefaultLanguage(defaultLang);
     setAutoDetectMode(language.autoDetect);
-    updateDetectedLanguage(defaultLang, defaultState);
+    updateDetectedLanguage(detectLanguage(language.autoDetect, defaultState), defaultState);
     toggleAutoDetectCheckbox(true);
     updateDefaultLanguageOptions(defaultState._enabledTranslations);
     updateCurrentLanguage(defaultLang, defaultState);
@@ -63,7 +63,7 @@ addEvent(autoDetectCheckbox, 'change', () => {
     if (enable) {
 
         language.autoDetect = language.autoDetect || defaultConfig.language.autoDetect;
-        const detectedLang = detectLanguage(language.autoDetect);
+        const detectedLang = detectLanguage(language.autoDetect, state);
         updateDetectedLanguage(detectedLang, state);
 
         if (enabledTranslation(detectedLang, state)) {
@@ -88,8 +88,8 @@ addEvent(autoDetectModeSelect, 'change', () => {
         const state = getState();
         state._cookieConsentConfig.language.autoDetect = mode;
 
-        const detectedLanguage = detectLanguage(mode);
-        updateDetectedLanguage(detectedLanguage);
+        const detectedLanguage = detectLanguage(mode, state);
+        updateDetectedLanguage(detectedLanguage, state);
 
         if (enabledTranslation(detectedLanguage, state)) {
             updateCurrentLanguage(detectedLanguage, state);
@@ -108,7 +108,7 @@ addEvent(defaultLanguageSelect, 'change', () => {
         language.default = lang;
         const autoDetect = autoDetectEnabled(language.autoDetect);
 
-        if (!autoDetect || !enabledTranslation(detectLanguage(language.autoDetect), state)) {
+        if (!autoDetect || !enabledTranslation(detectLanguage(language.autoDetect, state), state)) {
             updateCurrentLanguage(lang, state);
         }
 
@@ -121,7 +121,7 @@ addEvent(defaultLanguageSelect, 'change', () => {
      * @param {string|boolean} languageCode
      * @param {typeof defaultState} [state]
      */
-function updateDetectedLanguage(languageCode, state) {
+export function updateDetectedLanguage(languageCode, state) {
     if (languageCode && typeof languageCode === 'string') {
         const validLanguage = enabledTranslation(languageCode, state || getState());
         updateTranslationFound(validLanguage);
@@ -193,8 +193,16 @@ export function autoDetectEnabled(mode) {
     return autoDetectModes.includes(mode);
 }
 
-function getBrowserLanguage() {
-    return navigator.language.slice(0,2);
+/**
+ * The user's preferred languages, in the same order the plugin checks them
+ * @returns {string[]}
+ */
+function getBrowserLanguages() {
+    const languages = navigator.languages && navigator.languages.length
+        ? navigator.languages
+        : [navigator.language];
+
+    return languages.map(language => language.slice(0,2));
 }
 
 function getDocumentLanguage() {
@@ -203,10 +211,13 @@ function getDocumentLanguage() {
 
 /**
  * @param {string} mode
+ * @param {typeof defaultState} [state]
  */
-export function detectLanguage(mode) {
-    if (mode === 'browser')
-        return getBrowserLanguage();
+export function detectLanguage(mode, state) {
+    if (mode === 'browser') {
+        const languages = getBrowserLanguages();
+        return languages.find(language => enabledTranslation(language, state)) || languages[0];
+    }
 
     if (mode === 'document')
         return getDocumentLanguage();

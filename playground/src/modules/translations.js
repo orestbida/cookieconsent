@@ -1,4 +1,4 @@
-import { updateDefaultLanguageOptions, updateDefaultLanguage, updateCurrentLanguage, detectLanguage, autoDetectEnabled, updateTranslationFound } from './language';
+import { updateDefaultLanguageOptions, updateDefaultLanguage, updateCurrentLanguage, detectLanguage, autoDetectEnabled, updateDetectedLanguage } from './language';
 import { defaultState, getState, saveState } from './stateManager';
 import { addEvent, customEvents, getById, onEvent } from './utils';
 
@@ -45,7 +45,7 @@ onEvent(customEvents._PLAYGROUND_READY, () => {
             updateDefaultLanguageOptions(state._enabledTranslations);
 
             const autoDetect = autoDetectEnabled(language.autoDetect);
-            const autoDetectedLanguage = autoDetect ? detectLanguage(language.autoDetect) : '';
+            const autoDetectedLanguage = autoDetect ? detectLanguage(language.autoDetect, state) : '';
 
             const currLanguage =
                 (enabledTranslation(autoDetectedLanguage, state) && autoDetectedLanguage)
@@ -54,7 +54,7 @@ onEvent(customEvents._PLAYGROUND_READY, () => {
                 || '';
 
             if (autoDetect) {
-                updateTranslationFound(currLanguage === autoDetectedLanguage);
+                updateDetectedLanguage(autoDetectedLanguage, state);
             }
 
             if (!enabledTranslation(language.default, state)) {

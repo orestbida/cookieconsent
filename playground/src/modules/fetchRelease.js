@@ -1,4 +1,5 @@
 import { customEvents, onEvent } from './utils';
+import { version } from '../../../package.json';
 
 let latest = '';
 
@@ -16,14 +17,18 @@ export async function fetchLatestRelease() {
         return latest;
     }
 
-    const res = await fetch('https://raw.githubusercontent.com/orestbida/cookieconsent/master/package.json');
+    try {
+        const res = await fetch('https://raw.githubusercontent.com/orestbida/cookieconsent/master/package.json');
 
-    /**
-     * @type {import('../../package.json')}
-     */
-    const pkg = await res.json();
+        /**
+         * @type {import('../../package.json')}
+         */
+        const pkg = await res.json();
 
-    return pkg.version;
+        return pkg.version || version;
+    } catch (e) {
+        return version;
+    }
 }
 
 /**
