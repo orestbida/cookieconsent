@@ -495,4 +495,31 @@ describe("API tests", () => {
         fireClickEvent(globalObj._dom._pmSavePreferencesBtn);
         expect(api.acceptedCategory('hidden')).toBe(false);
     })
+
+    it('Should not accept the default categories again after they were rejected', async () => {
+        api.reset(true);
+        testConfig.lazyHtmlGeneration = true;
+        testConfig.categories.ads.enabled = true;
+        await api.run(testConfig);
+
+        api.acceptCategory([]);
+        expect(api.acceptedCategory('ads')).toBe(false);
+
+        api.acceptService('service1', 'analytics');
+        expect(api.acceptedCategory('analytics')).toBe(true);
+        expect(api.acceptedCategory('ads')).toBe(false);
+
+        api.acceptCategory();
+        expect(api.acceptedCategory('ads')).toBe(false);
+    })
+
+    it('Should accept the default categories with acceptCategory() before the first consent', async () => {
+        api.reset(true);
+        testConfig.lazyHtmlGeneration = true;
+        await api.run(testConfig);
+
+        api.acceptCategory();
+        expect(api.acceptedCategory('analytics')).toBe(true);
+        expect(api.acceptedCategory('ads')).toBe(false);
+    })
 })

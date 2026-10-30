@@ -102,7 +102,8 @@ export const resolveEnabledCategories = (categories, excludedCategories) => {
         _preferencesModalExists,
         _enabledServices,
         _defaultEnabledCategories,
-        _allDefinedServices
+        _allDefinedServices,
+        _invalidConsent
     } = globalObj._state;
 
     /**
@@ -111,7 +112,10 @@ export const resolveEnabledCategories = (categories, excludedCategories) => {
     let enabledCategories = [];
 
     if (!categories) {
-        enabledCategories = [..._acceptedCategories, ..._defaultEnabledCategories];
+        // The default categories apply only until the user makes a choice
+        enabledCategories = _invalidConsent
+            ? [..._acceptedCategories, ..._defaultEnabledCategories]
+            : [..._acceptedCategories];
         //{{START: GUI}}
         if (_preferencesModalExists) {
             const toggles = globalObj._dom._categoryCheckboxInputs;
