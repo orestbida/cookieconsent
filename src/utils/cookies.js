@@ -207,8 +207,11 @@ const runConsentEffects = (isFirstConsent, stateChanged) => {
         fireEvent(globalObj._customEvents._onFirstConsent);
         fireEvent(globalObj._customEvents._onConsent);
 
-        if (globalObj._config.mode === OPT_IN_MODE)
+        // Nothing ran before the first consent, so there is nothing to reload
+        if (globalObj._config.mode === OPT_IN_MODE) {
+            state._reloadPage = false;
             return;
+        }
     }
 
     if (stateChanged)

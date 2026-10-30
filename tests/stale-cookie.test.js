@@ -1,5 +1,6 @@
 import * as CookieConsent from "../src/index"
 import { setCookie } from "./config/mocks-utils";
+import { globalObj } from "../src/core/global";
 
 /**
  * @type {import("../src/core/global").Api}
@@ -121,5 +122,17 @@ describe('Cookie with categories and services removed from the config', () => {
             expect(api.validConsent()).toBe(true);
             expect(new Date(api.getCookie(field)).toString()).not.toBe('Invalid Date');
         }
+    });
+
+    it('Should not keep a page reload pending after a new revision is rejected', async () => {
+        api.reset();
+        testConfig.revision = 1;
+        testConfig.categories.analytics.autoClear.reloadPage = true;
+        await api.run(testConfig);
+
+        expect(api.validConsent()).toBe(false);
+        api.acceptCategory([]);
+        expect(api.validConsent()).toBe(true);
+        expect(globalObj._state._reloadPage).toBe(false);
     });
 });
