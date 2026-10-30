@@ -1,6 +1,5 @@
 import { saveState, getState, defaultState } from './stateManager';
 import { customEvents, onEvent, addEvent, getById } from './utils';
-import { toggleDarkmode } from './darkmodeCheckbox';
 
 /**
  * @type {NodeListOf<HTMLInputElement>}
@@ -22,13 +21,10 @@ onEvent(customEvents._PLAYGROUND_READY, () => {
             const currTheme = input.id;
             theme = state._theme;
 
-            const isDefaultDarkMode = currTheme === 'cc--darkmode';
-
             state._theme = currTheme;
             saveState(state);
 
             toggleTheme(currTheme);
-            toggleDarkmode(isDefaultDarkMode);
 
             window.CookieConsent.show(true);
         });

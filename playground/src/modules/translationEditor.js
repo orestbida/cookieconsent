@@ -61,8 +61,9 @@ addEvent(editBtn, 'click', () => {
 });
 
 addEvent(addSectionBtn, 'click', () => {
-    const section = createSection();
+    const section = createSection(undefined, true);
     appendSection(section);
+    section.querySelector('.pm-section-title').focus();
 });
 
 addEvent(saveTranslationBtn, 'click', () => {
@@ -70,19 +71,22 @@ addEvent(saveTranslationBtn, 'click', () => {
     const state = getState();
     const translations = state._cookieConsentConfig.language.translations;
 
-    translations[currentLanguage] = retrieveCurrentTranslationFromEditor();
+    const oldSections = translations[currentLanguage].preferencesModal.sections || [];
+    const translation = retrieveCurrentTranslationFromEditor();
+
+    /**
+     * The editor only shows the sections of the selected categories; keep the others
+     */
+    oldSections.forEach((section, index) => {
+        if (section.linkedCategory && !state._enabledCategories.includes(section.linkedCategory))
+            translation.preferencesModal.sections.splice(index, 0, section);
+    });
+
+    translations[currentLanguage] = translation;
 
     saveState(state);
     reRunPlugin(state, 1);
     window.CookieConsent.setLanguage(currentLanguage);
-});
-
-/**
- * The preview shows the consent modal, which moves the focus out of the open dialog
- */
-addEvent(document, 'focusin', ({ target }) => {
-    if (dialog.shown && target.matches('#cc-main .cm'))
-        saveTranslationBtn.focus();
 });
 
 addEvent(selectEditorTranslation, 'change', () => {
@@ -230,26 +234,51 @@ function appendSection(sectionDiv) {
 }
 
 /**
+ * @param {string} html
+ * @returns {string}
+ */
+const toPlainText = (html) => new DOMParser().parseFromString(html, 'text/html').body.textContent.trim();
+
+/**
+ * One collapsible card per section; the summary shows its number, title and category
  * @param {object} [sectionData]
  * @param {string} [sectionData.title]
  * @param {string} [sectionData.description]
  * @param {string} [sectionData.linkedCategory]
+ * @param {boolean} [open]
  */
-function createSection(sectionData) {
+function createSection(sectionData, open) {
     const section = document.createElement('li');
     section.className = 'pm-section';
 
+    const details = document.createElement('details');
+    details.open = !!open;
+
+    const summary = document.createElement('summary');
+    const summaryNumber = document.createElement('span');
+    const summaryTitle = document.createElement('span');
+    const summaryCategory = document.createElement('span');
+
+    summary.className = 'pm-section__summary';
+    summaryNumber.className = 'pm-section__number';
+    summaryTitle.className = 'pm-section__title';
+    summaryCategory.className = 'pm-section__category';
+    summary.append(summaryNumber, summaryTitle, summaryCategory);
+
+    const body = document.createElement('div');
+    body.className = 'pm-section__body';
+
     const title = document.createElement('textarea');
     title.value = sectionData?.title || '';
-    title.placeholder = 'Title';
+    title.placeholder = 'Section title';
     title.className = 'pm-section-title small-textarea';
-    section.appendChild(title);
+    body.appendChild(createEditorField('Title', title));
 
     const description = document.createElement('textarea');
     description.value = sectionData?.description || '';
-    description.placeholder = 'Description';
+    description.placeholder = 'What this section is about';
     description.className = 'pm-section-description';
-    section.appendChild(description);
+    body.appendChild(createEditorField('Description', description));
 
     const labelAndBtnContainer = document.createElement('div');
     labelAndBtnContainer.className = 'pm-section-label-btn-container';
@@ -263,7 +292,7 @@ function createSection(sectionData) {
     selectLabel.className = 'select-label';
     select.className = 'pm-section-linked-category';
     selectArrowSpan.className = 'arrow-icon';
-    selectSpanTitle.textContent = 'Linked category';
+    selectSpanTitle.textContent = 'Category switch';
     selectSpanContainer.className = 'select-input';
 
     const linkedCategory = sectionData?.linkedCategory;
@@ -279,7 +308,7 @@ function createSection(sectionData) {
             option.textContent = linkedCategory;
         } else if (!category) {
             option.selected = true;
-            option.textContent = '—';
+            option.textContent = 'none';
         }
 
         select.appendChild(option);
@@ -292,8 +321,9 @@ function createSection(sectionData) {
     labelAndBtnContainer.appendChild(selectLabel);
 
     const deleteBtn = document.createElement('button');
+    deleteBtn.type = 'button';
     deleteBtn.textContent = 'Delete section';
-    deleteBtn.className = 'styled-btn pm-section__delete-btn';
+    deleteBtn.className = 'styled-btn styled-btn--quiet pm-section__delete-btn';
 
     addEvent(deleteBtn, 'click', () => {
         sectionsCounter -= 1;
@@ -302,12 +332,43 @@ function createSection(sectionData) {
     });
 
     labelAndBtnContainer.appendChild(deleteBtn);
-    section.appendChild(labelAndBtnContainer);
+    body.appendChild(labelAndBtnContainer);
+
+    const updateSummary = () => {
+        summaryTitle.textContent = toPlainText(title.value) || 'Untitled section';
+        summaryCategory.textContent = select.value ? `${select.value} switch` : '';
+    };
+
+    addEvent(title, 'input', updateSummary);
+    addEvent(select, 'change', updateSummary);
+    updateSummary();
+
+    details.append(summary, body);
+    section.appendChild(details);
 
     sectionsCounter += 1;
     setSectionsCounter(sectionsCounter);
 
     return section;
+}
+
+/**
+ * @param {string} labelText
+ * @param {HTMLElement} control
+ */
+function createEditorField(labelText, control) {
+    const label = document.createElement('label');
+    const span = document.createElement('span');
+
+    label.className = 'editor-field';
+    span.className = 'editor-field__label';
+    span.textContent = labelText;
+    control.spellcheck = false;
+
+    label.appendChild(span);
+    label.appendChild(control);
+
+    return label;
 }
 
 /**

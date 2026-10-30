@@ -29,9 +29,10 @@ onEvent(customEvents._RESET, () => {
 });
 
 /**
+ * The plugin appends #cc-main to <html>, so the class goes there too
  * @param {string} className
  * @param {boolean} enable
  */
 const toggleClass = (className, enable) => {
-    document.body.classList[enable ? 'add' : 'remove'](className);
+    document.documentElement.classList[enable ? 'add' : 'remove'](className);
 }

@@ -1,39 +1,71 @@
 ---
 import '../../styles/installationSection.scss'
 import ShikiBlock from "../ShikiBlock.astro"
-import DocsLink from '../DocsLink.astro'
+import StepHeader from '../StepHeader.astro'
+import { docsUrl } from '../../data/metadata'
+
+const pageExample = `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- ... -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@{{latest_release}}/dist/cookieconsent.css">
+</head>
+<body>
+    <!-- ... your page ... -->
+
+    <script type="module" src="cookieconsent-config.js"></script>
+</body>
+</html>`;
+
+const scriptBefore = `<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXX"></script>`;
+
+const scriptAfter = `<script type="text/plain" data-category="analytics" async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXX"></script>`;
+
+const preferencesButton = `<button type="button" data-cc="show-preferencesModal">Cookie preferences</button>`;
 ---
-<section class="installation">
-    <div class="section__header">
-        <div class="section-title">
-            <h3>
-                Installation
-                <DocsLink docSection='essential/getting-started.html#installation' label='Installation documentation'/>
-            </h3>
-        </div>
-        <div class="section-description"></div>
-    </div>
-    <div class="section__body">
-        <ol>
+<section class="step installation" id="get-the-code" aria-labelledby="step-install">
+    <StepHeader
+        number={5}
+        title="Add it to your website"
+        id="step-install"
+        docSection="essential/getting-started.html#installation"
+        docLabel="Installation documentation"
+    >
+        Four small changes to your page and your banner is live.
+    </StepHeader>
+    <div class="install-body">
+        <ol class="install-steps">
             <li>
                 <p>
-                    Download the
-                    <code class="highlight--green">cookieconsent-config.js</code> javascript file:
+                    Save your config as <code class="highlight--green">cookieconsent-config.js</code> next to your HTML page:
+                    use <b>Copy</b> or <b>Download</b> on the config panel.
                 </p>
-                <button type="button" class="styled-btn" id="downloadConfigBtn">
-                    <span>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><g fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M3 12v7a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="m8 12 4 4 4-4" data-name="Right"/><path d="M12 3v11"/></g></svg>
-                    </span>
-                    cookieconsent-config.js
-                </button>
             </li>
             <li>
-                <p>Add the script in the <code>&lt;body&gt;</code> tag:</p>
-                <ShikiBlock lang="html" code={'<script type="module" src="cookieconsent-config.js"></script>'}/>
+                <p>Load the stylesheet in the <code>&lt;head&gt;</code> and your config at the end of the <code>&lt;body&gt;</code>:</p>
+                <ShikiBlock lang="html" code={pageExample}/>
             </li>
             <li>
-                <p>Add the stylesheet in the <code>&lt;head&gt;</code> tag:</p>
-                <ShikiBlock lang="html" code={`<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@{{latest_release}}/dist/cookieconsent.css">`}/>
+                <p>
+                    Stop your scripts from running until the visitor agrees.
+                    Change <code>type</code> to <code>"text/plain"</code> and add <code>data-category</code>
+                    with the name of one of your categories:
+                </p>
+                <ShikiBlock lang="html" title="Before" code={scriptBefore}/>
+                <ShikiBlock lang="html" title="After" code={scriptAfter}/>
+                <p class="install-steps__note">
+                    The script now runs only after the visitor accepts the <b>analytics</b> category.
+                    <a href={`${docsUrl}/advanced/manage-scripts.html`} target="_blank" rel="noopener noreferrer">More about blocking scripts</a>
+                    · for iframes (YouTube, maps…) use <a href={`${docsUrl}/advanced/iframemanager-setup.html`} target="_blank" rel="noopener noreferrer">iframemanager</a>.
+                </p>
+            </li>
+            <li>
+                <p>Let visitors change their choice later, for example from a link in your footer:</p>
+                <ShikiBlock lang="html" code={preferencesButton}/>
+                <p class="install-steps__note">
+                    Any element with <code>data-cc="show-preferencesModal"</code> opens the preferences modal.
+                    <a href={`${docsUrl}/advanced/custom-attribute.html#show-preferencesmodal`} target="_blank" rel="noopener noreferrer">More about this</a>
+                </p>
             </li>
         </ol>
     </div>

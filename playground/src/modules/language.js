@@ -182,8 +182,8 @@ export function updateDefaultLanguageOptions(languages) {
  */
 export function updateTranslationFound(found) {
     translationFoundSpan.textContent = found
-        ? 'true'
-        : 'false';
+        ? 'yes'
+        : 'no';
 }
 
 /**

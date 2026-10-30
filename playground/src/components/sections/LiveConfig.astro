@@ -1,0 +1,38 @@
+<aside class="live-config" aria-labelledby="live-config-title">
+    <div class="hl hl--div live-config__panel">
+        <div class="hl__title live-config__header">
+            <h2 id="live-config-title" class="live-config__title">cookieconsent-config.js</h2>
+            <div class="hl__actions">
+                <button type="button" class="styled-btn reset-btn" id="reset-btn" title="Reset all playground settings">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 3v6h6"/></g></svg>
+                    Reset
+                </button>
+                <button type="button" class="styled-btn" id="downloadConfigBtn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M3 12v7a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="m8 12 4 4 4-4"/><path d="M12 3v11"/></g></svg>
+                    Download
+                </button>
+            </div>
+        </div>
+        <div class="hl__content live-config__content">
+            <pre class="live-config__pre"><code id="live-config"></code></pre>
+        </div>
+    </div>
+
+    <section class="hl hl--div cookie-panel" id="consent-cookie" aria-labelledby="cookie-panel-title">
+        <div class="hl__title live-config__header">
+            <h2 id="cookie-panel-title" class="live-config__title">
+                Consent cookie <span class="cookie-panel__name" id="cookie-name">cc_cookie</span>
+            </h2>
+            <span class="consent-status" data-consent-status="none">
+                <span class="consent-status__dot" aria-hidden="true"></span>
+                <span class="consent-status__text">No consent yet</span>
+            </span>
+        </div>
+        <div class="hl__content cookie-panel__content">
+            <pre class="live-config__pre" id="cookie-json-pre" hidden><code id="cookie-json"></code></pre>
+            <p class="cookie-panel__empty" id="cookie-empty">
+                Nothing is saved yet. Accept, reject or save your preferences in the banner to see what CookieConsent stores.
+            </p>
+        </div>
+    </section>
+</aside>

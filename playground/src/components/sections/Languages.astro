@@ -1,0 +1,73 @@
+---
+import StepHeader from '../StepHeader.astro';
+import DocsLink from '../DocsLink.astro';
+import TranslationsEditor from '../TranslationsEditor.astro';
+import TranslationOptions from '../TranslationOptions.astro';
+import LanguageInputs from '../LanguageInputs.astro';
+---
+<section class="step" aria-labelledby="step-languages">
+    <StepHeader
+        number={2}
+        title="Languages"
+        id="step-languages"
+        docSection="advanced/language-configuration.html#language-config"
+        docLabel="Translations documentation"
+    >
+        Pick the languages of your banner, then change its texts with "Edit translations".
+    </StepHeader>
+
+    <div class="languages">
+        <div class="languages__translations" id="translations-section">
+            <div class="custom-inputs custom-inputs--languages">
+                <LanguageInputs/>
+            </div>
+
+            <button
+                type="button"
+                class="styled-btn"
+                id="edit-translations-btn"
+                data-a11y-dialog-show="edit-translations-dialog"
+            >Edit translations</button>
+
+            <TranslationsEditor />
+        </div>
+
+        <div class="languages__options">
+            <h3>
+                Which language to show
+                <DocsLink docSection="reference/configuration-reference.html#language" label="Language options documentation"/>
+            </h3>
+
+            <label class="select-label" for="default-language">
+                <span>Default language</span><span class="select-input">
+                    <select name="default-language" id="default-language">
+                        <option value="disabled" disabled selected>—</option>
+                        <TranslationOptions />
+                    </select>
+                    <span class="arrow-icon"></span>
+                </span>
+            </label>
+
+            <div class="checkbox-div">
+                <input type="checkbox" id="auto-language" name="autoLanguage"/>
+                <label for="auto-language">Detect the visitor's language</label>
+            </div>
+
+            <label class="select-label autodetect" for="autodetect-mode">
+                <span>Detect from</span><span class="select-input">
+                    <select name="autodetect" id="autodetect-mode" disabled>
+                        <option value="document">page (html lang)</option>
+                        <option value="browser">browser</option>
+                    </select>
+                    <span class="arrow-icon"></span>
+                </span>
+            </label>
+
+            <dl class="language__details">
+                <div><dt>Detected language</dt><dd><code id="detected-language">-</code></dd></div>
+                <div><dt>Translation available</dt><dd><code id="translation-found">-</code></dd></div>
+                <div><dt>Shown language</dt><dd><code id="current-active-language">-</code></dd></div>
+            </dl>
+        </div>
+    </div>
+</section>

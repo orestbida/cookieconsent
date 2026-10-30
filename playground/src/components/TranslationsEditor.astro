@@ -11,56 +11,115 @@ import '../styles/translationsEditor.scss';
     <div class="dialog-overlay"></div>
     <div class="dialog-content" role="document">
         <div class="dialog-header">
-            <div class="dialog-header--left">
-                <h1 id="dialog-title" class="dialog-title">Current translation</h1>
-                <label class="select-translation" for="editor-language-codes">
+            <h2 id="dialog-title" class="dialog-heading">Edit translations</h2>
+
+            <label class="select-label dialog-language" for="editor-language-codes">
+                <span>Language</span><span class="select-input">
                     <select id="editor-language-codes"></select>
                     <span class="arrow-icon"></span>
-                </label>
-            </div>
+                </span>
+            </label>
+
             <button type="button" class="styled-btn dialog-close-btn" data-a11y-dialog-hide aria-label="Close dialog">
-                &times;
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2.2" d="M6 6l12 12M18 6L6 18"/></svg>
             </button>
         </div>
 
         <div class="dialog-body">
             <div id="editor-container" class="translations-editor">
                 <div class="translation-editor" id="translation-editor">
-                    <div class="editor editor--cm">
-                        <h4>Consent modal</h4>
-                        <textarea id="consent-modal-title" placeholder="Title" class="small-textarea" spellcheck="false"></textarea>
-                        <textarea id="consent-modal-description" placeholder="Description" spellcheck="false"></textarea>
-                        <input type="text" id="close-icon-label" placeholder="X/Close icon label" spellcheck="false"/>
-                        <input type="text" id="consent-modal-accept-btn" placeholder="Accept all button" spellcheck="false"/>
-                        <input type="text" id="consent-modal-reject-btn" placeholder="Reject all button" spellcheck="false"/>
-                        <input type="text" id="consent-modal-manage-btn" placeholder="Manage preferences button" spellcheck="false"/>
-
-                        <div class="footer-textarea" id="textarea-cm-footer">
-                            <textarea id="editing" placeholder="Footer" spellcheck="false"></textarea>
+                    <section class="editor editor--cm" aria-labelledby="editor-cm-title">
+                        <div class="editor__header">
+                            <h3 id="editor-cm-title">Consent modal</h3>
+                            <p>The banner visitors see first.</p>
                         </div>
-                    </div>
 
-                    <div class="editor editor--pm">
-                        <h4>Preferences modal</h4>
-                        <textarea id="pm-title" placeholder="Title" class="small-textarea" spellcheck="false"></textarea>
-                        <input type="text" id="pm-close-icon-label" placeholder="Close icon label" spellcheck="false"/>
-                        <input type="text" id="pm-accept-btn" placeholder="Accept all button" spellcheck="false"/>
-                        <input type="text" id="pm-reject-btn" placeholder="Reject all button" spellcheck="false"/>
-                        <input type="text" id="pm-save-btn" placeholder="Save preferences button" spellcheck="false"/>
-                        <input type="text" id="pm-service-counter-label" placeholder="Service counter label" spellcheck="false"/>
+                        <label class="editor-field editor-field--wide">
+                            <span class="editor-field__label">Title</span>
+                            <textarea id="consent-modal-title" placeholder="We use cookies" class="small-textarea" spellcheck="false"></textarea>
+                        </label>
+                        <label class="editor-field editor-field--wide">
+                            <span class="editor-field__label">Description</span>
+                            <span class="editor-field__hint">HTML allowed, e.g. a link to your privacy policy</span>
+                            <textarea id="consent-modal-description" placeholder="Explain why you use cookies" spellcheck="false"></textarea>
+                        </label>
+                        <label class="editor-field">
+                            <span class="editor-field__label">"Accept all" button</span>
+                            <input type="text" id="consent-modal-accept-btn" placeholder="Accept all" spellcheck="false"/>
+                        </label>
+                        <label class="editor-field">
+                            <span class="editor-field__label">"Reject all" button</span>
+                            <input type="text" id="consent-modal-reject-btn" placeholder="Reject all" spellcheck="false"/>
+                        </label>
+                        <label class="editor-field">
+                            <span class="editor-field__label">"Manage preferences" button</span>
+                            <input type="text" id="consent-modal-manage-btn" placeholder="Manage preferences" spellcheck="false"/>
+                        </label>
+                        <label class="editor-field">
+                            <span class="editor-field__label">Close icon label</span>
+                            <input type="text" id="close-icon-label" placeholder="Leave empty to hide the × button" spellcheck="false"/>
+                        </label>
+                        <p class="editor-field__hint editor-field--wide">
+                            The close icon (box layout only) works like "Reject all"; its label is read by screen readers.
+                        </p>
+                        <label class="editor-field editor-field--wide">
+                            <span class="editor-field__label">Footer</span>
+                            <span class="editor-field__hint">HTML allowed</span>
+                            <textarea id="editing" placeholder="Links to your privacy policy, terms…" spellcheck="false"></textarea>
+                        </label>
+                    </section>
 
-                        <div class="pm-sections">
-                            <h3 class="pm-sections-title">Sections <span id="sections-counter"></span></h3>
+                    <section class="editor editor--pm" aria-labelledby="editor-pm-title">
+                        <div class="editor__header">
+                            <h3 id="editor-pm-title">Preferences modal</h3>
+                            <p>Where visitors switch categories on or off.</p>
+                        </div>
+
+                        <label class="editor-field editor-field--wide">
+                            <span class="editor-field__label">Title</span>
+                            <textarea id="pm-title" placeholder="Cookie preferences" class="small-textarea" spellcheck="false"></textarea>
+                        </label>
+                        <label class="editor-field">
+                            <span class="editor-field__label">"Accept all" button</span>
+                            <input type="text" id="pm-accept-btn" placeholder="Accept all" spellcheck="false"/>
+                        </label>
+                        <label class="editor-field">
+                            <span class="editor-field__label">"Reject all" button</span>
+                            <input type="text" id="pm-reject-btn" placeholder="Reject all" spellcheck="false"/>
+                        </label>
+                        <label class="editor-field">
+                            <span class="editor-field__label">"Save preferences" button</span>
+                            <input type="text" id="pm-save-btn" placeholder="Save preferences" spellcheck="false"/>
+                        </label>
+                        <label class="editor-field">
+                            <span class="editor-field__label">Close icon label</span>
+                            <input type="text" id="pm-close-icon-label" placeholder="Close" spellcheck="false"/>
+                        </label>
+                        <label class="editor-field editor-field--wide">
+                            <span class="editor-field__label">Service counter label</span>
+                            <span class="editor-field__hint">Singular|plural, shown next to a category that has services</span>
+                            <input type="text" id="pm-service-counter-label" placeholder="Service|Services" spellcheck="false"/>
+                        </label>
+
+                        <div class="pm-sections editor-field--wide">
+                            <div class="pm-sections__header">
+                                <h4 class="pm-sections-title">Sections <span id="sections-counter"></span></h4>
+                                <p class="pm-sections-hint">Click a section to edit it. Pick a category to give the section its on/off switch.</p>
+                            </div>
                             <ol id="pm-sections"></ol>
-                            <button type="button" class="styled-btn" id="add-section-btn">Add section</button>
+                            <button type="button" class="styled-btn" id="add-section-btn">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2.4" d="M12 5v14M5 12h14"/></svg>
+                                Add section
+                            </button>
                         </div>
-                    </div>
+                    </section>
                 </div>
             </div>
         </div>
 
         <div class="dialog-footer">
-            <button type="button" class="styled-btn" id="save-translation-config-btn">Save & Preview</button>
+            <p class="dialog-footer__hint">Changes show up in the banner after you save.</p>
+            <button type="button" class="styled-btn styled-btn--primary" id="save-translation-config-btn">Save & Preview</button>
         </div>
     </div>
 </div>

@@ -1,0 +1,41 @@
+---
+import StepHeader from '../StepHeader.astro';
+
+const lockIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><rect width="16" height="10" x="4" y="11" rx="2" ry="2"/><path d="M16.5 11V8h0c0-2.8-.5-5-4.5-5S7.5 5.2 7.5 8h0v3"/></g></svg>';
+
+const categories = [
+    { value: 'functionality', name: 'Functionality', hint: 'Remembered settings, chat widgets, embedded videos' },
+    { value: 'analytics', name: 'Analytics', hint: 'Google Analytics, Matomo, Plausible…' },
+    { value: 'marketing', name: 'Marketing', hint: 'Ads, Meta Pixel, Google Ads…' }
+];
+---
+<section class="step" aria-labelledby="step-categories">
+    <StepHeader
+        number={1}
+        title="Cookie categories"
+        id="step-categories"
+        docSection="reference/configuration-reference.html#categories"
+        docLabel="Categories documentation"
+    >
+        Pick the kinds of cookies your website uses. Visitors get an on/off switch for each one.
+    </StepHeader>
+
+    <div class="custom-inputs custom-inputs--categories">
+        <label>
+            <input class="category-input custom-input" type="checkbox" value="necessary" checked disabled/>
+            <span class="label">
+                <span class="label__text">Necessary<small>Login, cart, the consent itself. Always on.</small></span>
+                <span class="tick tick--locked" set:html={lockIcon}></span>
+            </span>
+        </label>
+        {categories.map(category => (
+            <label>
+                <input class="category-input custom-input" type="checkbox" value={category.value}/>
+                <span class="label">
+                    <span class="label__text">{category.name}<small>{category.hint}</small></span>
+                    <span class="tick"></span>
+                </span>
+            </label>
+        ))}
+    </div>
+</section>

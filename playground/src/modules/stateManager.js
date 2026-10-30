@@ -13,7 +13,7 @@ export const defaultState = {
     _disableTransitions: false,
 
     /**
-     * @type {'default-light' | 'cc--darkmode' | 'dark-turquoise' | 'light-funky' | 'elegant-black'}
+     * @type {'default-light' | 'cc--darkmode' | 'cc--dark-turquoise' | 'cc--light-funky' | 'cc--elegant-black'}
      */
     _theme: 'cc--darkmode',
 
@@ -71,7 +71,7 @@ export const resetState = () => {
     localStorage.removeItem(DEMO_ITEM_NAME);
 
     window.CookieConsent.reset(true);
-    window.CookieConsent.run(defaultConfig);
+    window.CookieConsent.run(defaultConfig).then(() => fireEvent(customEvents._RUN));
 
     /**
      * Notify other components
@@ -92,6 +92,8 @@ export const saveState = (newState) => {
     } catch (e) {
         console.error('Failed to save state:', e);
     }
+
+    fireEvent(customEvents._UPDATE);
 };
 
 export function clearInvalidDemoState() {
@@ -203,5 +205,6 @@ export const reRunPlugin = (state, showModal) => {
     cc.run(config).then(() => {
         showModal === 1 && cc.show(true);
         showModal === 2 && cc.showPreferences();
+        fireEvent(customEvents._RUN);
     });
 };

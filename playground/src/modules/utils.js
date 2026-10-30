@@ -24,9 +24,8 @@ export const customEvents = {
     _PLAYGROUND_READY: 'pg:ready',
     _INIT: 'cc:onInit',
     _RESET: 'cc:reset',
-    _ON_CONSENT: 'cc:onConsent',
-    _ON_CHANGE: 'cc:onChange',
-    _ON_MODAL_SHOW: 'cc:onModalShow'
+    _UPDATE: 'pg:update',
+    _RUN: 'pg:run'
 };
 
 /**
@@ -75,3 +74,29 @@ export const deepEqual = (x, y) => {
         ok(x).every(key => deepEqual(x[key], y[key]))
     ) : (x === y);
 };
+
+/**
+ * Minimal highlighting for the generated config and the cookie JSON:
+ * comments, keys, strings and literals
+ * @param {string} code
+ */
+export const highlightCode = (code) => code
+    .replace(/[&<>]/g, char => ({'&': '&amp;', '<': '&lt;', '>': '&gt;'})[char])
+    .replace(
+        /(\/\/.*$)|("(?:\\.|[^"\\])*")(?=\s*:)|("(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*')|\b(true|false|null|\d+)\b|^(\s*)([\w$]+)(?=:)/gm,
+        (match, comment, jsonKey, string, literal, indent, key) => {
+            if (comment)
+                return `<span class="tk-comment">${comment}</span>`;
+
+            if (jsonKey)
+                return `<span class="tk-key">${jsonKey}</span>`;
+
+            if (string)
+                return `<span class="tk-string">${string}</span>`;
+
+            if (literal)
+                return `<span class="tk-literal">${literal}</span>`;
+
+            return `${indent}<span class="tk-key">${key}</span>`;
+        }
+    );

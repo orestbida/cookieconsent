@@ -1,20 +1,23 @@
 ---
 import '../../styles/guiOptions.scss';
+import StepHeader from '../StepHeader.astro';
 import DocsLink from '../DocsLink.astro';
 ---
-<section class="gui-options-section">
-    <div class="section__header">
-        <div class="section-title">
-            <h3>
-                GUI Options
-                <DocsLink docSection='reference/configuration-reference.html#guioptions' label='GUI options documentation'/>
-            </h3>
-        </div>
-        <div class="section-description"></div>
-    </div>
-    <div class="section__body grid">
-        <div class="sub-section consent-modal">
-            <h4>Consent Modal</h4>
+<section class="step" aria-labelledby="step-layout">
+    <StepHeader
+        number={3}
+        title="Layout"
+        id="step-layout"
+        docSection="reference/configuration-reference.html#guioptions"
+        docLabel="GUI options documentation"
+    >
+        Where the banner appears and how its buttons look. Every change is previewed right away.
+    </StepHeader>
+
+    <div class="layout-groups">
+        <div class="layout-group consent-modal">
+            <h3>Consent modal</h3>
+            <p class="layout-group__description">The banner visitors see first.</p>
 
             <label class="select-label" for="cm-layout">
                 <span>Layout</span><span class="select-input">
@@ -43,16 +46,18 @@ import DocsLink from '../DocsLink.astro';
             <div class="checkbox-group">
                 <div class="flip checkbox-div">
                     <input type="checkbox" id="cm-flip" name="flip"/>
-                    <label for="cm-flip">Flip buttons</label>
+                    <label for="cm-flip">Swap button order</label>
                 </div>
                 <div class="weight checkbox-div">
                     <input type="checkbox" id="cm-weight" name="weight"/>
-                    <label for="cm-weight">Equal weight buttons</label>
+                    <label for="cm-weight">Same style for all buttons</label>
                 </div>
             </div>
         </div>
-        <div class="sub-section preferences-modal">
-            <h4>Preferences Modal</h4>
+
+        <div class="layout-group preferences-modal">
+            <h3>Preferences modal</h3>
+            <p class="layout-group__description">Where visitors switch categories on or off.</p>
 
             <label class="select-label" for="pm-layout">
                 <span>Layout</span><span class="select-input">
@@ -78,58 +83,37 @@ import DocsLink from '../DocsLink.astro';
             <div class="checkbox-group">
                 <div class="flip checkbox-div">
                     <input type="checkbox" id="pm-flip" name="flip"/>
-                    <label for="pm-flip">Flip buttons</label>
+                    <label for="pm-flip">Swap button order</label>
                 </div>
                 <div class="weight checkbox-div">
                     <input type="checkbox" id="pm-weight" name="weight"/>
-                    <label for="pm-weight">Equal weight buttons</label>
+                    <label for="pm-weight">Same style for all buttons</label>
                 </div>
             </div>
-
-            <button type="button" class="styled-btn" data-cc="show-preferencesModal">Open Preferences Modal</button>
         </div>
-        <div class="sub-section misc">
-            <h4>Misc</h4>
-            <div class="checkbox-group">
-                <div class="checkbox-div">
-                    <input
-                        type="checkbox"
-                        name="darkmode"
-                        id="darkmode-checkbox"
-                    />
-                    <label for="darkmode-checkbox">Enable dark-mode</label>
-                </div>
+    </div>
 
-                <div class="checkbox-div">
-                    <input
-                        type="checkbox"
-                        name="disablePageInteraction"
-                        id="disablePageInteraction-checkbox"
-                    />
-                    <label for="disablePageInteraction-checkbox">
-                        Disable page interaction
-                        <DocsLink docSection='reference/configuration-reference.html#disablepageinteraction' label='Disable page interaction documentation'/>
-                    </label>
-                </div>
-
-                <div class="checkbox-div">
-                    <input
-                        type="checkbox"
-                        name="disableTransitions"
-                        id="disableTransitions-checkbox"
-                    />
-                    <label for="disableTransitions-checkbox">
-                        Disable transitions
-                        <DocsLink docSection='advanced/ui-customization.html#disable-transitions' label='Disable transitions documentation'/>
-                    </label>
-                </div>
+    <div class="layout-extras">
+        <div class="checkbox-group">
+            <div class="checkbox-div">
+                <input type="checkbox" name="disablePageInteraction" id="disablePageInteraction-checkbox"/>
+                <label for="disablePageInteraction-checkbox">
+                    Block the page until visitors choose
+                    <DocsLink docSection='reference/configuration-reference.html#disablepageinteraction' label='Disable page interaction documentation'/>
+                </label>
             </div>
 
-            <button
-                type="button"
-                class="styled-btn"
-                id="reset-btn"
-            >🗑️ Reset demo/config</button>
+            <div class="checkbox-div">
+                <input type="checkbox" name="disableTransitions" id="disableTransitions-checkbox"/>
+                <label for="disableTransitions-checkbox">
+                    Turn off animations
+                    <DocsLink docSection='advanced/ui-customization.html#disable-transitions' label='Disable transitions documentation'/>
+                </label>
+            </div>
+        </div>
+
+        <div class="layout-extras__buttons">
+            <button type="button" class="styled-btn" data-cc="show-preferencesModal">Open preferences modal</button>
         </div>
     </div>
 </section>

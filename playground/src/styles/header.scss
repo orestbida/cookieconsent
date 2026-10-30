@@ -1,56 +1,300 @@
-header {
-    .main-links {
-        display: flex;
-        gap: .7rem;
-        margin: 2rem 0;
-    }
+.hero {
+    position: relative;
+    border-bottom: .0625rem solid var(--line);
+    overflow: hidden;
+}
 
-    .styled-link {
-        padding: .7rem 1rem;
-        background-color: #ffffff;
-        color: #000000;
-        text-decoration: none;
-        border-radius: .4rem;
-        border: 1px solid rgb(39, 39, 41);
+.hero__inner {
+    max-width: var(--page-width);
+    margin: 0 auto;
+    padding: 0 1.5rem;
+}
+
+/** Top row: brand and links **/
+
+.hero__bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1.25rem 0;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+    color: var(--heading);
+    text-decoration: none;
+
+    &:hover {
+        color: var(--heading);
+    }
+}
+
+.brand__mark {
+    width: 1.75rem;
+    height: 1.75rem;
+    color: #e0b37a;
+}
+
+.brand__name {
+    font-size: 1.05rem;
+    font-weight: 700;
+    letter-spacing: -.015em;
+}
+
+.brand__version {
+    padding: .05rem .45rem;
+    font-size: .75rem;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    color: var(--muted);
+    border: .0625rem solid var(--line-strong);
+    border-radius: 1rem;
+}
+
+.hero__nav {
+    display: flex;
+    align-items: center;
+    gap: .25rem;
+
+    a {
+        display: inline-flex;
+        align-items: center;
+        gap: .45rem;
+        padding: .45rem .7rem;
         font-size: .9rem;
-        font-weight: 600;
-        transition: color .15s ease,
-                    background-color .15s ease,
-                    border-color .15s ease;
+        font-weight: 500;
+        color: var(--muted);
+        text-decoration: none;
+        white-space: nowrap;
+        border-radius: var(--radius);
 
         &:hover {
-            background-color: #c8cbcd;
-            color: #000;
-        }
-
-        &__2 {
-            background-color: transparent;
-            color: #d4d9db;
-            border-color: #222425;
-
-            &:hover {
-                background-color: #111213;
-                color: #fff;
-            }
+            color: var(--heading);
+            background: var(--raised);
         }
     }
 
-    .github-icon {
-        padding: 0;
-        width: 43px;
-        height: auto;
-        align-items: center;
-        display: flex;
-        padding: 0;
-        justify-content: center;
+    svg {
+        fill: currentColor;
+    }
+}
 
-        svg {
-            fill: #d4d9db;
-            transition: fill .15s ease;
-        }
+.hero__github {
+    margin-left: .35rem;
+    color: var(--heading) !important;
+    border: .0625rem solid var(--line-strong);
+}
 
-        &:hover svg {
-            fill: #fff;
-        }
+/** Headline and the fanned-out banners **/
+
+.hero__main {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+    align-items: center;
+    gap: 3rem;
+    padding: 3.5rem 0 4.5rem;
+}
+
+.hero h1 {
+    font-size: clamp(2.5rem, 1.2rem + 4.2vw, 4.4rem);
+    font-weight: 750;
+    line-height: 1;
+    letter-spacing: -.04em;
+    text-wrap: balance;
+}
+
+.hero__lead {
+    margin-top: 1.25rem;
+    max-width: 34rem;
+    font-size: 1.125rem;
+    line-height: 1.55;
+    color: var(--muted);
+}
+
+.hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .6rem;
+    margin-top: 2rem;
+}
+
+.hero-btn {
+    display: inline-flex;
+    align-items: center;
+    height: 2.875rem;
+    padding: 0 1.3rem;
+    font-size: .95rem;
+    font-weight: 600;
+    color: var(--heading);
+    text-decoration: none;
+    background: var(--raised);
+    border: .0625rem solid var(--line-strong);
+    border-radius: .65rem;
+    transition: background-color .15s ease, border-color .15s ease;
+
+    &:hover {
+        color: var(--heading);
+        background: var(--raised-hover);
+    }
+
+    &:active {
+        transform: translateY(.0625rem);
+    }
+}
+
+.hero-btn--primary {
+    color: var(--on-accent);
+    background: var(--accent);
+    border-color: var(--accent);
+
+    &:hover {
+        color: var(--on-accent);
+        background: var(--accent-hover);
+        border-color: var(--accent-hover);
+    }
+}
+
+.hero__art {
+    position: relative;
+    height: 21rem;
+    scale: .9;
+}
+
+.mini-banner {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 16.5rem;
+    padding: 1.15rem 1.15rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: .45rem;
+    font-size: .8rem;
+    color: var(--cc-primary-color);
+    background: var(--cc-bg);
+    border: .0625rem solid var(--cc-separator-border-color);
+    border-radius: .9rem;
+    box-shadow: 0 1.5rem 3rem -1rem rgba(0, 0, 0, .7);
+    animation: fan-out .9s cubic-bezier(.2, .8, .2, 1) .15s both;
+}
+
+.mini-banner--1 {
+    --fan: translate(-118%, -46%) rotate(-7deg);
+}
+
+.mini-banner--2 {
+    --fan: translate(14%, -64%) rotate(6deg);
+}
+
+.mini-banner--3 {
+    --fan: translate(-50%, -30%) rotate(-1deg);
+    z-index: 1;
+}
+
+.mini-banner {
+    transform: var(--fan);
+}
+
+@keyframes fan-out {
+    from {
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+}
+
+.mini-banner__title {
+    margin-bottom: .1rem;
+    font-size: .95rem;
+    font-weight: 700;
+    color: var(--cc-primary-color);
+}
+
+.mini-banner__line {
+    width: 92%;
+    height: .35rem;
+    border-radius: 1rem;
+    background: var(--cc-secondary-color);
+    opacity: .45;
+}
+
+.mini-banner__line--short {
+    width: 64%;
+}
+
+.mini-banner__btns {
+    display: flex;
+    gap: .4rem;
+    margin-top: .55rem;
+}
+
+.mini-banner__btn {
+    flex: 1;
+    padding: .5rem .4rem;
+    font-weight: 600;
+    text-align: center;
+    white-space: nowrap;
+    color: var(--cc-btn-secondary-color);
+    background: var(--cc-btn-secondary-bg);
+    border-radius: .45rem;
+}
+
+.mini-banner__btn--primary {
+    color: var(--cc-btn-primary-color);
+    background: var(--cc-btn-primary-bg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .mini-banner {
+        animation: none;
+    }
+}
+
+@media only screen and (max-width: 82rem) {
+    .hero__art {
+        scale: .72;
+    }
+}
+
+@media only screen and (max-width: 60rem) {
+    .hero__main {
+        grid-template-columns: minmax(0, 1fr);
+        padding: 2rem 0 3rem;
+    }
+
+    .hero__art {
+        display: none;
+    }
+}
+
+@media only screen and (max-width: 30rem) {
+    .hero__inner {
+        padding: 0 1rem;
+    }
+
+    .hero__github span {
+        display: none;
+    }
+
+    .brand__version {
+        display: none;
+    }
+
+    .hero__nav a {
+        padding: .45rem .5rem;
+    }
+}
+
+@media only screen and (max-width: 26rem) {
+    .hero__nav .hero__demos {
+        display: none;
+    }
+}
+
+/* the footer has these links too */
+@media only screen and (max-width: 22rem) {
+    .hero__nav .hero__github {
+        display: none;
     }
 }

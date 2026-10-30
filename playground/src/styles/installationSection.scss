@@ -1,36 +1,264 @@
-#downloadConfigBtn {
+/** Live config panel, pinned next to the steps on wide screens **/
+
+.live-config {
+    position: sticky;
+    top: 1.5rem;
+    align-self: start;
+    display: flex;
+    flex-direction: column;
+    gap: .75rem;
+    height: calc(100vh - 3rem);
+    margin-top: 2.25rem;
+}
+
+.live-config__panel,
+.cookie-panel {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    margin: 0;
+    border-radius: .75rem;
+    overflow: hidden;
+}
+
+/* the config takes the space the cookie panel leaves */
+.live-config__panel {
+    flex: 1 1 0;
+    min-height: 12rem;
+}
+
+.cookie-panel {
+    flex: 0 0 auto;
+    max-height: 34%;
+
+    .hl__content {
+        flex: 1;
+        min-height: 0;
+        overflow: auto;
+        scrollbar-width: thin;
+        scrollbar-color: #3a4048 transparent;
+    }
+}
+
+.cookie-panel__name {
+    margin-left: .35rem;
+    color: #7d8792;
+}
+
+.cookie-panel__empty {
+    padding: 1rem 1.1rem;
+    font-size: .8125rem;
+    color: #8a939d;
+}
+
+/* nothing to copy until there is a cookie */
+.cookie-panel__content:has(pre[hidden]) .copy-btn {
+    display: none;
+}
+
+/** Consent status pill (cookie panel and page header) **/
+
+.consent-status {
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    gap: .45rem;
+    padding: .25rem .65rem;
+    font-size: .75rem;
+    font-weight: 600;
+    white-space: nowrap;
+    color: #f0c674;
+    background: rgba(240, 198, 116, .1);
+    border: .0625rem solid rgba(240, 198, 116, .3);
+    border-radius: 1rem;
+
+    &[data-consent-status="given"] {
+        color: #7fd99a;
+        background: rgba(127, 217, 154, .1);
+        border-color: rgba(127, 217, 154, .3);
+    }
+}
+
+.consent-status__dot {
+    width: .45rem;
+    height: .45rem;
+    background: currentColor;
+    border-radius: 100%;
+}
+
+.live-config__header {
+    flex: none;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background: transparent;
-    color: #8be6b1;
-    border-color: rgb(45, 56, 49);
-    padding: .7rem 1rem;
-    border-radius: .35rem;
+    gap: 1rem;
+    padding: .6rem .75rem .6rem 1.1rem;
+}
 
-    span {
-        margin-right: .6rem;
+.live-config__title {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: .8125rem;
+    font-weight: 500;
+    color: #c7d0da;
+}
+
+.live-config__content {
+    flex: 1;
+    min-height: 0;
+    overflow: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #3a4048 transparent;
+
+    code {
+        overflow: visible;
+        padding-right: 1.3rem;
+        white-space: pre;
     }
+}
 
-    svg {
-        display: block;
+.hl__actions {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
 
-        > g {
-            stroke: currentColor;
-        }
+    .copy-btn {
+        position: static;
     }
+}
 
-    &:hover,
-    &:focus {
-        background: #85ffb8;
-        border-color: #85ffb8;
-        color: #000;
+/* Reset sits apart from Copy and Download, in red */
+.hl__actions .styled-btn.reset-btn {
+    order: -1;
+    margin-right: .3rem;
+    color: #ff9a91;
+    background: rgba(240, 110, 100, .1);
+    border-color: rgba(240, 110, 100, .35);
+
+    &:hover {
+        color: #ffbdb7;
+        background: rgba(240, 110, 100, .2);
+        border-color: rgba(240, 110, 100, .6);
     }
 
     &:active {
-        transition: none;
-        background: #68bd8c;
-        border-color: #68bd8c;
-        color: #000;
+        background: rgba(240, 110, 100, .14);
+    }
+}
+
+/* buttons on the dark code background, same in both modes */
+.copy-btn,
+.hl__actions .styled-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: .35rem;
+    padding: .35rem .6rem;
+    font-size: .8125rem;
+    font-weight: 600;
+    color: #e3e7eb;
+    background: #1e2226;
+    border: .0625rem solid #343a41;
+    border-radius: .4rem;
+    cursor: pointer;
+    transition: background-color .15s ease, border-color .15s ease;
+
+    &:hover {
+        color: #fff;
+        background: #2a2f35;
+        border-color: #4a525b;
+    }
+
+    &:active {
+        background: #1a1d21;
+        transform: translateY(.0625rem);
+    }
+}
+
+.copy-btn {
+    position: absolute;
+    top: .5rem;
+    right: .5rem;
+}
+
+.hl code {
+    padding-right: 5rem;
+}
+
+.tk-comment {
+    color: #7b88a1;
+}
+
+.tk-string {
+    color: #a3be8c;
+}
+
+.tk-literal {
+    color: #81a1c1;
+}
+
+.tk-key {
+    color: #88c0d0;
+}
+
+/** Step 5 **/
+
+.install-steps {
+    margin: 0;
+    padding-left: 1.25rem;
+
+    > li {
+        padding-left: .25rem;
+
+        & + li {
+            margin-top: 1.5rem;
+        }
+
+        > p {
+            margin-bottom: .6rem;
+        }
+    }
+
+    > li::marker {
+        font-weight: 600;
+        color: var(--muted);
+    }
+
+    .hl {
+        margin: 0 0 .6rem;
+    }
+}
+
+.install-steps__note {
+    font-size: .875rem;
+    color: var(--muted);
+}
+
+.highlight--green {
+    color: var(--heading);
+}
+
+@media only screen and (max-width: 68rem) {
+    .live-config {
+        position: static;
+        height: auto;
+        margin-top: 0;
+    }
+
+    .live-config__panel {
+        flex: none;
+        max-height: 30rem;
+    }
+
+    .cookie-panel {
+        max-height: 20rem;
+    }
+}
+
+@media only screen and (max-width: 30rem) {
+    .live-config__header {
+        flex-wrap: wrap;
     }
 }

@@ -4,58 +4,98 @@ import '../../styles/custom-themes/light-funky.scss'
 import '../../styles/custom-themes/elegant-black.scss'
 
 import ShikiBlock from '../ShikiBlock.astro'
-import DocsLink from '../DocsLink.astro'
+import StepHeader from '../StepHeader.astro'
 ---
-<section class="themes-section">
-    <div class="section__header">
-        <div class="section-title">
-            <h3>
-                Themes
-                <DocsLink docSection="advanced/ui-customization.html#color-schemes" label='Themes documentation'/>
-            </h3>
-        </div>
-        <div class="section-description"></div>
-    </div>
-    <div class="section__body">
-        <div class="themes grid">
+<section class="step themes-section" aria-labelledby="step-theme">
+    <StepHeader
+        number={4}
+        title="Theme"
+        id="step-theme"
+        docSection="advanced/ui-customization.html#color-schemes"
+        docLabel="Themes documentation"
+    >
+        The built-in themes need no extra CSS. For a custom theme, also copy its CSS (below) into your stylesheet; the config already adds the theme's class.
+    </StepHeader>
+    <div class="themes-body">
+        <div class="themes">
             <label for="default-light">
-                <input type="radio" id="default-light" name="theme" checked/>
+                <input type="radio" id="default-light" name="theme"/>
                 <span class="input-label">
-                    <span class="theme-type">(built-in)</span>
+                    <span class="theme-type">Built-in</span>
                     <span class="theme-name">Light theme</span>
+                    <span class="theme-preview theme-preview--light" aria-hidden="true">
+                        <span class="theme-preview__line"></span>
+                        <span class="theme-preview__line theme-preview__line--short"></span>
+                        <span class="theme-preview__btns">
+                            <span class="theme-preview__btn"></span>
+                            <span class="theme-preview__btn theme-preview__btn--secondary"></span>
+                        </span>
+                    </span>
 
                 </span>
             </label>
 
             <label for="cc--darkmode">
-                <input type="radio" id="cc--darkmode" name="theme"/>
+                <input type="radio" id="cc--darkmode" name="theme" checked/>
                 <span class="input-label">
-                    <span class="theme-type">(built-in)</span>
+                    <span class="theme-type">Built-in</span>
                     <span class="theme-name">Dark theme</span>
+                    <span class="theme-preview cc--darkmode" aria-hidden="true">
+                        <span class="theme-preview__line"></span>
+                        <span class="theme-preview__line theme-preview__line--short"></span>
+                        <span class="theme-preview__btns">
+                            <span class="theme-preview__btn"></span>
+                            <span class="theme-preview__btn theme-preview__btn--secondary"></span>
+                        </span>
+                    </span>
                 </span>
             </label>
 
             <label for="cc--dark-turquoise" aria-label="Dark Turquoise">
                 <input type="radio" id="cc--dark-turquoise" name="theme"/>
                 <span class="input-label">
-                    <span class="theme-type">(custom)</span>
+                    <span class="theme-type">Custom CSS</span>
                     <span class="theme-name">Dark Turquoise</span>
+                    <span class="theme-preview cc--dark-turquoise" aria-hidden="true">
+                        <span class="theme-preview__line"></span>
+                        <span class="theme-preview__line theme-preview__line--short"></span>
+                        <span class="theme-preview__btns">
+                            <span class="theme-preview__btn"></span>
+                            <span class="theme-preview__btn theme-preview__btn--secondary"></span>
+                        </span>
+                    </span>
                 </span>
             </label>
 
             <label for="cc--light-funky">
                 <input type="radio" id="cc--light-funky" name="theme"/>
                 <span class="input-label">
-                    <span class="theme-type">(custom)</span>
+                    <span class="theme-type">Custom CSS</span>
                     <span class="theme-name">Light Funky</span>
+                    <span class="theme-preview cc--light-funky" aria-hidden="true">
+                        <span class="theme-preview__line"></span>
+                        <span class="theme-preview__line theme-preview__line--short"></span>
+                        <span class="theme-preview__btns">
+                            <span class="theme-preview__btn"></span>
+                            <span class="theme-preview__btn theme-preview__btn--secondary"></span>
+                        </span>
+                    </span>
                 </span>
             </label>
 
             <label for="cc--elegant-black">
                 <input type="radio" id="cc--elegant-black" name="theme"/>
                 <span class="input-label">
-                    <span class="theme-type">(custom)</span>
+                    <span class="theme-type">Custom CSS</span>
                     <span class="theme-name">Elegant Black</span>
+                    <span class="theme-preview cc--elegant-black" aria-hidden="true">
+                        <span class="theme-preview__line"></span>
+                        <span class="theme-preview__line theme-preview__line--short"></span>
+                        <span class="theme-preview__btns">
+                            <span class="theme-preview__btn"></span>
+                            <span class="theme-preview__btn theme-preview__btn--secondary"></span>
+                        </span>
+                    </span>
                 </span>
             </label>
         </div>
@@ -64,7 +104,7 @@ import DocsLink from '../DocsLink.astro'
                 <ShikiBlock
                     lang="css"
                     filePath="src/styles/custom-themes/light-funky.scss"
-                    title="Light Funky (CSS)"
+                    title="Light Funky theme CSS"
                     isDetails={true}
                     showLineNumbers={true}
                 />
@@ -72,7 +112,7 @@ import DocsLink from '../DocsLink.astro'
                 <ShikiBlock
                     lang="css"
                     filePath="src/styles/custom-themes/dark-turquoise.scss"
-                    title="Dark Turquoise (CSS)"
+                    title="Dark Turquoise theme CSS"
                     isDetails={true}
                     showLineNumbers={true}
                 />
@@ -80,7 +120,7 @@ import DocsLink from '../DocsLink.astro'
                 <ShikiBlock
                     lang="css"
                     filePath="src/styles/custom-themes/elegant-black.scss"
-                    title="Elegant Black (CSS)"
+                    title="Elegant Black theme CSS"
                     isDetails={true}
                     showLineNumbers={true}
                 />

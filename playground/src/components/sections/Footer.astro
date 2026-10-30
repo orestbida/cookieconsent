@@ -1,17 +1,67 @@
-<footer>
-    <p>Released under the MIT License.</p>
-    <p>Copyright © 2020-present <a href="https://orestbida.com/contact" target="_blank">Orest Bida</a></p>
+---
+import '../../styles/footer.scss';
+import { docsUrl, repoUrl, stackblitzUrl } from '../../data/metadata'
+
+const columns = [
+    {
+        title: 'Learn',
+        links: [
+            { label: 'Documentation', href: docsUrl },
+            { label: 'Blocking scripts', href: `${docsUrl}/advanced/manage-scripts.html` },
+            { label: 'Live demos', href: stackblitzUrl }
+        ]
+    },
+    {
+        title: 'Community',
+        links: [
+            { label: 'GitHub', href: repoUrl },
+            { label: 'Ask a question', href: `${repoUrl}/discussions` },
+            { label: 'Report a bug', href: `${repoUrl}/issues` }
+        ]
+    },
+    {
+        title: 'Project',
+        links: [
+            { label: 'Releases', href: `${repoUrl}/releases` },
+            { label: 'MIT License', href: `${repoUrl}/blob/master/LICENSE` },
+            { label: 'Orest Bida', href: 'https://orestbida.com/contact' }
+        ]
+    }
+];
+---
+<footer class="footer">
+    <div class="footer__inner">
+        <div class="footer__help">
+            <h2>Stuck somewhere?</h2>
+            <p>
+                Most answers are in the docs. If yours isn't, ask in a GitHub discussion:
+                someone has probably had the same question.
+            </p>
+        </div>
+
+        <nav class="footer__columns" aria-label="Footer">
+            {columns.map(column => (
+                <div class="footer__column">
+                    <h3>{column.title}</h3>
+                    <ul>
+                        {column.links.map(link => (
+                            <li><a href={link.href} target="_blank" rel="noopener noreferrer">{link.label}</a></li>
+                        ))}
+                    </ul>
+                </div>
+            ))}
+        </nav>
+    </div>
+
+    <p class="footer__legal">Released under the MIT License. Copyright © 2020-present Orest Bida.</p>
+
+    <svg class="footer__wordmark" viewBox="0 0 1000 150" aria-hidden="true">
+        <defs>
+            <linearGradient id="footer-wordmark-fade" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#262a31"/>
+                <stop offset="1" stop-color="#08090a"/>
+            </linearGradient>
+        </defs>
+        <text x="0" y="142" textLength="1000" lengthAdjust="spacingAndGlyphs" fill="url(#footer-wordmark-fade)">CookieConsent</text>
+    </svg>
 </footer>
-
-<style>
-    footer {
-        color: #65696d;
-        margin-top: 3rem;
-        padding: 2rem 0;
-        border-top: 1px solid rgba(255, 255, 255, 0.069);
-    }
-
-    footer > p:not(:first-child) {
-        margin-top: .5rem;
-    }
-</style>

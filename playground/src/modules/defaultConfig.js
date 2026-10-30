@@ -1,4 +1,5 @@
 import * as translations from '../translations/translations'
+import { deepCopy } from './utils';
 
 /**
  * WARNING: this object will be
@@ -55,21 +56,3 @@ export const defaultFullConfig = {
  * @type {typeof defaultFullConfig}
 */
 export const defaultConfig = deepCopy(defaultFullConfig);
-
-function deepCopy(el) {
-    if (typeof el !== 'object' )
-        return el;
-
-    if (el instanceof Date)
-        return new Date(el.getTime());
-
-    let clone = Array.isArray(el) ? [] : {};
-
-    for (let key in el) {
-        let value = el[key];
-
-        clone[key] = deepCopy(value);
-    }
-
-    return clone;
-}

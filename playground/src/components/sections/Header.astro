@@ -2,14 +2,73 @@
 import '../../styles/header.scss';
 import { docsUrl, stackblitzUrl, repoUrl } from "../../data/metadata";
 import { GitHubIcon } from '../../data/icons';
----
-<header>
-    <h1 class="page-title">CookieConsent v3<span data-latest-release data-minor-release class="fade-in title__minor-version">.0.0</span></h1>
-    <h2 class="page-subtitle">A lightweight, GDPR and CCPA compliant Consent Management Tool written in vanilla JS.</h2>
 
-    <div class="main-links">
-        <a href={docsUrl} class="styled-link" target="_blank" rel="noopener noreferrer">📃 Documentation</a>
-        <a href={stackblitzUrl} class="styled-link styled-link__2" target="_blank" rel="noopener noreferrer">Live demos</a>
-        <a href={repoUrl} class="styled-link styled-link__2 github-icon" target="_blank" set:html={GitHubIcon} aria-label="GitHub repository"></a>
+/**
+ * Three mini consent modals, each in one of the custom themes
+ */
+const banners = [
+    { theme: 'cc--light-funky', title: 'We use cookies', accept: 'Accept all', reject: 'Reject all' },
+    { theme: 'cc--dark-turquoise', title: 'Cookie time!', accept: 'Sounds good', reject: 'No thanks' },
+    { theme: 'cc--elegant-black', title: 'Your privacy', accept: 'Accept', reject: 'Reject' }
+];
+---
+<header class="hero">
+    <div class="hero__inner">
+        <div class="hero__bar">
+            <a class="brand" href="/">
+                <svg class="brand__mark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" aria-hidden="true">
+                    <mask id="brand-mark-bite">
+                        <rect width="32" height="32" fill="#fff"/>
+                        <circle cx="27.5" cy="4.5" r="6" fill="#000"/>
+                        <circle cx="31.5" cy="13" r="3.5" fill="#000"/>
+                        <circle cx="11" cy="12" r="2.1" fill="#000"/>
+                        <circle cx="19.5" cy="20" r="2.3" fill="#000"/>
+                        <circle cx="10.5" cy="21.5" r="1.6" fill="#000"/>
+                        <circle cx="18" cy="10" r="1.3" fill="#000"/>
+                    </mask>
+                    <circle cx="16" cy="16" r="14" fill="currentColor" mask="url(#brand-mark-bite)"/>
+                </svg>
+                <span class="brand__name">CookieConsent</span>
+                <span class="brand__version">v3<span data-latest-release data-minor-release class="fade-in">.0.0</span></span>
+            </a>
+
+            <nav class="hero__nav" aria-label="Links">
+                <a href={docsUrl} target="_blank" rel="noopener noreferrer">Docs</a>
+                <a href={stackblitzUrl} class="hero__demos" target="_blank" rel="noopener noreferrer">Live demos</a>
+                <a href={repoUrl} class="hero__github" target="_blank" rel="noopener noreferrer">
+                    <Fragment set:html={GitHubIcon}/>
+                    <span>GitHub</span>
+                </a>
+            </nav>
+        </div>
+
+        <div class="hero__main">
+            <div class="hero__text">
+                <h1>CookieConsent Playground</h1>
+                <p class="hero__lead">
+                    Pick your options, watch the banner on this page change, and copy the config when it looks right.
+                    Free, open source and written in plain JavaScript.
+                </p>
+                <div class="hero__actions">
+                    <a class="hero-btn hero-btn--primary" href="#step-categories">Start building</a>
+                    <a class="hero-btn" href={docsUrl} target="_blank" rel="noopener noreferrer">Read the docs</a>
+                </div>
+            </div>
+
+            <div class="hero__art" aria-hidden="true">
+                {banners.map((banner, index) => (
+                    <div class={`mini-banner mini-banner--${index + 1} ${banner.theme}`}>
+                        <p class="mini-banner__title">{banner.title}</p>
+                        <span class="mini-banner__line"></span>
+                        <span class="mini-banner__line mini-banner__line--short"></span>
+                        <div class="mini-banner__btns">
+                            <span class="mini-banner__btn mini-banner__btn--primary">{banner.accept}</span>
+                            <span class="mini-banner__btn">{banner.reject}</span>
+                        </div>
+                        <span class="mini-banner__btn mini-banner__btn--wide">Manage preferences</span>
+                    </div>
+                ))}
+            </div>
+        </div>
     </div>
 </header>

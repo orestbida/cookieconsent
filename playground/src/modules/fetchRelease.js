@@ -3,6 +3,11 @@ import { version } from '../../../package.json';
 
 let latest = '';
 
+/**
+ * @type {Promise<string>}
+ */
+let latestRelease = null;
+
 const releaseSpans = document.querySelectorAll('[data-latest-release]');
 
 onEvent(customEvents._PLAYGROUND_READY, async () => {
@@ -12,11 +17,14 @@ onEvent(customEvents._PLAYGROUND_READY, async () => {
 /**
  * Get last published v3 release
  */
-export async function fetchLatestRelease() {
-    if (latest) {
-        return latest;
-    }
+export function fetchLatestRelease() {
+    if (!latestRelease)
+        latestRelease = getLatestRelease();
 
+    return latestRelease;
+}
+
+async function getLatestRelease() {
     try {
         const res = await fetch('https://raw.githubusercontent.com/orestbida/cookieconsent/master/package.json');
 
@@ -47,23 +55,4 @@ export async function updateReleaseSpans() {
             ? getMinor(latest)
             : latest;
     }
-}
-
-/**
-* @param {string} release
-*/
-function validRelease(release) {
-    const isV3 = /^(v3.|3.)/.test(release);
-
-    if (!isV3)
-        return false;
-
-    /**
-     * Ignore releases that contain
-     * one of the following keywords
-     */
-    const safeRelease = !['alpha', 'beta', 'test']
-        .some(str => release.includes(str));
-
-    return safeRelease;
 }

@@ -2,26 +2,24 @@
 import Layout from '../layouts/Layout.astro';
 import Header from '../components/sections/Header.astro';
 import Footer from '../components/sections/Footer.astro';
-import Announcements from '../components/sections/Announcements.astro';
-import CategoriesAndTranslations from '../components/sections/CategoriesAndTranslations.astro';
+import Categories from '../components/sections/Categories.astro';
+import Languages from '../components/sections/Languages.astro';
 import GuiOptions from '../components/sections/GuiOptions.astro';
 import Themes from '../components/sections/Themes.astro';
+import LiveConfig from '../components/sections/LiveConfig.astro';
 import Installation from '../components/sections/Installation.astro';
-import NextSteps from '../components/sections/NextSteps.astro';
-import Iframes from '../components/sections/Iframes.astro';
-import Help from '../components/sections/Help.astro';
 ---
 <Layout>
     <Header/>
-    <main>
-        <Announcements/>
-        <CategoriesAndTranslations/>
-        <GuiOptions/>
-        <Themes/>
+    <main class="workbench">
+        <div class="workbench__steps">
+            <Categories/>
+            <Languages/>
+            <GuiOptions/>
+            <Themes/>
+        </div>
+        <LiveConfig/>
         <Installation/>
-        <NextSteps/>
-        <Iframes/>
-        <Help/>
     </main>
     <Footer/>
 </Layout>

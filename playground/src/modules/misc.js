@@ -1,4 +1,5 @@
-import './darkmodeCheckbox'
 import './disablePageInteraction'
 import './resetButton'
 import './disableTransitions'
+import './copyCode'
+import './consentCookie'

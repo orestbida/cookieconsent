@@ -1,16 +1,17 @@
 .hl {
     position: relative;
-    border: .0625rem solid #1d1f21;
-    border-radius: .375rem;
+    border: .0625rem solid var(--code-line);
+    border-radius: .625rem;
     margin-bottom: 1.625em;
     margin-top: .5rem;
 }
 
 .hl__title {
-    padding: 0.625rem 1.25rem;
-    font-size: .9rem;
-    color: #b0c4d4;
-    border-bottom: .0625rem solid #1f252c;
+    padding: .6rem 1.1rem;
+    font-size: .8125rem;
+    font-weight: 600;
+    color: #aab3bd;
+    border-bottom: .0625rem solid var(--code-line);
 }
 
 .hl .hl__shiki {
@@ -93,36 +94,56 @@
 }
 
 .hl--details summary {
-    padding: 0.75rem 1.25rem;
-    color: #4ebdff;
-    cursor: pointer;
-    transition: color .25s;
+    display: flex;
+    align-items: center;
+    gap: .85rem;
+    padding: .8rem 1.1rem;
+    font-size: .875rem;
     font-weight: 600;
-    display: block;
+    color: #e3e7eb;
+    list-style: none;
     border-bottom: none;
-    padding: 0.75rem 1.25rem;
-    transition: color .15s ease,
-                background-color .15s ease;
+    cursor: pointer;
+    user-select: none;
+    transition: background-color .15s ease;
+}
+
+.hl--details summary::-webkit-details-marker {
+    display: none;
+}
+
+.hl--details summary:hover {
+    background-color: #171a1e;
+}
+
+.hl--details summary:active {
+    background-color: #1d2126;
 }
 
 .hl--details[open] summary {
-    border-bottom: .0625rem solid #1f252c;
+    border-bottom: .0625rem solid var(--code-line);
 }
 
+/* chevron */
 .hl--details summary::before {
-    border-style: solid;
-    border-width: 0 0.125rem 0.125rem 0;
-    padding: 0.2em;
-    display: inline-block;
-    top: 0.0625rem;
-    position: relative;
     content: "";
-    margin-right: 1em;
-    transform: translateY(-50%) rotate(45deg);
+    flex: none;
+    width: .4rem;
+    height: .4rem;
+    margin: -.2rem .1rem 0;
+    border: solid #7d8792;
+    border-width: 0 .125rem .125rem 0;
+    transform: rotate(45deg);
+    transition: transform .15s ease, border-color .15s ease;
+}
+
+.hl--details summary:hover::before {
+    border-color: #e3e7eb;
 }
 
 .hl--details[open] > summary::before {
-    transform: translateY(-10%) rotate(225deg);
+    margin-top: .2rem;
+    transform: rotate(225deg);
 }
 
 .hl--line-focus .hl__numbers span:not(.line--focus),

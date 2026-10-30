@@ -1,0 +1,23 @@
+---
+import DocsLink from './DocsLink.astro';
+
+interface Props {
+    number: number,
+    title: string,
+    id: string,
+    docSection?: string,
+    docLabel?: string
+}
+
+const { number, title, id, docSection, docLabel }: Props = Astro.props;
+---
+<div class="step__header">
+    <span class="step__number" aria-hidden="true">{number}</span>
+    <div class="step__heading">
+        <h2 id={id}>
+            {title}
+            {docSection && <DocsLink docSection={docSection} label={docLabel}/>}
+        </h2>
+        <p class="step__description"><slot/></p>
+    </div>
+</div>
