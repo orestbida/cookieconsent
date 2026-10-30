@@ -97,6 +97,19 @@ describe('Cookie with categories and services removed from the config', () => {
         expect(window.__necessaryScript).toBe(true);
     });
 
+    it('Should not accept the services of a category added after the consent when mode="opt-out"', async () => {
+        api.reset();
+        const onAccept = jest.fn();
+        testConfig.mode = 'opt-out';
+        testConfig.categories.newCategory = { enabled: true, services: { newService: { onAccept } } };
+        await api.run(testConfig);
+
+        expect(api.validConsent()).toBe(true);
+        expect(api.acceptedCategory('newCategory')).toBe(false);
+        expect(api.acceptedService('newService', 'newCategory')).toBe(false);
+        expect(onAccept).not.toHaveBeenCalled();
+    });
+
     it('Should treat a cookie with a corrupted timestamp as invalid consent', async () => {
         for (const field of ['consentTimestamp', 'lastConsentTimestamp']) {
             api.reset();

@@ -616,6 +616,8 @@ const retrieveState = () => {
                 state._acceptedServices[categoryName] = definedServices;
             else if (isArray(savedServices))
                 state._acceptedServices[categoryName] = savedServices.filter(service => elContains(definedServices, service));
+            else if (!elContains(categories, categoryName))
+                state._acceptedServices[categoryName] = [];
         }
 
         state._enabledServices = {...state._acceptedServices};
