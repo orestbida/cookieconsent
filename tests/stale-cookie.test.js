@@ -124,6 +124,16 @@ describe('Cookie with categories and services removed from the config', () => {
         }
     });
 
+    it('Should ignore a cookie value that is not an object', async () => {
+        api.reset();
+        setCookie('cc_cookie', '1');
+        await api.run(testConfig);
+
+        expect(api.validConsent()).toBe(false);
+        expect(() => api.setCookieData({ value: { a: 1 } })).not.toThrow();
+        expect(api.getCookie('data')).toEqual({ a: 1 });
+    });
+
     it('Should not keep a page reload pending after a new revision is rejected', async () => {
         api.reset();
         testConfig.revision = 1;

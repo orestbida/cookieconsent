@@ -12,7 +12,7 @@ import {
 import { debug } from './debug';
 import { fireEvent } from './events';
 import { safeRun } from './safe-run';
-import { isFunction } from './type-guards';
+import { isFunction, isObject } from './type-guards';
 import { localStorageManager } from './localstorage';
 import { afterPaint } from './dom';
 
@@ -294,9 +294,9 @@ export const parseCookie = (value, skipDecode) => {
     parsedValue = safeRun(() => JSON.parse(skipDecode
         ? value
         : decodeURIComponent(value)
-    ), true) || {};
+    ), true);
 
-    return parsedValue;
+    return isObject(parsedValue) ? parsedValue : {};
 };
 
 /**
