@@ -159,7 +159,6 @@ export const createPreferencesModal = (api, createMainContainer) => {
             sCurrentCategoryObject = sLinkedCategory && state._allDefinedCategories[sLinkedCategory],
             sCookieTableData = section.cookieTable,
             sCookieTableBody = sCookieTableData && sCookieTableData.body,
-            sCookieTableCaption = sCookieTableData && sCookieTableData.caption,
             sCreateCookieTable = sCookieTableBody && sCookieTableBody.length > 0,
             hasToggle = !!sCurrentCategoryObject,
 
@@ -168,60 +167,27 @@ export const createPreferencesModal = (api, createMainContainer) => {
              */
             sServices = hasToggle && state._allDefinedServices[sLinkedCategory],
             sServiceNames = isObject(sServices) && getKeys(sServices) || [],
-            sIsExpandableToggle = hasToggle && (!!sDescriptionData || !!sCreateCookieTable || getKeys(sServices).length>0);
-
+            sIsExpandableToggle = hasToggle && (!!sDescriptionData || !!sCreateCookieTable || getKeys(sServices).length>0),
+            nServices = sServiceNames.length,
+            expandableDivId = sLinkedCategory + '-desc';
 
         // section
-        var s = createNode(DIV_TAG);
+        const s = createNode(DIV_TAG);
         addClassPm(s, 'section');
 
+        let sDescContainer, sTitle;
+
         if (sIsExpandableToggle || sDescriptionData) {
-            var sDescContainer = createNode(DIV_TAG);
+            sDescContainer = createNode(DIV_TAG);
             addClassPm(sDescContainer, 'section-desc-wrapper');
         }
 
-        let nServices = sServiceNames.length;
-
-        if (sIsExpandableToggle) {
-            if (nServices > 0) {
-
-                const servicesContainer = createNode(DIV_TAG);
-                addClassPm(servicesContainer, 'section-services');
-
-                for (const serviceName of sServiceNames) {
-                    const service = sServices[serviceName];
-                    const serviceLabel = service && service.label || serviceName;
-                    const serviceDiv = createNode(DIV_TAG);
-                    const serviceHeader = createNode(DIV_TAG);
-                    const serviceIconContainer = createNode(DIV_TAG);
-                    const serviceTitle = createNode(DIV_TAG);
-
-                    addClassPm(serviceDiv, 'service');
-                    addClassPm(serviceTitle, 'service-title');
-                    addClassPm(serviceHeader, 'service-header');
-                    addClassPm(serviceIconContainer, 'service-icon');
-
-                    const toggleLabel = createToggleLabel(serviceLabel, serviceName, sCurrentCategoryObject, true, sLinkedCategory);
-
-                    serviceTitle.innerHTML = serviceLabel;
-
-                    appendChild(serviceHeader, serviceIconContainer);
-                    appendChild(serviceHeader, serviceTitle);
-                    appendChild(serviceDiv, serviceHeader);
-                    appendChild(serviceDiv, toggleLabel);
-                    appendChild(servicesContainer, serviceDiv);
-                }
-
-                appendChild(sDescContainer, servicesContainer);
-            }
-        }
+        if (sIsExpandableToggle && nServices > 0)
+            appendChild(sDescContainer, createServices(sServices, sServiceNames, sCurrentCategoryObject, sLinkedCategory));
 
         if (sTitleData) {
-            var sTitleContainer = createNode(DIV_TAG);
-
-            var sTitle = hasToggle
-                ? createNode(BUTTON_TAG)
-                : createNode(DIV_TAG);
+            const sTitleContainer = createNode(DIV_TAG);
+            sTitle = createNode(hasToggle ? BUTTON_TAG : DIV_TAG);
 
             addClassPm(sTitleContainer, 'section-title-wrapper');
             addClassPm(sTitle, 'section-title');
@@ -242,38 +208,13 @@ export const createPreferencesModal = (api, createMainContainer) => {
                 s.className += '--toggle';
 
                 const toggleLabel = createToggleLabel(sTitleData, sLinkedCategory, sCurrentCategoryObject);
+                const serviceCounterLabel = modalData.serviceCounterLabel;
 
-                let serviceCounterLabel = modalData.serviceCounterLabel;
-
-                if (nServices > 0 && isString(serviceCounterLabel)) {
-                    let serviceCounter = createNode('span');
-
-                    addClassPm(serviceCounter, 'badge');
-                    addClassPm(serviceCounter, 'service-counter');
-                    setAttribute(serviceCounter, ARIA_HIDDEN, true);
-                    setAttribute(serviceCounter, 'data-servicecounter', nServices);
-
-                    if (serviceCounterLabel) {
-                        serviceCounterLabel = serviceCounterLabel.split('|');
-
-                        if (serviceCounterLabel.length > 1 && nServices > 1)
-                            serviceCounterLabel = serviceCounterLabel[1];
-                        else
-                            serviceCounterLabel = serviceCounterLabel[0];
-
-                        setAttribute(serviceCounter, 'data-counterlabel', serviceCounterLabel);
-                    }
-
-                    serviceCounter.innerHTML = nServices + (serviceCounterLabel
-                        ? ' ' + serviceCounterLabel
-                        : '');
-
-                    appendChild(sTitle, serviceCounter);
-                }
+                if (nServices > 0 && isString(serviceCounterLabel))
+                    appendChild(sTitle, createServiceCounter(nServices, serviceCounterLabel));
 
                 if (sIsExpandableToggle) {
                     addClassPm(s, 'section--expandable');
-                    var expandableDivId = sLinkedCategory + '-desc';
                     setAttribute(sTitle, 'aria-expanded', false);
                     setAttribute(sTitle, 'aria-controls', expandableDivId);
                 }
@@ -289,7 +230,7 @@ export const createPreferencesModal = (api, createMainContainer) => {
         }
 
         if (sDescriptionData) {
-            var sDesc = createNode('p');
+            const sDesc = createNode('p');
             addClassPm(sDesc, 'section-desc');
             sDesc.innerHTML = sDescriptionData;
             appendChild(sDescContainer, sDesc);
@@ -299,98 +240,10 @@ export const createPreferencesModal = (api, createMainContainer) => {
             setAttribute(sDescContainer, ARIA_HIDDEN, 'true');
             sDescContainer.id = expandableDivId;
 
-            /**
-             * On button click handle the following :=> aria-expanded, aria-hidden and act class for current section
-             */
-            ((accordion, section, btn) => {
-                addEvent(sTitle, CLICK_EVENT, () => {
-                    if (!hasClass(section, 'is-expanded')) {
-                        addClass(section, 'is-expanded');
-                        setAttribute(btn, 'aria-expanded', 'true');
-                        removeAttribute(accordion, ARIA_HIDDEN);
-                    } else {
-                        removeClass(section, 'is-expanded');
-                        setAttribute(btn, 'aria-expanded', 'false');
-                        setAttribute(accordion, ARIA_HIDDEN, 'true');
-                    }
-                });
-            })(sDescContainer, s, sTitle);
+            addExpandListener(sTitle, s, sDescContainer);
 
-
-            if (sCreateCookieTable) {
-                const table = createNode('table');
-                const thead = createNode('thead');
-                const tbody = createNode('tbody');
-
-                if (sCookieTableCaption) {
-                    const caption = createNode('caption');
-                    addClassPm(caption, 'table-caption');
-                    caption.innerHTML = sCookieTableCaption;
-                    table.appendChild(caption);
-                }
-
-                addClassPm(table, 'section-table');
-                addClassPm(thead, 'table-head');
-                addClassPm(tbody, 'table-body');
-
-                const headerData = sCookieTableData.headers;
-                const tableHeadersKeys = getKeys(headerData);
-
-                /**
-                 * Create table headers
-                 */
-                const trHeadFragment = dom._document.createDocumentFragment();
-                const trHead = createNode('tr');
-
-                for (const headerKey of tableHeadersKeys) {
-                    const headerValue = headerData[headerKey];
-                    const th = createNode('th');
-
-                    th.id = 'cc__row-' + headerKey + sectionIndex;
-                    setAttribute(th, 'scope', 'col');
-                    addClassPm(th, 'table-th');
-
-                    th.innerHTML = headerValue;
-                    appendChild(trHeadFragment, th);
-                }
-
-                appendChild(trHead, trHeadFragment);
-                appendChild(thead, trHead);
-
-                /**
-                 * Create table body
-                 */
-                const bodyFragment = dom._document.createDocumentFragment();
-
-                for (const bodyItem of sCookieTableBody) {
-                    const tr = createNode('tr');
-                    addClassPm(tr, 'table-tr');
-
-                    for (const tdKey of tableHeadersKeys) {
-                        const tdHeader = headerData[tdKey];
-                        const tdValue = bodyItem[tdKey];
-
-                        const td = createNode('td');
-                        const tdInner = createNode(DIV_TAG);
-
-                        addClassPm(td, 'table-td');
-                        setAttribute(td, 'data-column', tdHeader);
-                        setAttribute(td, 'headers', 'cc__row-' + tdKey + sectionIndex);
-
-                        tdInner.insertAdjacentHTML('beforeend', tdValue);
-
-                        appendChild(td, tdInner);
-                        appendChild(tr, td);
-                    }
-
-                    appendChild(bodyFragment, tr);
-                }
-
-                appendChild(tbody, bodyFragment);
-                appendChild(table, thead);
-                appendChild(table, tbody);
-                appendChild(sDescContainer, table);
-            }
+            if (sCreateCookieTable)
+                appendChild(sDescContainer, createCookieTable(sCookieTableData, sectionIndex));
         }
 
         if (sIsExpandableToggle || sDescriptionData)
@@ -482,6 +335,176 @@ export const createPreferencesModal = (api, createMainContainer) => {
     }
 
     getModalFocusableData(2);
+};
+
+/**
+ * Generate the list of services (each with its own toggle) of a category
+ * @param {Object.<string, import('../global').Service>} services
+ * @param {string[]} serviceNames
+ * @param {import('../global').Category} categoryObject
+ * @param {string} categoryName
+ */
+const createServices = (services, serviceNames, categoryObject, categoryName) => {
+    const servicesContainer = createNode(DIV_TAG);
+    addClassPm(servicesContainer, 'section-services');
+
+    for (const serviceName of serviceNames) {
+        const service = services[serviceName];
+        const serviceLabel = service && service.label || serviceName;
+        const serviceDiv = createNode(DIV_TAG);
+        const serviceHeader = createNode(DIV_TAG);
+        const serviceIconContainer = createNode(DIV_TAG);
+        const serviceTitle = createNode(DIV_TAG);
+
+        addClassPm(serviceDiv, 'service');
+        addClassPm(serviceTitle, 'service-title');
+        addClassPm(serviceHeader, 'service-header');
+        addClassPm(serviceIconContainer, 'service-icon');
+
+        const toggleLabel = createToggleLabel(serviceLabel, serviceName, categoryObject, true, categoryName);
+
+        serviceTitle.innerHTML = serviceLabel;
+
+        appendChild(serviceHeader, serviceIconContainer);
+        appendChild(serviceHeader, serviceTitle);
+        appendChild(serviceDiv, serviceHeader);
+        appendChild(serviceDiv, toggleLabel);
+        appendChild(servicesContainer, serviceDiv);
+    }
+
+    return servicesContainer;
+};
+
+/**
+ * Generate the "N services" badge
+ * @param {number} nServices
+ * @param {string} counterLabel singular and plural form, separated by "|"
+ */
+const createServiceCounter = (nServices, counterLabel) => {
+    const serviceCounter = createNode('span');
+
+    addClassPm(serviceCounter, 'badge');
+    addClassPm(serviceCounter, 'service-counter');
+    setAttribute(serviceCounter, ARIA_HIDDEN, true);
+    setAttribute(serviceCounter, 'data-servicecounter', nServices);
+
+    if (counterLabel) {
+        const labels = counterLabel.split('|');
+
+        counterLabel = labels.length > 1 && nServices > 1
+            ? labels[1]
+            : labels[0];
+
+        setAttribute(serviceCounter, 'data-counterlabel', counterLabel);
+    }
+
+    serviceCounter.innerHTML = nServices + (counterLabel
+        ? ' ' + counterLabel
+        : '');
+
+    return serviceCounter;
+};
+
+/**
+ * Expand/collapse the section when its title is clicked
+ * @param {HTMLElement} btn
+ * @param {HTMLElement} section
+ * @param {HTMLElement} accordion
+ */
+const addExpandListener = (btn, section, accordion) => {
+    addEvent(btn, CLICK_EVENT, () => {
+        if (!hasClass(section, 'is-expanded')) {
+            addClass(section, 'is-expanded');
+            setAttribute(btn, 'aria-expanded', 'true');
+            removeAttribute(accordion, ARIA_HIDDEN);
+        } else {
+            removeClass(section, 'is-expanded');
+            setAttribute(btn, 'aria-expanded', 'false');
+            setAttribute(accordion, ARIA_HIDDEN, 'true');
+        }
+    });
+};
+
+/**
+ * Generate the section's cookie table
+ * @param {import('../global').CookieTable} cookieTableData
+ * @param {number} sectionIndex
+ */
+const createCookieTable = (cookieTableData, sectionIndex) => {
+    const table = createNode('table');
+    const thead = createNode('thead');
+    const tbody = createNode('tbody');
+    const caption = cookieTableData.caption;
+
+    if (caption) {
+        const captionEl = createNode('caption');
+        addClassPm(captionEl, 'table-caption');
+        captionEl.innerHTML = caption;
+        table.appendChild(captionEl);
+    }
+
+    addClassPm(table, 'section-table');
+    addClassPm(thead, 'table-head');
+    addClassPm(tbody, 'table-body');
+
+    const headerData = cookieTableData.headers;
+    const tableHeadersKeys = getKeys(headerData);
+
+    /**
+     * Create table headers
+     */
+    const trHeadFragment = globalObj._dom._document.createDocumentFragment();
+    const trHead = createNode('tr');
+
+    for (const headerKey of tableHeadersKeys) {
+        const headerValue = headerData[headerKey];
+        const th = createNode('th');
+
+        th.id = 'cc__row-' + headerKey + sectionIndex;
+        setAttribute(th, 'scope', 'col');
+        addClassPm(th, 'table-th');
+
+        th.innerHTML = headerValue;
+        appendChild(trHeadFragment, th);
+    }
+
+    appendChild(trHead, trHeadFragment);
+    appendChild(thead, trHead);
+
+    /**
+     * Create table body
+     */
+    const bodyFragment = globalObj._dom._document.createDocumentFragment();
+
+    for (const bodyItem of cookieTableData.body) {
+        const tr = createNode('tr');
+        addClassPm(tr, 'table-tr');
+
+        for (const tdKey of tableHeadersKeys) {
+            const tdHeader = headerData[tdKey];
+            const tdValue = bodyItem[tdKey];
+
+            const td = createNode('td');
+            const tdInner = createNode(DIV_TAG);
+
+            addClassPm(td, 'table-td');
+            setAttribute(td, 'data-column', tdHeader);
+            setAttribute(td, 'headers', 'cc__row-' + tdKey + sectionIndex);
+
+            tdInner.insertAdjacentHTML('beforeend', tdValue);
+
+            appendChild(td, tdInner);
+            appendChild(tr, td);
+        }
+
+        appendChild(bodyFragment, tr);
+    }
+
+    appendChild(tbody, bodyFragment);
+    appendChild(table, thead);
+    appendChild(table, tbody);
+
+    return table;
 };
 
 /**
