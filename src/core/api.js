@@ -113,10 +113,7 @@ export const acceptService = (service, category) => {
         return false;
     }
 
-    //{{START: GUI}}
     updateModalToggles(service, category);
-    //{{END: GUI}}
-
     acceptCategory();
 };
 

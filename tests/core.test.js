@@ -62,4 +62,26 @@ describe('Core version (without GUI)', () => {
         expect(api.acceptedCategory('analytics')).toBe(true);
         expect(api.acceptedService('ga', 'analytics')).toBe(true);
     })
+
+    it('Should accept and reject services', async () => {
+        await api.run({
+            categories: {
+                analytics: {
+                    services: {
+                        ga: {},
+                        hotjar: {}
+                    }
+                }
+            }
+        });
+
+        api.acceptService('ga', 'analytics');
+        expect(api.acceptedService('ga', 'analytics')).toBe(true);
+        expect(api.acceptedService('hotjar', 'analytics')).toBe(false);
+        expect(api.acceptedCategory('analytics')).toBe(true);
+
+        api.acceptService([], 'analytics');
+        expect(api.acceptedService('ga', 'analytics')).toBe(false);
+        expect(api.acceptedCategory('analytics')).toBe(false);
+    })
 })
