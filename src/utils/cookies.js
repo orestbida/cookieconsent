@@ -67,7 +67,8 @@ export const autoclearCookiesHelper = (isFirstConsent) => {
      */
     for (const categoryName in state._lastChangedServices) {
         for (const serviceName of state._lastChangedServices[categoryName]) {
-            const serviceCookies = state._allDefinedServices[categoryName][serviceName].cookies;
+            const service = state._allDefinedServices[categoryName][serviceName];
+            const serviceCookies = service && service.cookies;
             const serviceIsDisabled = !elContains(state._acceptedServices[categoryName], serviceName);
 
             if (!serviceIsDisabled || !serviceCookies)
