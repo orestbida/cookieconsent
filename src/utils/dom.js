@@ -149,6 +149,12 @@ export const focus = (el, toggleTabIndex, preventScroll) => {
     toggleTabIndex && el.removeAttribute('tabindex');
 };
 
+/**
+ * Run `fn` in a new task, once the browser had the chance to paint
+ * @param {Function} fn
+ */
+export const afterPaint = (fn) => requestAnimationFrame(() => setTimeout(fn));
+
 let disableInteractionTimeout;
 
 /**

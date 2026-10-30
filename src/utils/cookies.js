@@ -14,6 +14,7 @@ import { fireEvent } from './events';
 import { safeRun } from './safe-run';
 import { isFunction } from './type-guards';
 import { localStorageManager } from './localstorage';
+import { afterPaint } from './dom';
 
 /**
  * @param {boolean} [isFirstConsent]
@@ -105,7 +106,10 @@ export const autoclearCookiesHelper = (isFirstConsent) => {
     }
 };
 
-export const saveCookiePreferences = () => {
+/**
+ * @param {boolean} [afterNextPaint] run scripts and callbacks after the next paint
+ */
+export const saveCookiePreferences = (afterNextPaint) => {
     const state = globalObj._state;
 
     /**
@@ -180,9 +184,23 @@ export const saveCookiePreferences = () => {
 
         if (isAutoClearEnabled && shouldClearCookies)
             autoclearCookiesHelper(isFirstConsent);
-
-        manageExistingScripts();
     }
+
+    afterNextPaint
+        ? afterPaint(() => state === globalObj._state && runConsentEffects(isFirstConsent, stateChanged))
+        : runConsentEffects(isFirstConsent, stateChanged);
+};
+
+/**
+ * Enable/disable scripts, fire the consent callbacks and reload the page if needed
+ * @param {boolean} isFirstConsent
+ * @param {boolean} stateChanged
+ */
+const runConsentEffects = (isFirstConsent, stateChanged) => {
+    const state = globalObj._state;
+
+    if (isFirstConsent || stateChanged)
+        manageExistingScripts();
 
     if (isFirstConsent) {
         fireEvent(globalObj._customEvents._onFirstConsent);

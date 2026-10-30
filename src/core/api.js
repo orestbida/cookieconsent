@@ -72,15 +72,22 @@ import {
 import { localStorageManager } from '../utils/localstorage';
 
 /**
+ * @param {string[]|string} categories
+ * @param {string[]} excludedCategories
+ * @param {boolean} [afterNextPaint] run scripts and callbacks after the next paint
+ */
+const acceptAndSave = (categories, excludedCategories, afterNextPaint) => {
+    resolveEnabledCategories(categories, excludedCategories);
+    resolveEnabledServices();
+    saveCookiePreferences(afterNextPaint);
+};
+
+/**
  * Accept API
  * @param {string[]|string} categories - Categories to accept
  * @param {string[]} [excludedCategories]
  */
-export const acceptCategory = (categories, excludedCategories = []) => {
-    resolveEnabledCategories(categories, excludedCategories);
-    resolveEnabledServices();
-    saveCookiePreferences();
-};
+export const acceptCategory = (categories, excludedCategories = []) => acceptAndSave(categories, excludedCategories);
 
 /**
  * Returns true if cookie category is accepted
@@ -337,7 +344,12 @@ const miniAPI = {
     hide,
     showPreferences,
     hidePreferences,
-    acceptCategory
+    /**
+     * Used by the modal buttons, so that scripts and
+     * callbacks don't delay the click's response (INP)
+     * @param {string[]|string} [categories]
+     */
+    acceptCategory: (categories) => acceptAndSave(categories, [], true)
 };
 
 /**

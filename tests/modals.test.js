@@ -53,6 +53,36 @@ describe("Consent Modal buttons test", () => {
         expect(userPreferences.rejectedCategories.length).toBe(0);
     })
 
+    it('Should run scripts and callbacks after the next paint on click', async () => {
+        jest.useFakeTimers();
+        const onConsent = jest.fn();
+        await api.run({...testConfig, onConsent});
+        fireClickEvent(globalObj._dom._cmAcceptAllBtn);
+        expect(api.validConsent()).toBe(true);
+        expect(onConsent).not.toHaveBeenCalled();
+        jest.runAllTimers();
+        expect(onConsent).toHaveBeenCalledTimes(1);
+        jest.useRealTimers();
+    })
+
+    it('Should not run deferred callbacks after reset', async () => {
+        jest.useFakeTimers();
+        const onConsent = jest.fn();
+        await api.run({...testConfig, onConsent});
+        fireClickEvent(globalObj._dom._cmAcceptAllBtn);
+        api.reset(true);
+        jest.runAllTimers();
+        expect(onConsent).not.toHaveBeenCalled();
+        jest.useRealTimers();
+    })
+
+    it('acceptCategory should still run callbacks synchronously', async () => {
+        const onConsent = jest.fn();
+        await api.run({...testConfig, onConsent});
+        api.acceptCategory('all');
+        expect(onConsent).toHaveBeenCalledTimes(1);
+    })
+
     it('Should accept necessary when closeIconLabel (x) is pressed', async () => {
         testConfig.guiOptions.consentModal.layout = 'box';
         testConfig.language.translations.en.consentModal.closeIconLabel = 'Reject all';
