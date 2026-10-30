@@ -4,6 +4,9 @@ on:
   release:
     types: [published]
 
+permissions:
+  contents: read
+
 jobs:
   push-to-npm-registry-as-latest:
     if: "!github.event.release.prerelease"

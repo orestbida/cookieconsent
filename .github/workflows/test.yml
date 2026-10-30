@@ -18,6 +18,9 @@ on:
       - 'pnpm-workspace.yaml'
       - '.github/workflows/test.yml'
 
+permissions:
+  contents: read
+
 jobs:
   run-test:
     runs-on: ubuntu-latest
