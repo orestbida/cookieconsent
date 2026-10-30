@@ -106,6 +106,18 @@ Stops the plugin's execution when a bot/crawler is detected, to prevent them fro
 - **Default**: `true`
 
 
+## respectGpc
+
+Honors the browser's [Global Privacy Control](https://globalprivacycontrol.org/) signal (`navigator.globalPrivacyControl`). Until the user makes a choice:
+- categories marked as [`enabled`](#category-enabled) are treated as disabled, so their scripts don't run in `opt-out` mode
+- the consent modal is not shown automatically; you can still open it via `show()` or `showPreferences()`
+
+No cookie is set and no consent callback is fired because of the signal alone. Once the user makes a choice, it always takes precedence over the signal.
+
+- **Type**: `boolean`
+- **Default**: `false`
+
+
 ## disablePageInteraction
 
 Creates a dark overlay and blocks the page scroll until consent is expressed.

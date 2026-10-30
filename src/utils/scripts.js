@@ -1,4 +1,5 @@
 import { globalObj } from '../core/global';
+import { isGpcOptOutActive } from './categories';
 import { elContains } from './collections';
 import {
     createNode,
@@ -205,7 +206,7 @@ export const retrieveEnabledCategoriesAndServices = () => {
     for (const categoryName of state._allCategoryNames) {
         const category = state._allDefinedCategories[categoryName];
 
-        if (category.readOnly || category.enabled) {
+        if (category.readOnly || (category.enabled && !isGpcOptOutActive())) {
             state._defaultEnabledCategories.push(categoryName);
             const services = state._allDefinedServices[categoryName] || {};
 

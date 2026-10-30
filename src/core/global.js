@@ -111,6 +111,7 @@ export class GlobalState {
             autoClearCookies: true,
             manageScriptTags: true,
             hideFromBots: true,
+            respectGpc: false,
 
             cookie: {
                 name: COOKIE_NAME,

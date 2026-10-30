@@ -1,5 +1,6 @@
 import {
     getCurrentCategoriesState,
+    isGpcOptOutActive,
     resolveEnabledCategories,
     resolveEnabledServices,
     retrieveRejectedServices,
@@ -650,7 +651,7 @@ export const run = async (userConfig) => {
 
         generateHtml(miniAPI);
 
-        if (_config.autoShow && !consentIsValid)
+        if (_config.autoShow && !consentIsValid && !isGpcOptOutActive())
             show(true);
         //{{END: GUI}}
 

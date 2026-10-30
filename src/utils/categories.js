@@ -192,6 +192,14 @@ export const resolveEnabledServices = (relativeCategory) => {
 };
 
 /**
+ * True if the browser's Global Privacy Control signal must be honored:
+ * `respectGpc` is enabled and there is no valid consent yet to override it
+ */
+export const isGpcOptOutActive = () => globalObj._config.respectGpc
+    && globalObj._state._invalidConsent
+    && navigator.globalPrivacyControl === true;
+
+/**
  * True if the toggle of the category (or of one of its services) should be checked.
  * Without `useAcceptedState`, the defaults are used.
  * @param {string} categoryName

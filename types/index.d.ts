@@ -452,6 +452,16 @@ declare namespace CookieConsent {
         hideFromBots?: boolean
 
         /**
+         * Honor the browser's Global Privacy Control signal (`navigator.globalPrivacyControl`).
+         * Until the user makes a choice, categories marked as `enabled` are treated as disabled
+         * and the consent modal is not shown automatically. No cookie is set and no consent
+         * callback is fired because of the signal alone; a saved choice always takes precedence.
+         *
+         * @default false
+         */
+        respectGpc?: boolean
+
+        /**
          * Tweak some UI options.
          */
         guiOptions?: GuiOptions
