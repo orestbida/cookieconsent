@@ -2,7 +2,7 @@
     "consentModal": {
         "label": "Cookie consent",
         "title": "Hello traveller, it's cookie time!",
-        "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip.",
+        "description": "We use cookies to make this website work, to understand how it is used and to show you relevant ads.",
         "acceptAllBtn": "Accept all",
         "acceptNecessaryBtn": "Reject all",
         "showPreferencesBtn": "Manage preferences",
@@ -18,21 +18,21 @@
         "sections": [
             {
                 "title": "Cookie Usage",
-                "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+                "description": "We use cookies to make this website work and to improve your experience. You can choose which categories to allow below and change your choice at any time. For more details, read our <a href=\"#link\" class=\"cc__link\">Privacy Policy</a>."
             },
             {
                 "title": "Strictly Necessary Cookies <span class=\"pm__badge\">Always Enabled</span>",
-                "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+                "description": "These cookies are essential for the website to work properly, for example to keep you signed in or to remember your cookie preferences. They cannot be disabled.",
                 "linkedCategory": "necessary"
             },
             {
                 "title": "Functionality Cookies",
-                "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+                "description": "These cookies remember your choices, such as your language or region, to give you a more personal experience. Disabling them may break some features.",
                 "linkedCategory": "functionality"
             },
             {
                 "title": "Analytics Cookies",
-                "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+                "description": "These cookies collect anonymous information about how visitors use the website, such as the pages visited and the time spent on them, so we can improve it.",
                 "linkedCategory": "analytics",
                 "cookieTable": {
                     "headers": {
@@ -51,12 +51,12 @@
             },
             {
                 "title": "Advertisement Cookies",
-                "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+                "description": "These cookies are used to show you ads that are relevant to your interests and to measure how well our advertising campaigns perform.",
                 "linkedCategory": "marketing"
             },
             {
                 "title": "More information",
-                "description": "For any query in relation to my policy on cookies and your choices, please <a class=\"cc__link\" href=\"#yourdomain.com\">contact me</a>."
+                "description": "If you have any questions about our cookie policy or your choices, please <a class=\"cc__link\" href=\"#yourdomain.com\">contact us</a>."
             }
         ]
     }

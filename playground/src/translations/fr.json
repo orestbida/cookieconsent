@@ -2,7 +2,7 @@
     "consentModal": {
         "label": "Consentement aux cookies",
         "title": "Bonjour voyageur, c'est l'heure des cookies!",
-        "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip.",
+        "description": "Nous utilisons des cookies pour faire fonctionner ce site, comprendre comment il est utilisé et vous montrer des publicités pertinentes.",
         "acceptAllBtn": "Tout accepter",
         "acceptNecessaryBtn": "Tout rejeter",
         "showPreferencesBtn": "Gérer les préférences",
@@ -18,21 +18,21 @@
         "sections": [
             {
                 "title": "Utilisation des Cookies",
-                "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+                "description": "Nous utilisons des cookies pour faire fonctionner ce site et améliorer votre expérience. Vous pouvez choisir ci-dessous les catégories que vous autorisez et modifier votre choix à tout moment. Pour plus de détails, consultez notre <a href=\"#link\" class=\"cc__link\">Politique de confidentialité</a>."
             },
             {
                 "title": "Cookies Strictement Nécessaires <span class=\"pm__badge\">Toujours Activé</span>",
-                "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+                "description": "Ces cookies sont indispensables au bon fonctionnement du site, par exemple pour maintenir votre connexion ou mémoriser vos préférences en matière de cookies. Ils ne peuvent pas être désactivés.",
                 "linkedCategory": "necessary"
             },
             {
                 "title": "Cookies de Fonctionnalités",
-                "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+                "description": "Ces cookies mémorisent vos choix, comme la langue ou la région, afin de vous offrir une expérience plus personnalisée. Leur désactivation peut empêcher certaines fonctionnalités de fonctionner.",
                 "linkedCategory": "functionality"
             },
             {
                 "title": "Cookies Analytiques",
-                "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+                "description": "Ces cookies collectent des informations anonymes sur la façon dont les visiteurs utilisent le site, comme les pages consultées et le temps passé sur celles-ci, afin que nous puissions l'améliorer.",
                 "linkedCategory": "analytics",
                 "cookieTable": {
                     "headers": {
@@ -51,12 +51,12 @@
             },
             {
                 "title": "Cookies Publicitaires",
-                "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+                "description": "Ces cookies servent à vous montrer des publicités adaptées à vos centres d'intérêt et à mesurer l'efficacité de nos campagnes publicitaires.",
                 "linkedCategory": "marketing"
             },
             {
                 "title": "Plus d'informations",
-                "description": "For any query in relation to my policy on cookies and your choices, please <a class=\"cc__link\" href=\"#yourdomain.com\">contact me</a>."
+                "description": "Pour toute question concernant notre politique en matière de cookies ou vos choix, veuillez <a class=\"cc__link\" href=\"#yourdomain.com\">nous contacter</a>."
             }
         ]
     }

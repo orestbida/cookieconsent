@@ -2,7 +2,7 @@
     "consentModal": {
         "label": "موافقة ملفات تعريف الارتباط",
         "title": "مرحبًا أيها المسافر ، حان وقت ملفات تعريف الارتباط!",
-        "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip.",
+        "description": "نستخدم ملفات تعريف الارتباط لتشغيل هذا الموقع، ولفهم كيفية استخدامه، ولعرض إعلانات ملائمة لك.",
         "acceptAllBtn": "رفض كل شيء",
         "acceptNecessaryBtn": "قبول الكل",
         "showPreferencesBtn": "إدارة التفضيلات",
@@ -18,21 +18,21 @@
         "sections": [
             {
                 "title": "استخدام ملفات تعريف الارتباط",
-                "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+                "description": "نستخدم ملفات تعريف الارتباط لتشغيل هذا الموقع وتحسين تجربتك. يمكنك أدناه اختيار الفئات التي تسمح بها وتغيير اختيارك في أي وقت. لمزيد من التفاصيل، اطّلع على <a href=\"#link\" class=\"cc__link\">سياسة الخصوصية</a>."
             },
             {
                 "title": "ملفات تعريف الارتباط الضرورية للغاية <span class=\"pm__badge\">ممكّن دائمًا</span>",
-                "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+                "description": "ملفات تعريف الارتباط هذه ضرورية لكي يعمل الموقع بشكل صحيح، على سبيل المثال لإبقائك مسجلًا الدخول أو لتذكر تفضيلاتك بشأن ملفات تعريف الارتباط. لا يمكن تعطيلها.",
                 "linkedCategory": "necessary"
             },
             {
                 "title": "ملفات تعريف الارتباط الوظيفية",
-                "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+                "description": "تتذكر ملفات تعريف الارتباط هذه اختياراتك، مثل اللغة أو المنطقة، لتقديم تجربة أكثر تخصيصًا لك. قد يؤدي تعطيلها إلى توقف بعض الميزات عن العمل.",
                 "linkedCategory": "functionality"
             },
             {
                 "title": "ملفات تعريف الارتباط التحليلية",
-                "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+                "description": "تجمع ملفات تعريف الارتباط هذه معلومات مجهولة الهوية حول كيفية استخدام الزوار للموقع، مثل الصفحات التي تمت زيارتها والوقت الذي يقضونه فيها، حتى نتمكن من تحسينها.",
                 "linkedCategory": "analytics",
                 "cookieTable": {
                     "headers": {
@@ -51,12 +51,12 @@
             },
             {
                 "title": "ملفات تعريف الارتباط للإعلان",
-                "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+                "description": "تُستخدم ملفات تعريف الارتباط هذه لعرض إعلانات تتناسب مع اهتماماتك ولقياس مدى فعالية حملاتنا الإعلانية.",
                 "linkedCategory": "marketing"
             },
             {
                 "title": "معلومات اكثر",
-                "description": "لأي استفسار يتعلق بسياستي الخاصة بملفات تعريف الارتباط وخياراتك ، يرجى  <a class=\"cc__link\" href=\"#yourdomain.com\">الاتصال بي</a>."
+                "description": "لأي استفسار يتعلق بسياستنا الخاصة بملفات تعريف الارتباط أو بخياراتك، يرجى <a class=\"cc__link\" href=\"#yourdomain.com\">التواصل معنا</a>."
             }
         ]
     }

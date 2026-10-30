@@ -30,7 +30,7 @@ export const defaultState = {
     /**
      * Increase on every new playground update
      */
-    _demoRevision: 34
+    _demoRevision: 35
 };
 
 /**
