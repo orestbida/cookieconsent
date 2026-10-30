@@ -51,26 +51,34 @@ export const fetchCategoriesAndServices = (allCategoryNames) => {
 };
 
 /**
- * Calculate rejected services (all services - enabled services)
- * @returns {Object.<string, string[]>}
+ * Obtain accepted and rejected services, consistent with the categories' state:
+ * only the services of an accepted category are accepted, and nothing is rejected
+ * until the consent is valid
+ * @returns {{accepted: Object.<string, string[]>, rejected: Object.<string, string[]>}}
  */
-export const retrieveRejectedServices = () => {
-    const rejectedServices = {};
+export const getCurrentServicesState = () => {
+    const accepted = {};
+    const rejected = {};
 
     const {
+        _invalidConsent,
         _allCategoryNames,
         _allDefinedServices,
+        _acceptedCategories,
         _acceptedServices
     } = globalObj._state;
 
     for (const categoryName of _allCategoryNames) {
-        rejectedServices[categoryName] = arrayDiff(
-            _acceptedServices[categoryName],
-            getKeys(_allDefinedServices[categoryName])
-        );
+        accepted[categoryName] = elContains(_acceptedCategories, categoryName)
+            ? _acceptedServices[categoryName]
+            : [];
+
+        rejected[categoryName] = _invalidConsent
+            ? []
+            : arrayDiff(accepted[categoryName], getKeys(_allDefinedServices[categoryName]));
     }
 
-    return rejectedServices;
+    return { accepted, rejected };
 };
 
 export const retrieveCategoriesFromModal = () => {

@@ -3,7 +3,7 @@ import {
     isGpcOptOutActive,
     resolveEnabledCategories,
     resolveEnabledServices,
-    retrieveRejectedServices,
+    getCurrentServicesState,
     setAcceptedCategories,
     syncModalToggles,
     updateModalToggles
@@ -397,15 +397,15 @@ export const setLanguage = async (newLanguageCode, forceUpdate) => {
  * @returns {import("./global").UserPreferences}
  */
 export const getUserPreferences = () => {
-    const { _acceptType, _acceptedServices } = globalObj._state;
     const { accepted, rejected } = getCurrentCategoriesState();
+    const services = getCurrentServicesState();
 
     return deepCopy({
-        acceptType: _acceptType,
+        acceptType: globalObj._state._acceptType,
         acceptedCategories: accepted,
         rejectedCategories: rejected,
-        acceptedServices: _acceptedServices,
-        rejectedServices: retrieveRejectedServices()
+        acceptedServices: services.accepted,
+        rejectedServices: services.rejected
     });
 };
 

@@ -114,6 +114,20 @@ describe("Check modals' html generation under different settings", () => {
         expect(api.getUserPreferences().acceptedServices.necessary).toEqual(['service1']);
     })
 
+    it('Should list only the services of the default categories before the consent when mode="opt-out"', async () => {
+        testConfig.mode = 'opt-out';
+        testConfig.categories.analytics.enabled = false;
+        api.eraseCookies('cc_cookie');
+        await api.run(testConfig);
+        expect(api.getUserPreferences()).toEqual({
+            acceptType: '',
+            acceptedCategories: ['necessary'],
+            rejectedCategories: [],
+            acceptedServices: { necessary: ['service1'], analytics: [], ads: [] },
+            rejectedServices: { necessary: [], analytics: [], ads: [] }
+        });
+    })
+
     it('equalWeightButtons option should be enabled by default', async () => {
         delete testConfig.guiOptions;
         await api.run(testConfig);

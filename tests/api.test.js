@@ -47,12 +47,12 @@ describe("API tests", () => {
 
     it('User preferences object should contain all the props.', () => {
         const userPreferences = api.getUserPreferences();
-        expect(userPreferences).toMatchObject({
+        expect(userPreferences).toEqual({
             acceptType: '',
             acceptedCategories: [],
             rejectedCategories: [],
-            acceptedServices: {},
-            rejectedServices: {}
+            acceptedServices: { necessary: [], analytics: [], ads: [] },
+            rejectedServices: { necessary: [], analytics: [], ads: [] }
         })
     })
 
