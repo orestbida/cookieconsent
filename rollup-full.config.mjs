@@ -17,7 +17,7 @@ const productionMode = !process.env.ROLLUP_WATCH;
 
 export const banner = `/*!
 * CookieConsent ${pkg.version}
-* ${pkg.repository.url}
+* ${pkg.repository.url.replace(/^git\+/, '').replace(/\.git$/, '')}
 * Author ${pkg.author}
 * Released under the ${pkg.license} License
 */
