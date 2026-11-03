@@ -34,7 +34,7 @@ export const setConfig = (userConfig) => {
     //{{START: GUI}}
     _dom._htmlDom = doc.documentElement;
     const _root = userConfig.root;
-    _dom._rootEl = (_root && isString(_root) ? doc.querySelector(_root) : _root) || doc.documentElement;
+    _dom._rootEl = (_root && isString(_root) ? doc.querySelector(_root) : _root);
     //{{END: GUI}}
     cookie.domain = location.hostname;
 

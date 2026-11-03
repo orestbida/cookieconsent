@@ -10,7 +10,7 @@ export const setCookie = (name, value, days = 1) => {
 }
 
 export function htmlHasClass(className) {
-    return globalObj._dom._rootEl.className.includes(className);
+    return globalObj._dom._htmlDom.className.includes(className);
 }
 
 export function setUserAgent(userAgent) {

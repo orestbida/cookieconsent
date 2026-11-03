@@ -91,6 +91,17 @@ describe("Check modals' html generation under different settings", () => {
         expect(document.body.querySelectorAll('script[data-category]').length).toBe(1);
     })
 
+    it('Should append the html markup to <body> by default', async () => {
+        const { root } = testConfig;
+        delete testConfig.root;
+        await api.run(testConfig);
+        api.show(true);
+        expect(document.getElementById('cc-main').parentElement).toBe(document.body);
+        expect(document.documentElement.classList.contains('show--consent')).toBe(true);
+        expect(document.body.classList.contains('show--consent')).toBe(false);
+        testConfig.root = root;
+    })
+
     it('Should append the html markup inside the "#app" root element', async () => {
         document.body.innerHTML = '<div id="app"></div>';
         testConfig.root = '#app';

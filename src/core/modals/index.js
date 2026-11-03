@@ -18,7 +18,7 @@ export const createMainContainer = () => {
     handleRtlLanguage();
 
     // Append main container to dom
-    dom._rootEl.appendChild(dom._ccMain);
+    (dom._rootEl || dom._document.body || dom._htmlDom).appendChild(dom._ccMain);
 };
 
 /**
