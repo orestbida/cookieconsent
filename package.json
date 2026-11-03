@@ -20,7 +20,7 @@
         "./types/*": "./types/*",
         "./package.json": "./package.json"
     },
-    "packageManager": "pnpm@11.17.0",
+    "packageManager": "pnpm@12.16.1",
     "scripts": {
         "dev": "rollup --config ./rollup-full.config.mjs --watch",
         "build": "pnpm rollup:full & pnpm rollup:core; wait",
@@ -49,7 +49,7 @@
     "author": "Orest Bida",
     "license": "MIT",
     "devDependencies": {
-        "@babel/core": "^8.0.9",
+        "@babel/core": "^8.0.10",
         "@babel/preset-env": "^8.0.7",
         "@eslint/js": "^10.0.1",
         "@rollup/plugin-eslint": "^9.2.0",
@@ -57,15 +57,15 @@
         "@types/jest": "^30.0.0",
         "babel-jest": "^30.5.2",
         "cssnano": "^9.9.0",
-        "eslint": "^10.13.0",
+        "eslint": "^10.14.0",
         "fast-glob": "^3.3.3",
-        "globals": "^17.13.0",
+        "globals": "^17.14.0",
         "jest": "^30.5.2",
         "jest-environment-jsdom": "^30.5.2",
         "postcss": "^8.5.32",
         "postcss-combine-duplicated-selectors": "^11.0.0",
-        "rollup": "^4.66.0",
-        "sass": "^1.107.0",
+        "rollup": "^4.67.4",
+        "sass": "^1.107.1",
         "sitemap": "^10.0.0",
         "vitepress": "1.6.4"
     },

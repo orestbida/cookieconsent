@@ -15,7 +15,7 @@
     "astro-compress": "^2.4.3",
     "deep-equal": "^2.2.3",
     "file-saver": "^2.0.5",
-    "sass": "^1.107.0",
-    "shiki": "^4.5.0"
+    "sass": "^1.107.1",
+    "shiki": "^4.6.0"
   }
 }
