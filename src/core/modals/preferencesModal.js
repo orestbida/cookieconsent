@@ -185,14 +185,6 @@ export const createPreferencesModal = (api, createMainContainer) => {
 
             if (hasToggle) {
 
-                /**
-                 * Arrow icon span
-                 */
-                const sTitleIcon = createNode('span');
-                sTitleIcon.innerHTML = getSvgIcon(2, 3.5);
-                addClassPm(sTitleIcon, 'section-arrow');
-                appendChild(sTitleContainer, sTitleIcon);
-
                 s.className += '--toggle';
 
                 const toggleLabel = createToggleLabel(sTitleData, sLinkedCategory, sCurrentCategoryObject);
@@ -202,6 +194,14 @@ export const createPreferencesModal = (api, createMainContainer) => {
                     appendChild(sTitle, createServiceCounter(nServices, serviceCounterLabel));
 
                 if (sIsExpandableToggle) {
+                    /**
+                     * Arrow icon span
+                     */
+                    const sTitleIcon = createNode('span');
+                    sTitleIcon.innerHTML = getSvgIcon(2, 3.5);
+                    addClassPm(sTitleIcon, 'section-arrow');
+                    appendChild(sTitleContainer, sTitleIcon);
+
                     addClassPm(s, 'section--expandable');
                     setAttribute(sTitle, 'aria-expanded', false);
                     setAttribute(sTitle, 'aria-controls', expandableDivId);

@@ -453,6 +453,18 @@ describe('Missing modal translation test', () => {
         await expect(api.run(testConfig)).resolves.not.toThrow();
         expect(document.querySelector('.pm__section-desc').innerHTML).toBe('no title');
     })
+
+    it('Should add the arrow icon only to expandable sections', async () => {
+        testConfig.language.translations.en.preferencesModal.sections = [
+            { title: 'Analytics', description: 'desc', linkedCategory: 'analytics' },
+            { title: 'Ads', linkedCategory: 'ads' }
+        ];
+
+        await api.run(testConfig);
+        const [expandable, plain] = document.querySelectorAll('.pm__section--toggle');
+        expect(expandable.querySelector('.pm__section-arrow')).not.toBeNull();
+        expect(plain.querySelector('.pm__section-arrow')).toBeNull();
+    })
 })
 
 describe('Modal timers after reset', () => {
