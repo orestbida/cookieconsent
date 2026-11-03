@@ -8,6 +8,7 @@
     p,
     button,
     input,
+    label,
     ::before,
     ::after{
         all: unset;
@@ -40,10 +41,21 @@
     }
 
     svg {
-        vertical-align: baseline;
+        display: block;
+        width: auto;
+        height: auto;
+        fill: none;
+        overflow: hidden;
+    }
+
+    path {
+        fill: inherit;
+        stroke: inherit;
+        stroke-width: inherit;
     }
 
     table,
+    caption,
     thead,
     tbody,
     tr,
