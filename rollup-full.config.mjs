@@ -12,6 +12,7 @@ const srcDir = './src';
 const distDir = './dist';
 const cssComponentsDir = `${distDir}/css-components`;
 const input = `${srcDir}/index.js`;
+const esmInput = `${srcDir}/index.esm.js`;
 const productionMode = !process.env.ROLLUP_WATCH;
 
 export const banner = `/*!
@@ -128,12 +129,6 @@ export default defineConfig(
                     format: 'umd',
                     name: 'CookieConsent',
                     banner: banner
-                },
-                {
-                    file: pkg.module,
-                    format: "esm",
-                    exports: "named",
-                    banner: banner
                 }
             ],
             plugins: [
@@ -142,6 +137,26 @@ export default defineConfig(
                     include: ['./src/**'],
                     exclude: ['./src/scss/**']
                 }),
+                productionMode && terserPlugin,
+            ]
+        },
+        {
+            input: esmInput,
+            output: [
+                {
+                    file: pkg.module,
+                    format: "esm",
+                    exports: "named",
+                    banner: banner
+                },
+                {
+                    file: pkg.exports['.'].import,
+                    format: "esm",
+                    exports: "named",
+                    banner: banner
+                }
+            ],
+            plugins: [
                 productionMode && terserPlugin,
             ]
         },

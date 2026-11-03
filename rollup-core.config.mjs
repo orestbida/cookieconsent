@@ -56,7 +56,15 @@ export default defineConfig(
                     format: 'umd',
                     name: 'CookieConsent',
                     banner: banner
-                },
+                }
+            ],
+            plugins: [
+                terserPlugin
+            ]
+        },
+        {
+            input: './src_tmp/index.esm.js',
+            output: [
                 {
                     file: `${distDir}/${fileName}.esm.js`,
                     format: 'esm',
