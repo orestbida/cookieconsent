@@ -19,8 +19,8 @@ Some services set their cookies in the main domain even if you are on a sub-doma
 
 You have to manually specify the `domain` field within each cookie declared in the `autoClear` object. See the [categories.autoClear](/reference/configuration-reference.html#category-autoclear) section.
 
-## Buttons stop working after client-side navigation
-Client-side routers — such as Astro's view transitions — replace the page's `<body>` without reloading the page. The consent modals keep working, since they live outside the `<body>`, but buttons with a [data-cc](/advanced/custom-attribute.html) attribute on the new page are not wired up.
+## Modals or buttons stop working after client-side navigation {#buttons-stop-working-after-client-side-navigation}
+Client-side routers — such as Astro's view transitions — replace the page's `<body>` without reloading the page. The modals, which are appended to the `<body>` by default, are removed along with it, and buttons with a [data-cc](/advanced/custom-attribute.html) attribute on the new page are not wired up.
 
 Call `CookieConsent.run()` only once, and handle the clicks with a single listener on `document`, which is not replaced:
 
@@ -30,6 +30,19 @@ document.addEventListener('click', (event) => {
         event.preventDefault();
         CookieConsent.showPreferences();
     }
+});
+```
+
+With Astro's `<ClientRouter />`, add an empty element with the `transition:persist` directive to your layout, and use it as the [root](/reference/configuration-reference.html#root) element, so that the modals are kept across navigations:
+
+```html
+<div id="cc-root" transition:persist></div>
+```
+
+```javascript
+CookieConsent.run({
+    root: '#cc-root',
+    // ...
 });
 ```
 

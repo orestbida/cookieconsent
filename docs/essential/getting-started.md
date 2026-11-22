@@ -49,6 +49,7 @@ Here are some of the most common setups to help you get up and running.
 - [React](#react)
 - [Vue](#vue)
 - [Angular](#angular)
+- [Astro](#astro)
 
 <br>
 
@@ -174,6 +175,34 @@ export class AppComponent implements AfterViewInit{
 ```
 
 Finally, [configure](#configuration) the plugin.
+
+### Astro
+Import the stylesheet in the frontmatter of your layout, and [configure](#configuration) the plugin inside a `<script>` tag:
+
+```astro{2,11,13-15}
+---
+import 'vanilla-cookieconsent/dist/cookieconsent.css';
+---
+<html>
+    <head>
+        <!-- head content -->
+    </head>
+    <body>
+        <slot />
+        <script>
+            import * as CookieConsent from 'vanilla-cookieconsent';
+
+            CookieConsent.run({
+                // your config. goes here (required)
+            });
+        </script>
+    </body>
+</html>
+```
+
+::: info
+Astro bundles the script and runs it once per page load. If you use view transitions (`<ClientRouter />`), check out [this troubleshooting section](/additional/troubleshooting.html#buttons-stop-working-after-client-side-navigation).
+:::
 
 <br>
 
